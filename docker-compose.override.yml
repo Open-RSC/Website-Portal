@@ -1,0 +1,14 @@
+version: '3'
+services:
+
+  nginx:
+    environment:
+      DEBUG: 'true'
+      VIRTUAL_HOST: localhost
+      NGINX_HOST: localhost
+    ports:
+      - '80:80'
+    
+  php:
+    environment:
+      - XDEBUG=true
