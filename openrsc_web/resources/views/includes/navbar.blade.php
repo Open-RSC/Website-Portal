@@ -58,39 +58,6 @@
 						Reddit</a></li>
 			</ul>
 		</li>
-		<li><a href="{{ asset('highscores') }}">Highscores</a></li>
-		<li>
-			<label for="drop-3" class="toggle">Information ▾</label>
-			<a href="#">Information</a>
-			<input type="checkbox" id="drop-3"/>
-			<ul>
-				<li><a href="{{ asset('faq') }}">FAQ</a></li>
-				<li><a href="{{ asset('rules') }}">Rules</a></li>
-				<li><a href="{{ asset('/player/shar/bank') }}">Shar's Bank</a></li>
-				<li><a href="{{ asset('stats') }}">Game Statistics</a></li>
-			</ul>
-		</li>
-		<li>
-			<label for="drop-4" class="toggle">Guides ▾</label>
-			<a href="#">Guides</a>
-			<input type="checkbox" id="drop-4"/>
-			<ul>
-				<li><a href="{{ asset('quest_list') }}">Quest List</a></li>
-				<li><a href="{{ asset('minigame_list') }}">Minigames</a></li>
-				<li><a href="{{ asset('wilderness') }}">Wilderness Map</a></li>
-				<li><a href="{{ route('items') }}">Item Database</a></li>
-				<li><a href="{{ asset('npcs') }}">NPC Database</a></li>
-			</ul>
-		</li>
-		<li>
-			<label for="drop-5" class="toggle">Reports ▾</label>
-			<a href="#">Reports</a>
-			<input type="checkbox" id="drop-5"/>
-			<ul>
-				<li><a href="https://gitlab.openrsc.com/open-rsc/Game/issues" target="_blank">Bug Reports</a></li>
-			</ul>
-		</li>
-		<li><a href="{{ asset('worldmap') }}">Live Map</a></li>
 		@if(Auth::user())
 			<li>
 				<label for="drop-5" class="toggle">Staff ▾</label>

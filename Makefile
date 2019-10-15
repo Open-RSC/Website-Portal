@@ -29,6 +29,9 @@ update-laravel:
 clear-all-laravel:
 	docker exec -i php bash -c "cd /var/www/html/openrsc_web && php artisan view:clear && php artisan route:clear && php artisan config:cache"
 
+create-database-portal:
+	docker exec -i mysql mysql -u${MARIADB_ROOT_USER} -p${MARIADB_ROOT_PASSWORD} -e "create database portal;"
+
 migrate-laravel:
 	docker exec -i php bash -c "cd /var/www/html/openrsc_web && php artisan migrate --seed"
 
