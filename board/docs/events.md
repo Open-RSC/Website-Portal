@@ -172,6 +172,18 @@ acp_group_options_before
 * Since: 3.1.0-b4
 * Purpose: Add additional options to group settings (before GROUP_FOUNDER_MANAGE)
 
+acp_group_types_append
+===
+* Location: adm/style/acp_groups.html
+* Since: 3.2.9-RC1
+* Purpose: Add additional group type options to group settings (append the list)
+
+acp_group_types_prepend
+===
+* Location: adm/style/acp_groups.html
+* Since: 3.2.9-RC1
+* Purpose: Add additional group type options to group settings (prepend the list)
+
 acp_groups_find_username_append
 ===
 * Location: adm/style/acp_groups.html
@@ -398,6 +410,27 @@ acp_posting_buttons_custom_tags_before
 * Since: 3.1.10-RC1
 * Purpose: Add content before the custom BBCodes in the ACP
 
+acp_profile_basic_options_after
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content after custom profile field basic options in the ACP
+
+acp_profile_basic_options_before
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content before custom profile field basic options in the ACP
+
+acp_profile_contact_after
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content after contact specific custom profile field option in the ACP
+
 acp_profile_contact_before
 ===
 * Locations:
@@ -412,12 +445,33 @@ acp_profile_contact_last
 * Since: 3.1.11-RC1
 * Purpose: Add contact specific options to custom profile fields in the ACP
 
+acp_profile_options_before
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content before custom profile field options in the ACP
+
 acp_profile_step_one_lang_after
 ===
 * Locations:
     + adm/style/acp_profile.html
 * Since: 3.1.11-RC1
 * Purpose: Add extra lang specific options to custom profile field step one configuration in the ACP
+
+acp_profile_visibility_options_after
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content after custom profile field visibility options in the ACP
+
+acp_profile_visibility_options_before
+===
+* Locations:
+    + adm/style/acp_profile.html
+* Since: 3.2.10-RC1
+* Purpose: Add content before custom profile field visibility options in the ACP
 
 acp_prune_forums_append
 ===
@@ -988,6 +1042,20 @@ mcp_move_before
 * Since: 3.1.10-RC1
 * Purpose: Add content before move topic/post form
 
+mcp_move_destination_forum_after
+===
+* Locations:
+    + styles/prosilver/template/mcp_move.html
+* Since: 3.2.8-RC1
+* Purpose: Add content after the destination select element in the move topic/post form
+
+mcp_move_destination_forum_before
+===
+* Locations:
+    + styles/prosilver/template/mcp_move.html
+* Since: 3.2.8-RC1
+* Purpose: Add content before the destination select element in the move topic/post form
+
 mcp_post_additional_options
 ===
 * Locations:
@@ -1036,6 +1104,20 @@ mcp_topic_options_before
     + styles/prosilver/template/mcp_topic.html
 * Since: 3.1.6-RC1
 * Purpose: Add some options (field, checkbox, ...) before the subject field when split a subject
+
+mcp_topic_post_author_full_append
+===
+* Locations:
+    + styles/prosilver/template/mcp_topic.html
+* Since: 3.2.8-RC1
+* Purpose: Append information to message author username for post details in topic moderation
+
+mcp_topic_post_author_full_prepend
+===
+* Locations:
+    + styles/prosilver/template/mcp_topic.html
+* Since: 3.2.8-RC1
+* Purpose: Prepend information to message author username for post details in topic moderation
 
 mcp_topic_postrow_attachments_after
 ===
@@ -1740,14 +1822,14 @@ posting_attach_body_file_list_after
 * Locations:
     + styles/prosilver/template/posting_attach_body.html
 * Since: 3.2.6-RC1
-* Purpose: Add content after attachments list 
+* Purpose: Add content after attachments list
 
 posting_attach_body_file_list_before
 ===
 * Locations:
     + styles/prosilver/template/posting_attach_body.html
 * Since: 3.2.6-RC1
-* Purpose: Add content before attachments list 
+* Purpose: Add content before attachments list
 
 posting_editor_add_panel_tab
 ===
@@ -1854,6 +1936,34 @@ posting_editor_submit_buttons
 * Since: 3.1.6-RC1
 * Purpose: Add custom buttons in the posting editor
 
+posting_editor_topic_icons_after
+===
+* Locations:
+    + styles/prosilver/template/posting_editor.html
+* Since: 3.2.10-RC1
+* Purpose: Add custom data after the topic icons loop
+
+posting_editor_topic_icons_append
+===
+* Locations:
+    + styles/prosilver/template/posting_editor.html
+* Since: 3.2.10-RC1
+* Purpose: Append custom data to the topic icon
+
+posting_editor_topic_icons_before
+===
+* Locations:
+    + styles/prosilver/template/posting_editor.html
+* Since: 3.2.10-RC1
+* Purpose: Add custom data before the topic icons loop
+
+posting_editor_topic_icons_prepend
+===
+* Locations:
+    + styles/prosilver/template/posting_editor.html
+* Since: 3.2.10-RC1
+* Purpose: Prepend custom data to the topic icon
+
 posting_layout_include_panel_body
 ===
 * Locations:
@@ -1910,12 +2020,40 @@ posting_preview_poll_after
 * Since: 3.1.7-RC1
 * Purpose: Add content after the poll preview block
 
+posting_review_row_post_author_username_append
+===
+* Locations:
+    + styles/prosilver/template/posting_review.html
+* Since: 3.2.8-RC1
+* Purpose: Append information to post author username of member
+
+posting_review_row_post_author_username_prepend
+===
+* Locations:
+    + styles/prosilver/template/posting_review.html
+* Since: 3.2.8-RC1
+* Purpose: Prepend information to post author username of member
+
 posting_topic_review_row_content_after
 ===
 * Locations:
     + styles/prosilver/template/posting_topic_review.html
 * Since: 3.2.4-RC1
 * Purpose: Add content after the message content in topic review
+
+posting_topic_review_row_post_author_username_append
+===
+* Locations:
+    + styles/prosilver/template/posting_topic_review.html
+* Since: 3.2.8-RC1
+* Purpose: Append information to post author username of member
+
+posting_topic_review_row_post_author_username_prepend
+===
+* Locations:
+    + styles/prosilver/template/posting_topic_review.html
+* Since: 3.2.8-RC1
+* Purpose: Prepend information to post author username of member
 
 posting_topic_review_row_post_details_after
 ===
@@ -2102,14 +2240,14 @@ search_results_header_before
 search_results_last_post_author_username_append
 ===
 * Locations:
-    + styles/prosilver/template/search_results.html
+    + styles/prosilver/template/search_results.html (2)
 * Since: 3.2.4-RC1
 * Purpose: Append information to last post author username of member
 
 search_results_last_post_author_username_prepend
 ===
 * Locations:
-    + styles/prosilver/template/search_results.html
+    + styles/prosilver/template/search_results.html (2)
 * Since: 3.2.4-RC1
 * Purpose: Prepend information to last post author username of member
 
@@ -2253,6 +2391,24 @@ topiclist_row_prepend
 * Changed: 3.1.6-RC1 Added event to mcp_forum.html
 * Purpose: Add content into topic rows (inside the elements containing topic titles)
 
+topiclist_row_topic_by_author_after
+===
+* Locations:
+    + styles/prosilver/template/search_results.html
+    + styles/prosilver/template/viewforum_body.html
+    + styles/prosilver/template/mcp_forum.html
+* Since: 3.2.8-RC1
+* Purpose: Add content into topic rows (after the "by topic author" row)
+
+topiclist_row_topic_by_author_before
+===
+* Locations:
+    + styles/prosilver/template/search_results.html
+    + styles/prosilver/template/viewforum_body.html
+    + styles/prosilver/template/mcp_forum.html
+* Since: 3.2.8-RC1
+* Purpose: Add content into topic rows (before the "by topic author" row)
+
 topiclist_row_topic_title_after
 ===
 * Locations:
@@ -2289,6 +2445,34 @@ ucp_friend_list_before
     + styles/prosilver/template/ucp_zebra_friends.html
 * Since: 3.1.0-a4
 * Purpose: Add optional elements before list of friends in UCP
+
+ucp_header_friends_offline_username_full_append
+===
+* Locations:
+    + styles/prosilver/template/ucp_header.html
+* Since: 3.2.10-RC1
+* Purpose: Append information to offline friends username in UCP
+
+ucp_header_friends_offline_username_full_prepend
+===
+* Locations:
+    + styles/prosilver/template/ucp_header.html
+* Since: 3.2.10-RC1
+* Purpose: Prepend information to offline friends username in UCP
+
+ucp_header_friends_online_username_full_append
+===
+* Locations:
+    + styles/prosilver/template/ucp_header.html
+* Since: 3.2.10-RC1
+* Purpose: Append information to online friends username in UCP
+
+ucp_header_friends_online_username_full_prepend
+===
+* Locations:
+    + styles/prosilver/template/ucp_header.html
+* Since: 3.2.10-RC1
+* Purpose: Prepend information to online friends username in UCP
 
 ucp_main_front_user_activity_after
 ===
@@ -2363,6 +2547,20 @@ ucp_pm_history_review_before
     + styles/prosilver/template/ucp_pm_history.html
 * Since: 3.1.6-RC1
 * Purpose: Add content before the private messages history review.
+
+ucp_pm_history_row_message_author_username_append
+===
+* Locations:
+    + styles/prosilver/template/ucp_pm_history.html
+* Since: 3.2.8-RC1
+* Purpose: Append information to message author username of member
+
+ucp_pm_history_row_message_author_username_prepend
+===
+* Locations:
+    + styles/prosilver/template/ucp_pm_history.html
+* Since: 3.2.8-RC1
+* Purpose: Prepend information to message author username of member
 
 ucp_pm_viewmessage_avatar_after
 ===
@@ -2532,6 +2730,62 @@ ucp_prefs_view_select_menu_prepend
 * Purpose: Add options to the top of the drop-down lists block of the Edit
 Display Options screen
 
+ucp_profile_autologin_keys_tbody_key_after
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table column after the first column.
+
+ucp_profile_autologin_keys_tbody_key_before
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table column before the first column.
+
+ucp_profile_autologin_keys_tbody_mark_after
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table column after the last column.
+
+ucp_profile_autologin_keys_tbody_mark_before
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table column before the last column.
+
+ucp_profile_autologin_keys_thead_key_after
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table header content after the first column.
+
+ucp_profile_autologin_keys_thead_key_before
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table header content before the first column.
+
+ucp_profile_autologin_keys_thead_mark_after
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table header content after the last column.
+
+ucp_profile_autologin_keys_thead_mark_before
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_autologin_keys.html
+* Since: 3.3.2-RC1
+* Purpose: Add table header content before the last column.
+
 ucp_profile_profile_info_after
 ===
 * Locations:
@@ -2545,6 +2799,13 @@ ucp_profile_profile_info_before
     + styles/prosilver/template/ucp_profile_profile_info.html
 * Since: 3.1.4-RC1
 * Purpose: Add options in profile page fieldset - before jabber field.
+
+ucp_profile_profile_info_birthday_label_append
+===
+* Locations:
+    + styles/prosilver/template/ucp_profile_profile_info.html
+* Since: 3.2.9-RC1
+* Purpose: Add more text to birthday label, such as required asterisk
 
 ucp_profile_register_details_after
 ===
@@ -2612,16 +2873,23 @@ ucp_register_profile_fields_before
 viewforum_body_last_post_author_username_append
 ===
 * Locations:
-    + styles/prosilver/template/viewforum_body.html
+    + styles/prosilver/template/viewforum_body.html (2)
 * Since: 3.2.4-RC1
 * Purpose: Append information to last post author username of member
 
 viewforum_body_last_post_author_username_prepend
 ===
 * Locations:
-    + styles/prosilver/template/viewforum_body.html
+    + styles/prosilver/template/viewforum_body.html (2)
 * Since: 3.2.4-RC1
 * Purpose: Prepend information to last post author username of member
+
+viewforum_body_online_list_before
+===
+* Locations:
+    + styles/prosilver/template/viewforum_body.html
+* Since: 3.2.10-RC1
+* Purpose: Add content before the online users list
 
 viewforum_body_topic_author_username_append
 ===
@@ -2772,6 +3040,20 @@ viewtopic_body_contact_fields_before
 * Purpose: Add data before the contact fields on the user profile when viewing
 a post
 
+viewtopic_body_contact_icon_append
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+* Since: 3.2.10-RC1
+* Purpose: Add content directly after the contact field icons in post user miniprofiles
+
+viewtopic_body_contact_icon_prepend
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+* Since: 3.2.10-RC1
+* Purpose: Add content directly before the contact field icons in post user miniprofiles
+
 viewtopic_body_footer_before
 ===
 * Locations:
@@ -2779,6 +3061,13 @@ viewtopic_body_footer_before
 * Since: 3.1.0-a1
 * Purpose: Add content to the bottom of the View topic screen below the posts
 and quick reply, directly before the jumpbox in Prosilver.
+
+viewtopic_body_online_list_before
+===
+* Locations:
+    + styles/prosilver/template/viewtopic_body.html
+* Since: 3.2.10-RC1
+* Purpose: Add content before the online users list
 
 viewtopic_body_pagination_top_after
 ===

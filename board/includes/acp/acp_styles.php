@@ -259,6 +259,19 @@ class acp_styles
 		// Get list of styles to uninstall
 		$ids = $this->request_vars('id', 0, true);
 
+		// Don't remove prosilver, you can still deactivate it.
+		$sql = 'SELECT style_id
+			FROM ' . STYLES_TABLE . "
+			WHERE style_name = '" . $this->db->sql_escape('prosilver') . "'";
+		$result = $this->db->sql_query($sql);
+		$prosilver_id = (int) $this->db->sql_fetchfield('style_id');
+		$this->db->sql_freeresult($result);
+
+		if ($prosilver_id && in_array($prosilver_id, $ids))
+		{
+			trigger_error($this->user->lang('UNINSTALL_PROSILVER') . adm_back_link($this->u_action), E_USER_WARNING);
+		}
+
 		// Check if confirmation box was submitted
 		if (confirm_box(true))
 		{
@@ -633,7 +646,7 @@ class acp_styles
 
 		// Set up styles list variables
 		// Addons should increase this number and update template variable
-		$this->styles_list_cols = 4;
+		$this->styles_list_cols = 5;
 		$this->template->assign_var('STYLES_LIST_COLS', $this->styles_list_cols);
 
 		// Show styles list
@@ -688,7 +701,7 @@ class acp_styles
 
 		usort($styles, array($this, 'sort_styles'));
 
-		$this->styles_list_cols = 3;
+		$this->styles_list_cols = 4;
 		$this->template->assign_vars(array(
 			'STYLES_LIST_COLS'	=> $this->styles_list_cols,
 			'STYLES_LIST_HIDE_COUNT'	=> true
@@ -946,22 +959,25 @@ class acp_styles
 
 		$style['_shown'] = true;
 
+		$style_cfg = $this->read_style_cfg($style['style_path']);
+
 		// Generate template variables
 		$actions = array();
 		$row = array(
 			// Style data
-			'STYLE_ID'		=> $style['style_id'],
-			'STYLE_NAME'	=> htmlspecialchars($style['style_name']),
-			'STYLE_PHPBB_VERSION'	=> $this->read_style_cfg($style['style_path'])['phpbb_version'],
-			'STYLE_PATH'	=> htmlspecialchars($style['style_path']),
-			'STYLE_COPYRIGHT'	=> strip_tags($style['style_copyright']),
-			'STYLE_ACTIVE'	=> $style['style_active'],
+			'STYLE_ID'				=> $style['style_id'],
+			'STYLE_NAME'			=> htmlspecialchars($style['style_name']),
+			'STYLE_VERSION'			=> $style_cfg['style_version'] ?? '-',
+			'STYLE_PHPBB_VERSION'	=> $style_cfg['phpbb_version'],
+			'STYLE_PATH'			=> htmlspecialchars($style['style_path']),
+			'STYLE_COPYRIGHT'		=> strip_tags($style['style_copyright']),
+			'STYLE_ACTIVE'			=> $style['style_active'],
 
 			// Additional data
-			'DEFAULT'		=> ($style['style_id'] && $style['style_id'] == $this->default_style),
-			'USERS'			=> (isset($style['_users'])) ? $style['_users'] : '',
-			'LEVEL'			=> $level,
-			'PADDING'		=> (4 + 16 * $level),
+			'DEFAULT'			=> ($style['style_id'] && $style['style_id'] == $this->default_style),
+			'USERS'				=> (isset($style['_users'])) ? $style['_users'] : '',
+			'LEVEL'				=> $level,
+			'PADDING'			=> (4 + 16 * $level),
 			'SHOW_COPYRIGHT'	=> ($style['style_id']) ? false : true,
 			'STYLE_PATH_FULL'	=> htmlspecialchars($this->styles_path_absolute . '/' . $style['style_path']) . '/',
 
@@ -998,11 +1014,14 @@ class acp_styles
 				'L_ACTION'	=> $this->user->lang['EXPORT']
 			); */
 
-			// Uninstall
-			$actions[] = array(
-				'U_ACTION'	=> $this->u_action . '&amp;action=uninstall&amp;hash=' . generate_link_hash('uninstall') . '&amp;id=' . $style['style_id'],
-				'L_ACTION'	=> $this->user->lang['STYLE_UNINSTALL']
-			);
+			if ($style['style_name'] !== 'prosilver')
+			{
+				// Uninstall
+				$actions[] = array(
+					'U_ACTION'	=> $this->u_action . '&amp;action=uninstall&amp;hash=' . generate_link_hash('uninstall') . '&amp;id=' . $style['style_id'],
+					'L_ACTION'	=> $this->user->lang['STYLE_UNINSTALL']
+				);
+			}
 
 			// Preview
 			$actions[] = array(
@@ -1123,7 +1142,14 @@ class acp_styles
 	*/
 	protected function read_style_cfg($dir)
 	{
+		// This should never happen, we give them a red warning because of its relevance.
+		if (!file_exists($this->styles_path . $dir . '/style.cfg'))
+		{
+			trigger_error($this->user->lang('NO_STYLE_CFG', $dir), E_USER_WARNING);
+		}
+
 		static $required = array('name', 'phpbb_version', 'copyright');
+
 		$cfg = parse_cfg_file($this->styles_path . $dir . '/style.cfg');
 
 		// Check if it is a valid file

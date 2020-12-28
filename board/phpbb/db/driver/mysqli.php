@@ -68,6 +68,9 @@ class mysqli extends \phpbb\db\driver\mysql_base
 
 		if ($this->db_connect_id && $this->dbname != '')
 		{
+			// Disable loading local files on client side
+			@mysqli_options($this->db_connect_id, MYSQLI_OPT_LOCAL_INFILE, false);
+
 			@mysqli_query($this->db_connect_id, "SET NAMES 'utf8'");
 
 			// enforce strict mode on databases that support it
@@ -173,12 +176,11 @@ class mysqli extends \phpbb\db\driver\mysql_base
 		{
 			global $cache;
 
-			// EXPLAIN only in extra debug mode
-			if (defined('DEBUG'))
+			if ($this->debug_sql_explain)
 			{
 				$this->sql_report('start', $query);
 			}
-			else if (defined('PHPBB_DISPLAY_LOAD_TIME'))
+			else if ($this->debug_load_time)
 			{
 				$this->curtime = microtime(true);
 			}
@@ -193,11 +195,11 @@ class mysqli extends \phpbb\db\driver\mysql_base
 					$this->sql_error($query);
 				}
 
-				if (defined('DEBUG'))
+				if ($this->debug_sql_explain)
 				{
 					$this->sql_report('stop', $query);
 				}
-				else if (defined('PHPBB_DISPLAY_LOAD_TIME'))
+				else if ($this->debug_load_time)
 				{
 					$this->sql_time += microtime(true) - $this->curtime;
 				}
@@ -212,7 +214,7 @@ class mysqli extends \phpbb\db\driver\mysql_base
 					$this->query_result = $cache->sql_save($this, $query, $this->query_result, $cache_ttl);
 				}
 			}
-			else if (defined('DEBUG'))
+			else if ($this->debug_sql_explain)
 			{
 				$this->sql_report('fromcache', $query);
 			}
@@ -373,7 +375,7 @@ class mysqli extends \phpbb\db\driver\mysql_base
 	{
 		static $test_prof;
 
-		// current detection method, might just switch to see the existance of INFORMATION_SCHEMA.PROFILING
+		// current detection method, might just switch to see the existence of INFORMATION_SCHEMA.PROFILING
 		if ($test_prof === null)
 		{
 			$test_prof = false;

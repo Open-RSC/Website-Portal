@@ -144,7 +144,14 @@ class content_visibility
 	*/
 	public function is_visible($mode, $forum_id, $data)
 	{
-		$is_visible = $this->auth->acl_get('m_approve', $forum_id) || $data[$mode . '_visibility'] == ITEM_APPROVED;
+		$visibility = $data[$mode . '_visibility'];
+		$poster_key = ($mode === 'topic') ? 'topic_poster' : 'poster_id';
+		$is_visible = ($visibility == ITEM_APPROVED) ||
+			($this->config['display_unapproved_posts'] &&
+				($this->user->data['user_id'] != ANONYMOUS) &&
+				($visibility == ITEM_UNAPPROVED || $visibility == ITEM_REAPPROVE) &&
+				($this->user->data['user_id'] == $data[$poster_key])) ||
+			 $this->auth->acl_get('m_approve', $forum_id);
 
 		/**
 		* Allow changing the result of calling is_visible
@@ -216,9 +223,16 @@ class content_visibility
 		}
 		else
 		{
-			$where_sql .= $table_alias . $mode . '_visibility = ' . ITEM_APPROVED;
-		}
+			$visibility_query = $table_alias . $mode . '_visibility = ';
 
+			$where_sql .= '(' . $visibility_query . ITEM_APPROVED . ')';
+			if ($this->config['display_unapproved_posts'] && ($this->user->data['user_id'] != ANONYMOUS))
+			{
+				$poster_key = ($mode === 'topic') ? 'topic_poster' : 'poster_id';
+				$where_sql .= ' OR ((' . $visibility_query . ITEM_UNAPPROVED . ' OR ' . $visibility_query . ITEM_REAPPROVE .')';
+				$where_sql .= ' AND ' . $table_alias . $poster_key . ' = ' . ((int) $this->user->data['user_id']) . ')';
+			}
+		}
 		return '(' . $where_sql . ')';
 	}
 
@@ -684,7 +698,7 @@ class content_visibility
 	* @param $time			int		Timestamp when the action is performed
 	* @param $reason		string	Reason why the visibilty was changed.
 	* @param $force_update_all	bool	Force to update all posts within the topic
-	* @return array		Changed topic data, empty array if an error occured.
+	* @return array		Changed topic data, empty array if an error occurred.
 	*/
 	public function set_topic_visibility($visibility, $topic_id, $forum_id, $user_id, $time, $reason, $force_update_all = false)
 	{
@@ -804,7 +818,7 @@ class content_visibility
 	* Add post to topic and forum statistics
 	*
 	* @param $data			array	Contains information from the topics table about given topic
-	* @param &$sql_data		array	Populated with the SQL changes, may be empty at call time
+	* @param $sql_data		array	Populated with the SQL changes, may be empty at call time (by reference)
 	* @return null
 	*/
 	public function add_post_to_statistic($data, &$sql_data)
@@ -825,7 +839,7 @@ class content_visibility
 	* Remove post from topic and forum statistics
 	*
 	* @param $data			array	Contains information from the topics table about given topic
-	* @param &$sql_data		array	Populated with the SQL changes, may be empty at call time
+	* @param $sql_data		array	Populated with the SQL changes, may be empty at call time (by reference)
 	* @return null
 	*/
 	public function remove_post_from_statistic($data, &$sql_data)
@@ -858,7 +872,7 @@ class content_visibility
 	* Remove topic from forum statistics
 	*
 	* @param $data			array	Post and topic data
-	* @param &$sql_data		array	Populated with the SQL changes, may be empty at call time
+	* @param $sql_data		array	Populated with the SQL changes, may be empty at call time (by reference)
 	* @return null
 	*/
 	public function remove_topic_from_statistic($data, &$sql_data)

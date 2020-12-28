@@ -35,7 +35,7 @@
 
 	<p>{L_ACP_BACKUP_EXPLAIN}</p>
 
-	<script type="text/javascript">
+	<script>
 	// <![CDATA[
 
 		function selector(bool)
@@ -68,12 +68,6 @@
 		<!-- END methods --></dd>
 	</dl>
 	<dl>
-		<dt><label for="where">{L_ACTION}{L_COLON}</label></dt>
-		<dd>
-			<label><input id="where" type="radio" class="radio" name="where" value="store" checked="checked" /> {L_STORE_LOCAL}</label>
-		</dd>
-	</dl>
-	<dl>
 		<dt><label for="table">{L_TABLE_SELECT}{L_COLON}</label></dt>
 		<dd><select id="table" name="table[]" size="10" multiple="multiple">
 		<!-- BEGIN tables -->
@@ -82,12 +76,15 @@
 		</select></dd>
 		<dd><a href="#" onclick="selector(true); return false;">{L_SELECT_ALL}</a> :: <a href="#" onclick="selector(false); return false;">{L_DESELECT_ALL}</a></dd>
 	</dl>
+	</fieldset>
 
-	<p class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-	</p>
-	{S_FORM_TOKEN}
+	<fieldset>
+		<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</p>
+		{S_FORM_TOKEN}
 	</fieldset>
 	</form>
 

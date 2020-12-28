@@ -5,16 +5,22 @@ services:
     image: nginx:latest
     container_name: nginx
     restart: always
-    hostname: localhost
+    ports:
+      - '80:80'
+      - '443:443'
     volumes:
       - "./inc/default.conf:/etc/nginx/conf.d/default.conf"
       - "./openrsc_web:/var/www/html/openrsc_web"
-      - "./log:/var/log/nginx"
       - "./avatars:/var/www/html/openrsc_web/public/img/avatars"
       - "./board:/var/www/html/openrsc_web/public/board"
-      - "./sql:/var/www/html/openrsc_web/public/sql"
       - "./downloads:/var/www/html/openrsc_web/public/downloads"
       - "./cache:/var/www/html/openrsc_web/public/cache"
+#      - "./etc/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
+#      - "./etc/nginx/ssl:/etc/nginx/ssl"
+#      - "./etc/nginx/log:/var/log/nginx"
+      - "./wiki:/var/www/html/wiki"
+#      - "./site/public/stylesheets:/var/www/html/site/public/stylesheets"
+#      - "./site/public/images:/var/www/html/site/public/images"
 
   php:
     image: openrsc/php-laravel:latest
@@ -28,33 +34,31 @@ services:
       - "./sql:/var/www/html/openrsc_web/public/sql"
       - "./downloads:/var/www/html/openrsc_web/public/downloads"
 
-  mysqldb:
-    image: mariadb:latest
-    container_name: mysql
+  mediawiki: # Optional, comment this section out if unwanted.
+    image: mediawiki:latest
+    container_name: mediawiki
     restart: always
-    env_file:
-      - ".env"
-    command: [
-      '--wait_timeout=360000',
-      '--log-bin=bin.log',
-      '--log-bin-index=bin-log.index',
-      '--max_binlog_size=100M',
-      '--binlog-format=MIXED',
-      '--slow-query-log',
-      '--general_log=1',
-      '--expire_logs_days=10',
-      '--sync_binlog=1'
-    ]
-    environment:
-      - MYSQL_DATABASE=mysql
-      - MYSQL_ROOT_USER=${MARIADB_ROOT_USER}
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=no
-      - MYSQL_USER=${MARIADB_USER}
-      - MYSQL_PASSWORD=${MARIADB_PASS}
     ports:
-      - "3306:3306"
+      - "127.0.0.1:9001:80"
     volumes:
-      - "./inc/databases:/var/lib/mysql"
-      - "./inc/innodb.cnf:/etc/mysql/conf.d/innodb.cnf:ro"
-      - "./log:/var/log/mysql"
+      - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php" # MediaWiki config is located in etc
+      - "./wiki/images:/var/www/html/images"
+      - "./wiki:/var/www/html"
+
+  phpmyadmin: # Optional, comment this section out if unwanted.
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      - HIDE_PHP_VERSION=true
+      - UPLOAD_LIMIT=10485760
+      - PMA_HOST=mariadb
+    ports:
+      - "4000:80"
+    volumes:
+      - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php" # PHPMyAdmin config is located in etc
+
+networks: # Required for connectivity with seperate docker-compose web framework
+  default:
+    external:
+      name: database

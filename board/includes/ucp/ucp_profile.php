@@ -70,9 +70,9 @@ class ucp_profile
 					// Do not check cur_password, it is the old one.
 					$check_ary = array(
 						'new_password'		=> array(
-							array('string', true, $config['min_pass_chars'], $config['max_pass_chars']),
+							array('string', true, $config['min_pass_chars'], 0),
 							array('password')),
-						'password_confirm'	=> array('string', true, $config['min_pass_chars'], $config['max_pass_chars']),
+						'password_confirm'	=> array('string', true, $config['min_pass_chars'], 0),
 						'email'				=> array(
 							array('string', false, 6, 60),
 							array('user_email')),
@@ -131,9 +131,7 @@ class ucp_profile
 							'username'			=> ($auth->acl_get('u_chgname') && $config['allow_namechange']) ? $data['username'] : $user->data['username'],
 							'username_clean'	=> ($auth->acl_get('u_chgname') && $config['allow_namechange']) ? utf8_clean_string($data['username']) : $user->data['username_clean'],
 							'user_email'		=> ($auth->acl_get('u_chgemail')) ? $data['email'] : $user->data['user_email'],
-							'user_email_hash'	=> ($auth->acl_get('u_chgemail')) ? phpbb_email_hash($data['email']) : $user->data['user_email_hash'],
 							'user_password'		=> ($auth->acl_get('u_chgpasswd') && $data['new_password']) ? $passwords_manager->hash($data['new_password']) : $user->data['user_password'],
-							'user_passchg'		=> ($auth->acl_get('u_chgpasswd') && $data['new_password']) ? time() : 0,
 						);
 
 						if ($auth->acl_get('u_chgname') && $config['allow_namechange'] && $data['username'] != $user->data['username'])
@@ -147,6 +145,8 @@ class ucp_profile
 
 						if ($auth->acl_get('u_chgpasswd') && $data['new_password'] && !$passwords_manager->check($data['new_password'], $user->data['user_password']))
 						{
+							$sql_ary['user_passchg'] = time();
+
 							$user->reset_login_keys();
 							$phpbb_log->add('user', $user->data['user_id'], $user->ip, 'LOG_USER_NEW_PASSWORD', false, array(
 								'reportee_id' => $user->data['user_id'],
@@ -266,7 +266,7 @@ class ucp_profile
 					'CUR_PASSWORD'		=> '',
 
 					'L_USERNAME_EXPLAIN'		=> $user->lang($config['allow_name_chars'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_name_chars']), $user->lang('CHARACTERS', (int) $config['max_name_chars'])),
-					'L_CHANGE_PASSWORD_EXPLAIN'	=> $user->lang($config['pass_complex'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_pass_chars']), $user->lang('CHARACTERS', (int) $config['max_pass_chars'])),
+					'L_CHANGE_PASSWORD_EXPLAIN'	=> $user->lang($config['pass_complex'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_pass_chars'])),
 
 					'S_FORCE_PASSWORD'	=> ($auth->acl_get('u_chgpasswd') && $config['chg_passforce'] && $user->data['user_passchg'] < time() - ($config['chg_passforce'] * 86400)) ? true : false,
 					'S_CHANGE_USERNAME' => ($config['allow_namechange'] && $auth->acl_get('u_chgname')) ? true : false,
@@ -810,23 +810,50 @@ class ucp_profile
 					$error = array_map(array($user, 'lang'), $error);
 				}
 
-				$sql = 'SELECT key_id, last_ip, last_login
-					FROM ' . SESSIONS_KEYS_TABLE . '
-					WHERE user_id = ' . (int) $user->data['user_id'] . '
-					ORDER BY last_login ASC';
+				$sql_ary = [
+					'SELECT'	=> 'sk.key_id, sk.last_ip, sk.last_login',
+					'FROM'		=> [SESSIONS_KEYS_TABLE	=> 'sk'],
+					'WHERE'		=> 'sk.user_id = ' . (int) $user->data['user_id'],
+					'ORDER_BY'	=> 'sk.last_login ASC',
+				];
 
-				$result = $db->sql_query($sql);
+				/**
+				 * Event allows changing SQL query for autologin keys
+				 *
+				 * @event core.ucp_profile_autologin_keys_sql
+				 * @var	array	sql_ary	Array with autologin keys SQL query
+				 * @since 3.3.2-RC1
+				 */
+				$vars = ['sql_ary'];
+				extract($phpbb_dispatcher->trigger_event('core.ucp_profile_autologin_keys_sql', compact($vars)));
 
-				while ($row = $db->sql_fetchrow($result))
+				$result = $db->sql_query($db->sql_build_query('SELECT', $sql_ary));
+				$sessions = (array) $db->sql_fetchrowset($result);
+				$db->sql_freeresult($result);
+
+				$template_vars = [];
+				foreach ($sessions as $row)
 				{
-					$template->assign_block_vars('sessions', array(
-						'KEY' => substr($row['key_id'], 0, 8),
+					$key = substr($row['key_id'], 0, 8);
+					$template_vars[$key] = [
+						'KEY' => $key,
 						'IP' => $row['last_ip'],
 						'LOGIN_TIME' => $user->format_date($row['last_login']),
-					));
+					];
 				}
 
-				$db->sql_freeresult($result);
+				/**
+				 * Event allows changing template variables
+				 *
+				 * @event core.ucp_profile_autologin_keys_template_vars
+				 * @var	array	sessions		Array with session keys data
+				 * @var	array	template_vars	Array with template variables
+				 * @since 3.3.2-RC1
+				 */
+				$vars = ['sessions', 'template_vars'];
+				extract($phpbb_dispatcher->trigger_event('core.ucp_profile_autologin_keys_template_vars', compact($vars)));
+
+				$template->assign_block_vars_array('sessions', $template_vars);
 
 			break;
 		}

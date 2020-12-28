@@ -20,14 +20,14 @@ class config implements \ArrayAccess, \IteratorAggregate, \Countable
 {
 	/**
 	* The configuration data
-	* @var array(string => string)
+	* @var array<string,string>
 	*/
 	protected $config;
 
 	/**
 	* Creates a configuration container with a default set of values
 	*
-	* @param array(string => string) $config The configuration data.
+	* @param array<string,string> $config The configuration data.
 	*/
 	public function __construct(array $config)
 	{
@@ -145,6 +145,25 @@ class config implements \ArrayAccess, \IteratorAggregate, \Countable
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	* Checks configuration option's value only if the new_value matches the
+	* current configuration value and the configuration value does exist.Called
+	* only after set_atomic has been called.
+	*
+	* @param  string $key       The configuration option's name
+	* @param  string $new_value New configuration value
+	* @throws \phpbb\exception\http_exception when config value is set and not equal to new_value.
+	* @return bool              True if the value was changed, false otherwise.
+	*/
+	public function ensure_lock($key, $new_value)
+	{
+		if (isset($this->config[$key]) && $this->config[$key] == $new_value)
+		{
+			return true;
+		}
+		throw new \phpbb\exception\http_exception(500, 'Failure while aqcuiring locks.');
 	}
 
 	/**

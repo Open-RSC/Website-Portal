@@ -50,16 +50,21 @@
 			<dl>
 				<dt><label for="{options.KEY}">{options.TITLE}{L_COLON}</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
 				<dd>{options.CONTENT}</dd>
+				{% if (options.KEY == 'allow_attachments' and S_EMPTY_POST_GROUPS) or (options.KEY == 'allow_pm_attach' and S_EMPTY_PM_GROUPS) %}
+					<dd><span class="error">{{ lang(options.KEY == 'allow_attachments' ? 'NO_EXT_GROUP_ALLOWED_POST' : 'NO_EXT_GROUP_ALLOWED_PM', U_EXTENSION_GROUPS) }}</span></dd>
+				{% endif %}
 			</dl>
 
 		<!-- ENDIF -->
 	<!-- END options -->
 	</fieldset>
 
-	<fieldset class="submit-buttons">
-		<legend>{L_SUBMIT}</legend>
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	<fieldset>
+		<legend>{{ lang('ACP_SUBMIT_CHANGES') }}</legend>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</p>
 	</fieldset>
 
 	<!-- IF not S_SECURE_DOWNLOADS -->
@@ -110,7 +115,7 @@
 <!-- ELSEIF S_EXTENSION_GROUPS -->
 
 	<!-- IF S_EDIT_GROUP -->
-		<script type="text/javascript" defer="defer">
+		<script>
 		// <![CDATA[
 			function update_image(newimage)
 			{
@@ -204,10 +209,13 @@
 			<dd><select name="allowed_forums[]" multiple="multiple" size="8">{S_FORUM_ID_OPTIONS}</select></dd>
 		</dl>
 
-		<p class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		</p>
+		</fieldset>
+		<fieldset>
+			<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+				<p class="submit-buttons">
+					<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+					<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+				</p>
 		{S_FORM_TOKEN}
 		</fieldset>
 
@@ -308,10 +316,14 @@
 	</tbody>
 	</table>
 
-	<p class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-	</p>
+	</fieldset>
+	<fieldset>
+		<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		</p>
+
 	{S_FORM_TOKEN}
 	</fieldset>
 	</form>
@@ -382,10 +394,13 @@
 	<!-- ENDIF -->
 
 	<!-- IF .orphan -->
-		<p class="submit-buttons">
-			<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		</p>
+	</fieldset>
+	<fieldset>
+		<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+			<p class="submit-buttons">
+				<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+				<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+			</p>
 	<!-- ENDIF -->
 
 	{S_FORM_TOKEN}
@@ -421,17 +436,25 @@
 	</tr>
 	</thead>
 	<tbody>
-	<!-- BEGIN attachments -->
+	{% for attachments in attachments %}
 		<tr>
 			<td>
-				<!-- IF attachments.S_IN_MESSAGE -->{L_EXTENSION_GROUP}{L_COLON} <strong><!-- IF attachments.EXT_GROUP_NAME -->{attachments.EXT_GROUP_NAME}<!-- ELSE -->{L_NO_EXT_GROUP}<!-- ENDIF --></strong><br />{attachments.L_DOWNLOAD_COUNT}<br />{L_IN} {L_PRIVATE_MESSAGE}
-				<!-- ELSE --><a href="{attachments.U_FILE}" style="font-weight: bold;">{attachments.REAL_FILENAME}</a><br /><!-- IF attachments.COMMENT -->{attachments.COMMENT}<br /><!-- ENDIF -->{attachments.L_DOWNLOAD_COUNT}<br />{L_TOPIC}{L_COLON} <a href="{attachments.U_VIEW_TOPIC}">{attachments.TOPIC_TITLE}</a><!-- ENDIF -->
+				{{ lang('EXTENSION_GROUP') ~ lang('COLON') }} <strong>{{ attachments.EXT_GROUP_NAME }}</strong>
+				{% if attachments.S_IN_MESSAGE %}
+					<br>{{ attachments.L_DOWNLOAD_COUNT }}
+					<br>{{ lang('IN') }} {{ lang('PRIVATE_MESSAGE') }}
+				{% else %}
+					<br><a href="{{ attachments.U_FILE }}"><strong>{{ attachments.REAL_FILENAME }}</strong></a>
+					{% if attachments.COMMENT %}<br>{{ attachments.COMMENT }}{% endif %}
+					<br>{{ attachments.L_DOWNLOAD_COUNT }}
+					<br>{{ lang('TOPIC') ~ lang('COLON') }} <a href="{{ attachments.U_VIEW_TOPIC }}">{{ attachments.TOPIC_TITLE }}</a>
+				{% endif %}
 			</td>
-			<td>{attachments.FILETIME}<br />{L_POST_BY_AUTHOR} {attachments.ATTACHMENT_POSTER}</td>
-			<td class="centered-text">{attachments.FILESIZE}</td>
-			<td class="centered-text"><input type="checkbox" class="radio" name="delete[{attachments.ATTACH_ID}]" /></td>
+			<td>{{ attachments.FILETIME }}<br>{{ lang('POST_BY_AUTHOR') }} {{ attachments.ATTACHMENT_POSTER }}</td>
+			<td class="centered-text">{{ attachments.FILESIZE }}</td>
+			<td class="centered-text"><input type="checkbox" class="radio" name="delete[{{ attachments.ATTACH_ID }}]" /></td>
 		</tr>
-	<!-- END attachments -->
+	{% endfor %}
 	</tbody>
 	</table>
 <!-- ELSE -->

@@ -52,9 +52,32 @@ function generate_smilies($mode, $forum_id)
 
 		page_header($user->lang['SMILIES']);
 
-		$sql = 'SELECT COUNT(smiley_id) AS item_count
-			FROM ' . SMILIES_TABLE . '
-			GROUP BY smiley_url';
+		$sql_ary = [
+			'SELECT'	=> 'COUNT(s.smiley_id) AS item_count',
+			'FROM'		=> [
+				SMILIES_TABLE => 's',
+			],
+			'GROUP_BY'	=> 's.smiley_url',
+		];
+
+		/**
+		* Modify SQL query that fetches the total number of smilies in window mode
+		*
+		* @event core.generate_smilies_count_sql_before
+		* @var int		forum_id	Forum where smilies are generated
+		* @var array	sql_ary		Array with the SQL query
+		* @var string	base_url	URL for the "More smilies" link and its pagination
+		* @since 3.2.9-RC1
+		* @changed 3.2.10-RC1 Added base_url
+		*/
+		$vars = [
+			'forum_id',
+			'sql_ary',
+			'base_url',
+		];
+		extract($phpbb_dispatcher->trigger_event('core.generate_smilies_count_sql_before', compact($vars)));
+
+		$sql = $db->sql_build_query('SELECT', $sql_ary);
 		$result = $db->sql_query($sql, 3600);
 
 		$smiley_count = 0;
@@ -89,18 +112,52 @@ function generate_smilies($mode, $forum_id)
 
 	if ($mode == 'window')
 	{
-		$sql = 'SELECT smiley_url, MIN(emotion) as emotion, MIN(code) AS code, smiley_width, smiley_height, MIN(smiley_order) AS min_smiley_order
-			FROM ' . SMILIES_TABLE . '
-			GROUP BY smiley_url, smiley_width, smiley_height
-			ORDER BY min_smiley_order';
+		$sql_ary = [
+			'SELECT'	=> 's.smiley_url, MIN(s.emotion) AS emotion, MIN(s.code) AS code, s.smiley_width, s.smiley_height, MIN(s.smiley_order) AS min_smiley_order',
+			'FROM'		=> [
+				SMILIES_TABLE => 's',
+			],
+			'GROUP_BY'	=> 's.smiley_url, s.smiley_width, s.smiley_height',
+			'ORDER_BY'	=> 'min_smiley_order',
+		];
+	}
+	else
+	{
+		$sql_ary = [
+			'SELECT'	=> 's.*',
+			'FROM'		=> [
+				SMILIES_TABLE => 's',
+			],
+			'WHERE'		=> 's.display_on_posting = 1',
+			'ORDER_BY'	=> 's.smiley_order',
+		];
+	}
+
+	/**
+	* Modify the SQL query that fetches the smilies
+	*
+	* @event core.generate_smilies_modify_sql
+	* @var string	mode		Smiley mode, either window or inline
+	* @var int		forum_id	Forum where smilies are generated, or 0 if composing a private message
+	* @var array	sql_ary		Array with SQL query data
+	* @since 3.2.10-RC1
+	* @since 3.3.1-RC1
+	*/
+	$vars = [
+		'mode',
+		'forum_id',
+		'sql_ary',
+	];
+	extract($phpbb_dispatcher->trigger_event('core.generate_smilies_modify_sql', compact($vars)));
+
+	$sql = $db->sql_build_query('SELECT', $sql_ary);
+
+	if ($mode == 'window')
+	{
 		$result = $db->sql_query_limit($sql, $config['smilies_per_page'], $start, 3600);
 	}
 	else
 	{
-		$sql = 'SELECT *
-			FROM ' . SMILIES_TABLE . '
-			WHERE display_on_posting = 1
-			ORDER BY smiley_order';
 		$result = $db->sql_query($sql, 3600);
 	}
 
@@ -113,6 +170,22 @@ function generate_smilies($mode, $forum_id)
 		}
 	}
 	$db->sql_freeresult($result);
+
+	/**
+	* Modify smilies before they are assigned to the template
+	*
+	* @event core.generate_smilies_modify_rowset
+	* @var string	mode		Smiley mode, either window or inline
+	* @var int		forum_id	Forum where smilies are generated, or 0 if composing a private message
+	* @var array	smilies		Smiley rows fetched from the database
+	* @since 3.2.9-RC1
+	*/
+	$vars = [
+		'mode',
+		'forum_id',
+		'smilies',
+	];
+	extract($phpbb_dispatcher->trigger_event('core.generate_smilies_modify_rowset', compact($vars)));
 
 	if (count($smilies))
 	{
@@ -147,9 +220,16 @@ function generate_smilies($mode, $forum_id)
 	* @var	string	mode			Mode of the smilies: window|inline
 	* @var	int		forum_id		The forum ID we are currently in
 	* @var	bool	display_link	Shall we display the "more smilies" link?
+	* @var string	base_url		URL for the "More smilies" link and its pagination
 	* @since 3.1.0-a1
+	* @changed 3.2.10-RC1 Added base_url
 	*/
-	$vars = array('mode', 'forum_id', 'display_link');
+	$vars = [
+		'mode',
+		'forum_id',
+		'display_link',
+		'base_url',
+	];
 	extract($phpbb_dispatcher->trigger_event('core.generate_smilies_after', compact($vars)));
 
 	if ($mode == 'inline' && $display_link)
@@ -397,34 +477,6 @@ function posting_gen_topic_types($forum_id, $cur_topic_type = POST_NORMAL)
 //
 // Attachment related functions
 //
-
-/**
-* Upload Attachment - filedata is generated here
-* Uses upload class
-*
-* @deprecated 3.2.0-a1 (To be removed: 3.4.0)
-*
-* @param string			$form_name		The form name of the file upload input
-* @param int			$forum_id		The id of the forum
-* @param bool			$local			Whether the file is local or not
-* @param string			$local_storage	The path to the local file
-* @param bool			$is_message		Whether it is a PM or not
-* @param array			$local_filedata	A filespec object created for the local file
-*
-* @return array File data array
-*/
-function upload_attachment($form_name, $forum_id, $local = false, $local_storage = '', $is_message = false, $local_filedata = false)
-{
-	global $phpbb_container;
-
-	/** @var \phpbb\attachment\manager $attachment_manager */
-	$attachment_manager = $phpbb_container->get('attachment.manager');
-	$file = $attachment_manager->upload($form_name, $forum_id, $local, $local_storage, $is_message, $local_filedata);
-	unset($attachment_manager);
-
-	return $file;
-}
-
 /**
 * Calculate the needed size for Thumbnail
 */
@@ -641,12 +693,6 @@ function create_thumbnail($source, $destination, $mimetype)
 				imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 			}
 
-			// If we are in safe mode create the destination file prior to using the gd functions to circumvent a PHP bug
-			if (@ini_get('safe_mode') || @strtolower(ini_get('safe_mode')) == 'on')
-			{
-				@touch($destination);
-			}
-
 			switch ($type['format'])
 			{
 				case IMG_GIF:
@@ -681,7 +727,7 @@ function create_thumbnail($source, $destination, $mimetype)
 
 	try
 	{
-		$phpbb_filesystem->phpbb_chmod($destination, CHMOD_READ | CHMOD_WRITE);
+		$phpbb_filesystem->phpbb_chmod($destination, \phpbb\filesystem\filesystem_interface::CHMOD_READ | \phpbb\filesystem\filesystem_interface::CHMOD_WRITE);
 	}
 	catch (\phpbb\filesystem\exception\filesystem_exception $e)
 	{
@@ -724,10 +770,11 @@ function posting_gen_attachment_entry($attachment_data, &$filename_data, $show_a
 
 	// Some default template variables
 	$template->assign_vars(array(
-		'S_SHOW_ATTACH_BOX'	=> $show_attach_box,
-		'S_HAS_ATTACHMENTS'	=> count($attachment_data),
-		'FILESIZE'			=> $config['max_filesize'],
-		'FILE_COMMENT'		=> (isset($filename_data['filecomment'])) ? $filename_data['filecomment'] : '',
+		'S_SHOW_ATTACH_BOX'				=> $show_attach_box,
+		'S_HAS_ATTACHMENTS'				=> count($attachment_data),
+		'FILESIZE'						=> $config['max_filesize'],
+		'FILE_COMMENT'					=> (isset($filename_data['filecomment'])) ? $filename_data['filecomment'] : '',
+		'MAX_ATTACHMENT_FILESIZE'		=> $config['max_filesize'] > 0 ? $user->lang('MAX_ATTACHMENT_FILESIZE', get_formatted_filesize($config['max_filesize'])) : '',
 	));
 
 	if (count($attachment_data))
@@ -977,6 +1024,30 @@ function topic_review($topic_id, $forum_id, $mode = 'topic_review', $cur_post_id
 		'WHERE'		=> $db->sql_in_set('p.post_id', $post_list) . '
 			AND u.user_id = p.poster_id',
 	);
+
+	/**
+	* Event to modify the SQL query for topic reviews
+	*
+	* @event core.topic_review_modify_sql_ary
+	* @var	int		topic_id			The topic ID that is being reviewed
+	* @var	int		forum_id			The topic's forum ID
+	* @var	string	mode				The topic review mode
+	* @var	int		cur_post_id			Post offset ID
+	* @var	bool	show_quote_button	Flag indicating if the quote button should be displayed
+	* @var	array	post_list			Array with the post IDs
+	* @var	array	sql_ary				Array with the SQL query
+	* @since 3.2.8-RC1
+	*/
+	$vars = array(
+		'topic_id',
+		'forum_id',
+		'mode',
+		'cur_post_id',
+		'show_quote_button',
+		'post_list',
+		'sql_ary',
+	);
+	extract($phpbb_dispatcher->trigger_event('core.topic_review_modify_sql_ary', compact($vars)));
 
 	$sql = $db->sql_build_query('SELECT', $sql_ary);
 	$result = $db->sql_query($sql);
@@ -1284,6 +1355,7 @@ function delete_post($forum_id, $topic_id, $post_id, &$data, $is_soft = false, $
 				delete_topics('topic_id', array($topic_id), false);
 
 				$phpbb_content_visibility->remove_topic_from_statistic($data, $sql_data);
+				$config->increment('num_posts', -1, false);
 
 				$update_sql = update_post_information('forum', $forum_id, true);
 				if (count($update_sql))
@@ -2054,6 +2126,11 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 				continue;
 			}
 
+			if (preg_match('/[\x{10000}-\x{10FFFF}]/u', $attach_row['attach_comment']))
+			{
+				trigger_error('ATTACH_COMMENT_NO_EMOJIS');
+			}
+
 			if (!$attach_row['is_orphan'])
 			{
 				// update entry in db if attachment already stored in db and filespace
@@ -2323,6 +2400,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 					'notification.type.quote',
 					'notification.type.bookmark',
 					'notification.type.post',
+					'notification.type.forum',
 				), $notification_data);
 			break;
 
@@ -2341,6 +2419,7 @@ function submit_post($mode, $subject, $username, $topic_type, &$poll_ary, &$data
 					'notification.type.bookmark',
 					'notification.type.topic',
 					'notification.type.post',
+					'notification.type.forum',
 				), $notification_data);
 			break;
 		}
@@ -2753,7 +2832,7 @@ function phpbb_handle_post_delete($forum_id, $topic_id, $post_id, &$post_data, $
 				$s_hidden_fields['delete_permanent'] = '1';
 			}
 
-			confirm_box(false, $l_confirm, build_hidden_fields($s_hidden_fields), 'confirm_delete_body.html');
+			confirm_box(false, [$l_confirm, 1], build_hidden_fields($s_hidden_fields), 'confirm_delete_body.html');
 		}
 	}
 

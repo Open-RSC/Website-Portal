@@ -53,7 +53,7 @@ interface provider_interface
 	 * Autologin function
 	 *
 	 * @return 	array|null	containing the user row, empty if no auto login
-	 * 						should take place, or null if not impletmented.
+	 * 						should take place, or null if not implemented.
 	 */
 	public function autologin();
 
@@ -68,12 +68,13 @@ interface provider_interface
 
 	/**
 	 * This function updates the template with variables related to the acp
-	 * options with whatever configuraton values are passed to it as an array.
+	 * options with whatever configuration values are passed to it as an array.
 	 * It then returns the name of the acp file related to this authentication
 	 * provider.
-	 * @param	array	$new_config Contains the new configuration values that
-	 *								have been set in acp_board.
-	 * @return	array|null		Returns null if not implemented or an array with
+	 *
+	 * @param \phpbb\config\config	$new_config	Contains the new configuration values
+	 * 											that have been set in acp_board.
+	 * @return array|null		Returns null if not implemented or an array with
 	 *							the template file name and an array of the vars
 	 *							that the template needs that must conform to the
 	 *							following example:

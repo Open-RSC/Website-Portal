@@ -39,11 +39,22 @@ class ucp_register
 			trigger_error('UCP_REGISTER_DISABLE');
 		}
 
-		$coppa			= $request->is_set('coppa') ? (int) $request->variable('coppa', false) : false;
+		$coppa			= $request->is_set('coppa_yes') ? 1 : ($request->is_set('coppa_no') ? 0 : false);
+		$coppa			= $request->is_set('coppa') ? $request->variable('coppa', 0) : $coppa;
 		$agreed			= $request->variable('agreed', false);
 		$submit			= $request->is_set_post('submit');
 		$change_lang	= $request->variable('change_lang', '');
 		$user_lang		= $request->variable('lang', $user->lang_name);
+
+		if ($agreed && !check_form_key('ucp_register'))
+		{
+			$agreed = false;
+		}
+
+		if ($coppa !== false && !check_form_key('ucp_register'))
+		{
+			$coppa = false;
+		}
 
 		/**
 		* Add UCP register data before they are assigned to the template or submitted
@@ -67,14 +78,7 @@ class ucp_register
 		);
 		extract($phpbb_dispatcher->trigger_event('core.ucp_register_requests_after', compact($vars)));
 
-		if ($agreed)
-		{
-			add_form_key('ucp_register');
-		}
-		else
-		{
-			add_form_key('ucp_register_terms');
-		}
+		add_form_key('ucp_register');
 
 		if ($change_lang || $user_lang != $config['default_lang'])
 		{
@@ -168,11 +172,8 @@ class ucp_register
 
 				$template_vars = array(
 					'S_LANG_OPTIONS'	=> (count($lang_row) > 1) ? language_select($user_lang) : '',
-					'L_COPPA_NO'		=> sprintf($user->lang['UCP_COPPA_BEFORE'], $coppa_birthday),
-					'L_COPPA_YES'		=> sprintf($user->lang['UCP_COPPA_ON_AFTER'], $coppa_birthday),
-
-					'U_COPPA_NO'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=register&amp;coppa=0'),
-					'U_COPPA_YES'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=register&amp;coppa=1'),
+					'L_COPPA_NO'		=> $user->lang('UCP_COPPA_BEFORE', $coppa_birthday),
+					'L_COPPA_YES'		=> $user->lang('UCP_COPPA_ON_AFTER', $coppa_birthday),
 
 					'S_SHOW_COPPA'		=> true,
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
@@ -275,9 +276,9 @@ class ucp_register
 					array('string', false, $config['min_name_chars'], $config['max_name_chars']),
 					array('username', '')),
 				'new_password'		=> array(
-					array('string', false, $config['min_pass_chars'], $config['max_pass_chars']),
+					array('string', false, $config['min_pass_chars'], 0),
 					array('password')),
-				'password_confirm'	=> array('string', false, $config['min_pass_chars'], $config['max_pass_chars']),
+				'password_confirm'	=> array('string', false, $config['min_pass_chars'], 0),
 				'email'				=> array(
 					array('string', false, 6, 60),
 					array('user_email')),
@@ -410,18 +411,20 @@ class ucp_register
 				* @event core.ucp_register_user_row_after
 				* @var	bool	submit		Do we display the form only
 				*							or did the user press submit
+				* @var	array	data		Array with current ucp registration data
 				* @var	array	cp_data		Array with custom profile fields data
-				* @var	array	user_row	Array with current ucp registration data
+				* @var	array	user_row	Array with user data that will be inserted
 				* @since 3.1.4-RC1
+				* @changed 3.2.10-RC1 Added data array
 				*/
-				$vars = array('submit', 'cp_data', 'user_row');
+				$vars = array('submit', 'data', 'cp_data', 'user_row');
 				extract($phpbb_dispatcher->trigger_event('core.ucp_register_user_row_after', compact($vars)));
 
 				// Register user...
 				$user_id = user_add($user_row, $cp_data);
 
 				// This should not happen, because the required variables are listed above...
-				if ($user_id === false)
+				if ((bool) $user_id === false)
 				{
 					trigger_error('NO_USER', E_USER_ERROR);
 				}
@@ -451,6 +454,9 @@ class ucp_register
 				{
 					$message = $user->lang['ACCOUNT_ADDED'];
 					$email_template = 'user_welcome';
+
+					// Autologin after registration
+					$user->session_create($user_id, 0, false, 1);
 				}
 
 				if ($config['email_enable'])
@@ -599,6 +605,31 @@ class ucp_register
 			break;
 		}
 
+		/* @var $provider_collection \phpbb\auth\provider_collection */
+		$provider_collection = $phpbb_container->get('auth.provider_collection');
+		$auth_provider = $provider_collection->get_provider();
+
+		$auth_provider_data = $auth_provider->get_login_data();
+		if ($auth_provider_data)
+		{
+			if (isset($auth_provider_data['VARS']))
+			{
+				$template->assign_vars($auth_provider_data['VARS']);
+			}
+
+			if (isset($auth_provider_data['BLOCK_VAR_NAME']))
+			{
+				foreach ($auth_provider_data['BLOCK_VARS'] as $block_vars)
+				{
+					$template->assign_block_vars($auth_provider_data['BLOCK_VAR_NAME'], $block_vars);
+				}
+			}
+
+			$template->assign_vars(array(
+				'PROVIDER_TEMPLATE_FILE' => $auth_provider_data['TEMPLATE_FILE'],
+			));
+		}
+
 		// Assign template vars for timezone select
 		phpbb_timezone_select($template, $user, $data['tz'], true);
 
@@ -610,7 +641,7 @@ class ucp_register
 
 			'L_REG_COND'				=> $l_reg_cond,
 			'L_USERNAME_EXPLAIN'		=> $user->lang($config['allow_name_chars'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_name_chars']), $user->lang('CHARACTERS', (int) $config['max_name_chars'])),
-			'L_PASSWORD_EXPLAIN'		=> $user->lang($config['pass_complex'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_pass_chars']), $user->lang('CHARACTERS', (int) $config['max_pass_chars'])),
+			'L_PASSWORD_EXPLAIN'		=> $user->lang($config['pass_complex'] . '_EXPLAIN', $user->lang('CHARACTERS', (int) $config['min_pass_chars'])),
 
 			'S_LANG_OPTIONS'	=> language_select($data['lang']),
 			'S_TZ_PRESELECT'	=> !$submit,

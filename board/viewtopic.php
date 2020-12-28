@@ -453,6 +453,38 @@ $join_user_sql = array('a' => true, 't' => false, 's' => false);
 
 $s_limit_days = $s_sort_key = $s_sort_dir = $u_sort_param = '';
 
+/**
+* Event to add new sorting options
+*
+* @event core.viewtopic_gen_sort_selects_before
+* @var	array	limit_days		Limit results by time
+* @var	array	sort_by_text	Language strings for sorting options
+* @var	array	sort_by_sql		SQL conditions for sorting options
+* @var	array	join_user_sql	SQL joins required for sorting options
+* @var	int		sort_days		User selected sort days
+* @var	string	sort_key		User selected sort key
+* @var	string	sort_dir		User selected sort direction
+* @var	string	s_limit_days	Initial value of limit days selectbox
+* @var	string	s_sort_key		Initial value of sort key selectbox
+* @var	string	s_sort_dir		Initial value of sort direction selectbox
+* @var	string	u_sort_param	Initial value of sorting form action
+* @since 3.2.8-RC1
+*/
+$vars = array(
+	'limit_days',
+	'sort_by_text',
+	'sort_by_sql',
+	'join_user_sql',
+	'sort_days',
+	'sort_key',
+	'sort_dir',
+	's_limit_days',
+	's_sort_key',
+	's_sort_dir',
+	'u_sort_param',
+);
+extract($phpbb_dispatcher->trigger_event('core.viewtopic_gen_sort_selects_before', compact($vars)));
+
 gen_sort_selects($limit_days, $sort_by_text, $sort_days, $sort_key, $sort_dir, $s_limit_days, $s_sort_key, $s_sort_dir, $u_sort_param, $default_sort_days, $default_sort_key, $default_sort_dir);
 
 // Obtain correct post count and ordering SQL if user has
@@ -1899,7 +1931,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 
 	$s_cannot_edit = !$auth->acl_get('f_edit', $forum_id) || $user->data['user_id'] != $poster_id;
 	$s_cannot_edit_time = $config['edit_time'] && $row['post_time'] <= time() - ($config['edit_time'] * 60);
-	$s_cannot_edit_locked = $topic_data['topic_status'] == ITEM_LOCKED || $row['post_edit_locked'];
+	$s_cannot_edit_locked = ($topic_data['topic_status'] == ITEM_LOCKED && !$auth->acl_get('m_lock', $forum_id)) || $row['post_edit_locked'];
 
 	$s_cannot_delete = $user->data['user_id'] != $poster_id || (
 			!$auth->acl_get('f_delete', $forum_id) &&
@@ -2012,6 +2044,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'CONTACT_USER'		=> $user_cache[$poster_id]['contact_user'],
 
 		'POST_DATE'			=> $user->format_date($row['post_time'], false, ($view == 'print') ? true : false),
+		'POST_DATE_RFC3339'	=> gmdate(DATE_RFC3339, $row['post_time']),
 		'POST_SUBJECT'		=> $row['post_subject'],
 		'MESSAGE'			=> $message,
 		'SIGNATURE'			=> ($row['enable_sig']) ? $user_cache[$poster_id]['sig'] : '',
@@ -2059,6 +2092,7 @@ for ($i = 0, $end = count($post_list); $i < $end; ++$i)
 		'S_HAS_ATTACHMENTS'	=> (!empty($attachments[$row['post_id']])) ? true : false,
 		'S_MULTIPLE_ATTACHMENTS'	=> !empty($attachments[$row['post_id']]) && count($attachments[$row['post_id']]) > 1,
 		'S_POST_UNAPPROVED'	=> ($row['post_visibility'] == ITEM_UNAPPROVED || $row['post_visibility'] == ITEM_REAPPROVE) ? true : false,
+		'S_CAN_APPROVE'		=> $auth->acl_get('m_approve', $forum_id),
 		'S_POST_DELETED'	=> ($row['post_visibility'] == ITEM_DELETED) ? true : false,
 		'L_POST_DELETED_MESSAGE'	=> $l_deleted_message,
 		'S_POST_REPORTED'	=> ($row['post_reported'] && $auth->acl_get('m_report', $forum_id)) ? true : false,
@@ -2327,12 +2361,25 @@ if ($s_can_vote || $s_quick_reply)
 		($s_notify)						? $qr_hidden_fields['notify'] = 1				: true;
 		($topic_data['topic_status'] == ITEM_LOCKED) ? $qr_hidden_fields['lock_topic'] = 1 : true;
 
-		$template->assign_vars(array(
+		$tpl_ary = [
 			'S_QUICK_REPLY'			=> true,
 			'U_QR_ACTION'			=> append_sid("{$phpbb_root_path}posting.$phpEx", "mode=reply&amp;f=$forum_id&amp;t=$topic_id"),
 			'QR_HIDDEN_FIELDS'		=> build_hidden_fields($qr_hidden_fields),
 			'SUBJECT'				=> 'Re: ' . censor_text($topic_data['topic_title']),
-		));
+		];
+
+		/**
+		* Event after the quick-reply has been setup
+		*
+		* @event core.viewtopic_modify_quick_reply_template_vars
+		* @var	array	tpl_ary			Array with template data
+		* @var	array	topic_data		Array with topic data
+		* @since 3.2.9-RC1
+		*/
+		$vars = ['tpl_ary', 'topic_data'];
+		extract($phpbb_dispatcher->trigger_event('core.viewtopic_modify_quick_reply_template_vars', compact($vars)));
+
+		$template->assign_vars($tpl_ary);
 	}
 }
 // now I have the urge to wash my hands :(

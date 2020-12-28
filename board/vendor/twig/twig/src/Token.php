@@ -16,14 +16,12 @@ namespace Twig;
  * Represents a Token.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @final
  */
-class Token
+final class Token
 {
-    protected $value;
-    protected $type;
-    protected $lineno;
+    private $value;
+    private $type;
+    private $lineno;
 
     const EOF_TYPE = -1;
     const TEXT_TYPE = 0;
@@ -38,6 +36,7 @@ class Token
     const PUNCTUATION_TYPE = 9;
     const INTERPOLATION_START_TYPE = 10;
     const INTERPOLATION_END_TYPE = 11;
+    const ARROW_TYPE = 12;
 
     /**
      * @param int    $type   The type of the token
@@ -157,6 +156,9 @@ class Token
             case self::INTERPOLATION_END_TYPE:
                 $name = 'INTERPOLATION_END_TYPE';
                 break;
+            case self::ARROW_TYPE:
+                $name = 'ARROW_TYPE';
+                break;
             default:
                 throw new \LogicException(sprintf('Token of type "%s" does not exist.', $type));
         }
@@ -200,6 +202,8 @@ class Token
                 return 'begin of string interpolation';
             case self::INTERPOLATION_END_TYPE:
                 return 'end of string interpolation';
+            case self::ARROW_TYPE:
+                return 'arrow function';
             default:
                 throw new \LogicException(sprintf('Token of type "%s" does not exist.', $type));
         }

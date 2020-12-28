@@ -181,10 +181,9 @@ class messenger
 	/**
 	* Adds X-AntiAbuse headers
 	*
-	* @param array $config		Configuration array
-	* @param user $user			A user object
-	*
-	* @return null
+	* @param \phpbb\config\config	$config		Config object
+	* @param \phpbb\user			$user		User object
+	* @return void
 	*/
 	function anti_abuse_headers($config, $user)
 	{
@@ -1014,7 +1013,7 @@ class queue
 
 				try
 				{
-					$this->filesystem->phpbb_chmod($this->cache_file, CHMOD_READ | CHMOD_WRITE);
+					$this->filesystem->phpbb_chmod($this->cache_file, \phpbb\filesystem\filesystem_interface::CHMOD_READ | \phpbb\filesystem\filesystem_interface::CHMOD_WRITE);
 				}
 				catch (\phpbb\filesystem\exception\filesystem_exception $e)
 				{
@@ -1068,7 +1067,7 @@ class queue
 
 			try
 			{
-				$this->filesystem->phpbb_chmod($this->cache_file, CHMOD_READ | CHMOD_WRITE);
+				$this->filesystem->phpbb_chmod($this->cache_file, \phpbb\filesystem\filesystem_interface::CHMOD_READ | \phpbb\filesystem\filesystem_interface::CHMOD_WRITE);
 			}
 			catch (\phpbb\filesystem\exception\filesystem_exception $e)
 			{
@@ -1582,6 +1581,14 @@ class smtp_class
 	*/
 	protected function starttls()
 	{
+		global $config;
+
+		// allow SMTPS (what was used by phpBB 3.0) if hostname is prefixed with tls:// or ssl://
+		if (strpos($config['smtp_host'], 'tls://') === 0 || strpos($config['smtp_host'], 'ssl://') === 0)
+		{
+			return true;
+		}
+
 		if (!function_exists('stream_socket_enable_crypto'))
 		{
 			return false;
@@ -1604,7 +1611,9 @@ class smtp_class
 
 		if (socket_set_blocking($this->socket, 1))
 		{
-			$result = stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+			// https://secure.php.net/manual/en/function.stream-socket-enable-crypto.php#119122
+			$crypto = (phpbb_version_compare(PHP_VERSION, '5.6.7', '<')) ? STREAM_CRYPTO_METHOD_TLS_CLIENT : STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
+			$result = stream_socket_enable_crypto($this->socket, true, $crypto);
 			socket_set_blocking($this->socket, (int) $stream_meta['blocked']);
 		}
 
@@ -1884,14 +1893,21 @@ function mail_encode($str, $eol = "\r\n")
 }
 
 /**
-* Wrapper for sending out emails with the PHP's mail function
-*/
+ * Wrapper for sending out emails with the PHP's mail function
+ */
 function phpbb_mail($to, $subject, $msg, $headers, $eol, &$err_msg)
 {
 	global $config, $phpbb_root_path, $phpEx;
 
-	// We use the EOL character for the OS here because the PHP mail function does not correctly transform line endings. On Windows SMTP is used (SMTP is \r\n), on UNIX a command is used...
-	// Reference: http://bugs.php.net/bug.php?id=15841
+	// Convert Numeric Character References to UTF-8 chars (ie. Emojis)
+	$subject = utf8_decode_ncr($subject);
+	$msg = utf8_decode_ncr($msg);
+
+	/**
+	 * We use the EOL character for the OS here because the PHP mail function does not correctly transform line endings.
+	 * On Windows SMTP is used (SMTP is \r\n), on UNIX a command is used...
+	 * Reference: http://bugs.php.net/bug.php?id=15841
+	 */
 	$headers = implode($eol, $headers);
 
 	if (!class_exists('\phpbb\error_collector'))
@@ -1902,10 +1918,14 @@ function phpbb_mail($to, $subject, $msg, $headers, $eol, &$err_msg)
 	$collector = new \phpbb\error_collector;
 	$collector->install();
 
-	// On some PHP Versions mail() *may* fail if there are newlines within the subject.
-	// Newlines are used as a delimiter for lines in mail_encode() according to RFC 2045 section 6.8.
-	// Because PHP can't decide what is wanted we revert back to the non-RFC-compliant way of separating by one space (Use '' as parameter to mail_encode() results in SPACE used)
+	/**
+	 * On some PHP Versions mail() *may* fail if there are newlines within the subject.
+	 * Newlines are used as a delimiter for lines in mail_encode() according to RFC 2045 section 6.8.
+	 * Because PHP can't decide what is wanted we revert back to the non-RFC-compliant way of separating by one space
+	 * (Use '' as parameter to mail_encode() results in SPACE used)
+	 */
 	$additional_parameters = $config['email_force_sender'] ? '-f' . $config['board_email'] : '';
+
 	$result = mail($to, mail_encode($subject, ''), wordwrap(utf8_wordwrap($msg), 997, "\n", true), $headers, $additional_parameters);
 
 	$collector->uninstall();

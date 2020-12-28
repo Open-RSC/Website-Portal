@@ -921,13 +921,17 @@ function make_clickable_callback($type, $whitespace, $url, $relative_url, $class
 }
 
 /**
-* make_clickable function
-*
-* Replace magic urls of form http://xxx.xxx., www.xxx. and xxx@xxx.xxx.
-* Cuts down displayed size of link if over 50 chars, turns absolute links
-* into relative versions when the server/script path matches the link
-*/
-function make_clickable($text, $server_url = false, $class = 'postlink')
+ * Replaces magic urls of form http://xxx.xxx., www.xxx. and xxx@xxx.xxx.
+ * Cuts down displayed size of link if over 50 chars, turns absolute links
+ * into relative versions when the server/script path matches the link
+ *
+ * @param string		$text		Message text to parse URL/email entries
+ * @param bool|string	$server_url	The server URL. If false, the board URL will be used
+ * @param string		$class		CSS class selector to add to the parsed URL entries
+ *
+ * @return string	A text with parsed URL/email entries
+ */
+function make_clickable($text, $server_url = false, string $class = 'postlink')
 {
 	if ($server_url === false)
 	{
@@ -948,39 +952,70 @@ function make_clickable($text, $server_url = false, $class = 'postlink')
 			$magic_url_match_args = array();
 		}
 
-		// relative urls for this board
-		$magic_url_match_args[$server_url][] = array(
-			'#(^|[\n\t (>.])(' . preg_quote($server_url, '#') . ')/(' . get_preg_expression('relative_url_inline') . ')#iu',
-			MAGIC_URL_LOCAL,
-			$local_class,
-		);
+		// Check if the match for this $server_url and $class already exists
+		$element_exists = false;
+		if (isset($magic_url_match_args[$server_url]))
+		{
+			array_walk_recursive($magic_url_match_args[$server_url], function($value) use (&$element_exists, $static_class)
+				{
+					if ($value == $static_class)
+					{
+						$element_exists = true;
+						return;
+					}
+				}
+			);
+		}
 
-		// matches a xxxx://aaaaa.bbb.cccc. ...
-		$magic_url_match_args[$server_url][] = array(
-			'#(^|[\n\t (>.])(' . get_preg_expression('url_inline') . ')#iu',
-			MAGIC_URL_FULL,
-			$class,
-		);
+		// Only add new $server_url and $class matches if not exist
+		if (!$element_exists)
+		{
+			// relative urls for this board
+			$magic_url_match_args[$server_url][] = [
+				'#(^|[\n\t (>.])(' . preg_quote($server_url, '#') . ')/(' . get_preg_expression('relative_url_inline') . ')#iu',
+				MAGIC_URL_LOCAL,
+				$local_class,
+				$static_class,
+			];
 
-		// matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
-		$magic_url_match_args[$server_url][] = array(
-			'#(^|[\n\t (>])(' . get_preg_expression('www_url_inline') . ')#iu',
-			MAGIC_URL_WWW,
-			$class,
-		);
+			// matches a xxxx://aaaaa.bbb.cccc. ...
+			$magic_url_match_args[$server_url][] = [
+				'#(^|[\n\t (>.])(' . get_preg_expression('url_inline') . ')#iu',
+				MAGIC_URL_FULL,
+				$class,
+				$static_class,
+			];
 
-		// matches an email@domain type address at the start of a line, or after a space or after what might be a BBCode.
-		$magic_url_match_args[$server_url][] = array(
-			'/(^|[\n\t (>])(' . get_preg_expression('email') . ')/iu',
-			MAGIC_URL_EMAIL,
-			'',
-		);
+			// matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
+			$magic_url_match_args[$server_url][] = [
+				'#(^|[\n\t (>])(' . get_preg_expression('www_url_inline') . ')#iu',
+				MAGIC_URL_WWW,
+				$class,
+				$static_class,
+			];
+		}
+
+		if (!isset($magic_url_match_args[$server_url]['email']))
+		{
+			// matches an email@domain type address at the start of a line, or after a space or after what might be a BBCode.
+			$magic_url_match_args[$server_url]['email'] = [
+				'/(^|[\n\t (>])(' . get_preg_expression('email') . ')/iu',
+				MAGIC_URL_EMAIL,
+				'',
+			];
+		}
 	}
 
 	foreach ($magic_url_match_args[$server_url] as $magic_args)
 	{
 		if (preg_match($magic_args[0], $text, $matches))
 		{
+			// Only apply $class from the corresponding function call argument (excepting emails which never has a class)
+			if ($magic_args[3] != $static_class && $magic_args[1] != MAGIC_URL_EMAIL)
+			{
+				continue;
+			}
+
 			$text = preg_replace_callback($magic_args[0], function($matches) use ($magic_args)
 			{
 				$relative_url = isset($matches[3]) ? $matches[3] : '';
@@ -1166,6 +1201,8 @@ function parse_attachments($forum_id, &$message, &$attachments, &$update_count_a
 		$filename = $phpbb_root_path . $config['upload_path'] . '/' . utf8_basename($attachment['physical_filename']);
 
 		$upload_icon = '';
+		$download_link = '';
+		$display_cat = false;
 
 		if (isset($extensions[$attachment['extension']]))
 		{
@@ -1245,11 +1282,6 @@ function parse_attachments($forum_id, &$message, &$attachments, &$update_count_a
 				$display_cat = ATTACHMENT_CATEGORY_NONE;
 			}
 
-			if ($display_cat == ATTACHMENT_CATEGORY_FLASH && !$user->optionget('viewflash'))
-			{
-				$display_cat = ATTACHMENT_CATEGORY_NONE;
-			}
-
 			$download_link = append_sid("{$phpbb_root_path}download/file.$phpEx", 'id=' . $attachment['attach_id']);
 			$l_downloaded_viewed = 'VIEWED_COUNTS';
 
@@ -1278,21 +1310,6 @@ function parse_attachments($forum_id, &$message, &$attachments, &$update_count_a
 						'THUMB_IMAGE'		=> $thumbnail_link,
 					);
 
-					$update_count_ary[] = $attachment['attach_id'];
-				break;
-
-				// Macromedia Flash Files
-				case ATTACHMENT_CATEGORY_FLASH:
-					list($width, $height) = @getimagesize($filename);
-
-					$block_array += array(
-						'S_FLASH_FILE'	=> true,
-						'WIDTH'			=> $width,
-						'HEIGHT'		=> $height,
-						'U_VIEW_LINK'	=> $download_link . '&amp;view=1',
-					);
-
-					// Viewed/Heared File ... update the download count
 					$update_count_ary[] = $attachment['attach_id'];
 				break;
 
@@ -1345,7 +1362,7 @@ function parse_attachments($forum_id, &$message, &$attachments, &$update_count_a
 		);
 		extract($phpbb_dispatcher->trigger_event('core.parse_attachments_modify_template_data', compact($vars)));
 		$update_count_ary = $update_count;
-		unset($update_count);
+		unset($update_count, $display_cat, $download_link);
 
 		$template->assign_block_vars('_file', $block_array);
 
@@ -1482,6 +1499,8 @@ function truncate_string($string, $max_length = 60, $max_store_length = 255, $al
 * Get username details for placing into templates.
 * This function caches all modes on first call, except for no_profile and anonymous user - determined by $user_id.
 *
+* @html Username spans and links
+*
 * @param string $mode Can be profile (for getting an url to the profile), username (for obtaining the username), colour (for obtaining the user colour), full (for obtaining a html string representing a coloured link to the users profile) or no_profile (the same as full but forcing no profile link)
 * @param int $user_id The users id
 * @param string $username The users name
@@ -1501,6 +1520,7 @@ function get_username_string($mode, $user_id, $username, $username_colour = '', 
 	{
 		global $phpbb_root_path, $phpEx;
 
+		/** @html Username spans and links for usage in the template */
 		$_profile_cache['base_url'] = append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=viewprofile&amp;u={USER_ID}');
 		$_profile_cache['tpl_noprofile'] = '<span class="username">{USERNAME}</span>';
 		$_profile_cache['tpl_noprofile_colour'] = '<span style="color: {USERNAME_COLOUR};" class="username-coloured">{USERNAME}</span>';

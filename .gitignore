@@ -24,7 +24,8 @@ sql/tmp/
 avatars/
 
 board/cache/production
+old_site
+portal/cache
+portal/tmp
 
-openrsc_web/public/css/app.css
-
-openrsc_web/public/mix-manifest.json
+!.gitignore

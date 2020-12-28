@@ -83,7 +83,7 @@ class fulltext_mysql extends \phpbb\search\base
 	 * @param string $phpEx PHP file extension
 	 * @param \phpbb\auth\auth $auth Auth object
 	 * @param \phpbb\config\config $config Config object
-	 * @param \phpbb\db\driver\driver_interface Database object
+	 * @param \phpbb\db\driver\driver_interface $db Database object
 	 * @param \phpbb\user $user User object
 	 * @param \phpbb\event\dispatcher_interface	$phpbb_dispatcher	Event dispatcher object
 	 */
@@ -150,11 +150,11 @@ class fulltext_mysql extends \phpbb\search\base
 	/**
 	* Checks for correct MySQL version and stores min/max word length in the config
 	*
-	* @return string|bool Language key of the error/incompatiblity occurred
+	* @return string|bool Language key of the error/incompatibility occurred
 	*/
 	public function init()
 	{
-		if ($this->db->get_sql_layer() != 'mysql4' && $this->db->get_sql_layer() != 'mysqli')
+		if ($this->db->get_sql_layer() != 'mysqli')
 		{
 			return $this->user->lang['FULLTEXT_MYSQL_INCOMPATIBLE_DATABASE'];
 		}
@@ -173,14 +173,15 @@ class fulltext_mysql extends \phpbb\search\base
 			$engine = $info['Type'];
 		}
 
-		$fulltext_supported =
-			$engine === 'MyISAM' ||
-			// FULLTEXT is supported on InnoDB since MySQL 5.6.4 according to
-			// http://dev.mysql.com/doc/refman/5.6/en/innodb-storage-engine.html
-			// We also require https://bugs.mysql.com/bug.php?id=67004 to be
-			// fixed for proper overall operation. Hence we require 5.6.8.
-			$engine === 'InnoDB' &&
-			phpbb_version_compare($this->db->sql_server_info(true), '5.6.8', '>=');
+		$fulltext_supported = $engine === 'Aria' || $engine === 'MyISAM'
+			/**
+			 * FULLTEXT is supported on InnoDB since MySQL 5.6.4 according to
+			 * http://dev.mysql.com/doc/refman/5.6/en/innodb-storage-engine.html
+			 * We also require https://bugs.mysql.com/bug.php?id=67004 to be
+			 * fixed for proper overall operation. Hence we require 5.6.8.
+			 */
+			|| $engine === 'InnoDB'
+			&& phpbb_version_compare($this->db->sql_server_info(true), '5.6.8', '>=');
 
 		if (!$fulltext_supported)
 		{
@@ -188,7 +189,7 @@ class fulltext_mysql extends \phpbb\search\base
 		}
 
 		$sql = 'SHOW VARIABLES
-			LIKE \'ft\_%\'';
+			LIKE \'%ft\_%\'';
 		$result = $this->db->sql_query($sql);
 
 		$mysql_info = array();
@@ -198,8 +199,16 @@ class fulltext_mysql extends \phpbb\search\base
 		}
 		$this->db->sql_freeresult($result);
 
-		$this->config->set('fulltext_mysql_max_word_len', $mysql_info['ft_max_word_len']);
-		$this->config->set('fulltext_mysql_min_word_len', $mysql_info['ft_min_word_len']);
+		if ($engine === 'MyISAM')
+		{
+			$this->config->set('fulltext_mysql_max_word_len', $mysql_info['ft_max_word_len']);
+			$this->config->set('fulltext_mysql_min_word_len', $mysql_info['ft_min_word_len']);
+		}
+		else if ($engine === 'InnoDB')
+		{
+			$this->config->set('fulltext_mysql_max_word_len', $mysql_info['innodb_ft_max_token_size']);
+			$this->config->set('fulltext_mysql_min_word_len', $mysql_info['innodb_ft_min_token_size']);
+		}
 
 		return false;
 	}
@@ -997,14 +1006,7 @@ class fulltext_mysql extends \phpbb\search\base
 		if (!isset($this->stats['post_subject']))
 		{
 			$alter_entry = array();
-			if ($this->db->get_sql_layer() == 'mysqli' || version_compare($this->db->sql_server_info(true), '4.1.3', '>='))
-			{
-				$alter_entry[] = 'MODIFY post_subject varchar(255) COLLATE utf8_unicode_ci DEFAULT \'\' NOT NULL';
-			}
-			else
-			{
-				$alter_entry[] = 'MODIFY post_subject text NOT NULL';
-			}
+			$alter_entry[] = 'MODIFY post_subject varchar(255) COLLATE utf8_unicode_ci DEFAULT \'\' NOT NULL';
 			$alter_entry[] = 'ADD FULLTEXT (post_subject)';
 			$alter_list[] = $alter_entry;
 		}
@@ -1012,15 +1014,7 @@ class fulltext_mysql extends \phpbb\search\base
 		if (!isset($this->stats['post_content']))
 		{
 			$alter_entry = array();
-			if ($this->db->get_sql_layer() == 'mysqli' || version_compare($this->db->sql_server_info(true), '4.1.3', '>='))
-			{
-				$alter_entry[] = 'MODIFY post_text mediumtext COLLATE utf8_unicode_ci NOT NULL';
-			}
-			else
-			{
-				$alter_entry[] = 'MODIFY post_text mediumtext NOT NULL';
-			}
-
+			$alter_entry[] = 'MODIFY post_text mediumtext COLLATE utf8_unicode_ci NOT NULL';
 			$alter_entry[] = 'ADD FULLTEXT post_content (post_text, post_subject)';
 			$alter_list[] = $alter_entry;
 		}

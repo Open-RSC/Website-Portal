@@ -89,6 +89,8 @@ class factory implements \phpbb\textformatter\cache_interface
 				author={TEXT1;optional}
 				post_id={UINT;optional}
 				post_url={URL;optional;postFilter=#false}
+				msg_id={UINT;optional}
+				msg_url={URL;optional;postFilter=#false}
 				profile_url={URL;optional;postFilter=#false}
 				time={UINT;optional}
 				url={URL;optional}
@@ -110,7 +112,7 @@ class factory implements \phpbb\textformatter\cache_interface
 		'i'     => '<span style="font-style: italic"><xsl:apply-templates/></span>',
 		'u'     => '<span style="text-decoration: underline"><xsl:apply-templates/></span>',
 		'img'   => '<img src="{IMAGEURL}" class="postimage" alt="{L_IMAGE}"/>',
-		'size'  => '<span style="font-size: {FONTSIZE}%; line-height: normal"><xsl:apply-templates/></span>',
+		'size'	=> '<span><xsl:attribute name="style"><xsl:text>font-size: </xsl:text><xsl:value-of select="substring(@size, 1, 4)"/><xsl:text>%; line-height: normal</xsl:text></xsl:attribute><xsl:apply-templates/></span>',
 		'color' => '<span style="color: {COLOR}"><xsl:apply-templates/></span>',
 		'email' => '<a>
 			<xsl:attribute name="href">
@@ -216,7 +218,7 @@ class factory implements \phpbb\textformatter\cache_interface
 		{
 			$configurator->urlConfig->disallowScheme($scheme);
 		}
-		foreach (explode(',', $this->config['allowed_schemes_links']) as $scheme)
+		foreach (array_filter(explode(',', $this->config['allowed_schemes_links'])) as $scheme)
 		{
 			$configurator->urlConfig->allowScheme(trim($scheme));
 		}
@@ -271,8 +273,6 @@ class factory implements \phpbb\textformatter\cache_interface
 			->add('#imageurl', __NAMESPACE__ . '\\parser::filter_img_url')
 			->addParameterByName('urlConfig')
 			->addParameterByName('logger')
-			->addParameterByName('max_img_height')
-			->addParameterByName('max_img_width')
 			->markAsSafeAsURL()
 			->setJS('UrlFilter.filter');
 
@@ -468,11 +468,17 @@ class factory implements \phpbb\textformatter\cache_interface
 		$tag->attributes->add('text');
 		$tag->template = '<xsl:value-of select="@text"/>';
 
+		$board_url = generate_board_url() . '/';
 		$tag->filterChain
 			->add(array($this->link_helper, 'truncate_local_url'))
 			->resetParameters()
 			->addParameterByName('tag')
-			->addParameterByValue(generate_board_url() . '/');
+			->addParameterByValue($board_url);
+		$tag->filterChain
+			->add(array($this->link_helper, 'truncate_local_url'))
+			->resetParameters()
+			->addParameterByName('tag')
+			->addParameterByValue(preg_replace('(^\\w+:)', '', $board_url));
 		$tag->filterChain
 			->add(array($this->link_helper, 'truncate_text'))
 			->resetParameters()

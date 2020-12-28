@@ -26,7 +26,7 @@ if (!defined('IN_PHPBB'))
 function compose_pm($id, $mode, $action, $user_folders = array())
 {
 	global $template, $db, $auth, $user, $cache;
-	global $phpbb_root_path, $phpEx, $config;
+	global $phpbb_root_path, $phpEx, $config, $language;
 	global $request, $phpbb_dispatcher, $phpbb_container;
 
 	// Damn php and globals - i know, this is horrible
@@ -308,6 +308,35 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		$result = $db->sql_query($sql);
 		$post = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
+
+		/**
+		* Alter the row of the post being quoted when composing a private message
+		*
+		* @event core.ucp_pm_compose_compose_pm_basic_info_query_after
+		* @var	array	post			Array with data of the post being quoted
+		* @var	int		msg_id			topic_id in the page request
+		* @var	int		to_user_id		The id of whom the message is to
+		* @var	int		to_group_id		The id of the group whom the message is to
+		* @var	bool	submit			Whether the user is sending the PM or not
+		* @var	bool	preview			Whether the user is previewing the PM or not
+		* @var	string	action			One of: post, reply, quote, forward, quotepost, edit, delete, smilies
+		* @var	bool	delete			Whether the user is deleting the PM
+		* @var	int		reply_to_all	Value of reply_to_all request variable.
+		* @since 3.2.10-RC1
+		* @since 3.3.1-RC1
+		*/
+		$vars = [
+			'post',
+			'msg_id',
+			'to_user_id',
+			'to_group_id',
+			'submit',
+			'preview',
+			'action',
+			'delete',
+			'reply_to_all',
+		];
+		extract($phpbb_dispatcher->trigger_event('core.ucp_pm_compose_compose_pm_basic_info_query_after', compact($vars)));
 
 		if (!$post)
 		{
@@ -665,6 +694,12 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		$subject = (!$subject && $action != 'post') ? $user->lang['NEW_MESSAGE'] : $subject;
 		$message = $request->variable('message', '', true);
 
+		/**
+		 * Replace Emojis and other 4bit UTF-8 chars not allowed by MySQL to UCR/NCR.
+		 * Using their Numeric Character Reference's Hexadecimal notation.
+		 */
+		$subject = utf8_encode_ucr($subject);
+
 		if ($subject && $message)
 		{
 			if (confirm_box(true))
@@ -683,6 +718,10 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 				);
 				$db->sql_query($sql);
 
+				/** @var \phpbb\attachment\manager $attachment_manager */
+				$attachment_manager = $phpbb_container->get('attachment.manager');
+				$attachment_manager->delete('attach', array_column($message_parser->attachment_data, 'attach_id'));
+
 				$redirect_url = append_sid("{$phpbb_root_path}ucp.$phpEx", "i=pm&amp;mode=$mode");
 
 				meta_refresh(3, $redirect_url);
@@ -700,8 +739,9 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 					'message'	=> $message,
 					'u'			=> $to_user_id,
 					'g'			=> $to_group_id,
-					'p'			=> $msg_id)
-				);
+					'p'			=> $msg_id,
+					'attachment_data' => $message_parser->attachment_data,
+				));
 				$s_hidden_fields .= build_address_field($address_list);
 
 				confirm_box(false, 'SAVE_DRAFT', $s_hidden_fields);
@@ -799,7 +839,10 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		extract($phpbb_dispatcher->trigger_event('core.ucp_pm_compose_modify_parse_before', compact($vars)));
 
 		// Parse Attachments - before checksum is calculated
-		$message_parser->parse_attachments('fileupload', $action, 0, $submit, $preview, $refresh, true);
+		if ($message_parser->check_attachment_form_token($language, $request, 'ucp_pm_compose'))
+		{
+			$message_parser->parse_attachments('fileupload', $action, 0, $submit, $preview, $refresh, true);
+		}
 
 		if (count($message_parser->warn_msg) && !($remove_u || $remove_g || $add_to || $add_bcc))
 		{
@@ -844,6 +887,35 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 			}
 		}
 
+		/**
+		* Modify private message
+		*
+		* @event core.ucp_pm_compose_modify_parse_after
+		* @var	bool	enable_bbcode		Whether or not bbcode is enabled
+		* @var	bool	enable_smilies		Whether or not smilies are enabled
+		* @var	bool	enable_urls			Whether or not urls are enabled
+		* @var	bool	enable_sig			Whether or not signature is enabled
+		* @var	string	subject				PM subject text
+		* @var	object	message_parser		The message parser object
+		* @var	bool	submit				Whether or not the form has been sumitted
+		* @var	bool	preview				Whether or not the signature is being previewed
+		* @var	array	error				Any error strings
+		* @since 3.2.10-RC1
+		* @since 3.3.1-RC1
+		*/
+		$vars = [
+			'enable_bbcode',
+			'enable_smilies',
+			'enable_urls',
+			'enable_sig',
+			'subject',
+			'message_parser',
+			'submit',
+			'preview',
+			'error',
+		];
+		extract($phpbb_dispatcher->trigger_event('core.ucp_pm_compose_modify_parse_after', compact($vars)));
+
 		// Store message, sync counters
 		if (!count($error) && $submit)
 		{
@@ -866,6 +938,12 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 				'filename_data'			=> $message_parser->filename_data,
 				'address_list'			=> $address_list
 			);
+
+			/**
+			 * Replace Emojis and other 4bit UTF-8 chars not allowed by MySQL to UCR/NCR.
+			 * Using their Numeric Character Reference's Hexadecimal notation.
+			 */
+			$subject = utf8_encode_ucr($subject);
 
 			// ((!$message_subject) ? $subject : $message_subject)
 			$msg_id = submit_pm($action, $subject, $pm_data);
@@ -996,7 +1074,10 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 		{
 			$quote_attributes['post_id'] = $post['msg_id'];
 		}
-
+		if ($action === 'quote')
+		{
+			$quote_attributes['msg_id'] = $post['msg_id'];
+		}
 		/** @var \phpbb\language\language $language */
 		$language = $phpbb_container->get('language');
 		/** @var \phpbb\textformatter\utils_interface $text_formatter_utils */
@@ -1007,6 +1088,16 @@ function compose_pm($id, $mode, $action, $user_folders = array())
 	if (($action == 'reply' || $action == 'quote' || $action == 'quotepost') && !$preview && !$refresh)
 	{
 		$message_subject = ((!preg_match('/^Re:/', $message_subject)) ? 'Re: ' : '') . censor_text($message_subject);
+
+		/**
+		* This event allows you to modify the PM subject of the PM being quoted
+		*
+		* @event core.pm_modify_message_subject
+		* @var	string		message_subject		String with the PM subject already censored.
+		* @since 3.2.8-RC1
+		*/
+		$vars = array('message_subject');
+		extract($phpbb_dispatcher->trigger_event('core.pm_modify_message_subject', compact($vars)));
 	}
 
 	if ($action == 'forward' && !$preview && !$refresh && !$submit)
