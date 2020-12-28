@@ -9,18 +9,16 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - "./inc/default.conf:/etc/nginx/conf.d/default.conf"
-      - "./openrsc_web:/var/www/html/openrsc_web"
-      - "./avatars:/var/www/html/openrsc_web/public/img/avatars"
-      - "./board:/var/www/html/openrsc_web/public/board"
-      - "./downloads:/var/www/html/openrsc_web/public/downloads"
-      - "./cache:/var/www/html/openrsc_web/public/cache"
-#      - "./etc/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
-#      - "./etc/nginx/ssl:/etc/nginx/ssl"
-#      - "./etc/nginx/log:/var/log/nginx"
-      - "./wiki:/var/www/html/wiki"
-#      - "./site/public/stylesheets:/var/www/html/site/public/stylesheets"
-#      - "./site/public/images:/var/www/html/site/public/images"
+      - "./portal:/var/www/html/portal"
+      - "./avatars:/var/www/html/portal/www/images/avatars"
+      - "./board:/var/www/html/portal/www/board"
+      - "./downloads:/var/www/html/portal/www/downloads"
+      - "./etc/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
+      - "./etc/nginx/ssl:/etc/nginx/ssl"
+      - "./etc/nginx/log:/var/log/nginx"
+      - "./wiki:/var/www/html/portal/www/wiki"
+#      - "./site/www/stylesheets:/var/www/html/site/www/stylesheets"
+#      - "./site/www/images:/var/www/html/site/www/images"
 
   php:
     image: openrsc/php-laravel:latest
@@ -28,11 +26,9 @@ services:
     ports:
       - "127.0.0.1:9000:9000"
     volumes:
-      - "./inc/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "./openrsc_web:/var/www/html/openrsc_web"
-      - "./board:/var/www/html/openrsc_web/public/board"
-      - "./sql:/var/www/html/openrsc_web/public/sql"
-      - "./downloads:/var/www/html/openrsc_web/public/downloads"
+      - "./etc/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "./portal:/var/www/html/portal"
+      - "./board:/var/www/html/portal/www/board"
 
   mediawiki: # Optional, comment this section out if unwanted.
     image: mediawiki:latest
@@ -54,7 +50,7 @@ services:
       - UPLOAD_LIMIT=10485760
       - PMA_HOST=mariadb
     ports:
-      - "4000:80"
+      - "127.0.0.1:4000:80"
     volumes:
       - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php" # PHPMyAdmin config is located in etc
 

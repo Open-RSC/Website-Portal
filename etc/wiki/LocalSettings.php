@@ -30,7 +30,7 @@ $wgMetaNamespace = "Open_RSC_Wiki";
 $wgScriptPath = "/wiki";
 
 ## The protocol and server name to use in fully-qualified URLs
-## $wgServer = "https://openrsc.com";
+## $wgServer = "https://rsc.vet";
 $wgServer = "http://localhost";
 
 ## The URL path to static resources (images, scripts, etc.)
@@ -53,7 +53,7 @@ $wgEnotifWatchlist = false; # UPO
 $wgEmailAuthentication = true;
 
 ## Database settings
-$wgDBtype = "mysql";
+$wgDBtype = "mariadb";
 $wgDBserver = "mariadb";
 $wgDBname = "wiki";
 $wgDBuser = "root";
