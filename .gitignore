@@ -29,3 +29,4 @@ portal/cache
 portal/tmp
 
 !.gitignore
+portal/www/administrator/cache/

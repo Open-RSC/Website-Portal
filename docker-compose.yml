@@ -34,8 +34,6 @@ services:
     image: mediawiki:latest
     container_name: mediawiki
     restart: always
-    ports:
-      - "127.0.0.1:9001:80"
     volumes:
       - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php" # MediaWiki config is located in etc
       - "./wiki/images:/var/www/html/images"
@@ -49,8 +47,6 @@ services:
       - HIDE_PHP_VERSION=true
       - UPLOAD_LIMIT=10485760
       - PMA_HOST=mariadb
-    ports:
-      - "127.0.0.1:4000:80"
     volumes:
       - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php" # PHPMyAdmin config is located in etc
 
