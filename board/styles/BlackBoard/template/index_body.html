@@ -1,0 +1,38 @@
+<!-- INCLUDE overall_header.html -->
+
+<div class="forumbody">
+<!-- EVENT index_body_markforums_before -->
+<!-- IF U_MARK_FORUMS -->
+	<div class="action-bar compact">
+		<a href="{U_MARK_FORUMS}" class="mark-read rightside" accesskey="m" data-ajax="mark_forums_read">{L_MARK_FORUMS_READ}</a>
+	</div>
+<!-- ENDIF -->
+<!-- EVENT index_body_markforums_after -->
+<!-- INCLUDE forumlist_body.html -->
+<div style="margin-bottom:5px;"></div>
+</div>
+
+			 <!-- IF not S_USER_LOGGED_IN and not S_IS_BOT -->
+				<div id="top-headerspace" class="top-headerspace">
+				<form method="post" action="{S_LOGIN_ACTION}" class="headerspace">
+						<h3><a href="{U_LOGIN_LOGOUT}">{L_LOGIN_LOGOUT}</a><!-- IF S_REGISTER_ENABLED -->&nbsp; &bull; &nbsp;<a href="{U_REGISTER}">{L_REGISTER}</a><!-- ENDIF --></h3>
+					<fieldset class="quick-login">
+						<label for="username"><span>{L_USERNAME}{L_COLON}</span> <input type="text" tabindex="1" name="username" id="username" size="10" class="inputbox" title="{L_USERNAME}" /></label><br /><br />
+						<label for="password"><span>{L_PASSWORD}{L_COLON}</span> <input type="password" tabindex="2" name="password" id="password" size="10" class="inputbox" title="{L_PASSWORD}" autocomplete="off" /></label><br /><br />
+					<!-- IF U_SEND_PASSWORD -->
+						<a href="{U_SEND_PASSWORD}">{L_FORGOT_PASS}</a>
+					<!-- ENDIF -->
+					<!-- IF S_AUTOLOGIN_ENABLED -->
+						<span class="responsive-hide">|</span> <label for="autologin">{L_LOG_ME_IN} <input type="checkbox" tabindex="4" name="autologin" id="autologin" /></label>
+					<!-- ENDIF -->
+						<input type="submit" tabindex="5" name="login" value="{L_LOGIN}" class="button2 hvr-sweep-to-top" />
+					{S_LOGIN_REDIRECT}
+					{S_FORM_TOKEN_LOGIN}
+					</fieldset>
+				</form>
+				</div>
+				<!-- ENDIF -->
+			
+		<!-- EVENT index_body_forumlist_body_after -->
+
+<!-- INCLUDE overall_footer_2.html -->
