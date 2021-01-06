@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  certbot: # Optional, comment this section out if unwanted.
+  certbot: # NGINX will exit with code 1 until certbot has finished Cloudflare DNS validation to generate SSL certs. Safe to restart repeatedly, will not renew until expiring. Verify cloudflare.ini is populated.
     image: certbot/dns-cloudflare
     container_name: certbot
     volumes:
@@ -33,9 +33,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    restart: always
-    depends_on: # Optional, comment this section out if unwanted.
-      - certbot # Optional, comment this section out if unwanted.
+    restart: unless-stopped
     ports:
       - '80:80'
       - '443:443'

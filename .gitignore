@@ -31,4 +31,10 @@ portal/tmp
 !.gitignore
 portal/www/administrator/cache/
 
-etc/certbot
+etc/letsencrypt/cloudflare.ini
+etc/letsencrypt/live/
+etc/letsencrypt/keys/
+etc/letsencrypt/renewal/
+etc/letsencrypt/csr/
+etc/letsencrypt/archive/
+etc/letsencrypt/accounts/
