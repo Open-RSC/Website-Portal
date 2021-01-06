@@ -30,3 +30,5 @@ portal/tmp
 
 !.gitignore
 portal/www/administrator/cache/
+
+etc/certbot

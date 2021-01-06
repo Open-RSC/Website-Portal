@@ -1,0 +1,61 @@
+server {
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
+    server_name             www.rsc.vet;
+    set                     $base /var/www/html/portal;
+    root                    $base/public;
+
+    # SSL
+    ssl_certificate         /etc/letsencrypt/live/rsc.vet/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/rsc.vet/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/rsc.vet/chain.pem;
+
+    # security
+    include                 nginxconfig.io/security.conf;
+
+    # index.php
+    index                   index.php;
+
+    # index.html fallback
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # index.php fallback
+    location ~ ^/api/ {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # additional config
+    include nginxconfig.io/general.conf;
+
+    # handle .php
+    location ~ \.php$ {
+        include nginxconfig.io/php_fastcgi.conf;
+    }
+}
+
+# non-www, subdomains redirect
+server {
+    listen                  443 ssl http2;
+    listen                  [::]:443 ssl http2;
+    server_name             .rsc.vet;
+
+    # SSL
+    ssl_certificate         /etc/letsencrypt/live/rsc.vet/fullchain.pem;
+    ssl_certificate_key     /etc/letsencrypt/live/rsc.vet/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/rsc.vet/chain.pem;
+    return                  301 https://www.rsc.vet$request_uri;
+}
+
+# HTTP redirect
+server {
+    listen      80;
+    listen      [::]:80;
+    server_name .rsc.vet;
+    include     nginxconfig.io/letsencrypt.conf;
+
+    location / {
+        return 301 https://www.rsc.vet$request_uri;
+    }
+}

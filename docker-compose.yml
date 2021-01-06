@@ -1,39 +1,85 @@
 version: '3'
 services:
 
+  certbot: # Optional, comment this section out if unwanted.
+    image: certbot/dns-cloudflare
+    container_name: certbot
+    volumes:
+      - "./etc/letsencrypt:/etc/letsencrypt"
+    command: >-
+      certonly --dns-cloudflare
+      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
+      --agree-tos 
+      --no-eff-email
+      --keep-until-expiring
+      --renew-with-new-domains
+      --email marwolf@openrsc.com
+      -d rsc.vet
+      -d www.rsc.vet
+      -d retro.rsc.vet
+      -d www.retro.rsc.vet
+      -d runescapeclassic.dev
+      -d www.runescapeclassic.dev
+      -d openrsc.com
+      -d www.openrsc.com
+      -d game.openrsc.com
+      -d rsccabbage.com
+      -d www.rsccabbage.com
+      -d orsc.dev
+      -d www.orsc.dev
+      -d 2001scape.com
+      -d www.2001scape.com
+
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: always
+    depends_on: # Optional, comment this section out if unwanted.
+      - certbot # Optional, comment this section out if unwanted.
     ports:
       - '80:80'
       - '443:443'
     volumes:
       - "./portal:/var/www/html/portal"
-      - "./avatars:/var/www/html/portal/www/images/avatars"
-      - "./board:/var/www/html/portal/www/board"
-      - "./downloads:/var/www/html/portal/www/downloads"
-      - "./etc/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
-      - "./etc/nginx/ssl:/etc/nginx/ssl"
+      - "./avatars:/var/www/html/portal/public/images/avatars"
+      - "./board:/var/www/html/portal/public/board"
+      - "./downloads:/var/www/html/portal/public/downloads"
+      - "./retro:/var/www/html/retro"
+      - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./etc/nginx/sites-available:/etc/nginx/sites-available"
+      - "./etc/nginx/sites-available:/etc/nginx/sites-enabled"
+      - "./etc/nginx/nginxconfig.io:/etc/nginx/nginxconfig.io"
       - "./etc/nginx/log:/var/log/nginx"
-      - "./wiki:/var/www/html/portal/www/wiki"
+      - "./etc/letsencrypt:/etc/letsencrypt"
+      - "./wiki:/var/www/html/portal/public/wiki"
 #      - "./site/www/stylesheets:/var/www/html/site/www/stylesheets"
 #      - "./site/www/images:/var/www/html/site/www/images"
+
+  node:
+    image: node:latest
+    container_name: node
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"
+    command: bash -c "cd /var/www/html/retro && npm install && npm update && npm start"
+    volumes:
+      - "./retro:/var/www/html/retro"
 
   php:
     image: openrsc/php-laravel:latest
     container_name: php
+    restart: unless-stopped
     ports:
       - "127.0.0.1:9000:9000"
     volumes:
       - "./etc/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "./portal:/var/www/html/portal"
-      - "./board:/var/www/html/portal/www/board"
+      - "./board:/var/www/html/portal/public/board"
 
   mediawiki: # Optional, comment this section out if unwanted.
     image: mediawiki:latest
     container_name: mediawiki
-    restart: always
+    restart: unless-stopped
     volumes:
       - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php" # MediaWiki config is located in etc
       - "./wiki/images:/var/www/html/images"
@@ -42,7 +88,7 @@ services:
   phpmyadmin: # Optional, comment this section out if unwanted.
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
-    restart: always
+    restart: unless-stopped
     environment:
       - HIDE_PHP_VERSION=true
       - UPLOAD_LIMIT=10485760
