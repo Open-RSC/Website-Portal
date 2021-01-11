@@ -39,24 +39,24 @@ services:
       - '443:443'
     volumes:
       - "./portal:/var/www/html/portal"
-      - "./avatars:/var/www/html/portal/public/images/avatars"
+      - "./avatars:/var/www/html/portal/public/img/avatars"
       - "./board:/var/www/html/portal/public/board"
       - "./downloads:/var/www/html/portal/public/downloads"
       - "./retro:/var/www/html/retro"
       - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./etc/nginx/sites-available:/etc/nginx/sites-available"
-      - "./etc/nginx/sites-available:/etc/nginx/sites-enabled"
-      - "./etc/nginx/nginxconfig.io:/etc/nginx/nginxconfig.io"
+      - "./etc/nginx/sites-enabled:/etc/nginx/sites-enabled"
+      - "./etc/nginx/conf.d:/etc/nginx/conf.d"
       - "./etc/nginx/log:/var/log/nginx"
       - "./etc/letsencrypt:/etc/letsencrypt"
       - "./wiki:/var/www/html/portal/public/wiki"
-#      - "./site/www/stylesheets:/var/www/html/site/www/stylesheets"
-#      - "./site/www/images:/var/www/html/site/www/images"
+      - "./retro/public/stylesheets:/var/www/retro/site/public/stylesheets"
+      - "./retro/public/images:/var/www/html/retro/public/images"
 
   node:
     image: node:latest
     container_name: node
-    restart: always
+    restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000"
     command: bash -c "cd /var/www/html/retro && npm install && npm update && npm start"
@@ -78,6 +78,8 @@ services:
     image: mediawiki:latest
     container_name: mediawiki
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:9001:80"
     volumes:
       - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php" # MediaWiki config is located in etc
       - "./wiki/images:/var/www/html/images"
