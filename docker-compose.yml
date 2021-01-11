@@ -42,7 +42,6 @@ services:
       - "./avatars:/var/www/html/portal/public/img/avatars"
       - "./board:/var/www/html/portal/public/board"
       - "./downloads:/var/www/html/portal/public/downloads"
-      - "./retro:/var/www/html/retro"
       - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./etc/nginx/sites-available:/etc/nginx/sites-available"
       - "./etc/nginx/sites-enabled:/etc/nginx/sites-enabled"
@@ -50,8 +49,8 @@ services:
       - "./etc/nginx/log:/var/log/nginx"
       - "./etc/letsencrypt:/etc/letsencrypt"
       - "./wiki:/var/www/html/portal/public/wiki"
-      - "./retro/public/stylesheets:/var/www/retro/site/public/stylesheets"
-      - "./retro/public/images:/var/www/html/retro/public/images"
+      - "./retro:/var/www/html/retro"
+      - "./retro/public:/var/www/retro/site/public"
 
   node:
     image: node:latest
