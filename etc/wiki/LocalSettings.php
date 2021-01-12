@@ -27,18 +27,18 @@ $wgMetaNamespace = "Open_RSC_Wiki";
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "/wiki";
+$wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-## $wgServer = "https://rsc.vet";
-$wgServer = "http://localhost";
+## $wgServer = "https://wiki.runescapeclassic.dev";
+$wgServer = "http://wiki.localhost";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
 
-## The URL path to the logo.  Make sure you change this from the default,
+## The URL paths to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
-$wgLogo = "/wiki/images/thumb/6/6d/Logo_512.png/180px-Logo_512.png";
+$wgLogos = [ '1x' => "/images/thumb/6/6d/Logo_512.png/180px-Logo_512.png" ];
 
 ## UPO means: this is also a user preference option
 
@@ -53,7 +53,7 @@ $wgEnotifWatchlist = false; # UPO
 $wgEmailAuthentication = true;
 
 ## Database settings
-$wgDBtype = "mariadb";
+$wgDBtype = "mysql";
 $wgDBserver = "mariadb";
 $wgDBname = "wiki";
 $wgDBuser = "root";
@@ -66,7 +66,7 @@ $wgDBprefix = "";
 $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 
 ## Shared memory settings
-$wgMainCacheType = CACHE_ACCEL;
+$wgMainCacheType = CACHE_ANYTHING;
 $wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
@@ -85,8 +85,13 @@ $wgPingback = false;
 
 ## If you use ImageMagick (or any other shell command) on a
 ## Linux server, this will need to be set to the name of an
-## available UTF-8 locale
+## available UTF-8 locale. This should ideally be set to an English
+## language locale so that the behaviour of C library functions will
+## be consistent with typical installations. Use $wgLanguageCode to
+## localise the wiki.			 
 $wgShellLocale = "C.UTF-8";
+
+$wgShowExceptionDetails = true;
 
 ## Set $wgCacheDirectory to a writable directory on the web server
 ## to make your wiki go slightly faster. The directory should not
@@ -96,14 +101,14 @@ $wgShellLocale = "C.UTF-8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
 
-$wgSecretKey = "";
+$wgSecretKey = "352dd78c92167d8eab301dba65704a8bf3d17479f613bf108549e129cc5e56fa"; # Generated for git commit! Change this manually for production usage
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "";
+$wgUpgradeKey = "4accb00871abf78c"; # Generated for git commit! Change this manually for production usage
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -169,42 +174,53 @@ $wgTweekiSkinUseTooltips = true;
 $wgTweekiSkinImagePageTOCTabs = true;
 
 # Enabled extensions. Most of the extensions are enabled by adding
-# wfLoadExtensions('ExtensionName');
-# to LocalSettings.php. Check specific extension documentation for more details.
-# The following extensions were automatically enabled:
-wfLoadExtension( 'CategoryTree' );
-wfLoadExtension( 'Cite' );
-wfLoadExtension( 'CiteThisPage' );
-wfLoadExtension( 'CodeEditor' );
-wfLoadExtension( 'ConfirmEdit' );
-wfLoadExtension( 'Gadgets' );
-wfLoadExtension( 'ImageMap' );
-wfLoadExtension( 'InputBox' );
-wfLoadExtension( 'Interwiki' );
-wfLoadExtension( 'LocalisationUpdate' );
-wfLoadExtension( 'MultimediaViewer' );
-wfLoadExtension( 'Nuke' );
-wfLoadExtension( 'ParserFunctions' );
-wfLoadExtension( 'PdfHandler' );
-wfLoadExtension( 'Renameuser' );
-wfLoadExtension( 'ReplaceText' );
-wfLoadExtension( 'Scribunto' );
-wfLoadExtension( 'SpamBlacklist' );
-wfLoadExtension( 'SyntaxHighlight_GeSHi' );
-wfLoadExtension( 'TitleBlacklist' );
-wfLoadExtension( 'WikiEditor' );
 
-
-# End of automatically generated settings.
-# Add more configuration options below.
-
+$wgDnsBlacklistUrls = array( 'xbl.spamhaus.org.', 'dnsbl.tornevall.org.', 'spam.dnsbl.sorbs.net.', 'rbl.dnsbl.im.', 'noptr.spamrats.com.', 'all.s5h.net.', 'z.mailspike.net.' );
 
 $wgSMTP = [
-    'host'     => "", // could also be an IP address. Where the SMTP server is located
-    'IDHost'   => "",      // Generally this will be the domain name of your website (aka mywiki.org)
-    'port'     => 465,                 // Port to use when connecting to the SMTP server
+    'host'     => 'mail.example.com', // could also be an IP address. Where the SMTP server is located
+    'IDHost'   => 'example.com',      // Generally this will be the domain name of your website (aka mywiki.org)
+    'port'     => 465,                // Port to use when connecting to the SMTP server
     'auth'     => true,               // Should we use SMTP authentication (true or false)
-    'username' => "",     // Username to use for SMTP authentication (if being used)
-    'password' => ""       // Password to use for SMTP authentication (if being used)
+    'username' => 'my_user_name',     // Username to use for SMTP authentication (if being used)
+    'password' => 'my_password'       // Password to use for SMTP authentication (if being used)
 ];
 
+wfLoadExtension( 'Scribunto' );
+$wgScribuntoDefaultEngine = 'luastandalone';
+
+wfLoadExtension( 'WikiEditor' );
+$wgHiddenPrefs[] = 'usebetatoolbar';
+
+wfLoadExtensions([ 'ConfirmEdit', 'ConfirmEdit/ReCaptchaNoCaptcha' ]);
+$wgCaptchaClass = 'ReCaptchaNoCaptcha';
+$wgReCaptchaSiteKey = 'your public/site key here'; # https://www.google.com/recaptcha/admin
+$wgReCaptchaSecretKey = 'your private key here';
+$wgReCaptchaSendRemoteIP = true;
+$wgGroupPermissions['*'            ]['skipcaptcha'] = false;
+$wgGroupPermissions['user'         ]['skipcaptcha'] = false;
+$wgGroupPermissions['autoconfirmed']['skipcaptcha'] = false;
+$wgGroupPermissions['bot'          ]['skipcaptcha'] = true; // registered bots
+$wgGroupPermissions['sysop'        ]['skipcaptcha'] = true;
+$wgGroupPermissions['emailconfirmed']['skipcaptcha'] = true;
+$ceAllowConfirmedEmail = true;
+$wgCaptchaTriggers['edit'] = false; # Emergency mode set to true
+$wgCaptchaTriggers['create'] = false; # Emergency mode set to true
+$wgCaptchaTriggers['addurl'] = true;
+$wgCaptchaTriggers['createaccount'] = true;
+$wgCaptchaTriggers['badlogin'] = true;
+$wgCaptchaTriggersOnNamespace[NS_TALK]['addurl'] = false;
+$wgCaptchaTriggersOnNamespace[NS_PROJECT]['edit'] = true;
+
+wfLoadExtension( 'MultimediaViewer' );
+$wgMediaViewerEnableByDefault = true;
+$wgMediaViewerIsInBeta = true;
+$wgMediaViewerUseThumbnailGuessing = true;
+
+wfLoadExtension( 'Renameuser' );
+$wgGroupPermissions['sysop']['renameuser'] = true;
+
+wfLoadExtension( 'CodeEditor' );
+$wgDefaultUserOptions['usebetatoolbar'] = 1;
+
+wfLoadExtension( 'CategoryTree' );
