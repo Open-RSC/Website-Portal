@@ -23,7 +23,8 @@
                             <div>
                                 <span class="font-weight-bold">{{ ucfirst($activity->username) }}</span>
                                 {!! $activity->message !!}
-                                <span class="d-block text-info small">{{ Carbon\Carbon::parse($activity->time)->diffForHumans() }}</span>
+                                <span
+                                    class="d-block text-info small">{{ Carbon\Carbon::parse($activity->time)->diffForHumans() }}</span>
                             </div>
                         </div>
                     </div>
@@ -34,7 +35,7 @@
         <!-- Center column with title text -->
         <div class="col container text-center">
             <div class="d-block pt-4">
-                <img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="logo">
+                <img src="{{ asset('img/logo.png') }}" class="center img-fluid" alt="logo">
             </div>
 
             <div class="d-block pb-3">
@@ -70,7 +71,7 @@
                         Players Online:
                         <a href="{{ route('online') }}">
                     <span class="text-info float-right">
-                        {{ $online }}
+                        {{ number_format($online) }}
                     </span>
                         </a>
                     </div>
@@ -84,7 +85,7 @@
                         Players Created Today:
                         <a href="{{ route('createdtoday') }}">
                         <span class="text-info float-right">
-                            {{ $registrations }}
+                            {{ number_format($registrations) }}
                         </span>
                         </a>
                     </div>
@@ -92,7 +93,7 @@
                         Online Last 48 Hours:
                         <a href="{{ route('logins48') }}">
                         <span class="text-info float-right">
-                            {{ $logins }}
+                            {{ number_format($logins) }}
                         </span>
                         </a>
                     </div>
@@ -100,7 +101,7 @@
                         Unique Players:
                         <a href="{{ route('stats') }}">
                         <span class="text-info float-right">
-                            {{ $uniquePlayers }}
+                            {{ number_format($uniquePlayers) }}
                         </span>
                         </a>
                     </div>
@@ -108,17 +109,17 @@
                         Total Players:
                         <a href="{{ route('stats') }}">
                         <span class="text-info float-right">
-                            {{ $totalPlayers }}
+                            {{ number_format($totalPlayers) }}
                         </span>
                         </a>
                     </div>
                     <div>
-                        Sum Gold:
+                        Gold in Game:
                         <a href="{{ route('stats') }}">
                         <span class="text-info float-right">
-							{{ number_format($sumgold) }}
-							<img class="mt-n2 ml-n2" src="{{ asset('img/items/10.png') }}"
+                            <img class="mt-n2 inline" src="{{ asset('img/items/10.png') }}"
                                  alt="coins" height="24px" width="32px"/>
+							{{ number_format($sumgold) }}
                         </span>
                         </a>
                     </div>
