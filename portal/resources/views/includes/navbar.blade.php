@@ -9,13 +9,13 @@
 	</label>
 
 	<!-- Left side of Navbar -->
-	<input type="checkbox" id="drop"/>
+	<input type="checkbox" id="drop" style="display: none !important;"/>
 	<ul class="menu">
 		<li><a href="{{ route('home') }}">Home</a></li>
 		<li>
 			<label for="drop-1" class="toggle">Download ▾</label>
 			<a href="#">Download</a>
-			<input type="checkbox" id="drop-1"/>
+			<input type="checkbox" id="drop-1" style="display: none !important;"/>
 			<ul>
 				<li><a href="{{ asset('downloads/OpenRSC%20Launcher.exe') }}">Windows</a></li>
 				<li><a href="{{ asset('downloads/OpenRSC.jar') }}">Mac / Linux</a></li>
@@ -30,7 +30,7 @@
 		<li>
 			<label for="drop-2" class="toggle">Community ▾</label>
 			<a href="#">Community</a>
-			<input type="checkbox" id="drop-2"/>
+			<input type="checkbox" id="drop-2" style="display: none !important;"/>
 			<ul>
 				<li><a href="https://discord.gg/ABdFCqn" target="_blank">
 						<svg class="svg-inline--fa fa-discord fa-w-14 text-info mr-md-2" aria-hidden="true"
@@ -62,7 +62,7 @@
 		<li>
 			<label for="drop-3" class="toggle">Information ▾</label>
 			<a href="#">Information</a>
-			<input type="checkbox" id="drop-3"/>
+			<input type="checkbox" id="drop-3" style="display: none !important;"/>
 			<ul>
 				<li><a href="{{ asset('faq') }}">FAQ</a></li>
 				<li><a href="{{ asset('rules') }}">Rules</a></li>
@@ -73,7 +73,7 @@
 		<li>
 			<label for="drop-4" class="toggle">Guides ▾</label>
 			<a href="#">Guides</a>
-			<input type="checkbox" id="drop-4"/>
+			<input type="checkbox" id="drop-4" style="display: none !important;"/>
 			<ul>
 				<li><a href="{{ asset('quest_list') }}">Quest List</a></li>
 				<li><a href="{{ asset('minigame_list') }}">Minigames</a></li>
@@ -85,7 +85,7 @@
 		<li>
 			<label for="drop-5" class="toggle">Reports ▾</label>
 			<a href="#">Reports</a>
-			<input type="checkbox" id="drop-5"/>
+			<input type="checkbox" id="drop-5" style="display: none !important;"/>
 			<ul>
 				<li><a href="https://gitlab.openrsc.com/open-rsc/Game/issues" target="_blank">Bug Reports</a></li>
 			</ul>
@@ -95,7 +95,7 @@
 			<li>
 				<label for="drop-5" class="toggle">Staff ▾</label>
 				<a href="#">Staff</a>
-				<input type="checkbox" id="drop-5"/>
+				<input type="checkbox" id="drop-5" style="display: none !important;"/>
 				<ul>
 					<li><a href="{{ asset('chat_logs') }}">Chat Logs</a></li>
 					<li><a href="{{ asset('pm_logs') }}">PM Logs</a></li>
@@ -126,7 +126,7 @@
 			<li>
 				<label for="drop-5" class="toggle">{{ Auth::user()->name }} ▾</label>
 				<a href="#">{{ Auth::user()->name }}</a>
-				<input type="checkbox" id="drop-5"/>
+				<input type="checkbox" id="drop-5" style="display: none !important;"/>
 				<ul>
 					<li><a href="{{ route('logout') }}"
 						   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
