@@ -9,7 +9,6 @@
 	<meta name="keywords"
 		  content="openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,open pk,openpk,authentic runescape classic,vanilla rsc, rs1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
 	<!-- Favicons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/favicons/apple-touch-icon.png') }}">
@@ -18,15 +17,12 @@
 	<link rel="manifest" href="{{ asset('img/favicons/site.webmanifest') }}">
 	<link rel="mask-icon" href="{{ asset('img/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
 
-	<!-- JavaScript -->
-	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/js/all.min.js"></script>
-
 	<!-- CSS -->
+    <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 	<link
 		href="https://fonts.googleapis.com/css?family=Exo:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 		rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
 </head>
 
 <!-- Fullscreen video background -->
