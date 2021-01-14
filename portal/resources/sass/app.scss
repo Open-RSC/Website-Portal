@@ -1,6 +1,3 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Exo:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i');
-
 // Variables
 @import 'variables';
 
@@ -13,17 +10,33 @@
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/brands';
 
+// Exo 2 Font
+@import '~@fontsource/exo-2/400.css'; // Weight 400.
+@import '~@fontsource/exo-2/variable.css'; // Contains ONLY variable weights and no other axes
+@import '~@fontsource/exo-2/variable-italic.css'; // Italic variant
+
 .navbar-laravel {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 body {
-    font-family: 'Exo', sans-serif;
+    font-family: 'Exo 2', sans-serif;
     background-color: #343a40;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+@supports (font-variation-settings: normal) {
+    body {
+        font-family: 'Exo 2variable', sans-serif;
+        font-variation-settings: "wght" 400;
+        background-color: #343a40;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .h2 {
