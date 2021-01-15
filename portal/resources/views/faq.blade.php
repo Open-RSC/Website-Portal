@@ -71,7 +71,7 @@
                 and the public worlds are restarted with updates shortly after the posting of patch notes.
 
                 <span class="text-danger font-weight-bold d-block pt-4">Is a single player edition available?</span>
-                Yes! Download a copy of the <a href="https://orsc.dev">GitLab "core" project repository</a> and start
+                Yes! Download a copy of the <a class="link-success underline" target="_blank" href="https://orsc.dev">GitLab "core" project repository</a> and start
                 playing. A "Start-Windows.cmd" script is included to launch a portable version that does not require any
                 additional installation nor configuration.
 
@@ -88,7 +88,7 @@
                                                                             href="https://runescapeclassic.dev/wiki/index.php/Running_your_own_server">Running your own production server</a></span>
 
                 <span class="text-danger font-weight-bold d-block pt-4">Who are the Open RuneScape Classic project admins?</span>
-                Kenix, Logg, Luis123.intl, and Marwolf
+                Kenix, Logg, Luis, and Marwolf
 
                 <span class="text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
                 We have a zero tolerance policy on our publicly hosted servers with the single exception of RSC Uranium,
