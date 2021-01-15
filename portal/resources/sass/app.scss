@@ -12,8 +12,7 @@
 
 // Exo 2 Font
 @import '~@fontsource/exo-2/400.css'; // Weight 400.
-@import '~@fontsource/exo-2/variable.css'; // Contains ONLY variable weights and no other axes
-@import '~@fontsource/exo-2/variable-italic.css'; // Italic variant
+@import '~@fontsource/exo-2/900-italic.css'; // Italic variant.
 
 .navbar-laravel {
     background-color: #fff;
@@ -22,7 +21,7 @@
 
 body {
     font-family: 'Exo 2', sans-serif;
-    background-color: #343a40;
+    background-color: #000;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -34,8 +33,8 @@ body {
 @supports (font-variation-settings: normal) {
     body {
         font-family: 'Exo 2variable', sans-serif;
+        background-color: #000;
         font-variation-settings: "wght" 400;
-        background-color: #343a40;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -50,10 +49,7 @@ body {
 }
 
 section {
-    background: rgba(20, 20, 20, 0.9);
-    flex-grow: 1;
-    justify-content: space-around;
-    overflow: hidden;
+    background: rgba(30,30,30,.4);
 }
 
 .table-wrapper-scroll-y {
@@ -73,7 +69,7 @@ section {
 }
 
 .table-transparent {
-    background-color: rgba(19, 36, 47, 0.5);
+    background-color: rgba(23, 23, 26, 0.5);
 }
 
 .table-black {
