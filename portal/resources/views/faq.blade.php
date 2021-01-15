@@ -89,7 +89,10 @@
                                                                             href="https://runescapeclassic.dev/wiki/index.php/Running_your_own_server">Running your own production server</a></span>
 
                 <span class="text-danger font-weight-bold d-block pt-4">Who are the Open RuneScape Classic project admins?</span>
-                <a class="link-success underline" target="_blank" href="https://gitlab.com/kenix3">Kenix</a>, <a class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a class="link-success underline" target="_blank" href="https://github.com/marwolf">Marwolf</a>
+                <a class="link-success underline" target="_blank" href="https://gitlab.com/kenix3">Kenix</a>, <a
+                    class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
+                    class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a
+                    class="link-success underline" target="_blank" href="https://github.com/marwolf">Marwolf</a>
 
                 <span class="text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
                 We have a zero tolerance policy on our publicly hosted servers with the single exception of RSC Uranium,

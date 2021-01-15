@@ -14,17 +14,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $game_hostname = config('app.game_hostname');
-        $game_port = config('app.game_port');
         $online = DB::table('players')
             ->where('online', 1)
             ->count();
-        $status = @fsockopen($game_hostname, $game_port, $num, $error, 2);
-        if ($status) {
-            $status = '<span style="color: lime">Online</span>';
-        } else {
-            $status = '<span style="color: red">Offline</span>';
-        }
 
         $registrations = DB::table('players')
                 ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
@@ -55,7 +47,7 @@ class HomeController extends Controller
                 ['B.time', '>=', 'unix_timestamp(current_date - interval 10 day)'],
             ])
             ->orderBy('time', 'desc')
-            ->limit(20)
+            ->limit(5)
             ->get();
 
         $sumgold_B = DB::table('bank as B') // bank
@@ -85,7 +77,6 @@ class HomeController extends Controller
             'home',
             [
                 'online' => $online,
-                'status' => $status,
                 'registrations' => $registrations,
                 'logins' => $logins,
                 'totalPlayers' => $totalPlayers,
