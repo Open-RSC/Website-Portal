@@ -19,15 +19,12 @@
 
 	<!-- CSS -->
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
-	<link
-		href="https://fonts.googleapis.com/css?family=Exo:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-		rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
 
 <!-- Fullscreen video background -->
 <div class="fullscreen-bg">
-	<video id="video" class="fullscreen-bg__video" playsinline="playsinline" autoplay="autoplay"
+	<!--<video id="video" class="fullscreen-bg__video" playsinline="playsinline" autoplay="autoplay"
 		   muted="muted"
 		   loop="loop">
 		<script>
@@ -48,5 +45,5 @@
             videoPlayer.addEventListener('ended', playIt, false);
             playIt();
 		</script>
-	</video>
+	</video>-->
 </div>

@@ -26,6 +26,9 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-image: url("/img/bg.jpg");
+    background-repeat: repeat-y;
+    background-position-x: center;
 }
 
 @supports (font-variation-settings: normal) {
@@ -36,6 +39,9 @@ body {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        background-image: url("/img/bg.jpg");
+        background-repeat: repeat-y;
+        background-position-x: center;
     }
 }
 

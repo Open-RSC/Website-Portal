@@ -38,3 +38,9 @@ etc/letsencrypt/renewal/
 etc/letsencrypt/csr/
 etc/letsencrypt/archive/
 etc/letsencrypt/accounts/
+
+portal/public/js/app.js
+
+portal/public/css/app.css
+
+portal/public/mix-manifest.json
