@@ -19,31 +19,4 @@
 
 	<!-- CSS -->
     <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
-	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
-
-<!-- Fullscreen video background -->
-<div class="fullscreen-bg">
-	<!--<video id="video" class="fullscreen-bg__video" playsinline="playsinline" autoplay="autoplay"
-		   muted="muted"
-		   loop="loop">
-		<script>
-            let videoPlayer = document.getElementById('video');
-
-            function playIt() {
-                videoPlayer.play();
-                var videos = [
-                    "1",
-                    "2",
-                    "3",
-                    "4",
-                ];
-                videos = videos[Math.floor(Math.random() * videos.length)];
-                videoPlayer.src = "/img/" + videos + ".mp4";
-            }
-
-            videoPlayer.addEventListener('ended', playIt, false);
-            playIt();
-		</script>
-	</video>-->
-</div>
