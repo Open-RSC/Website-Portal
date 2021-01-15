@@ -37,6 +37,7 @@
                     <span class="d-block"><i class="fas fa-angle-right"></i> Clans and parties</span>
                     <span class="d-block"><i class="fas fa-angle-right"></i> Custom items, skills, monsters, and quests</span>
                     <span class="d-block"><i class="fas fa-angle-right"></i> Batched skilling activities</span>
+                    <span class="d-block"><i class="fas fa-angle-right"></i> Regular Ironman, Hardcore Ironman, and Ultimate Ironman modes available</span>
                     <span class="d-block"><i class="fas fa-angle-right"></i> Fatigue disabled (optional to turn off XP gain using sleep)</span>
                     <span class="d-block"><i class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
                     <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
