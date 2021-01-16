@@ -71,7 +71,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $sumgold = $sumgold_B + $sumgold_I;
+        $sumgold = ($sumgold_B + $sumgold_I);
 
         return view(
             'home',

@@ -34,7 +34,7 @@
                 <li><a href="https://orsc.dev" target="_blank">
                         <i class="fab fa-gitlab"></i>
                         Source Code</a></li>
-                <li><a href="https://www.reddit.com/r/openrsc" target="_blank">
+                <li><a href="https://www.reddit.com/r/rsc" target="_blank">
                         <i class="fab fa-reddit-alien"></i>
                         Reddit</a></li>
             </ul>
