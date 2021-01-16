@@ -40,7 +40,7 @@ services:
     volumes:
       - "./portal:/var/www/html/portal"
       - "./avatars:/var/www/html/portal/public/img/avatars"
-      - "./board:/var/www/html/portal/public/board"
+      - "./board:/var/www/html/board"
       - "./downloads:/var/www/html/portal/public/downloads"
       - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro" # Nginx config is located in etc
       - "./etc/nginx/sites-available:/etc/nginx/sites-available:ro" # Nginx config is located in etc
@@ -71,7 +71,7 @@ services:
     volumes:
       - "./etc/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
       - "./portal:/var/www/html/portal"
-      - "./board:/var/www/html/portal/public/board"
+      - "./board:/var/www/html/board"
 
   mediawiki: # Optional, comment this section out if unwanted.
     build:

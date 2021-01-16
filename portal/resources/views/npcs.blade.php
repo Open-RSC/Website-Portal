@@ -20,7 +20,7 @@
 								<span class="text-capitalize">
 									{{ $npcdef->name }} ({{ $npcdef->id }})
 								</span>
-								<span class="text-white-50 d-block">
+								<span class="text-gray-400 d-block">
 								{{ $npcdef->description }}
 							</span>
 							</td>
