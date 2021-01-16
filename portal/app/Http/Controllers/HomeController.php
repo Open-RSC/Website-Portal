@@ -33,11 +33,11 @@ class HomeController extends Controller
             ->distinct('creation_ip')
             ->count('creation_ip');
 
-        $milliseconds = DB::table('player_cache')
+        /*$milliseconds = DB::table('player_cache')
             ->where('key', 'total_played')
             ->sum('value');
 
-        $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));
+        $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));*/
 
         $activityfeed = DB::table('live_feeds as B')
             ->join('players AS A', 'A.username', '=', 'B.username')
@@ -81,7 +81,7 @@ class HomeController extends Controller
                 'logins' => $logins,
                 'totalPlayers' => $totalPlayers,
                 'uniquePlayers' => $uniquePlayers,
-                'totalTime' => $totalTime,
+                //'totalTime' => $totalTime,
                 'activityfeed' => $activityfeed,
                 'sumgold' => $sumgold,
             ]
@@ -238,11 +238,11 @@ class HomeController extends Controller
             ->orderBy('creation_date', 'desc')
             ->count();
 
-        $milliseconds = DB::table('player_cache')
+        /*$milliseconds = DB::table('player_cache')
             ->where('key', 'total_played')
             ->sum('value');
 
-        $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));
+        $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));*/
 
         $current_timestamp = now()->timestamp;
 
@@ -1009,7 +1009,7 @@ class HomeController extends Controller
                 'logins48' => $logins48,
                 'totalPlayers' => $totalPlayers,
                 'uniquePlayers' => $uniquePlayers,
-                'totalTime' => $totalTime,
+                //'totalTime' => $totalTime,
                 'createdToday' => $createdToday,
                 'combat30' => $combat30,
                 'combat50' => $combat50,
