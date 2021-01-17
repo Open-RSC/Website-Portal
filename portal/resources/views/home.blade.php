@@ -124,7 +124,7 @@
                             <td class="col-9 text-left pb-2">
                                 {{ ucfirst($activity->username) }}
                                 {!! $activity->message !!}
-                                <span class="text-primary small">
+                                <span class="text-primary" style="white-space: nowrap; font-size: 12px;">
                                             ({{ Carbon\Carbon::parse($activity->time)->diffForHumans() }})
                                         </span>
                             </td>
