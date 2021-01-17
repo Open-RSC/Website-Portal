@@ -22,5 +22,3 @@
 
     @livewireStyles
 </head>
-
-<div class="fullscreen-bg" style="background: rgba(30,30,30,.4);"></div>

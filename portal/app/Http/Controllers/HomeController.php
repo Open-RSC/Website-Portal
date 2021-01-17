@@ -56,7 +56,7 @@ class HomeController extends Controller
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -66,7 +66,7 @@ class HomeController extends Controller
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
                 ['S.catalogID', '=', '10'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -252,7 +252,7 @@ class HomeController extends Controller
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -262,7 +262,7 @@ class HomeController extends Controller
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
                 ['S.catalogID', '=', '10'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -333,7 +333,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '30000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -344,7 +344,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '30000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -358,7 +358,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '50000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -369,7 +369,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '50000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -383,7 +383,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '80000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -394,7 +394,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '80000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -408,7 +408,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '120000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -419,7 +419,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '120000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -433,7 +433,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '400000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -444,7 +444,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '400000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -458,7 +458,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -469,7 +469,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -483,7 +483,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '12000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -494,7 +494,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '12000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -508,7 +508,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '15000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -519,7 +519,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '15000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -533,7 +533,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '2000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -544,7 +544,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '2000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -558,7 +558,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -569,7 +569,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -583,7 +583,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -594,7 +594,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -608,7 +608,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->sum('S.amount');
@@ -619,7 +619,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
             ])
             ->count();
@@ -630,7 +630,7 @@ class HomeController extends Controller
             ->where([
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
-                //['A.group_id', '=', '10'],
+                ['A.group_id', '=', '10'],
                 ['A.banned', '=', '0'],
                 ['U.was_cancel', '=', '0'],
                 ['U.sold-out', '=', '0'],

@@ -1,8 +1,6 @@
 @extends('template')
-
 @section('content')
-	<div class="text-info">
-		<div class="container">
+		<div class="col container">
 			<h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">NPC Database</h2>
 
 			<!-- Large view version -->
@@ -59,5 +57,4 @@
 				{{ $npcs->links('pagination::bootstrap-4') }}
 			</div>
 		</div>
-	</div>
 @endsection
