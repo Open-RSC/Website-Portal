@@ -1,8 +1,8 @@
 @extends('template')
 
 @section('content')
-    <div class="container text-gray-400" style="width: 820px;">
-        <div class="row">
+    <div class="container text-gray-400">
+        <div class="row justify-content-between">
             <div class="col-sm-4 float-left">
                 <div class="border-top border-info border-bottom pt-1">
                     <div class="text-left pl-3 pr-3">
@@ -69,10 +69,16 @@
                         </table>
                     </div>
                 </div>
+                <div class="border-info border-bottom pt-1 pb-1">
+                    <div class="discord">
+                        <iframe src="https://discordapp.com/widget?id=459699205674369025&theme=dark" width="245"
+                                height="520" allowtransparency="true"></iframe>
+                    </div>
+                </div>
             </div>
 
             <div class="float-right" style="width: 320px;">
-                <div class="border-top border-info border-bottom pt-1 pt-1">
+                <div class="border-top border-info border-bottom pt-1 pb-1">
                     <div class="text-left pl-3 pr-3">
                         <span class="h5 text-danger">Achievements</span>
                         <table id="List" class="container table-both-hover table-transparent">
@@ -100,11 +106,6 @@
                             @endforeach
                         </table>
                     </div>
-                </div>
-
-                <div class="discord">
-                    <iframe src="https://discordapp.com/widget?id=459699205674369025&theme=dark" width="245"
-                            height="520" allowtransparency="true"></iframe>
                 </div>
             </div>
         </div>

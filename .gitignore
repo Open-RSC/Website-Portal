@@ -44,3 +44,5 @@ portal/public/js/app.js
 portal/public/css/app.css
 
 portal/public/mix-manifest.json
+
+backups/*.zip

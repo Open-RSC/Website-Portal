@@ -4,7 +4,7 @@
 <body>
 @include('includes.navbar')
 <section id="home">
-	@yield('content')
+    @yield('content')
 </section>
 @include('includes.footerscripts')
 </body>
