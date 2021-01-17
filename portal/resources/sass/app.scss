@@ -37,6 +37,18 @@ body {
     font-size: 4rem;
 }
 
+.bg-black {
+    background-color: black;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.valign-top {
+    vertical-align: top;
+}
+
 .table-wrapper-scroll-y {
     display: block;
     max-height: 100vh;
@@ -418,13 +430,13 @@ li > a:only-child:after {
 }
 
 .side-decoration {
-    background-image:url('/img/bg.png');
+    background-image:url('/img/bg.png') !important;
     background-repeat:repeat-y;
     opacity: 0.6;
     width:135px;
     padding:10px;
     overflow: visible;
-    z-index: -100;
+    z-index: 1;
 }
 
 .picture {

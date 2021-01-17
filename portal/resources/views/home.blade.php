@@ -3,7 +3,7 @@
     <!-- Left column -->
     <div class="col float-left w-25"
          style="min-width: 350px; max-width: 350px; margin-left: auto; margin-right: auto;">
-        <div class="border-top border-info border-bottom pt-1 pb-1">
+        <div class="border-top border-info border-bottom pt-1 pb-1 bg-black">
 
             <!-- Server info box -->
             <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1">
@@ -95,12 +95,38 @@
     <div class="col w-50 text-center">
 
         <!-- News section -->
-        [Insert news posts here]
+        <div class="text-left pl-3 pr-3">
+            <span class="h5 text-danger text-center">Latest News and Updates</span>
+            <table id="List" class="container table-both-hover table-transparent">
+                <tr>
+                    <td width="77px">
+                        <a href="{{ asset('news') }}"><img class="no-margin" src="{{ asset('img/home/mm_scroll.jpg') }}" border="0"></a>
+                    </td>
+                    <td class="valign-top">
+                        <table id="List" class="container table-both-hover table-transparent">
+                            <!-- todo change to refer news possibly some text file -->
+                            <td class="clickable-row" data-href="{{ route('online') }}">
+                                News text
+                                <span class="text-primary float-right">
+                                        1-Jan-2021
+                                    </span>
+                            </td>
+                            @foreach ($activityfeed as $activity)
+                                <td class="clickable-row" data-href="{{ route('online') }}">
+                                    News text
+                                </td>
+                            @endforeach
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <p>To view a full list of news and updates, <a href="{{ asset('news') }}">Click Here</a></p>
+        </div>
 
     </div>
 
     <!-- Right column -->
-    <div class="col w-25 float-right"
+    <div class="col w-25 float-right bg-black"
          style="min-width: 350px; max-width: 350px; margin-left: auto; margin-right: auto;">
         <div class="border-top border-info border-bottom pt-1 pb-1">
 
