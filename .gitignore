@@ -30,7 +30,6 @@ portal/cache
 portal/tmp
 
 !.gitignore
-portal/www/administrator/cache/
 
 etc/letsencrypt/cloudflare.ini
 etc/letsencrypt/live/
@@ -41,9 +40,12 @@ etc/letsencrypt/archive/
 etc/letsencrypt/accounts/
 
 portal/public/js/app.js
+stock/public/js/app.js
 
 portal/public/css/app.css
+stock/public/css/app.css
 
 portal/public/mix-manifest.json
+stock/public/mix-manifest.json
 
 backups/*.zip
