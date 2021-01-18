@@ -62,13 +62,31 @@ body {
     border-color: rgb(87, 7, 0);
     background-color: rgb(87, 7, 0);
     background-image: url('/img/home/shinystonered.jpg');
+    color: white;
+}
+
+.btn-jag-red:hover {
+    background: url('/img/home/ssredbright.jpg');
+    border-color: rgb(167, 7, 0);
+    background-color: rgb(167, 7, 0);
+    background-image: url('/img/home/ssredbright.jpg');
+    color: white;
 }
 
 .btn-jag-grey {
     background: url('/img/home/stoneback.gif');
-    border-color: rgb(55, 55, 55);
-    background-color: rgb(55, 55, 55);
+    border-color: rgb(71, 71, 71);
+    background-color: rgb(71, 71, 71);
     background-image: url('/img/home/stoneback.gif');
+    color: white;
+}
+
+.btn-jag-grey:hover {
+    background: url('/img/home/ssgreybright.png');
+    border-color: rgb(119, 119, 119);
+    background-color: rgb(119, 119, 119);
+    background-image: url('/img/home/ssgreybright.png');
+    color: white;
 }
 
 .table-wrapper-scroll-y {

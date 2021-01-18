@@ -137,7 +137,7 @@
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_accman.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Account Management</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Account Management</a>
                                         <br>
                                         <p>Manage your Password and Recovery Details.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
                                     </td>
@@ -149,7 +149,7 @@
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_passwordsupport.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Password Support</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Password Support</a>
                                         <br>
                                         <p>If you lose/forget your password help is at hand.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
                                     </td>
@@ -161,7 +161,7 @@
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_inbox.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Message Centre</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Message Centre</a>
                                         <br>
                                         <p>Your messages from our staff.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
                                     </td>
@@ -173,7 +173,7 @@
                                         <a href="{{ asset('forums') }}"><img class="no-margin" src="{{ asset('img/home/mms_forums.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('forums') }}" role="button">Forums</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('forums') }}" role="button">Forums</a>
                                         <br>
                                         <p>Discuss the game with fellow players!<br><a class="link-success underline" href="{{ asset('forums') }}">Click Here</a></p>
                                     </td>
@@ -185,7 +185,7 @@
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_support.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Customer Support</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Customer Support</a>
                                         <br>
                                         <p>Questions?<br>Contact our staff.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
                                     </td>
@@ -299,7 +299,7 @@
                                         <a href="{{ asset('play') }}"><img class="no-margin" src="{{ asset('img/home/mms_rsclassic.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-red white" href="{{ asset('play') }}" role="button">Play Game<br>(Existing User)</a>
+                                        <a class="btn btn-jag-red" href="{{ asset('play') }}" role="button">Play Game<br>(Existing User)</a>
                                         <br>
                                         <p>Play RuneScape Classic right now!<br><a class="link-success underline" href="{{ asset('play') }}">Click Here</a></p>
                                     </td>
@@ -311,7 +311,7 @@
                                         <a href="{{ asset('register') }}"><img class="no-margin" src="{{ asset('img/home/mm_player.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-red white" href="{{ asset('register') }}" role="button">Create Account<br>(New User)</a>
+                                        <a class="btn btn-jag-red" href="{{ asset('register') }}" role="button">Create Account<br>(New User)</a>
                                         <br>
                                         <p>Create a free account for both the game & website.<br><a class="link-success underline" href="{{ asset('register') }}">Click Here</a></p>
                                     </td>
@@ -323,7 +323,7 @@
                                         <a href="{{ asset('manual') }}"><img class="no-margin" src="{{ asset('img/home/mm_howtoplay.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('manual') }}" role="button">Manual</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('manual') }}" role="button">Manual</a>
                                         <br>
                                         <p>Detailed info on all aspects of the game.<br><a class="link-success underline" href="{{ asset('manual') }}">Click Here</a></p>
                                     </td>
@@ -335,7 +335,7 @@
                                         <a href="{{ asset('highscores') }}"><img class="no-margin" src="{{ asset('img/home/mm_chalice.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('highscores') }}" role="button">Full Hiscores</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('highscores') }}" role="button">Full Hiscores</a>
                                         <br>
                                         <p>Is your character in the top 500,000?<br><a class="link-success underline" href="{{ asset('highscores') }}">Click Here</a></p>
                                     </td>
@@ -347,7 +347,7 @@
                                         <a href="{{ asset('worldmap') }}"><img class="no-margin" src="{{ asset('img/home/mm_worldmap.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey white" href="{{ asset('worldmap') }}" role="button">World Map</a>
+                                        <a class="btn btn-jag-grey" href="{{ asset('worldmap') }}" role="button">World Map</a>
                                         <br>
                                         <p>Great for finding your way around.<br><a class="link-success underline" href="{{ asset('worldmap') }}">Click Here</a></p>
                                     </td>
@@ -431,7 +431,7 @@
                                             <a href="{{ asset('faq') }}"><img class="no-margin" src="{{ asset('img/home/mms_faq.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey white" href="{{ asset('faq') }}" role="button">F.A.Q.</a>
+                                            <a class="btn btn-jag-grey" href="{{ asset('faq') }}" role="button">F.A.Q.</a>
                                             <br>
                                             <p>Answers to Frequently Asked Questions.<br><a class="link-success underline" href="{{ asset('faq') }}">Click Here</a></p>
                                         </td>
@@ -443,7 +443,7 @@
                                             <a href="https://2009scape.org/"><img class="no-margin" src="{{ asset('img/home/mm_sword.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey white" href="https://2009scape.org/" role="button">2009Scape</a>
+                                            <a class="btn btn-jag-grey" href="https://2009scape.org/" role="button">2009Scape</a>
                                             <br>
                                             <p>RuneScape 2 (2009)<br><a class="link-success underline" href="https://2009scape.org/">Click Here</a></p>
                                         </td>
