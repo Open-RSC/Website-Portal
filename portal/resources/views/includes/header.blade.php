@@ -4,7 +4,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Open RSC</title>
+	<title>Open RuneScape Classic</title>
 	<meta name="description" content="Striving for a replica RSC game and more.">
 	<meta name="keywords"
 		  content="openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,open pk,openpk,authentic runescape classic,vanilla rsc, rs1">

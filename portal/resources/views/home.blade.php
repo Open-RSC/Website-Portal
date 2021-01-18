@@ -6,26 +6,53 @@
         <div class="border-top border-info border-bottom pt-1 pb-1 bg-black">
 
             <!-- Server info box -->
-            <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1">
-                <span class="h5 text-danger">Server Info</span>
-                <div class="table-transparent">
-                    @if(('app.authentic') == true)
-                        <div class="pl-1 d-block"><span class="text-primary d-block">RSC Preservation</span>
+            <div class="text-center container">
+                <span class="h5 text-white text-center">Servers Info</span>
+            </div>
+            <div class="accordion" id="serversInfo">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="rscPreservation">
+                        <button class="text-primary accordion-button table-transparent collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#preservationInfo" aria-expanded="false" aria-controls="preservationInfo">
+                            RSC Preservation
+                        </button>
+                    </h2>
+                    <div id="preservationInfo" class="accordion-collapse collapse" aria-labelledby="rscPreservation" data-bs-parent="#serversInfo">
+                        <div class="accordion-body">
                             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
                             <span class="d-block"><i class="fas fa-angle-right"></i> No QoL customizations</span>
                             <span class="d-block"><i class="fas fa-angle-right"></i> Staff moderated and no botting allowed</span>
                             <span class="d-block"><i class="fas fa-angle-right"></i> Authentic RSC based on RSC+ replay data</span>
                             <span class="d-block"><i class="fas fa-angle-right"></i> Uses the Open RuneScape Classic framework</span>
                         </div>
-                    @elseif(('app.authentic') == false)
-                        test
-                    @endif
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="rscCabbage">
+                        <button class="text-primary accordion-button table-transparent collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cabbageInfo" aria-expanded="false" aria-controls="cabbageInfo">
+                            RSC Cabbage
+                        </button>
+                    </h2>
+                    <div id="cabbageInfo" class="accordion-collapse collapse" aria-labelledby="rscCabbage" data-bs-parent="#serversInfo">
+                        <div class="accordion-body">
+                            <span class="d-block"><i class="fas fa-angle-right"></i> 1x or 5x XP rate</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> 30% faster in-game speed</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Auction House</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Clans and parties</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Custom items, skills, monsters, and quests</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Batched skilling activities</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Regular Ironman, Hardcore Ironman, and Ultimate Ironman modes available</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Staff moderated and no botting allowed</span>
+                            <span class="d-block"><i class="fas fa-angle-right"></i> Uses the Open RuneScape Classic framework</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Statistics box -->
             <div class="text-left pl-3 pr-3">
-                <span class="h5 text-danger">Statistics</span>
+                <div class="text-center container">
+                    <span class="h5 text-white text-center">Statistics</span>
+                </div>
                 <table id="List" class="container table-both-hover table-transparent">
                     <tr>
                         <td class="clickable-row" data-href="{{ route('online') }}">
@@ -92,35 +119,57 @@
     </div>
 
     <!-- Center column -->
-    <div class="col w-50 text-center">
+    <div class="col w-50 text-center no-padding">
 
         <!-- News section -->
-        <div class="text-left pl-3 pr-3">
-            <span class="h5 text-danger text-center">Latest News and Updates</span>
-            <table id="List" class="container table-both-hover table-transparent">
+        <div class="text-left pl-3 pr-3 no-padding bg-black">
+            <table id="List" class="container">
                 <tr>
-                    <td width="77px">
-                        <a href="{{ asset('news') }}"><img class="no-margin" src="{{ asset('img/home/mm_scroll.jpg') }}" border="0"></a>
-                    </td>
-                    <td class="valign-top">
-                        <table id="List" class="container table-both-hover table-transparent">
-                            <!-- todo change to refer news possibly some text file -->
-                            <td class="clickable-row" data-href="{{ route('online') }}">
-                                News text
-                                <span class="text-primary float-right">
+                    <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td>
+                        <div class="text-center container">
+                            <span class="h5 text-white text-center">Latest News and Updates</span>
+                        </div>
+                        <table id="List" class="container">
+                            <tr>
+                                <td width="77px">
+                                    <a href="{{ asset('news') }}"><img class="no-margin" src="{{ asset('img/home/mm_scroll.jpg') }}" border="0"></a>
+                                </td>
+                                <td class="valign-top">
+                                    <table id="List" class="container">
+                                        <!-- todo change to refer news possibly some text file -->
+                                        <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                            News text
+                                            <span class="text-white float-right">
                                         1-Jan-2021
                                     </span>
-                            </td>
-                            @foreach ($activityfeed as $activity)
-                                <td class="clickable-row" data-href="{{ route('online') }}">
-                                    News text
+                                        </td>
+                                        @foreach ($activityfeed as $activity)
+                                            <td class="clickable-row" data-href="{{ route('online') }}">
+                                                News text
+                                            </td>
+                                        @endforeach
+                                    </table>
                                 </td>
-                            @endforeach
+                            </tr>
                         </table>
+                        <div class="text-center container no-padding">
+                            <p>To view a full list of news and updates, <a class="link-success underline" href="{{ asset('news') }}">Click Here</a></p>
+                        </div>
                     </td>
+                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_bottom2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6"></td>
                 </tr>
             </table>
-            <p>To view a full list of news and updates, <a href="{{ asset('news') }}">Click Here</a></p>
         </div>
 
     </div>
@@ -132,7 +181,9 @@
 
             <!-- Achievements box -->
             <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1">
-                <span class="h5 text-danger">Achievements</span>
+                <div class="text-center container">
+                    <span class="h5 text-white text-center">Achievements</span>
+                </div>
                 <table id="List" class="container table-both-hover table-transparent">
                     @foreach ($activityfeed as $activity)
                         <tr class="clickable-row" data-href="../player/{{ $activity->id }}">

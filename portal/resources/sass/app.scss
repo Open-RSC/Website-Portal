@@ -45,8 +45,16 @@ body {
     margin: 0;
 }
 
+.no-padding {
+    padding: unset;
+}
+
 .valign-top {
     vertical-align: top;
+}
+
+.container {
+    width: 100%;
 }
 
 .table-wrapper-scroll-y {
