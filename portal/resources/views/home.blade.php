@@ -125,7 +125,7 @@
                     <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
                 </tr>
                 <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                     <td>
                         <div class="text-center container">
                             <span class="h5 text-white text-center">Services</span>
@@ -193,7 +193,7 @@
                             </table>
                         </div>
                     </td>
-                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                 </tr>
                 <tr>
                     <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
@@ -217,7 +217,7 @@
                     <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
                 </tr>
                 <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                     <td>
                         <div class="text-center container">
                             <span class="h5 text-white text-center">Latest News and Updates</span>
@@ -268,7 +268,7 @@
                             <p>To view a full list of news and updates, <a class="link-success underline" href="{{ asset('news') }}">Click Here</a></p>
                         </div>
                     </td>
-                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                 </tr>
                 <tr>
                     <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
@@ -287,7 +287,7 @@
                     <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
                 </tr>
                 <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                     <td>
                         <div class="text-center container">
                             <span class="h5 text-white text-center">Main Features</span>
@@ -355,7 +355,7 @@
                             </table>
                         </div>
                     </td>
-                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                 </tr>
                 <tr>
                     <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
@@ -419,7 +419,7 @@
                         <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
                     </tr>
                     <tr>
-                        <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                        <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                         <td>
                             <div class="text-center container">
                                 <span class="h5 text-white text-center">Other Features</span>
@@ -451,7 +451,7 @@
                                 </table>
                             </div>
                         </td>
-                        <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                        <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
                     </tr>
                     <tr>
                         <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
