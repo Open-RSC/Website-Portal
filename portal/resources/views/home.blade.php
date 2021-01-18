@@ -116,14 +116,101 @@
             </div>
         </div>
 
+        <!-- Alt Features -->
+        <div class="text-left pl-3 pr-3 no-padding">
+            <table id="List" class="container bg-black">
+                <tr>
+                    <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td>
+                        <div class="text-center container">
+                            <span class="h5 text-white text-center">Services</span>
+                        </div>
+                        <div>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_accman.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Account Management</a>
+                                        <br>
+                                        <p>Manage your Password and Recovery Details.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_passwordsupport.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Password Support</a>
+                                        <br>
+                                        <p>If you lose/forget your password help is at hand.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_inbox.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Message Centre</a>
+                                        <br>
+                                        <p>Your messages from our staff.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('forums') }}"><img class="no-margin" src="{{ asset('img/home/mms_forums.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('forums') }}" role="button">Forums</a>
+                                        <br>
+                                        <p>Discuss the game with fellow players!<br><a class="link-success underline" href="{{ asset('forums') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_support.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('login') }}" role="button">Customer Support</a>
+                                        <br>
+                                        <p>Questions?<br>Contact our staff.<br><a class="link-success underline" href="{{ asset('login') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_bottom2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6"></td>
+                </tr>
+            </table>
+        </div>
+
     </div>
 
     <!-- Center column -->
     <div class="col w-50 text-center no-padding">
 
         <!-- News section -->
-        <div class="text-left pl-3 pr-3 no-padding bg-black">
-            <table id="List" class="container">
+        <div class="text-left pl-3 pr-3 no-padding">
+            <table id="List" class="container bg-black">
                 <tr>
                     <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
                     <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
@@ -143,17 +230,36 @@
                                 <td class="valign-top">
                                     <table id="List" class="container">
                                         <!-- todo change to refer news possibly some text file -->
-                                        <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
-                                            News text
-                                            <span class="text-white float-right">
-                                        1-Jan-2021
-                                    </span>
-                                        </td>
-                                        @foreach ($activityfeed as $activity)
-                                            <td class="clickable-row" data-href="{{ route('online') }}">
-                                                News text
+                                        <tr>
+                                            <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                                News text 1
+                                                <span class="text-white float-right">1-Jan-2021</span>
                                             </td>
-                                        @endforeach
+                                        </tr>
+                                        <tr>
+                                            <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                                News text 2
+                                                <span class="text-white float-right">1-Jan-2021</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                                News text 3
+                                                <span class="text-white float-right">1-Jan-2021</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                                News text 4
+                                                <span class="text-white float-right">1-Jan-2021</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="clickable-row link-success underline" data-href="{{ route('online') }}">
+                                                News text 5
+                                                <span class="text-white float-right">1-Jan-2021</span>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>
@@ -172,15 +278,102 @@
             </table>
         </div>
 
+        <!-- Main Features -->
+        <div class="text-left pl-3 pr-3 no-padding">
+            <table id="List" class="container bg-black">
+                <tr>
+                    <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    <td>
+                        <div class="text-center container">
+                            <span class="h5 text-white text-center">Main Features</span>
+                        </div>
+                        <div>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('play') }}"><img class="no-margin" src="{{ asset('img/home/mms_rsclassic.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-red white" href="{{ asset('play') }}" role="button">Play Game<br>(Existing User)</a>
+                                        <br>
+                                        <p>Play RuneScape Classic right now!<br><a class="link-success underline" href="{{ asset('play') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('register') }}"><img class="no-margin" src="{{ asset('img/home/mm_player.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-red white" href="{{ asset('register') }}" role="button">Create Account<br>(New User)</a>
+                                        <br>
+                                        <p>Create a free account for both the game & website.<br><a class="link-success underline" href="{{ asset('register') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('manual') }}"><img class="no-margin" src="{{ asset('img/home/mm_howtoplay.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('manual') }}" role="button">Manual</a>
+                                        <br>
+                                        <p>Detailed info on all aspects of the game.<br><a class="link-success underline" href="{{ asset('manual') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('highscores') }}"><img class="no-margin" src="{{ asset('img/home/mm_chalice.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('highscores') }}" role="button">Full Hiscores</a>
+                                        <br>
+                                        <p>Is your character in the top 500,000?<br><a class="link-success underline" href="{{ asset('highscores') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="List" class="container">
+                                <tr>
+                                    <td width="77px" class="text-center align-middle">
+                                        <a href="{{ asset('worldmap') }}"><img class="no-margin" src="{{ asset('img/home/mm_worldmap.jpg') }}" border="0"></a>
+                                    </td>
+                                    <td class="valign-top text-center align-middle">
+                                        <a class="btn btn-jag-grey white" href="{{ asset('worldmap') }}" role="button">World Map</a>
+                                        <br>
+                                        <p>Great for finding your way around.<br><a class="link-success underline" href="{{ asset('worldmap') }}">Click Here</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                </tr>
+                <tr>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
+                    <td style="background-image:url('/img/home/fm_bottom2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                    <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6"></td>
+                </tr>
+            </table>
+        </div>
+
     </div>
 
     <!-- Right column -->
-    <div class="col w-25 float-right bg-black"
+    <div class="col w-25 float-right"
          style="min-width: 350px; max-width: 350px; margin-left: auto; margin-right: auto;">
         <div class="border-top border-info border-bottom pt-1 pb-1">
 
             <!-- Achievements box -->
-            <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1">
+            <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1 bg-black">
                 <div class="text-center container">
                     <span class="h5 text-white text-center">Achievements</span>
                 </div>
@@ -215,6 +408,57 @@
                 <iframe src="https://discordapp.com/widget?id=459699205674369025&theme=dark" width="100%"
                         height="520" allowtransparency="true"
                         style="padding-left: 14px; padding-right: 14px;"></iframe>
+            </div>
+
+            <!-- Other Features -->
+            <div class="text-left pl-3 pr-3 no-padding">
+                <table id="List" class="container bg-black">
+                    <tr>
+                        <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
+                        <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                        <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
+                    </tr>
+                    <tr>
+                        <td style="background-image:url('/img/home/fm_left.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                        <td>
+                            <div class="text-center container">
+                                <span class="h5 text-white text-center">Other Features</span>
+                            </div>
+                            <div>
+                                <table id="List" class="container">
+                                    <tr>
+                                        <td width="77px" class="text-center align-middle">
+                                            <a href="{{ asset('faq') }}"><img class="no-margin" src="{{ asset('img/home/mms_faq.jpg') }}" border="0"></a>
+                                        </td>
+                                        <td class="valign-top text-center align-middle">
+                                            <a class="btn btn-jag-grey white" href="{{ asset('faq') }}" role="button">F.A.Q.</a>
+                                            <br>
+                                            <p>Answers to Frequently Asked Questions.<br><a class="link-success underline" href="{{ asset('faq') }}">Click Here</a></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="List" class="container">
+                                    <tr>
+                                        <td width="77px" class="text-center align-middle">
+                                            <a href="https://2009scape.org/"><img class="no-margin" src="{{ asset('img/home/mm_sword.jpg') }}" border="0"></a>
+                                        </td>
+                                        <td class="valign-top text-center align-middle">
+                                            <a class="btn btn-jag-grey white" href="https://2009scape.org/" role="button">2009Scape</a>
+                                            <br>
+                                            <p>RuneScape 2 (2009)<br><a class="link-success underline" href="https://2009scape.org/">Click Here</a></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                        <td style="background-image:url('/img/home/fm_right.gif');"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                    </tr>
+                    <tr>
+                        <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
+                        <td style="background-image:url('/img/home/fm_bottom2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
+                        <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6"></td>
+                    </tr>
+                </table>
             </div>
 
         </div>

@@ -57,6 +57,20 @@ body {
     width: 100%;
 }
 
+.btn-jag-red {
+    background: url('/img/home/shinystonered.jpg');
+    border-color: rgb(87, 7, 0);
+    background-color: rgb(87, 7, 0);
+    background-image: url('/img/home/shinystonered.jpg');
+}
+
+.btn-jag-grey {
+    background: url('/img/home/stoneback.gif');
+    border-color: rgb(55, 55, 55);
+    background-color: rgb(55, 55, 55);
+    background-image: url('/img/home/stoneback.gif');
+}
+
 .table-wrapper-scroll-y {
     display: block;
     max-height: 100vh;
