@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1280" baseProfile="full">
+  <path d="M1240 80h40v40h-40zM560 120h40v40h-40zM1200 120h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1240 120h40v40h-40z"/>
+  <path d="M1280 120h40v40h-40zM520 160h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M560 160h40v40h-40z"/>
+  <path d="M600 160h40v40h-40zM1160 160h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1200 160h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1240 160h40v40h-40zM1280 160h40v40h-40z"/>
+  <path d="M1320 160h40v40h-40zM480 200h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M520 200h40v40h-40zM560 200h40v40h-40zM600 200h40v40h-40z"/>
+  <path d="M640 200h40v40h-40zM1160 200h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1200 200h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1240 200h40v40h-40zM1280 200h40v40h-40zM1320 200h40v40h-40z"/>
+  <path d="M1360 200h40v40h-40zM440 240h40v40h-40z"/>
+  <path fill="#CED6DE" d="M480 240h40v40h-40zM520 240h40v40h-40zM560 240h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M600 240h40v40h-40z"/>
+  <path d="M640 240h40v40h-40zM1080 240h40v40h-40zM1120 240h40v40h-40z"/>
+  <path fill="#FCFCFC" d="M1160 240h40v40h-40zM1200 240h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1240 240h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1280 240h40v40h-40zM1320 240h40v40h-40zM1360 240h40v40h-40z"/>
+  <path d="M1400 240h40v40h-40zM440 280h40v40h-40z"/>
+  <path fill="#CED6DE" d="M480 280h40v40h-40zM520 280h40v40h-40zM560 280h40v40h-40zM600 280h40v40h-40z"/>
+  <path d="M640 280h40v40h-40zM1040 280h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1080 280h40v40h-40zM1120 280h40v40h-40zM1160 280h40v40h-40zM1200 280h40v40h-40zM1240 280h40v40h-40zM1280 280h40v40h-40zM1320 280h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1360 280h40v40h-40z"/>
+  <path d="M1400 280h40v40h-40zM1560 280h40v40h-40zM400 320h40v40h-40z"/>
+  <path fill="#CED6DE" d="M440 320h40v40h-40zM480 320h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M520 320h40v40h-40z"/>
+  <path fill="#CED6DE" d="M560 320h40v40h-40zM600 320h40v40h-40zM640 320h40v40h-40z"/>
+  <path d="M680 320h40v40h-40zM720 320h40v40h-40zM960 320h40v40h-40zM1000 320h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1040 320h40v40h-40zM1080 320h40v40h-40zM1120 320h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1160 320h40v40h-40z"/>
+  <path d="M1200 320h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1240 320h40v40h-40zM1280 320h40v40h-40zM1320 320h40v40h-40zM1360 320h40v40h-40z"/>
+  <path d="M1400 320h40v40h-40zM1520 320h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1560 320h40v40h-40z"/>
+  <path d="M1600 320h40v40h-40zM400 360h40v40h-40z"/>
+  <path fill="#CED6DE" d="M440 360h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M480 360h40v40h-40z"/>
+  <path fill="#CED6DE" d="M520 360h40v40h-40zM560 360h40v40h-40z"/>
+  <path d="M600 360h40v40h-40z"/>
+  <path fill="#CED6DE" d="M640 360h40v40h-40zM680 360h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M720 360h40v40h-40z"/>
+  <path d="M760 360h40v40h-40zM800 360h40v40h-40zM920 360h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M960 360h40v40h-40zM1000 360h40v40h-40zM1040 360h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1080 360h40v40h-40z"/>
+  <path d="M1120 360h40v40h-40zM1160 360h40v40h-40zM1240 360h40v40h-40zM1280 360h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1320 360h40v40h-40z"/>
+  <path d="M1360 360h40v40h-40zM1480 360h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1520 360h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1560 360h40v40h-40zM1600 360h40v40h-40z"/>
+  <path d="M1640 360h40v40h-40zM440 400h40v40h-40z"/>
+  <path fill="#CED6DE" d="M480 400h40v40h-40zM520 400h40v40h-40z"/>
+  <path d="M560 400h40v40h-40zM640 400h40v40h-40zM680 400h40v40h-40z"/>
+  <path fill="#CED6DE" d="M720 400h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M760 400h40v40h-40zM800 400h40v40h-40z"/>
+  <path d="M840 400h40v40h-40zM880 400h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M920 400h40v40h-40zM960 400h40v40h-40zM1000 400h40v40h-40z"/>
+  <path d="M1040 400h40v40h-40zM1080 400h40v40h-40zM1320 400h40v40h-40zM1480 400h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1520 400h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1560 400h40v40h-40zM1600 400h40v40h-40zM1640 400h40v40h-40z"/>
+  <path d="M1680 400h40v40h-40zM480 440h40v40h-40zM520 440h40v40h-40zM720 440h40v40h-40z"/>
+  <path fill="#CED6DE" d="M760 440h40v40h-40zM800 440h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M840 440h40v40h-40z"/>
+  <path d="M880 440h40v40h-40zM920 440h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M960 440h40v40h-40z"/>
+  <path d="M1000 440h40v40h-40zM1400 440h40v40h-40zM1440 440h40v40h-40z"/>
+  <path fill="#FCFCFC" d="M1480 440h40v40h-40zM1520 440h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1560 440h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1600 440h40v40h-40zM1640 440h40v40h-40zM1680 440h40v40h-40z"/>
+  <path d="M1720 440h40v40h-40zM720 480h40v40h-40zM760 480h40v40h-40zM800 480h40v40h-40z"/>
+  <path fill="#CED6DE" d="M840 480h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M880 480h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M920 480h40v40h-40z"/>
+  <path d="M960 480h40v40h-40zM1000 480h40v40h-40zM1360 480h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1400 480h40v40h-40zM1440 480h40v40h-40zM1480 480h40v40h-40zM1520 480h40v40h-40zM1560 480h40v40h-40zM1600 480h40v40h-40zM1640 480h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1680 480h40v40h-40z"/>
+  <path d="M1720 480h40v40h-40zM640 520h40v40h-40zM680 520h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M720 520h40v40h-40zM760 520h40v40h-40zM800 520h40v40h-40z"/>
+  <path d="M840 520h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M880 520h40v40h-40zM920 520h40v40h-40zM960 520h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1000 520h40v40h-40z"/>
+  <path d="M1040 520h40v40h-40zM1280 520h40v40h-40zM1320 520h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1360 520h40v40h-40zM1400 520h40v40h-40zM1440 520h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1480 520h40v40h-40z"/>
+  <path d="M1520 520h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1560 520h40v40h-40zM1600 520h40v40h-40zM1640 520h40v40h-40zM1680 520h40v40h-40z"/>
+  <path d="M1720 520h40v40h-40zM600 560h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M640 560h40v40h-40zM680 560h40v40h-40zM720 560h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M760 560h40v40h-40z"/>
+  <path d="M800 560h40v40h-40zM880 560h40v40h-40zM920 560h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M960 560h40v40h-40zM1000 560h40v40h-40zM1040 560h40v40h-40z"/>
+  <path d="M1080 560h40v40h-40zM1120 560h40v40h-40zM1240 560h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1280 560h40v40h-40zM1320 560h40v40h-40zM1360 560h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1400 560h40v40h-40z"/>
+  <path d="M1440 560h40v40h-40zM1480 560h40v40h-40zM1560 560h40v40h-40zM1600 560h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1640 560h40v40h-40z"/>
+  <path d="M1680 560h40v40h-40zM520 600h40v40h-40zM560 600h40v40h-40z"/>
+  <path fill="#CED6DE" d="M600 600h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M640 600h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M680 600h40v40h-40z"/>
+  <path d="M720 600h40v40h-40zM760 600h40v40h-40zM960 600h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1000 600h40v40h-40zM1040 600h40v40h-40zM1080 600h40v40h-40zM1120 600h40v40h-40z"/>
+  <path d="M1160 600h40v40h-40zM1200 600h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1240 600h40v40h-40zM1280 600h40v40h-40zM1320 600h40v40h-40z"/>
+  <path d="M1360 600h40v40h-40zM1400 600h40v40h-40zM1640 600h40v40h-40zM240 640h40v40h-40zM280 640h40v40h-40zM480 640h40v40h-40z"/>
+  <path fill="#CED6DE" d="M520 640h40v40h-40zM560 640h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M600 640h40v40h-40z"/>
+  <path d="M640 640h40v40h-40zM680 640h40v40h-40zM1000 640h40v40h-40zM1040 640h40v40h-40zM1080 640h40v40h-40zM1120 640h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1160 640h40v40h-40zM1200 640h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1240 640h40v40h-40zM1280 640h40v40h-40z"/>
+  <path d="M1320 640h40v40h-40zM200 680h40v40h-40z"/>
+  <path fill="#CED6DE" d="M240 680h40v40h-40zM280 680h40v40h-40z"/>
+  <path d="M320 680h40v40h-40zM400 680h40v40h-40zM440 680h40v40h-40z"/>
+  <path fill="#CED6DE" d="M480 680h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M520 680h40v40h-40zM560 680h40v40h-40z"/>
+  <path d="M600 680h40v40h-40zM1040 680h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1080 680h40v40h-40zM1120 680h40v40h-40zM1160 680h40v40h-40zM1200 680h40v40h-40z"/>
+  <path d="M1240 680h40v40h-40zM1280 680h40v40h-40zM1320 680h40v40h-40zM1560 680h40v40h-40zM160 720h40v40h-40z"/>
+  <path fill="#CED6DE" d="M200 720h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M240 720h40v40h-40z"/>
+  <path fill="#CED6DE" d="M280 720h40v40h-40zM320 720h40v40h-40z"/>
+  <path d="M360 720h40v40h-40z"/>
+  <path fill="#CED6DE" d="M400 720h40v40h-40zM440 720h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M480 720h40v40h-40z"/>
+  <path d="M520 720h40v40h-40zM560 720h40v40h-40zM960 720h40v40h-40zM1000 720h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1040 720h40v40h-40zM1080 720h40v40h-40zM1120 720h40v40h-40z"/>
+  <path d="M1160 720h40v40h-40zM1200 720h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1240 720h40v40h-40zM1280 720h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1320 720h40v40h-40z"/>
+  <path d="M1360 720h40v40h-40zM1400 720h40v40h-40zM1480 720h40v40h-40zM1520 720h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1560 720h40v40h-40z"/>
+  <path d="M1600 720h40v40h-40zM160 760h40v40h-40z"/>
+  <path fill="#CED6DE" d="M200 760h40v40h-40zM240 760h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M280 760h40v40h-40z"/>
+  <path fill="#CED6DE" d="M320 760h40v40h-40zM360 760h40v40h-40zM400 760h40v40h-40z"/>
+  <path d="M440 760h40v40h-40zM480 760h40v40h-40zM920 760h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M960 760h40v40h-40zM1000 760h40v40h-40zM1040 760h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1080 760h40v40h-40z"/>
+  <path d="M1120 760h40v40h-40zM1200 760h40v40h-40zM1240 760h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1280 760h40v40h-40zM1320 760h40v40h-40zM1360 760h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1400 760h40v40h-40z"/>
+  <path d="M1440 760h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1480 760h40v40h-40zM1520 760h40v40h-40zM1560 760h40v40h-40zM1600 760h40v40h-40z"/>
+  <path d="M1640 760h40v40h-40zM200 800h40v40h-40z"/>
+  <path fill="#CED6DE" d="M240 800h40v40h-40zM280 800h40v40h-40zM320 800h40v40h-40zM360 800h40v40h-40z"/>
+  <path d="M400 800h40v40h-40zM840 800h40v40h-40zM880 800h40v40h-40z"/>
+  <path fill="#CED6DE" d="M920 800h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M960 800h40v40h-40z"/>
+  <path fill="#9B9B9B" d="M1000 800h40v40h-40z"/>
+  <path d="M1040 800h40v40h-40zM1080 800h40v40h-40zM1280 800h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1320 800h40v40h-40zM1360 800h40v40h-40zM1400 800h40v40h-40zM1440 800h40v40h-40zM1480 800h40v40h-40zM1520 800h40v40h-40zM1560 800h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M1600 800h40v40h-40z"/>
+  <path d="M1640 800h40v40h-40zM200 840h40v40h-40z"/>
+  <path fill="#CED6DE" d="M240 840h40v40h-40zM280 840h40v40h-40zM320 840h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M360 840h40v40h-40z"/>
+  <path d="M400 840h40v40h-40zM560 840h40v40h-40zM600 840h40v40h-40zM800 840h40v40h-40z"/>
+  <path fill="#CED6DE" d="M840 840h40v40h-40zM880 840h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M920 840h40v40h-40z"/>
+  <path d="M960 840h40v40h-40zM1000 840h40v40h-40zM1320 840h40v40h-40zM1360 840h40v40h-40z"/>
+  <path fill="#FCFCFC" d="M1400 840h40v40h-40zM1440 840h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1480 840h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1520 840h40v40h-40zM1560 840h40v40h-40zM1600 840h40v40h-40z"/>
+  <path d="M1640 840h40v40h-40zM240 880h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M280 880h40v40h-40zM320 880h40v40h-40zM360 880h40v40h-40z"/>
+  <path d="M400 880h40v40h-40zM520 880h40v40h-40z"/>
+  <path fill="#CED6DE" d="M560 880h40v40h-40zM600 880h40v40h-40z"/>
+  <path d="M640 880h40v40h-40zM720 880h40v40h-40zM760 880h40v40h-40z"/>
+  <path fill="#CED6DE" d="M800 880h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M840 880h40v40h-40zM880 880h40v40h-40z"/>
+  <path d="M920 880h40v40h-40zM1400 880h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1440 880h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1480 880h40v40h-40zM1520 880h40v40h-40zM1560 880h40v40h-40z"/>
+  <path d="M1600 880h40v40h-40zM280 920h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M320 920h40v40h-40z"/>
+  <path d="M360 920h40v40h-40zM480 920h40v40h-40z"/>
+  <path fill="#CED6DE" d="M520 920h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M560 920h40v40h-40z"/>
+  <path fill="#CED6DE" d="M600 920h40v40h-40zM640 920h40v40h-40z"/>
+  <path d="M680 920h40v40h-40z"/>
+  <path fill="#CED6DE" d="M720 920h40v40h-40zM760 920h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M800 920h40v40h-40z"/>
+  <path d="M840 920h40v40h-40zM880 920h40v40h-40zM1400 920h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M1440 920h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1480 920h40v40h-40zM1520 920h40v40h-40z"/>
+  <path d="M1560 920h40v40h-40zM320 960h40v40h-40zM480 960h40v40h-40z"/>
+  <path fill="#CED6DE" d="M520 960h40v40h-40zM560 960h40v40h-40z"/>
+  <path fill="#E7F7FF" d="M600 960h40v40h-40z"/>
+  <path fill="#CED6DE" d="M640 960h40v40h-40zM680 960h40v40h-40zM720 960h40v40h-40z"/>
+  <path d="M760 960h40v40h-40zM800 960h40v40h-40zM1440 960h40v40h-40z"/>
+  <path fill="#CED6DE" d="M1480 960h40v40h-40z"/>
+  <path d="M1520 960h40v40h-40zM520 1000h40v40h-40z"/>
+  <path fill="#CED6DE" d="M560 1000h40v40h-40zM600 1000h40v40h-40zM640 1000h40v40h-40zM680 1000h40v40h-40z"/>
+  <path d="M720 1000h40v40h-40zM1480 1000h40v40h-40zM520 1040h40v40h-40z"/>
+  <path fill="#CED6DE" d="M560 1040h40v40h-40zM600 1040h40v40h-40zM640 1040h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M680 1040h40v40h-40z"/>
+  <path d="M720 1040h40v40h-40zM560 1080h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M600 1080h40v40h-40zM640 1080h40v40h-40zM680 1080h40v40h-40z"/>
+  <path d="M720 1080h40v40h-40zM600 1120h40v40h-40z"/>
+  <path fill="#ADB5C6" d="M640 1120h40v40h-40z"/>
+  <path d="M680 1120h40v40h-40zM640 1160h40v40h-40z"/>
+</svg>

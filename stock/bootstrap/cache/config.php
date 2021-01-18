@@ -10,7 +10,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:N/drKWqtJ54MSBaAeJ6QVRmAP9vlhmmTVId/3Xl+Lqg=',
+    'key' => 'base64:BxwoJjLUiyntG2ppgITuyJPMX/GQ+zYrDOQxdf0a0IM=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -685,6 +685,14 @@
     'remote_sites_path' => '',
     'local_sites_path' => '',
     'housekeeping_endpoint_prefix' => '_ignition',
+  ),
+  'generators' => 
+  array (
+    'config' => 
+    array (
+      'migration_template_path' => '/var/www/html/stock/vendor/kitloong/laravel-migrations-generator/src/Way/Generators/templates/migration.txt',
+      'migration_target_path' => '/var/www/html/stock/database/migrations',
+    ),
   ),
   'trustedproxy' => 
   array (

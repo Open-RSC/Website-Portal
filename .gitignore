@@ -52,3 +52,4 @@ etc/letsencrypt/archive/
 etc/letsencrypt/accounts/
 
 backups/*.zip
+stock/storage/framework/views/

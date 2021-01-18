@@ -61,6 +61,6 @@ Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middlewar
 Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth:api')->name('report_logs');
 Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth:api')->name('staff_logs');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('login')->name('login');
+Route::get('logout')->name('logout');
+Route::get('register')->name('register');

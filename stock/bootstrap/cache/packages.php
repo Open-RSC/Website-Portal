@@ -24,6 +24,20 @@
       0 => 'Fruitcake\\Cors\\CorsServiceProvider',
     ),
   ),
+  'kitloong/laravel-migrations-generator' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'KitLoong\\MigrationsGenerator\\MigrationsGeneratorServiceProvider',
+    ),
+  ),
+  'krlove/eloquent-model-generator' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Krlove\\EloquentModelGenerator\\Provider\\GeneratorServiceProvider',
+    ),
+  ),
   'laravel/sail' => 
   array (
     'providers' => 
