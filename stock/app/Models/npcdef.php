@@ -45,7 +45,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $roundMode
  * @method static where(string $string, string $string1, string $searchTerm)
  */
-class NpcDef extends Model
+class npcdef extends Model
 {
     /**
      * The table associated with the model.

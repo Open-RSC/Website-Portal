@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\NpcDef;
+use App\Models\npcdef;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,7 +17,7 @@ class NpcSearch extends Component
         $searchTerm = '%' . $this->searchTerm . '%';
 
         return view('livewire.npc-search', [
-            'npcResults' => NpcDef::where('name', 'like', $searchTerm)->paginate(300)
+            'npcResults' => npcdef::where('name', 'like', $searchTerm)->paginate(300)
         ]);
     }
 }
