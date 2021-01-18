@@ -53,7 +53,7 @@ return [
     |
     */
 
-    'asset_url'  => 'http://stock.localhost',
+    'asset_url'  => 'http://localhost',
 
     /*
     |--------------------------------------------------------------------------
