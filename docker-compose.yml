@@ -38,6 +38,7 @@ services:
       - '80:80'
       - '443:443'
     volumes:
+      - "./root:/var/www/html/root"
       - "./portal:/var/www/html/portal"
       - "./avatars:/var/www/html/portal/public/img/avatars"
       - "./board:/var/www/html/board"
@@ -49,9 +50,6 @@ services:
       - "./etc/nginx/log:/var/log/nginx"
       - "./etc/letsencrypt:/etc/letsencrypt"
       - "./wiki:/var/www/html/wiki"
-      #- "./retro:/var/www/html/retro"
-      #- "./retro/public:/var/www/retro/site/public"
-      - "./stock:/var/www/html/stock"
 
   node:
     image: node:latest
@@ -64,7 +62,6 @@ services:
       - "./retro:/var/www/html/retro"
 
   php:
-    #image: openrsc/php-laravel:latest
     build:
       context: "./etc/php"
       dockerfile: Dockerfile
@@ -76,9 +73,9 @@ services:
       - "127.0.0.1:9000:9000"
     volumes:
       - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
+      - "./root:/var/www/html/root"
       - "./portal:/var/www/html/portal"
       - "./board:/var/www/html/board"
-      - "./stock:/var/www/html/stock"
 
   mediawiki: # Optional, comment this section out if unwanted.
     build:
