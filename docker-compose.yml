@@ -51,6 +51,7 @@ services:
       - "./wiki:/var/www/html/wiki"
       #- "./retro:/var/www/html/retro"
       #- "./retro/public:/var/www/retro/site/public"
+      - "./stock:/var/www/html/stock"
 
   node:
     image: node:latest
@@ -63,15 +64,21 @@ services:
       - "./retro:/var/www/html/retro"
 
   php:
-    image: openrsc/php-laravel:latest
+    #image: openrsc/php-laravel:latest
+    build:
+      context: "./etc/php"
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
     container_name: php
     restart: unless-stopped
     ports:
       - "127.0.0.1:9000:9000"
     volumes:
-      - "./etc/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
+      - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
       - "./portal:/var/www/html/portal"
       - "./board:/var/www/html/board"
+      - "./stock:/var/www/html/stock"
 
   mediawiki: # Optional, comment this section out if unwanted.
     build:
