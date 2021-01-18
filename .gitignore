@@ -1,3 +1,4 @@
+*/storage/framework/views/
 */node_modules
 */public/fonts/vendor/**
 */public/hot
@@ -52,4 +53,5 @@ etc/letsencrypt/archive/
 etc/letsencrypt/accounts/
 
 backups/*.zip
-stock/storage/framework/views/
+
+!*/vendor/livewire/livewire/src/LivewireServiceProvider.php
