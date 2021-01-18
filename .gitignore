@@ -1,11 +1,12 @@
-/node_modules
-/public/fonts/vendor/**
-/public/hot
-/public/storage
-/public/js/app.js
-/public/css/app.css
-/storage/*.key
-/vendor
+*/node_modules
+*/public/fonts/vendor/**
+*/public/hot
+*/public/storage
+*/public/js/app.js
+*/public/css/app.css
+*/public/mix-manifest.json
+*/storage/*.key
+*/vendor
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -38,14 +39,5 @@ etc/letsencrypt/renewal/
 etc/letsencrypt/csr/
 etc/letsencrypt/archive/
 etc/letsencrypt/accounts/
-
-portal/public/js/app.js
-stock/public/js/app.js
-
-portal/public/css/app.css
-stock/public/css/app.css
-
-portal/public/mix-manifest.json
-stock/public/mix-manifest.json
 
 backups/*.zip
