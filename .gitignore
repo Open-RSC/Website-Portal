@@ -8,6 +8,16 @@
 */storage/*.key
 */vendor
 */composer.lock
+*/.env
+*/public/.htaccess
+*/bootstrap/compiled.php
+*/build/logs
+*/build/coverage
+*/app/tests/_log
+composer.phar
+*/app/config/packages
+*/public/packages
+
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
