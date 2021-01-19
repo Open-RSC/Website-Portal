@@ -16,8 +16,11 @@ services:
       --email marwolf@openrsc.com
       -d rsc.vet
       -d www.rsc.vet
+      -d portal.rsc.vet
+      -d afman.rsc.vet
+      -d wiki.rsc.vet
+      -d board.rsc.vet
       -d retro.rsc.vet
-      -d www.retro.rsc.vet
       -d runescapeclassic.dev
       -d www.runescapeclassic.dev
       -d openrsc.com
