@@ -133,7 +133,7 @@
                         <div>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_accman.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -145,7 +145,7 @@
                             </table>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_passwordsupport.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -157,7 +157,7 @@
                             </table>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('forums') }}"><img class="no-margin" src="{{ asset('img/home/mms_forums.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -201,7 +201,7 @@
                         <div>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('play') }}"><img class="no-margin" src="{{ asset('img/home/mms_rsclassic.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -213,7 +213,7 @@
                             </table>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('register') }}"><img class="no-margin" src="{{ asset('img/home/mm_player.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -251,7 +251,7 @@
                         </div>
                         <table id="List" class="container">
                             <tr>
-                                <td width="77px">
+                                <td style= "min-width: 48px; max-width: 77px;">
                                     <a href="{{ asset('news') }}"><img class="no-margin" src="{{ asset('img/home/mm_scroll.jpg') }}" border="0"></a>
                                 </td>
                                 <td class="valign-top">
@@ -322,7 +322,7 @@
                         <div>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="http://rsc.wiki"><img class="no-margin" src="{{ asset('img/home/mm_rscwiki.png') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -334,7 +334,7 @@
                             </table>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('highscores') }}"><img class="no-margin" src="{{ asset('img/home/mm_chalice.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -346,7 +346,7 @@
                             </table>
                             <table id="List" class="container">
                                 <tr>
-                                    <td width="77px" class="text-center align-middle">
+                                    <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('worldmap') }}"><img class="no-margin" src="{{ asset('img/home/mm_worldmap.jpg') }}" border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -430,7 +430,7 @@
                             <div>
                                 <table id="List" class="container">
                                     <tr>
-                                        <td width="77px" class="text-center align-middle">
+                                        <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_inbox.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
@@ -442,7 +442,7 @@
                                 </table>
                                 <table id="List" class="container">
                                     <tr>
-                                        <td width="77px" class="text-center align-middle">
+                                        <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('faq') }}"><img class="no-margin" src="{{ asset('img/home/mms_faq.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
@@ -454,7 +454,7 @@
                                 </table>
                                 <table id="List" class="container">
                                     <tr>
-                                        <td width="77px" class="text-center align-middle">
+                                        <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('login') }}"><img class="no-margin" src="{{ asset('img/home/mms_support.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
@@ -466,7 +466,7 @@
                                 </table>
                                 <table id="List" class="container">
                                     <tr>
-                                        <td width="77px" class="text-center align-middle">
+                                        <td style= "min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="https://2009scape.org/"><img class="no-margin" src="{{ asset('img/home/mm_sword.jpg') }}" border="0"></a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
