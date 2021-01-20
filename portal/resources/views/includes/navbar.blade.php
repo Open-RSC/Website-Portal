@@ -105,8 +105,8 @@
             @endif
         @else
             <li>
-                <label for="drop-5" class="toggle">{{ Auth::user()->name }} <i class="fas fa-caret-down"></i></label>
-                <a href="#">{{ Auth::user()->name }}</a>
+                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></label>
+                <a href="#">{{ Auth::user()->username }}</a>
                 <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 <ul>
                     <li><a href="{{ route('logout') }}"

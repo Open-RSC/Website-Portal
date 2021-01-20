@@ -61,6 +61,14 @@ Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middlewar
 Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth:api')->name('report_logs');
 Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth:api')->name('staff_logs');
 
-Route::get('login')->name('login');
+Route::namespace('Auth')->group(function () {
+    Route::get('/login','LoginController@show_login_form')->name('login');
+    Route::post('/login','LoginController@process_login')->name('login');
+    Route::get('/register','LoginController@show_signup_form')->name('register');
+    Route::post('/register','LoginController@process_signup');
+    Route::post('/logout','LoginController@logout')->name('logout');
+});
+
+/*Route::get('login')->name('login');
 Route::get('logout')->name('logout');
-Route::get('register')->name('register');
+Route::get('register')->name('register');*/
