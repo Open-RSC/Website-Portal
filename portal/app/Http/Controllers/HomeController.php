@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\phpbb_posts;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\DB;
 
@@ -14,32 +15,43 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $online = DB::table('players')
+        $news_feed = DB::connection('board')->table('phpbb_posts as p')
+            ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
+            ->where([
+                ['t.forum_id', '=', '2'], // forum ID for the news (/viewforum.php?f=18)
+                ['t.topic_status', '=', '0'], // topic not locked or deleted
+                ['p.post_visibility', '=', '1'], // post not deleted and is visible
+            ])
+            ->orderBy('p.post_time', 'desc')
+            ->limit(5)
+            ->get();
+
+        $online = DB::connection('cabbage')->table('players')
             ->where('online', 1)
             ->count();
 
-        $registrations = DB::table('players')
+        $registrations = DB::connection('cabbage')->table('players')
                 ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
                 ->count() ?? '0';
 
-        $logins = DB::table('players')
+        $logins = DB::connection('cabbage')->table('players')
                 ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
                 ->count() ?? '0';
 
-        $totalPlayers = DB::table('players')
+        $totalPlayers = DB::connection('cabbage')->table('players')
                 ->count() ?? '0';
 
-        $uniquePlayers = DB::table('players')
+        $uniquePlayers = DB::connection('cabbage')->table('players')
             ->distinct('creation_ip')
             ->count('creation_ip');
 
-        /*$milliseconds = DB::table('player_cache')
+        /*$milliseconds = DB::connection('cabbage')->table('player_cache')
             ->where('key', 'total_played')
             ->sum('value');
 
         $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));*/
 
-        $activityfeed = DB::table('live_feeds as B')
+        $activityfeed = DB::connection('cabbage')->table('live_feeds as B')
             ->join('players AS A', 'A.username', '=', 'B.username')
             ->where([
                 ['A.group_id', '=', '10'],
@@ -50,7 +62,7 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        $sumgold_B = DB::table('bank as B') // bank
+        $sumgold_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -61,7 +73,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $sumgold_I = DB::table('invitems as I') // inventory
+        $sumgold_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -84,6 +96,7 @@ class HomeController extends Controller
                 //'totalTime' => $totalTime,
                 'activityfeed' => $activityfeed,
                 'sumgold' => $sumgold,
+                'news_feed' => $news_feed,
             ]
         );
     }
@@ -154,7 +167,7 @@ class HomeController extends Controller
 
     public function online()
     {
-        $players = DB::table('players as B')
+        $players = DB::connection('cabbage')->table('players as B')
             ->join('player_cache AS A', 'A.playerID', '=', 'B.id')
             ->where([
                 ['B.online', '=', '1'],
@@ -173,7 +186,7 @@ class HomeController extends Controller
 
     public function createdtoday()
     {
-        $players = DB::table('players AS B')
+        $players = DB::connection('cabbage')->table('players AS B')
             ->whereRaw('B.creation_date >= unix_timestamp(current_date - interval 1 day)')
             ->join('player_cache AS A', 'A.playerID', '=', 'B.id')
             ->where([
@@ -193,7 +206,7 @@ class HomeController extends Controller
 
     public function logins48()
     {
-        $players = DB::table('players AS B')
+        $players = DB::connection('cabbage')->table('players AS B')
             ->whereRaw('B.login_date >= unix_timestamp(current_date - interval 48 hour)')
             ->join('player_cache AS A', 'A.playerID', '=', 'B.id')
             ->where([
@@ -212,33 +225,33 @@ class HomeController extends Controller
 
     public function stats()
     {
-        $online = DB::table('players')
+        $online = DB::connection('cabbage')->table('players')
             ->where('online', '=', '1')
             ->count('online');
 
-        $registrations = DB::table('players')
+        $registrations = DB::connection('cabbage')->table('players')
                 ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
                 ->count() ?? '0';
 
-        $logins48 = DB::table('players')
+        $logins48 = DB::connection('cabbage')->table('players')
             ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
             ->orderBy('login_date', 'desc')
             ->count();
 
-        $totalPlayers = DB::table('players')
+        $totalPlayers = DB::connection('cabbage')->table('players')
                 ->count() ?? '0';
 
-        $uniquePlayers = DB::table('players')
+        $uniquePlayers = DB::connection('cabbage')->table('players')
             ->distinct('creation_ip')
             ->count('creation_ip');
 
-        $createdToday = DB::table('players')
+        $createdToday = DB::connection('cabbage')->table('players')
             ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
             ->orderBy('login_date', 'desc')
             ->orderBy('creation_date', 'desc')
             ->count();
 
-        /*$milliseconds = DB::table('player_cache')
+        /*$milliseconds = DB::connection('cabbage')->table('player_cache')
             ->where('key', 'total_played')
             ->sum('value');
 
@@ -246,7 +259,7 @@ class HomeController extends Controller
 
         $current_timestamp = now()->timestamp;
 
-        $sumgold_B = DB::table('bank as B') // bank
+        $sumgold_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -257,7 +270,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $sumgold_I = DB::table('invitems as I') // inventory
+        $sumgold_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -269,7 +282,7 @@ class HomeController extends Controller
 
         $sumgold = $sumgold_B + $sumgold_I;
 
-        $combat30 = DB::table('players')
+        $combat30 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '30'],
                 ['group_id', '=', '10'],
@@ -277,7 +290,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $combat50 = DB::table('players')
+        $combat50 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '50'],
                 ['group_id', '=', '10'],
@@ -285,7 +298,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $combat80 = DB::table('players')
+        $combat80 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '50'],
                 ['group_id', '=', '10'],
@@ -293,7 +306,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $combat90 = DB::table('players')
+        $combat90 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '90'],
                 ['group_id', '=', '10'],
@@ -301,7 +314,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $combat100 = DB::table('players')
+        $combat100 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '100'],
                 ['group_id', '=', '10'],
@@ -309,7 +322,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $combat123 = DB::table('players')
+        $combat123 = DB::connection('cabbage')->table('players')
             ->where([
                 ['combat', '>=', '123'],
                 ['group_id', '=', '10'],
@@ -317,7 +330,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $startedQuest = DB::table('quests as B')
+        $startedQuest = DB::connection('cabbage')->table('quests as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['A.group_id', '=', '10'],
@@ -326,7 +339,7 @@ class HomeController extends Controller
             ->distinct('B.playerID')
             ->count();
 
-        $gold30_B = DB::table('bank as B') // bank
+        $gold30_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -338,7 +351,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold30_I = DB::table('invitems as I') // inventory
+        $gold30_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -351,7 +364,7 @@ class HomeController extends Controller
 
         $gold30 = $gold30_B + $gold30_I;
 
-        $gold50_B = DB::table('bank as B') // bank
+        $gold50_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -363,7 +376,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold50_I = DB::table('invitems as I') // inventory
+        $gold50_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -376,7 +389,7 @@ class HomeController extends Controller
 
         $gold50 = $gold50_B + $gold50_I;
 
-        $gold80_B = DB::table('bank as B') // bank
+        $gold80_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -388,7 +401,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold80_I = DB::table('invitems as I') // inventory
+        $gold80_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -401,7 +414,7 @@ class HomeController extends Controller
 
         $gold80 = $gold80_B + $gold80_I;
 
-        $gold120_B = DB::table('bank as B') // bank
+        $gold120_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -413,7 +426,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold120_I = DB::table('invitems as I') // inventory
+        $gold120_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -426,7 +439,7 @@ class HomeController extends Controller
 
         $gold120 = $gold120_B + $gold120_I;
 
-        $gold400_B = DB::table('bank as B') // bank
+        $gold400_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -438,7 +451,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold400_I = DB::table('invitems as I') // inventory
+        $gold400_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -451,7 +464,7 @@ class HomeController extends Controller
 
         $gold400 = $gold400_B + $gold400_I;
 
-        $gold1m_B = DB::table('bank as B') // bank
+        $gold1m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -463,7 +476,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold1m_I = DB::table('invitems as I') // inventory
+        $gold1m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -476,7 +489,7 @@ class HomeController extends Controller
 
         $gold1m = $gold1m_B + $gold1m_I;
 
-        $gold12m_B = DB::table('bank as B') // bank
+        $gold12m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -488,7 +501,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold12m_I = DB::table('invitems as I') // inventory
+        $gold12m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -501,7 +514,7 @@ class HomeController extends Controller
 
         $gold12m = $gold12m_B + $gold12m_I;
 
-        $gold15m_B = DB::table('bank as B') // bank
+        $gold15m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -513,7 +526,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold15m_I = DB::table('invitems as I') // inventory
+        $gold15m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -526,7 +539,7 @@ class HomeController extends Controller
 
         $gold15m = $gold15m_B + $gold15m_I;
 
-        $gold2m_B = DB::table('bank as B') // bank
+        $gold2m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -538,7 +551,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold2m_I = DB::table('invitems as I') // inventory
+        $gold2m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -551,7 +564,7 @@ class HomeController extends Controller
 
         $gold2m = $gold2m_B + $gold2m_I;
 
-        $gold4m_B = DB::table('bank as B') // bank
+        $gold4m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -563,7 +576,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold4m_I = DB::table('invitems as I') // inventory
+        $gold4m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -576,7 +589,7 @@ class HomeController extends Controller
 
         $gold4m = $gold4m_B + $gold4m_I;
 
-        $gold10m_B = DB::table('bank as B') // bank
+        $gold10m_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -588,7 +601,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold10m_I = DB::table('invitems as I') // inventory
+        $gold10m_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -601,7 +614,7 @@ class HomeController extends Controller
 
         $gold10m = $gold10m_B + $gold10m_I;
 
-        $pumpkin_B = DB::table('bank as B') // bank
+        $pumpkin_B = DB::connection('cabbage')->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -613,7 +626,7 @@ class HomeController extends Controller
             ])
             ->sum('S.amount');
 
-        $pumpkin_I = DB::table('invitems as I') // inventory
+        $pumpkin_I = DB::connection('cabbage')->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -624,7 +637,7 @@ class HomeController extends Controller
             ])
             ->count();
 
-        $pumpkin_A = DB::table('auctions as U') // auction
+        $pumpkin_A = DB::connection('cabbage')->table('auctions as U') // auction
         ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
             ->where([
@@ -640,7 +653,7 @@ class HomeController extends Controller
 
         $pumpkin = $pumpkin_B + $pumpkin_I + $pumpkin_A;
 
-        /*$cracker = DB::table('bank as B')
+        /*$cracker = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -650,7 +663,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $yellowphat = DB::table('bank as B')
+        $yellowphat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -660,7 +673,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $whitephat = DB::table('bank as B')
+        $whitephat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -670,7 +683,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $purplephat = DB::table('bank as B')
+        $purplephat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -680,7 +693,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $redphat = DB::table('bank as B')
+        $redphat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -690,7 +703,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $bluephat = DB::table('bank as B')
+        $bluephat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -700,7 +713,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $greenphat = DB::table('bank as B')
+        $greenphat = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -710,7 +723,7 @@ class HomeController extends Controller
             ])
             ->sum('C.amount');
 
-        $greenphatBank = DB::table('invitems as B')
+        $greenphatBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '579'],
@@ -721,7 +734,7 @@ class HomeController extends Controller
 
         $greenphat = $greenphatInvitems + $greenphatBank;
 
-        $eastereggInvitems = DB::table('bank as B')
+        $eastereggInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '677'],
@@ -730,7 +743,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $eastereggBank = DB::table('invitems as B')
+        $eastereggBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '677'],
@@ -741,7 +754,7 @@ class HomeController extends Controller
 
         $easteregg = $eastereggInvitems + $eastereggBank;
 
-        $redmaskInvitems = DB::table('bank as B')
+        $redmaskInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '831'],
@@ -750,7 +763,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $redmaskBank = DB::table('invitems as B')
+        $redmaskBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '831'],
@@ -761,7 +774,7 @@ class HomeController extends Controller
 
         $redmask = $redmaskInvitems + $redmaskBank;
 
-        $bluemaskInvitems = DB::table('bank as B')
+        $bluemaskInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '832'],
@@ -770,7 +783,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $bluemaskBank = DB::table('invitems as B')
+        $bluemaskBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '832'],
@@ -781,7 +794,7 @@ class HomeController extends Controller
 
         $bluemask = $bluemaskInvitems + $bluemaskBank;
 
-        $greenmaskInvitems = DB::table('bank as B')
+        $greenmaskInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '828'],
@@ -790,7 +803,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $greenmaskBank = DB::table('invitems as B')
+        $greenmaskBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '828'],
@@ -801,7 +814,7 @@ class HomeController extends Controller
 
         $greenmask = $greenmaskInvitems + $greenmaskBank;
 
-        $santahatInvitems = DB::table('bank as B')
+        $santahatInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '971'],
@@ -810,7 +823,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $santahatBank = DB::table('invitems as B')
+        $santahatBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '971'],
@@ -821,7 +834,7 @@ class HomeController extends Controller
 
         $santahat = $santahatInvitems + $santahatBank;
 
-        $bunnyearsInvitems = DB::table('bank as B')
+        $bunnyearsInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1156'],
@@ -830,7 +843,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $bunnyearsBank = DB::table('invitems as B')
+        $bunnyearsBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1156'],
@@ -841,7 +854,7 @@ class HomeController extends Controller
 
         $bunnyears = $bunnyearsInvitems + $bunnyearsBank;
 
-        $scytheInvitems = DB::table('bank as B')
+        $scytheInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1289'],
@@ -850,7 +863,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $scytheBank = DB::table('invitems as B')
+        $scytheBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1289'],
@@ -861,7 +874,7 @@ class HomeController extends Controller
 
         $scythe = $scytheInvitems + $scytheBank;
 
-        $dsqInvitems = DB::table('bank as B')
+        $dsqInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1278'],
@@ -870,7 +883,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $dsqBank = DB::table('invitems as B')
+        $dsqBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1278'],
@@ -881,7 +894,7 @@ class HomeController extends Controller
 
         $dsq = $dsqInvitems + $dsqBank;
 
-        $dmedInvitems = DB::table('bank as B')
+        $dmedInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '795'],
@@ -890,7 +903,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $dmedBank = DB::table('invitems as B')
+        $dmedBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '795'],
@@ -901,7 +914,7 @@ class HomeController extends Controller
 
         $dmed = $dmedInvitems + $dmedBank;
 
-        $dammyInvitems = DB::table('bank as B')
+        $dammyInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '522'],
@@ -915,7 +928,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $dammyBank = DB::table('invitems as B')
+        $dammyBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '522'],
@@ -931,7 +944,7 @@ class HomeController extends Controller
 
         $dammy = $dammyInvitems + $dammyBank;
 
-        $dbattleInvitems = DB::table('bank as B')
+        $dbattleInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '594'],
@@ -940,7 +953,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $dbattleBank = DB::table('invitems as B')
+        $dbattleBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '594'],
@@ -951,7 +964,7 @@ class HomeController extends Controller
 
         $dbattle = $dbattleInvitems + $dbattleBank;
 
-        $dlongInvitems = DB::table('bank as B')
+        $dlongInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '593'],
@@ -960,7 +973,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $dlongBank = DB::table('invitems as B')
+        $dlongBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '593'],
@@ -971,7 +984,7 @@ class HomeController extends Controller
 
         $dlong = $dlongInvitems + $dlongBank;
 
-        $cabbageInvitems = DB::table('bank as B')
+        $cabbageInvitems = DB::connection('cabbage')->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '18'],
@@ -985,7 +998,7 @@ class HomeController extends Controller
             ])
             ->sum('B.amount');
 
-        $cabbageBank = DB::table('invitems as B')
+        $cabbageBank = DB::connection('cabbage')->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '18'],

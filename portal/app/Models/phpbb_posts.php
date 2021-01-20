@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $post_delete_reason
  * @property int $post_delete_user
  */
-class phpbb_posts extends Model
+class phpbb_posts extends phpbb_topics
 {
     /**
      * The primary key for the model.
@@ -48,5 +48,9 @@ class phpbb_posts extends Model
      * @var array
      */
     protected $fillable = ['topic_id', 'forum_id', 'poster_id', 'icon_id', 'poster_ip', 'post_time', 'post_reported', 'enable_bbcode', 'enable_smilies', 'enable_magic_url', 'enable_sig', 'post_username', 'post_subject', 'post_text', 'post_checksum', 'post_attachment', 'bbcode_bitfield', 'bbcode_uid', 'post_postcount', 'post_edit_time', 'post_edit_reason', 'post_edit_user', 'post_edit_count', 'post_edit_locked', 'post_visibility', 'post_delete_time', 'post_delete_reason', 'post_delete_user'];
+
+    protected $dateFormat = 'U';
+
+    //protected $connection = 'connection-name';
 
 }
