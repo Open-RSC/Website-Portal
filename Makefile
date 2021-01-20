@@ -97,3 +97,7 @@ npm-run-prod:
 
 npm-run-watch:
 	docker exec -i php bash -c "cd /var/www/html/${site} && npm run watch"
+
+# Usage: make generate-model site=portal name=phpbb_topics
+generate-model:
+	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan krlove:generate:model ${name} --table-name ${name}"
