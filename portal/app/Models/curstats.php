@@ -53,4 +53,6 @@ class curstats extends Model
      */
     protected $fillable = ['playerID', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting'];
 
+    // Selects which database to query
+    protected $connection = 'cabbage';
 }
