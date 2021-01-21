@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Http\Controllers\Auth;
-use App\Models\players;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth as Auth;
 
-//use App\User;
+use App\Models\players;
+use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -21,7 +18,8 @@ class LoginController extends Controller
     {
         return view('secure.login');
     }
-    public function process_login(Request $request)
+
+    public function process_login(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|min:3|max:16',
@@ -30,22 +28,24 @@ class LoginController extends Controller
 
         $credentials = $request->except(['_token']);
 
-        $user = players::where('username',$request->name)->first();
+        $user = players::where('username', $request->name)->first();
 
         if (auth()->attempt(['username' => $request['name'], 'password' => $request['password']])) {
 
             return redirect()->route('home');
 
-        }else{
+        } else {
             session()->flash('message', 'Invalid credentials');
             return redirect()->back();
         }
     }
+
     public function show_signup_form()
     {
         return view('secure.register');
     }
-    public function process_signup(Request $request)
+
+    public function process_signup(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => 'required',
@@ -66,14 +66,15 @@ class LoginController extends Controller
 
         return redirect()->route('login');
     }
-    public function logout()
+
+    public function logout(): \Illuminate\Http\RedirectResponse
     {
         Auth::logout();
 
         return redirect()->route('login');
     }
 
-    public function username()
+    public function username(): string
     {
         return 'username';
     }

@@ -13,8 +13,8 @@ class PlayerController extends Controller
 	 * @param $n
 	 * @return string
 	 */
-	public function bd_nice_number($n)
-	{
+	public function bd_nice_number($n): string
+    {
 		if ($n > 1000000000000) return round(($n / 1000000000000), 1) . ' trillion';
 		else if ($n > 1000000000) return round(($n / 1000000000), 1) . ' billion';
 		else if ($n > 1000000) return round(($n / 1000000), 1) . ' million';
