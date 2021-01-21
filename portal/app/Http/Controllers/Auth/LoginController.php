@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Category;
 use App\Models\curstats;
+use App\Models\experience;
 use App\Models\players;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
@@ -67,29 +68,28 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
+        $user = players::where('username', $request->name)->first();
+
+        if ($user) {
+            session()->flash('message', 'Username already taken!');
+            return redirect()->back();
+        }
+
         $user = players::create([
             'username' => trim($request->input('name')),
             'email' => strtolower($request->input('email')),
             'pass' => bcrypt($request->input('password')),
         ]);
 
-        $lastID = players::all()->last()->id;
+        curstats::create([
+            'playerID' => $user->id,
+            'hits' => 10
+        ]);
 
-        #TODO
-        # - need to match up creation IP and creation timestamp when registering so those get populated
-        # - we also have to have checks to prevent registering existing player names which isn't being done presently
-        # - database selection needs a combo box with livewire to load the rest of the registration form once selected
-        # - database selection combo box needs to set the presently hardcoded "DB::connection('cabbage')" to the appropriate DB
-
-        DB::connection('cabbage')->table('curstats')
-            ->insert([
-                'playerID' => $lastID
-            ]);
-
-        DB::connection('cabbage')->table('experience')
-            ->insert([
-                'playerID' => $lastID
-            ]);
+        experience::create([
+            'playerID' => $user->id,
+            'hits' => 4000
+        ]);
 
         session()->flash('message', 'Your account is created');
 
