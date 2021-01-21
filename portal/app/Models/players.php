@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -90,4 +91,6 @@ class players extends Authenticatable
     {
         return $this->pass; // case sensitive
     }
+
+    protected $connection = 'cabbage';
 }
