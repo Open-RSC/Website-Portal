@@ -59,11 +59,11 @@ class players extends Authenticatable
     use HasFactory, Notifiable;
 
     //Set Table Name
-    protected string $table = 'players';
+    protected $table = 'players';
     //Set Primary Key
-    public string $primaryKey = 'id';
+    public $primaryKey = 'id';
 
-    public bool $timestamps = false;
+    public $timestamps = false;
     // the below don't work in laravel since type expected should be
     // timestamp and we have as int(10)
     const CREATED_AT = 'creation_date';
@@ -74,14 +74,14 @@ class players extends Authenticatable
      *
      * @var array
      */
-    protected array $fillable = ['username', 'group_id', 'email', 'pass', 'salt', 'combat', 'skill_total', 'x', 'y', 'fatigue', 'petfatigue', 'combatstyle', 'block_chat', 'block_private', 'block_trade', 'block_duel', 'cameraauto', 'onemouse', 'soundoff', 'haircolour', 'topcolour', 'trousercolour', 'skincolour', 'headsprite', 'bodysprite', 'male', 'creation_date', 'creation_ip', 'login_date', 'login_ip', 'banned', 'offences', 'muted', 'kills', 'npc_kills', 'pets', 'deaths', 'iron_man', 'iron_man_restriction', 'hc_ironman_death', 'online', 'quest_points', 'bank_size', 'lastRecoveryTryId', 'transfer'];
+    protected $fillable = ['username', 'group_id', 'email', 'pass', 'salt', 'combat', 'skill_total', 'x', 'y', 'fatigue', 'petfatigue', 'combatstyle', 'block_chat', 'block_private', 'block_trade', 'block_duel', 'cameraauto', 'onemouse', 'soundoff', 'haircolour', 'topcolour', 'trousercolour', 'skincolour', 'headsprite', 'bodysprite', 'male', 'creation_date', 'creation_ip', 'login_date', 'login_ip', 'banned', 'offences', 'muted', 'kills', 'npc_kills', 'pets', 'deaths', 'iron_man', 'iron_man_restriction', 'hc_ironman_death', 'online', 'quest_points', 'bank_size', 'lastRecoveryTryId', 'transfer'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected array $hidden = [
+    protected $hidden = [
         'password',
     ];
 
@@ -91,5 +91,5 @@ class players extends Authenticatable
     }
 
     // Selects which database to query
-    protected string $connection = 'cabbage';
+    protected $connection = 'cabbage';
 }

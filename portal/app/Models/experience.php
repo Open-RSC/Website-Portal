@@ -34,23 +34,23 @@ class experience extends Model
      * 
      * @var string
      */
-    protected string $table = 'experience';
+    protected $table = 'experience';
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected string $primaryKey = 'playerID';
+    protected $primaryKey = 'playerID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
      * 
      * @var bool
      */
-    public bool $incrementing = false;
+    public $incrementing = false;
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 
     /**
      * @var array

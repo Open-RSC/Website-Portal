@@ -34,7 +34,7 @@ class curstats extends Model
      * 
      * @var string
      */
-    protected string $primaryKey = 'playerID';
+    protected $primaryKey = 'playerID';
 
     const CREATED_AT = '';
     const UPDATED_AT = '';
@@ -44,9 +44,9 @@ class curstats extends Model
      * 
      * @var bool
      */
-    public bool $incrementing = false;
+    public $incrementing = false;
 
-    public bool $timestamps = false;
+    public $timestamps = false;
 
     /**
      * @var array

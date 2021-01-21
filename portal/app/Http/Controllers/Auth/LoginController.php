@@ -9,7 +9,6 @@ use App\Models\players;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -18,7 +17,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function show_login_form()
+    public function show_login_form(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('secure.login');
     }
@@ -55,7 +54,7 @@ class LoginController extends Controller
         }
     }
 
-    public function show_signup_form()
+    public function show_signup_form(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('secure.register');
     }
