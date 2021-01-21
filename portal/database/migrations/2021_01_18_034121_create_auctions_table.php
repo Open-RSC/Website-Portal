@@ -21,11 +21,13 @@ class CreateAuctionsTable extends Migration
             $table->integer('price');
             $table->unsignedInteger('seller');
             $table->string('seller_username', 12)->index('seller_username');
-            $table->text('buyer_info')->index('buyer_info');
+            $table->text('buyer_info')/*->index('buyer_info')*/;
             $table->tinyInteger('sold-out')->default(0);
             $table->string('time')->default('0')->index('time');
             $table->tinyInteger('was_cancel')->default(0);
         });
+
+        DB::unprepared('ALTER TABLE auctions ADD UNIQUE key buyer_info (buyer_info(255))');
     }
 
     /**

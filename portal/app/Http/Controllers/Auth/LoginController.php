@@ -30,7 +30,18 @@ class LoginController extends Controller
 
         $user = players::where('username', $request->name)->first();
 
-        if (auth()->attempt(['username' => $request['name'], 'password' => $request['password']])) {
+        if (!$user) {
+            session()->flash('message', 'Invalid credentials');
+            return redirect()->back();
+        }
+
+        $form_pass = $request['password'];
+        if ($user->salt) {
+            // accounts with old password compatibility
+            $form_pass = hash('sha512', ($user->salt.md5($form_pass)));
+        }
+
+        if (auth()->attempt(['username' => $request['name'], 'password' => $form_pass])) {
 
             return redirect()->route('home');
 
