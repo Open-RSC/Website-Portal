@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Category;
+use App\Models\curstats;
 use App\Models\players;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -38,7 +41,7 @@ class LoginController extends Controller
         $form_pass = $request['password'];
         if ($user->salt) {
             // accounts with old password compatibility
-            $form_pass = hash('sha512', ($user->salt.md5($form_pass)));
+            $form_pass = hash('sha512', ($user->salt . md5($form_pass)));
         }
 
         if (auth()->attempt(['username' => $request['name'], 'password' => $form_pass])) {
@@ -70,10 +73,25 @@ class LoginController extends Controller
             'pass' => bcrypt($request->input('password')),
         ]);
 
-        session()->flash('message', 'Your account is created');
+        $lastID = players::all()->last()->id;
 
-        // TODO: although technically does create account
-        // in-game not yet usable since some tables are not filled out
+        #TODO
+        # - need to match up creation IP and creation timestamp when registering so those get populated
+        # - we also have to have checks to prevent registering existing player names which isn't being done presently
+        # - database selection needs a combo box with livewire to load the rest of the registration form once selected
+        # - database selection combo box needs to set the presently hardcoded "DB::connection('cabbage')" to the appropriate DB
+
+        DB::connection('cabbage')->table('curstats')
+            ->insert([
+                'playerID' => $lastID
+            ]);
+
+        DB::connection('cabbage')->table('experience')
+            ->insert([
+                'playerID' => $lastID
+            ]);
+
+        session()->flash('message', 'Your account is created');
 
         return redirect()->route('login');
     }

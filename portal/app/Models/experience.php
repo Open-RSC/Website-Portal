@@ -34,25 +34,24 @@ class experience extends Model
      * 
      * @var string
      */
-    protected $table = 'experience';
+    protected string $table = 'experience';
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected $primaryKey = 'playerID';
+    protected string $primaryKey = 'playerID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
      * 
      * @var bool
      */
-    public $incrementing = false;
+    public bool $incrementing = false;
 
     /**
      * @var array
      */
-    protected $fillable = ['attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting'];
-
+    protected array $fillable = ['attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting'];
 }
