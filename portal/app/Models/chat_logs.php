@@ -15,6 +15,6 @@ class chat_logs extends Model
     /**
      * @var array
      */
-    protected $fillable = ['sender', 'message', 'time'];
+    protected array $fillable = ['sender', 'message', 'time'];
 
 }

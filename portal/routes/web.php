@@ -50,25 +50,21 @@ Route::get('/highscores/skill_total', 'HighscoresController@index')->name('skill
 Route::get('/highscores/{subpage}', 'HighscoresController@show')->name('highscorestat');
 
 // Afman staff zone
-Route::get('/chat_logs', 'StaffController@chat_logs')->middleware('auth:api')->name('chat_logs');
-Route::get('/pm_logs', 'StaffController@pm_logs')->middleware('auth:api')->name('pm_logs');
-Route::get('/trade_logs', 'StaffController@trade_logs')->middleware('auth:api')->name('trade_logs');
-Route::get('/generic_logs', 'StaffController@generic_logs')->middleware('auth:api')->name('generic_logs');
-Route::get('/shop_logs', 'StaffController@shop_logs')->middleware('auth:api')->name('shop_logs');
-Route::get('/auction_logs', 'StaffController@auction_logs')->middleware('auth:api')->name('auction_logs');
-Route::get('/live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth:api')->name('live_feed_logs');
-Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth:api')->name('player_cache_logs');
-Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth:api')->name('report_logs');
-Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth:api')->name('staff_logs');
+Route::get('/chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
+Route::get('/pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
+Route::get('/trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
+Route::get('/generic_logs', 'StaffController@generic_logs')->middleware('auth')->name('generic_logs');
+Route::get('/shop_logs', 'StaffController@shop_logs')->middleware('auth')->name('shop_logs');
+Route::get('/auction_logs', 'StaffController@auction_logs')->middleware('auth')->name('auction_logs');
+Route::get('/live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth')->name('live_feed_logs');
+Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
+Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
+Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 
 Route::namespace('Auth')->group(function () {
-    Route::get('/login','LoginController@show_login_form')->name('login');
-    Route::post('/login','LoginController@process_login')->name('login');
-    Route::get('/register','LoginController@show_signup_form')->name('register');
-    Route::post('/register','LoginController@process_signup');
-    Route::post('/logout','LoginController@logout')->name('logout');
+    Route::get('/login', 'LoginController@show_login_form')->name('login');
+    Route::post('/login', 'LoginController@process_login')->name('login');
+    Route::get('/register', 'LoginController@show_signup_form')->name('register');
+    Route::post('/register', 'LoginController@process_signup');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 });
-
-/*Route::get('login')->name('login');
-Route::get('logout')->name('logout');
-Route::get('register')->name('register');*/
