@@ -22,7 +22,7 @@ class ItemController extends Controller
 		 * fetches the table row of the item in view and paginates the results
 		 */
 		if (Config::get('app.authentic') == true) {
-			$items = DB::connection()
+			$items = DB::connection('cabbage')
 				->table('itemdef')
 				->where([
 					['bankNoteID', '!=', '-1'],
@@ -31,7 +31,7 @@ class ItemController extends Controller
 				->orderBy('id', 'asc')
 				->paginate(300);
 		} else {
-			$items = DB::connection()
+			$items = DB::connection('cabbage')
 				->table('itemdef')
 				->where('bankNoteID', '!=', '-1')
 				->orderBy('id', 'asc')
@@ -51,14 +51,14 @@ class ItemController extends Controller
 	public function autocomplete(Request $request)
 	{
 		if (Config::get('app.authentic') == true) {
-			$items = DB::connection()
+			$items = DB::connection('cabbage')
 				->table('itemdef')
 				->where("name", "LIKE", "%{$request->input('query')}%")
 				->where('id', '<=', '2091') // limits to show only authentic items
 				->orderBy('id', 'asc')
 				->get();
 		} else {
-			$items = DB::connection()
+			$items = DB::connection('cabbage')
 				->table('itemdef')
 				->where("name", "LIKE", "%{$request->input('query')}%")
 				->orderBy('id', 'asc')
@@ -80,7 +80,7 @@ class ItemController extends Controller
 		 * queries the item and returns a 404 error if not found in database
 		 */
 		if (Config::get('app.authentic') == true) {
-			$itemdef = DB::connection()
+			$itemdef = DB::connection('cabbage')
 				->table('itemdef')
 				->where('id', '<=', '2091') // limits to show only authentic items
 				->find($id);
@@ -88,7 +88,7 @@ class ItemController extends Controller
 				abort(404);
 			}
 		} else {
-			$itemdef = DB::connection()
+			$itemdef = DB::connection('cabbage')
 				->table('itemdef')
 				->find($id);
 			if (!$itemdef) {
@@ -100,7 +100,7 @@ class ItemController extends Controller
 		 * @var
 		 * determines a count for how many of the item the player base has total in their bank
 		 */
-		$totalPlayerHeld_bank = DB::connection()
+		$totalPlayerHeld_bank = DB::connection('cabbage')
 			->table('bank')
 			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned')
 			->join('players', function ($join) use ($id) {
@@ -117,7 +117,7 @@ class ItemController extends Controller
 		 * @var
 		 * determines a count for how many of the item the player base has total in their inventory
 		 */
-		$totalPlayerHeld_invitems = DB::connection()
+		$totalPlayerHeld_invitems = DB::connection('cabbage')
 			->table('invitems')
 			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned')
 			->join('players', function ($join) use ($id) {
@@ -140,7 +140,7 @@ class ItemController extends Controller
 		 * @var
 		 * determines a count for how many of the item the player base has for those active within the last 3 months in their bank
 		 */
-		$last3moPlayerHeld_bank = DB::connection()
+		$last3moPlayerHeld_bank = DB::connection('cabbage')
 			->table('bank')
 			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
 			->join('players', function ($join) use ($id) {
@@ -160,7 +160,7 @@ class ItemController extends Controller
 		 * @var
 		 * determines a count for how many of the item the player base has for those active within the last 3 months in their inventory
 		 */
-		$last3moPlayerHeld_invitems = DB::connection()
+		$last3moPlayerHeld_invitems = DB::connection('cabbage')
 			->table('invitems')
 			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
 			->join('players', function ($join) use ($id) {
@@ -188,7 +188,7 @@ class ItemController extends Controller
 		 * gathers a list of the npcs and their associated drop tables, then paginates the table
 		 */
 		if (Config::get('app.authentic') == true) {
-			$item_drops = DB::connection()
+			$item_drops = DB::connection('cabbage')
 				->table('npcdrops AS B')
 				->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
 				->join('itemdef AS C', 'B.id', '=', 'C.id')
@@ -202,7 +202,7 @@ class ItemController extends Controller
 				->orderBy('id', 'asc')
 				->paginate(50);
 		} else {
-			$item_drops = DB::connection()
+			$item_drops = DB::connection('cabbage')
 				->table('npcdrops AS B')
 				->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
 				->join('itemdef AS C', 'B.id', '=', 'C.id')

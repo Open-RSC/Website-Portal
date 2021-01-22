@@ -56,7 +56,7 @@ class HighscoresController extends Controller
 		 * @var $highscores
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$highscores = DB::connection()
+		$highscores = DB::connection('cabbage')
 			->table('experience as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->select('*', DB::raw('
@@ -134,7 +134,7 @@ class HighscoresController extends Controller
 		 * @var $highscores
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$highscores = DB::connection()
+		$highscores = DB::connection('cabbage')
 			->table('experience as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->select('*', DB::raw('a.exp_' . $subpage))

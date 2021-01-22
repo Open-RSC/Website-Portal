@@ -25,4 +25,5 @@ class npcdrops extends Model
      */
     protected $fillable = ['npcdef_id', 'amount', 'id', 'weight'];
 
+    protected $connection = 'cabbage';
 }

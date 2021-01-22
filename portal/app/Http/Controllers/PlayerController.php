@@ -34,7 +34,7 @@ class PlayerController extends Controller
 		 * @var $players
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$players = DB::connection()
+		$players = DB::connection('cabbage')
 			->table('players')
 			->where([
 				['banned', '=', '0'],
@@ -65,7 +65,7 @@ class PlayerController extends Controller
 		 * @var $banks
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$banks = DB::connection()
+		$banks = DB::connection('cabbage')
 			->table('bank as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->join('itemdef as c', 'a.id', '=', 'c.id')
@@ -103,7 +103,7 @@ class PlayerController extends Controller
 		 * @var $banks
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$banks = DB::connection()
+		$banks = DB::connection('cabbage')
 			->table('bank as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->join('itemdef as c', 'a.id', '=', 'c.id')
@@ -150,7 +150,7 @@ class PlayerController extends Controller
 		 * @var $banks
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$invitems = DB::connection()
+		$invitems = DB::connection('cabbage')
 			->table('invitems as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->join('itemdef as c', 'a.id', '=', 'c.id')

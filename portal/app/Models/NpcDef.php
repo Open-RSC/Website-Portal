@@ -66,4 +66,5 @@ class npcdef extends Model
      */
     protected $fillable = ['name', 'description', 'command', 'command2', 'attack', 'strength', 'hits', 'defense', 'ranged', 'combatlvl', 'isMembers', 'attackable', 'aggressive', 'respawnTime', 'sprites1', 'sprites2', 'sprites3', 'sprites4', 'sprites5', 'sprites6', 'sprites7', 'sprites8', 'sprites9', 'sprites10', 'sprites11', 'sprites12', 'hairColour', 'topColour', 'bottomColour', 'skinColour', 'camera1', 'camera2', 'walkModel', 'combatModel', 'combatSprite', 'canEdit', 'roundMode'];
 
+    protected $connection = 'cabbage';
 }

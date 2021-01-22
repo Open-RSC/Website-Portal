@@ -72,7 +72,7 @@ class QuestController extends Controller
 		/**
 		 * @var $quest
 		 */
-		/*$quest = DB::connection()
+		/*$quest = DB::connection('cabbage')
 			->table('quests as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->select('*', DB::raw($subpage))

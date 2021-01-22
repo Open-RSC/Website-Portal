@@ -20,13 +20,13 @@ class NpcController extends Controller
 		 * fetches the table row of the npc in view and paginates the results
 		 */
 		if (Config::get('app.authentic') == true) {
-			$npcs = DB::connection()
+			$npcs = DB::connection('cabbage')
 				->table('npcdef')
 				->where('id', '<=', '793')
 				->orderBy('id', 'asc')
 				->paginate(300);
 		} else {
-			$npcs = DB::connection()
+			$npcs = DB::connection('cabbage')
 				->table('npcdef')
 				->orderBy('id', 'asc')
 				->paginate(300);
@@ -47,7 +47,7 @@ class NpcController extends Controller
 		 * queries the npc and returns a 404 error if not found in database
 		 */
 		if (Config::get('app.authentic') == true) {
-			$npcdef = DB::connection()
+			$npcdef = DB::connection('cabbage')
 				->table('npcdef')
 				->where('id', '<=', '793')
 				->find($id);
@@ -55,7 +55,7 @@ class NpcController extends Controller
 				abort(404);
 			}
 		} else {
-			$npcdef = DB::connection()
+			$npcdef = DB::connection('cabbage')
 				->table('npcdef')
 				->find($id);
 			if (!$npcdef) {
@@ -68,7 +68,7 @@ class NpcController extends Controller
 		 * gathers a list of the npcs and their associated drop tables, then paginates the table
 		 */
 		if (Config::get('app.authentic') == true) {
-			$npc_drops = DB::connection()
+			$npc_drops = DB::connection('cabbage')
 				->table('npcdrops AS B')
 				->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
 				->join('itemdef AS C', 'B.id', '=', 'C.id')
@@ -83,7 +83,7 @@ class NpcController extends Controller
 				->orderBy('C.basePrice', 'asc')
 				->paginate(50);
 		} else {
-			$npc_drops = DB::connection()
+			$npc_drops = DB::connection('cabbage')
 				->table('npcdrops AS B')
 				->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
 				->join('itemdef AS C', 'B.id', '=', 'C.id')
