@@ -7,7 +7,7 @@
         </h2>
 
         <div class="row justify-content-center">
-            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3">
+            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
                 <span class="text-danger font-weight-bold d-block">What is Open RuneScape Classic?</span>
                 The project was officially begun in June 2018, though has roots spanning as far back as 2009 with
                 Open RSCD v25. The Open RuneScape Classic project has been a non-profit, community driven, open source
