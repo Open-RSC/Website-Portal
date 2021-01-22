@@ -127,18 +127,18 @@
             <table id="List" class="container bg-black">
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                     <td>
                         <div class="text-center container">
@@ -149,7 +149,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('login') }}"><img class="no-margin"
-                                                                            src="{{ asset('img/home/mms_accman.jpg') }}"
+                                                                            src="{{ asset('img/mms_accman.jpg') }}"
                                                                             border="0"></a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -166,7 +166,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('login') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mms_passwordsupport.jpg') }}"
+                                            <img class="no-margin" src="{{ asset('img/mms_passwordsupport.jpg') }}"
                                                  alt="">
                                         </a>
                                     </td>
@@ -187,7 +187,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('forums') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mms_forums.jpg') }}" alt="">
+                                            <img class="no-margin" src="{{ asset('img/mms_forums.jpg') }}" alt="">
                                         </a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -206,18 +206,18 @@
                         </div>
                     </td>
                     <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
             </table>
@@ -233,18 +233,18 @@
             <table id="List" class="container bg-black">
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                     <td>
                         <div class="text-center container">
@@ -255,7 +255,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('play') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mms_rsclassic.jpg') }}"
+                                            <img class="no-margin" src="{{ asset('img/mms_rsclassic.jpg') }}"
                                                  alt="">
                                         </a>
                                     </td>
@@ -277,7 +277,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('register') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mm_player.jpg') }}" alt="">
+                                            <img class="no-margin" src="{{ asset('img/mm_player.jpg') }}" alt="">
                                         </a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -297,18 +297,18 @@
                         </div>
                     </td>
                     <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
             </table>
@@ -319,18 +319,18 @@
             <table id="List" class="container bg-black">
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                     <td>
                         <div class="text-center container">
@@ -340,7 +340,7 @@
                             <tr>
                                 <td style="min-width: 48px; max-width: 77px;">
                                     <a href="{{ asset('news') }}">
-                                        <img class="no-margin" src="{{ asset('img/home/mm_scroll.jpg') }}" alt="">
+                                        <img class="no-margin" src="{{ asset('img/mm_scroll.jpg') }}" alt="">
                                     </a>
                                 </td>
                                 <td class="valign-top">
@@ -356,7 +356,8 @@
                                                         @php
                                                             echo Str::limit(strip_tags($news->post_text), 150);
                                                         @endphp
-                                                        <a class="text-success underline" href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                        <a class="text-success underline"
+                                                           href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
                                                             Read More...
                                                         </a>
                                                     </span>
@@ -386,18 +387,18 @@
                         </div>
                     </td>
                     <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
             </table>
@@ -408,18 +409,18 @@
             <table id="List" class="container bg-black">
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                     <td>
                         <div class="text-center container">
@@ -430,7 +431,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="http://rsc.wiki">
-                                            <img class="no-margin" src="{{ asset('img/home/mm_rscwiki.png') }}" alt="">
+                                            <img class="no-margin" src="{{ asset('img/mm_rscwiki.png') }}" alt="">
                                         </a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -447,7 +448,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('highscores') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mm_chalice.jpg') }}" alt="">
+                                            <img class="no-margin" src="{{ asset('img/mm_chalice.jpg') }}" alt="">
                                         </a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -466,7 +467,7 @@
                                 <tr>
                                     <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                         <a href="{{ asset('worldmap') }}">
-                                            <img class="no-margin" src="{{ asset('img/home/mm_worldmap.jpg') }}" alt="">
+                                            <img class="no-margin" src="{{ asset('img/mm_worldmap.jpg') }}" alt="">
                                         </a>
                                     </td>
                                     <td class="valign-top text-center align-middle">
@@ -484,18 +485,18 @@
                         </div>
                     </td>
                     <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
                     </td>
                     <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                     </td>
                     <td>
-                        <img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt="">
+                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
                     </td>
                 </tr>
             </table>
@@ -541,8 +542,9 @@
 
             <!-- Discord box -->
             <div class="border-info pt-1 pb-1">
-                <iframe src="https://discordapp.com/widget?id=459699205674369025&theme=dark" width="100%"
-                        height="520" allowtransparency="true"
+                <iframe src="https://discord.com/widget?id=459699205674369025&theme=dark" width="100%" height="520"
+                        allowtransparency="true"
+                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                         style="padding-left: 14px; padding-right: 14px;"></iframe>
             </div>
 
@@ -551,18 +553,18 @@
                 <table id="List" class="container bg-black">
                     <tr>
                         <td>
-                            <img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt="">
+                            <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
                         </td>
                         <td style="background-image:url('/img/home/fm_top2.gif');">
-                            <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                            <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                         </td>
                         <td>
-                            <img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt="">
+                            <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
                         </td>
                     </tr>
                     <tr>
                         <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                            <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                            <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                         </td>
                         <td>
                             <div class="text-center container">
@@ -573,7 +575,7 @@
                                     <tr>
                                         <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('login') }}">
-                                                <img class="no-margin" src="{{ asset('img/home/mms_inbox.jpg') }}"
+                                                <img class="no-margin" src="{{ asset('img/mms_inbox.jpg') }}"
                                                      alt="">
                                             </a>
                                         </td>
@@ -592,7 +594,7 @@
                                     <tr>
                                         <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('faq') }}">
-                                                <img class="no-margin" src="{{ asset('img/home/mms_faq.jpg') }}" alt="">
+                                                <img class="no-margin" src="{{ asset('img/mms_faq.jpg') }}" alt="">
                                             </a>
                                         </td>
                                         <td class="valign-top text-center align-middle">
@@ -611,7 +613,7 @@
                                     <tr>
                                         <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="{{ asset('login') }}">
-                                                <img class="no-margin" src="{{ asset('img/home/mms_support.jpg') }}"
+                                                <img class="no-margin" src="{{ asset('img/mms_support.jpg') }}"
                                                      alt="">
                                             </a>
                                         </td>
@@ -633,7 +635,7 @@
                                     <tr>
                                         <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
                                             <a href="https://2009scape.org/">
-                                                <img class="no-margin" src="{{ asset('img/home/mm_sword.jpg') }}"
+                                                <img class="no-margin" src="{{ asset('img/mm_sword.jpg') }}"
                                                      alt="">
                                             </a>
                                         </td>
@@ -653,18 +655,18 @@
                             </div>
                         </td>
                         <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                            <img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt="">
+                            <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt="">
+                            <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
                         </td>
                         <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                            <img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt="">
+                            <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
                         </td>
                         <td>
-                            <img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt="">
+                            <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
                         </td>
                     </tr>
                 </table>

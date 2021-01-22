@@ -1,37 +1,37 @@
 version: '3'
 services:
 
-  certbot: # NGINX will exit with code 1 until certbot has finished Cloudflare DNS validation to generate SSL certs. Safe to restart repeatedly, will not renew until expiring. Verify cloudflare.ini is populated.
-    image: certbot/dns-cloudflare
-    container_name: certbot
-    volumes:
-      - "./etc/letsencrypt:/etc/letsencrypt"
-    command: >-
-      certonly --dns-cloudflare
-      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
-      --agree-tos 
-      --no-eff-email
-      --keep-until-expiring
-      --renew-with-new-domains
-      --email marwolf@openrsc.com
-      -d rsc.vet
-      -d www.rsc.vet
-      -d portal.rsc.vet
-      -d afman.rsc.vet
-      -d wiki.rsc.vet
-      -d board.rsc.vet
-      -d retro.rsc.vet
-      -d runescapeclassic.dev
-      -d www.runescapeclassic.dev
-      -d openrsc.com
-      -d www.openrsc.com
-      -d game.openrsc.com
-      -d rsccabbage.com
-      -d www.rsccabbage.com
-      -d orsc.dev
-      -d www.orsc.dev
-      -d 2001scape.com
-      -d www.2001scape.com
+#  certbot: # NGINX will exit with code 1 until certbot has finished Cloudflare DNS validation to generate SSL certs. Safe to restart repeatedly, will not renew until expiring. Verify cloudflare.ini is populated.
+#    image: certbot/dns-cloudflare
+#    container_name: certbot
+#    volumes:
+#      - "./etc/letsencrypt:/etc/letsencrypt"
+#    command: >-
+#      certonly --dns-cloudflare
+#      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
+#      --agree-tos 
+#      --no-eff-email
+#      --keep-until-expiring
+#      --renew-with-new-domains
+#      --email marwolf@openrsc.com
+#      -d rsc.vet
+#      -d www.rsc.vet
+#      -d portal.rsc.vet
+#      -d afman.rsc.vet
+#      -d wiki.rsc.vet
+#      -d board.rsc.vet
+#      -d retro.rsc.vet
+#      -d runescapeclassic.dev
+#      -d www.runescapeclassic.dev
+#      -d openrsc.com
+#      -d www.openrsc.com
+#      -d game.openrsc.com
+#      -d rsccabbage.com
+#      -d www.rsccabbage.com
+#      -d orsc.dev
+#      -d www.orsc.dev
+#      -d 2001scape.com
+#      -d www.2001scape.com
 
   nginx:
     image: nginx:latest

@@ -4,17 +4,7 @@
 <body>
 @include('includes.navbar')
 <section id="home">
-    <div class="row text-gray-400"
-         style="max-width: 1500px; min-height: 100vh; margin-left: auto; margin-right: auto; background-image:url('/img/background.jpg'); z-index: 0;">
-
-        <!-- Left rock border -->
-        <div class="side-decoration d-none d-xl-flex" style="transform: scaleX(-1);"></div>
-
-        @yield('content')
-
-        <!-- Right rock border -->
-        <div class="side-decoration d-none d-xl-flex"></div>
-    </div>
+    @yield('content')
 </section>
 @include('includes.footerscripts')
 </body>

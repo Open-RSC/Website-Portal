@@ -1,0 +1,109 @@
+version: '3'
+services:
+
+  certbot: # NGINX will exit with code 1 until certbot has finished Cloudflare DNS validation to generate SSL certs. Safe to restart repeatedly, will not renew until expiring. Verify cloudflare.ini is populated.
+    image: certbot/dns-cloudflare
+    container_name: certbot
+    volumes:
+      - "./etc/letsencrypt:/etc/letsencrypt"
+    command: >-
+      certonly --dns-cloudflare
+      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
+      --agree-tos 
+      --no-eff-email
+      --keep-until-expiring
+      --renew-with-new-domains
+      --email marwolf@openrsc.com
+      -d rsc.vet
+      -d www.rsc.vet
+      -d portal.rsc.vet
+      -d afman.rsc.vet
+      -d wiki.rsc.vet
+      -d board.rsc.vet
+      -d retro.rsc.vet
+      -d runescapeclassic.dev
+      -d www.runescapeclassic.dev
+      -d openrsc.com
+      -d www.openrsc.com
+      -d game.openrsc.com
+      -d rsccabbage.com
+      -d www.rsccabbage.com
+      -d orsc.dev
+      -d www.orsc.dev
+      -d 2001scape.com
+      -d www.2001scape.com
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - "./root:/var/www/html/root"
+      - "./portal:/var/www/html/portal"
+      - "./avatars:/var/www/html/portal/public/img/avatars"
+      - "./board:/var/www/html/board"
+      - "./downloads:/var/www/html/portal/public/downloads"
+      - "./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro" # Nginx config is located in etc
+      - "./etc/nginx/sites-available:/etc/nginx/sites-available:ro" # Nginx config is located in etc
+      - "./etc/nginx/sites-enabled:/etc/nginx/sites-enabled:ro" # Nginx config is located in etc
+      - "./etc/nginx/conf.d:/etc/nginx/conf.d:ro" # Nginx config is located in etc
+      - "./etc/nginx/log:/var/log/nginx"
+      - "./etc/letsencrypt:/etc/letsencrypt"
+      - "./wiki:/var/www/html/wiki"
+
+  node:
+    image: node:latest
+    container_name: node
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    command: bash -c "cd /var/www/html/retro && npm install && npm update && npm start"
+    volumes:
+      - "./retro:/var/www/html/retro"
+
+  php:
+    build:
+      context: "./etc/php"
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    container_name: php
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9000:9000"
+    volumes:
+      - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
+      - "./root:/var/www/html/root"
+      - "./portal:/var/www/html/portal"
+      - "./board:/var/www/html/board"
+
+  mediawiki: # Optional, comment this section out if unwanted.
+    build:
+      context: "./etc/wiki"
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    container_name: mediawiki
+    restart: unless-stopped
+    volumes:
+      - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php:ro" # MediaWiki config is located in etc
+      - "./wiki/images:/var/www/html/images"
+      - "./wiki/skins:/var/www/html/skins"
+
+  phpmyadmin: # Optional, comment this section out if unwanted.
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: unless-stopped
+    environment:
+      - HIDE_PHP_VERSION=true
+      - PMA_HOST=mariadb
+    volumes:
+      - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php:ro" # PHPMyAdmin config is located in etc
+
+networks: # Required for connectivity with separate docker-compose web framework
+  default:
+    external:
+      name: database

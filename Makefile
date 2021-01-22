@@ -51,53 +51,53 @@ clear-backups:
 	find $(MYSQL_DUMPS_DIR)/*.zip -mtime +${days} -exec rm -f {} \;
 
 update-laravel:
-	docker exec -i php bash -c "cd /var/www/html/${site} && composer install && composer update && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix && npm install -g npm"
+	docker exec -i php bash -c "cd /var/www/html/portal && composer install && composer update && composer dump-autoload && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix && npm install -g npm"
 
 clear-all-laravel:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan view:clear && php artisan route:clear && php artisan config:cache"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan view:clear && php artisan route:clear && php artisan config:cache"
 
 migrate-laravel:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan migrate --seed"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan migrate --seed"
 
 make-laravel:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan make:controller MyController"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan make:controller MyController"
 
 list-route:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan route:list"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan route:list"
 
 clear-views:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan view:clear"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan view:clear"
 
 clear-route:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan route:clear"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan route:clear"
 
 migrate:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan migrate"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan migrate"
 
 migrate-refresh:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan migrate:refresh"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan migrate:refresh"
 
 clear-config:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan config:cache"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan config:cache"
 
 publish-pagination:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan vendor:publish --tag=laravel-pagination"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan vendor:publish --tag=laravel-pagination"
 
 version:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan --version"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan --version"
 
 npm-install:
-	docker exec -i php bash -c "cd /var/www/html/${site} && npm install"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm install"
 
 npm-run-dev:
-	docker exec -i php bash -c "cd /var/www/html/${site} && npm run dev"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm run dev"
 
 npm-run-prod:
-	docker exec -i php bash -c "cd /var/www/html/${site} && npm run prod"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm run prod"
 
 npm-run-watch:
-	docker exec -i php bash -c "cd /var/www/html/${site} && npm run watch"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm run watch"
 
-# Usage: make generate-model site=portal name=phpbb_topics
+# Usage: make generate-model name=phpbb_topics
 generate-model:
-	docker exec -i php bash -c "cd /var/www/html/${site} && php artisan krlove:generate:model ${name} --table-name ${name}"
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan krlove:generate:model ${name} --table-name ${name}"
