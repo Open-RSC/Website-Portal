@@ -9,6 +9,7 @@ use App\Models\players;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use function App\Helpers\passwd_compat_hasher;
 
 class LoginController extends Controller
 {
@@ -41,7 +42,7 @@ class LoginController extends Controller
         $form_pass = $request['password'];
         if ($user->salt) {
             // accounts with old password compatibility
-            $form_pass = hash('sha512', ($user->salt . md5($form_pass)));
+            $form_pass = passwd_compat_hasher($form_pass, $user->salt);
         }
 
         if (auth()->attempt(['username' => $request['name'], 'password' => $form_pass])) {
