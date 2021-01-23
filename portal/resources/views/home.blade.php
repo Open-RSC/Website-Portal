@@ -32,7 +32,7 @@
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently {{ $online_count }} people playing!</font></span>
+                                                    <center><span style="font-size:14px" ;=""><font color="white">There are currently {{ $online_count }} people playing!</font></span>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -98,7 +98,8 @@
                                                             </tbody>
                                                         </table>
                                                         To view a full list of news and updates, <a
-                                                                href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
+                                                                href="http://board.localhost/viewforum.php?f=2"
+                                                                class="c">click here</a>.
                                                         <br><br>
                                                     </center>
                                                 </td>
@@ -465,9 +466,7 @@
                                                                     </table>
                                                                     Start or continue your subscription<br>
                                                                     <a href="../securemenu/securemenu.html"
-                                                                       class="c"><a
-                                                                                href="../securemenu/securemenu.html"
-                                                                                class="c">Click Here</a></td>
+                                                                       class="c">Click Here</a></td>
                                                                 <td width="10"></td>
                                                                 <td align="center" width="100"><a
                                                                             href="../unsubscribe/unsubscribe.html"
