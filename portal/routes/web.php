@@ -14,16 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 // General pages
-Route::get('/', 'HomeController@index')->name('root');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@home')->name('root');
+Route::get('/home', 'HomeController@home')->name('home');
 Route::get('/worldmap', 'HomeController@worldmap')->name('worldmap');
 Route::get('/wilderness', 'HomeController@wilderness')->name('wilderness');
 Route::get('/faq', 'HomeController@faq')->name('faq');
 Route::get('/rules', 'HomeController@rules')->name('rules');
-Route::get('/online', 'HomeController@online')->name('online');
-Route::get('/createdtoday', 'HomeController@createdtoday')->name('createdtoday');
-Route::get('/logins48', 'HomeController@logins48')->name('logins48');
-Route::get('/stats', 'HomeController@stats')->name('stats');
+Route::get('/online', 'StatsController@online')->name('online');
+Route::get('/createdtoday', 'StatsController@createdtoday')->name('createdtoday');
+Route::get('/logins48', 'StatsController@logins48')->name('logins48');
+Route::get('/stats', 'StatsController@stats')->name('stats');
 
 // Quest pages
 Route::get('/quest_list', 'QuestController@index')->name('quest_list');

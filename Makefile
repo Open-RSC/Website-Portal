@@ -59,8 +59,8 @@ clear-all-laravel:
 migrate-laravel:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan migrate --seed"
 
-make-laravel:
-	docker exec -i php bash -c "cd /var/www/html/portal && php artisan make:controller MyController"
+controller:
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan make:controller ${name}"
 
 list-route:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan route:list"

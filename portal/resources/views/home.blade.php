@@ -1,677 +1,876 @@
 @extends('template')
 @section('content')
-    <!-- Left column -->
-    <div class="col float-left w-25"
-         style="min-width: 350px; max-width: 350px; margin-left: auto; margin-right: auto;">
-        <div class="border-top border-info border-bottom pt-1 pb-1 bg-black">
 
-            <!-- Server info box -->
-            <div class="text-center container">
-                <span class="h5 text-white text-center">Servers Info</span>
-            </div>
-            <div class="accordion" id="serversInfo">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="rscPreservation">
-                        <button class="text-primary accordion-button table-transparent collapsed" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#preservationInfo" aria-expanded="false"
-                                aria-controls="preservationInfo">
-                            RSC Preservation
-                        </button>
-                    </h2>
-                    <div id="preservationInfo" class="accordion-collapse collapse" aria-labelledby="rscPreservation"
-                         data-bs-parent="#serversInfo">
-                        <div class="accordion-body">
-                            <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> No QoL customizations</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Staff moderated and no botting allowed</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Authentic RSC based on RSC+ replay data</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Uses the Open RuneScape Classic framework</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="rscCabbage">
-                        <button class="text-primary accordion-button table-transparent collapsed" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#cabbageInfo" aria-expanded="false"
-                                aria-controls="cabbageInfo">
-                            RSC Cabbage
-                        </button>
-                    </h2>
-                    <div id="cabbageInfo" class="accordion-collapse collapse" aria-labelledby="rscCabbage"
-                         data-bs-parent="#serversInfo">
-                        <div class="accordion-body">
-                            <span class="d-block"><i class="fas fa-angle-right"></i> 1x or 5x XP rate</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> 30% faster in-game speed</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Auction House</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Clans and parties</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Custom items, skills, monsters, and quests</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Batched skilling activities</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Regular Ironman, Hardcore Ironman, and Ultimate Ironman modes available</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Staff moderated and no botting allowed</span>
-                            <span class="d-block"><i class="fas fa-angle-right"></i> Uses the Open RuneScape Classic framework</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <table height="100%" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr>
+            <td valign="middle">
+                <center>
 
-            <!-- Statistics box -->
-            <div class="text-left pl-3 pr-3">
-                <div class="text-center container">
-                    <span class="h5 text-white text-center">Statistics</span>
-                </div>
-                <table id="List" class="container table-both-hover table-transparent">
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('online') }}">
-                            Players Online
-                            <span class="text-primary float-right">
-                                        {{ number_format($online) }}
-                                    </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('createdtoday') }}">
-                            Players Created Today
-                            <span class="text-primary float-right">
-                                        {{ number_format($registrations) }}
-                                    </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('logins48') }}">
-                            Online Last 48 Hours
-                            <span class="text-primary float-right">
-                                        {{ number_format($logins) }}
-                                    </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('stats') }}">
-                            Unique Players
-                            <span class="text-primary float-right">
-                                        {{ number_format($uniquePlayers) }}
-                                    </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('stats') }}">
-                            Total Players
-                            <span class="text-primary float-right">
-                                        {{ number_format($totalPlayers) }}
-                                    </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="clickable-row" data-href="{{ route('stats') }}">
-                            Gold in Game
-                            <span class="text-primary float-right">
-                                        @if ($sumgold>=1000 and $sumgold<1000000)
-                                    {{ number_format($sumgold/1000) }}K
-                                @elseif ($sumgold>=1000000 and $sumgold<1000000000)
-                                    {{ number_format($sumgold/1000000) }}M
-                                @elseif ($sumgold>=1000000000 and $sumgold<1000000000000)
-                                    {{ number_format($sumgold/1000000000) }}B
-                                @elseif ($sumgold>=1000000000000)
-                                    {{ number_format($sumgold/1000000000000) }}T
-                                @else
-                                    {{ number_format($sumgold) }}
-                                @endif
-                                    </span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+                    <div style="LEFT: 0; TOP: 0; WIDTH: 600px; POSITION: relative;">
 
-        <!-- Alt Features -->
-        <div class="text-left pl-3 pr-3 no-padding">
-            <table id="List" class="container bg-black">
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                    <td>
-                        <div class="text-center container">
-                            <span class="h5 text-white text-center">Services</span>
-                        </div>
-                        <div>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('login') }}"><img class="no-margin"
-                                                                            src="{{ asset('img/mms_accman.jpg') }}"
-                                                                            border="0"></a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Account
-                                            Management</a>
-                                        <br>
-                                        <p>Manage your Password and Recovery Details.<br><a
-                                                    class="link-success underline" href="{{ asset('login') }}">Click
-                                                Here</a></p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('login') }}">
-                                            <img class="no-margin" src="{{ asset('img/mms_passwordsupport.jpg') }}"
-                                                 alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">
-                                            Password Support
-                                        </a>
-                                        <p>
-                                            If you lose/forget your password help is at hand.
-                                            <a class="link-success underline" href="{{ asset('login') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('forums') }}">
-                                            <img class="no-margin" src="{{ asset('img/mms_forums.jpg') }}" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="{{ asset('forums') }}" role="button">
-                                            Forums
-                                        </a>
-                                        <p>
-                                            Discuss the game with fellow players!
-                                            <a class="link-success underline" href="{{ asset('forums') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </td>
-                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-    </div>
-
-    <!-- Center column -->
-    <div class="col w-50 text-center no-padding">
-
-        <!-- Main Features -->
-        <div class="text-left pl-3 pr-3 no-padding">
-            <table id="List" class="container bg-black">
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                    <td>
-                        <div class="text-center container">
-                            <span class="h5 text-white text-center">Main Features</span>
-                        </div>
-                        <div>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('play') }}">
-                                            <img class="no-margin" src="{{ asset('img/mms_rsclassic.jpg') }}"
-                                                 alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-red" href="{{ asset('play') }}" role="button">
-                                            Play Game
-                                            (Existing User)
-                                        </a>
-                                        <p>
-                                            Play on our hosted Open RuneScape Classic servers now!
-                                            <a class="link-success underline" href="{{ asset('play') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('register') }}">
-                                            <img class="no-margin" src="{{ asset('img/mm_player.jpg') }}" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-red" href="{{ asset('register') }}" role="button">
-                                            Create Account
-                                            (New User)
-                                        </a>
-                                        <p>
-                                            Create a free account for both the game & website.
-                                            <a class="link-success underline" href="{{ asset('register') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </td>
-                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- News section -->
-        <div class="text-left pl-3 pr-3 no-padding">
-            <table id="List" class="container bg-black">
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                    <td>
-                        <div class="text-center container">
-                            <span class="h5 text-white text-center">News and Updates</span>
-                        </div>
-                        <table id="List" class="container">
+                        <table cellspacing="0" cellpadding="0">
+                            <tbody>
                             <tr>
-                                <td style="min-width: 48px; max-width: 77px;">
-                                    <a href="{{ asset('news') }}">
-                                        <img class="no-margin" src="{{ asset('img/mm_scroll.jpg') }}" alt="">
-                                    </a>
-                                </td>
-                                <td class="valign-top">
-                                    <table id="List" class="container">
-                                        @foreach ($news_feed as $news)
+                                <td valign="top"><img src="img/edge_a.jpg" hspace="0" height="43"
+                                                      vspace="0" width="100"></td>
+                                <td valign="top"><img src="img/edge_c.jpg" hspace="0" height="42"
+                                                      vspace="0" width="400"></td>
+                                <td valign="top"><img src="img/edge_d.jpg" hspace="0" height="43"
+                                                      vspace="0" width="100"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table background="img/background2.jpg" height="570" cellspacing="0"
+                               cellpadding="0" border="0" width="600">
+                            <tbody>
+                            <tr>
+                                <td valign="bottom">
+                                    <center>
+                                        <img src="img/runescape.gif" height="106" width="309">
+                                        <table width="359">
+                                            <tbody>
                                             <tr>
-                                                <td class="clickable-row pb-3 w-75"
-                                                    data-href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
-                                                    <span class="text-white">
-                                                        {{ $news->post_subject }}
-                                                    </span>
-                                                    <span class="d-block">
-                                                        @php
-                                                            echo Str::limit(strip_tags($news->post_text), 150);
-                                                        @endphp
-                                                        <a class="text-success underline"
-                                                           href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
-                                                            Read More...
-                                                        </a>
-                                                    </span>
-                                                </td>
-                                                <td class="w-25">
-                                                    <span class="text-white float-right">
-                                                        @php
-                                                            $timestamp = $news->post_time;
-                                                            $dt = new DateTime();
-                                                            echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
-                                                        @endphp
-                                                    </span>
+                                                <td>
+                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently 17851 people playing!</font></span>
+                                                    </center>
                                                 </td>
                                             </tr>
-                                        @endforeach
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                        <!--stones border top-->
+                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="img/fm_top.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones content-->
+                                        <table background="img/fm_middle.gif" cellspacing="0"
+                                               cellpadding="0" border="0" width="500"
+                                               style="background-repeat:no-repeat;" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                                <td valign="bottom">
+                                                    <center>
+                                                        <img src="img/blank.gif" height="7"
+                                                             width="1"><br>
+                                                        <span class="font-weight-bold d-block">Latest News and Updates</span><br>
+                                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                                            <tbody>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../news.html"><img
+                                                                                src="img/mm_scroll.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="350">
+                                                                    <table id="List" class="container">
+                                                                        @foreach ($news_feed as $news)
+                                                                            <tr>
+                                                                                <td class="w-75">
+                                                                                    <!-- News subject -->
+                                                                                    <a class="c"
+                                                                                       href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                                                        @php
+                                                                                            echo Str::limit(strip_tags($news->post_subject), 40);
+                                                                                        @endphp
+                                                                                    </a>
+                                                                                </td>
+                                                                                <td class="w-25">
+                                                                                    <span class="text-white float-right">
+                                                                                        @php
+                                                                                            $timestamp = $news->post_time;
+                                                                                            $dt = new DateTime();
+                                                                                            echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
+                                                                                        @endphp
+                                                                                    </span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        To view a full list of news and updates, <a
+                                                                href="../news.html" class="c">click here</a>.
+                                                        <br><br>
+                                                    </center>
+                                                </td>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones border bottom-->
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br>
+                                        <!--stones border top-->
+                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="img/fm_top.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones content-->
+                                        <table background="img/fm_middle.gif" cellspacing="0"
+                                               cellpadding="0" border="0" width="500"
+                                               style="background-repeat:no-repeat;" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                                <td valign="bottom">
+                                                    <center>
+                                                        <br>
+                                                        <!--table to contain options-->
+                                                        <table>
+                                                            <tbody>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/playgame.html"><img
+                                                                                src="img/mm_sword.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/playgame.jpgl"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b2"
+                                                                                background="img/shinystonered.jpg"
+                                                                                bgcolor="#570700">
+                                                                                <center><b>Play<br>Game</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Play RuneScape right now!<br>
+                                                                    <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/playgame.jpgl"
+                                                                       class="c">Click here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../create/index.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_player.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../create/index.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table cellpadding="2" bgcolor="black"
+                                                                           width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b2"
+                                                                                background="img/shinystonered.jpg"
+                                                                                bgcolor="#570700">
+                                                                                <center><b>Create Account</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Create an account for both the game and our
+                                                                    website.<br>
+                                                                    <a href="../create/index.html" class="c">Click
+                                                                        Here</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"></td>
+                                                            </tr>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="whychoosers.htm" class="c"><img
+                                                                                src="img/mm_whyrs.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="whychoosers.htm" class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Why Choose RuneScape?</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    See why our game is right for you!<br>
+                                                                    <a href="whychoosers.htm" class="c">Click
+                                                                        Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../members/members.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_members.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../members/members.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>RuneScape Members</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Get the Premium version of the game!<br>
+                                                                    <a href="../members/members.html" class="c">Click
+                                                                        Here</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"></td>
+                                                            </tr>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../hiscores/hiscores.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_chalice.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../hiscores/hiscores.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Hiscore Tables</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Is your character in the top 250,000?<br>
+                                                                    <a href="../hiscores/hiscores.html" class="c">Click
+                                                                        Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="betaplaygame/RS2Notes.htm"
+                                                                            class="c"><img
+                                                                                src="img/mm2_rs2b.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="betaplaygame/RS2Notes.htm"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Play RS2 Beta</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Try the new version <br>of the game!<br>
+                                                                    <a href="betaplaygame/RS2Notes.htm" class="c">Click
+                                                                        Here</a></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!--end options container-->
+                                                    </center>
+                                                    <br>
+                                                </td>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones border bottom-->
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br>
+                                        <!--stones border top-->
+                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="img/fm_top.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones content-->
+                                        <table background="img/fm_middle.gif" cellspacing="0"
+                                               cellpadding="0" border="0" width="500"
+                                               style="background-repeat:no-repeat;" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                                <td valign="bottom">
+                                                    <center>
+                                                        <img src="img/blank.gif" height="7"
+                                                             width="1"><br>
+                                                        <b>Latest Poll</b><br>
+                                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                                            <tbody>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../polls/allpolls.htm"><img
+                                                                                src="img/mms_vote.jpg"
+                                                                                border="0"></a></td>
+                                                                <td width="350">
+                                                                    <iframe src="img/latestpoll.jpg"
+                                                                            scrolling="no" border="0"
+                                                                            frameborder="no" height="120"
+                                                                            width="350"></iframe>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <br>
+                                                    </center>
+                                                </td>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones border bottom-->
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br>
+
+                                        <!--stones border top-->
+                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="img/fm_top.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones content-->
+                                        <table background="img/fm_middle.gif" cellspacing="0"
+                                               cellpadding="0" border="0" width="500"
+                                               style="background-repeat:no-repeat;" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                                <td valign="bottom">
+                                                    <center>
+                                                        <img src="img/blank.gif" height="7"
+                                                             width="1"><br>
+                                                        <b>Secure Services</b><br>
+                                                        <br>
+                                                        <!--table to contain options-->
+                                                        <table>
+                                                            <tbody>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_subscribe.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../securemenu/securemenu.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Subscribe</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Start or continue your subscription<br>
+                                                                    <a href="../securemenu/securemenu.html"
+                                                                       class="c"><a
+                                                                                href="../securemenu/securemenu.html"
+                                                                                class="c">Click Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../unsubscribe/unsubscribe.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_unsubscribe.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../unsubscribe/unsubscribe.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Unsubscribe</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Cancel your subscription<br>
+                                                                    <a href="../unsubscribe/unsubscribe.html"
+                                                                       class="c">Click Here</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"></td>
+                                                            </tr>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../customersupport/customersupport.html"><img
+                                                                                src="img/mm_support.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../customersupport/customersupport.html"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Customer Support</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Questions?<br>Contact our staff<br>
+                                                                    <a href="../customersupport/customersupport.html"
+                                                                       class="c">Click Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c"><img
+                                                                                src="img/mm_inbox.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../securemenu/securemenu.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Message Centre</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Your messages<br>from our staff<br><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c">Click Here</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"></td>
+                                                            </tr>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c"><img
+                                                                                src="img/mms_forums.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../securemenu/securemenu.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Forums</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Discuss the game with fellow players!<br><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c">Click Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c"><img
+                                                                                src="img/mms_accman.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../securemenu/securemenu.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Account Management</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Manage your Password and Recovery Details<br><a
+                                                                            href="../securemenu/securemenu.html"
+                                                                            class="c">Click Here</a></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!--end options container-->
+                                                    </center>
+                                                    <br>
+                                                </td>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones border bottom-->
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                        <br>
+
+
+                                        <!--stones border top-->
+                                        <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td><img src="img/fm_top.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones content-->
+                                        <table background="img/fm_middle.gif" cellspacing="0"
+                                               cellpadding="0" border="0" width="500"
+                                               style="background-repeat:no-repeat;" bgcolor="black">
+                                            <tbody>
+                                            <tr>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                                <td valign="bottom">
+                                                    <center>
+                                                        <img src="img/blank.gif" height="7"
+                                                             width="1"><br>
+                                                        <b>Manual</b><br>
+                                                        <br>
+
+                                                        <!--table to contain options-->
+                                                        <table>
+                                                            <tbody>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100">
+                                                                    <a href="../howtoplay.html" class="c"><img
+                                                                                src="img/mm_howtoplay.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../howtoplay.html"
+                                                                               class="c"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>How To Play</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Everything you need to know to play
+                                                                    RuneScape<br>
+                                                                    <a href="../howtoplay.html" class="c">Click
+                                                                        Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100">
+                                                                    <a href="betafaq.htm"><img
+                                                                                src="img/mm_faq.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="betafaq.htm"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>F.A.Q.</b></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Answers to Frequently Asked Questions<br>
+                                                                    <a href="betafaq.htm" class="c">Click Here</a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5"></td>
+                                                            </tr>
+                                                            <tr valign="top">
+                                                                <td align="center" width="100"><a
+                                                                            href="../varrock/varrockindex.html"><img
+                                                                                src="img/mm_lov.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../varrock/varrockindex.html"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Library of Varrock</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Learn about the History of RuneScape<br>
+                                                                    <a href="../varrock/varrockindex.html"
+                                                                       class="c">Click Here</a></td>
+                                                                <td width="10"></td>
+                                                                <td align="center" width="100"><a
+                                                                            href="../guides/guides.html"><img
+                                                                                src="img/mm_rules.jpg"
+                                                                                height="120" border="0" width="77"></a>
+                                                                </td>
+                                                                <td width="120">
+                                                                    <div style="LEFT: 0; TOP: 0; POSITION: relative;">
+                                                                        <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                                                            <a href="../guides/guides.html"><img
+                                                                                        src="img/blank.gif"
+                                                                                        height="45" border="0"
+                                                                                        width="100"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <table height="45" cellpadding="2"
+                                                                           bgcolor="black" width="100">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td class="b"
+                                                                                background="img/stoneback.gif"
+                                                                                bgcolor="#474747">
+                                                                                <center><b>Rules &amp; Security</b>
+                                                                                </center>
+                                                                            </td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    Learn our rules<br>and stay safe<br>online<br>
+                                                                    <a href="../guides/guides.html" class="c">Click
+                                                                        Here</a></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <!--end options container-->
+                                                    </center>
+                                                    <br>
+                                                </td>
+                                                <td width="7" background="img/fm_middle.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--stones border bottom-->
+                                        <table cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                            <tr>
+                                                <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br>
+                                    </center>
                                 </td>
                             </tr>
+                            </tbody>
                         </table>
-                        <div class="text-center container no-padding">
-                            <p>To view a full list of news and updates,
-                                <a class="link-success underline"
-                                   target="_blank" href="http://board.localhost/viewforum.php?f={{ $news->forum_id }}">
-                                    Click Here
-                                </a>
-                            </p>
-                        </div>
-                    </td>
-                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-            </table>
-        </div>
 
-        <!-- Game Information -->
-        <div class="text-left pl-3 pr-3 no-padding">
-            <table id="List" class="container bg-black">
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_top2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                    <td>
-                        <div class="text-center container">
-                            <span class="h5 text-white text-center">Game Information</span>
-                        </div>
-                        <div>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="http://rsc.wiki">
-                                            <img class="no-margin" src="{{ asset('img/mm_rscwiki.png') }}" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="http://rsc.wiki" role="button">RSC Wiki</a>
-                                        <p>Everything you need to know to play RuneScape Classic
-                                            <a class="link-success underline" href="http://rsc.wiki">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('highscores') }}">
-                                            <img class="no-margin" src="{{ asset('img/mm_chalice.jpg') }}" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="{{ asset('highscores') }}" role="button">
-                                            Full Hiscores
-                                        </a>
-                                        <p>Is your character in the top 100,000?
-                                            <a class="link-success underline" href="{{ asset('highscores') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <table id="List" class="container">
-                                <tr>
-                                    <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                        <a href="{{ asset('worldmap') }}">
-                                            <img class="no-margin" src="{{ asset('img/mm_worldmap.jpg') }}" alt="">
-                                        </a>
-                                    </td>
-                                    <td class="valign-top text-center align-middle">
-                                        <a class="btn btn-jag-grey" href="{{ asset('worldmap') }}" role="button">
-                                            World Map
-                                        </a>
-                                        <p>Great for finding your way around.
-                                            <a class="link-success underline" href="{{ asset('worldmap') }}">
-                                                Click Here
-                                            </a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </td>
-                    <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                        <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
-                    </td>
-                    <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                        <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                    </td>
-                    <td>
-                        <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
-                    </td>
-                </tr>
-            </table>
-        </div>
 
-    </div>
+                        <table cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                                <td valign="bottom"><img src="img/edge_g2.jpg" hspace="0" height="82"
+                                                         vspace="0" width="100"></td>
+                                <td valign="bottom">
+                                    <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px;"
+                                         align="center">
+                                        This webpage and its contents is copyright 2004 Jagex Ltd<br>
+                                        To use our service you must agree to our
+                                        <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/terms/terms.jpgl"
+                                           class="c">Terms+Conditions</a>
+                                        +
+                                        <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/privacy/privacy.jpgl"
+                                           class="c">Privacy policy</a>
+                                    </div>
+                                    <img src="img/edge_c.jpg" hspace="0" height="42" vspace="0"
+                                         width="400"></td>
+                                <td valign="bottom"><img src="img/edge_h2.jpg" hspace="0" height="82"
+                                                         vspace="0" width="100"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </center>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-    <!-- Right column -->
-    <div class="col w-25 float-right"
-         style="min-width: 350px; max-width: 350px; margin-left: auto; margin-right: auto;">
-        <div class="border-top border-info border-bottom pt-1 pb-1">
-
-            <!-- Achievements box -->
-            <div class="text-left pl-3 pr-3 border-info border-bottom pt-1 pb-1 bg-black">
-                <div class="text-center container">
-                    <span class="h5 text-white text-center">Achievements</span>
-                </div>
-                <table id="List" class="container table-both-hover table-transparent">
-                    @foreach ($activityfeed as $activity)
-                        <tr class="clickable-row" data-href="../player/{{ $activity->id }}">
-                            <td class="col-2">
-                                <div class="center"
-                                     style="border-radius: 10px; overflow: hidden; width: 50px; height: 50px;">
-                                    @if(file_exists( public_path().asset('/img/avatars/'.$activity->id.'.png')))
-                                        <img src="{{ asset('img/avatars/'.$activity->id.'.png') }}"
-                                             alt="Player avatar">
-                                    @else
-                                        <img src="{{ asset('img/player.png') }}" alt="Default avatar">
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="col-9 text-left pb-2">
-                                {{ ucfirst($activity->username) }}
-                                {!! $activity->message !!}
-                                <span class="text-primary" style="white-space: nowrap; font-size: 12px;">
-                                            ({{ Carbon\Carbon::parse($activity->time)->diffForHumans() }})
-                                        </span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
-            </div>
-
-            <!-- Discord box -->
-            <div class="border-info pt-1 pb-1">
-                <iframe src="https://discord.com/widget?id=459699205674369025&theme=dark" width="100%" height="520"
-                        allowtransparency="true"
-                        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                        style="padding-left: 14px; padding-right: 14px;"></iframe>
-            </div>
-
-            <!-- Other Features -->
-            <div class="text-left pl-3 pr-3 no-padding">
-                <table id="List" class="container bg-black">
-                    <tr>
-                        <td>
-                            <img height="6" src="{{ asset('img/fm_topleft.gif') }}" width="6" alt="">
-                        </td>
-                        <td style="background-image:url('/img/home/fm_top2.gif');">
-                            <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                        </td>
-                        <td>
-                            <img height="6" src="{{ asset('img/fm_topright.gif') }}" width="6" alt="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;">
-                            <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                        </td>
-                        <td>
-                            <div class="text-center container">
-                                <span class="h5 text-white text-center">Other Features</span>
-                            </div>
-                            <div>
-                                <table id="List" class="container">
-                                    <tr>
-                                        <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                            <a href="{{ asset('login') }}">
-                                                <img class="no-margin" src="{{ asset('img/mms_inbox.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">Message
-                                                Centre</a>
-                                            <p>Your messages from our staff.
-                                                <a class="link-success underline" href="{{ asset('login') }}">
-                                                    Click Here
-                                                </a>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table id="List" class="container">
-                                    <tr>
-                                        <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                            <a href="{{ asset('faq') }}">
-                                                <img class="no-margin" src="{{ asset('img/mms_faq.jpg') }}" alt="">
-                                            </a>
-                                        </td>
-                                        <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey" href="{{ asset('faq') }}"
-                                               role="button">F.A.Q.</a>
-                                            <p>
-                                                Answers to Frequently Asked Questions.
-                                                <a class="link-success underline" href="{{ asset('faq') }}">
-                                                    Click Here
-                                                </a>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table id="List" class="container">
-                                    <tr>
-                                        <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                            <a href="{{ asset('login') }}">
-                                                <img class="no-margin" src="{{ asset('img/mms_support.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey" href="{{ asset('login') }}" role="button">
-                                                Support
-                                            </a>
-                                            <p>
-                                                Questions or Comments?
-                                                Contact our staff.
-                                                <a class="link-success underline" href="{{ asset('login') }}">
-                                                    Click Here
-                                                </a>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table id="List" class="container">
-                                    <tr>
-                                        <td style="min-width: 48px; max-width: 77px;" class="text-center align-middle">
-                                            <a href="https://2009scape.org/">
-                                                <img class="no-margin" src="{{ asset('img/mm_sword.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td class="valign-top text-center align-middle">
-                                            <a class="btn btn-jag-grey" href="https://2009scape.org/" role="button">
-                                                2009Scape
-                                            </a>
-                                            <p>
-                                                Experience RS2 in its peak (2009)
-                                                <a class="link-success underline" href="https://2009scape.org/">
-                                                    Click Here
-                                                </a>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                        <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;">
-                            <img height="1" src="{{ asset('img/blank.gif') }}" width="6" alt="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img height="6" src="{{ asset('img/fm_bottomleft.gif') }}" width="6" alt="">
-                        </td>
-                        <td style="background-image:url('/img/home/fm_bottom2.gif');">
-                            <img height="6" src="{{ asset('img/blank.gif') }}" width="1" alt="">
-                        </td>
-                        <td>
-                            <img height="6" src="{{ asset('img/fm_bottomright.gif') }}" width="6" alt="">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
     </div>
 @endsection

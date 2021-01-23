@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\phpbb_posts;
-use Illuminate\Support\Facades\DB;
-
 class StaffController extends Controller
 {
     public function __construct()
@@ -12,25 +9,9 @@ class StaffController extends Controller
         $this->middleware('auth');
     }
 
-    public function chat_logs(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function chat_logs()
     {
-        $news_feed = DB::connection('board')->table('phpbb_posts as p')
-            ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
-            ->where([
-                ['t.forum_id', '=', '2'], // forum ID for the news (/viewforum.php?f=18)
-                ['t.topic_status', '=', '0'], // topic not locked or deleted
-                ['p.post_visibility', '=', '1'], // post not deleted and is visible
-            ])
-            ->orderBy('p.post_time', 'desc')
-            ->limit(5)
-            ->get();
-
-        return view(
-            'chat_logs',
-            [
-                'news_feed' => $news_feed,
-            ]
-        );
+        return view('chat_logs');
     }
 
     public function pm_logs()

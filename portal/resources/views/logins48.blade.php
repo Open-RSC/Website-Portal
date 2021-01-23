@@ -60,7 +60,7 @@
                     <td>
 							<span class="pr-3 float-right pt-1 pb-1 h5">
 								@if ($player->value)
-                                    {{ (new App\Http\Controllers\HomeController)->secondsToTime($player->value/1000) }}
+                                    {{ (new App\Http\Controllers\StatsController)->secondsToTime($player->value/1000) }}
                                 @else
                                     Never
                                 @endif
