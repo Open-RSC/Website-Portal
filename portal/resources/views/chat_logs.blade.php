@@ -34,7 +34,7 @@
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently 17851 people playing!<br> There are 3806 people testing RuneScape 2!</font></span>
+                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently 17851 people playing!</font></span>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -60,7 +60,7 @@
                                                     <center>
                                                         <img src="img/blank.gif" height="7"
                                                              width="1"><br>
-                                                        <b>Latest News and Updates</b><br>
+                                                        <span class="font-weight-bold d-block">Latest News and Updates</span><br>
                                                         <table cellspacing="0" cellpadding="0" bgcolor="black">
                                                             <tbody>
                                                             <tr valign="top">
@@ -69,10 +69,30 @@
                                                                                 src="img/mm_scroll.jpg"
                                                                                 border="0"></a></td>
                                                                 <td width="350">
-                                                                    <iframe src="img/latestnewsitem.jpg"
-                                                                            scrolling="no" border="0"
-                                                                            frameborder="no" height="130"
-                                                                            width="350"></iframe>
+                                                                    <table id="List" class="container">
+                                                                        @foreach ($news_feed as $news)
+                                                                            <tr>
+                                                                                <td class="w-75">
+                                                                                    <!-- News subject -->
+                                                                                    <a class="c"
+                                                                                       href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                                                        @php
+                                                                                            echo Str::limit(strip_tags($news->post_subject), 40);
+                                                                                        @endphp
+                                                                                    </a>
+                                                                                </td>
+                                                                                <td class="w-25">
+                                                                                    <span class="text-white float-right">
+                                                                                        @php
+                                                                                            $timestamp = $news->post_time;
+                                                                                            $dt = new DateTime();
+                                                                                            echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
+                                                                                        @endphp
+                                                                                    </span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </table>
                                                                 </td>
                                                             </tr>
                                                             <tr>

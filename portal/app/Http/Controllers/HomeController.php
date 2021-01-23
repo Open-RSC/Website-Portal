@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\phpbb_posts;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\DB;
 
