@@ -63,7 +63,7 @@
                                                             <tbody>
                                                             <tr valign="top">
                                                                 <td align="center" width="100"><a
-                                                                            href="../news.html"><img
+                                                                            href="http://board.localhost/viewforum.php?f=2"><img
                                                                                 src="img/mm_scroll.jpg"
                                                                                 border="0"></a></td>
                                                                 <td width="350">
@@ -98,7 +98,7 @@
                                                             </tbody>
                                                         </table>
                                                         To view a full list of news and updates, <a
-                                                                href="../news.html" class="c">click here</a>.
+                                                                href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
                                                         <br><br>
                                                     </center>
                                                 </td>
@@ -271,14 +271,14 @@
                                                             </tr>
                                                             <tr valign="top">
                                                                 <td align="center" width="100"><a
-                                                                            href="../hiscores/hiscores.html"
+                                                                            href="/hiscores"
                                                                             class="c"><img
                                                                                 src="img/mm_chalice.jpg"
                                                                                 border="0"></a></td>
                                                                 <td width="120">
                                                                     <div style="LEFT: 0; TOP: 0; POSITION: relative;">
                                                                         <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                                            <a href="../hiscores/hiscores.html"
+                                                                            <a href="/hiscores"
                                                                                class="c"><img
                                                                                         src="img/blank.gif"
                                                                                         height="45" border="0"
@@ -299,7 +299,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                     Is your character in the top 250,000?<br>
-                                                                    <a href="../hiscores/hiscores.html" class="c">Click
+                                                                    <a href="/hiscores" class="c">Click
                                                                         Here</a></td>
                                                                 <td width="10"></td>
                                                                 <td align="center" width="100"><a
@@ -720,14 +720,14 @@
                                                                         Here</a></td>
                                                                 <td width="10"></td>
                                                                 <td align="center" width="100">
-                                                                    <a href="betafaq.htm"><img
+                                                                    <a href="/faq"><img
                                                                                 src="img/mm_faq.jpg"
                                                                                 height="120" border="0" width="77"></a>
                                                                 </td>
                                                                 <td width="120">
                                                                     <div style="LEFT: 0; TOP: 0; POSITION: relative;">
                                                                         <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                                            <a href="betafaq.htm"><img
+                                                                            <a href="/faq"><img
                                                                                         src="img/blank.gif"
                                                                                         height="45" border="0"
                                                                                         width="100"></a>
@@ -746,7 +746,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                     Answers to Frequently Asked Questions<br>
-                                                                    <a href="betafaq.htm" class="c">Click Here</a>
+                                                                    <a href="/faq" class="c">Click Here</a>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -785,14 +785,14 @@
                                                                        class="c">Click Here</a></td>
                                                                 <td width="10"></td>
                                                                 <td align="center" width="100"><a
-                                                                            href="../guides/guides.html"><img
+                                                                            href="/rules"><img
                                                                                 src="img/mm_rules.jpg"
                                                                                 height="120" border="0" width="77"></a>
                                                                 </td>
                                                                 <td width="120">
                                                                     <div style="LEFT: 0; TOP: 0; POSITION: relative;">
                                                                         <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                                            <a href="../guides/guides.html"><img
+                                                                            <a href="/rules"><img
                                                                                         src="img/blank.gif"
                                                                                         height="45" border="0"
                                                                                         width="100"></a>
@@ -812,7 +812,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                     Learn our rules<br>and stay safe<br>online<br>
-                                                                    <a href="../guides/guides.html" class="c">Click
+                                                                    <a href="/rules" class="c">Click
                                                                         Here</a></td>
                                                             </tr>
                                                             </tbody>

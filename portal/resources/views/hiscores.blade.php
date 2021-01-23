@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col container">
-        <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">Highscores</h2>
+        <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">Hiscores</h2>
         <div class="row no-gutters">
 
             <!-- placeholder left column -->
@@ -10,7 +10,7 @@
 
             <!-- center column -->
             <div class="col-auto" style="width: 600px;">
-                <div class="float-left h3 text-white">{{ ucfirst($subpage) }}</div>
+                <div class="float-left h3 text-white">Overall Skill Total</div>
 
                 <div class="float-right">
                     <nav>
@@ -25,7 +25,7 @@
                                     <li>
                                         @foreach ($skill_array as $skill)
                                             <a class="dropdown-item text-secondary"
-                                               href="/highscores/{{ $skill }}">
+                                               href="/hiscores/{{ $skill }}">
                                                 <img src="{{ asset('img/skill_icons').'/'.$skill }}.svg"
                                                      alt="{{ $skill }}" height="20px"/>
                                                 {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
@@ -44,17 +44,17 @@
                     <tr class="row text-info">
                         <th class="col text-right">Rank</th>
                         <th class="col-sm-3 text-left">Player</th>
-                        <th class="col text-right">Level</th>
-                        <th class="col text-left">XP</th>
+                        <th class="col text-right">Total Level</th>
+                        <th class="col text-left">Total XP</th>
                         <th class="col-sm-3 text-right">Last Login</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach ($highscores as $key=>$player)
+                    @foreach ($hiscores as $key=>$player)
                         <tr class="row clickable-row" data-href="{{ route('player', $player->id) }}">
                             <td class="col-2 text-right">
 									<span>
-										{{ ($highscores->currentpage()-1) * $highscores->perpage() + $key + 1 }}
+										{{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
 									</span>
                             </td>
                             <td class="col-sm-3 text-left">
@@ -64,12 +64,12 @@
                             </td>
                             <td class="col text-right">
 									<span>
-										{{ number_format((new App\Http\Controllers\HighscoresController)->experienceToLevel($player->${'exp_'.$subpage}/4.0)) }}
+										{{ number_format($player->skill_total) }}
 									</span>
                             </td>
                             <td class="col text-left">
 									<span>
-										{{ number_format($player->${'exp_'.$subpage}/4.0) }}
+										{{ number_format((new App\Http\Controllers\HiscoresController)->totalXP($player)/4.0) }}
 									</span>
                             </td>
                             <td class="col-sm-3 text-right">
@@ -85,7 +85,7 @@
                     @endforeach
                     </tbody>
                 </table>
-                {{ $highscores->links('pagination::bootstrap-4') }}
+                {{ $hiscores->links('pagination::bootstrap-4') }}
             </div>
 
             <!-- right column -->

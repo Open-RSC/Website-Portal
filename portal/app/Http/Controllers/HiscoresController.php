@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class HighscoresController extends Controller
+class HiscoresController extends Controller
 {
 	/**
 	 * @function totalXP()
@@ -47,16 +47,16 @@ class HighscoresController extends Controller
 	/**
 	 * @function index()
 	 * @return Factory|View
-	 * Used to show the main highscores page
+	 * Used to show the main hiscores page
 	 */
 	public function index()
 	{
 		/**
 		 * @return Factory|View
-		 * @var $highscores
+		 * @var $hiscores
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$highscores = DB::connection('cabbage')
+		$hiscores = DB::connection('cabbage')
 			->table('experience as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->select('*', DB::raw('
@@ -84,7 +84,7 @@ class HighscoresController extends Controller
 			->where([
 				['b.banned', '=', '0'],
 				['b.group_id', '=', '10'],
-				['b.highscoreopt', '=', '0'],
+				['b.hiscoreopt', '=', '0'],
 			])
 			->groupBy('b.username')
 			->orderBy('b.skill_total', 'desc')
@@ -97,10 +97,10 @@ class HighscoresController extends Controller
 		 */
 		$skill_array = Config::get('app.authentic') == true ? array('skill_total', 'attack', 'strength', 'defense', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'attack', 'strength', 'defense', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
 
-		return view('highscores', [
+		return view('hiscores', [
 			'skill_array' => $skill_array,
 		])
-			->with(compact('highscores'));
+			->with(compact('hiscores'));
 	}
 
 	/**
@@ -131,17 +131,17 @@ class HighscoresController extends Controller
 		}
 
 		/**
-		 * @var $highscores
+		 * @var $hiscores
 		 * Fetches the table row of the player experience in view and paginates the results
 		 */
-		$highscores = DB::connection('cabbage')
+		$hiscores = DB::connection('cabbage')
 			->table('experience as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
 			->select('*', DB::raw('a.exp_' . $subpage))
 			->where([
 				['b.banned', '=', '0'],
 				['b.group_id', '=', '10'],
-				['b.highscoreopt', '=', '0'],
+				['b.hiscoreopt', '=', '0'],
 			])
 			->groupBy('b.username')
 			->orderBy('a.exp_' . $subpage, 'desc')
@@ -149,11 +149,11 @@ class HighscoresController extends Controller
 
 		$skill = 'exp_' . $subpage;
 
-		return view('highscoreskill', [
+		return view('hiscoreskill', [
 			'skill_array' => $skill_array,
 			'subpage' => $subpage,
 			'exp_' . $subpage => $skill,
 		])
-			->with(compact('highscores'));
+			->with(compact('hiscores'));
 	}
 }
