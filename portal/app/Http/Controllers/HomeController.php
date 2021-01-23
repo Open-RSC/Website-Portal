@@ -30,7 +30,7 @@ class HomeController extends Controller
         $online_count = $preservation_online + $cabbage_online;
 
         return view(
-            'home',
+            'Home',
             [
                 'news_feed' => $news_feed,
                 'online_count' => $online_count,
@@ -40,17 +40,27 @@ class HomeController extends Controller
 
     public function wilderness()
     {
-        return view('wilderness');
+        return view('Wilderness_Map');
     }
 
     public function faq()
     {
-        return view('faq');
+        return view('Frequently_Asked_Questions');
+    }
+
+    public function terms()
+    {
+        return view('Frequently_Asked_Questions');
+    }
+
+    public function privacy()
+    {
+        return view('Frequently_Asked_Questions');
     }
 
     public function rules()
     {
-        return view('rules');
+        return view('Rules_and_Security');
     }
 
     public function worldmap()
@@ -66,7 +76,7 @@ class HomeController extends Controller
 
         $playerPositions = $playerPositions->toArray();
 
-        return view('worldmap', [
+        return view('World_Map', [
             'playerPositions' => $playerPositions,
         ]);
     }

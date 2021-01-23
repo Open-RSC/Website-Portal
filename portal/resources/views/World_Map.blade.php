@@ -1,6 +1,6 @@
-`@extends('template')
-
+@extends('template')
 @section('content')
+
     <div class="col">
         <!-- loads the crosshairs image to be referenced by javascript -->
         <img src="{{ asset('img/crosshairs.svg') }}" id="crosshairs" style="display: none;" alt="crosshairs"/>

@@ -1,13 +1,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
 	<title>Open RuneScape Classic</title>
-	<meta name="description" content="Striving for a replica RSC game and more.">
+	<meta name="description" content="A RuneScape Classic replica - open source and free!">
 	<meta name="keywords"
-		  content="openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,open pk,openpk,authentic runescape classic,vanilla rsc, rs1">
+		  content="rsc preservation,openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,authentic runescape classic,vanilla rsc, rs1">
+	<meta name="author" content="Open RuneScape Classic">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<!-- Favicons -->

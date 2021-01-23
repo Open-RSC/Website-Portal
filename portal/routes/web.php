@@ -14,16 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 // General pages
-Route::get('/', 'HomeController@home')->name('root');
-Route::get('/home', 'HomeController@home')->name('home');
-Route::get('/worldmap', 'HomeController@worldmap')->name('worldmap');
-Route::get('/wilderness', 'HomeController@wilderness')->name('wilderness');
-Route::get('/faq', 'HomeController@faq')->name('faq');
-Route::get('/rules', 'HomeController@rules')->name('rules');
+Route::get('/', 'HomeController@home')->name('Home');
+Route::get('/worldmap', 'HomeController@worldmap')->name('World_Map');
+Route::get('/wilderness', 'HomeController@wilderness')->name('Wilderness_Map');
+Route::get('/faq', 'HomeController@faq')->name('Frequently_Asked_Questions');
+Route::get('/rules', 'HomeController@rules')->name('Rules_and_Security');
 Route::get('/online', 'StatsController@online')->name('online');
 Route::get('/createdtoday', 'StatsController@createdtoday')->name('createdtoday');
 Route::get('/logins48', 'StatsController@logins48')->name('logins48');
 Route::get('/stats', 'StatsController@stats')->name('stats');
+Route::get('/terms', 'HomeController@faq')->name('Terms_and_Conditions');
+Route::get('/privacy', 'HomeController@faq')->name('Privacy_Policy');
 
 // Quest pages
 Route::get('/quest_list', 'QuestController@index')->name('quest_list');
