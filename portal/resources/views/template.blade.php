@@ -5,14 +5,15 @@
 <body>
 
 @if(Route::currentRouteName() == 'World_Map')
-    <table width=250 bgcolor=black cellpadding=4>
+    <table style="width: 250px; background: black; padding: 4px;">
+        <tbody>
         <tr>
             <td class=e>
-                <center>
+                <div class="text-center">
                     <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                     <br>
                     <a href="{{ route('Home') }}">Main menu</a>
-                </center>
+                </div>
             </td>
         </tr>
         </tbody>
@@ -21,14 +22,15 @@
     @yield('content')
 
 @elseif(Route::currentRouteName() == 'Wilderness_Map')
-    <table width=250 bgcolor=black cellpadding=4>
+    <table style="width: 250px; background: black; padding: 4px;">
+        <tbody>
         <tr>
             <td class=e>
-                <center>
+                <div class="text-center">
                     <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                     <br>
                     <a href="{{ route('Home') }}">Main menu</a>
-                </center>
+                </div>
             </td>
         </tr>
         </tbody>
@@ -48,14 +50,15 @@
             <div class="mid-left-border"></div>
             <div class="middle-content">
                 @if(Route::currentRouteName() != 'Home')
-                    <table width=250 bgcolor=black cellpadding=4>
+                    <table style="width: 250px; background: black; padding: 4px;">
+                        <tbody>
                         <tr>
                             <td class=e>
-                                <center>
+                                <div class="text-center">
                                     <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     <br>
                                     <a href="{{ route('Home') }}">Main menu</a>
-                                </center>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
