@@ -32,7 +32,7 @@
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently 17851 people playing!</font></span>
+                                                    <center><span style="font-size=14px" ;=""><font color="white">There are currently {{ $online_count }} people playing!</font></span>
                                                     </center>
                                                 </td>
                                             </tr>

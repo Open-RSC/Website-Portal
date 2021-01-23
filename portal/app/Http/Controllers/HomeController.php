@@ -19,10 +19,21 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
+        $preservation_online = DB::connection('preservation')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $cabbage_online = DB::connection('cabbage')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $online_count = $preservation_online + $cabbage_online;
+
         return view(
             'home',
             [
                 'news_feed' => $news_feed,
+                'online_count' => $online_count,
             ]
         );
     }
