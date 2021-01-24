@@ -1,11 +1,11 @@
 @extends('template')
 @section('content')
     <div class="pt-1"></div>
-    <table width=500 bgcolor=black cellpadding=4 border=0>
+    <table style="width: 500px; background-color: black; padding: 4px;">
         <tr>
             <td class=e>
-                <div class="pt-2"></div>
-                <div class="">
+                <div class="pt-3"></div>
+                <center>
                     <table style="padding: 2px; border-spacing: 1px; border: 0;">
                         <tr>
                             <td style="background-color: #35210F; height: 26px; color: #ffbb22">
@@ -25,7 +25,7 @@
                             </td>
                         </tr>
                     </table>
-                </div>
+                </center>
                 <span class="d-block pt-2 pb-2">
                     Creating an account for Open RuneScape Classic is a simple process.
                 </span>
