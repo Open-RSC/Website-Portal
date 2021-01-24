@@ -98,6 +98,12 @@ npm-run-prod:
 npm-run-watch:
 	docker exec -i php bash -c "cd /var/www/html/portal && npm run watch"
 
+livewire-discover:
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan livewire:discover"
+
+livewire:
+	docker exec -i php bash -c "cd /var/www/html/portal && php artisan livewire:make ${name}"
+
 # Usage: make generate-model name=phpbb_topics
 generate-model:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan krlove:generate:model ${name} --table-name ${name}"

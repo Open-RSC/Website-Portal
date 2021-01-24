@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Category;
 use App\Models\curstats;
 use App\Models\experience;
 use App\Models\players;
@@ -26,13 +25,14 @@ class LoginController extends Controller
     public function process_login(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|min:3|max:16',
-            'password' => 'required|min:4|max:16'
+            'username' => 'required|min:3|max:12|unique:cabbage.players',
+            'email' => 'required|min:6|max:255',
+            'password' => 'required|min:4|max:20',
         ]);
 
         $credentials = $request->except(['_token']);
 
-        $user = players::where('username', $request->name)->first();
+        $user = players::where('username', $request->username)->first();
 
         if (!$user) {
             session()->flash('message', 'Invalid credentials');
@@ -45,7 +45,7 @@ class LoginController extends Controller
             $form_pass = passwd_compat_hasher($form_pass, $user->salt);
         }
 
-        if (auth()->attempt(['username' => $request['name'], 'password' => $form_pass])) {
+        if (auth()->attempt(['username' => $request['username'], 'password' => $form_pass])) {
 
             return redirect()->route('home');
 
@@ -63,12 +63,12 @@ class LoginController extends Controller
     public function process_signup(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required'
+            'username' => 'required|min:3|max:12|unique:cabbage.players',
+            'email' => 'required|min:6|max:255',
+            'password' => 'required|min:4|max:20',
         ]);
 
-        $user = players::where('username', $request->name)->first();
+        $user = players::where('username', $request->username)->first();
 
         if ($user) {
             session()->flash('message', 'Username already taken!');
@@ -76,7 +76,7 @@ class LoginController extends Controller
         }
 
         $user = players::create([
-            'username' => trim($request->input('name')),
+            'username' => trim($request->input('username')),
             'email' => strtolower($request->input('email')),
             'pass' => bcrypt($request->input('password')),
         ]);
