@@ -6,7 +6,7 @@
         There are currently {{ $online_count }} people playing!
     </span>
     <div class="pt-3"></div>
-    <table class="table">
+    <table>
         <tbody>
         <tr>
             <td>
@@ -67,9 +67,7 @@
                                 </tbody>
                             </table>
                             <div class="text-center">To view a full list of news and updates,
-                                <a href="http://board.localhost/viewforum.php?f=2" class="c">
-                                    click here
-                                </a>.
+                                <a href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
                             </div>
                         </td>
                         <td width="7" background="img/fm_middle.gif"></td>
