@@ -85,7 +85,7 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right">
-                                                I agree with the terms and conditions:
+                                                I agree with the <a target="_blank" href="{{ route('Terms_and_Conditions') }}">terms+conditions</a>:
                                             </td>
                                             <td>
                                                 <label class="pl-1">
