@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Config;

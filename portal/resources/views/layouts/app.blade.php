@@ -2,8 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
 
-<body>
-
 @if(Route::currentRouteName() == 'World_Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>
@@ -20,6 +18,7 @@
     </table>
     <div class="pt-2"></div>
     @yield('content')
+    {{ $slot }}
 
 @elseif(Route::currentRouteName() == 'Wilderness_Map')
     <table style="width: 250px; background: black; padding: 4px;">
@@ -37,6 +36,7 @@
     </table>
     <div class="pt-2"></div>
     @yield('content')
+    {{ $slot }}
 
 @else
     <main>
@@ -66,6 +66,7 @@
                     <div class="pt-3"></div>
                 @endif
                 @yield('content')
+                    {{ $slot }}
                 <div class="pt-2"></div>
             </div>
             <div class="mid-right-border"></div>
@@ -85,8 +86,7 @@
             <div class="bottom-right-border"></div>
         </section>
     </main>
-@endif
+    @endif
 
-@include('includes.footerscripts')
-</body>
-</html>
+    @include('includes.footerscripts')
+    </body>

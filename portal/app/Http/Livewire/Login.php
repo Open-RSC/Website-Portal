@@ -7,11 +7,11 @@ use Livewire\Component;
 
 class Login extends Component
 {
-    public $email = '';
+    public $username = '';
     public $password = '';
 
     protected $rules = [
-        'email' => 'required|email',
+        'username' => 'required',
         'password' => 'required'
     ];
 

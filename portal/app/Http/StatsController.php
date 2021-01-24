@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\DB;
