@@ -66,7 +66,7 @@
                     <div class="pt-3"></div>
                 @endif
                 @yield('content')
-                    {{ $slot }}
+                {{ $slot }}
                 <div class="pt-2"></div>
             </div>
             <div class="mid-right-border"></div>
@@ -90,3 +90,4 @@
 
     @include('includes.footerscripts')
     </body>
+</html>

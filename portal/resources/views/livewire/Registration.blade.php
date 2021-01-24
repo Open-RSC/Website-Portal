@@ -11,10 +11,10 @@
                         you like and is not already taken, you will be asked to choose a password.
                     </span>
                     <span class="d-block pt-2 pb-2">
-                        Usernames can be a maximum of 12 characters long and may contain letters, numbers
+                        Usernames can be a maximum of 12 characters long and may contain letters, numbers, dashes, spaces,
                         and underscores. When playing Open RuneScape Classic, underscores in usernames are translated
-                        into spaces and first letters are capitalised. For example the username
-                        red_rooster would appear as Red Rooster.
+                        into spaces. Capitalization is maintained from account creation now. For example, the
+                        username Red_Rooster would appear as Red Rooster.
                     </span>
                     <span class="d-block pt-2 pb-2">
                         Passwords most be between 5 and 20 characters long. We recommend you use a mixture of numbers and
