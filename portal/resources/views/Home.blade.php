@@ -21,18 +21,22 @@
                     </tbody>
                 </table>
                 <!--stones content-->
-                <table style="padding: 0; border: 0; width: 500px; background-repeat:no-repeat; background-color: black;">
+                <table background="{{ asset('img/fm_middle.gif') }}" style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td>
-                            <span class="font-weight-bold d-block text-center">Latest News and Updates</span><br>
+                            <div class="pb-3"></div>
+                            <span class="d-block text-center">
+                                <b>Latest News and Updates</b>
+                            </span>
+                            <div class="pb-3"></div>
                             <table style="padding: 0; background: black;">
                                 <tbody>
                                 <tr class="align-top">
-                                    <td class="text-center w-25">
+                                    <td style="width: 100px;">
                                         <a href="http://board.localhost/viewforum.php?f=2">
-                                            <img src="{{ asset('img/mm_scroll.jpg') }}" alt="">
+                                            <img class="mx-auto" src="{{ asset('img/mm_scroll.jpg') }}" alt="">
                                         </a>
                                     </td>
                                     <td style="width: 350px">
@@ -70,38 +74,41 @@
                                 <a href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
                             </div>
                         </td>
-                        <td width="7" background="img/fm_middle.gif"></td>
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones border bottom-->
-                <table cellspacing="0" cellpadding="0">
+                <table style="padding: 0;">
                     <tbody>
                     <tr>
-                        <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                        <td colspan="3">
+                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <br>
+                <div class="pb-3"></div>
+
                 <!--stones border top-->
-                <table cellspacing="0" cellpadding="0" bgcolor="black">
+                <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
-                        <td><img src="img/fm_top.gif"></td>
+                        <td>
+                            <img src="{{ asset('img/fm_top.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones content-->
-                <table background="img/fm_middle.gif" cellspacing="0"
-                       cellpadding="0" border="0" width="500"
-                       style="background-repeat:no-repeat;" bgcolor="black">
+                <table background="{{ asset('img/fm_middle.gif') }}" style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td width="7" background="img/fm_middle.gif"></td>
-                        <td valign="bottom">
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td class="align-bottom">
                             <center>
-                                <br>
+                                <div class="pb-3"></div>
                                 <!--table to contain options-->
                                 <table>
                                     <tbody>
@@ -126,14 +133,21 @@
                                                     <td class="b2"
                                                         background="img/shinystonered.jpg"
                                                         bgcolor="#570700">
-                                                        <center><b>Play<br>Game</b></center>
+                                                        <center><b>Play
+                                                                <div class="d-block">
+                                                                    Game
+                                                                </div>
+                                                            </b></center>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Play RuneScape right now!<br>
-                                            <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/playgame.jpgl"
-                                               class="c">Click here</a></td>
+                                            Play RuneScape right now!
+                                            <div class="d-block">
+                                                <a href="http://web.archive.org/web/20040324014226/http://ww.runescape.com/playgame.jpgl"
+                                                   class="c">Click here</a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="../create/index.html"
@@ -164,9 +178,12 @@
                                                 </tbody>
                                             </table>
                                             Create an account for both the game and our
-                                            website.<br>
-                                            <a href="../create/index.html" class="c">Click
-                                                Here</a></td>
+                                            website.
+                                            <div class="d-block">
+                                                <a href="../create/index.html" class="c">Click
+                                                    Here</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="5"></td>
@@ -198,9 +215,12 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            See why our game is right for you!<br>
-                                            <a href="whychoosers.htm" class="c">Click
-                                                Here</a></td>
+                                            See why our game is right for you!
+                                            <div class="d-block">
+                                                <a href="whychoosers.htm" class="c">Click
+                                                    Here</a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="../members/members.html"
@@ -230,9 +250,12 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Get the Premium version of the game!<br>
-                                            <a href="../members/members.html" class="c">Click
-                                                Here</a></td>
+                                            Get the Premium version of the game!
+                                            <div class="d-block">
+                                                <a href="../members/members.html" class="c">Click
+                                                    Here</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="5"></td>
@@ -266,9 +289,12 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Is your character in the top 250,000?<br>
-                                            <a href="/hiscores" class="c">Click
-                                                Here</a></td>
+                                            Is your character in the top 250,000?
+                                            <div class="d-block">
+                                                <a href="/hiscores" class="c">Click
+                                                    Here</a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="betaplaygame/RS2Notes.htm"
@@ -298,50 +324,61 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Try the new version <br>of the game!<br>
-                                            <a href="betaplaygame/RS2Notes.htm" class="c">Click
-                                                Here</a></td>
+                                            Try the new version
+                                            <span class="d-block">
+                                                of the game!</span>
+                                            <div class="d-block">
+                                                <a href="betaplaygame/RS2Notes.htm" class="c">Click
+                                                    Here</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <!--end options container-->
                             </center>
-                            <br>
+                            <div class="pb-3"></div>
+
                         </td>
-                        <td width="7" background="img/fm_middle.gif"></td>
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones border bottom-->
-                <table cellspacing="0" cellpadding="0">
+                <table style="padding: 0;">
                     <tbody>
                     <tr>
-                        <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                        <td colspan="3">
+                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <br>
+                <div class="pb-3"></div>
+
                 <!--stones border top-->
-                <table cellspacing="0" cellpadding="0" bgcolor="black">
+                <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
-                        <td><img src="img/fm_top.gif"></td>
+                        <td>
+                            <img src="{{ asset('img/fm_top.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones content-->
-                <table background="img/fm_middle.gif" cellspacing="0"
-                       cellpadding="0" border="0" width="500"
-                       style="background-repeat:no-repeat;" bgcolor="black">
+                <table background="{{ asset('img/fm_middle.gif') }}" style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td width="7" background="img/fm_middle.gif"></td>
-                        <td valign="bottom">
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td class="align-bottom">
                             <center>
                                 <img src="img/blank.gif" height="7"
-                                     width="1"><br>
-                                <b>Latest Poll</b><br>
+                                     width="1">
+                                <div class="pb-3"></div>
+                                <b>Latest Poll</b>
+                                <div class="pb-3"></div>
                                 <table cellspacing="0" cellpadding="0" bgcolor="black">
                                     <tbody>
                                     <tr valign="top">
@@ -360,45 +397,48 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <br>
+                                <div class="pb-3"></div>
                             </center>
                         </td>
-                        <td width="7" background="img/fm_middle.gif"></td>
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones border bottom-->
-                <table cellspacing="0" cellpadding="0">
+                <table style="padding: 0;">
                     <tbody>
                     <tr>
-                        <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                        <td colspan="3">
+                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <br>
+                <div class="pb-3"></div>
 
                 <!--stones border top-->
                 <table cellspacing="0" cellpadding="0" bgcolor="black">
                     <tbody>
                     <tr>
-                        <td><img src="img/fm_top.gif"></td>
+                        <td>
+                            <img src="{{ asset('img/fm_top.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones content-->
-                <table background="img/fm_middle.gif" cellspacing="0"
-                       cellpadding="0" border="0" width="500"
-                       style="background-repeat:no-repeat;" bgcolor="black">
+                <table background="{{ asset('img/fm_middle.gif') }}" style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td width="7" background="img/fm_middle.gif"></td>
-                        <td valign="bottom">
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td class="align-bottom">
                             <center>
                                 <img src="img/blank.gif" height="7"
-                                     width="1"><br>
-                                <b>Secure Services</b><br>
-                                <br>
+                                     width="1">
+                                <div class="pb-3"></div>
+                                <b>Secure Services</b>
+                                <div class="pb-3"></div>
                                 <!--table to contain options-->
                                 <table>
                                     <tbody>
@@ -431,9 +471,13 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Start or continue your subscription<br>
-                                            <a href="../securemenu/securemenu.html"
-                                               class="c">Click Here</a></td>
+                                            Start or continue your subscription
+                                            <div class="d-block">
+                                                <a href="../securemenu/securemenu.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="../unsubscribe/unsubscribe.html"
@@ -463,9 +507,13 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Cancel your subscription<br>
-                                            <a href="../unsubscribe/unsubscribe.html"
-                                               class="c">Click Here</a></td>
+                                            Cancel your subscription
+                                            <div class="d-block">
+                                                <a href="../unsubscribe/unsubscribe.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="5"></td>
@@ -498,9 +546,16 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Questions?<br>Contact our staff<br>
-                                            <a href="../customersupport/customersupport.html"
-                                               class="c">Click Here</a></td>
+                                            Questions?
+                                            <span class="d-block">Contact our staff
+                                            </span>
+                                            <div class="d-block">
+                                                <a href="../customersupport/customersupport.html"
+                                                   class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="../securemenu/securemenu.html"
@@ -531,9 +586,16 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Your messages<br>from our staff<br><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c">Click Here</a></td>
+                                            Your messages
+                                            <span class="d-block">
+                                                from our staff
+                                            </span>
+                                            <div class="d-block">
+                                                <a href="../securemenu/securemenu.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="5"></td>
@@ -567,9 +629,13 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Discuss the game with fellow players!<br><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c">Click Here</a></td>
+                                            Discuss the game with fellow players!
+                                            <div class="d-block">
+                                                <a href="../securemenu/securemenu.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="../securemenu/securemenu.html"
@@ -600,54 +666,59 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Manage your Password and Recovery Details<br><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c">Click Here</a></td>
+                                            Manage your Password and Recovery Details
+                                            <div class="d-block">
+                                                <a href="../securemenu/securemenu.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <!--end options container-->
                             </center>
-                            <br>
+                            <div class="pb-3"></div>
                         </td>
-                        <td width="7" background="img/fm_middle.gif"></td>
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones border bottom-->
-                <table cellspacing="0" cellpadding="0">
+                <table style="padding: 0;">
                     <tbody>
                     <tr>
-                        <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                        <td colspan="3">
+                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-
-                <br>
-
+                <div class="pb-3"></div>
 
                 <!--stones border top-->
-                <table cellspacing="0" cellpadding="0" bgcolor="black">
+                <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
-                        <td><img src="img/fm_top.gif"></td>
+                        <td>
+                            <img src="{{ asset('img/fm_top.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones content-->
-                <table background="img/fm_middle.gif" cellspacing="0"
-                       cellpadding="0" border="0" width="500"
-                       style="background-repeat:no-repeat;" bgcolor="black">
+                <table background="{{ asset('img/fm_middle.gif') }}" style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td width="7" background="img/fm_middle.gif"></td>
-                        <td valign="bottom">
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td class="align-bottom">
                             <center>
                                 <img src="img/blank.gif" height="7"
-                                     width="1"><br>
-                                <b>Manual</b><br>
-                                <br>
+                                     width="1">
+                                <div class="pb-3"></div>
+                                <b>Manual</b>
+                                <div class="pb-3"></div>
 
                                 <!--table to contain options-->
                                 <table>
@@ -681,19 +752,23 @@
                                                 </tbody>
                                             </table>
                                             Everything you need to know to play
-                                            RuneScape<br>
-                                            <a href="../howtoplay.html" class="c">Click
-                                                Here</a></td>
+                                            RuneScape
+                                            <div class="d-block">
+                                                <a href="../howtoplay.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100">
-                                            <a href="/faq"><img
+                                            <a href="{{ route('Frequently_Asked_Questions') }}"><img
                                                         src="img/mm_faq.jpg"
                                                         height="120" border="0" width="77"></a>
                                         </td>
                                         <td width="120">
                                             <div style="LEFT: 0; TOP: 0; POSITION: relative;">
                                                 <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="/faq"><img
+                                                    <a href="{{ route('Frequently_Asked_Questions') }}"><img
                                                                 src="img/blank.gif"
                                                                 height="45" border="0"
                                                                 width="100"></a>
@@ -711,8 +786,12 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Answers to Frequently Asked Questions<br>
-                                            <a href="/faq" class="c">Click Here</a>
+                                            Answers to Frequently Asked Questions
+                                            <div class="d-block">
+                                                <a href="{{ route('Frequently_Asked_Questions') }}" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -746,9 +825,13 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Learn about the History of RuneScape<br>
-                                            <a href="../varrock/varrockindex.html"
-                                               class="c">Click Here</a></td>
+                                            Learn about the History of RuneScape
+                                            <div class="d-block">
+                                                <a href="../varrock/varrockindex.html" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                         <td width="10"></td>
                                         <td align="center" width="100"><a
                                                     href="/rules"><img
@@ -777,30 +860,41 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Learn our rules<br>and stay safe<br>online<br>
-                                            <a href="/rules" class="c">Click
-                                                Here</a></td>
+                                            Learn our rules
+                                            <span class="d-block">
+                                                and stay safe
+                                                </span>
+                                            <span class="d-block">
+                                                online
+                                            </span>
+                                            <div class="d-block">
+                                                <a href="/rules" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <!--end options container-->
                             </center>
-                            <br>
+                            <div class="pb-3"></div>
                         </td>
-                        <td width="7" background="img/fm_middle.gif"></td>
+                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
                 <!--stones border bottom-->
-                <table cellspacing="0" cellpadding="0">
+                <table style="padding: 0;">
                     <tbody>
                     <tr>
-                        <td colspan="3"><img src="img/fm_bottom.gif"></td>
+                        <td colspan="3">
+                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                        </td>
                     </tr>
                     </tbody>
                 </table>
-
-                <br>
+                <div class="pb-2"></div>
             </td>
         </tr>
         </tbody>
