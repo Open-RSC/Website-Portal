@@ -70,7 +70,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="text-center">To view a full list of news and updates,
+                            <div class="text-center pb-2">To view a full list of news and updates,
                                 <a href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
                             </div>
                         </td>
