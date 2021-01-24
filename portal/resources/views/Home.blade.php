@@ -1,6 +1,5 @@
 @extends('template')
 @section('content')
-
     <div class="logo" role="banner"></div>
     <span class="online-count" style="font-size: 14px;">
         There are currently {{ $online_count }} people playing!
@@ -89,7 +88,6 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <div class="pb-3"></div>
                 <!--stones border top-->
                 <table style="padding: 0; background: black;">
@@ -120,8 +118,8 @@
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="">
                                                         <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
                                                              alt="">
@@ -146,7 +144,9 @@
                                             </table>
                                             Play RuneScape right now!
                                             <div class="d-block">
-                                                <a href="" class="c">Click here</a>
+                                                <a href="" class="c">
+                                                    Click here
+                                                </a>
                                             </div>
                                         </td>
                                         <td style="width: 10px"></td>
@@ -156,8 +156,8 @@
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="{{ route('register') }}" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
                                                              alt="">
@@ -168,7 +168,7 @@
                                                 <tbody>
                                                 <tr>
                                                     <td class="b2" background="{{ asset('img/shinystonered.jpg') }}"
-                                                        bgcolor="#570700">
+                                                        style="background-color: #570700">
                                                         <div class="text-center">
                                                             <b>Create Account</b>
                                                         </div>
@@ -188,69 +188,70 @@
                                         <td colspan="5"></td>
                                     </tr>
                                     <tr class="align-top">
-                                        <td align="center" width="100">
-                                            <a href="whychoosers.htm" class="c">
-                                                <img src="img/mm_whyrs.jpg">
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_whyrs.jpg') }}" alt="">
                                             </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="whychoosers.htm" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100">
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
                                                     </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2" bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="img/stoneback.gif" bgcolor="#474747">
-                                                        <center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747">
+                                                        <div class="text-center">
                                                             <b>Why Choose RuneScape?</b>
-                                                        </center>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             See why our game is right for you!
                                             <div class="d-block">
-                                                <a href="whychoosers.htm" class="c">Click
-                                                    Here</a>
+                                                <a href="" class="c">Click Here</a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="../members/members.html"
-                                                    class="c"><img
-                                                        src="img/mm_members.jpg"
-                                                ></a></td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../members/members.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_members.jpg') }}" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href=""
+                                                       class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>RuneScape Members</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>RuneScape Members</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Get the Premium version of the game!
                                             <div class="d-block">
-                                                <a href="../members/members.html" class="c">Click
-                                                    Here</a>
+                                                <a href="" class="c">
+                                                    Click Here
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -258,65 +259,62 @@
                                         <td colspan="5"></td>
                                     </tr>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="/hiscores"
-                                                    class="c"><img
-                                                        src="img/mm_chalice.jpg"
-                                                ></a></td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="/hiscores"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 100px;">
+                                            <a href="{{ route('Hiscores') }}" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_chalice.jpg') }}" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="{{ route('Hiscores') }}" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Hiscore Tables</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Hiscore Tables</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Is your character in the top 250,000?
                                             <div class="d-block">
-                                                <a href="/hiscores" class="c">Click
-                                                    Here</a>
+                                                <a href="{{ route('Hiscores') }}" class="c">
+                                                    Click Here
+                                                </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="betaplaygame/RS2Notes.htm"
-                                                    class="c"><img
-                                                        src="img/mm2_rs2b.jpg"
-                                                ></a></td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="betaplaygame/RS2Notes.htm"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img src="{{ asset('img/mm2_rs2b.jpg') }}" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Play RS2 Beta</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Play RS2 Beta</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -325,8 +323,9 @@
                                             <span class="d-block">
                                                 of the game!</span>
                                             <div class="d-block">
-                                                <a href="betaplaygame/RS2Notes.htm" class="c">Click
-                                                    Here</a>
+                                                <a href="" class="c">
+                                                    Click Here
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -335,7 +334,6 @@
                                 <!--end options container-->
                             </center>
                             <div class="pb-3"></div>
-
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
@@ -351,9 +349,7 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <div class="pb-3"></div>
-
                 <!--stones border top-->
                 <table style="padding: 0; background: black;">
                     <tbody>
@@ -372,26 +368,22 @@
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <center>
-                                <img src="{{ asset('img/blank.gif') }}" height="7"
-                                     width="1">
+                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Latest Poll</b>
                                 <div class="pb-3"></div>
-                                <table cellspacing="0" cellpadding="0" bgcolor="black">
+                                <table style="padding: 0; background-color: black;">
                                     <tbody>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="../polls/allpolls.htm"><img
-                                                        src="img/mms_vote.jpg"
-                                                ></a></td>
-                                        <td width="350">
-                                            <iframe src="img/latestpoll.jpg"
-                                                    scrolling="no"
-                                                    frameborder="no" height="120"
-                                                    width="350"></iframe>
+                                        <td style="width: 100px;">
+                                            <a href="">
+                                                <img class="mx-auto" src="{{ asset('img/mms_vote.jpg') }}" alt="">
+                                            </a>
                                         </td>
-                                    </tr>
-                                    <tr>
+                                        <td style="width: 350px;">
+                                            <img src="{{ asset('img/latestpoll.jpg') }}" height="120" width="350"
+                                                 alt=""/>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -412,11 +404,9 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <div class="pb-3"></div>
-
                 <!--stones border top-->
-                <table cellspacing="0" cellpadding="0" bgcolor="black">
+                <table style="padding: 0; background-color: black;">
                     <tbody>
                     <tr>
                         <td>
@@ -433,8 +423,7 @@
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <center>
-                                <img src="{{ asset('img/blank.gif') }}" height="7"
-                                     width="1">
+                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Secure Services</b>
                                 <div class="pb-3"></div>
@@ -442,73 +431,71 @@
                                 <table>
                                     <tbody>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c"><img
-                                                        src="img/mm_subscribe.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_subscribe.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../securemenu/securemenu.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Subscribe</b></center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Subscribe</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Start or continue your subscription
                                             <div class="d-block">
-                                                <a href="../securemenu/securemenu.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="../unsubscribe/unsubscribe.html"
-                                                    class="c"><img
-                                                        src="img/mm_unsubscribe.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_unsubscribe.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../unsubscribe/unsubscribe.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Unsubscribe</b></center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Unsubscribe</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Cancel your subscription
                                             <div class="d-block">
-                                                <a href="../unsubscribe/unsubscribe.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -518,69 +505,68 @@
                                         <td colspan="5"></td>
                                     </tr>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="../customersupport/customersupport.html"><img
-                                                        src="img/mm_support.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 100px;">
+                                            <a href="">
+                                                <img class="mx-auto" src="{{ asset('img/mm_support.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../customersupport/customersupport.html"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Customer Support</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Customer Support</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Questions?
-                                            <span class="d-block">Contact our staff
+                                            <span class="d-block">
+                                                Contact our staff
                                             </span>
                                             <div class="d-block">
-                                                <a href="../customersupport/customersupport.html"
-                                                   class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c"><img
-                                                        src="img/mm_inbox.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_inbox.jpg') }}" height="120"
+                                                     width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../securemenu/securemenu.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href=""
+                                                       class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Message Centre</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Message Centre</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -590,7 +576,7 @@
                                                 from our staff
                                             </span>
                                             <div class="d-block">
-                                                <a href="../securemenu/securemenu.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -600,74 +586,71 @@
                                         <td colspan="5"></td>
                                     </tr>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c"><img
-                                                        src="img/mms_forums.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mms_forums.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../securemenu/securemenu.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Forums</b></center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Forums</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Discuss the game with fellow players!
                                             <div class="d-block">
-                                                <a href="../securemenu/securemenu.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="../securemenu/securemenu.html"
-                                                    class="c"><img
-                                                        src="img/mms_accman.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mms_accman.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../securemenu/securemenu.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Account Management</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Account Management</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Manage your Password and Recovery Details
                                             <div class="d-block">
-                                                <a href="../securemenu/securemenu.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -693,9 +676,7 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <div class="pb-3"></div>
-
                 <!--stones border top-->
                 <table style="padding: 0; background: black;">
                     <tbody>
@@ -714,39 +695,37 @@
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <center>
-                                <img src="{{ asset('img/blank.gif') }}" height="7"
-                                     width="1">
+                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Manual</b>
                                 <div class="pb-3"></div>
-
                                 <!--table to contain options-->
                                 <table>
                                     <tbody>
                                     <tr class="align-top">
-                                        <td align="center" width="100">
-                                            <a href="../howtoplay.html" class="c"><img
-                                                        src="img/mm_howtoplay.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 100px;">
+                                            <a href="" class="c">
+                                                <img class="mx-auto" src="{{ asset('img/mm_howtoplay.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../howtoplay.html"
-                                                       class="c"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="" class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>How To Play</b></center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>How To Play</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -754,34 +733,35 @@
                                             Everything you need to know to play
                                             RuneScape
                                             <div class="d-block">
-                                                <a href="../howtoplay.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100">
-                                            <a href="{{ route('Frequently_Asked_Questions') }}"><img
-                                                        src="img/mm_faq.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="{{ route('Frequently_Asked_Questions') }}">
+                                                <img class="mx-auto" src="{{ asset('img/mm_faq.jpg') }}" height="120"
+                                                     width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="{{ route('Frequently_Asked_Questions') }}"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="{{ route('Frequently_Asked_Questions') }}">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>F.A.Q.</b></center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>F.A.Q.</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -798,64 +778,64 @@
                                         <td colspan="5"></td>
                                     </tr>
                                     <tr class="align-top">
-                                        <td align="center" width="100"><a
-                                                    href="../varrock/varrockindex.html"><img
-                                                        src="img/mm_lov.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 100px;">
+                                            <a href="">
+                                                <img class="mx-auto" src="{{ asset('img/mm_lov.jpg') }}" height="120"
+                                                     width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="../varrock/varrockindex.html"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Library of Varrock</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Library of Varrock</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             Learn about the History of RuneScape
                                             <div class="d-block">
-                                                <a href="../varrock/varrockindex.html" class="c">
+                                                <a href="" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
-                                        <td width="10"></td>
-                                        <td align="center" width="100"><a
-                                                    href="/rules"><img
-                                                        src="img/mm_rules.jpg"
-                                                        height="120" width="77"></a>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="{{ route('Rules_and_Security') }}">
+                                                <img class="mx-auto" src="{{ asset('img/mm_rules.jpg') }}" height="120"
+                                                     width="77" alt="">
+                                            </a>
                                         </td>
-                                        <td width="120">
-                                            <div style="LEFT: 0; TOP: 0; POSITION: relative;">
-                                                <div style="LEFT: 0; TOP: 0; POSITION: absolute;">
-                                                    <a href="/rules"><img
-                                                                src="{{ asset('img/blank.gif') }}"
-                                                                height="45"
-                                                                width="100"></a>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="{{ route('Rules_and_Security') }}">
+                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
-                                            <table height="45" cellpadding="2"
-                                                   bgcolor="black" width="100">
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b"
-                                                        background="img/stoneback.gif"
-                                                        bgcolor="#474747">
-                                                        <center><b>Rules &amp; Security</b>
-                                                        </center>
+                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747">
+                                                        <div class="text-center">
+                                                            <b>Rules & Security</b>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -863,12 +843,12 @@
                                             Learn our rules
                                             <span class="d-block">
                                                 and stay safe
-                                                </span>
+                                            </span>
                                             <span class="d-block">
                                                 online
                                             </span>
                                             <div class="d-block">
-                                                <a href="/rules" class="c">
+                                                <a href="{{ route('Rules_and_Security') }}" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
