@@ -5,7 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\curstats;
 use App\Models\experience;
 use App\Models\players;
-use Illuminate\Support\Facades\Request;
+use App\Rules\playerName;
 use Livewire\Component;
 
 class Registration extends Component
@@ -14,6 +14,7 @@ class Registration extends Component
     public $email = '';
     public $password = '';
     public $passwordConfirmation = '';
+    public $terms= '';
 
     public function render()
     {
@@ -21,8 +22,8 @@ class Registration extends Component
     }
 
     protected $rules = [
-        'username' => 'required|min:3|max:12|unique:cabbage.players',
-        'password' => 'required|min:4|max:20|same:passwordConfirmation',
+        'username' => 'bail|required|min:2|max:12|unique:cabbage.players',
+        'password' => 'bail|required|min:4|max:64',
     ];
 
     private function resetInputFields()
@@ -31,6 +32,7 @@ class Registration extends Component
         $this->email = '';
         $this->password = '';
         $this->passwordConfirmation = '';
+        $this->terms = '';
     }
 
     public function updated($field)
@@ -59,10 +61,16 @@ class Registration extends Component
 
     public function registerStore()
     {
+        #Todo:
+        # Prevent creation of players with names containing "mod, m0d, admin, moderator, administrator, fuck, shit, ass, suck, pussy, cunt"
+        # Rate limit successful registration submissions "Registration failed: Registered recently"
+
+
         $v = $this->validate([
-            'username' => 'required|min:3|max:12|unique:cabbage.players',
-            'password' => 'required|min:4|max:20|same:passwordConfirmation',
+            'username' => ['bail', 'required', 'min:2', 'max:12', 'unique:cabbage.players', new playerName],
+            'password' => 'bail|required|min:4|max:64|same:passwordConfirmation',
             'email' => 'required|email',
+            'terms' => 'accepted',
         ]);
 
         $data = [

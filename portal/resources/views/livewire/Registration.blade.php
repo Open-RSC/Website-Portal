@@ -11,13 +11,13 @@
                         you like and is not already taken, you will be asked to choose a password.
                     </span>
                     <span class="d-block pt-2 pb-2">
-                        Usernames can be a maximum of 12 characters long and may contain letters, numbers, dashes, spaces,
+                        Usernames must be between 2 and 12 characters long and may contain letters, numbers, dashes, spaces,
                         and underscores. When playing Open RuneScape Classic, underscores in usernames are translated
                         into spaces. Capitalization is maintained from account creation now. For example, the
                         username Red_Rooster would appear as Red Rooster.
                     </span>
                     <span class="d-block pt-2 pb-2">
-                        Passwords most be between 5 and 20 characters long. We recommend you use a mixture of numbers and
+                        Passwords must be between 4 and 64 characters long. We recommend you use a mixture of numbers and
                         letters in your password to make it hard for someone to guess. We also suggest to avoid reusing passwords from other games here.
                     </span>
                     <div class="pt-2"></div>
@@ -33,7 +33,7 @@
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.lazy="username" aria-label="Username"
+                                                    <input wire:model="username" aria-label="Username"
                                                            type="text" required class="text-dark focus:z-10">
                                                     @error('username')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -47,7 +47,7 @@
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.lazy="password" aria-label="Password"
+                                                    <input wire:model.defer="password" aria-label="Password"
                                                            type="password" required class="text-dark focus:z-10">
                                                     @error('password')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -61,7 +61,7 @@
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.lazy="passwordConfirmation" aria-label="Password"
+                                                    <input wire:model.defer="passwordConfirmation" aria-label="Password"
                                                            type="password" required class="text-dark focus:z-10">
                                                     @error('password')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -75,11 +75,21 @@
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.lazy="email" aria-label="Email" name="email"
+                                                    <input wire:model.defer="email" aria-label="Email" name="email"
                                                            type="email" required class="text-dark focus:z-10">
                                                     @error('email')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                I agree with the terms and conditions:
+                                            </td>
+                                            <td>
+                                                <label class="pl-1">
+                                                    <input wire:model.defer="terms" type="checkbox" value="yes" name="terms" id="terms">
                                                 </label>
                                             </td>
                                         </tr>
