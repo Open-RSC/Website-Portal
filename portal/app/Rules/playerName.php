@@ -77,6 +77,7 @@ class playerName implements Rule
     public function passes($attribute, $value)
     {
         //return $this->usernameToHash($value) === $this->hashToUsername($value);
+        return '1=1';
 
     }
 

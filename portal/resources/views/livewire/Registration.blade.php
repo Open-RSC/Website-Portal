@@ -90,6 +90,9 @@
                                             <td>
                                                 <label class="pl-1">
                                                     <input wire:model.defer="terms" type="checkbox" value="yes" name="terms" id="terms">
+                                                    @error('terms')
+                                                    <p class="text-sm text-red-500 text-center">{{$message}}</p>
+                                                    @enderror
                                                 </label>
                                             </td>
                                         </tr>
@@ -99,7 +102,6 @@
                                                 <label class="pl-1">
                                                     <input style="color: black; width: 110px;" type=submit value="Create Account"
                                                            wire:click.prevent="registerStore">
-                                                    <input type="hidden" name="remember" value="true">
                                                 </label>
                                                 <div class="pt-2"></div>
                                             </td>
