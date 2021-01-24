@@ -57,7 +57,7 @@ class LoginController extends Controller
 
     public function show_signup_form(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('secure.register');
+        return view('secure.Choose_a_username');
     }
 
     public function process_signup(Request $request): \Illuminate\Http\RedirectResponse
