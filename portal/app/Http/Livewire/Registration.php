@@ -27,6 +27,7 @@ class Registration extends Component
     protected array $rules = [
         'game' => 'required',
         'username' => ['required', 'max:12'],
+        'password' => ['required', 'max:20'],
     ];
 
     private function resetInputFields()
@@ -70,7 +71,7 @@ class Registration extends Component
         $v = $this->validate([
             'game' => 'required',
             'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:' . $this->game . '.players'],
-            'password' => 'required|min:4|max:64|same:passwordConfirmation',
+            'password' => 'required|min:4|max:20|same:passwordConfirmation',
             'email' => ['required', 'email', new not_contains],
             'terms' => 'accepted',
         ]);

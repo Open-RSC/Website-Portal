@@ -18,7 +18,7 @@
                         username Red_Rooster would appear as Red Rooster.
                     </span>
                     <span class="d-block pt-2 pb-2">
-                        Passwords must be between 4 and 64 characters long. We recommend you use a mixture of numbers and
+                        Passwords must be between 4 and 20 characters long. We recommend you use a mixture of numbers and
                         letters in your password to make it hard for someone to guess. We also suggest to avoid reusing passwords from other games here.
                     </span>
                     <div class="pt-2"></div>
