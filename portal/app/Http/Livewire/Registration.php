@@ -68,7 +68,6 @@ class Registration extends Component
     public function registerStore()
     {
         #Todo:
-        # Rate limit successful registration submissions "Registration failed: Registered recently"
         # Inform when successfully registered for specific game
 
         $v = $this->validate([
