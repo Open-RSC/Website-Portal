@@ -63,6 +63,7 @@ Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth')->n
 Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 
 Route::get('/register', 'Livewire\Registration')->name('Registration');
+Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha'])->name('Registration');
 
 Route::namespace('Auth')->group(function () {
     Route::get('/login', 'LoginController@show_login_form')->name('login');

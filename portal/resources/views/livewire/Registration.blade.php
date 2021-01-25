@@ -1,5 +1,6 @@
 <table style="width: 500px; background-color: black; padding: 4px;">
     <form>
+        @csrf
         <tr>
             <td class=e>
                 <div class="pl-1 pr-1">
@@ -118,7 +119,7 @@
                                         <tr>
                                             <td></td>
                                             <td>
-
+                                                <x-honey recaptcha="registration"/>
                                             </td>
                                         </tr>
                                         <tr>

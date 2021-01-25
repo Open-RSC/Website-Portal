@@ -16,6 +16,8 @@ class Registration extends Component
     public $password = '';
     public $passwordConfirmation = '';
     public $terms = '';
+    public $honeyPasses = '';
+    public $honeyInputs = '';
 
     public function render()
     {
@@ -35,6 +37,8 @@ class Registration extends Component
         $this->password = '';
         $this->passwordConfirmation = '';
         $this->terms = '';
+        $this->honeyPasses = '';
+        $this->honeyInputs = '';
     }
 
     public function updated($field)
