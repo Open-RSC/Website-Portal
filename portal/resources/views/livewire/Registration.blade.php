@@ -29,12 +29,29 @@
                                         <tbody>
                                         <tr>
                                             <td class="text-right">
+                                                Select Game:
+                                            </td>
+                                            <td>
+                                                <label class="pl-1">
+                                                    <select wire:model="game" class="text-dark" name="game">
+                                                        <option selected hidden></option>
+                                                        <option value="preservation">RSC Preservation</option>
+                                                        <option value="cabbage">RSC Cabbage</option>
+                                                    </select>
+                                                    @error('game')
+                                                    <p class="text-sm text-red-500 text-center">{{$message}}</p>
+                                                    @enderror
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
                                                 Desired Username:
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.lazy="username" aria-label="Username"
-                                                           type="text" required class="text-dark focus:z-10">
+                                                    <input wire:model="username" aria-label="Username"
+                                                           type="text" required class="text-dark">
                                                     @error('username')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror
@@ -48,7 +65,7 @@
                                             <td>
                                                 <label class="pl-1">
                                                     <input wire:model.defer="password" aria-label="Password"
-                                                           type="password" required class="text-dark focus:z-10">
+                                                           type="password" required class="text-dark">
                                                     @error('password')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror
@@ -62,7 +79,7 @@
                                             <td>
                                                 <label class="pl-1">
                                                     <input wire:model.defer="passwordConfirmation" aria-label="Password"
-                                                           type="password" required class="text-dark focus:z-10">
+                                                           type="password" required class="text-dark">
                                                     @error('password')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror
@@ -76,7 +93,7 @@
                                             <td>
                                                 <label class="pl-1">
                                                     <input wire:model.defer="email" aria-label="Email" name="email"
-                                                           type="email" required class="text-dark focus:z-10">
+                                                           type="email" required class="text-dark">
                                                     @error('email')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror

@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class Registration extends Component
 {
+    public $game = '';
     public $username = '';
     public $email = '';
     public $password = '';
@@ -22,18 +23,13 @@ class Registration extends Component
     }
 
     protected array $rules = [
-        'username' => ['bail', 'required', 'min:2', 'max:12', 'unique:cabbage.players'],
+        'game' => 'required',
+        'username' => ['required', 'max:12'],
     ];
-
-    public function mount()
-    {
-        $this->rules = [
-            'username' => [new not_contains],
-        ];
-    }
 
     private function resetInputFields()
     {
+        $this->game = '';
         $this->username = '';
         $this->email = '';
         $this->password = '';
@@ -72,9 +68,10 @@ class Registration extends Component
 
 
         $v = $this->validate([
-            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:cabbage.players'],
+            'game' => 'required',
+            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:'.$this->game.'.players'],
             'password' => 'required|min:4|max:64|same:passwordConfirmation',
-            'email' => 'required|email',
+            'email' => ['required', 'email', new not_contains],
             'terms' => 'accepted',
         ]);
 
@@ -86,16 +83,16 @@ class Registration extends Component
             'creation_ip' => $this->getClientIPaddress(),
         ];
 
-        players::create($data);
+        players::on($this->game)->create($data);
 
-        $user = players::where('username', trim(preg_replace('/[-_.]/', ' ', $this->username)))->first();
+        $user = players::on($this->game)->where('username', trim(preg_replace('/[-_.]/', ' ', $this->username)))->first();
 
-        curstats::create([
+        curstats::on($this->game)->create([
             'playerID' => $user->id,
             'hits' => 10
         ]);
 
-        experience::create([
+        experience::on($this->game)->create([
             'playerID' => $user->id,
             'hits' => 4000
         ]);

@@ -43,6 +43,6 @@ class not_contains implements Rule
      */
     public function message()
     {
-        return 'That username is not allowed.';
+        return 'That word is not allowed.';
     }
 }

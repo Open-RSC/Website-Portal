@@ -90,6 +90,8 @@ class players extends Authenticatable
         return $this->pass; // case sensitive
     }
 
-    // Selects which database to query
-    protected $connection = 'cabbage';
+    public function setDbConnection(string $connection)
+    {
+        $this->connection = $connection;
+    }
 }
