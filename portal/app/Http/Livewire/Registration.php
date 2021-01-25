@@ -67,9 +67,6 @@ class Registration extends Component
 
     public function registerStore()
     {
-        #Todo:
-        # Inform when successfully registered for specific game
-
         $v = $this->validate([
             'game' => 'required',
             'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:' . $this->game . '.players'],
@@ -101,6 +98,7 @@ class Registration extends Component
         ]);
 
         session()->flash('message', 'You have been successfully registered.');
+
         $this->resetInputFields();
     }
 }

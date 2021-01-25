@@ -29,6 +29,16 @@
                                     <table>
                                         <tbody>
                                         <tr>
+                                            <td></td>
+                                            <td>
+                                                @if (session()->has('message'))
+                                                    <div class="alert alert-success">
+                                                        {{ session('message') }}
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td class="text-right">
                                                 Select Game:
                                             </td>
