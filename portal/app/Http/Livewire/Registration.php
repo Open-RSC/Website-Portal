@@ -65,11 +65,11 @@ class Registration extends Component
     {
         #Todo:
         # Rate limit successful registration submissions "Registration failed: Registered recently"
-
+        # Inform when successfully registered for specific game
 
         $v = $this->validate([
             'game' => 'required',
-            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:'.$this->game.'.players'],
+            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:' . $this->game . '.players'],
             'password' => 'required|min:4|max:64|same:passwordConfirmation',
             'email' => ['required', 'email', new not_contains],
             'terms' => 'accepted',

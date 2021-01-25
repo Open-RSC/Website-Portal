@@ -102,11 +102,13 @@
                                         </tr>
                                         <tr>
                                             <td class="text-right">
-                                                I agree with the <a target="_blank" href="{{ route('Terms_and_Conditions') }}">terms+conditions</a>:
+                                                I agree with the <a target="_blank"
+                                                                    href="{{ route('Terms_and_Conditions') }}">terms+conditions</a>:
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model.defer="terms" type="checkbox" value="yes" name="terms" id="terms">
+                                                    <input wire:model.defer="terms" type="checkbox" value="yes"
+                                                           name="terms" id="terms">
                                                     @error('terms')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                                     @enderror
@@ -116,8 +118,15 @@
                                         <tr>
                                             <td></td>
                                             <td>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
                                                 <label class="pl-1">
-                                                    <input style="color: black; width: 110px;" type=submit value="Create Account"
+                                                    <input style="color: black; width: 110px;" type=submit
+                                                           value="Create Account"
                                                            wire:click.prevent="registerStore">
                                                 </label>
                                                 <div class="pt-2"></div>
