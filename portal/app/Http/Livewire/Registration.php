@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use App\Models\curstats;
 use App\Models\experience;
 use App\Models\players;
-use App\Rules\playerName;
 use Livewire\Component;
 
 class Registration extends Component
@@ -14,7 +13,7 @@ class Registration extends Component
     public $email = '';
     public $password = '';
     public $passwordConfirmation = '';
-    public $terms= '';
+    public $terms = '';
 
     public function render()
     {
@@ -22,7 +21,7 @@ class Registration extends Component
     }
 
     protected $rules = [
-        'username' => 'bail|required|min:2|max:12|unique:cabbage.players',
+        'username' => 'bail|required|min:2|max:12|regex:/^[a-zA-Z\s]*$/|unique:cabbage.players',
         'password' => 'bail|required|min:4|max:64',
     ];
 
@@ -67,14 +66,14 @@ class Registration extends Component
 
 
         $v = $this->validate([
-            'username' => ['bail', 'required', 'min:2', 'max:12', 'unique:cabbage.players', new playerName],
+            'username' => ['bail', 'required', 'min:2', 'max:12', 'regex:/^[a-zA-Z\s]*$/', 'unique:cabbage.players'],
             'password' => 'bail|required|min:4|max:64|same:passwordConfirmation',
             'email' => 'required|email',
             'terms' => 'accepted',
         ]);
 
         $data = [
-            'username' => trim($this->username),
+            'username' => trim(preg_replace('/[-_.]/', ' ', $this->username)),
             'email' => strtolower($this->email),
             'pass' => bcrypt($this->password),
             'creation_date' => now()->timestamp,
@@ -83,7 +82,7 @@ class Registration extends Component
 
         players::create($data);
 
-        $user = players::where('username', $this->username)->first();
+        $user = players::where('username', trim(preg_replace('/[-_.]/', ' ', $this->username)))->first();
 
         curstats::create([
             'playerID' => $user->id,

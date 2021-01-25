@@ -11,8 +11,8 @@
                         you like and is not already taken, you will be asked to choose a password.
                     </span>
                     <span class="d-block pt-2 pb-2">
-                        Usernames must be between 2 and 12 characters long and may contain letters, numbers, dashes, spaces,
-                        and underscores. When playing Open RuneScape Classic, underscores in usernames are translated
+                        Usernames must be between 2 and 12 characters long and may contain letters, numbers, and spaces.
+                        When playing Open RuneScape Classic, underscores in usernames are translated
                         into spaces. Capitalization is maintained from account creation now. For example, the
                         username Red_Rooster would appear as Red Rooster.
                     </span>
@@ -33,7 +33,7 @@
                                             </td>
                                             <td>
                                                 <label class="pl-1">
-                                                    <input wire:model="username" aria-label="Username"
+                                                    <input wire:model.lazy="username" aria-label="Username"
                                                            type="text" required class="text-dark focus:z-10">
                                                     @error('username')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
