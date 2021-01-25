@@ -151,14 +151,14 @@
                                         </td>
                                         <td style="width: 10px"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Choose_a_username') }}" class="c">
+                                            <a href="{{ route('Registration') }}" class="c">
                                                 <img class="mx-auto" src="{{ asset('img/mm_player.jpg') }}" alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Choose_a_username') }}" class="c">
+                                                    <a href="{{ route('Registration') }}" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
                                                              alt="">
                                                     </a>
@@ -178,7 +178,7 @@
                                             </table>
                                             Create an account for both the game and our website.
                                             <div class="d-block">
-                                                <a href="{{ route('Choose_a_username') }}" class="c">
+                                                <a href="{{ route('Registration') }}" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
