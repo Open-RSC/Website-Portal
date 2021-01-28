@@ -61,9 +61,9 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <input wire:model.defer="pass" aria-label="Password"
+                                    <input wire:model.defer="password" aria-label="Password"
                                            type="password" required class="text-dark">
-                                    @error('pass')
+                                    @error('password')
                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                     @enderror
                                 </label>
