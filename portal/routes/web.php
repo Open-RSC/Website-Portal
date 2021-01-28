@@ -67,6 +67,7 @@ Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-r
 
 Route::get('/login', 'Livewire\Login')->name('Secure_Login');
 Route::post('/login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha'])->name('Secure_Login');
+Route::post('/logout', 'Livewire\Login@logout')->name('Logout');
 
 Route::namespace('Auth')->group(function () {
     #Route::get('/login', 'LoginController@show_login_form')->name('login');

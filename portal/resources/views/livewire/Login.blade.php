@@ -18,7 +18,7 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <select wire:model="game" class="text-dark" name="game">
+                                    <select wire:model.defer="game" class="text-dark" name="game">
                                         <option selected hidden></option>
                                         <option value="preservation">RSC Preservation</option>
                                         <option value="cabbage">RSC Cabbage</option>
@@ -35,7 +35,7 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <input wire:model.defer="username" aria-label="Username"
+                                    <input wire:model.lazy="username" aria-label="Username"
                                            type="text" required class="text-dark">
                                     @error('username')
                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -49,7 +49,7 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <input wire:model.defer="password" aria-label="Password"
+                                    <input wire:model.lazy="password" aria-label="Password"
                                            type="password" required class="text-dark">
                                     @error('password')
                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -61,7 +61,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="remember" value="true">
-                                <x-honey recaptcha="login"/>
+                                <!--<x-honey recaptcha="login"/>-->
                             </td>
                         </tr>
                         <tr>
@@ -69,7 +69,7 @@
                             <td>
                                 <label class="pl-1">
                                     <input style="color: black; width: 110px;" type=submit
-                                           value="Secure Login" wire:click.prevent="loginStore">
+                                           value="Secure Login" wire:click.prevent="login">
                                 </label>
                                 <div class="pt-3"></div>
                             </td>
@@ -83,11 +83,11 @@
                                         <td class="b" background="{{ asset('img/stoneback.gif') }}"
                                             style="background-color: #474747">
                                             <div class="text-center">
-                                                <a href="" class=c>
+                                                <a href="#" class=c>
                                                     <b>Lost password?</b></a>
                                                 <span class="d-block">
-                                        If you have lost/forgotten your password or need to recover your account.
-                                    </span>
+                                                    If you have lost/forgotten your password or need to recover your account.
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>
@@ -100,12 +100,12 @@
                                         <td class="b" background="{{ asset('img/stoneback.gif') }}"
                                             style="background-color: #474747">
                                             <div class="text-center">
-                                                <a href="" class=c>
+                                                <a href="{{ route('Player_Registration') }}" class=c>
                                                     <b>Need an account?</b>
                                                 </a>
                                                 <span class="d-block">
-                                        Create an Open RuneScape Classic account to access our games and secure services.
-                                    </span>
+                                                    Create an Open RuneScape Classic account to access our games and secure services.
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>

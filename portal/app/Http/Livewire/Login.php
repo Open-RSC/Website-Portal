@@ -18,13 +18,13 @@ class Login extends Component
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('livewire.login');
+        return view('livewire.Login');
     }
 
     protected array $rules = [
         'game' => 'required',
-        'username' => ['required', 'max:12'],
-        'password' => ['required', 'max:20'],
+        'username' => 'bail|required|min:2|max:12',
+        'password' => 'bail|required|min:4|max:20',
     ];
 
     private function resetInputFields()
@@ -42,12 +42,12 @@ class Login extends Component
         }
     }
 
-    public function loginStore(): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    public function login(): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         $v = $this->validate([
             'game' => 'required',
-            'username' => ['required', 'max:12'],
-            'password' => ['required', 'max:20'],
+            'username' => 'bail|required|min:2|max:12',
+            'password' => 'bail|required|min:4|max:20',
         ]);
 
         $data = [
@@ -59,6 +59,7 @@ class Login extends Component
 
         if (!$user) {
             session()->flash('message', 'Invalid credentials');
+            $this->resetInputFields();
             //return redirect(back());
         }
 
@@ -74,6 +75,7 @@ class Login extends Component
         } else {
             session()->flash('message', 'Invalid credentials');
             //return redirect(back());
+            $this->resetInputFields();
         }
     }
 

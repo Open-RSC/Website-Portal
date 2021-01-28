@@ -16,11 +16,11 @@
                 <a href="#">{{ Auth::user()->username }}</a>
                 <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 <ul>
-                    <li><a href="{{ route('logout') }}"
+                    <li><a href="{{ route('Logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                     </li>
                 </ul>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                <form id="logout-form" action="{{ route('Logout') }}" method="POST"
                       style="display: none;">
                     @csrf
                 </form>
