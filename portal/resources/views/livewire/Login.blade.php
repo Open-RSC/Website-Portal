@@ -103,7 +103,7 @@
                                         <b>Need an account?</b>
                                     </a>
                                     <span class="d-block">
-                                        Create a RuneScape account to access our game and secure services.
+                                        Create an Open RuneScape Classic account to access our games and secure services.
                                     </span>
                                 </div>
                             </td>
