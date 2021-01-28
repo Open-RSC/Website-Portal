@@ -51,25 +51,21 @@ class Login extends Component
         ]);
 
         $user = players::on($this->game)->where('username', $this->username)->first();
-        $salt = players::on($this->game)->where('salt', $this->username)->first();
 
+        $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $this->username));
         $form_pass = $this->pass;
-        if ($salt) {
+        if ($user->salt) {
             // accounts with old password compatibility
-            $form_pass = passwd_compat_hasher($form_pass, $salt);
+            $form_pass = passwd_compat_hasher($form_pass, $user->salt);
         }
 
-        if (Auth($this->game)->attempt(['username' => trim(preg_replace('/[-_.]/', ' ', $this->username)), 'pass' => bcrypt($form_pass)])) {
-            //return redirect(route('Home'));
+        if (Auth($this->game)->attempt(['username' => $trimmed_username, 'pass' => $form_pass])) {
             $this->resetInputFields();
-            session()->flash('success', 'Logged in successfully.');
-            //session()->regenerate();
-            return 'success';
+            session()->flash('success', 'Success');
+            session()->regenerate();
         } else {
             $this->resetInputFields();
             session()->flash('error', 'The password was not correct.');
-            return 'fail';
-            //return redirect(back());
         }
     }
 
