@@ -59,28 +59,15 @@ class Login extends Component
             $form_pass = passwd_compat_hasher($form_pass, $salt);
         }
 
-        /*$data = [
-            'username' => trim(preg_replace('/[-_.]/', ' ', $this->username)),
-            'pass' => bcrypt($form_pass),
-        ];*/
-
-        if (!$user) {
-            $this->resetInputFields();
-            session()->flash('message', 'Username does not exist');
-            return 'fail';
-            //return redirect(back());
-        }
-
-        if (Auth::attempt(['username' => trim(preg_replace('/[-_.]/', ' ', $this->username)), 'pass' => bcrypt($form_pass)])) {
-        //if (players::on($this->game)->find($data)) {
+        if (Auth($this->game)->attempt(['username' => trim(preg_replace('/[-_.]/', ' ', $this->username)), 'pass' => bcrypt($form_pass)])) {
             //return redirect(route('Home'));
             $this->resetInputFields();
-            session()->flash('message', 'Logged in successfully');
-            session()->regenerate();
+            session()->flash('success', 'Logged in successfully.');
+            //session()->regenerate();
             return 'success';
         } else {
             $this->resetInputFields();
-            session()->flash('message', 'Invalid credentials');
+            session()->flash('error', 'The password was not correct.');
             return 'fail';
             //return redirect(back());
         }

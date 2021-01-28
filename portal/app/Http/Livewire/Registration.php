@@ -88,22 +88,27 @@ class Registration extends Component
             'creation_ip' => $this->getClientIPaddress(),
         ];
 
-        players::on($this->game)->create($data);
+        try {
+            players::on($this->game)->create($data);
 
-        $user = players::on($this->game)->where('username', trim(preg_replace('/[-_.]/', ' ', $this->username)))->first();
+            $user = players::on($this->game)->where('username', trim(preg_replace('/[-_.]/', ' ', $this->username)))->first();
 
-        curstats::on($this->game)->create([
-            'playerID' => $user->id,
-            'hits' => 10
-        ]);
+            curstats::on($this->game)->create([
+                'playerID' => $user->id,
+                'hits' => 10
+            ]);
 
-        experience::on($this->game)->create([
-            'playerID' => $user->id,
-            'hits' => 4000
-        ]);
+            experience::on($this->game)->create([
+                'playerID' => $user->id,
+                'hits' => 4000
+            ]);
 
-        session()->flash('message', 'You have been successfully registered.');
+            session()->flash('success', 'The player was successfully registered.');
+            $this->resetInputFields();
 
-        $this->resetInputFields();
+        } catch (ValidationException $e) {
+            session()->flash('error', 'The player registration was unsuccessful.');
+            $this->resetInputFields();
+        }
     }
 }

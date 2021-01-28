@@ -23,21 +23,24 @@
                     </span>
                     <div class="pt-2"></div>
                     <center>
+                        @if (session()->has('success'))
+                            <div class="alert-success">
+                                {{ session('success') }}
+                            </div>
+                            <a class="c d-block" href="{{ route('Home') }}">Return home</a>
+                            <div class="pt-3"></div>
+                        @elseif (session()->has('error'))
+                            <div class="alert-danger">
+                                {{ session('error') }}
+                            </div>
+                            <a class="c d-block" href="{{ route('Home') }}">Return home</a>
+                            <div class="pt-3"></div>
+                        @endif
                         <table>
                             <tr>
                                 <td>
                                     <table>
                                         <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td>
-                                                @if (session()->has('message'))
-                                                    <div class="alert alert-success">
-                                                        {{ session('message') }}
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        </tr>
                                         <tr>
                                             <td class="text-right">
                                                 Select Game:

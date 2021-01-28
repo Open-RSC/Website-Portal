@@ -46,6 +46,16 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'preservation' => [
+            'driver' => 'session',
+            'provider' => 'preservation',
+        ],
+
+        'cabbage' => [
+            'driver' => 'session',
+            'provider' => 'cabbage',
+        ],
     ],
 
     /*
@@ -69,13 +79,19 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\players::class,
-            //'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'preservation' => [
+            'driver' => 'database',
+            'model' => App\Models\players::class,
+            'table' => 'openrsc.players',
+        ],
+
+        'cabbage' => [
+            'driver' => 'database',
+            'model' => App\Models\players::class,
+            'table' => 'cabbage.players',
+        ],
     ],
 
     /*
