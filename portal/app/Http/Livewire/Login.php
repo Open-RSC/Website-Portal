@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\players;
-use Illuminate\Support\Facades\Auth as Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use function App\Helpers\passwd_compat_hasher;
@@ -12,7 +12,7 @@ class Login extends Component
 {
     public $game = '';
     public $username = '';
-    public $password = '';
+    public $pass = '';
     public $honeyPasses = '';
     public $honeyInputs = '';
 
@@ -24,12 +24,12 @@ class Login extends Component
     protected array $rules = [
         'game' => 'required',
         'username' => 'bail|required|min:2|max:12',
-        'password' => 'bail|required|min:4|max:20',
+        'pass' => 'required|min:4|max:20',
     ];
 
     private function resetInputFields()
     {
-        $this->password = '';
+        $this->pass = '';
         $this->honeyPasses = '';
         $this->honeyInputs = '';
     }
@@ -42,40 +42,47 @@ class Login extends Component
         }
     }
 
-    public function login(): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    public function login()
     {
         $v = $this->validate([
             'game' => 'required',
-            'username' => 'bail|required|min:2|max:12',
-            'password' => 'bail|required|min:4|max:20',
+            'username' => ['bail', 'required', 'min:2', 'max:12', 'exists:' . $this->game . '.players'],
+            'pass' => ['required', 'min:2', 'max:20'],
         ]);
 
-        $data = [
-            'username' => trim(preg_replace('/[-_.]/', ' ', $this->username)),
-            'pass' => bcrypt($this->password),
-        ];
-
         $user = players::on($this->game)->where('username', $this->username)->first();
+        $salt = players::on($this->game)->where('salt', $this->username)->first();
+
+        $form_pass = $this->pass;
+        if ($salt) {
+            // accounts with old password compatibility
+            $form_pass = passwd_compat_hasher($form_pass, $salt);
+        }
+
+        /*$data = [
+            'username' => trim(preg_replace('/[-_.]/', ' ', $this->username)),
+            'pass' => bcrypt($form_pass),
+        ];*/
 
         if (!$user) {
-            session()->flash('message', 'Invalid credentials');
             $this->resetInputFields();
+            session()->flash('message', 'Username does not exist');
+            return 'fail';
             //return redirect(back());
         }
 
-        $form_pass = $this->password;
-        if ($user->salt) {
-            // accounts with old password compatibility
-            $form_pass = passwd_compat_hasher($form_pass, $user->salt);
-        }
-
-        if (auth()->attempt(['username' => $this->username, 'password' => $form_pass])) {
+        if (Auth::attempt(['username' => trim(preg_replace('/[-_.]/', ' ', $this->username)), 'pass' => bcrypt($form_pass)])) {
+        //if (players::on($this->game)->find($data)) {
             //return redirect(route('Home'));
-            session()->flash('message', 'Success');
-        } else {
-            session()->flash('message', 'Invalid credentials');
-            //return redirect(back());
             $this->resetInputFields();
+            session()->flash('message', 'Logged in successfully');
+            session()->regenerate();
+            return 'success';
+        } else {
+            $this->resetInputFields();
+            session()->flash('message', 'Invalid credentials');
+            return 'fail';
+            //return redirect(back());
         }
     }
 

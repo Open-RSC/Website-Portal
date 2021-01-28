@@ -13,6 +13,16 @@
                 <center>
                     <table>
                         <tr>
+                            <td></td>
+                            <td>
+                                @if (session()->has('message'))
+                                    <div class="alert alert-success">
+                                        {{ session('message') }}
+                                    </div>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="text-right">
                                 Select Game:
                             </td>
@@ -35,7 +45,7 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <input wire:model.lazy="username" aria-label="Username"
+                                    <input wire:model.defer="username" aria-label="Username"
                                            type="text" required class="text-dark">
                                     @error('username')
                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
@@ -49,9 +59,9 @@
                             </td>
                             <td>
                                 <label class="pl-1">
-                                    <input wire:model.lazy="password" aria-label="Password"
+                                    <input wire:model.defer="pass" aria-label="Password"
                                            type="password" required class="text-dark">
-                                    @error('password')
+                                    @error('pass')
                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
                                     @enderror
                                 </label>
