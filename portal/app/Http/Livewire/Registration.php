@@ -6,6 +6,7 @@ use App\Models\curstats;
 use App\Models\experience;
 use App\Models\players;
 use App\Rules\not_contains;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Registration extends Component
@@ -19,7 +20,7 @@ class Registration extends Component
     public $honeyPasses = '';
     public $honeyInputs = '';
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('livewire.Registration');
     }
@@ -44,7 +45,10 @@ class Registration extends Component
 
     public function updated($field)
     {
-        $this->validateOnly($field);
+        try {
+            $this->validateOnly($field);
+        } catch (ValidationException $e) {
+        }
     }
 
     public function getClientIPaddress()
