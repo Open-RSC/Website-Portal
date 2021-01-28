@@ -43,9 +43,9 @@ class Login extends Component
         }
     }
 
-    public function login()
+    public function authenticate()
     {
-        $v = $this->validate([
+        $this->validate([
             'game' => 'required',
             'username' => ['bail', 'required', 'min:2', 'max:12', 'exists:' . $this->game . '.players'],
             'password' => ['required', 'min:2', 'max:20'],
@@ -54,18 +54,24 @@ class Login extends Component
         $user = players::on($this->game)->where('username', $this->username)->first();
 
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $this->username));
+
         $form_pass = $this->password;
         if ($user->salt) {
             // accounts with old password compatibility
             $form_pass = passwd_compat_hasher($form_pass, $user->salt);
         }
 
-        //if (Auth($this->game)->attempt(['username' => $trimmed_username, 'password' => Hash::check($form_pass, $user->pass)])) {
-        if ($this->username = $trimmed_username and Hash::check($form_pass, $user->pass))
+        $credentials = [
+            'username' => $trimmed_username,
+            'pass' => $form_pass,
+        ];
+
+        if (Auth($this->game)->attempt($credentials))
+        //if ($this->username = $trimmed_username and Hash::check($form_pass, $user->pass))
         {
             $this->resetInputFields();
             session()->flash('success', 'Success');
-            //session()->regenerate();
+            session()->regenerate();
         } else {
             $this->resetInputFields();
             session()->flash('error', 'The password was not correct.');
@@ -76,5 +82,15 @@ class Login extends Component
     {
         Auth::logout();
         return redirect(route('Secure_Login'));
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username(): string
+    {
+        return 'username';
     }
 }
