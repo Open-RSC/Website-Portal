@@ -62,11 +62,14 @@ Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middlewar
 Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 
-Route::get('/register', 'Livewire\Registration')->name('Registration');
-Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha'])->name('Registration');
+Route::get('/register', 'Livewire\Registration')->name('Player_Registration');
+Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha'])->name('Player_Registration');
+
+Route::get('/login', 'Livewire\Login')->name('Secure_Login');
+Route::post('/login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha'])->name('Secure_Login');
 
 Route::namespace('Auth')->group(function () {
-    Route::get('/login', 'LoginController@show_login_form')->name('login');
-    Route::post('/login', 'LoginController@process_login')->name('login');
-    Route::post('/logout', 'LoginController@logout')->name('logout');
+    #Route::get('/login', 'LoginController@show_login_form')->name('login');
+    #Route::post('/login', 'LoginController@process_login')->name('login');
+    #Route::post('/logout', 'LoginController@logout')->name('logout');
 });

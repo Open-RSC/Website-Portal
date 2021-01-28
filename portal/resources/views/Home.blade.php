@@ -5,6 +5,29 @@
         There are currently {{ $online_count }} people playing!
     </span>
     <div class="pt-3"></div>
+
+    <ul class="menu">
+        <!-- Authentication Links -->
+        @guest
+            <li><a href="{{ route('Secure_Login') }}">{{ __('Secure Login') }}</a></li>
+        @else
+            <li>
+                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></label>
+                <a href="#">{{ Auth::user()->username }}</a>
+                <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                <ul>
+                    <li><a href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                    </li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                      style="display: none;">
+                    @csrf
+                </form>
+            </li>
+        @endguest
+    </ul>
+
     <table>
         <tbody>
         <tr>
@@ -151,14 +174,14 @@
                                         </td>
                                         <td style="width: 10px"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Registration') }}" class="c">
+                                            <a href="{{ route('Player_Registration') }}" class="c">
                                                 <img class="mx-auto" src="{{ asset('img/mm_player.jpg') }}" alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Registration') }}" class="c">
+                                                    <a href="{{ route('Player_Registration') }}" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
                                                              alt="">
                                                     </a>
@@ -178,7 +201,7 @@
                                             </table>
                                             Create an account for both the game and our website.
                                             <div class="d-block">
-                                                <a href="{{ route('Registration') }}" class="c">
+                                                <a href="{{ route('Player_Registration') }}" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
