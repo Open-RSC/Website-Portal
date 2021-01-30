@@ -1,8 +1,11 @@
 @extends('template')
 @section('content')
     <div class="logo" role="banner"></div>
-    <span class="online-count" style="font-size: 14px;">
-        There are currently {{ $online_count }} people playing!
+    <span class="d-block online-count" style="font-size: 14px;">
+        There are currently {{ $online_count }} people on RSC Preservation and RSC Cabbage.
+    </span>
+    <span class="d-block online-count" style="font-size: 14px;">
+        There are currently {{ $online_count+10 }} cyborgs on radioactive RSC Uranium and RSC Coleslaw.
     </span>
     <div class="pt-3"></div>
 
