@@ -15,7 +15,7 @@ class HomeController extends Controller
                 ['t.topic_status', '=', '0'], // topic not locked or deleted
                 ['p.post_visibility', '=', '1'], // post not deleted and is visible
             ])
-            ->orderBy('p.post_time', 'desc')
+            ->orderBy('t.topic_time', 'desc')
             ->limit(5)
             ->get();
 

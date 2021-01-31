@@ -74,14 +74,14 @@
                                                         <a class="c"
                                                            href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
                                                             @php
-                                                                echo Str::limit(strip_tags($news->post_subject), 40);
+                                                                echo Str::limit(strip_tags($news->post_subject), 37);
                                                             @endphp
                                                         </a>
                                                     </td>
                                                     <td class="w-25">
                                                             <span class="text-white float-right">
                                                                 @php
-                                                                    $timestamp = $news->post_time;
+                                                                    $timestamp = $news->topic_time;
                                                                     $dt = new DateTime();
                                                                     echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
                                                                 @endphp
