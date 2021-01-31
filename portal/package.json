@@ -22,7 +22,6 @@
         "lodash": "^4.17.20",
         "postcss": "^8.2.4",
         "postcss-import": "^14.0.0",
-        "resolve-url-loader": "^3.1.2",
         "sass": "^1.32.4",
         "sass-loader": "^10.1.1",
         "tailwindcss": "^2.0.2"
@@ -31,6 +30,7 @@
         "@fontsource/exo-2": "^4.1.0",
         "@fortawesome/fontawesome-free": "^5.15.2",
         "@popperjs/core": "^2.6.0",
-        "popper.js": "^1.16.1"
+        "popper.js": "^1.16.1",
+        "source-map-resolve": "^0.6.0"
     }
 }
