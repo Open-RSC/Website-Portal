@@ -51,7 +51,7 @@ clear-backups:
 	find $(MYSQL_DUMPS_DIR)/*.zip -mtime +${days} -exec rm -f {} \;
 
 update-laravel:
-	docker exec -i php bash -c "cd /var/www/html/portal && composer install && composer update && composer dump-autoload && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix && npm install -g npm"
+	docker exec -i php bash -c "cd /var/www/html/portal && composer install && composer update && composer dump-autoload && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix"
 
 clear-all-laravel:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan view:clear && php artisan route:clear && php artisan config:cache && php artisan livewire:discover"
