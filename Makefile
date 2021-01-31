@@ -107,3 +107,7 @@ livewire:
 # Usage: make generate-model name=phpbb_topics
 generate-model:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan krlove:generate:model ${name} --table-name ${name}"
+
+# Generates passport keys
+generate-passport:
+	docker exec -it php bash -c "cd /var/www/html/portal && php artisan passport:keys --force"

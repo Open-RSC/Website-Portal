@@ -51,9 +51,8 @@ class Login extends Component
             'password' => ['required', 'min:2', 'max:20'],
         ]);
 
-        $user = players::on($this->game)->where('username', $this->username)->first();
-
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $this->username));
+        $user = players::on($this->game)->where('username', $trimmed_username)->first();
 
         $form_pass = $this->password;
         if ($user->salt) {
@@ -66,31 +65,23 @@ class Login extends Component
             'pass' => $form_pass,
         ];
 
-        if (Auth($this->game)->attempt($credentials))
-        //if ($this->username = $trimmed_username and Hash::check($form_pass, $user->pass))
-        {
-            $this->resetInputFields();
-            session()->flash('success', 'Success');
-            session()->regenerate();
-        } else {
-            $this->resetInputFields();
-            session()->flash('error', 'The password was not correct.');
+        if (!$user || !Hash::check($this->password, $user->pass)) {
+            throw ValidationException::withMessages([
+                'password' => ['The provided credentials are incorrect'],
+            ]);
         }
+
+        //return $user->createToken($this->device_name)->plainTextToken;
+
+        $this->resetInputFields();
+        session()->flash('success', 'Success');
+        //session()->regenerate();
+        //return redirect()->route('Home');
     }
 
     public function logout(): \Illuminate\Http\RedirectResponse
     {
         Auth::logout();
         return redirect(route('Secure_Login'));
-    }
-
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username(): string
-    {
-        return 'username';
     }
 }
