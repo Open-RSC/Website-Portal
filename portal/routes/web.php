@@ -33,7 +33,7 @@ Route::get('/minigame_list', 'QuestController@minigame_list')->name('minigame_li
 
 // Player pages
 Route::get('/player/{subpage}', 'PlayerController@index')->name('player');
-Route::get('/player/shar/bank', 'PlayerController@shar')->name('bank');
+Route::get('/player/shar/bank', 'PlayerController@shar')->name('sharbank');
 Route::get('/player/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('bank');
 Route::get('/player/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
 
