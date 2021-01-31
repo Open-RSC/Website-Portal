@@ -54,18 +54,19 @@ class Login extends Component
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $this->username));
         $user = players::on($this->game)->where('username', $trimmed_username)->first();
 
-        $form_pass = $this->password;
         if ($user->salt) {
             // accounts with old password compatibility
-            $form_pass = passwd_compat_hasher($form_pass, $user->salt);
+            $trimmed_pass = passwd_compat_hasher(trim($this->password), $user->salt);
+        } else {
+            $trimmed_pass = trim($this->password);
         }
 
         $credentials = [
             'username' => $trimmed_username,
-            'pass' => $form_pass,
+            'pass' => $trimmed_pass,
         ];
 
-        if (!$user || !Hash::check($this->password, $user->pass)) {
+        if (!$user || !Hash::check($trimmed_pass, $user->pass)) {
             throw ValidationException::withMessages([
                 'password' => ['The provided credentials are incorrect'],
             ]);
