@@ -115,10 +115,6 @@ a:hover { color: #D31141; }
 
 }
 
-.post:target h3 a {
-
-}
-
 .bg1 {
 	background-color: #ECF3F7;
 }
@@ -675,7 +671,6 @@ Colours and backgrounds for buttons.css
 .phpbb_website-icon					{ background-position: -40px 0; }
 .phpbb_youtube-icon					{ background-position: -98px 0; }
 .phpbb_facebook-icon				{ background-position: -119px 0; }
-.phpbb_googleplus-icon				{ background-position: -140px 0; }
 .phpbb_skype-icon					{ background-position: -161px 0; }
 .phpbb_twitter-icon					{ background-position: -203px 0; }
 .phpbb_yahoo-icon					{ background-position: -224px 0; }

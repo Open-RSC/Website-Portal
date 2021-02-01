@@ -14,7 +14,7 @@ html, body, .headerbar p, .copyright, ul.topiclist li, .panel, label, dd label, 
 
 
 /* Light bg colours */
-.headerbar, .navbar, .forabg, .forumbg, li.row, .bg1, .bg2, .bg3, .tabs .activetab > a, .tabs a:hover, ul.cplist, .panel, blockquote blockquote, .dropdown .dropdown-contents, .jumpbox-cat-link, .jumpbox-sub-link, .jumpbox-forum-link, .cp-main .message-box textarea {
+.headerbar, .navbar, .forabg, .forumbg, li.row, .bg1, .bg2, .bg3, .tabs .activetab > a, .tabs a:hover, ul.cplist, .panel, blockquote blockquote, .dropdown .dropdown-contents, .jumpbox-cat-link, .jumpbox-sub-link, .jumpbox-forum-link, .cp-main .message-box textarea, fieldset.quick-login input.inputbox {
 	background: #242a36 !important;
 }
 
@@ -43,7 +43,7 @@ html, body, .wrap, .panel-container .panel, .navigation .active-subsection a, .n
 }
 
 /* button hover */
-.button:hover, a.button1:hover, input.button1:hover, a.button2:hover, input.button2:hover, input.button3:hover {
+.button:hover, a.button1:hover, input.button1:hover, a.button2:hover, input.button2:hover, input.button3:hover,  .search-results li:hover, .search-results li.active {
 	background: rgba(255,255,255,0.2);
 }
 
@@ -130,7 +130,7 @@ dl.row-item {
 	font-family: FontAwesome;
 	text-align: center;
 	position: absolute;
-	left: 9px;
+	left: 5px;
 	top: 4px;
 	width: 32px;
 	height: 32px;
@@ -144,7 +144,7 @@ dl.row-item {
 .global_read_mine:after, .global_read_locked_mine:after, .global_unread_mine:after, .global_unread_locked_mine:after, .announce_read_mine:after, .announce_read_locked_mine:after, .announce_unread_mine:after, .announce_unread_locked_mine:after, .sticky_read_mine:after, .sticky_read_locked_mine:after, .sticky_unread_mine:after, .sticky_unread_locked_mine:after, .topic_read_mine:after, .topic_read_hot_mine:after, .topic_unread_mine:after, .topic_unread_hot_mine:after, .topic_read_locked_mine:after, .topic_unread_locked_mine:after {
 	position: absolute;
 	top: 6px;
-	left: 35px;
+	left: 30px;
 	font-family: FontAwesome;
 	content: "\f005";
 	font-size: 7px;

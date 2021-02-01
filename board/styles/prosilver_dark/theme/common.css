@@ -482,6 +482,11 @@ a.header-avatar span:after {
 	padding: 5px;
 }
 
+/* ajax memerlist search */
+ul.search-results li {
+	padding: 5px !important;
+}
+
 .jumpbox {
 	margin: 5px 0;
 }
