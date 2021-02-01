@@ -11,18 +11,23 @@ use function App\Helpers\passwd_compat_hasher;
 
 class Login extends Component
 {
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
     public $game = '';
     public $username = '';
     public $password = '';
     public $honeyPasses = '';
     public $honeyInputs = '';
 
-    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function render()
     {
         return view('livewire.Login');
     }
 
-    protected array $rules = [
+    protected $rules = [
         'game' => 'required',
         'username' => 'bail|required|min:2|max:12',
         'password' => 'required|min:4|max:20',
@@ -80,7 +85,7 @@ class Login extends Component
         //return redirect()->route('Home');
     }
 
-    public function logout(): \Illuminate\Http\RedirectResponse
+    public function logout()
     {
         Auth::logout();
         return redirect(route('Secure_Login'));

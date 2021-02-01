@@ -17,7 +17,7 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function show_login_form(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show_login_form()
     {
         return view('secure.login');
     }
@@ -36,7 +36,7 @@ class LoginController extends Controller
 
         if (!$user) {
             session()->flash('message', 'Invalid credentials');
-            return redirect()->back();
+            return redirect(back());
         }
 
         $form_pass = $request['password'];
@@ -47,20 +47,20 @@ class LoginController extends Controller
 
         if (auth()->attempt(['username' => $request['username'], 'password' => $form_pass])) {
 
-            return redirect()->route('home');
+            return redirect(route('Home'));
 
         } else {
             session()->flash('message', 'Invalid credentials');
-            return redirect()->back();
+            return redirect(back());
         }
     }
 
-    public function show_signup_form(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show_signup_form()
     {
         return view('secure.Choose_a_username');
     }
 
-    public function process_signup(Request $request): \Illuminate\Http\RedirectResponse
+    public function process_signup(Request $request)
     {
         $request->validate([
             'username' => 'required|min:3|max:12|unique:cabbage.players',
@@ -93,14 +93,14 @@ class LoginController extends Controller
 
         session()->flash('message', 'Your account is created');
 
-        return redirect()->route('login');
+        return redirect(route('Secure_Login'));
     }
 
-    public function logout(): \Illuminate\Http\RedirectResponse
+    public function logout()
     {
         Auth::logout();
 
-        return redirect()->route('login');
+        return redirect(route('Secure_Login'));
     }
 
     public function username(): string
