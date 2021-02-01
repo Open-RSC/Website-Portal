@@ -90,15 +90,6 @@ RUN echo "* * * * * root php /var/www/artisan schedule:run >> /dev/null 2>&1" >>
 RUN chmod 0644 /etc/cron.d/laravel-schedule
 
 #####################################
-# Security Checker:
-#####################################
-
-# Security Checker
-RUN wget http://get.sensiolabs.org/security-checker.phar
-RUN chmod +x security-checker.phar
-RUN mv security-checker.phar /usr/local/bin/security-checker
-
-#####################################
 # Node.js && Yarn:
 #####################################
 
