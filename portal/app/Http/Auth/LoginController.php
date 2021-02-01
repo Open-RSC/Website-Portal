@@ -2,8 +2,6 @@
 
 namespace App\Http\Auth;
 
-use App\Models\curstats;
-use App\Models\experience;
 use App\Models\players;
 use Illuminate\Support\Facades\Auth as Auth;
 use Illuminate\Http\Request;
@@ -12,6 +10,12 @@ use function App\Helpers\passwd_compat_hasher;
 
 class LoginController extends Controller
 {
+    public $game = '';
+    public $username = '';
+    public $password = '';
+    public $honeyPasses = '';
+    public $honeyInputs = '';
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -22,21 +26,18 @@ class LoginController extends Controller
         return view('secure.login');
     }
 
-    public function process_login(Request $request): \Illuminate\Http\RedirectResponse
+    public function process_login(Request $request)
     {
         $request->validate([
-            'username' => 'required|min:3|max:12|unique:cabbage.players',
-            'email' => 'required|min:6|max:255',
-            'password' => 'required|min:4|max:20',
+            'username' => 'required|string|min:3|max:16',
+            'password' => 'required|min:4|max:16'
         ]);
 
-        $credentials = $request->except(['_token']);
-
-        $user = players::where('username', $request->username)->first();
+        $user = players::on($request->game)->where('username', trim(preg_replace('/[-_.]/', ' ', $request->username)))->first();
 
         if (!$user) {
             session()->flash('message', 'Invalid credentials');
-            return redirect(back());
+            return redirect()->back();
         }
 
         $form_pass = $request['password'];
@@ -46,61 +47,21 @@ class LoginController extends Controller
         }
 
         if (auth()->attempt(['username' => $request['username'], 'password' => $form_pass])) {
+        //if (auth()->attempt(['username' => $request['username'], 'password' => $form_pass])) {
 
-            return redirect(route('Home'));
+            return redirect()->route('Home');
 
         } else {
             session()->flash('message', 'Invalid credentials');
-            return redirect(back());
-        }
-    }
-
-    public function show_signup_form()
-    {
-        return view('secure.Choose_a_username');
-    }
-
-    public function process_signup(Request $request)
-    {
-        $request->validate([
-            'username' => 'required|min:3|max:12|unique:cabbage.players',
-            'email' => 'required|min:6|max:255',
-            'password' => 'required|min:4|max:20',
-        ]);
-
-        $user = players::where('username', $request->username)->first();
-
-        if ($user) {
-            session()->flash('message', 'Username already taken!');
             return redirect()->back();
         }
-
-        $user = players::create([
-            'username' => trim($request->input('username')),
-            'email' => strtolower($request->input('email')),
-            'pass' => bcrypt($request->input('password')),
-        ]);
-
-        curstats::create([
-            'playerID' => $user->id,
-            'hits' => 10
-        ]);
-
-        experience::create([
-            'playerID' => $user->id,
-            'hits' => 4000
-        ]);
-
-        session()->flash('message', 'Your account is created');
-
-        return redirect(route('Secure_Login'));
     }
 
-    public function logout()
+    public function logout(): \Illuminate\Http\RedirectResponse
     {
         Auth::logout();
 
-        return redirect(route('Secure_Login'));
+        return redirect()->route('Secure_Login');
     }
 
     public function username(): string
