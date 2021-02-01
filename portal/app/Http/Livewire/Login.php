@@ -61,23 +61,12 @@ class Login extends Component
             $trimmed_pass = trim($this->password);
         }
 
-        $credentials = [
-            'username' => $trimmed_username,
-            'pass' => $trimmed_pass,
-        ];
+        if (auth()->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+            return redirect()->route('Home');
 
-        if (!$user || !Hash::check($trimmed_pass, $user->pass)) {
-            throw ValidationException::withMessages([
-                'password' => ['The provided credentials are incorrect'],
-            ]);
+        } else {
+            session()->flash('error', 'Invalid credentials');
         }
-
-        //return $user->createToken($this->device_name)->plainTextToken;
-
-        $this->resetInputFields();
-        session()->flash('success', 'Success');
-        //session()->regenerate();
-        //return redirect()->route('Home');
     }
 
     public function logout()

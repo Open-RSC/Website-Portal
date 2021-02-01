@@ -65,15 +65,7 @@ Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth')->nam
 Route::get('/register', 'Livewire\Registration')->name('Player_Registration');
 Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
-//Route::get('/login', 'Livewire\Login')->name('Secure_Login');
-//Route::post('/login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
-//Route::post('/logout', 'Livewire\Login@logout')->name('Logout');
-
-Route::namespace('Auth')->group(function () {
-    Route::get('/login', 'LoginController@show_login_form')->name('Secure_Login');
-    Route::post('/login', 'LoginController@process_login');
-    //Route::get('/register', 'LoginController@show_signup_form')->name('register');
-    //Route::post('/register', 'LoginController@process_signup');
-    Route::post('/logout', 'LoginController@logout')->name('Logout');
-});
+Route::get('/login', 'Livewire\Login')->name('Secure_Login');
+Route::post('/login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
+Route::post('/logout', 'Livewire\Login@logout')->name('Logout');
 
