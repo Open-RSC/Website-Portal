@@ -11,11 +11,6 @@ use function App\Helpers\passwd_compat_hasher;
 
 class Login extends Component
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
-
     public $game = '';
     public $username = '';
     public $password = '';
