@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\cabbage;
 use App\Models\players;
+use App\Models\preservation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -51,6 +53,7 @@ class Login extends Component
         ]);
 
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $this->username));
+
         $user = players::on($this->game)->where('username', $trimmed_username)->first();
 
         if ($user->salt) {
@@ -60,11 +63,18 @@ class Login extends Component
             $trimmed_pass = trim($this->password);
         }
 
-        if (auth('cabbage')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
-            return redirect(route('Home'));
-
-        } else {
-            session()->flash('error', 'Invalid credentials');
+        if ($this->game == 'cabbage') {
+            if (Auth::guard('cabbage')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                return redirect(route('Home'));
+            } else {
+                session()->flash('error', 'Invalid credentials');
+            }
+        } elseif ($this->game == 'preservation') {
+            if (Auth::guard('preservation')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                return redirect(route('Home'));
+            } else {
+                session()->flash('error', 'Invalid credentials');
+            }
         }
     }
 

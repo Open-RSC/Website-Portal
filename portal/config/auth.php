@@ -78,7 +78,7 @@ return [
     'providers' => [
         'user' => [
             'driver' => 'eloquent',
-            'model' => App\Models\cabbage::class,
+            'model' => App\Models\players::class,
         ],
 
         'preservation' => [
@@ -110,6 +110,20 @@ return [
     'passwords' => [
         'user' => [
             'provider' => 'user',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'preservation' => [
+            'provider' => 'preservation',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'cabbage' => [
+            'provider' => 'cabbage',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
