@@ -58,7 +58,6 @@ class cabbage extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $connection = 'cabbage';
     protected $table = 'players';
     public $primaryKey = 'id';
 
@@ -83,4 +82,16 @@ class cabbage extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function getAuthPassword(): string
+    {
+        return $this->pass; // case sensitive
+    }
+
+    public function setDbConnection(string $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    public $connection = 'cabbage';
 }

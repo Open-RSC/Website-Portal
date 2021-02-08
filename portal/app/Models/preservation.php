@@ -58,7 +58,6 @@ class preservation extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $connection = 'preservation';
     protected $table = 'players';
     public $primaryKey = 'id';
 
@@ -83,4 +82,16 @@ class preservation extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function getAuthPassword(): string
+    {
+        return $this->pass; // case sensitive
+    }
+
+    public function setDbConnection(string $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    public $connection = 'preservation';
 }

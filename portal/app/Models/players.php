@@ -92,4 +92,6 @@ class players extends Authenticatable
     {
         $this->connection = $connection;
     }
+
+    //public $connection = 'cabbage';
 }

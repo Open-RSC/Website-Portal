@@ -61,7 +61,7 @@ class Login extends Component
         }
 
         if (auth('cabbage')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
-            return redirect()->route('Home');
+            return redirect(route('Home'));
 
         } else {
             session()->flash('error', 'Invalid credentials');
