@@ -73,7 +73,7 @@
                             <td></td>
                             <td>
                                 <input type="hidden" name="remember" value="true">
-                                <x-honey recaptcha="login"/>
+                                <!--<x-honey recaptcha="login"/>-->
                             </td>
                         </tr>
                         <tr>

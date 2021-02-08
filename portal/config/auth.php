@@ -82,15 +82,13 @@ return [
         ],
 
         'preservation' => [
-            'driver' => 'database',
-            'model' => App\Models\players::class,
-            'table' => 'openrsc.players',
+            'driver' => 'eloquent',
+            'model' => App\Models\preservation::class,
         ],
 
         'cabbage' => [
-            'driver' => 'database',
-            'model' => App\Models\players::class,
-            'table' => 'cabbage.players',
+            'driver' => 'eloquent',
+            'model' => App\Models\cabbage::class,
         ],
     ],
 

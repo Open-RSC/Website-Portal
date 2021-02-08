@@ -54,10 +54,11 @@ use Illuminate\Notifications\Notifiable;
  * @property int $lastRecoveryTryId
  * @property int $transfer
  */
-class players extends Authenticatable
+class cabbage extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $connection = 'cabbage';
     protected $table = 'players';
     public $primaryKey = 'id';
 

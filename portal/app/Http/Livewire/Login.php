@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\players;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use function App\Helpers\passwd_compat_hasher;
@@ -61,9 +60,8 @@ class Login extends Component
             $trimmed_pass = trim($this->password);
         }
 
-        if (auth()->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
-            return redirect()->route('Home');
-
+        if (auth($this->game)->attempt(['username' => $trimmed_username, 'password' => $this->password])) {
+            return redirect(route('Home'));
         } else {
             session()->flash('error', 'Invalid credentials');
         }
