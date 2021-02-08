@@ -82,4 +82,14 @@ class players extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function getAuthPassword(): string
+    {
+        return $this->pass; // case sensitive
+    }
+
+    public function setDbConnection(string $connection)
+    {
+        $this->connection = $connection;
+    }
 }
