@@ -80,7 +80,7 @@ class cabbage extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'remember_token',
     ];
 
     public function getAuthPassword(): string

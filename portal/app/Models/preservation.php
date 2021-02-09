@@ -58,6 +58,8 @@ class preservation extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $guard = 'preservation';
+
     protected $table = 'players';
     public $primaryKey = 'id';
 

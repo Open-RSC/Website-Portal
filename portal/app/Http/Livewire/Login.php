@@ -65,12 +65,14 @@ class Login extends Component
 
         if ($this->game == 'cabbage') {
             if (Auth::guard('cabbage')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                session()->regenerate();
                 return redirect(route('Home'));
             } else {
                 session()->flash('error', 'Invalid credentials');
             }
         } elseif ($this->game == 'preservation') {
             if (Auth::guard('preservation')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                session()->regenerate();
                 return redirect(route('Home'));
             } else {
                 session()->flash('error', 'Invalid credentials');
