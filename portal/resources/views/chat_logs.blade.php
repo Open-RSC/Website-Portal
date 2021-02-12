@@ -2,6 +2,9 @@
 
 @section('content')
 
-Protected zone
+    @unless (Auth::check())
+        You are not signed in.
+    @endunless
 
+    Protected zone
 @endsection
