@@ -21,7 +21,7 @@ return [
     'features' => [
         Features::spammerIpTracking(),
         Features::blockSpammersGlobally(),
-//        Features::neverGonnaGiveYouUp(),
+        Features::neverGonnaGiveYouUp(),
     ],
 
     /**
@@ -36,7 +36,7 @@ return [
      */
     'environments' => [
         'production',
-        'local'
+//        'local'
     ],
 
     /**
