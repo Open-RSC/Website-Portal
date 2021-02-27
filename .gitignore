@@ -55,3 +55,6 @@ etc/letsencrypt/accounts/
 backups/*.zip
 
 !*/vendor/livewire/livewire/src/LivewireServiceProvider.php
+*.log
+
+board/ext/phpbb/viglink/
