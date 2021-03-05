@@ -37,7 +37,6 @@ sql/tmp/
 
 avatars/
 
-board/cache/production
 old_site
 portal/cache
 portal/tmp

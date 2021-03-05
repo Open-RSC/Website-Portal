@@ -14,12 +14,12 @@ html, body, .headerbar p, .copyright, ul.topiclist li, .panel, label, dd label, 
 
 
 /* Light bg colours */
-.headerbar, .navbar, .forabg, .forumbg, li.row, .bg1, .bg2, .bg3, .tabs .activetab > a, .tabs a:hover, ul.cplist, .panel, blockquote blockquote, .dropdown .dropdown-contents, .jumpbox-cat-link, .jumpbox-sub-link, .jumpbox-forum-link, .cp-main .message-box textarea, fieldset.quick-login input.inputbox {
+.headerbar, .navbar, .forabg, .forumbg, li.row, .bg1, .bg2, .bg3, .tabs .activetab > a, .tabs a:hover, ul.cplist, .panel, blockquote blockquote, .panel blockquote, .panel blockquote blockquote blockquote, .panel .codebox, .dropdown .dropdown-contents, .jumpbox-cat-link, .jumpbox-sub-link, .jumpbox-forum-link, .cp-main .message-box textarea, fieldset.quick-login input.inputbox {
 	background: #242a36 !important;
 }
 
 /* Dark bg colours */
-html, body, .wrap, .panel-container .panel, .navigation .active-subsection a, .navigation a:hover, .cp-mini, .codebox, blockquote, blockquote blockquote blockquote, .attachbox, .message-box textarea, .phpbb_alert, select, .minitabs a:hover, .minitabs .activetab > a, .minitabs .activetab > a:hover, .cp-main .pm, .bg3 .topicreview .bg2, .bg3 .topicreview .bg1 {
+html, body, .wrap, .panel-container .panel, .navigation .active-subsection a, .navigation a:hover, .cp-mini, .codebox, blockquote, blockquote blockquote blockquote, .panel blockquote blockquote, .attachbox, .message-box textarea, .phpbb_alert, select, .minitabs a:hover, .minitabs .activetab > a, .minitabs .activetab > a:hover, .cp-main .pm, .bg3 .topicreview .bg2, .bg3 .topicreview .bg1 {
 	background-color: #171b24 !important;
 }
 
@@ -52,7 +52,7 @@ html, body, .wrap, .panel-container .panel, .navigation .active-subsection a, .n
 
 
 /* Super subtle borders */
-.forumbg, .forabg, .navbar, .headerbar, .post, .bg3  {
+.forumbg, .forabg, .navbar, .headerbar, .post, .bg3, .panel blockquote, .panel blockquote, .panel .codebox  {
 	border: 1px solid rgba(255,255,255,0.04);
 }
 
