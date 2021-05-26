@@ -106,6 +106,9 @@ npm-run-prod:
 npm-run-watch:
 	docker exec -i php bash -c "cd /var/www/html/portal && npm run watch"
 
+npm-audit-fix:
+	docker exec -it php bash -c "cd /var/www/html/portal && npm audit fix --force"
+
 livewire-discover:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan livewire:discover"
 
