@@ -4,7 +4,7 @@ start:
 	docker-compose up -d
 
 start-prod:
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose-prod.yml up -d
 
 stop:
 	@docker-compose down -v
@@ -15,7 +15,7 @@ restart:
 
 restart-prod:
 	@docker-compose down -v
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose-prod.yml up -d
 
 ps:
 	docker-compose ps
