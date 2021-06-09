@@ -4,18 +4,69 @@
     <span class="d-block online-count" style="font-size: 14px;">
         There are {{ $online_count }} people on RSC Preservation and Cabbage
     </span>
-    <span class="d-block online-count" style="font-size: 14px;">
-        There are {{ $online_count+10 }} cyborgs on RSC Uranium and Coleslaw
-    </span>
+
+    <div style="text-align: center;">
+        <table width="500" bgcolor="black" cellpadding="4" border="0"
+               style="font-size: 14px; font-family: Arial,Helvetica,sans-serif;">
+            <tr>
+                <td class="e">
+                    <div style="text-align: center;">
+                        <b>Anyone can play on the Worlds below</b>
+                        <br>Each world can hold up to 2000 players
+                        <br><br>
+                        <table style="font-size: 12px; font-family: Arial,Helvetica,sans-serif;">
+                            <tr valign="top">
+                                <td align="center" width="300">
+                                    <table>
+                                        <tr>
+                                            <td colspan="2">
+                                                <img align="absmiddle" src="{{ asset('img/usflag.gif') }}" width="30"
+                                                     height="15" border="0"> Raleigh
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="center"><a
+                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                        href="/download">RSC Preservation</a></td>
+                                            <td align="right">2 players</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="center"><a
+                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                        href="/download">RSC Cabbage</a></td>
+                                            <td align="right">3 players</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="center"><a
+                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                        href="/download">RSC Uranium</a></td>
+                                            <td align="right">424 cyborgs</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="center"><a
+                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                        href="/download">RSC Coleslaw</a></td>
+                                            <td align="right">15 cyborgs</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="pt-3"></div>
 
     <ul class="menu">
-        <!-- Authentication Links -->
         @guest
             <li><a href="{{ route('Secure_Login') }}">{{ __('Secure Login') }}</a></li>
         @else
             <li>
-                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></label>
+                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i
+                            class="fas fa-caret-down"></i></label>
                 <a href="#">{{ Auth::user()->username }}</a>
                 <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 <ul>
@@ -35,7 +86,6 @@
         <tbody>
         <tr>
             <td>
-                <!--stones border top-->
                 <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
@@ -45,7 +95,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--stones content-->
                 <table background="{{ asset('img/fm_middle.gif') }}"
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
@@ -61,7 +110,7 @@
                                 <tbody>
                                 <tr class="align-top">
                                     <td style="width: 100px;">
-                                        <a href="http://board.localhost/viewforum.php?f=2">
+                                        <a href="board/viewforum.php?f=2">
                                             <img class="mx-auto" src="{{ asset('img/mm_scroll.jpg') }}" alt="">
                                         </a>
                                     </td>
@@ -72,7 +121,7 @@
                                                     <td class="w-75">
                                                         <!-- News subject -->
                                                         <a class="c"
-                                                           href="http://board.localhost/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                           href="board/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
                                                             @php
                                                                 echo Str::limit(strip_tags($news->post_subject), 37);
                                                             @endphp
@@ -97,14 +146,13 @@
                                 </tbody>
                             </table>
                             <div class="text-center pb-2">To view a full list of news and updates,
-                                <a href="http://board.localhost/viewforum.php?f=2" class="c">click here</a>.
+                                <a href="/board/viewforum.php?f=2" class="c">click here</a>.
                             </div>
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <!--stones border bottom-->
                 <table style="padding: 0;">
                     <tbody>
                     <tr>
@@ -115,7 +163,6 @@
                     </tbody>
                 </table>
                 <div class="pb-3"></div>
-                <!--stones border top-->
                 <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
@@ -132,7 +179,7 @@
                     <tr>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <center>
+                            <div style="text-align: center;">
                                 <div class="pb-3"></div>
                                 <!--table to contain options-->
                                 <table>
@@ -357,15 +404,13 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <!--end options container-->
-                            </center>
+                            </div>
                             <div class="pb-3"></div>
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <!--stones border bottom-->
                 <table style="padding: 0;">
                     <tbody>
                     <tr>
@@ -375,8 +420,8 @@
                     </tr>
                     </tbody>
                 </table>
-                <div class="pb-3"></div>
-                <!--stones border top-->
+
+            <!--<div class="pb-3"></div>
                 <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
@@ -386,14 +431,13 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--stones content-->
                 <table background="{{ asset('img/fm_middle.gif') }}"
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <center>
+                            <div style="text-align: center;">
                                 <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Latest Poll</b>
@@ -414,13 +458,12 @@
                                     </tbody>
                                 </table>
                                 <div class="pb-3"></div>
-                            </center>
+                            </div>
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <!--stones border bottom-->
                 <table style="padding: 0;">
                     <tbody>
                     <tr>
@@ -429,9 +472,9 @@
                         </td>
                     </tr>
                     </tbody>
-                </table>
+                </table>-->
+
                 <div class="pb-3"></div>
-                <!--stones border top-->
                 <table style="padding: 0; background-color: black;">
                     <tbody>
                     <tr>
@@ -441,19 +484,17 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--stones content-->
                 <table background="{{ asset('img/fm_middle.gif') }}"
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <center>
+                            <div style="text-align: center;">
                                 <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Secure Services</b>
                                 <div class="pb-3"></div>
-                                <!--table to contain options-->
                                 <table>
                                     <tbody>
                                     <tr class="align-top">
@@ -684,15 +725,13 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <!--end options container-->
-                            </center>
+                            </div>
                             <div class="pb-3"></div>
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <!--stones border bottom-->
                 <table style="padding: 0;">
                     <tbody>
                     <tr>
@@ -702,8 +741,8 @@
                     </tr>
                     </tbody>
                 </table>
+
                 <div class="pb-3"></div>
-                <!--stones border top-->
                 <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
@@ -713,19 +752,17 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--stones content-->
                 <table background="{{ asset('img/fm_middle.gif') }}"
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <center>
+                            <div style="text-align: center;">
                                 <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
                                 <div class="pb-3"></div>
                                 <b>Manual</b>
                                 <div class="pb-3"></div>
-                                <!--table to contain options-->
                                 <table>
                                     <tbody>
                                     <tr class="align-top">
@@ -882,15 +919,13 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <!--end options container-->
-                            </center>
+                            </div>
                             <div class="pb-3"></div>
                         </td>
                         <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <!--stones border bottom-->
                 <table style="padding: 0;">
                     <tbody>
                     <tr>

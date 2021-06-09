@@ -1,4 +1,0 @@
-[submodule "retro"]
-	url = https://gitlab.com/open-runescape-classic/site.git
-[submodule "wiki/skins/Tweeki"]
-	url = https://github.com/thaider/Tweeki.git
