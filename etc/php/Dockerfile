@@ -1,4 +1,4 @@
-FROM php:8.0.1-fpm
+FROM php:fpm
 
 RUN apt-get update && \
     apt-get install -y --force-yes --no-install-recommends \
@@ -25,7 +25,11 @@ RUN apt-get update && \
         git \
         gnupg1 \
         gnupg2 \
-        gnupg
+        gnupg \
+        libicu-dev
+
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
 
 # Install the PHP mcrypt extention (from PECL, mcrypt has been removed from PHP 7.2)
 RUN pecl install mcrypt-1.0.4

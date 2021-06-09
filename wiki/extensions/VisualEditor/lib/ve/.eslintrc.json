@@ -1,0 +1,31 @@
+{
+	"root": true,
+	"extends": [
+		"wikimedia/client",
+		"wikimedia/jquery",
+		"wikimedia/mediawiki"
+	],
+	"globals": {
+		"ve": "writable",
+		"VisualEditorSupportCheck": "writable",
+		"OO": "readonly",
+		"unicodeJS": "readonly",
+		"RangeFix": "readonly",
+		"Papa": "readonly"
+	},
+	"rules": {
+		"no-jquery/no-extend": "error",
+		"no-jquery/no-hide": "error",
+		"no-jquery/no-show": "error",
+		"no-jquery/no-toggle": "error",
+		"mediawiki/msg-doc": "error",
+		"mediawiki/valid-package-file-require": "off",
+		"max-statements-per-line": [ "error", { "max": 1 } ],
+		"max-len": "off"
+	},
+	"plugins": [ "html" ],
+	"settings": {
+		"html/indent": "+tab",
+		"html/report-bad-indent": "error"
+	}
+}

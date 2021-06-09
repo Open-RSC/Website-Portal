@@ -27,11 +27,11 @@ $wgMetaNamespace = "Open_RSC_Wiki";
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "";
+$wgScriptPath = "/wiki";
 
 ## The protocol and server name to use in fully-qualified URLs
 ## $wgServer = "https://wiki.runescapeclassic.dev";
-$wgServer = "http://wiki.localhost";
+$wgServer = "http://localhost";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
@@ -96,7 +96,7 @@ $wgShowExceptionDetails = true;
 ## Set $wgCacheDirectory to a writable directory on the web server
 ## to make your wiki go slightly faster. The directory should not
 ## be publicly accessible from the web.
-#$wgCacheDirectory = "$IP/cache";
+$wgCacheDirectory = "$IP/cache";
 
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
@@ -130,48 +130,11 @@ $wgGroupPermissions['sysop']['edit'] = true;
 
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, ie 'vector', 'monobook':
-#$wgDefaultSkin = "Vector";
-$wgDefaultSkin = "Tweeki";
+$wgDefaultSkin = "vector";
 
 # Enabled skins.
 # The following skins were automatically enabled:
-require_once( "$IP/skins/Tweeki/Tweeki.php" );
-#wfLoadSkin( 'Vector' );
-
-$wgDefaultUserOptions['tweeki-advanced'] = 1;
-$wgTweekiSkinSpecialElements = [
-  'FIRSTHEADING' => 'self::renderFirstHeading', 
-  'TOC' => 'self::renderTOC', 
-  'SEARCH' => 'self::renderSearch', 
-  'LOGO' => 'self::renderLogo', 
-  'LOGIN-EXT' => 'self::renderLoginExt' 
-  ];
-$wgTweekiSkinUseAwesome = true;
-$wgTweekiSkinUseBootstrapTheme = true;
-$wgTweekiSkinCustomEditSectionLink = false;
-$wgTweekiSkinUseBtnParser = true;
-
-// make 'sidebar-right' hideable with the #tweekihide parser function
-// (used on the main page)
-$wgTweekiSkinHideable[] = 'sidebar-right'; 
-$wgTweekiSkinHideable = [ 'firstHeading' ];
-
-// hide for logged in users
-$wgTweekiSkinHideLoggedin = [ 'footer-custom' => true, 'LOGIN-EXT' => true ];
-
-// hide the edit button as well as the subnavigation (containing the toolbox 
-// and personal links for editors) for anonymous users
-$wgTweekiSkinHideAnon['EDIT-EXT'] = true;
-$wgTweekiSkinHideAnon['subnav'] = true;
-
-// hide for everyone
-$wgTweekiSkinHideAll['footer-icons'] = true;
-$wgTweekiSkinHideAll['footer'] = true; // hide the entire footer
-
-// use tooltip functionality
-$wgTweekiSkinUseTooltips = true;
-
-$wgTweekiSkinImagePageTOCTabs = true;
+wfLoadSkin( 'Vector' );
 
 # Enabled extensions. Most of the extensions are enabled by adding
 
@@ -203,7 +166,7 @@ $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = false;
 $wgGroupPermissions['bot'          ]['skipcaptcha'] = true; // registered bots
 $wgGroupPermissions['sysop'        ]['skipcaptcha'] = true;
 $wgGroupPermissions['emailconfirmed']['skipcaptcha'] = true;
-$ceAllowConfirmedEmail = true;
+$wgAllowConfirmedEmail = true;
 $wgCaptchaTriggers['edit'] = false; # Emergency mode set to true
 $wgCaptchaTriggers['create'] = false; # Emergency mode set to true
 $wgCaptchaTriggers['addurl'] = true;
