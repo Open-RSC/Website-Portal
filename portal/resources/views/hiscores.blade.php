@@ -69,7 +69,7 @@
                             </td>
                             <td class="col text-left">
 									<span>
-										{{ number_format((new App\Http\Controllers\HiscoresController)->totalXP($player)/4.0) }}
+										{{ number_format((new App\Http\HiscoresController)->totalXP($player)/4.0) }}
 									</span>
                             </td>
                             <td class="col-sm-3 text-right">

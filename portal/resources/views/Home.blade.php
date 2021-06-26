@@ -1,7 +1,7 @@
 @extends('template')
 @section('content')
     <div>
-        <img src="{{ asset('img/logo.png') }}" style="height: 120px;" alt="" />
+        <img src="{{ asset('img/logo.png') }}" style="height: 120px;" alt=""/>
     </div>
 
     <div class="d-block online-count" style="font-size: 14px;">
