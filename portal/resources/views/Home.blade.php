@@ -1,87 +1,34 @@
 @extends('template')
 @section('content')
-    <div class="logo" role="banner"></div>
-    <span class="d-block online-count" style="font-size: 14px;">
-        There are {{ $online_count }} people on RSC Preservation and Cabbage
-    </span>
-
-    <div style="text-align: center;">
-        <table width="500" bgcolor="black" cellpadding="4" border="0"
-               style="font-size: 14px; font-family: Arial,Helvetica,sans-serif;">
-            <tr>
-                <td class="e">
-                    <div style="text-align: center;">
-                        <b>Anyone can play on the Worlds below</b>
-                        <br>Each world can hold up to 2000 players
-                        <br><br>
-                        <table style="font-size: 12px; font-family: Arial,Helvetica,sans-serif;">
-                            <tr valign="top">
-                                <td align="center" width="300">
-                                    <table>
-                                        <tr>
-                                            <td colspan="2">
-                                                <img align="absmiddle" src="{{ asset('img/usflag.gif') }}" width="30"
-                                                     height="15" border="0"> Raleigh
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="center"><a
-                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                        href="/download">RSC Preservation</a></td>
-                                            <td align="right">2 players</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="center"><a
-                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                        href="/download">RSC Cabbage</a></td>
-                                            <td align="right">3 players</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="center"><a
-                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                        href="/download">RSC Uranium</a></td>
-                                            <td align="right">424 cyborgs</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="center"><a
-                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                        href="/download">RSC Coleslaw</a></td>
-                                            <td align="right">15 cyborgs</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div>
+        <img src="{{ asset('img/logo.png') }}" style="height: 120px;" alt="" />
     </div>
 
-    <div class="pt-3"></div>
+    <div class="d-block online-count" style="font-size: 14px;">
+        <ul class="menu">
+            @guest
+                <li><a href="{{ route('Secure_Login') }}">{{ __('Secure Login') }}</a></li>
+            @else
+                <li>
+                    <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i
+                                class="fas fa-caret-down"></i></label>
+                    <a href="#">{{ Auth::user()->username }}</a>
+                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    <ul>
+                        <li><a href="{{ route('Logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                        </li>
+                    </ul>
+                    <form id="logout-form" action="{{ route('Logout') }}" method="POST"
+                          style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+            @endguest
+        </ul>
+    </div>
 
-    <ul class="menu">
-        @guest
-            <li><a href="{{ route('Secure_Login') }}">{{ __('Secure Login') }}</a></li>
-        @else
-            <li>
-                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i
-                            class="fas fa-caret-down"></i></label>
-                <a href="#">{{ Auth::user()->username }}</a>
-                <input type="checkbox" id="drop-5" style="display: none !important;"/>
-                <ul>
-                    <li><a href="{{ route('Logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                    </li>
-                </ul>
-                <form id="logout-form" action="{{ route('Logout') }}" method="POST"
-                      style="display: none;">
-                    @csrf
-                </form>
-            </li>
-        @endguest
-    </ul>
-
+    <!--Latest news-->
     <table>
         <tbody>
         <tr>
@@ -99,7 +46,8 @@
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td>
                             <div class="pb-3"></div>
                             <span class="d-block text-center">
@@ -111,7 +59,9 @@
                                 <tr class="align-top">
                                     <td style="width: 100px;">
                                         <a href="board/viewforum.php?f=2">
-                                            <img class="mx-auto" src="{{ asset('img/mm_scroll.jpg') }}" alt="">
+                                            <img class="mx-auto"
+                                                 src="{{ asset('img/mm_scroll.jpg') }}"
+                                                 alt="">
                                         </a>
                                     </td>
                                     <td style="width: 350px">
@@ -145,11 +95,13 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="text-center pb-2">To view a full list of news and updates,
+                            <div class="text-center pb-2">To view a full list of news and
+                                updates,
                                 <a href="/board/viewforum.php?f=2" class="c">click here</a>.
                             </div>
                         </td>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -162,7 +114,113 @@
                     </tr>
                     </tbody>
                 </table>
+
                 <div class="pb-3"></div>
+
+                <!--World list-->
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <table style="padding: 0; background: black;">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset('img/fm_top.gif') }}" alt="">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table background="{{ asset('img/fm_middle.gif') }}"
+                                   style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
+                                <tbody>
+                                <tr>
+                                    <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                                    <td>
+                                        <div class="pt-3"></div>
+
+                                        <span class="d-block text-center">
+                                            <b>Anyone may play on the worlds below</b>
+                                        </span>
+
+                                        <div class="pb-3"></div>
+
+                                        <div class="d-flex justify-content-center">
+                                            <table style="padding: 0; background: black;">
+                                                <tbody>
+
+                                                <!--World online counts-->
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <img align="left" src="{{ asset('img/usflag.gif') }}" width="30"
+                                                             height="15" border="0">
+                                                        <span class="m-1">Raleigh</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">RSC Preservation</a></td>
+                                                    <td align="right">{{$preservation_online}} players</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">RSC Cabbage</a></td>
+                                                    <td align="right">{{$cabbage_online}} players</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">RSC Uranium</a></td>
+                                                    <td align="right">{{$uranium_online}} cyborgs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">RSC Coleslaw</a></td>
+                                                    <td align="right">{{$coleslaw_online}} cyborgs</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">2001Scape</a></td>
+                                                    <td align="right">{{$retro_online}} players</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="center"><a
+                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                href="/download">Open PK</a></td>
+                                                    <td align="right">{{$openpk_online}} players</td>
+                                                </tr>
+                                                <!--end worlds-->
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="pb-3"></div>
+                                    </td>
+                                    <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <table style="padding: 0;">
+                                <tbody>
+                                <tr>
+                                    <td colspan="3">
+                                        <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="pb-3"></div>
+
+                <!--Play game-->
                 <table style="padding: 0; background: black;">
                     <tbody>
                     <tr>
@@ -172,29 +230,31 @@
                     </tr>
                     </tbody>
                 </table>
-                <!--stones content-->
                 <table background="{{ asset('img/fm_middle.gif') }}"
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <div style="text-align: center;">
                                 <div class="pb-3"></div>
-                                <!--table to contain options-->
                                 <table>
                                     <tbody>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="">
-                                                <img class="mx-auto" src="{{ asset('img/mm_sword.jpg') }}" alt="">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_sword.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -202,7 +262,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b2" background="{{ asset('img/shinystonered.jpg') }}"
+                                                    <td class="b2"
+                                                        background="{{ asset('img/shinystonered.jpg') }}"
                                                         style="background-color: #570700">
                                                         <div class="text-center">
                                                             <b>Play
@@ -224,15 +285,20 @@
                                         </td>
                                         <td style="width: 10px"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Player_Registration') }}" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_player.jpg') }}" alt="">
+                                            <a href="{{ route('Player_Registration') }}"
+                                               class="c">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_player.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Player_Registration') }}" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                    <a href="{{ route('Player_Registration') }}"
+                                                       class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -240,7 +306,8 @@
                                             <table style="width: 100px; padding: 0; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b2" background="{{ asset('img/shinystonered.jpg') }}"
+                                                    <td class="b2"
+                                                        background="{{ asset('img/shinystonered.jpg') }}"
                                                         style="background-color: #570700">
                                                         <div class="text-center">
                                                             <b>Create Account</b>
@@ -251,7 +318,8 @@
                                             </table>
                                             Create an account for both the game and our website.
                                             <div class="d-block">
-                                                <a href="{{ route('Player_Registration') }}" class="c">
+                                                <a href="{{ route('Player_Registration') }}"
+                                                   class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -263,14 +331,17 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_whyrs.jpg') }}" alt="">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_whyrs.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -278,7 +349,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747">
                                                         <div class="text-center">
                                                             <b>Why Choose RuneScape?</b>
@@ -295,7 +367,9 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_members.jpg') }}" alt="">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_members.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
@@ -303,7 +377,8 @@
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href=""
                                                        class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -311,7 +386,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>RuneScape Members</b>
@@ -334,14 +410,17 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="{{ route('Hiscores') }}" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_chalice.jpg') }}" alt="">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_chalice.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="{{ route('Hiscores') }}" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -349,7 +428,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Hiscore Tables</b>
@@ -368,14 +448,16 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img src="{{ asset('img/mm2_rs2b.jpg') }}" alt="">
+                                                <img src="{{ asset('img/mm2_rs2b.jpg') }}"
+                                                     alt="">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -383,7 +465,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Play RS2 Beta</b>
@@ -407,7 +490,8 @@
                             </div>
                             <div class="pb-3"></div>
                         </td>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -420,61 +504,10 @@
                     </tr>
                     </tbody>
                 </table>
-
-            <!--<div class="pb-3"></div>
-                <table style="padding: 0; background: black;">
-                    <tbody>
-                    <tr>
-                        <td>
-                            <img src="{{ asset('img/fm_top.gif') }}" alt="">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table background="{{ asset('img/fm_middle.gif') }}"
-                       style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
-                    <tbody>
-                    <tr>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
-                        <td class="align-bottom">
-                            <div style="text-align: center;">
-                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
-                                <div class="pb-3"></div>
-                                <b>Latest Poll</b>
-                                <div class="pb-3"></div>
-                                <table style="padding: 0; background-color: black;">
-                                    <tbody>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="">
-                                                <img class="mx-auto" src="{{ asset('img/mms_vote.jpg') }}" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 350px;">
-                                            <img src="{{ asset('img/latestpoll.jpg') }}" height="120" width="350"
-                                                 alt=""/>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="pb-3"></div>
-                            </div>
-                        </td>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table style="padding: 0;">
-                    <tbody>
-                    <tr>
-                        <td colspan="3">
-                            <img src="{{ asset('img/fm_bottom.gif') }}" alt="">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>-->
 
                 <div class="pb-3"></div>
+
+                <!--Secure Services-->
                 <table style="padding: 0; background-color: black;">
                     <tbody>
                     <tr>
@@ -488,10 +521,12 @@
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <div style="text-align: center;">
-                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
+                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1"
+                                     alt="">
                                 <div class="pb-3"></div>
                                 <b>Secure Services</b>
                                 <div class="pb-3"></div>
@@ -500,7 +535,8 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_subscribe.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_subscribe.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -508,7 +544,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -516,7 +553,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Subscribe</b>
@@ -535,7 +573,8 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_unsubscribe.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_unsubscribe.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -543,7 +582,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -551,7 +591,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Unsubscribe</b>
@@ -574,7 +615,8 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="">
-                                                <img class="mx-auto" src="{{ asset('img/mm_support.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_support.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -582,7 +624,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -590,7 +633,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Customer Support</b>
@@ -612,7 +656,9 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_inbox.jpg') }}" height="120"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_inbox.jpg') }}"
+                                                     height="120"
                                                      width="77" alt="">
                                             </a>
                                         </td>
@@ -621,7 +667,8 @@
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href=""
                                                        class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -629,7 +676,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Message Centre</b>
@@ -655,7 +703,8 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mms_forums.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mms_forums.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -663,7 +712,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -671,7 +721,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Forums</b>
@@ -690,7 +741,8 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mms_accman.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mms_accman.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -698,7 +750,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -706,7 +759,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Account Management</b>
@@ -728,7 +782,8 @@
                             </div>
                             <div class="pb-3"></div>
                         </td>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -756,10 +811,12 @@
                        style="padding: 0;background-repeat:no-repeat; background-color: black; width: 500px;">
                     <tbody>
                     <tr>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
                             <div style="text-align: center;">
-                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1" alt="">
+                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1"
+                                     alt="">
                                 <div class="pb-3"></div>
                                 <b>Manual</b>
                                 <div class="pb-3"></div>
@@ -768,7 +825,8 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="" class="c">
-                                                <img class="mx-auto" src="{{ asset('img/mm_howtoplay.jpg') }}"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_howtoplay.jpg') }}"
                                                      height="120" width="77" alt="">
                                             </a>
                                         </td>
@@ -776,7 +834,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -784,7 +843,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>How To Play</b>
@@ -804,7 +864,9 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="{{ route('Frequently_Asked_Questions') }}">
-                                                <img class="mx-auto" src="{{ asset('img/mm_faq.jpg') }}" height="120"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_faq.jpg') }}"
+                                                     height="120"
                                                      width="77" alt="">
                                             </a>
                                         </td>
@@ -812,7 +874,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="{{ route('Frequently_Asked_Questions') }}">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -820,7 +883,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>F.A.Q.</b>
@@ -831,7 +895,8 @@
                                             </table>
                                             Answers to Frequently Asked Questions
                                             <div class="d-block">
-                                                <a href="{{ route('Frequently_Asked_Questions') }}" class="c">
+                                                <a href="{{ route('Frequently_Asked_Questions') }}"
+                                                   class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -843,7 +908,9 @@
                                     <tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="">
-                                                <img class="mx-auto" src="{{ asset('img/mm_lov.jpg') }}" height="120"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_lov.jpg') }}"
+                                                     height="120"
                                                      width="77" alt="">
                                             </a>
                                         </td>
@@ -851,7 +918,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -859,7 +927,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
                                                             <b>Library of Varrock</b>
@@ -878,7 +947,9 @@
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
                                             <a href="{{ route('Rules_and_Security') }}">
-                                                <img class="mx-auto" src="{{ asset('img/mm_rules.jpg') }}" height="120"
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_rules.jpg') }}"
+                                                     height="120"
                                                      width="77" alt="">
                                             </a>
                                         </td>
@@ -886,7 +957,8 @@
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="{{ route('Rules_and_Security') }}">
-                                                        <img src="{{ asset('img/blank.gif') }}" height="45" width="100"
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
                                                              alt="">
                                                     </a>
                                                 </div>
@@ -894,7 +966,8 @@
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="b" background="{{ asset('img/stoneback.gif') }}"
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747">
                                                         <div class="text-center">
                                                             <b>Rules & Security</b>
@@ -911,7 +984,8 @@
                                                 online
                                             </span>
                                             <div class="d-block">
-                                                <a href="{{ route('Rules_and_Security') }}" class="c">
+                                                <a href="{{ route('Rules_and_Security') }}"
+                                                   class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -922,7 +996,8 @@
                             </div>
                             <div class="pb-3"></div>
                         </td>
-                        <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
+                        <td style="width: 7px;"
+                            background="{{ asset('img/fm_middle.gif') }}"></td>
                     </tr>
                     </tbody>
                 </table>

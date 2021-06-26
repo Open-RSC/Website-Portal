@@ -52,11 +52,11 @@ use Illuminate\Notifications\Notifiable;
  * @property int $lastRecoveryTryId
  * @property int $transfer
  */
-class preservation extends Authenticatable
+class uranium extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $guard = 'preservation';
+    protected $guard = 'uranium';
 
     protected $table = 'players';
     public $primaryKey = 'id';
@@ -93,5 +93,5 @@ class preservation extends Authenticatable
         $this->connection = $connection;
     }
 
-    public $connection = 'preservation';
+    public $connection = 'uranium';
 }

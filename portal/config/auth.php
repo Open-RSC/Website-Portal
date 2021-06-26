@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'cabbage',
+        'guard' => 'uranium',
         'passwords' => 'user',
     ],
 
@@ -49,6 +49,26 @@ return [
         'cabbage' => [
             'driver' => 'session',
             'provider' => 'cabbage',
+        ],
+
+        'uranium' => [
+            'driver' => 'session',
+            'provider' => 'uranium',
+        ],
+
+        'coleslaw' => [
+            'driver' => 'session',
+            'provider' => 'coleslaw',
+        ],
+
+        'openpk' => [
+            'driver' => 'session',
+            'provider' => 'openpk',
+        ],
+
+        'retro' => [
+            'driver' => 'session',
+            'provider' => 'retro',
         ],
 
         'api' => [
@@ -90,6 +110,26 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\cabbage::class,
         ],
+
+        'uranium' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\uranium::class,
+        ],
+
+        'coleslaw' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\coleslaw::class,
+        ],
+
+        'openpk' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\openpk::class,
+        ],
+
+        '2001scape' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\retro::class,
+        ],
     ],
 
     /*
@@ -124,6 +164,34 @@ return [
 
         'cabbage' => [
             'provider' => 'cabbage',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'uranium' => [
+            'provider' => 'uranium',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'coleslaw' => [
+            'provider' => 'coleslaw',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'openpk' => [
+            'provider' => 'openpk',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        '2001scape' => [
+            'provider' => '2001scape',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

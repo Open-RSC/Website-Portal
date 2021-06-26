@@ -18,6 +18,7 @@ use Illuminate\Notifications\Notifiable;
  * @property int $x
  * @property int $y
  * @property int $fatigue
+ * @property int $petfatigue
  * @property boolean $combatstyle
  * @property boolean $block_chat
  * @property boolean $block_private
@@ -42,6 +43,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $muted
  * @property int $kills
  * @property int $npc_kills
+ * @property int $pets
  * @property int $deaths
  * @property boolean $iron_man
  * @property boolean $iron_man_restriction
@@ -52,11 +54,9 @@ use Illuminate\Notifications\Notifiable;
  * @property int $lastRecoveryTryId
  * @property int $transfer
  */
-class preservation extends Authenticatable
+class coleslaw extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    protected $guard = 'preservation';
 
     protected $table = 'players';
     public $primaryKey = 'id';
@@ -72,7 +72,7 @@ class preservation extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['username', 'group_id', 'email', 'pass', 'salt', 'combat', 'skill_total', 'x', 'y', 'fatigue', 'combatstyle', 'block_chat', 'block_private', 'block_trade', 'block_duel', 'cameraauto', 'onemouse', 'soundoff', 'haircolour', 'topcolour', 'trousercolour', 'skincolour', 'headsprite', 'bodysprite', 'male', 'creation_date', 'creation_ip', 'login_date', 'login_ip', 'banned', 'offences', 'muted', 'kills', 'npc_kills', 'deaths', 'iron_man', 'iron_man_restriction', 'hc_ironman_death', 'online', 'quest_points', 'bank_size', 'lastRecoveryTryId', 'transfer'];
+    protected $fillable = ['username', 'group_id', 'email', 'pass', 'salt', 'combat', 'skill_total', 'x', 'y', 'fatigue', 'petfatigue', 'combatstyle', 'block_chat', 'block_private', 'block_trade', 'block_duel', 'cameraauto', 'onemouse', 'soundoff', 'haircolour', 'topcolour', 'trousercolour', 'skincolour', 'headsprite', 'bodysprite', 'male', 'creation_date', 'creation_ip', 'login_date', 'login_ip', 'banned', 'offences', 'muted', 'kills', 'npc_kills', 'pets', 'deaths', 'iron_man', 'iron_man_restriction', 'hc_ironman_death', 'online', 'quest_points', 'bank_size', 'lastRecoveryTryId', 'transfer'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -80,7 +80,7 @@ class preservation extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'remember_token',
     ];
 
     public function getAuthPassword(): string
@@ -93,5 +93,5 @@ class preservation extends Authenticatable
         $this->connection = $connection;
     }
 
-    public $connection = 'preservation';
+    public $connection = 'coleslaw';
 }
