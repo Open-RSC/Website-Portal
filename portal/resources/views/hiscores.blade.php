@@ -10,7 +10,7 @@
 
             <!-- center column -->
             <div class="col-auto" style="width: 600px;">
-                <div class="float-left h3 text-white">Overall Skill Total</div>
+                <div class="float-left h3 text-white">Overall</div>
 
                 <div class="float-right">
                     <nav>
@@ -28,7 +28,13 @@
                                                href="/hiscores/{{ $skill }}">
                                                 <img src="{{ asset('img/skill_icons').'/'.$skill }}.svg"
                                                      alt="{{ $skill }}" height="20px"/>
-                                                {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                @if($skill == 'hits')
+                                                    Fighting
+                                                @elseif($skill == 'skill_total')
+                                                    Overall
+                                                @else
+                                                    {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                @endif
                                             </a>
                                         @endforeach
                                     </li>

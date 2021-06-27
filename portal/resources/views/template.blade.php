@@ -4,6 +4,44 @@
 
 <body>
 
+<div class="navbar-expand-xxl pt-2 mr-1">
+    <div class="e text-center flex-row" style="background: black; width:596px;">
+        <span class="flex-auto p-2">
+            <a href="/" taborder="1">Home</a>
+        </span>
+        <span class="flex-auto p-2">
+            <a href="/download" taborder="1">Play Now</a>
+        </span>
+        <span class="flex-auto p-2">
+            <a href="/hiscores" taborder="1">Hiscores</a>
+        </span>
+        <span class="flex-auto p-2">
+            <a href="/board" taborder="1">Forums</a>
+        </span>
+        <span class="flex-auto p-2">
+            <a target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn" taborder="2">Discord</a>
+        </span>
+        <span class="flex-auto p-2">
+            <a target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic" taborder="3">Open Source</a>
+        </span>
+        <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener" taborder="5">Wiki Lookup</a>
+            <div class="dropdown-content" style="background: black;">
+                <a target="_blank" rel="noopener" href="https://classic.runescape.wiki" taborder="5">
+                    RSC Wiki
+                </a>
+                <a target="_blank" rel="noopener" href="https://runescapeclassic.dev/wiki" taborder="5">
+                    Open Wiki
+                </a>
+            </div>
+        </span>
+        <span class="flex-auto p-2">
+            <a target="_blank" rel="noopener" href="https://rsc.plus" taborder="6">
+                RSC+
+            </a>
+        </span>
+    </div>
+</div>
+
 @if(Route::currentRouteName() == 'World_Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>

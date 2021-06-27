@@ -10,11 +10,8 @@
 
             <!-- center column -->
             <div class="col-auto" style="width: 600px;">
-
                 @if($subpage == 'hits')
                     <div class="float-left h3 text-white">Fighting</div>
-                @elseif($subpage == 'skill_total')
-                    <div class="float-left h3 text-white">Overall</div>
                 @else
                     <div class="float-left h3 text-white">{{ ucfirst($subpage) }}</div>
                 @endif
@@ -35,7 +32,13 @@
                                                href="/hiscores/{{ $skill }}">
                                                 <img src="{{ asset('img/skill_icons').'/'.$skill }}.svg"
                                                      alt="{{ $skill }}" height="20px"/>
-                                                {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                @if($skill == 'hits')
+                                                    Fighting
+                                                @elseif($skill == 'skill_total')
+                                                    Overall
+                                                @else
+                                                    {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                @endif
                                             </a>
                                         @endforeach
                                     </li>
