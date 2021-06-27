@@ -65,11 +65,16 @@
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                                    @elseif($subpage == 'hits')
+                                        <b>Fighting</b>
+                                    @elseif($subpage == 'skill_total')
+                                        <b>Overall</b>
                                     @else
-                                        {{ ucfirst($subpage) }}
+                                        <b>{{ ucfirst($subpage) }}</b>
                                     @endif
-                                    <br>
-                                    <a href="{{ route('Home') }}">Main menu</a>
+                                    <span class="d-block">
+                                        <a href="{{ route('Home') }}">Main menu</a>
+                                    </span>
                                 </div>
                             </td>
                         </tr>

@@ -10,7 +10,14 @@
 
             <!-- center column -->
             <div class="col-auto" style="width: 600px;">
-                <div class="float-left h3 text-white">{{ ucfirst($subpage) }}</div>
+
+                @if($subpage == 'hits')
+                    <div class="float-left h3 text-white">Fighting</div>
+                @elseif($subpage == 'skill_total')
+                    <div class="float-left h3 text-white">Overall</div>
+                @else
+                    <div class="float-left h3 text-white">{{ ucfirst($subpage) }}</div>
+                @endif
 
                 <div class="float-right">
                     <nav>
