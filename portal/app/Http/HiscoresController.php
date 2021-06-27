@@ -135,7 +135,7 @@ class HiscoresController extends Controller
 		$hiscores = DB::connection('uranium')
 			->table('experience as a')
 			->join('players as b', 'a.playerID', '=', 'b.id')
-			->select('*', DB::raw('a.' . $subpage))
+			->select('b.*', DB::raw('a.' . $subpage))
 			->where([
 				['b.banned', '=', '0'],
 				['b.group_id', '=', '10'],

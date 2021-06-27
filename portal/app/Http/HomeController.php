@@ -84,7 +84,7 @@ class HomeController extends Controller
 
     public function worldmap()
     {
-        $playerPositions = DB::connection('cabbage')
+        $playerPositions = DB::connection('uranium')
             ->table('players')
             ->where([
                 ['banned', '=', '0'],

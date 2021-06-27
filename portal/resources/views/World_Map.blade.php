@@ -7,12 +7,12 @@
 
         <div class="text-center" style="overflow: auto;">
             <script>
-                // automatically reload the page every 20 seconds
+                // automatically reload the page every 10 seconds
                 function autoRefreshPage() {
                     window.location = window.location.href;
                 }
 
-                setInterval('autoRefreshPage()', 20000);
+                setInterval('autoRefreshPage()', 10000);
 
                 function drawPosition() {
                     let canvas = document.getElementById('canvas');
@@ -20,7 +20,7 @@
                     let img = document.getElementById("crosshairs");
 
                     // text overlay settings
-                    context.font = '16px Arial';
+                    context.font = '12px Arial';
                     context.textBaseline = 'middle';
                     context.fillStyle = "gold";
 

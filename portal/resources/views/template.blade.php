@@ -10,7 +10,11 @@
         <tr>
             <td class=e>
                 <div class="text-center">
-                    <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                    @if(Route::currentRouteName())
+                        <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                    @else
+                        {{ ucfirst($subpage) }}
+                    @endif
                     <br>
                     <a href="{{ route('Home') }}">Main menu</a>
                 </div>
@@ -27,7 +31,11 @@
         <tr>
             <td class=e>
                 <div class="text-center">
-                    <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                    @if(Route::currentRouteName())
+                        <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                    @else
+                        {{ ucfirst($subpage) }}
+                    @endif
                     <br>
                     <a href="{{ route('Home') }}">Main menu</a>
                 </div>
@@ -55,7 +63,11 @@
                         <tr>
                             <td class=e>
                                 <div class="text-center">
-                                    <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                                    @if(Route::currentRouteName())
+                                        <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                                    @else
+                                        {{ ucfirst($subpage) }}
+                                    @endif
                                     <br>
                                     <a href="{{ route('Home') }}">Main menu</a>
                                 </div>

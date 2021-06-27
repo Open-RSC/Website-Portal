@@ -42,41 +42,46 @@
                        class="container-fluid table-striped table-hover text-primary table-transparent">
                     <thead class="border-bottom border-info thead-dark">
                     <tr class="row text-info">
-                        <th class="col text-right">Rank</th>
-                        <th class="col-sm-3 text-left">Player</th>
-                        <th class="col text-right">Total Level</th>
-                        <th class="col text-left">Total XP</th>
+                        <th class="col-1 text-right">Rank</th>
+                        <th class="col-sm-4 text-left">Player</th>
+                        <th class="col-1 text-right">Skill</th>
+                        <th class="col-sm-3 text-left">Total XP</th>
                         <th class="col-sm-3 text-right">Last Login</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach ($hiscores as $key=>$player)
                         <tr class="row clickable-row" data-href="{{ route('player', $player->id) }}">
-                            <td class="col-2 text-right">
-									<span>
-										{{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
-									</span>
+                            <!--Rank-->
+                            <td class="col-1 text-right">
+                                <span>
+                                    {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                </span>
                             </td>
+                            <!--Player-->
+                            <td class="col-sm-4 text-left">
+                                <span>
+                                    {{ ucfirst($player->username) }}
+                                </span>
+                            </td>
+                            <!--Total Level-->
+                            <td class="col-1 text-right">
+                                <span>
+                                    {{ number_format($player->skill_total) }}
+                                </span>
+                            </td>
+                            <!--Total XP-->
                             <td class="col-sm-3 text-left">
-									<span>
-										{{ ucfirst($player->username) }}
-									</span>
+                                <span>
+                                    {{ number_format($player->total_xp) }}
+                                </span>
                             </td>
-                            <td class="col text-right">
-									<span>
-										{{ number_format($player->skill_total) }}
-									</span>
-                            </td>
-                            <td class="col text-left">
-									<span>
-										{{ number_format((new App\Http\HiscoresController)->totalXP($player)/4.0) }}
-									</span>
-                            </td>
+                            <!--Last Login-->
                             <td class="col-sm-3 text-right">
                                 @if($player->login_date != 0)
                                     <span>
-											{{ Carbon\Carbon::parse($player->login_date)->diffForHumans() }}
-										</span>
+                                        {{ Carbon\Carbon::parse($player->login_date)->diffForHumans() }}
+                                    </span>
                                 @else
                                     <span>Never</span>
                                 @endif
