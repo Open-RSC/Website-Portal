@@ -139,6 +139,7 @@ class HiscoresController extends Controller
 			->where([
 				['b.banned', '=', '0'],
 				['b.group_id', '=', '10'],
+                ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
 			])
 			->groupBy('b.username')
 			->orderBy('a.' . $subpage, 'desc')
