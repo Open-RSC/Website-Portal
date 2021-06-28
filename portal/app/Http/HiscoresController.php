@@ -49,8 +49,8 @@ class HiscoresController extends Controller
 	 * @return Factory|View
 	 * Used to show the main hiscores page
 	 */
-	public function index()
-	{
+	public function index(): Factory|View
+    {
 		/**
 		 * @return Factory|View
 		 * @var $hiscores
@@ -87,7 +87,7 @@ class HiscoresController extends Controller
 			->groupBy('b.username')
 			->orderBy('b.skill_total', 'desc')
 			->orderBy('total_xp', 'desc')
-			->paginate(300);
+			->paginate(16);
 
 		/**
 		 * @var $skill_array
@@ -106,8 +106,8 @@ class HiscoresController extends Controller
 	 * @return Factory|View
 	 * Used to show all skill-specific sub pages
 	 */
-	public function show($subpage)
-	{
+	public function show($subpage): Factory|View
+    {
 		/**
 		 * @var $skill_array
 		 * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
@@ -143,7 +143,7 @@ class HiscoresController extends Controller
 			])
 			->groupBy('b.username')
 			->orderBy('a.' . $subpage, 'desc')
-			->paginate(300);
+			->paginate(16);
 
 		$skill = '' . $subpage;
 

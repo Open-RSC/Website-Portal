@@ -10,11 +10,18 @@
                 <div class="text-center">
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                    @elseif($subpage == 'hits')
+                        <b>Fighting Hiscores</b>
+                    @elseif($subpage == 'skill_total')
+                        <b>Overall Hiscores</b>
+                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                        <b>{{ ucfirst($subpage) }} Hiscores</b>
                     @else
-                        {{ ucfirst($subpage) }}
+                        <b>{{ ucfirst($subpage) }}</b>
                     @endif
-                    <br>
-                    <a href="{{ route('Home') }}">Main menu</a>
+                    <div class="d-block">
+                        <a href="{{ route('Home') }}">Main menu</a>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -35,8 +42,9 @@
                     @else
                         {{ ucfirst($subpage) }}
                     @endif
-                    <br>
-                    <a href="{{ route('Home') }}">Main menu</a>
+                    <div class="d-block">
+                        <a href="{{ route('Home') }}">Main menu</a>
+                    </div>
                 </div>
             </td>
         </tr>
@@ -65,11 +73,18 @@
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                                    @elseif($subpage == 'hits')
+                                        <b>Fighting Hiscores</b>
+                                    @elseif($subpage == 'skill_total')
+                                        <b>Overall Hiscores</b>
+                                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                                        <b>{{ ucfirst($subpage) }} Hiscores</b>
                                     @else
-                                        {{ ucfirst($subpage) }}
+                                        <b>{{ ucfirst($subpage) }}</b>
                                     @endif
-                                    <br>
-                                    <a href="{{ route('Home') }}">Main menu</a>
+                                    <div class="d-block">
+                                        <a href="{{ route('Home') }}">Main menu</a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -119,15 +134,17 @@
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif($subpage == 'hits')
-                                        <b>Fighting</b>
+                                        <b>Fighting Hiscores</b>
                                     @elseif($subpage == 'skill_total')
-                                        <b>Overall</b>
+                                        <b>Overall Hiscores</b>
+                                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                                        <b>{{ ucfirst($subpage) }} Hiscores</b>
                                     @else
-                                        {{ ucfirst($subpage) }}
+                                        <b>{{ ucfirst($subpage) }}</b>
                                     @endif
-                                    <span class="d-block">
+                                    <div class="d-block">
                                         <a href="{{ route('Home') }}">Main menu</a>
-                                    </span>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

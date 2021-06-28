@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
-
 <body>
 
 <div class="navbar-expand-xxl pt-2 mr-1">
@@ -22,17 +21,18 @@
             <a target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn" taborder="2">Discord</a>
         </span>
         <span class="flex-auto p-2">
-            <a target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic" taborder="3">Open Source</a>
+            <a target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic"
+               taborder="3">Open Source</a>
         </span>
         <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener" taborder="5">Wiki Lookup</a>
-            <div class="dropdown-content" style="background: black;">
+            <span class="p-2 dropdown-content" style="background: black;">
                 <a target="_blank" rel="noopener" href="https://classic.runescape.wiki" taborder="5">
                     RSC Wiki
                 </a>
-                <a target="_blank" rel="noopener" href="https://runescapeclassic.dev/wiki" taborder="5">
+                <a target="_blank" rel="noopener" href="/wiki" taborder="5">
                     Open Wiki
                 </a>
-            </div>
+            </span>
         </span>
         <span class="flex-auto p-2">
             <a target="_blank" rel="noopener" href="https://rsc.plus" taborder="6">
@@ -104,15 +104,17 @@
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif($subpage == 'hits')
-                                        <b>Fighting</b>
+                                        <b>Fighting Hiscores</b>
                                     @elseif($subpage == 'skill_total')
-                                        <b>Overall</b>
+                                        <b>Overall Hiscores</b>
+                                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                                        <b>{{ ucfirst($subpage) }} Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
-                                    <span class="d-block">
+                                    <div class="d-block">
                                         <a href="{{ route('Home') }}">Main menu</a>
-                                    </span>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

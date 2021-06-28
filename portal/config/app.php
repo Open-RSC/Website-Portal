@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Default game is authentic RSC
+    'authentic' => env('AUTHENTIC', 'true'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
