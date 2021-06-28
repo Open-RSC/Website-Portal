@@ -354,7 +354,7 @@ div.mid-right-border {
 }
 
 div.middle-content, div.middle-play,
-div.middle-content-server, div.middle-content-hiscores {
+div.middle-content-server {
   width: 519px;
   min-height: 488px;
   display: flex;
@@ -649,85 +649,12 @@ div.middle-content-server dl dd {
   padding-top: 4px;
 }
 
-.hiscores {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin: 4px;
-  margin-bottom: 8px;
-  min-height: 316px;
-}
-
-.hiscores .page-link {
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-decoration: none;
-}
-
-.hiscores .page-link:hover, .hiscores .page-link:focus {
-  color: gold;
-  cursor: pointer;
-}
-
-.middle-content-hiscores .title .hiscores-title {
-  font-size: 1.1em;
-}
-
-.hiscores-panel {
-  border: 2px solid #382418;
-  outline: 2px solid black;
-  background-color: black;
-}
-
-.middle-content-hiscores .title {
-  width: 234px;
-  min-height: 32px;
-  padding: 4px;
-  text-align: center;
-}
-
-.middle-content-hiscores .title h2 {
-  font-size: 13px;
-  margin: 0;
-}
-
-.middle-content-hiscores .title ul {
-  padding: 0;
-  margin: 0;
-  min-height: 16px;
-  list-style: none;
-}
-
-.middle-content-hiscores .title li {
-  height: 16px;
-}
-
-a.hiscores-link {
-  font-size: 13px;
-  color: rgb(144, 192, 64);
-  text-decoration: none;
-  display: block;
-}
-
-.hiscore-links h4, .hiscore-table h4 {
-  font-size: 13px;
-  margin: 0;
-  margin-bottom: 2px;
-  text-align: center;
-}
-
 .player-page-link:hover, .clan-page-link:hover {
   color: lightgray;
 }
 
 .clan-list td:not(:last-child) {
   padding-left: 5px;
-}
-
-.hiscore-table .hiscores-panel.clan-list {
-  width: auto;
 }
 
 .hiscore-links {
@@ -737,85 +664,6 @@ a.hiscores-link {
   flex-direction: column;
   align-items: center;
   align-self: center;
-}
-
-.hiscore-links .hiscores-panel {
-  text-align: center;
-  padding: 8px 4px;
-  width: 114px;
-  min-height: 264px;
-}
-
-.hiscores > .hiscore-links .hiscores-panel.players-nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 13px;
-  height: auto;
-  min-height: auto;
-}
-
-.hiscores > .hiscore-links .hiscores-panel.players-nav dl {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-}
-
-.hiscores > .hiscore-links .hiscores-panel.players-nav dt,
-.hiscores > .hiscore-links .hiscores-panel.players-nav dd {
-  flex: 1 0 45%;
-  margin: 0;
-}
-
-.hiscores > .hiscore-links .hiscores-panel.players-nav dt {
-  text-align: left;
-  padding-left: 5px;
-}
-
-.hiscores > .hiscore-links .hiscores-panel.players-nav dd {
-  text-align: left;
-  padding-right: 5px;
-}
-
-.players-nav .hiscores-link {
-  padding: 10px 0;
-}
-
-.hiscore-table {
-  width: 290px;
-  min-height: 312px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hiscore-table .hiscores-panel {
-  width: 254px;
-  min-height: 278px;
-  padding: 4px;
-  padding-top: 8px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.hiscore-table th {
-  font-weight: 700;
-  text-align: left;
-}
-
-.hiscore-table tr, .hiscore-table td {
-  height: 14px;
-  line-height: 14px;
-}
-
-.hiscore-table td, .hiscore-table th {
-  font-size: 13px;
-  padding: 0 1px;
-}
-
-.hiscores.player .hiscore-table .hiscores-panel {
-  min-height: auto;
-  padding-bottom: 10px;
 }
 
 .players-info {
@@ -833,17 +681,6 @@ a.hiscores-link {
 
 .player {
   justify-content: space-between;
-}
-
-.hiscore-links .hiscores-panel.players-nav {
-  padding: 0;
-  width: 90%;
-}
-
-.hiscore-search {
-  display: flex;
-  justify-items: center;
-  align-content: space-between;
 }
 
 .search-box {
@@ -922,7 +759,7 @@ a.hiscores-link {
   }
   main, section.middle,
   div.middle-content, div.middle-play,
-  div.middle-content-server, div.middle-content-hiscores,
+  div.middle-content-server,
   .orsc-buttons, .cabbage-buttons {
     width: 100vw !important;
   }
@@ -940,6 +777,245 @@ a.hiscores-link {
   .index-middle-bottom div:first-child {
     padding-bottom: 10px;
   }
+
+  .patch-notes-link {
+    margin: 0;
+  }
+
+  .patch-notes-link a, .patch-notes a {
+    color: rgb(144, 192, 64);
+  }
+
+  .patch-notes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+
+  .patch-notes > div {
+    width: 90%;
+  }
+
+  .patch-notes ul {
+    padding-left: 10px;
+    list-style-type: "- ";
+  }
+  .patch-notes li {
+    margin-bottom: 2px;
+  }
+
+  div.middle-content, div.middle-play,
+  div.middle-content-server, div.middle-content-hiscores {
+    width: 519px;
+    min-height: 488px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url("/img/background.jpg");
+  }
+
+  div.middle-play .buttons {
+    width: 519px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .hiscores {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 4px;
+    margin-bottom: 8px;
+    min-height: 316px;
+  }
+
+  .hiscores .page-link {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+  }
+
+  .hiscores .page-link:hover, .hiscores .page-link:focus {
+    color: gold;
+    cursor: pointer;
+  }
+
+  .middle-content-hiscores .title .hiscores-title {
+    font-size: 1.1em;
+  }
+
+  .hiscores-panel {
+    border: 2px solid #382418;
+    outline: 2px solid black;
+    background-color: black;
+  }
+
+  .middle-content-hiscores .title {
+    width: 234px;
+    min-height: 32px;
+    padding: 4px;
+    text-align: center;
+  }
+
+  .middle-content-hiscores .title h2 {
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .middle-content-hiscores .title ul {
+    padding: 0;
+    margin: 0;
+    min-height: 16px;
+    list-style: none;
+  }
+
+  .middle-content-hiscores .title li {
+    height: 16px;
+  }
+
+  a.hiscores-link {
+    font-size: 13px;
+    color: rgb(144, 192, 64);
+    text-decoration: none;
+    display: block;
+  }
+
+  .hiscore-links h4, .hiscore-table h4 {
+    font-size: 13px;
+    margin: 0;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+
+  .player-page-link:hover, .clan-page-link:hover {
+    color: lightgray;
+  }
+
+  .clan-list td:not(:last-child) {
+    padding-left: 5px;
+  }
+
+  .hiscore-table .hiscores-panel.clan-list {
+    width: auto;
+  }
+
+  .hiscore-links {
+    width: 160px;
+    min-height: 310px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+  }
+
+  .hiscore-links .hiscores-panel {
+    text-align: center;
+    padding: 8px 4px;
+    width: 114px;
+    min-height: 264px;
+  }
+
+  .hiscores > .hiscore-links .hiscores-panel.players-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 13px;
+    height: auto;
+    min-height: auto;
+  }
+
+  .hiscores > .hiscore-links .hiscores-panel.players-nav dl {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .hiscores > .hiscore-links .hiscores-panel.players-nav dt,
+  .hiscores > .hiscore-links .hiscores-panel.players-nav dd {
+    flex: 1 0 45%;
+    margin: 0;
+  }
+
+  .hiscores > .hiscore-links .hiscores-panel.players-nav dt {
+    text-align: left;
+    padding-left: 5px;
+  }
+  .hiscores > .hiscore-links .hiscores-panel.players-nav dd {
+    text-align: left;
+    padding-right: 5px;
+  }
+
+  .players-nav .hiscores-link {
+    padding: 10px 0;
+  }
+
+  .hiscore-table {
+    width: 290px;
+    min-height: 312px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hiscore-table .hiscores-panel {
+    width: 254px;
+    min-height: 278px;
+    padding: 4px;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .hiscore-table th {
+    font-weight: 700;
+    text-align: left;
+  }
+  .hiscore-table tr, .hiscore-table td {
+    height: 14px;
+    line-height: 14px;
+  }
+  .hiscore-table td, .hiscore-table th {
+    font-size: 13px;
+    padding: 0 1px;
+  }
+
+  .hiscores.player .hiscore-table .hiscores-panel {
+    min-height: auto;
+    padding-bottom: 10px;
+  }
+
+  .players-info {
+    flex: 2 0 30%;
+  }
+
+  .players-skills, .clan-members {
+    flex: 1 0 50%;
+    width: auto;
+  }
+
+  .players-skills table, .clan-members table {
+    width: 100%;
+  }
+
+  .player {
+    justify-content: space-between;
+  }
+
+  .hiscore-links .hiscores-panel.players-nav {
+    padding: 0;
+    width: 90%;
+  }
+
+  .hiscore-search {
+    display: flex;
+    justify-items: center;
+    align-content: space-between;
+  }
+
   .middle-content-hiscores .title {
     width: auto;
   }
@@ -949,39 +1025,48 @@ a.hiscores-link {
     display: flex;
     justify-content: space-around;
   }
+
   .hiscore-links, .hiscore-table, .hiscore-table .hiscores-panel {
     max-width: 50vw;
     width: auto;
     height: auto;
     max-width: 80vw;
   }
+
   .hiscore-table .hiscores-panel {
     flex-wrap: wrap;
   }
+
   .hiscore-table .hiscores-panel table {
     width: 100%;
   }
+
   .hiscore-table .hiscores-panel > a:first-child {
     display: block;
     order: 2;
     flex: 1;
     text-align: left;
   }
+
   .hiscore-table .hiscores-panel > a:first-child:after {
     content: " Prev"
   }
+
   .hiscore-table .hiscores-panel > a:last-child {
     display: block;
     order: 3;
     flex: 1;
     text-align: right;
   }
+
   .hiscore-table .hiscores-panel > a:last-child:before {
     content: "Next "
   }
+
   .hiscore-links h4, .hiscore-table h4, .middle-content-hiscores .title h2 {
     font-size: 1em;
   }
+
   .hiscore-links h4 span {
     display: block;
     visibility: hidden;
@@ -992,14 +1077,17 @@ a.hiscores-link {
     text-align: center;
     content: 'Menu';
   }
+
   .hiscore-table td, .hiscore-table th {
     font-size: 0.9em;
   }
+
   .hiscore-links, .hiscore-links .hiscores-panel {
     width: auto;
     min-height: auto;
     margin-bottom: 10px;
   }
+
   .hiscores > .hiscore-links .hiscores-panel.players-nav {
     flex-direction: column;
     justify-content: start;
@@ -1009,10 +1097,12 @@ a.hiscores-link {
   .hiscores > .hiscore-links .hiscores-panel.players-nav a {
     flex: 0;
   }
+
   a.hiscores-link {
     font-size: 1em;
     margin-bottom: 2px;
   }
+
   div.hiscore-search {
     width: 100vw;
     align-items: center;

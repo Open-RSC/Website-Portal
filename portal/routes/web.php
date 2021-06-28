@@ -46,8 +46,8 @@ Route::get('/npcs', 'NpcController@index')->name('npcs');
 Route::get('/npcdef/{id}', 'NpcController@show')->name('npcdef');
 
 // Hiscores
-Route::get('/hiscores', 'HiscoresController@index')->name('Hiscores');
-Route::get('/hiscores/skill_total', 'HiscoresController@index')->name('skill_total');
+Route::get('/hiscores', 'HiscoresController@index')->name('RuneScape Hiscores');
+Route::get('/hiscores/skill_total', 'HiscoresController@index')->name('Overall Hiscores');
 Route::get('/hiscores/{subpage}', 'HiscoresController@show');
 
 // Afman staff zone

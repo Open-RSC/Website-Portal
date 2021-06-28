@@ -10,12 +10,6 @@
                 <div class="text-center">
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                    @elseif($subpage == 'hits')
-                        <b>Fighting Hiscores</b>
-                    @elseif($subpage == 'skill_total')
-                        <b>Overall Hiscores</b>
-                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
-                        <b>{{ ucfirst($subpage) }} Hiscores</b>
                     @else
                         <b>{{ ucfirst($subpage) }}</b>
                     @endif
@@ -73,12 +67,16 @@
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                                    @elseif($subpage == 'hits')
-                                        <b>Fighting Hiscores</b>
-                                    @elseif($subpage == 'skill_total')
-                                        <b>Overall Hiscores</b>
-                                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                                    @elseif(in_array($subpage, array('attack', 'defense', 'strength', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
                                         <b>{{ ucfirst($subpage) }} Hiscores</b>
+                                    @elseif($subpage == 'hits')
+                                        <b>Hitpoints Hiscores</b>
+                                    @elseif($subpage == 'woodcut')
+                                        <b>Woodcutting Hiscores</b>
+                                    @elseif($subpage == 'herblaw')
+                                        <b>Herblore Hiscores</b>
+                                    @elseif($subpage == 'runecraft')
+                                        <b>Runecrafting Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
@@ -133,12 +131,16 @@
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                                    @elseif($subpage == 'hits')
-                                        <b>Fighting Hiscores</b>
-                                    @elseif($subpage == 'skill_total')
-                                        <b>Overall Hiscores</b>
-                                    @elseif(in_array($subpage, array('ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft')))
+                                    @elseif(in_array($subpage, array('attack', 'defense', 'strength', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
                                         <b>{{ ucfirst($subpage) }} Hiscores</b>
+                                    @elseif($subpage == 'hits')
+                                        <b>Hitpoints Hiscores</b>
+                                    @elseif($subpage == 'woodcut')
+                                        <b>Woodcutting Hiscores</b>
+                                    @elseif($subpage == 'herblaw')
+                                        <b>Herblore Hiscores</b>
+                                    @elseif($subpage == 'runecraft')
+                                        <b>Runecrafting Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
