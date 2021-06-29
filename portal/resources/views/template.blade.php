@@ -119,6 +119,14 @@
                                     <div class="d-block">
                                         <a href="{{ route('Home') }}">Main menu</a>
                                     </div>
+                                    @if(!Config::get('app.authentic'))
+                                        <div class="d-block">
+                                            <a href="{{ route('RuneScape Hiscores') }}">Regular</a> |
+                                            <a href="{/{ route('hiscores-ironman') }}">Ironman</a> |
+                                            <a href="{/{ route('hiscores-hardcore') }}">Hardcore</a> |
+                                            <a href="{/{ route('hiscores-ultimate') }}">Ultimate</a>
+                                        </div>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
