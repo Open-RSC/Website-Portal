@@ -6,36 +6,36 @@
 <div class="navbar-expand-xxl pt-2 mr-1">
     <div class="e text-center flex-row" style="background: black; width:596px;">
         <span class="flex-auto p-2">
-            <a href="/" taborder="1">Home</a>
+            <a class="c" href="/" taborder="1">Home</a>
         </span>
         <span class="flex-auto p-2">
-            <a href="/download" taborder="1">Play Now</a>
+            <a class="c" href="/download" taborder="1">Play Now</a>
         </span>
         <span class="flex-auto p-2">
-            <a href="/hiscores" taborder="1">Hiscores</a>
+            <a class="c" href="{{ route('RuneScape Hiscores') }}" taborder="1">Hiscores</a>
         </span>
         <span class="flex-auto p-2">
-            <a href="/board" taborder="1">Forums</a>
+            <a class="c" href="/board" taborder="1">Forums</a>
         </span>
         <span class="flex-auto p-2">
-            <a target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn" taborder="2">Discord</a>
+            <a class="c" target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn" taborder="2">Discord</a>
         </span>
         <span class="flex-auto p-2">
-            <a target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic"
+            <a class="c" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic"
                taborder="3">Open Source</a>
         </span>
         <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener" taborder="5">Wiki Lookup</a>
             <span class="p-2 dropdown-content" style="background: black;">
-                <a target="_blank" rel="noopener" href="https://classic.runescape.wiki" taborder="5">
+                <a class="c" target="_blank" rel="noopener" href="https://classic.runescape.wiki" taborder="5">
                     RSC Wiki
                 </a>
-                <a target="_blank" rel="noopener" href="/wiki" taborder="5">
+                <a class="c" target="_blank" rel="noopener" href="/wiki" taborder="5">
                     Open Wiki
                 </a>
             </span>
         </span>
         <span class="flex-auto p-2">
-            <a target="_blank" rel="noopener" href="https://rsc.plus" taborder="6">
+            <a class="c" target="_blank" rel="noopener" href="https://rsc.plus" taborder="6">
                 RSC+
             </a>
         </span>
@@ -53,8 +53,9 @@
                     @else
                         {{ ucfirst($subpage) }}
                     @endif
-                    <br>
-                    <a href="{{ route('Home') }}">Main menu</a>
+                    <span class="d-block">
+                        <a class="c" href="{{ route('Home') }}">Main menu</a>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -74,8 +75,9 @@
                     @else
                         {{ ucfirst($subpage) }}
                     @endif
-                    <br>
-                    <a href="{{ route('Home') }}">Main menu</a>
+                    <span class="d-block">
+                        <a class="c" href="{{ route('Home') }}">Main menu</a>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -117,14 +119,14 @@
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
                                     <div class="d-block">
-                                        <a href="{{ route('Home') }}">Main menu</a>
+                                        <a class="c" href="{{ route('Home') }}">Main menu</a>
                                     </div>
-                                    @if(!Config::get('app.authentic'))
+                                    @if(Config::get('app.authentic'))
                                         <div class="d-block">
-                                            <a href="{{ route('RuneScape Hiscores') }}">Regular</a> |
-                                            <a href="{/{ route('hiscores-ironman') }}">Ironman</a> |
-                                            <a href="{/{ route('hiscores-hardcore') }}">Hardcore</a> |
-                                            <a href="{/{ route('hiscores-ultimate') }}">Ultimate</a>
+                                            <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
+                                            <a class="c" href="{/{ route('hiscores-ironman') }}">Ironman</a> |
+                                            <a class="c" href="{/{ route('hiscores-hardcore') }}">Hardcore</a> |
+                                            <a class="c" href="{/{ route('hiscores-ultimate') }}">Ultimate</a>
                                         </div>
                                     @endif
                                 </div>
@@ -145,9 +147,9 @@
                 <div class="copyright pt-2">
                     Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
-                    <a href="{{ route('Terms_and_Conditions') }}">Terms+Conditions</a>
+                    <a class="c" href="{{ route('Terms_and_Conditions') }}">Terms+Conditions</a>
                     +
-                    <a href="{{ route('Privacy_Policy') }}">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy_Policy') }}">Privacy policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>
