@@ -46,7 +46,7 @@ Route::get('/npcs', 'NpcController@index')->name('npcs');
 Route::get('/npcdef/{id}', 'NpcController@show')->name('npcdef');
 
 // Hiscores
-Route::get('/hiscores', 'HiscoresController@index')->name('RuneScape Hiscores');
+Route::get('/hiscores', 'HiscoresController@index');
 Route::get('/hiscores/skill_total', 'HiscoresController@index')->name('RuneScape Hiscores');
 Route::get('/hiscores/{subpage}', 'HiscoresController@show');
 
