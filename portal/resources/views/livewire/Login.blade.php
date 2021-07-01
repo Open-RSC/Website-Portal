@@ -81,7 +81,7 @@
                             <td>
                                 <label class="pl-1">
                                     <input style="color: black; width: 110px;" type=submit
-                                           value="Secure Login" wire:click.prevent="authenticate">
+                                           value="Secure Login" wire:submit.prevent="authenticate">
                                 </label>
                                 <div class="pt-3"></div>
                             </td>

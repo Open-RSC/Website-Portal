@@ -12,18 +12,18 @@ use function App\Helpers\passwd_compat_hasher;
 
 class Login extends Component
 {
-    public $game = '';
-    public $username = '';
-    public $password = '';
-    public $honeyPasses = '';
-    public $honeyInputs = '';
+    public string $game = '';
+    public string $username = '';
+    public string $password = '';
+    public string $honeyPasses = '';
+    public string $honeyInputs = '';
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('livewire.Login');
     }
 
-    protected $rules = [
+    protected array $rules = [
         'game' => 'required',
         'username' => 'bail|required|min:2|max:12',
         'password' => 'required|min:4|max:20',
@@ -44,11 +44,11 @@ class Login extends Component
         }
     }
 
-    public function authenticate()
+    public function authenticate(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $this->validate([
             'game' => 'required',
-            'username' => ['bail', 'required', 'min:2', 'max:12', 'exists:' . $this->game . '.players'],
+            'username' => ['required', 'min:2', 'max:12', 'exists:' . $this->game . '.players'],
             'password' => ['required', 'min:2', 'max:20'],
         ]);
 
@@ -80,7 +80,7 @@ class Login extends Component
         }
     }
 
-    public function logout()
+    public function logout(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         Auth::logout();
         return redirect(route('Secure_Login'));

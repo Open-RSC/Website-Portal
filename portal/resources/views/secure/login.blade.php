@@ -3,12 +3,12 @@
     <div class="w-50 mx-auto">
         <table id="List" class="container bg-black">
             <tr>
-                <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6"></td>
-                <td style="background-image:url('/img/home/fm_top2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
-                <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6"></td>
+                <td><img height="6" src="{{ asset('img/home/fm_topleft.gif') }}" width="6" alt=""></td>
+                <td style="background-image:url('{{ asset('img/home/fm_top2.gif') }}');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt=""></td>
+                <td><img height="6" src="{{ asset('img/home/fm_topright.gif') }}" width="6" alt=""></td>
             </tr>
             <tr>
-                <td style="background-image:url('/img/home/fm_left.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                <td style="background-image:url('{{ asset('img/home/fm_left.gif') }}'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt=""></td>
                 <td>
                     <br/>
                     <div class="text-center container">
@@ -16,7 +16,7 @@
                     </div>
                     <br/>
                     <div>
-                        <form method="post" action="{{ route('Secure_Login') }}">
+                        <form method="POST" action="{{ route('Secure_Login') }}">
                             @csrf
                             <label class="pl-1">
                                 <select class="text-dark" name="game">
@@ -54,12 +54,12 @@
                         </form>
                     </div>
                 </td>
-                <td style="background-image:url('/img/home/fm_right.gif'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6"></td>
+                <td style="background-image:url('{{ asset('img/home/fm_right.gif') }}'); width: 6px;"><img height="1" src="{{ asset('img/home/blank.gif') }}" width="6" alt=""></td>
             </tr>
             <tr>
-                <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6"></td>
-                <td style="background-image:url('/img/home/fm_bottom2.gif');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1"></td>
-                <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6"></td>
+                <td><img height="6" src="{{ asset('img/home/fm_bottomleft.gif') }}" width="6" alt=""></td>
+                <td style="background-image:url('{{ asset('img/home/fm_bottom2.gif') }}');"><img height="6" src="{{ asset('img/home/blank.gif') }}" width="1" alt=""></td>
+                <td><img height="6" src="{{ asset('img/home/fm_bottomright.gif') }}" width="6" alt=""></td>
             </tr>
         </table>
     </div>

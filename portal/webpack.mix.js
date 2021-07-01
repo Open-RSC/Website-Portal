@@ -20,8 +20,15 @@ mix.js('resources/js/app.js', 'public/js')
         require('autoprefixer'),
     ]);
 
-mix.sass('resources/sass/app.scss', 'public/css');
+mix.scripts([
+    'resources/assets/js/jquery.js',
+    'resources/assets/js/popper.js',
+    'resources/assets/js/bootstrap.js',
+    'resources/assets/js/app.js',
+],'public/js/app.js').version();
 
-if (mix.inProduction()) {
+mix.sass('resources/sass/app.scss', 'public/css').version();
+
+/*if (mix.inProduction()) {
     mix.version();
-}
+}*/
