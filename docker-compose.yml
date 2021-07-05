@@ -41,16 +41,6 @@ services:
       - "./wiki:/var/www/html/portal/public/wiki"
       - "./etc/wiki/LocalSettings.php:/var/www/html/portal/public/wiki/LocalSettings.php:ro" # MediaWiki config is located in etc
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin
-    restart: unless-stopped
-    environment:
-      - HIDE_PHP_VERSION=true
-      - PMA_HOST=mariadb
-    volumes:
-      - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php:ro" # PHPMyAdmin config is located in etc
-
 networks: # Required for connectivity with separate docker-compose web framework
   default:
     external:
