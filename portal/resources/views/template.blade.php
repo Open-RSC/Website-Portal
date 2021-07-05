@@ -124,9 +124,9 @@
                                     @if(Config::get('app.authentic'))
                                         <div class="d-block">
                                             <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                            <a class="c" href="{/{ route('hiscores-ironman') }}">Ironman</a> |
-                                            <a class="c" href="{/{ route('hiscores-hardcore') }}">Hardcore</a> |
-                                            <a class="c" href="{/{ route('hiscores-ultimate') }}">Ultimate</a>
+                                            <a class="c" href="/hiscores/ironman">Ironman</a> |
+                                            <a class="c" href="/hiscores/hardcore">Hardcore</a> |
+                                            <a class="c" href="/hiscores/ultimate">Ultimate</a>
                                         </div>
                                     @endif
                                 </div>

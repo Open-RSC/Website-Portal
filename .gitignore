@@ -57,3 +57,5 @@ backups/*.zip
 *.log
 
 board/ext/phpbb/viglink/
+
+portal/public/phpmyadmin/tmp/
