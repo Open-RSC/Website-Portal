@@ -73,7 +73,7 @@
                             </div>
                             <!--Total Level-->
                             <div class="text-right" style="padding-right:15px; width:30px;">
-                                {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$subpage/4.0)) }}
+                                {{ number_format((new App\Http\Livewire\HiscoresController)->experienceToLevel($player->$subpage/4.0)) }}
                             </div>
                             <!--Total XP-->
                             <div class="text-left" style="padding-left:10px; width:100px;">
@@ -85,6 +85,7 @@
             </div>
         </div>
         <!--{/{ $hiscores->links('pagination::simple-tailwind') }}-->
+        <!--{/{ $hiscoreResults->links('pagination::bootstrap-4') }}-->
     </div>
 
     <div class="p-2"></div>

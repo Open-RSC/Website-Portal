@@ -46,9 +46,10 @@ Route::get('/npcs', 'NpcController@index')->name('npcs');
 Route::get('/npcdef/{id}', 'NpcController@show')->name('npcdef');
 
 // Hiscores
-Route::get('/hiscores', 'HiscoresController@index');
-Route::get('/hiscores/skill_total', 'HiscoresController@index')->name('RuneScape Hiscores');
-Route::get('/hiscores/{subpage}', 'HiscoresController@show');
+Route::get('hiscores', 'Livewire\HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict below
+Route::get('hiscores/skill_total', 'Livewire\HiscoresController@index')->name('RuneScape Hiscores');
+Route::get('hiscores/{subpage}', 'Livewire\HiscoresController@show');
+Route::get('hiscores/{subpage}/{iron_man}', 'Livewire\HiscoresController@iron_man');
 
 // Afman staff zone
 Route::get('/chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
@@ -62,10 +63,10 @@ Route::get('/player_cache_logs', 'StaffController@player_cache_logs')->middlewar
 Route::get('/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 
-Route::get('/register', 'Livewire\Registration')->name('Player_Registration');
-Route::post('/register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
+Route::any('register', 'Livewire\Registration')->name('Player_Registration');
+Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
-Route::any('/login', 'Livewire\Login')->name('Secure_Login');
-Route::post('/login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
-Route::post('/logout', 'Livewire\Login@logout')->name('Logout');
+Route::any('login', 'Livewire\Login')->name('Secure_Login');
+Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
+Route::post('logout', 'Livewire\Login@logout')->name('Logout');
 
