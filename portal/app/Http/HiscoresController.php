@@ -1,20 +1,15 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http;
 
-use App\Models\ironman;
-use App\Models\players;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class HiscoresController extends Component
 {
-    public int $iron_man = 0;
-
     /**
      * @function totalXP()
      * @param $skills
@@ -103,7 +98,7 @@ class HiscoresController extends Component
          */
         $skill_array = Config::get('app.authentic') == true ? array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
 
-        return view('livewire.hiscores', [
+        return view('hiscores', [
             'skill_array' => $skill_array,
         ])
             ->with(compact('hiscores'));
@@ -158,7 +153,7 @@ class HiscoresController extends Component
 
         $skill = '' . $subpage;
 
-        return view('livewire.hiscoreskill', [
+        return view('hiscoreskill', [
             'skill_array' => $skill_array,
             'subpage' => $subpage,
             '' . $subpage => $skill,
@@ -236,7 +231,7 @@ class HiscoresController extends Component
 
             $skill = '' . $subpage;
 
-            return view('livewire.hiscores', [
+            return view('hiscores', [
                 'skill_array' => $skill_array,
                 'subpage' => $subpage,
                 'ironman_mode' => $iron_man,
@@ -261,7 +256,7 @@ class HiscoresController extends Component
 
             $skill = '' . $subpage;
 
-            return view('livewire.hiscoreskill', [
+            return view('hiscoreskill', [
                 'skill_array' => $skill_array,
                 'subpage' => $subpage,
                 'ironman_mode' => $iron_man,
