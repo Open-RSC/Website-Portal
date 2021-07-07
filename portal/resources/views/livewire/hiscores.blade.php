@@ -40,19 +40,7 @@
 
             <div style="width:300px;">
                 <div style="padding-left: 75px;">
-                    @if($subpage ?? '' == null)
-                        <b>Overall Hiscores</b>
-                    @elseif($subpage ?? '' == 'hits')
-                        <b>Hitpoints Hiscores</b>
-                    @elseif($subpage ?? '' == 'woodcut')
-                        <b>Woodcutting Hiscores</b>
-                    @elseif($subpage ?? '' == 'herblaw')
-                        <b>Herblore Hiscores</b>
-                    @elseif($subpage ?? '' == 'runecraft')
-                        <b>Runecrafting Hiscores</b>
-                    @else
-                        <b>{{ ucfirst($subpage ?? '') }} Hiscores</b>
-                    @endif
+                    <b>Overall Hiscores</b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">

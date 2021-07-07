@@ -40,15 +40,15 @@
 
             <div style="width:300px;">
                 <div style="padding-left: 75px;">
-                    @if($subpage ?? '' == null)
+                    @if($subpage == null)
                         <b>Overall Hiscores</b>
-                    @elseif($subpage ?? '' == 'hits')
+                    @elseif($subpage == 'hits')
                         <b>Hitpoints Hiscores</b>
-                    @elseif($subpage ?? '' == 'woodcut')
+                    @elseif($subpage == 'woodcut')
                         <b>Woodcutting Hiscores</b>
-                    @elseif($subpage ?? '' == 'herblaw')
+                    @elseif($subpage == 'herblaw')
                         <b>Herblore Hiscores</b>
-                    @elseif($subpage ?? '' == 'runecraft')
+                    @elseif($subpage == 'runecraft')
                         <b>Runecrafting Hiscores</b>
                     @else
                         <b>{{ ucfirst($subpage ?? '') }} Hiscores</b>

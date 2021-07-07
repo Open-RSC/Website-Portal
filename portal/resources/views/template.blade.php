@@ -105,16 +105,8 @@
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                                    @elseif(in_array($subpage, array('attack', 'defense', 'strength', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
-                                        <b>{{ ucfirst($subpage) }} Hiscores</b>
-                                    @elseif($subpage == 'hits')
-                                        <b>Hitpoints Hiscores</b>
-                                    @elseif($subpage == 'woodcut')
-                                        <b>Woodcutting Hiscores</b>
-                                    @elseif($subpage == 'herblaw')
-                                        <b>Herblore Hiscores</b>
-                                    @elseif($subpage == 'runecraft')
-                                        <b>Runecrafting Hiscores</b>
+                                    @elseif(in_array($subpage, array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
+                                        <b>RuneScape Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
@@ -122,12 +114,21 @@
                                         <a class="c" href="{{ route('Home') }}">Main menu</a>
                                     </div>
                                     @if(Config::get('app.authentic'))
-                                        <div class="d-block">
-                                            <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                            <a class="c" href="/hiscores/ironman">Ironman</a> |
-                                            <a class="c" href="/hiscores/hardcore">Hardcore</a> |
-                                            <a class="c" href="/hiscores/ultimate">Ultimate</a>
-                                        </div>
+                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')) || route('RuneScape Hiscores'))
+                                            <div class="d-block">
+                                                @if($subpage ?? '' == 'skill_total')
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
+                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/1">Ironman</a> |
+                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/2">Hardcore</a> |
+                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/3">Ultimate</a>
+                                                @else
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/1">Ironman</a> |
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/2">Hardcore</a> |
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/3">Ultimate</a>
+                                                @endif
+                                            </div>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
