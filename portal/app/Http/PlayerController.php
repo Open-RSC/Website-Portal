@@ -53,7 +53,7 @@ class PlayerController extends Controller
 			'subpage' => $subpage,
 			'players' => $players,
 		])
-			->with(compact('$banks'));
+			->with(compact('players'));
 	}
 
 	/**
@@ -84,7 +84,7 @@ class PlayerController extends Controller
 		return view('bank', [
 			'banks' => $banks,
 		])
-			->with(compact('$banks'));
+            ->with(compact('players'));
 	}
 
 	/**
@@ -131,7 +131,7 @@ class PlayerController extends Controller
 			'subpage' => $subpage,
 			'banks' => $banks,
 		])
-			->with(compact('$banks'));
+            ->with(compact('banks'));
 	}
 
 	/**
@@ -178,6 +178,6 @@ class PlayerController extends Controller
 			'subpage' => $subpage,
 			'invitems' => $invitems,
 		])
-			->with(compact('$invitems'));
+			->with(compact('invitems'));
 	}
 }
