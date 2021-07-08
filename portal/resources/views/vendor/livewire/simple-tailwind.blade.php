@@ -4,16 +4,12 @@
             <span>
                 {{-- Previous Page Link --}}
                 @if ($paginator->onFirstPage())
-                    <span class="relative inline-flex items-center px-1 py-2 text-sm font-medium bg-black text-gray-500 border
-            border-gray-900 cursor-default leading-5 rounded-md">
+                    <span class="inline-flex items-center px-1 py-2 font-medium leading-5 rounded-md focus:outline-none" style="color:slategray;">
                         {!! __('pagination.previous') !!}
                     </span>
                 @else
                     <button wire:click="previousPage" wire:loading.attr="disabled" rel="prev"
-                            class="relative inline-flex items-center px-1 py-2
-            text-sm font-medium text-gray-700 bg-dark border border-black leading-5 rounded-md hover:text-gray-500
-            focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700
-            transition ease-in-out duration-150">
+                            class="inline-flex items-center px-1 py-2 font-medium f leading-5 rounded-md hover:text-green-500 focus:outline-none transition ease-in-out duration-150">
                         {!! __('pagination.previous') !!}
                     </button>
                 @endif
@@ -22,14 +18,12 @@
             <span>
                 {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
-                    <button wire:click="nextPage" wire:loading.attr="disabled" rel="next" class="relative inline-flex items-center px-1 py-2
-            text-sm font-medium text-gray-700 bg-dark border border-black leading-5 rounded-md hover:text-gray-500
-            focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700
-            transition ease-in-out duration-150">
+                    <button wire:click="nextPage" wire:loading.attr="disabled" rel="next"
+                            class="inline-flex items-center px-1 py-2 font-medium f leading-5 rounded-md hover:text-green-500 focus:outline-none transition ease-in-out duration-150">
                         {!! __('pagination.next') !!}
                     </button>
                 @else
-                    <span class="relative inline-flex items-center px-1 py-2 text-sm font-medium text-gray-500 bg-black border border-gray-900 cursor-default leading-5 rounded-md">
+                    <span class="inline-flex items-center px-1 py-2 font-medium leading-5 rounded-md focus:outline-none" style="color:slategray;">
                         {!! __('pagination.next') !!}
                     </span>
                 @endif

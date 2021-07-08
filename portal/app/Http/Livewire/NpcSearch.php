@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\npcdef;
+use Illuminate\Pagination\Paginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -11,7 +12,7 @@ class NpcSearch extends Component
     use WithPagination;
 
     public string $searchTerm = 'Type a name';
-    public string $npcdefs;
+    public int $currentPage = 1;
 
     public function render()
     {

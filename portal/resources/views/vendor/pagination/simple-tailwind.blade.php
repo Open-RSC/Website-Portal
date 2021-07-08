@@ -2,30 +2,26 @@
     <nav role="navigation" aria-label="Pagination Navigation" class="flex justify-between">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
-            <span class="relative inline-flex items-center px-1 py-2 text-sm font-medium bg-black text-gray-500 border
-            border-gray-900 cursor-default leading-5 rounded-md">
+            <span class="inline-flex items-center px-1 py-2 leading-5 rounded-md focus:outline-none"
+                  style="color:slategray; font-size:22px;">
                 {!! __('pagination.previous') !!}
             </span>
         @else
-            <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="relative inline-flex items-center px-1 py-2
-            text-sm font-medium text-gray-700 bg-dark border border-black leading-5 rounded-md hover:text-gray-500
-            focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700
-            transition ease-in-out duration-150">
+            <a href="{{ $paginator->previousPageUrl() }}" rel="prev"
+               class="inline-flex items-center px-1 py-2 font-medium f leading-5 rounded-md" style="font-size:22px;">
                 {!! __('pagination.previous') !!}
             </a>
         @endif
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
-            <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="relative inline-flex items-center px-1 py-2
-            text-sm font-medium text-gray-700 bg-dark border border-black leading-5 rounded-md hover:text-gray-500
-            focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-700
-            transition ease-in-out duration-150">
+            <a href="{{ $paginator->nextPageUrl() }}" rel="next"
+               class="inline-flex items-center px-1 py-2 font-medium f leading-5 rounded-md" style="font-size:22px;">
                 {!! __('pagination.next') !!}
             </a>
         @else
-            <span class="relative inline-flex items-center px-1 py-2 text-sm font-medium text-gray-500 bg-black border
-            border-gray-900 cursor-default leading-5 rounded-md">
+            <span class="inline-flex items-center px-1 py-2 leading-5 rounded-md focus:outline-none"
+                  style="color:slategray; font-size:22px;">
                 {!! __('pagination.next') !!}
             </span>
         @endif

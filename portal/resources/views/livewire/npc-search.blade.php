@@ -34,5 +34,5 @@
     </div>
     @endif
     @endforeach
-    {{ $npcResults->links('livewire::simple-tailwind') }}
+    {{ $npcResults->onEachSide(1)->links('livewire::simple-tailwind') }}
 </div>

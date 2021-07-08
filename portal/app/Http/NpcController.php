@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
