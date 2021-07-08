@@ -7,10 +7,10 @@
         </h2>
 
         <div class="row align-items-center pb-3">
-            <div class="col-md d-inline-block text-center">
-                <img class="display-glow pb-3" style="transform: scale(1.3);"
-                     src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"/>
-                <span class="col d-inline-block">{{ $npcdef->description }}</span>
+            <div class="col d-inline-block text-center" style="width:150px; padding-left:30px;">
+                <img class="display-glow pb-3 align-self-center" src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png"
+                     alt="{{ $npcdef->name }}"/>
+                <span class="col d-inline-block">{{ ucfirst($npcdef->description) }}</span>
             </div>
 
             <div class="col-md d-inline-block text-center">
@@ -92,16 +92,16 @@
                                     data-href="{{ route('itemdef', $npc_drop->itemID) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
-                                        style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
+                                            style="-webkit-text-fill-color:limegreen; -webkit-text-stroke-width:1px; -webkit-text-stroke-color:black; margin-top:0; position:relative; font-size:13px; font-weight:900;">
                                         {{ $npc_drop->dropAmount }}
                                     </div>
                                     <img class="mt-n2 pb-1" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
                                          alt="{{ $npc_drop->itemID }}"/>
-                                    <!--<span class="text-capitalize d-block">
-                                    { $npc_drop->itemName }} ({ $npc_drop->itemID }})
-                                </span>-->
+                                    <span class="text-capitalize d-block">
+                                        {{ $npc_drop->itemName }}
+                                </span>
                                 </td>
-                                @if ($key % 8 == 7)
+                                @if ($key % 6 == 5)
                         </tr>
                     @endif
                     @endforeach
@@ -123,7 +123,7 @@
                                     data-href="{{ route('itemdef', $npc_drop->itemID) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
-                                        style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
+                                            style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
                                         {{ $npc_drop->dropAmount }}
                                     </div>
                                     <img class="mt-n2" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
@@ -132,7 +132,7 @@
                                     { $npc_drop->itemName }} ({ $npc_drop->itemID }})
                                 </span>-->
                                 </td>
-                                @if ($key % 8 == 7)
+                                @if ($key % 6 == 5)
                         </tr>
                     @endif
                     @endforeach

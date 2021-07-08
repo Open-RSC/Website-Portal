@@ -11,13 +11,13 @@ class NpcSearch extends Component
     use WithPagination;
 
     public string $searchTerm = 'Type a name';
+    public string $npcdefs;
 
     public function render()
     {
         $searchTerm = '%' . $this->searchTerm . '%';
-
         return view('livewire.npc-search', [
-            'npcResults' => npcdef::where('name', 'like', $searchTerm)->paginate(6)
+            'npcResults' => npcdef::where('name', 'like', $searchTerm)->orderBy('combatlvl', 'asc')->paginate(6)
         ]);
     }
 }
