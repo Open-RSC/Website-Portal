@@ -76,12 +76,12 @@
                                 {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$subpage/4.0)) }}
                             </div>
                             <!--Total XP-->
-                            <div class="text-left" style="padding-left:10px; width:100px;">
+                            <div class="text-right" style="padding-left:10px; width:100px;">
                                 {{ number_format($player->$subpage/4.0) }}
                             </div>
                         </div>
                     @endforeach
-                    {{ $hiscores->links('pagination::simple-tailwind') }}
+                    {{ $hiscores->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>

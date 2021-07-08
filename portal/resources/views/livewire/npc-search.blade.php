@@ -5,15 +5,15 @@
 
     <div class="e bg-black p-2" style="outline:black; width:500px;">
         <div class="d-flex">
-            <div class="text-left" style="width:80px;"><b>Image</b></div>
+            <div class="text-center" style="width:80px;"><b>Image</b></div>
             <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
             <div class="text-left" style="width:40px;"><b>Level</b></div>
             <div class="text-left" style="padding-left:10px; width:230px;"><b>Description</b></div>
         </div>
         @foreach($npcResults as $key=>$npcdef)
-            <div class="d-flex">
+            <div class="d-flex pt-3">
                 <!--Image-->
-                <div class="text-left pt-1 pb-1" style="width:80px;">
+                <div class="img-fluid pt-1 pb-1 mx-auto" style="max-width:80px;">
                     <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
                          style="max-height: 62px; max-width: 75px;"/>
                 </div>
@@ -27,12 +27,12 @@
                 </div>
                 <!--Description-->
                 <div class="text-left pt-1  pb-1 text-gray-400" style="padding-left:10px; width:230px;">
-                    {{ $npcdef->description }}
+                    {{ ucfirst($npcdef->description) }}
                 </div>
             </div>
             @if ($key % 6 == 5)
-    </div>
     @endif
     @endforeach
-    {{ $npcResults->onEachSide(1)->links('livewire::simple-tailwind') }}
+    {{ $npcResults->onEachSide(1)->links('livewire::tailwind') }}
+    </div>
 </div>
