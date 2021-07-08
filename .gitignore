@@ -59,3 +59,6 @@ backups/*.zip
 board/ext/phpbb/viglink/
 
 portal/public/phpmyadmin/tmp/
+
+!board/cache/production/.gitsave
+board/cache/production/
