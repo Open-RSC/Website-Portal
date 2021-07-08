@@ -25,7 +25,6 @@ class ItemController extends Controller
 			$items = DB::connection('cabbage')
 				->table('itemdef')
 				->where([
-					['bankNoteID', '!=', '-1'],
 					['id', '<=', '2091'], // limits to show only authentic items
 				])
 				->orderBy('id', 'asc')
@@ -33,7 +32,6 @@ class ItemController extends Controller
 		} else {
 			$items = DB::connection('cabbage')
 				->table('itemdef')
-				->where('bankNoteID', '!=', '-1')
 				->orderBy('id', 'asc')
 				->paginate(300);
 		}
@@ -46,8 +44,8 @@ class ItemController extends Controller
 	 * Show the form for creating a new resource.
 	 *
 	 * @param Request $request
-	 * @return void
-	 */
+	 * @return Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\View
+     */
 	public function autocomplete(Request $request)
 	{
 		if (Config::get('app.authentic') == true) {
