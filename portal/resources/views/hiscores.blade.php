@@ -69,10 +69,10 @@
                             </div>
                         </div>
                     @endforeach
+                    {{ $hiscores->links('pagination::simple-tailwind') }}
                 </div>
             </div>
         </div>
-        <!--{/{ $hiscores->links('pagination::simple-tailwind') }}-->
     </div>
 
     <div class="p-2"></div>
