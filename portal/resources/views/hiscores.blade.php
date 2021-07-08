@@ -21,7 +21,7 @@
                                     @if($skill == 'skill_total')
                                         Overall
                                     @elseif($skill =='hits')
-                                        Hitpoints
+                                        Fighting
                                     @elseif($skill == 'woodcut')
                                         Woodcutting
                                     @elseif($skill == 'herblaw')
@@ -99,6 +99,5 @@
                 <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
             </form>
         </div>
-    </div>
     </div>
 @endsection

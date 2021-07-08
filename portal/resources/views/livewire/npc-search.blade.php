@@ -1,57 +1,37 @@
 <div class="col">
-    <input wire:model="searchTerm" type="text">
+    <input class="text-black-50 click" onfocus="this.value=''" wire:model="searchTerm" type="text">
 
     <!-- Large view version -->
-    <div class="d-none d-md-block">
-        {{ $npcResults->links('pagination::bootstrap-4') }}
-        <table id="List" class="table table-striped table-both-hover text-primary table-transparent">
-            <tr>
-                @foreach($npcResults as $key=>$npcdef)
-                    <td class="text-center clickable-row" data-href="npcdef/{{ $npcdef->id }}"
-                        style="border: 1px solid #0F0F0F;">
-                        <div class="display-glow pt-1">
-                            <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
-                                 style="max-height: 52px; max-width: 65px;"/>
-                        </div>
-                        <span class="text-capitalize">
-									{{ $npcdef->name }} ({{ $npcdef->id }})
-								</span>
-                        <span class="text-gray-400 d-block">
-								{{ $npcdef->description }}
-							</span>
-                    </td>
-                    @if ($key % 6 == 5)
-            </tr>
-            @endif
-            @endforeach
-        </table>
-        {{ $npcResults->links('pagination::bootstrap-4') }}
+    <div class="e bg-black p-2" style="outline: black; width: 400px;">
+        <div class="d-flex">
+            <div class="text-left" style="width:60px;"><b>Image</b></div>
+            <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
+            <div class="text-right" style="width:30px;"><b>Level</b></div>
+            <div class="text-right" style="width:100px;"><b>Description</b></div>
+        </div>
+        @foreach($npcResults as $key=>$npcdef)
+            <div class="d-flex clickable-row" data-href="/npcdef/{{ $npcdef->id }}">
+                <!--Image-->
+                <div class="text-left" style="width:60px;">
+                    <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
+                         style="max-height: 52px; max-width: 65px;"/>
+                </div>
+                <!--Name-->
+                <div class="text-left" style="padding-left:10px; width:130px;">
+                    <a class="c" href="/npcdef/{{ $npcdef->id }}">{{ ucfirst($npcdef->name) }} ({{ $npcdef->id }})</a>
+                </div>
+                <!--Level-->
+                <div class="text-right" style="padding-right:15px; width:30px;">
+                    {{ number_format($npcdef->combatlvl) }}
+                </div>
+                <!--Description-->
+                <div class="text-left text-gray-400" style="padding-left:10px; width:100px;">
+                    {{ $npcdef->description }}
+                </div>
+            </div>
+            @if ($key % 6 == 5)
     </div>
-
-    <!-- Mobile view version -->
-    <div class="d-md-none d-lg-none">
-        {{ $npcResults->links('pagination::bootstrap-4') }}
-        <table id="List" class="table table-striped table-both-hover text-primary table-transparent">
-            <tr>
-                @foreach($npcResults as $key=>$npcdef)
-                    <td class="text-center clickable-row" data-href="npcdef/{{ $npcdef->id }}"
-                        style="border: 1px solid #0F0F0F;">
-                        <div class="display-glow pt-1">
-                            <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
-                                 style="max-height: 52px; max-width: 65px;"/>
-                        </div>
-                        <span class="text-capitalize">
-									{{ $npcdef->name }} ({{ $npcdef->id }})
-								</span>
-                        <span class="text-white-50 d-block">
-								{{ $npcdef->description }}
-							</span>
-                    </td>
-                    @if ($key % 4 == 3)
-            </tr>
-            @endif
-            @endforeach
-        </table>
-        {{ $npcResults->links('pagination::bootstrap-4') }}
-    </div>
+    @endif
+    @endforeach
+    {{ $npcResults->links('pagination::simple-tailwind') }}
 </div>

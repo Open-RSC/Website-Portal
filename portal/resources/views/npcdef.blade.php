@@ -1,9 +1,9 @@
 @extends('template')
 
 @section('content')
-    <div class="col container">
+    <div class="e bg-black p-2" style="outline: black; width: 480px;">
         <h2 class="h2 text-center pt-5 pb-3 text-capitalize display-3">
-            <a href="{{ route('npcs') }}">{{ $npcdef->name }}</a>
+            <a href="{{ route('Monster Database') }}">{{ $npcdef->name }}</a>
         </h2>
 
         <div class="row align-items-center pb-3">
@@ -101,69 +101,7 @@
                                     { $npc_drop->itemName }} ({ $npc_drop->itemID }})
                                 </span>-->
                                 </td>
-                                @if ($key % 18 == 17)
-                        </tr>
-                    @endif
-                    @endforeach
-                    @else
-                        No items found.
-                    @endif
-                </table>
-            </div>
-        </div>
-
-        <!-- Large version -->
-        <div class="row align-items-center d-none d-md-none d-lg-block d-xl-none">
-            <div class="col">
-                <table>
-                    @if ($npc_drops->count() > 0)
-                        <tr>
-                            @foreach ($npc_drops as $key=>$npc_drop)
-                                <td class="pl-1 pr-1 clickable-row"
-                                    data-href="{{ route('itemdef', $npc_drop->itemID) }}"
-                                    style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                    <div
-                                        style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
-                                        {{ $npc_drop->dropAmount }}
-                                    </div>
-                                    <img class="mt-n2 pb-1" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
-                                         alt="{{ $npc_drop->itemID }}"/>
-                                    <!--<span class="text-capitalize d-block">
-                                    { $npc_drop->itemName }} ({ $npc_drop->itemID }})
-                                </span>-->
-                                </td>
-                                @if ($key % 14 == 13)
-                        </tr>
-                    @endif
-                    @endforeach
-                    @else
-                        No items found.
-                    @endif
-                </table>
-            </div>
-        </div>
-
-        <!-- Medium view version -->
-        <div class="row align-items-center pl-5 pr-5 d-none d-md-block d-lg-none d-xl-none">
-            <div class="col">
-                <table>
-                    @if ($npc_drops->count() > 0)
-                        <tr>
-                            @foreach ($npc_drops as $key=>$npc_drop)
-                                <td class="pl-1 pr-1 clickable-row"
-                                    data-href="{{ route('itemdef', $npc_drop->itemID) }}"
-                                    style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                    <div
-                                        style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
-                                        {{ $npc_drop->dropAmount }}
-                                    </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
-                                         alt="{{ $npc_drop->itemID }}"/>
-                                    <!--<span class="text-capitalize d-block">
-                                    { $npc_drop->itemName }} ({ $npc_drop->itemID }})
-                                </span>-->
-                                </td>
-                                @if ($key % 11 == 10)
+                                @if ($key % 8 == 7)
                         </tr>
                     @endif
                     @endforeach

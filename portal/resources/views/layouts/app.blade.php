@@ -161,7 +161,8 @@
                 @endif
                 @yield('content')
                 {{ $slot }}
-                <div class="pt-2"></div>
+            </div>
+            <div class="pt-2"></div>
             </div>
             <div class="mid-right-border"></div>
         </section>

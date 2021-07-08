@@ -38,12 +38,12 @@ Route::get('player/{subpage}/bank', 'PlayerController@bank')->middleware('auth:a
 Route::get('player/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
 
 // Item lookup
-Route::get('items', 'ItemController@index')->name('items');
-Route::get('itemdef/{id}', 'ItemController@show')->name('itemdef');
+Route::any('items', 'ItemController@index')->name('items');
+Route::any('itemdef/{id}', 'ItemController@show')->name('itemdef');
 
 // NPC lookup
-Route::get('npcs', 'NpcController@index')->name('npcs');
-Route::get('npcdef/{id}', 'NpcController@show')->name('npcdef');
+Route::any('npcs', 'NpcController@index')->name('Monster Database');
+Route::any('npcdef/{id}', 'NpcController@show')->name('Monster Details');
 
 // Hiscores
 Route::any('hiscores', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict below

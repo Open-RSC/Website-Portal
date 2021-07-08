@@ -123,8 +123,10 @@
                                                     <a class="c" href="/hiscores/{{ $subpage ?? '' }}/3">Ultimate</a>
                                                 @else
                                                     <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/1">Ironman</a> |
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/2">Hardcore</a> |
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/1">Ironman</a>
+                                                    |
+                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/2">Hardcore</a>
+                                                    |
                                                     <a class="c" href="{{ route('RuneScape Hiscores') }}/3">Ultimate</a>
                                                 @endif
                                             </div>
@@ -138,7 +140,8 @@
                     <div class="pt-3"></div>
                 @endif
                 @yield('content')
-                <div class="pt-2"></div>
+            </div>
+            <div class="pt-2"></div>
             </div>
             <div class="mid-right-border"></div>
         </section>

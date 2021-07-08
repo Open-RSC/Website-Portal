@@ -21,7 +21,7 @@
                                     @if($skill == 'skill_total')
                                         Overall
                                     @elseif($skill =='hits')
-                                        Hitpoints
+                                        Fighting
                                     @elseif($skill == 'woodcut')
                                         Woodcutting
                                     @elseif($skill == 'herblaw')
@@ -43,7 +43,7 @@
                     @if($subpage == null)
                         <b>Overall Hiscores</b>
                     @elseif($subpage == 'hits')
-                        <b>Hitpoints Hiscores</b>
+                        <b>Fighting Hiscores</b>
                     @elseif($subpage == 'woodcut')
                         <b>Woodcutting Hiscores</b>
                     @elseif($subpage == 'herblaw')
@@ -111,6 +111,5 @@
                 <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
             </form>
         </div>
-    </div>
     </div>
 @endsection
