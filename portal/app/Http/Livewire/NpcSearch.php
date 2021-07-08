@@ -17,7 +17,7 @@ class NpcSearch extends Component
         $searchTerm = '%' . $this->searchTerm . '%';
 
         return view('livewire.npc-search', [
-            'npcResults' => npcdef::where('name', 'like', $searchTerm)->paginate(11)
+            'npcResults' => npcdef::where('name', 'like', $searchTerm)->paginate(6)
         ]);
     }
 }

@@ -1,31 +1,32 @@
 <div class="col">
-    <input class="text-black-50 click" onfocus="this.value=''" wire:model="searchTerm" type="text">
+    <div class="d-flex justify-content-left pb-1">
+        <input class="e  pl-1 text-white click" onfocus="this.value=''" wire:model="searchTerm" type="text" style="width:150px; background:black;">
+    </div>
 
-    <!-- Large view version -->
-    <div class="e bg-black p-2" style="outline: black; width: 400px;">
+    <div class="e bg-black p-2" style="outline:black; width:500px;">
         <div class="d-flex">
-            <div class="text-left" style="width:60px;"><b>Image</b></div>
+            <div class="text-left" style="width:80px;"><b>Image</b></div>
             <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
-            <div class="text-right" style="width:30px;"><b>Level</b></div>
-            <div class="text-right" style="width:100px;"><b>Description</b></div>
+            <div class="text-left" style="width:40px;"><b>Level</b></div>
+            <div class="text-left" style="padding-left:10px; width:230px;"><b>Description</b></div>
         </div>
         @foreach($npcResults as $key=>$npcdef)
-            <div class="d-flex clickable-row" data-href="/npcdef/{{ $npcdef->id }}">
+            <div class="d-flex">
                 <!--Image-->
-                <div class="text-left" style="width:60px;">
+                <div class="text-left pt-1 pb-1" style="width:80px;">
                     <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
-                         style="max-height: 52px; max-width: 65px;"/>
+                         style="max-height: 62px; max-width: 75px;"/>
                 </div>
                 <!--Name-->
-                <div class="text-left" style="padding-left:10px; width:130px;">
-                    <a class="c" href="/npcdef/{{ $npcdef->id }}">{{ ucfirst($npcdef->name) }} ({{ $npcdef->id }})</a>
+                <div class="text-left pt-1 pb-1" style="padding-left:10px; width:130px;">
+                    <a class="c" href="/npcdef/{{ $npcdef->id }}">{{ ucfirst($npcdef->name) }}</a>
                 </div>
                 <!--Level-->
-                <div class="text-right" style="padding-right:15px; width:30px;">
+                <div class="text-left pt-1 pb-1" style="width:40px;">
                     {{ number_format($npcdef->combatlvl) }}
                 </div>
                 <!--Description-->
-                <div class="text-left text-gray-400" style="padding-left:10px; width:100px;">
+                <div class="text-left pt-1  pb-1 text-gray-400" style="padding-left:10px; width:230px;">
                     {{ $npcdef->description }}
                 </div>
             </div>
