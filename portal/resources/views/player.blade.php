@@ -53,6 +53,7 @@
                                 </td>
                             </tr>
                             @foreach ($skill_array as $skill)
+                                @foreach ($rank as $display)
                                 <tr>
                                     <td>
                                         @if($skill == 'skill_total')
@@ -82,11 +83,7 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        @if($skill =='hits')
-                                            {{ $rank_hits->first()->hits }}
-                                        @else
-                                            NULL
-                                        @endif
+                                        {{ $display->first()->rank }}
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
@@ -95,6 +92,7 @@
                                         {{ number_format($player->$skill/4.0) }}
                                     </td>
                                 </tr>
+                                @endforeach
                             @endforeach
                         @endforeach
                     </table>

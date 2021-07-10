@@ -222,6 +222,7 @@ class HiscoresController extends Component
                 ->where([
                     ['b.banned', '=', '0'],
                     ['b.group_id', '>=', '8'],
+                    ['c.iron_man', '!=', '4'],
                     ['c.iron_man', '=', $iron_man],
                 ])
                 ->groupBy('b.username')
@@ -249,6 +250,7 @@ class HiscoresController extends Component
                     ['b.group_id', '>=', '8'],
                     ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
                     ['c.iron_man', '=', $iron_man],
+                    ['c.iron_man', '!=', '4'],
                 ])
                 ->groupBy('b.username')
                 ->orderBy('a.' . $subpage, 'desc')
