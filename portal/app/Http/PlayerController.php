@@ -72,15 +72,25 @@ class PlayerController extends Controller
         }
 
         $rank_overall = DB::connection('cabbage')
-            ->table("players")
-            ->select(DB::raw("COUNT(skill_total) AS rank"))
-            ->where("skill_total", ">", function ($query) use ($subpage) {
-                $query->select("skill_total")
-                    ->from("players")
+            ->table("experience as a")
+            ->join("players as b", function ($join) {
+                $join->on("a.playerid", "=", "b.id");
+            })
+            ->select(DB::raw("COUNT(b.skill_total) as skill_count"))
+            ->orderBy('b.skill_total', 'desc')
+            ->where([
+                ['b.banned', '=', '0'],
+                ['b.group_id', '>=', '8'],
+            ])
+            ->where("b.skill_total", ">", function ($query) use ($subpage) {
+                $query
+                    ->select(DB::raw("b.skill_total"))
+                    ->from("players AS b")
+                    ->orderBy('b.skill_total', 'desc')
                     ->where([
-                        ['banned', '=', '0'],
-                        ['group_id', '>=', '8'],
-                        ["id", '=', $subpage],
+                        ['b.banned', '=', '0'],
+                        ['b.group_id', '>=', '8'],
+                        ["b.id", '=', $subpage],
                     ]);
             })
             ->get();

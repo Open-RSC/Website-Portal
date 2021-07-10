@@ -43,7 +43,7 @@
                                     </a>
                                 </td>
                                 <td align="right">
-                                    {{ $rank_overall->first()->rank }}
+                                    {{ number_format($rank_overall->first()->skill_count+1) }}
                                 </td>
                                 <td align="right">
                                     {{ number_format($player->skill_total) }}
