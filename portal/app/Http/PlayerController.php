@@ -23,6 +23,34 @@ class PlayerController extends Controller
         return number_format($n);
     }
 
+    public function rank($subpage, $skill)
+    {
+        DB::connection('cabbage')
+            ->table("experience as a")
+            ->join("players as b", function ($join) {
+                $join->on("a.playerid", "=", "b.id");
+            })
+            ->join('ironman as c', 'b.id', '=', 'c.playerID')
+            ->select(DB::raw("COUNT($skill) AS rank"))
+            ->where([
+                ["b.banned", "=", "0"],
+                ["b.group_id", ">=", "8"],
+                ['c.iron_man', '!=', '4'],
+                ["a.hits", ">", function ($query) use ($subpage, $skill) {
+                    $query
+                        ->select("$skill")
+                        ->from("experience as a")
+                        ->where([
+                            ['b.banned', '=', '0'],
+                            ['b.group_id', '>=', '8'],
+                            ['c.iron_man', '!=', '4'],
+                            ["a.playerid", "=", $subpage],
+                        ]);
+                }]
+            ])
+            ->get();
+    }
+
     public function index($subpage)
     {
         /**
@@ -123,38 +151,10 @@ class PlayerController extends Controller
             ->get();
 
 
-        foreach ($skill_array as $skill) {
-            $rank[] = DB::connection('cabbage')
-                ->table("experience as a")
-                ->join("players as b", function ($join) {
-                    $join->on("a.playerid", "=", "b.id");
-                })
-                ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select(DB::raw("COUNT($skill) AS rank"))
-                ->where([
-                    ["b.banned", "=", "0"],
-                    ["b.group_id", ">=", "8"],
-                    ['c.iron_man', '!=', '4'],
-                    ["a.hits", ">", function ($query) use ($subpage, $skill) {
-                        $query
-                            ->select("$skill")
-                            ->from("experience as a")
-                            ->where([
-                                ['b.banned', '=', '0'],
-                                ['b.group_id', '>=', '8'],
-                                ['c.iron_man', '!=', '4'],
-                                ["a.playerid", "=", $subpage],
-                            ]);
-                    }]
-                ])
-                ->get();
-        }
-
         return view('player', [
             'subpage' => $subpage,
             'players' => $players,
             'rank_overall' => $rank_overall,
-            'rank' => $rank,
             'skill_array' => $skill_array,
         ])
             ->with(compact('players'));

@@ -53,7 +53,6 @@
                                 </td>
                             </tr>
                             @foreach ($skill_array as $skill)
-                                @foreach ($rank as $display)
                                 <tr>
                                     <td>
                                         @if($skill == 'skill_total')
@@ -83,7 +82,7 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        {{ $display->first()->rank }}
+                                        {{  number_format((new App\Http\PlayerController)->rank($subpage, $skill)) }}
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
@@ -92,7 +91,6 @@
                                         {{ number_format($player->$skill/4.0) }}
                                     </td>
                                 </tr>
-                                @endforeach
                             @endforeach
                         @endforeach
                     </table>
