@@ -43,7 +43,7 @@
                                     </a>
                                 </td>
                                 <td align="right">
-                                    NULL
+                                    {{ $rank_overall->first()->rank }}
                                 </td>
                                 <td align="right">
                                     {{ number_format($player->skill_total) }}
@@ -82,7 +82,11 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        NULL
+                                        @if($skill =='hits')
+                                            {{ $rank_hits->first()->hits }}
+                                        @else
+                                            NULL
+                                        @endif
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
