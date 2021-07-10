@@ -135,37 +135,10 @@ class PlayerController extends Controller
             ])
             ->get();
 
-        $rank_hits = DB::connection('cabbage')
-            ->table("experience as a")
-            ->join("players as b", function ($join) {
-                $join->on("a.playerid", "=", "b.id");
-            })
-            ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select(DB::raw("COUNT(hits) AS rank"))
-            ->where([
-                ["b.banned", "=", "0"],
-                ["b.group_id", ">=", "8"],
-                ['c.iron_man', '!=', '4'],
-                ["a.hits", ">", function ($query) use ($subpage) {
-                    $query
-                        ->select("hits")
-                        ->from("experience as a")
-                        ->where([
-                            ['b.banned', '=', '0'],
-                            ['b.group_id', '>=', '8'],
-                            ['c.iron_man', '!=', '4'],
-                            ["a.playerid", "=", $subpage],
-                        ]);
-                }]
-            ])
-            ->get();
-
-
         return view('player', [
             'subpage' => $subpage,
             'players' => $players,
             'rank_overall' => $rank_overall,
-            'rank_hits' => $rank_hits,
             'skill_array' => $skill_array,
         ])
             ->with(compact('players'));
