@@ -31,19 +31,7 @@ class PlayerController extends Controller
          */
         $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
 
-        $hiscores = DB::connection('cabbage')
-            ->table('experience as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->select('b.*', 'a.*')
-            ->where([
-                ['b.id', '=', $subpage],
-            ])
-            ->orWhere([
-                ['b.username', '=', $subpage],
-            ])
-            ->get();
-
-        $skill_array = Config::get('app.authentic') == true ? array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        $skill_array = !Config::get('app.authentic') == true ? array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
 
         /**
          * @var $players
@@ -53,7 +41,27 @@ class PlayerController extends Controller
             ->table('experience as a')
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select('b.*', 'c.*', 'a.*')
+            ->select('b.*', 'c.*', 'a.*', DB::raw('
+			(SUM(a.attack +
+			a.strength +
+			a.defense +
+			a.hits +
+			a.ranged +
+			a.prayer +
+			a.magic +
+			a.cooking +
+			a.woodcut +
+			a.fletching +
+			a.fishing +
+			a.firemaking +
+			a.crafting +
+			a.smithing +
+			a.mining +
+			a.herblaw +
+			a.agility +
+			a.thieving)
+			/4.0)
+			as total_xp'))
             ->where([
                 ['b.id', '=', $subpage],
             ])
@@ -67,7 +75,6 @@ class PlayerController extends Controller
 
         return view('player', [
             'subpage' => $subpage,
-            'hiscores' => $hiscores,
             'players' => $players,
             'skill_array' => $skill_array,
         ])

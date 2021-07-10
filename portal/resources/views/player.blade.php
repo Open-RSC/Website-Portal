@@ -29,8 +29,30 @@
                                 <b>XP</b>
                             </td>
                         </tr>
-                        @foreach ($skill_array as $skill)
-                            @foreach ($players as $key=>$player)
+                        @foreach ($players as $key=>$player)
+                            <tr>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td align="left">
+                                    <a class="c" href="/hiscores">
+                                        Overall
+                                    </a>
+                                </td>
+                                <td align="right">
+                                    NULL
+                                </td>
+                                <td align="right">
+                                    {{ number_format($player->skill_total) }}
+                                </td>
+                                <td align="right">
+                                    {{ number_format($player->total_xp) }}
+                                </td>
+                            </tr>
+                            @foreach ($skill_array as $skill)
                                 <tr>
                                     <td>
                                         @if($skill == 'skill_total')
@@ -43,7 +65,7 @@
                                         &nbsp;
                                     </td>
                                     <td align="left">
-                                        <a class="c" href="/player/{{ $skill }}">
+                                        <a class="c" href="/hiscores/{{ $skill }}">
                                             @if($skill == 'skill_total')
                                                 Overall
                                             @elseif($skill =='hits')
