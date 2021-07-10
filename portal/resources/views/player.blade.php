@@ -43,7 +43,7 @@
                                     </a>
                                 </td>
                                 <td align="right">
-                                    {{ number_format($rank_overall->first()->skill_count+1) }}
+                                    {{ number_format($rank_overall->first()->rank+1) }}
                                 </td>
                                 <td align="right">
                                     {{ number_format($player->skill_total) }}
@@ -82,7 +82,8 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        {{  number_format((new App\Http\PlayerController)->rank($subpage, $skill)) }}
+                                        {{  (new App\Http\PlayerController)->rank($subpage, $skill)+1 }}
+                                        {{ number_format($rank_hits->first()->rank+1) }}
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}

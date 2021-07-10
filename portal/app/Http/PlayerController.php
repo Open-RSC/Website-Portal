@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -23,22 +24,27 @@ class PlayerController extends Controller
         return number_format($n);
     }
 
-    public function rank($subpage, $skill)
+    /**
+     * @param $subpage
+     * @param $skill
+     * @return int
+     */
+    public function rank($subpage, $skill): int
     {
-        DB::connection('cabbage')
+        return DB::connection('cabbage')
             ->table("experience as a")
             ->join("players as b", function ($join) {
                 $join->on("a.playerid", "=", "b.id");
             })
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select(DB::raw("COUNT($skill) AS rank"))
+            ->select(DB::raw("COUNT($skill)"))
             ->where([
                 ["b.banned", "=", "0"],
                 ["b.group_id", ">=", "8"],
                 ['c.iron_man', '!=', '4'],
                 ["a.hits", ">", function ($query) use ($subpage, $skill) {
                     $query
-                        ->select("$skill")
+                        ->select($skill)
                         ->from("experience as a")
                         ->where([
                             ['b.banned', '=', '0'],
@@ -48,9 +54,13 @@ class PlayerController extends Controller
                         ]);
                 }]
             ])
-            ->get();
+            ->count();
     }
 
+    /**
+     * @param $subpage
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
     public function index($subpage)
     {
         /**
@@ -105,7 +115,7 @@ class PlayerController extends Controller
                 $join->on("a.playerid", "=", "b.id");
             })
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select(DB::raw("COUNT(b.skill_total) as skill_count"))
+            ->select(DB::raw("COUNT(b.skill_total) as rank"))
             ->where([
                 ['b.banned', '=', '0'],
                 ['b.group_id', '>=', '8'],
@@ -155,6 +165,7 @@ class PlayerController extends Controller
             'subpage' => $subpage,
             'players' => $players,
             'rank_overall' => $rank_overall,
+            'rank_hits' => $rank_hits,
             'skill_array' => $skill_array,
         ])
             ->with(compact('players'));
