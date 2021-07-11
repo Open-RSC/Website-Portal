@@ -82,7 +82,7 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        {{  (new App\Http\PlayerController)->rank($subpage, $skill) }}
+                                        {{  (new App\Http\PlayerController)->rank($subpage, $skill)+1 }}
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
