@@ -27,17 +27,15 @@ class PlayerController extends Controller
     /**
      * @param $subpage
      * @param $skill
-     * @return int
      */
-    public function rank($subpage, $skill): int
+    public function rank($subpage, $skill)
     {
         return DB::connection('cabbage')
             ->table("experience as a")
-            ->join("players as b", function ($join) {
-                $join->on("a.playerid", "=", "b.id");
-            })
+            ->join("players as b", 'a.playerid', '=', 'b.id')
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select(DB::raw("COUNT($skill)"))
+            ->select(DB::raw("COUNT(a.playerid), $skill"))
+            ->orderBy($skill, 'desc')
             ->where([
                 ["b.banned", "=", "0"],
                 ["b.group_id", ">=", "8"],
@@ -47,14 +45,11 @@ class PlayerController extends Controller
                         ->select($skill)
                         ->from("experience as a")
                         ->where([
-                            ['b.banned', '=', '0'],
-                            ['b.group_id', '>=', '8'],
-                            ['c.iron_man', '!=', '4'],
                             ["a.playerid", "=", $subpage],
                         ]);
                 }]
             ])
-            ->count();
+            ->get();
     }
 
     /**
