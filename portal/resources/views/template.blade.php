@@ -113,8 +113,8 @@
                                     <div class="d-block">
                                         <a class="c" href="{{ route('Home') }}">Main menu</a>
                                     </div>
-                                    @if(Config::get('app.authentic'))
-                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
+                                        @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
+                                            @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')) || route('RuneScape Hiscores',$db))
                                             <div class="d-block">
                                                 @if($subpage ?? '' == 'skill_total')
                                                     <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
