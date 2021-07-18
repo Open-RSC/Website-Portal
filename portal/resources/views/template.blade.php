@@ -117,17 +117,17 @@
                                         @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
                                             <div class="d-block">
                                                 @if($subpage ?? '' == 'skill_total')
-                                                    <a class="c" href="/hiscores/{{ $db }}">All</a> |
-                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/1">Ironman</a> |
-                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/2">Hardcore</a> |
-                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/3">Ultimate</a>
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/1">Ironman</a> |
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/2">Hardcore</a> |
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/3">Ultimate</a>
                                                 @else
-                                                    <a class="c" href="/hiscores/{{ $db }}">All</a> |
-                                                    <a class="c" href="/hiscores/{{ $db }}/1">Ironman</a>
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/1">Ironman</a>
                                                     |
-                                                    <a class="c" href="/hiscores/{{ $db }}/2">Hardcore</a>
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/2">Hardcore</a>
                                                     |
-                                                    <a class="c" href="/hiscores/{{ $db }}/3">Ultimate</a>
+                                                    <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}/3">Ultimate</a>
                                                 @endif
                                             </div>
                                         @endif

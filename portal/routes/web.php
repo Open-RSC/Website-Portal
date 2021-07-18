@@ -46,8 +46,8 @@ Route::any('npcs', 'NpcController@index')->name('Monster Database');
 Route::any('npcdef/{id}', 'NpcController@show')->name('Monster Details');
 
 // Hiscores
-Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict below
-Route::any('/hiscores/skill_total/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
+Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
+Route::any('/hiscores/skill_total/{db}', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict
 Route::any('/hiscores/{subpage}/{db}', 'HiscoresController@show');
 Route::any('/hiscores/{subpage}/{iron_man}/{db}', 'HiscoresController@iron_man');
 

@@ -17,21 +17,25 @@
                                 @endif
                             </div>
                             <div style="width:40px;">
-                                <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}">
-                                    @if($skill == 'skill_total')
-                                        Overall
-                                    @elseif($skill =='hits')
-                                        Fighting
-                                    @elseif($skill == 'woodcut')
-                                        Woodcutting
-                                    @elseif($skill == 'herblaw')
-                                        Herblore
-                                    @elseif($skill == 'runecraft')
-                                        Runecrafting
-                                    @else
-                                        {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
-                                    @endif
-                                </a>
+                                @if($skill == 'skill_total')
+                                    <a class="c" class="col-3" href="/hiscores/{{ $db }}">
+                                        @else
+                                            <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}">
+                                                @endif
+                                                @if($skill == 'skill_total')
+                                                    Overall
+                                                @elseif($skill =='hits')
+                                                    Fighting
+                                                @elseif($skill == 'woodcut')
+                                                    Woodcutting
+                                                @elseif($skill == 'herblaw')
+                                                    Herblore
+                                                @elseif($skill == 'runecraft')
+                                                    Runecrafting
+                                                @else
+                                                    {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                @endif
+                                            </a>
                             </div>
                         </div>
                     @endforeach
