@@ -107,7 +107,7 @@
                                         <b>RuneScape Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                                    @elseif(in_array($subpage, array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
+                                    @elseif(in_array($subpage, array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
                                         <b>RuneScape Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage) }}</b>
@@ -125,7 +125,7 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')) || route('RuneScape Hiscores',$db))
+                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
                                             <div class="d-block">
                                                 @if($subpage ?? '' == 'skill_total')
                                                     <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
