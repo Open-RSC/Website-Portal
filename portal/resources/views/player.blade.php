@@ -99,6 +99,8 @@
         </table>
     </div>
 
+    <div class="p-2"></div>
+
     @isset($players->first()->username)
         <span class="text-info">
             Status:
@@ -124,4 +126,7 @@
             @endif
         </span>
     @endif
+
+    <div class="p-2"></div>
+
 @endsection

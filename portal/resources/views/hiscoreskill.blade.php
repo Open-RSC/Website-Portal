@@ -94,6 +94,8 @@
 
     <div class="p-2"></div>
 
+    <!-- disabled until time permits figuring this part out
+
     <div class="d-flex justify-between">
         <div class="col hiscore-search">
             <div class="b search-box search-rank"
@@ -121,4 +123,5 @@
                 </form>
             </div>
         </div>
+        -->
 @endsection
