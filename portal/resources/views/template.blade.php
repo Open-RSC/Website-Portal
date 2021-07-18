@@ -113,7 +113,16 @@
                                         <b>{{ ucfirst($subpage) }}</b>
                                     @endif
                                     <div class="d-block">
-                                        <a class="c" href="{{ route('Home') }}">Main menu</a>
+                                        @if(str_contains(url()->current(), '/player'))
+                                            <a class="c" href="{{ route('Home') }}">
+                                                Main menu
+                                            </a> -
+                                            <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">
+                                                All Hiscores
+                                            </a>
+                                        @else
+                                            <a class="c" href="{{ route('Home') }}">Main menu</a>
+                                        @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
                                         @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')) || route('RuneScape Hiscores',$db))
