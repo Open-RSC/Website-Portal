@@ -88,7 +88,6 @@ class HomeController extends Controller
             ->table('players')
             ->where([
                 ['banned', '=', '0'],
-                ['group_id', '=', '10'],
                 ['online', '=', '1'],
             ])
             ->get();

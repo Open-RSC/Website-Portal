@@ -12,7 +12,7 @@
             <a class="c" href="/download" taborder="1">Play Now</a>
         </span>
         <span class="flex-auto p-2">
-            <a class="c" href="{{ route('RuneScape Hiscores') }}" taborder="1">Hiscores</a>
+            <a class="c" href="/hiscores/preservation" taborder="1">Hiscores</a>
         </span>
         <span class="flex-auto p-2">
             <a class="c" href="/board" taborder="1">Forums</a>
@@ -114,20 +114,20 @@
                                         <a class="c" href="{{ route('Home') }}">Main menu</a>
                                     </div>
                                     @if(Config::get('app.authentic'))
-                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')) || route('RuneScape Hiscores'))
+                                        @if(in_array($subpage ?? '', array('attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving')))
                                             <div class="d-block">
                                                 @if($subpage ?? '' == 'skill_total')
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/1">Ironman</a> |
-                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/2">Hardcore</a> |
-                                                    <a class="c" href="/hiscores/{{ $subpage ?? '' }}/3">Ultimate</a>
+                                                    <a class="c" href="/hiscores/{{ $db }}">All</a> |
+                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/1">Ironman</a> |
+                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/2">Hardcore</a> |
+                                                    <a class="c" href="/hiscores/{{ $db }}/{{ $subpage ?? '' }}/3">Ultimate</a>
                                                 @else
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/1">Ironman</a>
+                                                    <a class="c" href="/hiscores/{{ $db }}">All</a> |
+                                                    <a class="c" href="/hiscores/{{ $db }}/1">Ironman</a>
                                                     |
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/2">Hardcore</a>
+                                                    <a class="c" href="/hiscores/{{ $db }}/2">Hardcore</a>
                                                     |
-                                                    <a class="c" href="{{ route('RuneScape Hiscores') }}/3">Ultimate</a>
+                                                    <a class="c" href="/hiscores/{{ $db }}/3">Ultimate</a>
                                                 @endif
                                             </div>
                                         @endif

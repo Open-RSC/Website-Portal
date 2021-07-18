@@ -18,7 +18,7 @@
                                 @endif
                             </div>
                             <div style="width:40px;">
-                                <a class="c" class="col-3" href="/hiscores/{{ $skill }}">
+                                <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}">
                                     @if($skill == 'skill_total')
                                         Overall
                                     @elseif($skill =='hits')

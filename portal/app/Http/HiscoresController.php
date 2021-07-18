@@ -50,14 +50,14 @@ class HiscoresController extends Component
      * @return Factory|View
      * Used to show the main hiscores page
      */
-    public function index(): Factory|View
+    public function index($db): Factory|View
     {
         /**
          * @return Factory|View
          * @var $hiscores
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $hiscores = DB::connection('cabbage')
+        $hiscores = DB::connection($db)
             ->table('experience as a')
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -100,16 +100,18 @@ class HiscoresController extends Component
         $skill_array = Config::get('app.authentic') == true ? array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
         return view('hiscores', [
             'skill_array' => $skill_array,
+            'db' => $db,
         ])
             ->with(compact('hiscores'));
     }
 
     /**
+     * @param $db
      * @param $subpage
      * @return Factory|View
      * Used to show all skill-specific sub pages
      */
-    public function show($subpage): Factory|View
+    public function show($db, $subpage): Factory|View
     {
         /**
          * @var $skill_array
@@ -136,7 +138,7 @@ class HiscoresController extends Component
          * Fetches the table row of the player experience in view and paginates the results
          */
 
-        $hiscores = DB::connection('cabbage')
+        $hiscores = DB::connection($db)
             ->table('experience as a')
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -156,17 +158,19 @@ class HiscoresController extends Component
         return view('hiscoreskill', [
             'skill_array' => $skill_array,
             'subpage' => $subpage,
+            'db' => $db,
             '' . $subpage => $skill,
         ])
             ->with(compact('hiscores'));
     }
 
     /**
+     * @param $db
      * @param $subpage
      * @param $iron_man
      * @return Factory|View
      */
-    public function iron_man($subpage, $iron_man): Factory|View
+    public function iron_man($db, $subpage, $iron_man): Factory|View
     {
         /**
          * @var $skill_array
@@ -194,7 +198,7 @@ class HiscoresController extends Component
          */
 
         if ($subpage == 'skill_total') {
-            $hiscores = DB::connection('cabbage')
+            $hiscores = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -235,12 +239,13 @@ class HiscoresController extends Component
             return view('hiscores', [
                 'skill_array' => $skill_array,
                 'subpage' => $subpage,
+                'db' => $db,
                 'ironman_mode' => $iron_man,
                 '' . $subpage => $skill,
             ])
                 ->with(compact('hiscores'));
         } else {
-            $hiscores = DB::connection('cabbage')
+            $hiscores = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -261,6 +266,7 @@ class HiscoresController extends Component
             return view('hiscoreskill', [
                 'skill_array' => $skill_array,
                 'subpage' => $subpage,
+                'db' => $db,
                 'ironman_mode' => $iron_man,
                 '' . $subpage => $skill,
             ])
