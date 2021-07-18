@@ -97,7 +97,11 @@ class HiscoresController extends Component
          * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
          */
 
-        $skill_array = Config::get('app.authentic') == true ? array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        if (!$db = 'cabbage') { // authentic
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
+        } else { // custom
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        }
         return view('hiscores', [
             'skill_array' => $skill_array,
             'db' => $db,
@@ -117,13 +121,18 @@ class HiscoresController extends Component
          * @var $skill_array
          * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
          */
-        $skill_array = Config::get('app.authentic') == true ? array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving') : array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        if (!$db = 'cabbage') { // authentic
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
+        } else { // custom
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        }
 
         /**
          * @var $subpage
          * Replaces spaces with underlines
          */
         $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
+        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
 
         /**
          * @var $subpage
@@ -183,6 +192,7 @@ class HiscoresController extends Component
          * Replaces spaces with underlines
          */
         $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
+        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
 
         /**
          * @var $subpage

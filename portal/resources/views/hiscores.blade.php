@@ -37,6 +37,7 @@
                                                     {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
                                                 @endif
                                             </a>
+                                    </a>
                             </div>
                         </div>
                     @endforeach
@@ -55,14 +56,15 @@
                         <div class="text-right" style="width:100px;"><b>XP</b></div>
                     </div>
                     @foreach ($hiscores as $key=>$player)
-                        <div class="d-flex clickable-row" data-href="{{ route('player', $player->id) }}">
+                        <div class="d-flex">
                             <!--Rank-->
                             <div class="text-right" style="width:40px;">
                                 {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
                             </div>
                             <!--Player-->
                             <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c" href="/player/{{ $player->id }}">{{ ucfirst($player->username) }}</a>
+                                <a class="c"
+                                   href="/player/{{ $db }}/{{ $player->id }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Total Level-->
                             <div class="text-right" style="padding-right:15px; width:30px;">

@@ -32,10 +32,10 @@ Route::get('quest/{subpage}', 'QuestController@show')->name('quest');
 Route::get('minigame_list', 'QuestController@minigame_list')->name('minigame_list');
 
 // Player pages
-Route::get('player/{subpage}', 'PlayerController@index')->name('player');
-Route::get('player/shar/bank', 'PlayerController@shar')->name('sharbank');
-Route::get('player/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('bank');
-Route::get('player/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
+Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('player');
+Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
+Route::get('player/{db}/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('bank');
+Route::get('player/{db}/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
 
 // Item lookup
 Route::any('items', 'ItemController@index')->name('items');

@@ -38,7 +38,7 @@
                                     &nbsp;
                                 </td>
                                 <td align="left">
-                                    <a class="c" href="/hiscores">
+                                    <a class="c" href="/hiscores/{{ $db }}">
                                         Overall
                                     </a>
                                 </td>
@@ -65,7 +65,7 @@
                                         &nbsp;
                                     </td>
                                     <td align="left">
-                                        <a class="c" href="/hiscores/{{ $skill }}">
+                                        <a class="c" href="/hiscores/{{ $db }}/{{ $skill }}">
                                             @if($skill == 'skill_total')
                                                 Overall
                                             @elseif($skill =='hits')
@@ -82,7 +82,7 @@
                                         </a>
                                     </td>
                                     <td align="right">
-                                        {{  (new App\Http\PlayerController)->rank($subpage, $skill)+1 }}
+                                        {{  (new App\Http\PlayerController)->rank($db, $subpage, $skill)+1 }}
                                     </td>
                                     <td align="right">
                                         {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
