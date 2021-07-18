@@ -83,7 +83,7 @@
                     <li><a href="{{ asset('trade_logs') }}">Trade Logs</a></li>
                     <li><a href="{{ asset('generic_logs') }}">Generic Logs</a></li>
                     <li><a href="{{ asset('shop_logs') }}">Shop Logs</a></li>
-                    @if (Config::get('app.authentic') == false)
+                    @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
                         <li><a href="{{ asset('auction_logs') }}">Auction Logs</a></li>
                     @endif
                     <li><a href="{{ asset('live_feed_logs') }}">Live Feed Logs</a></li>
