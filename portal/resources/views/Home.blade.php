@@ -409,7 +409,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="{{ route('RuneScape Hiscores') }}" class="c">
+                                            <a href="/hiscores/preservation" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_chalice.jpg') }}"
                                                      alt="">
@@ -418,7 +418,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('RuneScape Hiscores') }}" class="c">
+                                                    <a href="/hiscores/preservation" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -440,7 +440,7 @@
                                             </table>
                                             Is your character in the top 250,000?
                                             <div class="d-block">
-                                                <a href="{{ route('RuneScape Hiscores') }}" class="c">
+                                                <a href="/hiscores/preservation" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
