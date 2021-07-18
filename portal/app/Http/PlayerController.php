@@ -67,10 +67,10 @@ class PlayerController extends Controller
         $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
         $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
 
-        if (!$db = 'cabbage') { // authentic
-            $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
-        } else { // custom
+        if (value($db) == 'cabbage') { // custom
             $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        } else { // authentic
+            $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
 
         /**

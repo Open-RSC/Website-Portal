@@ -97,10 +97,10 @@ class HiscoresController extends Component
          * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
          */
 
-        if (!$db = 'cabbage') { // authentic
-            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
-        } else { // custom
+        if (value($db) == 'cabbage') { // custom
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        } else { // authentic
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
         return view('hiscores', [
             'skill_array' => $skill_array,
@@ -117,14 +117,16 @@ class HiscoresController extends Component
      */
     public function show($db, $subpage): Factory|View
     {
+
+        //$queryString = $db->getQueryString();
         /**
          * @var $skill_array
          * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
          */
-        if (!$db = 'cabbage') { // authentic
-            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
-        } else { // custom
+        if (value($db) == 'cabbage') { // custom
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft');
+        } else { // authentic
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
 
         /**
