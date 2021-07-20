@@ -22,6 +22,7 @@ services:
       - "./wiki/images:/var/www/html/portal/public/wiki/images"
       - "./wiki/skins:/var/www/html/portal/public/skins"
       - "./etc/wiki/LocalSettings.php:/var/www/html/portal/public/wiki/LocalSettings.php:ro" # MediaWiki config is located in etc
+      - "./rsc-client/dist:/var/www/html/portal/public/client"
 
   php:
     build:
@@ -34,6 +35,7 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:9000:9000"
+      - "1337:1337"
     volumes:
       - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config is located in etc
       - "./portal:/var/www/html/portal"
