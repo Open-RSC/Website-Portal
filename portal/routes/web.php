@@ -47,10 +47,9 @@ Route::any('npcdef/{id}', 'NpcController@show')->name('Monster Details');
 
 // Hiscores
 Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
-Route::any('/hiscores/skill_total/{db}', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict
+Route::any('/hiscores/{db}/skill_total', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict
 Route::any('/hiscores/{db}/{subpage}', 'HiscoresController@show');
 Route::any('/hiscores/{db}/{subpage}/{iron_man}', 'HiscoresController@iron_man');
-Route::any('/hiscores/{db}/{subpage}/{iron_man}/overall', 'HiscoresController@iron_man_overall');
 
 // Afman staff zone
 Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
