@@ -17,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@home')->name('Home');
 Route::get('worldmap', 'HomeController@worldmap')->name('World_Map');
 Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness_Map');
-Route::get('faq', 'HomeController@faq')->name('Frequently_Asked_Questions');
 Route::get('rules', 'HomeController@rules')->name('Rules_and_Security');
 Route::get('online', 'StatsController@online')->name('online');
 Route::get('createdtoday', 'StatsController@createdtoday')->name('createdtoday');
 Route::get('logins48', 'StatsController@logins48')->name('logins48');
 Route::get('stats', 'StatsController@stats')->name('stats');
+
+Route::get('faq', 'HomeController@faq')->name('Frequently_Asked_Questions');
 Route::get('terms', 'HomeController@faq')->name('Terms_and_Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy_Policy');
 
@@ -33,7 +34,7 @@ Route::get('minigame_list', 'QuestController@minigame_list')->name('minigame_lis
 
 // Player pages
 Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('player');
-Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
+//Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
 Route::get('player/{db}/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('bank');
 Route::get('player/{db}/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
 
@@ -52,6 +53,7 @@ Route::any('/hiscores/{db}/{subpage}', 'HiscoresController@show');
 Route::any('/hiscores/{db}/{subpage}/{iron_man}', 'HiscoresController@iron_man');
 
 // Afman staff zone
+/*
 Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
 Route::get('pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
 Route::get('trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
@@ -62,11 +64,13 @@ Route::get('live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth
 Route::get('player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
 Route::get('report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
+*/
 
-Route::any('register', 'Livewire\Registration')->name('Player_Registration');
+Route::get('register', 'Livewire\Registration')->name('Player_Registration');
 Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
+/*
 Route::any('login', 'Livewire\Login')->name('Secure_Login');
 Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
 Route::post('logout', 'Livewire\Login@logout')->name('Logout');
-
+*/

@@ -3,8 +3,8 @@
 @section('content')
     <div class="text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
         <span class="text-danger font-weight-bold d-block">Do not Advertise</span>
-        <span class="d-block">- on other Discord servers (without staff permission)</span>
-        <span class="d-block">- on other RSC-based private game servers or websites</span>
+        <span class="d-block">- on other Discord servers without staff permission</span>
+        <span class="d-block">- on external RSC-based games</span>
         <span class="d-block">- Mass DM/PM is considered advertising</span>
 
         <span class="text-danger font-weight-bold d-block pt-4">No RWT</span>
@@ -26,6 +26,7 @@
 
         <span class="text-danger font-weight-bold d-block pt-4">No botting</span>
         <span class="d-block">- Do not place bots, autos, nor macros inside our games</span>
-        <span class="d-block">- Do not exploit bugs</span>
+        <span class="d-block">&nbsp (except on RSC Uranium and RSC Coleslaw where it is allowed)</span>
+        <span class="d-block">- Do not exploit bugs, instead, report them and help out</span>
     </div>
 @endsection

@@ -51,6 +51,10 @@
                                                         <option selected hidden></option>
                                                         <option value="preservation">RSC Preservation</option>
                                                         <option value="cabbage">RSC Cabbage</option>
+                                                        <option value="uranium">RSC Uranium</option>
+                                                        <option value="coleslaw">RSC Coleslaw</option>
+                                                        <!--<option value="openpk">Open PK</option>-->
+                                                        <!--<option value="2001scape">2001Scape</option>-->
                                                     </select>
                                                     @error('game')
                                                     <p class="text-sm text-red-500 text-center">{{$message}}</p>
