@@ -129,44 +129,45 @@
 </nav>
 
 <div class="navbar-expand-xxl pt-2 mr-1">
-    <div class="e text-center flex-row" style="background: black; width:596px;">
+    <div class="e text-center flex-row" style="background:black; width:596px;">
         <span class="flex-auto p-2">
-            <a class="c" href="/" taborder="1">Home</a>
+            <a class="c" href="/">Home</a>
         </span>
         <span class="flex-auto p-2 dropdown">
-            <a class="c" href="/download" taborder="1">Play Now <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:110px;">
-                <a class="c text-left" target="_blank" rel="noopener" href="https://classic.runescape.wiki">
-                    RSC Wiki
+            <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
+            <span class="p-2 dropdown-content" style="background:black; width:140px;">
+                <a class="c text-left" target="_blank" rel="noopener" href="{{ asset('downloads/OpenRSC.jar') }}">
+                    <i class="fas fa-download"></i>&nbsp; Game Launcher
                 </a>
-                <a class="c text-left" target="_blank" rel="noopener" href="/wiki">
-                    OpenRSC Wiki
+                <a class="c text-left" target="_blank" rel="noopener" href="{{ asset('downloads/openrsc.apk') }}">
+                    <i class="fab fa-android"></i>&nbsp; Android
                 </a>
-                <a class="c text-left" target="_blank" rel="noopener" href="https://rsc.plus">
-                RSC+
-            </a>
+                <a class="c text-left" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic/core">
+                    <i class="fab fa-gitlab"></i>&nbsp; Source Code
+                </a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
-            <a class="c" href="#" taborder="1">Hiscores <i class="fas fa-caret-down"></i></a>
+            <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
-                <a class="c text-left" href="/hiscores/preservation">RSC Cabbage</a>
-                <a class="c text-left" href="/hiscores/preservation">RSC Uranium</a>
-                <a class="c text-left" href="/hiscores/preservation">RSC Coleslaw</a>
+                <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
+                <a class="c text-left" href="/hiscores/uranium">RSC Uranium</a>
+                <a class="c text-left" href="/hiscores/coleslaw">RSC Coleslaw</a>
+                <!--<a class="c text-left" href="/hiscores/openpk">Open PK</a>-->
+                <!--<a class="c text-left" href="/hiscores/2001scape">2001Scape</a>-->
             </span>
         </span>
         <span class="flex-auto p-2">
-            <a class="c" href="/board" taborder="1">Forums</a>
+            <a class="c" href="/board">Forums</a>
         </span>
         <span class="flex-auto p-2">
-            <a class="c" target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn" taborder="2">Discord</a>
+            <a class="c" target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn">Discord</a>
         </span>
         <span class="flex-auto p-2">
-            <a class="c" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic"
-               taborder="3">Open Source</a>
+            <a class="c" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic">Open Source</a>
         </span>
-        <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener" taborder="5">Wiki Lookup <i
+        <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener">Wiki Lookup <i
                         class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:110px;">
                 <a class="c text-left" target="_blank" rel="noopener" href="https://classic.runescape.wiki">
