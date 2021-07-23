@@ -57,11 +57,12 @@ class HiscoresController extends Component
          * @var $hiscores
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $hiscores = DB::connection($db)
-            ->table('experience as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select('b.*', 'c.*', DB::raw('
+        if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+            $hiscores = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('ironman as c', 'b.id', '=', 'c.playerID')
+                ->select('b.*', 'c.*', DB::raw('
 			(SUM(a.attack +
 			a.strength +
 			a.defense +
@@ -82,15 +83,49 @@ class HiscoresController extends Component
 			a.thieving)
 			/4.0)
 			as total_xp'))
-            ->where([
-                ['b.banned', '=', '0'],
-                ['b.group_id', '>=', '8'],
-                ['c.iron_man', '!=', '4'],
-            ])
-            ->groupBy('b.username')
-            ->orderBy('b.skill_total', 'desc')
-            ->orderBy('total_xp', 'desc')
-            ->paginate(21);
+                ->where([
+                    ['b.banned', '=', '0'],
+                    ['b.group_id', '>=', '8'],
+                    ['c.iron_man', '!=', '4'],
+                ])
+                ->groupBy('b.username')
+                ->orderBy('b.skill_total', 'desc')
+                ->orderBy('total_xp', 'desc')
+                ->paginate(21);
+        } else { // authentic
+            $hiscores = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->select('b.*', DB::raw('
+			(SUM(a.attack +
+			a.strength +
+			a.defense +
+			a.hits +
+			a.ranged +
+			a.prayer +
+			a.magic +
+			a.cooking +
+			a.woodcut +
+			a.fletching +
+			a.fishing +
+			a.firemaking +
+			a.crafting +
+			a.smithing +
+			a.mining +
+			a.herblaw +
+			a.agility +
+			a.thieving)
+			/4.0)
+			as total_xp'))
+                ->where([
+                    ['b.banned', '=', '0'],
+                    ['b.group_id', '>=', '8'],
+                ])
+                ->groupBy('b.username')
+                ->orderBy('b.skill_total', 'desc')
+                ->orderBy('total_xp', 'desc')
+                ->paginate(21);
+        }
 
         /**
          * @var $skill_array
@@ -149,23 +184,38 @@ class HiscoresController extends Component
          * Fetches the table row of the player experience in view and paginates the results
          */
 
-        $hiscores = DB::connection($db)
-            ->table('experience as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->join('ironman as c', 'b.id', '=', 'c.playerID')
-            ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
-            ->where([
-                ['b.banned', '=', '0'],
-                ['b.group_id', '>=', '8'],
-                ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                ['c.iron_man', '!=', '4'],
-            ])
-            ->groupBy('b.username')
-            ->orderBy('a.' . $subpage, 'desc')
-            ->paginate(21);
+        if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+            $hiscores = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('ironman as c', 'b.id', '=', 'c.playerID')
+                ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
+                ->where([
+                    ['b.banned', '=', '0'],
+                    ['b.group_id', '>=', '8'],
+                    ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
+                    ['c.iron_man', '!=', '4'],
+                ])
+                ->groupBy('b.username')
+                ->orderBy('a.' . $subpage, 'desc')
+                ->paginate(21);
 
+        } else { // authentic
+            $hiscores = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->select('b.*', DB::raw('a.' . $subpage))
+                ->where([
+                    ['b.banned', '=', '0'],
+                    ['b.group_id', '>=', '8'],
+                    ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
+                ])
+                ->groupBy('b.username')
+                ->orderBy('a.' . $subpage, 'desc')
+                ->paginate(21);
+
+        }
         $skill = '' . $subpage;
-
         return view('hiscoreskill', [
             'skill_array' => $skill_array,
             'subpage' => $subpage,
@@ -214,11 +264,12 @@ class HiscoresController extends Component
          */
 
         if ($subpage == 'skill_total') {
-            $hiscores = DB::connection($db)
-                ->table('experience as a')
-                ->join('players as b', 'a.playerID', '=', 'b.id')
-                ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select('b.*', 'c.*', DB::raw('
+            if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+                $hiscores = DB::connection($db)
+                    ->table('experience as a')
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->join('ironman as c', 'b.id', '=', 'c.playerID')
+                    ->select('b.*', 'c.*', DB::raw('
 			(SUM(a.attack +
 			a.strength +
 			a.defense +
@@ -239,16 +290,50 @@ class HiscoresController extends Component
 			a.thieving)
 			/4.0)
 			as total_xp'))
-                ->where([
-                    ['b.banned', '=', '0'],
-                    ['b.group_id', '>=', '8'],
-                    ['c.iron_man', '!=', '4'],
-                    ['c.iron_man', '=', $iron_man],
-                ])
-                ->groupBy('b.username')
-                ->orderBy('b.skill_total', 'desc')
-                ->orderBy('total_xp', 'desc')
-                ->paginate(21);
+                    ->where([
+                        ['b.banned', '=', '0'],
+                        ['b.group_id', '>=', '8'],
+                        ['c.iron_man', '!=', '4'],
+                        ['c.iron_man', '=', $iron_man],
+                    ])
+                    ->groupBy('b.username')
+                    ->orderBy('b.skill_total', 'desc')
+                    ->orderBy('total_xp', 'desc')
+                    ->paginate(21);
+            } else { // authentic
+                $hiscores = DB::connection($db)
+                    ->table('experience as a')
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->select('b.*', 'c.*', DB::raw('
+			(SUM(a.attack +
+			a.strength +
+			a.defense +
+			a.hits +
+			a.ranged +
+			a.prayer +
+			a.magic +
+			a.cooking +
+			a.woodcut +
+			a.fletching +
+			a.fishing +
+			a.firemaking +
+			a.crafting +
+			a.smithing +
+			a.mining +
+			a.herblaw +
+			a.agility +
+			a.thieving)
+			/4.0)
+			as total_xp'))
+                    ->where([
+                        ['b.banned', '=', '0'],
+                        ['b.group_id', '>=', '8'],
+                    ])
+                    ->groupBy('b.username')
+                    ->orderBy('b.skill_total', 'desc')
+                    ->orderBy('total_xp', 'desc')
+                    ->paginate(21);
+            }
 
             $skill = '' . $subpage;
 
@@ -261,21 +346,36 @@ class HiscoresController extends Component
             ])
                 ->with(compact('hiscores'));
         } else {
-            $hiscores = DB::connection($db)
-                ->table('experience as a')
-                ->join('players as b', 'a.playerID', '=', 'b.id')
-                ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
-                ->where([
-                    ['b.banned', '=', '0'],
-                    ['b.group_id', '>=', '8'],
-                    ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                    ['c.iron_man', '=', $iron_man],
-                    ['c.iron_man', '!=', '4'],
-                ])
-                ->groupBy('b.username')
-                ->orderBy('a.' . $subpage, 'desc')
-                ->paginate(21);
+            if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+                $hiscores = DB::connection($db)
+                    ->table('experience as a')
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->join('ironman as c', 'b.id', '=', 'c.playerID')
+                    ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
+                    ->where([
+                        ['b.banned', '=', '0'],
+                        ['b.group_id', '>=', '8'],
+                        ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
+                        ['c.iron_man', '=', $iron_man],
+                        ['c.iron_man', '!=', '4'],
+                    ])
+                    ->groupBy('b.username')
+                    ->orderBy('a.' . $subpage, 'desc')
+                    ->paginate(21);
+            } else { // authentic
+                $hiscores = DB::connection($db)
+                    ->table('experience as a')
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
+                    ->where([
+                        ['b.banned', '=', '0'],
+                        ['b.group_id', '>=', '8'],
+                        ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
+                    ])
+                    ->groupBy('b.username')
+                    ->orderBy('a.' . $subpage, 'desc')
+                    ->paginate(21);
+            }
 
             $skill = '' . $subpage;
 
