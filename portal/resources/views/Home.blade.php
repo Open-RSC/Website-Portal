@@ -288,7 +288,7 @@
                                         </td>
                                         <td style="width: 10px"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Player_Registration') }}"
+                                            <a href="{{ route('Player Registration') }}"
                                                class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_player.jpg') }}"
@@ -298,7 +298,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Player_Registration') }}"
+                                                    <a href="{{ route('Player Registration') }}"
                                                        class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
@@ -321,7 +321,7 @@
                                             </table>
                                             Create an account for both the game and our website.
                                             <div class="d-block">
-                                                <a href="{{ route('Player_Registration') }}"
+                                                <a href="{{ route('Player Registration') }}"
                                                    class="c">
                                                     Click Here
                                                 </a>
@@ -866,7 +866,7 @@
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Frequently_Asked_Questions') }}">
+                                            <a href="{{ route('Frequently Asked Questions') }}">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_faq.jpg') }}"
                                                      height="120"
@@ -876,7 +876,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Frequently_Asked_Questions') }}">
+                                                    <a href="{{ route('Frequently Asked Questions') }}">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -898,7 +898,7 @@
                                             </table>
                                             Answers to Frequently Asked Questions
                                             <div class="d-block">
-                                                <a href="{{ route('Frequently_Asked_Questions') }}"
+                                                <a href="{{ route('Frequently Asked Questions') }}"
                                                    class="c">
                                                     Click Here
                                                 </a>
@@ -949,7 +949,7 @@
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="{{ route('Rules_and_Security') }}">
+                                            <a href="{{ route('Rules and Security') }}">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_rules.jpg') }}"
                                                      height="120"
@@ -959,7 +959,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Rules_and_Security') }}">
+                                                    <a href="{{ route('Rules and Security') }}">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -987,7 +987,7 @@
                                                 online
                                             </span>
                                             <div class="d-block">
-                                                <a href="{{ route('Rules_and_Security') }}"
+                                                <a href="{{ route('Rules and Security') }}"
                                                    class="c">
                                                     Click Here
                                                 </a>

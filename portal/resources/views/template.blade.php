@@ -44,16 +44,16 @@
                         Reddit</a></li>
             </ul>
         </li>
-        <li><a href="{{ asset('highscores') }}">Highscores</a></li>
+        <li><a href="/hiscores">Highscores</a></li>
         <li>
             <label for="drop-3" class="toggle">Information <i class="fas fa-caret-down"></i></label>
             <a href="#">Information</a>
             <input type="checkbox" id="drop-3" style="display: none !important;"/>
             <ul>
-                <li><a href="{{ asset('faq') }}">FAQ</a></li>
-                <li><a href="{{ asset('rules') }}">Rules</a></li>
-                <li><a href="{{ asset('/player/shar/bank') }}">Shar's Bank</a></li>
-                <li><a href="{{ asset('stats') }}">Game Statistics</a></li>
+                <li><a href="{/{ route('Frequently Asked Questions') }}">FAQ</a></li>
+                <li><a href="{/{ route('Rules') }}">Rules</a></li>
+                <li><a href="{/{ route('/player/shar/bank') }}">Shar's Bank</a></li>
+                <li><a href="{/{ route('Statistics') }}">Game Statistics</a></li>
             </ul>
         </li>
         <li>
@@ -61,11 +61,11 @@
             <a href="#">Guides</a>
             <input type="checkbox" id="drop-4" style="display: none !important;"/>
             <ul>
-                <li><a href="{{ asset('quest_list') }}">Quest List</a></li>
-                <li><a href="{{ asset('minigame_list') }}">Minigames</a></li>
-                <li><a href="{{ asset('wilderness') }}">Wilderness Map</a></li>
-                <li><a href="{{ route('items') }}">Item Database</a></li>
-                <li><a href="{{ asset('npcs') }}">NPC Database</a></li>
+                <li><a href="{/{ route('Quests') }}">Quest List</a></li>
+                <li><a href="{/{ route('Mini Games') }}">Minigames</a></li>
+                <li><a href="{/{ route('Wilderness') }}">Wilderness Map</a></li>
+                <li><a href="{/{ route('Items') }}">Item Database</a></li>
+                <li><a href="{/{ route('Monster Database') }}">NPC Database</a></li>
             </ul>
         </li>
         <li>
@@ -76,25 +76,25 @@
                 <li><a href="https://gitlab.openrsc.com/open-rsc/Game/issues" target="_blank">Bug Reports</a></li>
             </ul>
         </li>
-        <li><a href="{{ asset('worldmap') }}">Live Map</a></li>
+        <li><a href="{/{ route('World Map') }}">Live Map</a></li>
         @if(Auth::user())
             <li>
                 <label for="drop-5" class="toggle">Staff <i class="fas fa-caret-down"></i></label>
                 <a href="#">Staff</a>
                 <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 <ul>
-                    <li><a href="{{ asset('chat_logs') }}">Chat Logs</a></li>
-                    <li><a href="{{ asset('pm_logs') }}">PM Logs</a></li>
-                    <li><a href="{{ asset('trade_logs') }}">Trade Logs</a></li>
-                    <li><a href="{{ asset('generic_logs') }}">Generic Logs</a></li>
-                    <li><a href="{{ asset('shop_logs') }}">Shop Logs</a></li>
+                    <li><a href="{{ route('chat_logs') }}">Chat Logs</a></li>
+                    <li><a href="{{ route('pm_logs') }}">PM Logs</a></li>
+                    <li><a href="{{ route('trade_logs') }}">Trade Logs</a></li>
+                    <li><a href="{{ route('generic_logs') }}">Generic Logs</a></li>
+                    <li><a href="{{ route('shop_logs') }}">Shop Logs</a></li>
                 @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
-                    <li><a href="{{ asset('auction_logs') }}">Auction Logs</a></li>
+                    <li><a href="{{ route('auction_logs') }}">Auction Logs</a></li>
                     @endif
-                    <li><a href="{{ asset('live_feed_logs') }}">Live Feed Logs</a></li>
-                    <li><a href="{{ asset('player_cache_logs') }}">Player Cache Logs</a></li>
-                    <li><a href="{{ asset('report_logs') }}">Report Logs</a></li>
-                    <li><a href="{{ asset('staff_logs') }}">Staff Logs</a></li>
+                    <li><a href="{{ route('live_feed_logs') }}">Live Feed Logs</a></li>
+                    <li><a href="{{ route('player_cache_logs') }}">Player Cache Logs</a></li>
+                    <li><a href="{{ route('report_logs') }}">Report Logs</a></li>
+                    <li><a href="{{ route('staff_logs') }}">Staff Logs</a></li>
                 </ul>
             </li>
         @endif
@@ -148,6 +148,13 @@
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
+            <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
+            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+                <a class="c text-left" href="/board"><i class="far fa-comment-alt"></i> Forums</a>
+                <a class="c text-left" href="https://discord.gg/ABdFCqn"><i class="fab fa-discord"></i> Discord</a>
+            </span>
+        </span>
+        <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
@@ -158,14 +165,15 @@
                 <!--<a class="c text-left" href="/hiscores/2001scape">2001Scape</a>-->
             </span>
         </span>
-        <span class="flex-auto p-2">
-            <a class="c" href="/board">Forums</a>
-        </span>
-        <span class="flex-auto p-2">
-            <a class="c" target="_blank" rel="noopener" href="https://discord.gg/ABdFCqn">Discord</a>
-        </span>
-        <span class="flex-auto p-2">
-            <a class="c" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic">Open Source</a>
+        <span class="flex-auto p-2 dropdown">
+            <a class="c" href="#">Guides <i class="fas fa-caret-down"></i></a>
+            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+                <a class="c text-left" href="{{ route('Quests') }}">Quest List</a>
+                <a class="c text-left" href="{{ route('Mini Games') }}">Mini Games</a>
+                <a class="c text-left" href="{{ route('Wilderness Map') }}">Wilderness Map</a>
+                <a class="c text-left" href="{{ route('Items') }}">Item Database</a>
+                <a class="c text-left" href="{{ route('Monster Database') }}">Monster Database</a>
+            </span>
         </span>
         <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener">Wiki Lookup <i
                         class="fas fa-caret-down"></i></a>
@@ -181,7 +189,7 @@
     </div>
 </div>
 
-@if(Route::currentRouteName() == 'World_Map')
+@if(Route::currentRouteName() == 'World Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>
         <tr>
@@ -309,9 +317,9 @@
                 <div class="copyright pt-2">
                     Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
-                    <a class="c" href="{{ route('Terms_and_Conditions') }}">Terms+Conditions</a>
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
                     +
-                    <a class="c" href="{{ route('Privacy_Policy') }}">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>

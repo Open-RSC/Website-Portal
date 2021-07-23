@@ -15,32 +15,32 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', 'HomeController@home')->name('Home');
-Route::get('worldmap', 'HomeController@worldmap')->name('World_Map');
-Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness_Map');
-Route::get('rules', 'HomeController@rules')->name('Rules_and_Security');
-Route::get('online', 'StatsController@online')->name('online');
-Route::get('createdtoday', 'StatsController@createdtoday')->name('createdtoday');
-Route::get('logins48', 'StatsController@logins48')->name('logins48');
-Route::get('stats', 'StatsController@stats')->name('stats');
+Route::get('worldmap', 'HomeController@worldmap')->name('World Map');
+Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness Map');
+Route::get('rules', 'HomeController@rules')->name('Rules and Security');
+Route::get('online', 'StatsController@online')->name('Online list');
+Route::get('createdtoday', 'StatsController@createdtoday')->name('Players Created Today');
+Route::get('logins48', 'StatsController@logins48')->name('Logins in the last 48 hours');
+Route::get('stats', 'StatsController@stats')->name('Statistics');
 
-Route::get('faq', 'HomeController@faq')->name('Frequently_Asked_Questions');
-Route::get('terms', 'HomeController@faq')->name('Terms_and_Conditions');
-Route::get('privacy', 'HomeController@faq')->name('Privacy_Policy');
+Route::get('faq', 'HomeController@faq')->name('Frequently Asked Questions');
+Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
+Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');
 
 // Quest pages
-Route::get('quest_list', 'QuestController@index')->name('quest_list');
-Route::get('quest/{subpage}', 'QuestController@show')->name('quest');
-Route::get('minigame_list', 'QuestController@minigame_list')->name('minigame_list');
+Route::get('quest_list', 'QuestController@index')->name('Quests');
+Route::get('quest/{subpage}', 'QuestController@show')->name('Quest');
+Route::get('minigame_list', 'QuestController@minigame_list')->name('Mini Games');
 
 // Player pages
-Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('player');
+Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('Player');
 //Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
-Route::get('player/{db}/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('bank');
-Route::get('player/{db}/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('invitem');
+Route::get('player/{db}/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('Bank');
+Route::get('player/{db}/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('Inventory Items');
 
 // Item lookup
-Route::any('items', 'ItemController@index')->name('items');
-Route::any('itemdef/{id}', 'ItemController@show')->name('itemdef');
+Route::any('items', 'ItemController@index')->name('Items');
+Route::any('itemdef/{id}', 'ItemController@show')->name('Item Information');
 
 // NPC lookup
 Route::any('npcs', 'NpcController@index')->name('Monster Database');
@@ -66,7 +66,7 @@ Route::get('report_logs', 'StaffController@report_logs')->middleware('auth')->na
 Route::get('staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 */
 
-Route::get('register', 'Livewire\Registration')->name('Player_Registration');
+Route::get('register', 'Livewire\Registration')->name('Player Registration');
 Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
 /*
