@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
 
-@if(Route::currentRouteName() == 'World_Map')
+@if(Route::currentRouteName() == 'World Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>
         <tr>
@@ -25,7 +25,7 @@
     @yield('content')
     {{ $slot }}
 
-@elseif(Route::currentRouteName() == 'Wilderness_Map')
+@elseif(Route::currentRouteName() == 'Wilderness Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>
         <tr>
@@ -48,7 +48,7 @@
     @yield('content')
     {{ $slot }}
 
-@elseif(Route::currentRouteName() == 'Secure_Login')
+@elseif(Route::currentRouteName() == 'Secure Login')
     <main>
         <section class="top-border">
             <div class="top-left-border"></div>
@@ -92,9 +92,9 @@
                 <div class="copyright pt-2">
                     Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
-                    <a class="c" href="{{ route('Terms_and_Conditions') }}">Terms+Conditions</a>
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
                     +
-                    <a class="c" href="{{ route('Privacy_Policy') }}">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>
@@ -172,9 +172,9 @@
                 <div class="copyright pt-2">
                     Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
-                    <a class="c" href="{{ route('Terms_and_Conditions') }}">Terms+Conditions</a>
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
                     +
-                    <a class="c" href="{{ route('Privacy_Policy') }}">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>

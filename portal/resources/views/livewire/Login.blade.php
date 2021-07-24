@@ -112,7 +112,7 @@
                                         <td class="b" background="{{ asset('img/stoneback.gif') }}"
                                             style="background-color: #474747">
                                             <div class="text-center">
-                                                <a href="{{ route('Player_Registration') }}" class=c>
+                                                <a href="{{ route('Player Registration') }}" class=c>
                                                     <b>Need an account?</b>
                                                 </a>
                                                 <span class="d-block">

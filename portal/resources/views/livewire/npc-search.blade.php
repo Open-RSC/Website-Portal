@@ -1,6 +1,7 @@
 <div class="col">
     <div class="d-flex justify-content-left pb-1">
-        <input class="e  pl-1 text-white click" onfocus="this.value=''" wire:model="searchTerm" type="text" style="width:150px; background:black;">
+        <input class="e pl-1 text-white click" onfocus="this.value=''" wire:model="searchTerm" type="text"
+               style="width:150px; background:black;">
     </div>
 
     <div class="e bg-black p-2" style="outline:black; width:500px;">
@@ -31,8 +32,8 @@
                 </div>
             </div>
             @if ($key % 6 == 5)
-    @endif
-    @endforeach
-    {{ $npcResults->onEachSide(1)->links('livewire::tailwind') }}
+            @endif
+        @endforeach
+        {{ $npcResults->onEachSide(1)->links('livewire::tailwind') }}
     </div>
 </div>

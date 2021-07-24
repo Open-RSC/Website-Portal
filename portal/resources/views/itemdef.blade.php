@@ -143,7 +143,7 @@
                    placeholder="Search this page"/>
         </div>
 
-        {{ $item_drops->links('pagination::bootstrap-4') }}
+        {{ $item_drops->links('pagination::tailwind') }}
         <table class="container table-striped table-hover text-primary table-transparent" id="List">
             <thead class="border-bottom border-info">
             <tr class="text-info">
@@ -175,6 +175,6 @@
             @endforeach
             </tbody>
         </table>
-        {{ $item_drops->links('pagination::bootstrap-4') }}
+        {{ $item_drops->links('pagination::tailwind') }}
     </div>
 @endsection

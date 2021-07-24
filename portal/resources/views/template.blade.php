@@ -61,9 +61,10 @@
             <a href="#">Guides</a>
             <input type="checkbox" id="drop-4" style="display: none !important;"/>
             <ul>
+                <li><a href="{/{ route('World Map') }}">World Map</a></li>
+                <li><a href="{/{ route('Wilderness Map') }}">Wilderness Map</a></li>
                 <li><a href="{/{ route('Quests') }}">Quest List</a></li>
                 <li><a href="{/{ route('Mini Games') }}">Minigames</a></li>
-                <li><a href="{/{ route('Wilderness') }}">Wilderness Map</a></li>
                 <li><a href="{/{ route('Items') }}">Item Database</a></li>
                 <li><a href="{/{ route('Monster Database') }}">NPC Database</a></li>
             </ul>
@@ -152,7 +153,8 @@
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/board"><i class="far fa-comment-alt"></i> Forums</a>
                 <a class="c text-left" href="https://discord.gg/ABdFCqn" target="_blank"><i class="fab fa-discord"></i> Discord</a>
-                <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank"><i class="fab fa-reddit-alien"></i> Reddit</a>
+                <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank"><i
+                            class="fab fa-reddit-alien"></i> Reddit</a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
@@ -168,25 +170,47 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Guides <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:130px;">
-                <a class="c text-left" href="{{ route('Quests') }}">Quests</a>
-                <a class="c text-left" href="{{ route('Mini Games') }}">Mini Games</a>
-                <a class="c text-left" href="{{ route('Wilderness Map') }}">Wilderness Map</a>
-                <a class="c text-left" href="{{ route('Items') }}">Item Database</a>
-                <a class="c text-left" href="{{ route('Monster Database') }}">Monster Database</a>
-            </span>
-        </span>
-        <span class="flex-auto p-2 dropdown"><a href="#">Wiki Lookup <i
-                        class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:110px;">
+            <span class="p-2 dropdown-content" style="background:black; width:150px;">
+                <a class="c text-left" href="{{ route('World Map') }}"><i class="fas fa-map"></i> Live World Map</a>
+                <a class="c text-left" href="{{ route('Wilderness Map') }}"><i
+                            class="fas fa-map"></i> Wilderness Map</a>
+                <a class="c text-left" href="{{ route('Monster Database') }}"><i class="fas fa-book"></i> Monster Database</a>
+                <a class="c text-left" href="{{ route('Items') }}"><i class="fas fa-book"></i> Item Database</a>
+                <a class="c text-left" href="{{ route('Quests') }}"><i class="fas fa-question"></i> Quests</a>
+                <a class="c text-left" href="{{ route('Mini Games') }}"><i class="fas fa-question"></i> Mini Games</a>
                 <a class="c text-left" target="_blank" href="https://classic.runescape.wiki">
-                    RSC Wiki
+                    <i class="fab fa-wikipedia-w"></i> RSC Wiki
                 </a>
                 <a class="c text-left" href="/wiki">
-                    OpenRSC Wiki
+                    <i class="fab fa-wikipedia-w"></i> OpenRSC Wiki
                 </a>
             </span>
         </span>
+        <span class="flex-auto p-2"><a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank">Bug Reports</a>
+        </span>
+        @if(!Auth::user())
+            <span class="flex-auto p-2">
+                <a class="c" href="/login">Staff Login</a>
+            </span>
+        @else
+            <span class="flex-auto p-2 dropdown">
+            <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:150px;">
+                    <a class="c text-left" href="{/{ route('chat_logs') }}">Chat Logs</a>
+                    <a class="c text-left" href="{/{ route('pm_logs') }}">PM Logs</a>
+                    <a class="c text-left" href="{/{ route('trade_logs') }}">Trade Logs</a>
+                    <a class="c text-left" href="{/{ route('generic_logs') }}">Generic Logs</a>
+                    <a class="c text-left" href="{/{ route('shop_logs') }}">Shop Logs</a>
+                    @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
+                        <a class="c text-left" href="{/{ route('auction_logs') }}">Auction Logs</a>
+                    @endif
+                    <a class="c text-left" href="{/{ route('live_feed_logs') }}">Live Feed Logs</a>
+                    <a class="c text-left" href="{/{ route('player_cache_logs') }}">Player Cache Logs</a>
+                    <a class="c text-left" href="{/{ route('report_logs') }}">Report Logs</a>
+                    <a class="c text-left" href="{/{ route('staff_logs') }}">Staff Logs</a>
+                </span>
+            </span>
+        @endif
     </div>
 </div>
 
@@ -212,7 +236,7 @@
     <div class="pt-2"></div>
     @yield('content')
 
-@elseif(Route::currentRouteName() == 'Wilderness_Map')
+@elseif(Route::currentRouteName() == 'Wilderness Map')
     <table style="width: 250px; background: black; padding: 4px;">
         <tbody>
         <tr>
@@ -309,7 +333,6 @@
                 @yield('content')
             </div>
             <div class="pt-2"></div>
-            </div>
             <div class="mid-right-border"></div>
         </section>
         <section class="bottom-border">

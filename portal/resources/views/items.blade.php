@@ -8,7 +8,7 @@
                    placeholder="Search this page">
         </div>
 
-        {{ $items->links('pagination::bootstrap-4') }}
+        {{ $items->links('pagination::tailwind') }}
         <table id="List" class="container table-striped table-hover text-primary table-transparent">
             <thead class="border-bottom border-info">
             <tr class="text-info">
@@ -114,6 +114,7 @@
             @endforeach
             </tbody>
         </table>
-        {{ $items->links('pagination::bootstrap-4') }}
+        {{ $items->links('pagination::tailwind') }}
+    </div>
     </div>
 @endsection
