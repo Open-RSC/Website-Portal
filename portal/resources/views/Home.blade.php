@@ -621,7 +621,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="">
+                                            <a href="https://discord.gg/ABdFCqn" target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_support.jpg') }}"
                                                      height="120" width="77" alt="">
@@ -630,7 +630,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="">
+                                                    <a href="https://discord.gg/ABdFCqn" target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -655,14 +655,14 @@
                                                 Contact our staff
                                             </span>
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="https://discord.gg/ABdFCqn" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_inbox.jpg') }}"
                                                      height="120"
@@ -672,7 +672,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href=""
+                                                    <a href="/board/ucp.php?i=pm&folder=inbox"
                                                        class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
@@ -698,7 +698,7 @@
                                                 from our staff
                                             </span>
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -747,7 +747,7 @@
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="/login" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mms_accman.jpg') }}"
                                                      height="120" width="77" alt="">
@@ -756,7 +756,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="" class="c">
+                                                    <a href="/login" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -778,7 +778,7 @@
                                             </table>
                                             Manage your Password and Recovery Details
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="/login" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -914,7 +914,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank">
+                                            <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_lov.jpg') }}"
                                                      height="120"
@@ -924,7 +924,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank">
+                                                    <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -946,7 +946,7 @@
                                             </table>
                                             Learn about the History of RuneScape
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank" class="c">
+                                                <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
