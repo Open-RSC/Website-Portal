@@ -28,9 +28,9 @@ Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');
 
 // Quest pages
-Route::get('quest_list', 'QuestController@index')->name('Quests');
-Route::get('quest/{subpage}', 'QuestController@show')->name('Quest');
-Route::get('minigame_list', 'QuestController@minigame_list')->name('Mini Games');
+Route::get('quests', 'QuestController@index')->name('Quests');
+Route::get('quest/{subpage}', 'QuestController@show')->name('{subpage}}');
+Route::get('minigames', 'QuestController@minigame_list')->name('Mini Games');
 
 // Player pages
 Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('Player');

@@ -136,13 +136,13 @@
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:140px;">
-                <a class="c text-left" target="_blank" rel="noopener" href="{{ asset('downloads/OpenRSC.jar') }}">
+                <a class="c text-left" href="{{ asset('downloads/OpenRSC.jar') }}">
                     <i class="fas fa-download"></i>&nbsp; Game Launcher
                 </a>
-                <a class="c text-left" target="_blank" rel="noopener" href="{{ asset('downloads/openrsc.apk') }}">
+                <a class="c text-left" href="{{ asset('downloads/openrsc.apk') }}">
                     <i class="fab fa-android"></i>&nbsp; Android
                 </a>
-                <a class="c text-left" target="_blank" rel="noopener" href="https://gitlab.com/open-runescape-classic/core">
+                <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
                     <i class="fab fa-gitlab"></i>&nbsp; Source Code
                 </a>
             </span>
@@ -151,7 +151,8 @@
             <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/board"><i class="far fa-comment-alt"></i> Forums</a>
-                <a class="c text-left" href="https://discord.gg/ABdFCqn"><i class="fab fa-discord"></i> Discord</a>
+                <a class="c text-left" href="https://discord.gg/ABdFCqn" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+                <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank"><i class="fab fa-reddit-alien"></i> Reddit</a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
@@ -168,20 +169,20 @@
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Guides <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
-                <a class="c text-left" href="{{ route('Quests') }}">Quest List</a>
+                <a class="c text-left" href="{{ route('Quests') }}">Quests</a>
                 <a class="c text-left" href="{{ route('Mini Games') }}">Mini Games</a>
                 <a class="c text-left" href="{{ route('Wilderness Map') }}">Wilderness Map</a>
                 <a class="c text-left" href="{{ route('Items') }}">Item Database</a>
                 <a class="c text-left" href="{{ route('Monster Database') }}">Monster Database</a>
             </span>
         </span>
-        <span class="flex-auto p-2 dropdown"><a href="#" rel="noopener">Wiki Lookup <i
+        <span class="flex-auto p-2 dropdown"><a href="#">Wiki Lookup <i
                         class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:110px;">
-                <a class="c text-left" target="_blank" rel="noopener" href="https://classic.runescape.wiki">
+                <a class="c text-left" target="_blank" href="https://classic.runescape.wiki">
                     RSC Wiki
                 </a>
-                <a class="c text-left" target="_blank" rel="noopener" href="/wiki">
+                <a class="c text-left" href="/wiki">
                     OpenRSC Wiki
                 </a>
             </span>

@@ -2,160 +2,175 @@
 
 @section('content')
     <div class="col">
-        <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">
-            Quest List
-        </h2>
         <div class="text-primary">
             <div class="pl-3 pr-3 container">
 
                 <!-- Begin F2P Quests -->
                 <div id="f2p" class="table-transparent pl-5 pr-5 mb-5">
-                    <h3 class="text-info pt-3">F2P Quests</h3>
+                    <div class="text-white h5 pt-2 text-center">Free Quests</div>
                     <div id="row1" class="d-flex flex-wrap justify-content-between pt-3">
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest/black_knights_fortress"
                              title="Reward: 3 quest points and 2500 coins">
-									<span class="d-block">
-										<img class="d-block"
-                                             src="{{ asset('img/quests/Black_Knight_Quest_Complete.png') }}"
-                                             style="max-height:150px; max-width: 225px;" alt="quest image">
-										<span class="text-info">
-											Black Knights' Fortress
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block"
+                                     src="{{ asset('img/quests/Black_Knight_Quest_Complete.png') }}"
+                                     style="max-height:150px; max-width: 225px;" alt="quest image">
+								<span class="text-gray-300">
+									Black Knights' Fortress
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
 
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-cooks-assistant"
                              title="Reward: 1 quest point, cooking experience, and access to the cook's range in Lumbridge castle">
-									<span class="d-block">
-										<img class="d-block"
-                                             src="{{ asset('img/quests/Cooks_Assistant_Completed.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Cook's Assistant
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block"
+                                     src="{{ asset('img/quests/Cooks_Assistant_Completed.png') }}"
+                                     style="max-height:150px; max-width: 225px;">
+								<span class="text-gray-300">
+									Cook's Assistant
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/ga-Vda46MGw?t=465" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
 
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-demon-slayer"
                              title="Reward: 3 quest points and to obtain Silverlight">
-									<span class="d-block">
-										<img class="d-block" alt="quest image"
-                                             src="{{ asset('img/quests/Demon_Slayer_completed.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Demon Slayer
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block" alt="quest image"
+                                     src="{{ asset('img/quests/Demon_Slayer_completed.png') }}"
+                                     style="max-height:150px; max-width: 225px;">
+								<span class="text-gray-300">
+									Demon Slayer
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
 
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-doric-quest"
                              title="Reward: 1 quest point, mining experience, 180 coins, and the ability to use Doric's anvils">
-									<span class="d-block">
-										<img class="d-block" alt="quest image"
-                                             src="{{ asset('img/quests/Dorics_Quest_Completed.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Doric's Quest
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block" alt="quest image"
+                                     src="{{ asset('img/quests/Dorics_Quest_Completed.png') }}"
+                                     style="max-height:150px; max-width: 225px;">
+								<span class="text-gray-300">
+									Doric's Quest
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
                     </div>
 
                     <div id="row2" class="d-flex flex-wrap justify-content-between pt-3">
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-dragon-slayer"
                              title="Reward: 2 quest points, defense experience, strength experience, and the ability to wear the rune plate mail body">
-									<span class="d-block">
-										<img class="d-block" alt="quest image"
-                                             src="{{ asset('img/quests/Dragon_Slayer_completed.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Dragon slayer
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block" alt="quest image"
+									 src="{{ asset('img/quests/Dragon_Slayer_completed.png') }}"
+									 style="max-height:150px; max-width: 225px;">
+								<span class="text-gray-300">
+									Dragon slayer
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
 
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-ernest-the-chicken"
                              title="Reward: 4 quest points and 300 coins">
-									<span class="d-block">
-										<img class="d-block"
-                                             src="{{ asset('img/quests/Ernest_Chicken_completed.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Ernest the Chicken
-										</span>
-									</span>
+							<span class="d-block">
+								<img class="d-block"
+									 src="{{ asset('img/quests/Ernest_Chicken_completed.png') }}"
+									 style="max-height:150px; max-width: 225px;">
+								<span class="text-gray-300">
+									Ernest the Chicken
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
+							</span>
                             <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
+								Difficulty:
+								<span class="small text-info font-weight-bold">
+									<i class="fas fa-star"></i>
+								</span>
+								<span class="small">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</span>
+							</span>
                         </div>
 
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-goblin-diplomacy"
@@ -164,7 +179,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Goblin_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Goblin Diplomacy
 										</span>
 									</span>
@@ -188,7 +203,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Imp_Catcher_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Imp Catcher
 										</span>
 									</span>
@@ -214,7 +229,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Knight\'s_Sword_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											The Knight's Sword
 										</span>
 									</span>
@@ -238,7 +253,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Pirates_Treasure_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Pirate's Treasure
 										</span>
 									</span>
@@ -262,7 +277,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Prince_Ali_Rescue_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Prince Ali Rescue
 										</span>
 									</span>
@@ -286,7 +301,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/The_Restless_Ghost_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											The Restless Ghost
 										</span>
 									</span>
@@ -312,7 +327,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Romeo_Juliet_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Romeo & Juliet
 										</span>
 									</span>
@@ -336,7 +351,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Sheep_Shearer_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Sheep Shearer
 										</span>
 									</span>
@@ -360,7 +375,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Shield_of_Arrav_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Shield of Arrav
 										</span>
 									</span>
@@ -384,7 +399,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Vampire_Slayer_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Vampire Slayer
 										</span>
 									</span>
@@ -410,7 +425,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Witch\'s_potion_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Witch's potion
 										</span>
 									</span>
@@ -434,7 +449,7 @@
 
                 <!-- Begin Members Quests -->
                 <div id="members" class="table-transparent pl-5 pr-5">
-                    <h3 class="text-info pt-3">Members Quests</h3>
+                    <div class="text-white h5 pt-2 text-center">Members Quests</div>
                     <div id="row1" class="d-flex flex-wrap justify-content-between pt-3">
                         <div class="clickable-row" data-toggle="tooltip" data-href="/quest-biohazard"
                              title="Reward: 3 quest points, a King Lathas Amulet, use of the Combat Training Camp, ability to travel through the Ardougne wall gateway, and thieving experience">
@@ -442,7 +457,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Biohazard_finish_8.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Biohazard
 										</span>
 									</span>
@@ -466,7 +481,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Clock_tower_2.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Clock Tower
 										</span>
 									</span>
@@ -490,7 +505,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Digsite_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Digsite
 										</span>
 									</span>
@@ -514,7 +529,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Druidic_Ritual_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Druidic Ritual
 										</span>
 									</span>
@@ -540,7 +555,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Dwarf_cannon_finish.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Dwarf Cannon
 										</span>
 									</span>
@@ -564,7 +579,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Family_Crest_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Family Crest
 										</span>
 									</span>
@@ -588,7 +603,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/FightArenaComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Fight Arena
 										</span>
 									</span>
@@ -612,7 +627,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/FishConReward.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Fishing Contest
 										</span>
 									</span>
@@ -638,7 +653,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Grand_tree_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											The Grand Tree
 										</span>
 									</span>
@@ -662,7 +677,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Gertude_Cat_Complete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Gertrude's Cat
 										</span>
 									</span>
@@ -686,7 +701,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Good_Hazeel_Complete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											The Hazeel Cult
 										</span>
 									</span>
@@ -710,7 +725,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Heroes_finish.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Hero's Quest
 										</span>
 									</span>
@@ -736,7 +751,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/HolyGrailComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											The Holy Grail
 										</span>
 									</span>
@@ -760,7 +775,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/JunglePotionComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Jungle Potion
 										</span>
 									</span>
@@ -784,7 +799,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/LegendsQuestComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Legend's Quest
 										</span>
 									</span>
@@ -806,7 +821,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Lost_City_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Lost City
 										</span>
 									</span>
@@ -832,7 +847,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Merlins_Crystal_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Merlin's Crystal
 										</span>
 									</span>
@@ -856,7 +871,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Monk\'s_friend_end.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Monk's Friend
 										</span>
 									</span>
@@ -880,7 +895,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Murder_reward.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Murder Mystery
 										</span>
 									</span>
@@ -904,7 +919,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Observatory_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Observatory Quest
 										</span>
 									</span>
@@ -930,7 +945,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Plague_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Plague City
 										</span>
 									</span>
@@ -954,7 +969,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Scorp_catcher_end.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Scorpion Catcher
 										</span>
 									</span>
@@ -978,7 +993,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/SeaSlugComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Sea Slug
 										</span>
 									</span>
@@ -1002,7 +1017,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Sheep_Herder_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Sheep Herder
 										</span>
 									</span>
@@ -1028,7 +1043,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/ShiloVillageComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Shilo Village
 										</span>
 									</span>
@@ -1052,7 +1067,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Temple_of_Ikov_Evil_-_Complete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Temple of Ikov
 										</span>
 									</span>
@@ -1076,7 +1091,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/TouristTrapComplete.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Tourist Trap
 										</span>
 									</span>
@@ -1100,7 +1115,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Tree_Gnome_Village_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Tree Gnome Village
 										</span>
 									</span>
@@ -1126,7 +1141,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Tribal_totem_5.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Tribal Totem
 										</span>
 									</span>
@@ -1150,7 +1165,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Underground_completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Underground Pass
 										</span>
 									</span>
@@ -1174,7 +1189,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Watchtower_other_rewards.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Watchtower
 										</span>
 									</span>
@@ -1198,7 +1213,7 @@
 										<img class="d-block"
                                              src="{{ asset('img/quests/Waterfall_Quest_Completed.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Waterfall Quest
 										</span>
 									</span>
@@ -1224,7 +1239,7 @@
 										<img class="d-block" alt="quest image"
                                              src="{{ asset('img/quests/Witches_Quest_end.png') }}"
                                              style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
+										<span class="text-gray-300">
 											Witch's House
 										</span>
 									</span>

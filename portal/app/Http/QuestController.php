@@ -13,19 +13,19 @@ class QuestController extends Controller
 	 * @return Factory|View
 	 * Used to show the main quests page
 	 */
-	public function index()
-	{
-		return view('quest_list');
+	public function index(): Factory|View
+    {
+		return view('quests');
 	}
 
 	/**
-	 * @function minigame_list()
+	 * @function minigames()
 	 * @return Factory|View
 	 * Used to show the minigames page
 	 */
-	public function minigame_list()
-	{
-		return view('minigame_list');
+	public function minigames(): Factory|View
+    {
+		return view('minigames');
 	}
 
 	/**
@@ -33,8 +33,8 @@ class QuestController extends Controller
 	 * @return Factory|View
 	 * Used to show all quest-specific sub pages
 	 */
-	public function show($subpage)
-	{
+	public function show($subpage): Factory|View
+    {
 		/**
 		 * @var $quest_array
 		 * prevents non-authentic quests from showing if .env DB_DATABASE is named 'openrsc'
