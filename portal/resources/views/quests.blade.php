@@ -157,7 +157,7 @@
 									Ernest the Chicken
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=4394" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -184,7 +184,7 @@
 									Goblin Diplomacy
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=11286" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -211,7 +211,7 @@
 									Imp Catcher
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=10551" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -321,7 +321,7 @@
 									The Restless Ghost
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=2575" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -350,7 +350,7 @@
 									Romeo & Juliet
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=9055" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -431,6 +431,9 @@
 								<span class="text-gray-300">
 									Vampire Slayer
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/ga-Vda46MGw?t=7638" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Diffculty:
@@ -456,6 +459,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Witch's potion
+								</span>
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -1287,7 +1293,7 @@
                         </div>
                     </div>
 					<!-- End Members Quests -->
-					
+
                 </div>
             </div>
         </div>
