@@ -77,6 +77,20 @@ class Login extends Component
             } else {
                 session()->flash('error', 'Invalid credentials');
             }
+        } elseif ($this->game == 'uranium') {
+            if (Auth::guard('uranium')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                session()->regenerate();
+                return redirect(route('Home'));
+            } else {
+                session()->flash('error', 'Invalid credentials');
+            }
+        } elseif ($this->game == 'coleslaw') {
+            if (Auth::guard('coleslaw')->attempt(['username' => $trimmed_username, 'password' => $trimmed_pass])) {
+                session()->regenerate();
+                return redirect(route('Home'));
+            } else {
+                session()->flash('error', 'Invalid credentials');
+            }
         }
     }
 
