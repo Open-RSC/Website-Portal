@@ -30,7 +30,7 @@ Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');
 // Quest pages
 Route::get('quests', 'QuestController@index')->name('Quests');
 Route::get('quest/{subpage}', 'QuestController@show')->name('{subpage}}');
-Route::get('minigames', 'QuestController@minigame_list')->name('Mini Games');
+Route::get('minigames', 'QuestController@minigames')->name('Mini Games');
 
 // Player pages
 Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('Player');

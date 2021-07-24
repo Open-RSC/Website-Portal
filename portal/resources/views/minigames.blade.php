@@ -2,9 +2,6 @@
 
 @section('content')
     <div class="col">
-        <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">
-            Minigame List
-        </h2>
         <div class="text-primary">
             <div class="pl-3 pr-3 container">
 
@@ -76,6 +73,30 @@
 										</span>
 										<span class="small">
 											<i class="far fa-star"></i>
+											<i class="far fa-star"></i>
+											<i class="far fa-star"></i>
+										</span>
+									</span>
+                        </div>
+
+                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/blurberrys_bar"
+                             title="Prepare gnomish drinks for Blurberry and be awarded some money and cooking experience per order completed.">
+									<span class="d-block">
+										<img class="d-block" alt="minigames image"
+                                             src="{{ asset('img/minigames/Blurberry_bar_tutorial_done.png') }}"
+                                             style="max-height:150px; max-width: 225px;">
+										<span class="text-info">
+											Blurberry's Bar
+										</span>
+									</span>
+                            <span class="d-block pb-3">
+										Difficulty:
+										<span class="small text-info font-weight-bold">
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+											<i class="fas fa-star"></i>
+										</span>
+										<span class="small">
 											<i class="far fa-star"></i>
 											<i class="far fa-star"></i>
 										</span>
@@ -178,29 +199,6 @@
 									</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/blurberrys_bar"
-                             title="Prepare gnomish drinks for Blurberry and be awarded some money and cooking experience per order completed.">
-									<span class="d-block">
-										<img class="d-block" alt="minigames image"
-                                             src="{{ asset('img/minigames/Blurberry_bar_tutorial_done.png') }}"
-                                             style="max-height:150px; max-width: 225px;">
-										<span class="text-info">
-											Blurberry's Bar
-										</span>
-									</span>
-                            <span class="d-block pb-3">
-										Difficulty:
-										<span class="small text-info font-weight-bold">
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-											<i class="fas fa-star"></i>
-										</span>
-										<span class="small">
-											<i class="far fa-star"></i>
-											<i class="far fa-star"></i>
-										</span>
-									</span>
-                        </div>
                     </div>
                 </div>
             </div>
