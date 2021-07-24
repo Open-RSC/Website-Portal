@@ -61,7 +61,7 @@
                                 <tbody>
                                 <tr class="align-top">
                                     <td style="width: 100px;">
-                                        <a href="board/viewforum.php?f=2">
+                                        <a href="/board/viewforum.php?f=2">
                                             <img class="mx-auto"
                                                  src="{{ asset('img/mm_scroll.jpg') }}"
                                                  alt="">
@@ -74,7 +74,7 @@
                                                     <td class="w-75">
                                                         <!-- News subject -->
                                                         <a class="c"
-                                                           href="board/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                           href="/board/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
                                                             @php
                                                                 echo Str::limit(strip_tags($news->post_subject), 37);
                                                             @endphp
@@ -246,7 +246,7 @@
                                     <tbody>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="">
+                                            <a href="{{ asset('downloads/OpenRSC.jar') }}">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_sword.jpg') }}"
                                                      alt="">
@@ -255,7 +255,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="">
+                                                    <a href="{{ asset('downloads/OpenRSC.jar') }}">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -281,7 +281,7 @@
                                             </table>
                                             Play RuneScape right now!
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="{{ asset('downloads/OpenRSC.jar') }}" class="c">
                                                     Click here
                                                 </a>
                                             </div>
@@ -450,7 +450,7 @@
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="/hiscores/preservation" class="c">
                                                 <img src="{{ asset('img/mm2_rs2b.jpg') }}"
                                                      alt="">
                                             </a>
@@ -458,7 +458,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="" class="c">
+                                                    <a href="https://2009scape.org" target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -482,7 +482,7 @@
                                             <span class="d-block">
                                                 of the game!</span>
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="https://2009scape.org" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -535,7 +535,7 @@
                                 <div class="pb-3"></div>
                                 <table>
                                     <tbody>
-                                    <tr class="align-top">
+                                    <!--<tr class="align-top">
                                         <td style="width: 100px;">
                                             <a href="" class="c">
                                                 <img class="mx-auto"
@@ -611,7 +611,7 @@
                                                 </a>
                                             </div>
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                     <tr>
                                         <td colspan="5"></td>
                                     </tr>
@@ -705,7 +705,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="/board" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mms_forums.jpg') }}"
                                                      height="120" width="77" alt="">
@@ -714,7 +714,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="" class="c">
+                                                    <a href="/board" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -736,7 +736,7 @@
                                             </table>
                                             Discuss the game with fellow players!
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="/board" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -827,7 +827,7 @@
                                     <tbody>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="https://rsc.wiki" target="_blank" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_howtoplay.jpg') }}"
                                                      height="120" width="77" alt="">
@@ -836,7 +836,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="" class="c">
+                                                    <a href="https://rsc.wiki" target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -859,7 +859,7 @@
                                             Everything you need to know to play
                                             RuneScape
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="https://rsc.wiki" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -910,7 +910,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="">
+                                            <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_lov.jpg') }}"
                                                      height="120"
@@ -920,7 +920,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="">
+                                                    <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -942,7 +942,7 @@
                                             </table>
                                             Learn about the History of RuneScape
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="https://classic.runescape.wiki/w/Category:Library_of_Varrock" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>

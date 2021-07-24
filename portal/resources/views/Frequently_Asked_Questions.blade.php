@@ -44,6 +44,18 @@
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
+        <div class="pl-1 d-block pt-2"><span class="text-primary d-block">RSC Coleslaw</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Botting allowed</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> 2x XP rate</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> 30% faster in-game speed</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Auction House</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Clans and parties</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Custom items, skills, monsters, and quests</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Batched skilling activities</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Regular Ironman, Hardcore Ironman, and Ultimate Ironman modes available</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Fatigue disabled (optional to turn off XP gain using sleep)</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
+        </div>
         <div class="pl-1 d-block pt-2"><span class="text-primary d-block">Open PK (Under development)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Stork-style point system and dedicated to F2P player killing</span>
             <span class="d-block"><i
@@ -96,7 +108,7 @@
                 class="link-success underline" target="_blank" href="https://github.com/marwolf">Marwolf</a>
 
         <span class="text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
-        We have a zero tolerance policy on our publicly hosted servers with the single exception of RSC Uranium,
-        a botting allowed world.
+        We have a zero tolerance policy on our publicly hosted servers with the exception of RSC Uranium and RSC Coleslaw,
+        which are botting allowed worlds.
     </div>
 @endsection
