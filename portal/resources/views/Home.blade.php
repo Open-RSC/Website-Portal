@@ -284,6 +284,10 @@
                                                 <a href="{{ asset('downloads/OpenRSC.jar') }}" class="c">
                                                     Click here
                                                 </a>
+                                                |
+                                                <a href="{{ asset('downloads/openrsc.apk') }}" class="c">
+                                                    <i class="fab fa-android"></i>
+                                                </a>
                                             </div>
                                         </td>
                                         <td style="width: 10px"></td>
@@ -333,7 +337,7 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_whyrs.jpg') }}"
                                                      alt="">
@@ -342,7 +346,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="" class="c">
+                                                    <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -364,12 +368,12 @@
                                             </table>
                                             See why our game is right for you!
                                             <div class="d-block">
-                                                <a href="" class="c">Click Here</a>
+                                                <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">Click Here</a>
                                             </div>
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="" class="c">
+                                            <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank" class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_members.jpg') }}"
                                                      alt="">
@@ -378,7 +382,7 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href=""
+                                                    <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
                                                        class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
@@ -399,9 +403,9 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Get the Premium version of the game!
+                                            Everyone may be a member for free!
                                             <div class="d-block">
-                                                <a href="" class="c">
+                                                <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
