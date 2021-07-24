@@ -53,7 +53,6 @@ Route::any('/hiscores/{db}/{subpage}', 'HiscoresController@show');
 Route::any('/hiscores/{db}/{subpage}/{iron_man}', 'HiscoresController@iron_man');
 
 // Afman staff zone
-/*
 Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
 Route::get('pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
 Route::get('trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
@@ -64,13 +63,10 @@ Route::get('live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth
 Route::get('player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
 Route::get('report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
-*/
 
 Route::get('register', 'Livewire\Registration')->name('Player Registration');
 Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
-/*
 Route::any('login', 'Livewire\Login')->name('Secure_Login');
 Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
 Route::post('logout', 'Livewire\Login@logout')->name('Logout');
-*/

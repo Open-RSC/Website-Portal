@@ -188,7 +188,7 @@
         </span>
         <span class="flex-auto p-2"><a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank">Bug Reports</a>
         </span>
-        @if(!Auth::user())
+        @guest
             <span class="flex-auto p-2">
                 <a class="c" href="/login">Staff Login</a>
             </span>
@@ -196,21 +196,44 @@
             <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black; width:150px;">
-                    <a class="c text-left" href="{/{ route('chat_logs') }}">Chat Logs</a>
-                    <a class="c text-left" href="{/{ route('pm_logs') }}">PM Logs</a>
-                    <a class="c text-left" href="{/{ route('trade_logs') }}">Trade Logs</a>
-                    <a class="c text-left" href="{/{ route('generic_logs') }}">Generic Logs</a>
-                    <a class="c text-left" href="{/{ route('shop_logs') }}">Shop Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs') }}">Chat Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs') }}">PM Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs') }}">Trade Logs</a>
+                    <a class="c text-left" href="{{ route('generic_logs') }}">Generic Logs</a>
+                    <a class="c text-left" href="{{ route('shop_logs') }}">Shop Logs</a>
                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
-                        <a class="c text-left" href="{/{ route('auction_logs') }}">Auction Logs</a>
-                    @endif
-                    <a class="c text-left" href="{/{ route('live_feed_logs') }}">Live Feed Logs</a>
-                    <a class="c text-left" href="{/{ route('player_cache_logs') }}">Player Cache Logs</a>
-                    <a class="c text-left" href="{/{ route('report_logs') }}">Report Logs</a>
-                    <a class="c text-left" href="{/{ route('staff_logs') }}">Staff Logs</a>
+                        <a class="c text-left" href="{{ route('auction_logs') }}">Auction Logs</a>
+                        @endif
+                    <a class="c text-left" href="{{ route('live_feed_logs') }}">Live Feed Logs</a>
+                    <a class="c text-left" href="{{ route('player_cache_logs') }}">Player Cache Logs</a>
+                    <a class="c text-left" href="{{ route('report_logs') }}">Report Logs</a>
+                    <a class="c text-left" href="{{ route('staff_logs') }}">Staff Logs</a>
+                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    <a class="c text-left" href="{{ route('Logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                    <form id="logout-form" action="{{ route('Logout') }}" method="POST"
+                          style="display: none;">
+                        @csrf
+                    </form>
                 </span>
             </span>
-        @endif
+
+            <li>
+                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i
+                            class="fas fa-caret-down"></i></label>
+                <a href="#">{{ Auth::user()->username }}</a>
+                <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                <ul>
+                    <li><a href="{/{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                    </li>
+                </ul>
+                <form id="logout-form" action="{/{ route('logout') }}" method="POST"
+                      style="display: none;">
+                    @csrf
+                </form>
+            </li>
+        @endguest
     </div>
 </div>
 
