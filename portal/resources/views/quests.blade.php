@@ -19,7 +19,7 @@
 									Black Knights' Fortress
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=4100" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -184,7 +184,7 @@
 									Goblin Diplomacy
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=11286" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=2464" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -267,7 +267,7 @@
 									Pirate's Treasure
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ualcnFURH-Q?t=151" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -405,7 +405,7 @@
 									Shield of Arrav
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ualcnFURH-Q?t=1881" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -461,7 +461,7 @@
 									Witch's potion
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=5984" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
