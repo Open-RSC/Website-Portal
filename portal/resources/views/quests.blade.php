@@ -19,7 +19,8 @@
 									Black Knights' Fortress
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/_rI4zHpi1Bs?t=4100" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=4100" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -73,9 +74,9 @@
 								<span class="text-gray-300">
 									Demon Slayer
 								</span>
-								<span class="float-right">
+								<!--<span class="float-right">
 									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
-								</span>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -101,7 +102,7 @@
 									Doric's Quest
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=3975" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -130,7 +131,8 @@
 									Dragon slayer
 								</span>
 								<span class="float-right">
-									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/76T0pMawXMA?t=260" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -157,7 +159,8 @@
 									Ernest the Chicken
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=4394" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=4394" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -184,7 +187,8 @@
 									Goblin Diplomacy
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/_rI4zHpi1Bs?t=2464" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=2464" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -211,7 +215,8 @@
 									Imp Catcher
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=10551" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=10551" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -239,9 +244,9 @@
 								<span class="text-gray-300">
 									The Knight's Sword
 								</span>
-								<span class="float-right">
+								<!--<span class="float-right">
 									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
-								</span>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -267,7 +272,8 @@
 									Pirate's Treasure
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ualcnFURH-Q?t=151" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ualcnFURH-Q?t=151" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -293,9 +299,9 @@
 								<span class="text-gray-300">
 									Prince Ali Rescue
 								</span>
-								<span class="float-right">
+								<!--<span class="float-right">
 									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
-								</span>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -321,7 +327,8 @@
 									The Restless Ghost
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=2575" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=2575" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -350,7 +357,8 @@
 									Romeo & Juliet
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=9055" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=9055" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -405,7 +413,8 @@
 									Shield of Arrav
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ualcnFURH-Q?t=1881" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ualcnFURH-Q?t=1881" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -432,7 +441,8 @@
 									Vampire Slayer
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/ga-Vda46MGw?t=7638" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/ga-Vda46MGw?t=7638" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -461,7 +471,8 @@
 									Witch's potion
 								</span>
 								<span class="float-right">
-									<a href="https://youtu.be/_rI4zHpi1Bs?t=5984" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+									<a href="https://youtu.be/_rI4zHpi1Bs?t=5984" target="_blank"><i
+                                                class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -495,6 +506,9 @@
 								<span class="text-gray-300">
 									Biohazard
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/Gw8b17_wKwc?t=258" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -518,6 +532,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Clock Tower
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/CpQuyphK3i4?t=171" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -543,6 +560,9 @@
 								<span class="text-gray-300">
 									Digsite
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -566,6 +586,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Druidic Ritual
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/pa9UPyMdDE0?t=6427" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -593,6 +616,9 @@
 								<span class="text-gray-300">
 									Dwarf Cannon
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -617,6 +643,9 @@
 								<span class="text-gray-300">
 									Family Crest
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -641,6 +670,9 @@
 								<span class="text-gray-300">
 									Fight Arena
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -665,6 +697,9 @@
 								<span class="text-gray-300">
 									Fishing Contest
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/3bJOYgCWDhA?t=2266" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -688,8 +723,11 @@
 								<img class="d-block" alt="quest image"
                                      src="{{ asset('img/quests/Grand_tree_completed.png') }}"
                                      style="max-height:150px; max-width: 225px;">
-								<span class="text-gray-300">
+								<!--<span class="text-gray-300">
 									The Grand Tree
+								</span>-->
+								<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -715,6 +753,9 @@
 								<span class="text-gray-300">
 									Gertrude's Cat
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -739,6 +780,9 @@
 								<span class="text-gray-300">
 									The Hazeel Cult
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/CpQuyphK3i4?t=4396" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -762,6 +806,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Hero's Quest
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/3bJOYgCWDhA?t=3541" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -789,6 +836,9 @@
 								<span class="text-gray-300">
 									The Holy Grail
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -813,6 +863,9 @@
 								<span class="text-gray-300">
 									Jungle Potion
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -837,6 +890,9 @@
 								<span class="text-gray-300">
 									Legend's Quest
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -858,6 +914,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Lost City
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/pa9UPyMdDE0?t=8043" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -885,6 +944,9 @@
 								<span class="text-gray-300">
 									Merlin's Crystal
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/pa9UPyMdDE0?t=1298" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -908,6 +970,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Monk's Friend
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/CpQuyphK3i4?t=3833" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -933,6 +998,9 @@
 								<span class="text-gray-300">
 									Murder Mystery
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -957,6 +1025,9 @@
 								<span class="text-gray-300">
 									Observatory Quest
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -983,6 +1054,9 @@
 								<span class="text-gray-300">
 									Plague City
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/sQQaoxEIuvc?t=1411" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1006,6 +1080,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Scorpion Catcher
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/IxRisOrdfjk?t=409" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -1031,6 +1108,9 @@
 								<span class="text-gray-300">
 									Sea Slug
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1055,6 +1135,9 @@
 								<span class="text-gray-300">
 									Sheep Herder
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1081,6 +1164,9 @@
 								<span class="text-gray-300">
 									Shilo Village
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1104,6 +1190,9 @@
                                      style="max-height:150px; max-width: 225px;">
 								<span class="text-gray-300">
 									Temple of Ikov
+								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/3bJOYgCWDhA?t=484" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
 								</span>
 							</span>
                             <span class="d-block pb-3">
@@ -1129,6 +1218,9 @@
 								<span class="text-gray-300">
 									Tourist Trap
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1153,6 +1245,9 @@
 								<span class="text-gray-300">
 									Tree Gnome Village
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1179,6 +1274,9 @@
 								<span class="text-gray-300">
 									Tribal Totem
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1203,6 +1301,9 @@
 								<span class="text-gray-300">
 									Underground Pass
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1227,6 +1328,9 @@
 								<span class="text-gray-300">
 									Watchtower
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1251,6 +1355,9 @@
 								<span class="text-gray-300">
 									Waterfall Quest
 								</span>
+								<!--<span class="float-right">
+									<a href="" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>-->
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1277,6 +1384,9 @@
 								<span class="text-gray-300">
 									Witch's House
 								</span>
+								<span class="float-right">
+									<a href="https://youtu.be/pa9UPyMdDE0?t=259" target="_blank"><i class="fab fa-youtube"></i> Watch</a>
+								</span>
 							</span>
                             <span class="d-block pb-3">
 								Difficulty:
@@ -1292,7 +1402,7 @@
 							</span>
                         </div>
                     </div>
-					<!-- End Members Quests -->
+                    <!-- End Members Quests -->
 
                 </div>
             </div>
