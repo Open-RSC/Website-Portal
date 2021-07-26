@@ -1476,3 +1476,12 @@ li > a:only-child:after {
     width: 94%;
   }
 }
+
+.navbar-expand-xxl .flex-row {
+  width: 534px !important;
+}
+@media screen and (max-width: 480px) {
+  .navbar-expand-xxl .flex-row  {
+    width: auto !important;
+  }
+}
