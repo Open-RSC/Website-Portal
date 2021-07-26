@@ -8,7 +8,12 @@
         <span class="flex-auto p-2">
             <a class="c" href="/">Home</a>
         </span>
-        <span class="flex-auto p-2 dropdown">
+        @if (Browser::isAndroid())
+            <span class="flex-auto p-2">
+                <a class="c" href="{{ asset('downloads/openrsc.apk') }}">Play Now</a>
+            </span>
+        @else
+            <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:140px;">
                 <a class="c text-left" href="{{ asset('downloads/OpenRSC.jar') }}">
@@ -22,6 +27,7 @@
                 </a>
             </span>
         </span>
+        @endif
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
