@@ -246,20 +246,36 @@
                                     <tbody>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="{{ asset('downloads/OpenRSC.jar') }}">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_sword.jpg') }}"
-                                                     alt="">
-                                            </a>
+                                            @if (Browser::isAndroid())
+                                                <a href="{{ asset('downloads/openrsc.apk') }}">
+                                                    <img class="mx-auto"
+                                                         src="{{ asset('img/mm_sword.jpg') }}"
+                                                         alt="">
+                                                </a>
+                                            @else
+                                                <a href="{{ asset('downloads/OpenRSC.jar') }}">
+                                                    <img class="mx-auto"
+                                                         src="{{ asset('img/mm_sword.jpg') }}"
+                                                         alt="">
+                                                </a>
+                                            @endif
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ asset('downloads/OpenRSC.jar') }}">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
+                                                    @if (Browser::isAndroid())
+                                                        <a href="{{ asset('downloads/openrsc.apk') }}">
+                                                            <img src="{{ asset('img/blank.gif') }}"
+                                                                 height="45" width="100"
+                                                                 alt="">
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ asset('downloads/OpenRSC.jar') }}">
+                                                            <img src="{{ asset('img/blank.gif') }}"
+                                                                 height="45" width="100"
+                                                                 alt="">
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
@@ -281,13 +297,15 @@
                                             </table>
                                             Play RuneScape right now!
                                             <div class="d-block">
-                                                <a href="{{ asset('downloads/OpenRSC.jar') }}" class="c">
-                                                    Click here
-                                                </a>
-                                                |
-                                                <a href="{{ asset('downloads/openrsc.apk') }}" class="c">
-                                                    <i class="fab fa-android"></i>
-                                                </a>
+                                                @if (Browser::isAndroid())
+                                                    <a href="{{ asset('downloads/openrsc.apk') }}" class="c">
+                                                        Click here
+                                                    </a>
+                                                @else
+                                                    <a href="{{ asset('downloads/OpenRSC.jar') }}" class="c">
+                                                        Click here
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                         <td style="width: 10px"></td>
@@ -337,7 +355,8 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">
+                                            <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank"
+                                               class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_whyrs.jpg') }}"
                                                      alt="">
@@ -346,7 +365,8 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">
+                                                    <a href="https://classic.runescape.wiki/w/RuneScape_Classic"
+                                                       target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -368,12 +388,14 @@
                                             </table>
                                             See why our game is right for you!
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank" class="c">Click Here</a>
+                                                <a href="https://classic.runescape.wiki/w/RuneScape_Classic"
+                                                   target="_blank" class="c">Click Here</a>
                                             </div>
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank" class="c">
+                                            <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
+                                               class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_members.jpg') }}"
                                                      alt="">
@@ -382,7 +404,8 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
+                                                    <a href="https://classic.runescape.wiki/w/Pay-to-play"
+                                                       target="_blank"
                                                        class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
@@ -405,7 +428,8 @@
                                             </table>
                                             Everyone may be a member for free!
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank" class="c">
+                                                <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
+                                                   class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -914,7 +938,8 @@
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank">
+                                            <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                               target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_lov.jpg') }}"
                                                      height="120"
@@ -924,7 +949,8 @@
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank">
+                                                    <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                                       target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -946,7 +972,8 @@
                                             </table>
                                             Learn about the History of RuneScape
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/Library_of_Varrock" target="_blank" class="c">
+                                                <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                                   target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
