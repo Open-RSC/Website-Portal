@@ -163,37 +163,37 @@
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">RSC Preservation</a></td>
+                                                                href="/hiscores/preservation">RSC Preservation</a></td>
                                                     <td align="right">{{$preservation_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">RSC Cabbage</a></td>
+                                                                href="/hiscores/cabbage">RSC Cabbage</a></td>
                                                     <td align="right">{{$cabbage_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">RSC Uranium</a></td>
+                                                                href="/hiscores/uranium">RSC Uranium</a></td>
                                                     <td align="right">{{$uranium_online}} cyborgs</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">RSC Coleslaw</a></td>
+                                                                href="/hiscores/coleslaw">RSC Coleslaw</a></td>
                                                     <td align="right">{{$coleslaw_online}} cyborgs</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">2001Scape</a></td>
+                                                                href="#">2001Scape</a></td>
                                                     <td align="right">{{$retro_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/download">Open PK</a></td>
+                                                                href="#">Open PK</a></td>
                                                     <td align="right">{{$openpk_online}} players</td>
                                                 </tr>
                                                 <!--end worlds-->

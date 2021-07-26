@@ -17,6 +17,7 @@ services:
       - "./etc/nginx/sites-enabled:/etc/nginx/sites-enabled:ro" # Nginx config is located in etc
       - "./etc/nginx/conf.d:/etc/nginx/conf.d:ro" # Nginx config is located in etc
       - "./etc/nginx/log:/var/log/nginx"
+      - "./etc/nginx/ssl:/etc/nginx/ssl" # Cloudflare origin SSL cert path
       - "./wiki:/var/www/html/portal/public/wiki"
       - "./wiki/images:/var/www/html/portal/public/wiki/images"
       - "./wiki/skins:/var/www/html/portal/public/skins"
