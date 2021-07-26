@@ -4,7 +4,7 @@
 <body>
 
 <div class="navbar-expand-xxl pt-2 mr-1">
-    <div class="e text-center flex-row" style="background:black; width:596px;">
+    <div class="e text-center flex-row" style="background:black;">
         <span class="flex-auto p-2">
             <a class="c" href="/">Home</a>
         </span>
