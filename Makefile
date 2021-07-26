@@ -125,4 +125,9 @@ generate-model:
 generate-passport:
 	docker exec -it php bash -c "cd /var/www/html/portal && php artisan passport:keys --force"
 
-# Creates a new tagged image in Docker Hub for the custom PHP-FPM build
+# Creates a new tagged image in Docker Hub for the named container
+# Usage: make docker-push name=openrsc/php
+docker-push:
+	@[ "${name}" ] || ( echo ">> name is not set"; exit 1 )
+	docker tag php ${name}
+	docker push ${name}
