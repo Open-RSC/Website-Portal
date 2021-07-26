@@ -63,12 +63,16 @@
         </span>
         @guest
             <span class="flex-auto p-2 dropdown">
-                <a class="c" href="#">Live Map <i class="fas fa-caret-down"></i></a>
+                <a class="c" href="#">Live Maps <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:150px;">
-                        <a class="c text-left" href="/worldmap/preservation">RSC Preservation</a>
-                        <a class="c text-left" href="/worldmap/cabbage">RSC Cabbage</a>
-                        <a class="c text-left" href="/worldmap/uranium">RSC Uranium</a>
-                        <a class="c text-left" href="/worldmap/coleslaw">RSC Coleslaw</a>
+                        <a class="c text-left" href="/worldmap/preservation"><i
+                                    class="fas fa-map"></i> RSC Preservation</a>
+                        <a class="c text-left" href="/worldmap/cabbage"><i
+                                    class="fas fa-map"></i> RSC Cabbage</a>
+                        <a class="c text-left" href="/worldmap/uranium"><i
+                                    class="fas fa-map"></i> RSC Uranium</a>
+                        <a class="c text-left" href="/worldmap/coleslaw"><i
+                                    class="fas fa-map"></i> RSC Coleslaw</a>
                     </span>
             </span>
         @else
