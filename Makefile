@@ -107,7 +107,7 @@ npm-run-watch:
 	docker exec -i php bash -c "cd /var/www/html/portal && npm run watch"
 
 npm-audit-fix:
-	docker exec -it php bash -c "cd /var/www/html/portal && npm audit fix --force"
+	docker exec -it php bash -c "cd /var/www/html/portal && npm update && npm install & npm audit fix --force"
 
 livewire-discover:
 	docker exec -i php bash -c "cd /var/www/html/portal && php artisan livewire:discover"
@@ -124,3 +124,5 @@ generate-model:
 # Generates passport keys
 generate-passport:
 	docker exec -it php bash -c "cd /var/www/html/portal && php artisan passport:keys --force"
+
+# Creates a new tagged image in Docker Hub for the custom PHP-FPM build
