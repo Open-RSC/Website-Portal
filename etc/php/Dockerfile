@@ -98,10 +98,14 @@ RUN chmod 0644 /etc/cron.d/laravel-schedule
 #####################################
 
 # Node.js
-RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
-RUN bash nodesource_setup.sh
-RUN apt-get install nodejs -y
-RUN npm install
+ENV NODE_ENV=production
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+#RUN npm install --production
+RUN curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
+RUN bash n lts
+RUN npm install -g n
 
 # Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
