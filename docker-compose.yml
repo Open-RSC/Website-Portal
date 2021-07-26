@@ -25,12 +25,12 @@ services:
       - "./portal/node_modules/@2003scape/rsc-client/dist:/var/www/html/portal/public/client"
 
   php:
-    build:
-      context: "./etc/php"
-      dockerfile: Dockerfile
-      args:
-        buildno: 1
-#    image: openrsc/php-laravel:latest
+    #build:
+    #  context: "./etc/php"
+    #  dockerfile: Dockerfile
+    #  args:
+    #    buildno: 1
+    image: openrsc/php-laravel:latest
     container_name: php
     restart: unless-stopped
     ports:
