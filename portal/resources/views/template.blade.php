@@ -211,10 +211,10 @@
                                                        href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/1">Ironman</a>
                                                     |
                                                     <a class="c"
-                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/2">Hardcore</a>
+                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/2">Ultimate</a>
                                                     |
                                                     <a class="c"
-                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/3">Ultimate</a>
+                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/3">Hardcore</a>
                                                 @else
                                                     <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                     <a class="c"
