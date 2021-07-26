@@ -82,13 +82,14 @@ class HomeController extends Controller
         return view('Rules_and_Security');
     }
 
-    public function worldmap()
+    public function worldmap($db)
     {
-        $playerPositions = DB::connection('uranium')
+        $playerPositions = DB::connection($db)
             ->table('players')
             ->where([
                 ['banned', '=', '0'],
                 ['online', '=', '1'],
+                ['group_id', '>=', '8'],
             ])
             ->get();
 

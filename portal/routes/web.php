@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', 'HomeController@home')->name('Home');
-Route::get('worldmap', 'HomeController@worldmap')->name('World Map');
+Route::get('worldmap/{db}', 'HomeController@worldmap')->name('World Map');
 Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness Map');
 Route::get('rules', 'HomeController@rules')->name('Rules and Security');
 Route::get('online', 'StatsController@online')->name('Online list');
