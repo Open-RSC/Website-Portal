@@ -42,7 +42,7 @@ services:
       - "./board:/var/www/html/portal/public/board"
       - "./wiki:/var/www/html/portal/public/wiki"
       - "./etc/wiki/LocalSettings.php:/var/www/html/portal/public/wiki/LocalSettings.php:ro" # MediaWiki config is located in etc
-      - "./rsc-client/dist:/var/www/rsc-client"
+      - "./rsc-client:/var/www/html/rsc-client"
 
 networks: # Required for connectivity with separate docker-compose web framework
   default:
