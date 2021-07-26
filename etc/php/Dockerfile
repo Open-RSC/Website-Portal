@@ -98,7 +98,7 @@ RUN chmod 0644 /etc/cron.d/laravel-schedule
 #####################################
 
 # Node.js
-RUN curl -sL https://deb.nodesource.com/setup_15.x -o nodesource_setup.sh
+RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
 RUN apt-get install nodejs -y
 RUN npm install
