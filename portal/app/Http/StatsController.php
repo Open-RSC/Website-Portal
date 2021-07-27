@@ -1053,7 +1053,7 @@ class StatsController extends Controller
         );
     }
 
-    public function lookup()
+    public function onlinelookup()
     {
         $preservation_online = DB::connection('preservation')->table('players')
             ->where('online', '=', '1')
@@ -1080,7 +1080,7 @@ class StatsController extends Controller
             ->count('online');
 
         return view(
-            'lookup',
+            'onlinelookup',
             [
                 'preservation_online' => $preservation_online,
                 'cabbage_online' => $cabbage_online,

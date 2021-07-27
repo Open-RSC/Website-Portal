@@ -47,7 +47,7 @@ Route::any('npcs', 'NpcController@index')->name('Monster Database');
 Route::any('npcdef/{id}', 'NpcController@show')->name('Monster Details');
 
 // Client launcher online world lookup
-Route::get('onlinelookup', 'StatsController@lookup');
+Route::get('onlinelookup', 'StatsController@onlinelookup');
 
 // Hiscores
 Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
