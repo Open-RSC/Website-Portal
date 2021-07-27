@@ -135,7 +135,7 @@
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                     @else
-                        {{ ucfirst($subpage) }}
+                        {{ ucfirst($subpage ?? '') }}
                     @endif
                     <span class="d-block">
                         <a class="c" href="{{ route('Home') }}">Main menu</a>
@@ -157,7 +157,7 @@
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                     @else
-                        {{ ucfirst($subpage) }}
+                        {{ ucfirst($subpage ?? '') }}
                     @endif
                     <span class="d-block">
                         <a class="c" href="{{ route('Home') }}">Main menu</a>
@@ -191,10 +191,10 @@
                                         <b>RuneScape Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
-                                    @elseif(in_array($subpage, array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
+                                    @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
                                         <b>RuneScape Hiscores</b>
                                     @else
-                                        <b>{{ ucfirst($subpage) }}</b>
+                                        <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
                                     <div class="d-block">
                                         @if(str_contains(url()->current(), '/player'))
@@ -209,18 +209,18 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
+                                        @if(in_array($subpage ?? '' ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
                                             <div class="d-block">
-                                                @if($subpage ?? '' == 'skill_total')
+                                                @if($subpage ?? '' ?? '' == 'skill_total')
                                                     <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                     <a class="c"
-                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/1">Ironman</a>
+                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' ?? '' }}/1">Ironman</a>
                                                     |
                                                     <a class="c"
-                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/2">Ultimate</a>
+                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' ?? '' }}/2">Ultimate</a>
                                                     |
                                                     <a class="c"
-                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' }}/3">Hardcore</a>
+                                                       href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? '' ?? '' }}/3">Hardcore</a>
                                                 @else
                                                     <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                     <a class="c"

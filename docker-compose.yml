@@ -30,7 +30,7 @@ services:
     #  dockerfile: Dockerfile
     #  args:
     #    buildno: 1
-    image: openrsc/php-laravel:latest
+    image: openrsc/php:latest
     container_name: php
     restart: unless-stopped
     ports:

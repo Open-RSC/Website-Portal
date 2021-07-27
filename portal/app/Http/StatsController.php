@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
@@ -12,7 +13,7 @@ class StatsController extends Controller
      * @return Renderable
      * Shows the main home page and associated database queries
      */
-    public function index()
+    public function index(): Renderable
     {
         $news_feed = DB::connection('board')->table('phpbb_posts as p')
             ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
@@ -106,7 +107,7 @@ class StatsController extends Controller
      * @return int
      * Used to calculate the total input of seconds into years, days, hours, minutes, and seconds
      */
-    public function secondsToTime($inputSeconds)
+    public function secondsToTime($inputSeconds): int
     {
         $secondsInAMinute = 60;
         $secondsInAnHour = 60 * $secondsInAMinute;
@@ -168,7 +169,7 @@ class StatsController extends Controller
         );
     }
 
-    public function createdtoday()
+    public function createdtoday(): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $players = DB::connection('cabbage')->table('players AS B')
             ->whereRaw('B.creation_date >= unix_timestamp(current_date - interval 1 day)')
@@ -188,7 +189,7 @@ class StatsController extends Controller
         );
     }
 
-    public function logins48()
+    public function logins48(): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $players = DB::connection('cabbage')->table('players AS B')
             ->whereRaw('B.login_date >= unix_timestamp(current_date - interval 48 hour)')
@@ -207,7 +208,7 @@ class StatsController extends Controller
         );
     }
 
-    public function stats()
+    public function stats(): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $online = DB::connection('cabbage')->table('players')
             ->where('online', '=', '1')
@@ -1048,6 +1049,45 @@ class StatsController extends Controller
                 'dbattle' => $dbattle,
                 'dlong' => $dlong,
                 'cabbage' => $cabbage,*/
+            ]
+        );
+    }
+
+    public function lookup()
+    {
+        $preservation_online = DB::connection('preservation')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $cabbage_online = DB::connection('cabbage')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $uranium_online = DB::connection('uranium')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $coleslaw_online = DB::connection('coleslaw')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $retro_online = DB::connection('2001scape')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $openpk_online = DB::connection('openpk')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        return view(
+            'lookup',
+            [
+                'preservation_online' => $preservation_online,
+                'cabbage_online' => $cabbage_online,
+                'uranium_online' => $uranium_online,
+                'coleslaw_online' => $coleslaw_online,
+                'retro_online' => $retro_online,
+                'openpk_online' => $openpk_online,
             ]
         );
     }
