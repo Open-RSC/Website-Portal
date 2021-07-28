@@ -84,7 +84,6 @@ class HiscoresController extends Component
 			/4.0)
 			as total_xp'))
                 ->where([
-                    ['b.banned', '=', '0'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                 ])
@@ -118,7 +117,6 @@ class HiscoresController extends Component
 			/4.0)
 			as total_xp'))
                 ->where([
-                    ['b.banned', '=', '0'],
                     ['b.group_id', '>=', '8'],
                 ])
                 ->groupBy('b.username')
@@ -191,7 +189,6 @@ class HiscoresController extends Component
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
                 ->where([
-                    ['b.banned', '=', '0'],
                     ['b.group_id', '>=', '8'],
                     ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
                     ['c.iron_man', '!=', '4'],
@@ -206,7 +203,6 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('a.' . $subpage))
                 ->where([
-                    ['b.banned', '=', '0'],
                     ['b.group_id', '>=', '8'],
                     ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
                 ])
@@ -291,7 +287,6 @@ class HiscoresController extends Component
 			/4.0)
 			as total_xp'))
                     ->where([
-                        ['b.banned', '=', '0'],
                         ['b.group_id', '>=', '8'],
                         ['c.iron_man', '!=', '4'],
                         ['c.iron_man', '=', $iron_man],
@@ -326,7 +321,6 @@ class HiscoresController extends Component
 			/4.0)
 			as total_xp'))
                     ->where([
-                        ['b.banned', '=', '0'],
                         ['b.group_id', '>=', '8'],
                     ])
                     ->groupBy('b.username')
@@ -353,7 +347,6 @@ class HiscoresController extends Component
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
                     ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
                     ->where([
-                        ['b.banned', '=', '0'],
                         ['b.group_id', '>=', '8'],
                         ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
                         ['c.iron_man', '=', $iron_man],
@@ -368,7 +361,6 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->select('b.*', 'c.*', DB::raw('a.' . $subpage))
                     ->where([
-                        ['b.banned', '=', '0'],
                         ['b.group_id', '>=', '8'],
                         ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
                     ])
