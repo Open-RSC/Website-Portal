@@ -100,12 +100,13 @@ class ItemController extends Controller
 		 */
 		$totalPlayerHeld_bank = DB::connection('preservation')
 			->table('bank')
-			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id',)
+			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned')
 			->join('players', function ($join) use ($id) {
 				$join->on('bank.playerID', '=', 'players.id')
 					->where([
 						['bank.id', '=', $id],
 						['players.id', '>=', '10'],
+						['players.banned', '=', '0'],
 					]);
 			})
 			->sum('amount');
@@ -116,12 +117,13 @@ class ItemController extends Controller
 		 */
 		$totalPlayerHeld_invitems = DB::connection('preservation')
 			->table('invitems')
-			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id')
+			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned')
 			->join('players', function ($join) use ($id) {
 				$join->on('invitems.playerID', '=', 'players.id')
 					->where([
 						['invitems.id', '=', $id],
 						['players.id', '>=', '10'],
+						['players.banned', '=', '0'],
 					]);
 			})
 			->sum('amount');
@@ -138,12 +140,13 @@ class ItemController extends Controller
 		 */
 		$last3moPlayerHeld_bank = DB::connection('preservation')
 			->table('bank')
-			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.login_date')
+			->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
 			->join('players', function ($join) use ($id) {
 				$join->on('bank.playerID', '=', 'players.id')
 					->where([
 						['bank.id', '=', $id],
 						['players.id', '>=', '10'],
+						['players.banned', '=', '0'],
 						['players.login_date', '>=', Carbon::now()
 							->subMonth(3)
 							->timestamp,],
@@ -157,13 +160,14 @@ class ItemController extends Controller
 		 */
 		$last3moPlayerHeld_invitems = DB::connection('preservation')
 			->table('invitems')
-			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.login_date')
+			->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
 			->join('players', function ($join) use ($id) {
 				$join
 					->on('invitems.playerID', '=', 'players.id')
 					->where([
 						['invitems.id', '=', $id],
 						['players.id', '>=', '10'],
+						['players.banned', '=', '0'],
 						['players.login_date', '>=', Carbon::now()
 							->subMonth(3)
 							->timestamp,],
