@@ -55,7 +55,7 @@ class StatsController extends Controller
             ->join('players AS A', 'A.username', '=', 'B.username')
             ->where([
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
                 ['B.time', '>=', 'unix_timestamp(current_date - interval 10 day)'],
             ])
             ->orderBy('time', 'desc')
@@ -69,7 +69,7 @@ class StatsController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -79,7 +79,7 @@ class StatsController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -251,7 +251,7 @@ class StatsController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -261,7 +261,7 @@ class StatsController extends Controller
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -332,7 +332,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '30000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -343,7 +343,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '30000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -357,7 +357,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '50000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -368,7 +368,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '50000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -382,7 +382,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '80000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -393,7 +393,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '80000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -407,7 +407,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '120000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -418,7 +418,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '120000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -432,7 +432,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '400000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -443,7 +443,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '400000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -457,7 +457,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -468,7 +468,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -482,7 +482,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '12000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -493,7 +493,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '12000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -507,7 +507,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '15000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -518,7 +518,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '15000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -532,7 +532,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '2000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -543,7 +543,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '2000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -557,7 +557,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -568,7 +568,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -582,7 +582,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -593,7 +593,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -607,7 +607,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('S.amount');
 
@@ -618,7 +618,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->count();
 
@@ -629,7 +629,7 @@ class StatsController extends Controller
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
                 ['U.was_cancel', '=', '0'],
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
@@ -644,7 +644,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '575'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -654,7 +654,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '577'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -664,7 +664,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '581'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -674,7 +674,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '580'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -684,7 +684,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '576'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -694,7 +694,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '578'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -704,7 +704,7 @@ class StatsController extends Controller
             ->where([
                 ['B.itemID', '=', '579'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
 
@@ -713,7 +713,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '579'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -724,7 +724,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '677'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -733,7 +733,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '677'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -744,7 +744,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '831'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -753,7 +753,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '831'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -764,7 +764,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '832'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -773,7 +773,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '832'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -784,7 +784,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '828'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -793,7 +793,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '828'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -804,7 +804,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '971'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -813,7 +813,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '971'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -824,7 +824,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1156'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -833,7 +833,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1156'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -844,7 +844,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1289'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -853,7 +853,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1289'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -864,7 +864,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1278'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -873,7 +873,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '1278'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -884,7 +884,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '795'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -893,7 +893,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '795'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -904,12 +904,12 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '522'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->orWhere([
                 ['B.id', '=', '597'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -918,12 +918,12 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '522'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->orWhere([
                 ['B.id', '=', '597'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -934,7 +934,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '594'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -943,7 +943,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '594'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -954,7 +954,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '593'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -963,7 +963,7 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '593'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -974,12 +974,12 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '18'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->orWhere([
                 ['B.id', '=', '228'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 
@@ -988,12 +988,12 @@ class StatsController extends Controller
             ->where([
                 ['B.id', '=', '18'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->orWhere([
                 ['B.id', '=', '228'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '=', '0'],
+                ['A.banned', '!=', '1'],
             ])
             ->sum('B.amount');
 

@@ -106,7 +106,7 @@ class ItemController extends Controller
 					->where([
 						['bank.id', '=', $id],
 						['players.id', '>=', '10'],
-						['players.banned', '=', '0'],
+						['players.banned', '!=', '1'],
 					]);
 			})
 			->sum('amount');
@@ -123,7 +123,7 @@ class ItemController extends Controller
 					->where([
 						['invitems.id', '=', $id],
 						['players.id', '>=', '10'],
-						['players.banned', '=', '0'],
+						['players.banned', '!=', '1'],
 					]);
 			})
 			->sum('amount');
@@ -146,7 +146,7 @@ class ItemController extends Controller
 					->where([
 						['bank.id', '=', $id],
 						['players.id', '>=', '10'],
-						['players.banned', '=', '0'],
+						['players.banned', '!=', '1'],
 						['players.login_date', '>=', Carbon::now()
 							->subMonth(3)
 							->timestamp,],
@@ -167,7 +167,7 @@ class ItemController extends Controller
 					->where([
 						['invitems.id', '=', $id],
 						['players.id', '>=', '10'],
-						['players.banned', '=', '0'],
+						['players.banned', '!=', '1'],
 						['players.login_date', '>=', Carbon::now()
 							->subMonth(3)
 							->timestamp,],

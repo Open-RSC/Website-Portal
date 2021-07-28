@@ -87,7 +87,7 @@ class HomeController extends Controller
         $playerPositions = DB::connection($db)
             ->table('players')
             ->where([
-                ['banned', '=', '0'],
+                ['banned', '!=', '1'],
                 ['online', '=', '1'],
                 ['group_id', '>=', '8'],
             ])

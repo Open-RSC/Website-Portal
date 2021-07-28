@@ -169,7 +169,7 @@ class PlayerController extends Controller
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
                 ->where([
-                    ['b.banned', '=', '0'],
+                    ['b.banned', '!=', '1'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
@@ -178,7 +178,7 @@ class PlayerController extends Controller
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
                             ->where([
-                                ['b.banned', '=', '0'],
+                                ['b.banned', '!=', '1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
@@ -194,7 +194,7 @@ class PlayerController extends Controller
                 })
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
                 ->where([
-                    ['b.banned', '=', '0'],
+                    ['b.banned', '!=', '1'],
                     ['b.group_id', '>=', '8'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
                         $query
@@ -202,7 +202,7 @@ class PlayerController extends Controller
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
                             ->where([
-                                ['b.banned', '=', '0'],
+                                ['b.banned', '!=', '1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                             ]);
@@ -276,11 +276,11 @@ class PlayerController extends Controller
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->where([
-                ['b.banned', '=', '0'],
+                ['b.banned', '!=', '1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '=', '0'],
+                ['b.banned', '!=', '1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
@@ -326,11 +326,11 @@ class PlayerController extends Controller
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->where([
-                ['b.banned', '=', '0'],
+                ['b.banned', '!=', '1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '=', '0'],
+                ['b.banned', '!=', '1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
