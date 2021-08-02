@@ -70,6 +70,20 @@ class PlayerController extends Controller
         }
     }
 
+    public function cast($alias, $subpage, $relabel = false): string {
+        if (!$relabel) {
+            return $alias . '.' . $subpage . '&0xFFFFFFFF';
+        } else {
+            return '(' . $alias . '.' . $subpage . '&0xFFFFFFFF) as ' . $subpage;
+        }
+    }
+
+    public function skill_cast($alias, $skill_array): array {
+        return array_map(function ($skill) use ($alias) {
+            return DB::raw($this->cast($alias, $skill, true));
+        }, $skill_array);
+    }
+
     /**
      * @param $db
      * @param $subpage
@@ -99,28 +113,30 @@ class PlayerController extends Controller
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select('b.*', 'c.*', 'a.*', DB::raw('
-			(SUM(a.attack +
-			a.strength +
-			a.defense +
-			a.hits +
-			a.ranged +
-			a.prayer +
-			a.magic +
-			a.cooking +
-			a.woodcut +
-			a.fletching +
-			a.fishing +
-			a.firemaking +
-			a.crafting +
-			a.smithing +
-			a.mining +
-			a.herblaw +
-			a.agility +
-			a.thieving)
+                ->select('b.*', 'c.*', DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'runecraft') . ') +
+			(' . $this->cast('a', 'harvesting') . '))
 			/4.0)
 			as total_xp
-			'))
+			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.id', '=', $subpage],
                 ])
@@ -129,28 +145,28 @@ class PlayerController extends Controller
             $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
-                ->select('b.*', 'a.*', DB::raw('
-			(SUM(a.attack +
-			a.strength +
-			a.defense +
-			a.hits +
-			a.ranged +
-			a.prayer +
-			a.magic +
-			a.cooking +
-			a.woodcut +
-			a.fletching +
-			a.fishing +
-			a.firemaking +
-			a.crafting +
-			a.smithing +
-			a.mining +
-			a.herblaw +
-			a.agility +
-			a.thieving)
+                ->select('b.*', DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . '))
 			/4.0)
 			as total_xp
-			'))
+			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.id', '=', $subpage],
                 ])
@@ -169,7 +185,7 @@ class PlayerController extends Controller
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
                 ->where([
-                    ['b.banned', '!=', '1'],
+                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
@@ -178,7 +194,7 @@ class PlayerController extends Controller
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
                             ->where([
-                                ['b.banned', '!=', '1'],
+                                ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
@@ -194,7 +210,7 @@ class PlayerController extends Controller
                 })
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
                 ->where([
-                    ['b.banned', '!=', '1'],
+                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
                         $query
@@ -202,7 +218,7 @@ class PlayerController extends Controller
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
                             ->where([
-                                ['b.banned', '!=', '1'],
+                                ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                             ]);
@@ -276,11 +292,11 @@ class PlayerController extends Controller
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->where([
-                ['b.banned', '!=', '1'],
+                ['b.banned', '!=', '-1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '!=', '1'],
+                ['b.banned', '!=', '-1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
@@ -326,11 +342,11 @@ class PlayerController extends Controller
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->where([
-                ['b.banned', '!=', '1'],
+                ['b.banned', '!=', '-1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '!=', '1'],
+                ['b.banned', '!=', '-1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
