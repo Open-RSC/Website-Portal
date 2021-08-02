@@ -16,11 +16,14 @@
             <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:140px;">
+                <a class="c text-left" href="/playnow">
+                    <i class="fab fa-js-square"></i>&nbsp; In-Browser
+                </a>
                 <a class="c text-left" href="{{ asset('downloads/OpenRSC.jar') }}">
-                    <i class="fas fa-download"></i>&nbsp; Game Launcher
+                    <i class="fas fa-download"></i>&nbsp; PC Launcher
                 </a>
                 <a class="c text-left" href="{{ asset('downloads/openrsc.apk') }}">
-                    <i class="fab fa-android"></i>&nbsp; Android
+                    <i class="fab fa-android"></i>&nbsp; Android APK
                 </a>
                 <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
                     <i class="fab fa-gitlab"></i>&nbsp; Source Code
@@ -183,7 +186,6 @@
         <section class="middle">
             <div class="mid-left-border"></div>
             <div class="middle-content">
-                <div class="mt-5"></div>
                 @yield('content')
             </div>
             <div class="mid-right-border"></div>

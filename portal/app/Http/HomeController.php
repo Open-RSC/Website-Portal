@@ -100,7 +100,12 @@ class HomeController extends Controller
         ]);
     }
 
-    public function playnow($game, $members): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function playnow()
+    {
+        return view('playnow');
+    }
+
+    public function play($game, $members): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         /**
          * @var $subpage
@@ -126,7 +131,7 @@ class HomeController extends Controller
         }
 
         return view(
-            'playnow',
+            'play',
             [
                 'game' => $game,
                 'members' => $members,
