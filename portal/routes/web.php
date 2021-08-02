@@ -25,8 +25,8 @@ Route::get('stats', 'StatsController@stats')->name('Statistics');
 Route::get('faq', 'HomeController@faq')->name('Frequently Asked Questions');
 Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');
-Route::get('playnow', 'HomeController@playnow')->name('Play RuneScape Classic '); // purposely left with a space to deconflict
-Route::get('play/{game}/{members}', 'HomeController@play')->name('Play RuneScape Classic');
+Route::get('playnow', 'HomeController@playnow')->name('Play RuneScape '); // purposely left with a space to deconflict
+Route::get('play/{game}/{members}', 'HomeController@play')->name('Play RuneScape');
 
 // Quest pages
 Route::get('quests', 'QuestController@index')->name('Quests');

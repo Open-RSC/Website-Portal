@@ -102,7 +102,40 @@ class HomeController extends Controller
 
     public function playnow()
     {
-        return view('playnow');
+        $preservation_online = DB::connection('preservation')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $cabbage_online = DB::connection('cabbage')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $uranium_online = DB::connection('uranium')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $coleslaw_online = DB::connection('coleslaw')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $retro_online = DB::connection('2001scape')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        $openpk_online = DB::connection('openpk')->table('players')
+            ->where('online', '=', '1')
+            ->count('online');
+
+        return view('playnow',
+            [
+                'preservation_online' => $preservation_online,
+                'cabbage_online' => $cabbage_online,
+                'uranium_online' => $uranium_online,
+                'coleslaw_online' => $coleslaw_online,
+                'retro_online' => $retro_online,
+                'openpk_online' => $openpk_online,
+            ]
+        );
     }
 
     public function play($game, $members): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
