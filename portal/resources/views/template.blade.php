@@ -172,7 +172,7 @@
         <div class="pt-1"></div>
         <section class="top-border">
             <div class="top-left-border"></div>
-            <a style="display:block" href="/">
+            <a style="display:block" href="https://rsc.vet">
                 <div class="top-middle-border2"></div>
             </a>
             <div class="top-right-border"></div>
