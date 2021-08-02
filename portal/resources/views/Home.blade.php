@@ -246,36 +246,20 @@
                                     <tbody>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            @if (Browser::isAndroid())
-                                                <a href="{{ asset('downloads/openrsc.apk') }}">
-                                                    <img class="mx-auto"
-                                                         src="{{ asset('img/mm_sword.jpg') }}"
-                                                         alt="">
-                                                </a>
-                                            @else
-                                                <a href="{{ asset('downloads/OpenRSC.jar') }}">
-                                                    <img class="mx-auto"
-                                                         src="{{ asset('img/mm_sword.jpg') }}"
-                                                         alt="">
-                                                </a>
-                                            @endif
+                                            <a href="/playnow">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_sword.jpg') }}"
+                                                     alt="">
+                                            </a>
                                         </td>
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    @if (Browser::isAndroid())
-                                                        <a href="{{ asset('downloads/openrsc.apk') }}">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                 height="45" width="100"
-                                                                 alt="">
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ asset('downloads/OpenRSC.jar') }}">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                 height="45" width="100"
-                                                                 alt="">
-                                                        </a>
-                                                    @endif
+                                                    <a href="/playnow">
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
                                             </div>
                                             <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
@@ -297,15 +281,9 @@
                                             </table>
                                             Play RuneScape right now!
                                             <div class="d-block">
-                                                @if (Browser::isAndroid())
-                                                    <a href="{{ asset('downloads/openrsc.apk') }}" class="c">
-                                                        Click here
-                                                    </a>
-                                                @else
-                                                    <a href="{{ asset('downloads/OpenRSC.jar') }}" class="c">
-                                                        Click here
-                                                    </a>
-                                                @endif
+                                                <a href="/playnow" class="c">
+                                                    Click here
+                                                </a>
                                             </div>
                                         </td>
                                         <td style="width: 10px"></td>
