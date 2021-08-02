@@ -22,10 +22,10 @@ Route::get('online', 'StatsController@online')->name('Online list');
 Route::get('createdtoday', 'StatsController@createdtoday')->name('Players Created Today');
 Route::get('logins48', 'StatsController@logins48')->name('Logins in the last 48 hours');
 Route::get('stats', 'StatsController@stats')->name('Statistics');
-
 Route::get('faq', 'HomeController@faq')->name('Frequently Asked Questions');
 Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');
+Route::get('play/{game}/{members}', 'HomeController@playnow')->name('Play RuneScape Classic');
 
 // Quest pages
 Route::get('quests', 'QuestController@index')->name('Quests');

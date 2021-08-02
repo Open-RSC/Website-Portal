@@ -99,4 +99,39 @@ class HomeController extends Controller
             'playerPositions' => $playerPositions,
         ]);
     }
+
+    public function playnow($game, $members): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        /**
+         * @var $subpage
+         * Replaces spaces with underlines
+         */
+        $game = preg_replace("/[^A-Za-z0-9 ]/", "_", $game);
+        $members = preg_replace("/[^A-Za-z0-9 ]/", "_", $members);
+
+        if (value($game) == 'uranium') {
+            $port = 43435;
+        } elseif (value($game = 'preservation')) {
+            $port = 43496;
+        } elseif (value($game = 'cabbage')) {
+            $port = 43495;
+        } elseif (value($game = 'coleslaw')) {
+            $port = 43499;
+        } elseif (value($game = '2001scape')) {
+            $port = 43493;
+        } elseif (value($game = 'openpk')) {
+            $port = 43497;
+        } else {
+            $port = 43496;
+        }
+
+        return view(
+            'playnow',
+            [
+                'game' => $game,
+                'members' => $members,
+                'port' => $port,
+            ]
+        );
+    }
 }

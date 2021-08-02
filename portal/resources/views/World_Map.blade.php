@@ -8,11 +8,10 @@
         <div class="text-center" style="overflow: auto;">
             <script>
                 // automatically reload the page every 10 seconds
-                function autoRefreshPage() {
+                /*function autoRefreshPage() {
                     window.location = window.location.href;
                 }
-
-                setInterval('autoRefreshPage()', 10000);
+                setInterval('autoRefreshPage()', 10000);*/
 
                 function drawPosition() {
                     let canvas = document.getElementById('canvas');

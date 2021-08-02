@@ -170,6 +170,40 @@
     <div class="pt-2"></div>
     @yield('content')
 
+@elseif(Route::currentRouteName() == 'Play RuneScape Classic')
+    <main>
+        <div class="pt-1"></div>
+        <section class="top-border">
+            <div class="top-left-border"></div>
+            <a style="display:block" href="/">
+                <div class="top-middle-border2"></div>
+            </a>
+            <div class="top-right-border"></div>
+        </section>
+        <section class="middle">
+            <div class="mid-left-border"></div>
+            <div class="middle-content">
+                <div class="mt-5"></div>
+                @yield('content')
+            </div>
+            <div class="mid-right-border"></div>
+        </section>
+        <section class="bottom-border">
+            <div class="bottom-left-border"></div>
+            <div class="bottom-middle">
+                <div class="copyright pt-2">
+                    Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
+                    To use our service you must agree to our
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
+                    +
+                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
+                </div>
+                <div class="bottom-middle-border"></div>
+            </div>
+            <div class="bottom-right-border"></div>
+        </section>
+    </main>
+
 @else
     <main>
         <section class="top-border">
