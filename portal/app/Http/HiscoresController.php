@@ -45,15 +45,12 @@ class HiscoresController extends Component
         return 99;
     }
 
-    /**
-     * @function cast()
-     * @param $skill
-     * @return string
-     * Used to convert value to unsigned
-     */
-    public function cast($skill): string
-    {
-        return $skill . '&0xFFFFFFFF';
+    public function cast($alias, $subpage, $relabel = false): string {
+        if (!$relabel) {
+            return $alias . '.' . $subpage . '&0xFFFFFFFF';
+        } else {
+            return '(' . $alias . '.' . $subpage . '&0xFFFFFFFF) as ' . $subpage;
+        }
     }
 
     /**
@@ -74,24 +71,26 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw('
-			(SUM('. $this->cast('a.attack') . ' +
-			'. $this->cast('a.strength') . ' +
-			'. $this->cast('a.defense') . ' +
-			'. $this->cast('a.hits') . ' +
-			'. $this->cast('a.ranged') . ' +
-			'. $this->cast('a.prayer') . ' +
-			'. $this->cast('a.magic') . ' +
-			'. $this->cast('a.cooking') . ' +
-			'. $this->cast('a.woodcut') . ' +
-			'. $this->cast('a.fletching') . ' +
-			'. $this->cast('a.fishing') . ' +
-			'. $this->cast('a.firemaking') . ' +
-			'. $this->cast('a.crafting') . ' +
-			'. $this->cast('a.smithing') . ' +
-			'. $this->cast('a.mining') . ' +
-			'. $this->cast('a.herblaw') . ' +
-			'. $this->cast('a.agility') . ' +
-			'. $this->cast('a.thieving') . ')
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'runecraft') . ') +
+			(' . $this->cast('a', 'harvesting') . '))
 			/4.0)
 			as total_xp'))
                 ->where([
@@ -108,24 +107,24 @@ class HiscoresController extends Component
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM('. $this->cast('a.attack') . ' +
-			'. $this->cast('a.strength') . ' +
-			'. $this->cast('a.defense') . ' +
-			'. $this->cast('a.hits') . ' +
-			'. $this->cast('a.ranged') . ' +
-			'. $this->cast('a.prayer') . ' +
-			'. $this->cast('a.magic') . ' +
-			'. $this->cast('a.cooking') . ' +
-			'. $this->cast('a.woodcut') . ' +
-			'. $this->cast('a.fletching') . ' +
-			'. $this->cast('a.fishing') . ' +
-			'. $this->cast('a.firemaking') . ' +
-			'. $this->cast('a.crafting') . ' +
-			'. $this->cast('a.smithing') . ' +
-			'. $this->cast('a.mining') . ' +
-			'. $this->cast('a.herblaw') . ' +
-			'. $this->cast('a.agility') . ' +
-			'. $this->cast('a.thieving') . ')
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . '))
 			/4.0)
 			as total_xp'))
                 ->where([
@@ -200,31 +199,35 @@ class HiscoresController extends Component
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select('b.*', 'c.*', DB::raw($this->cast('a.' . $subpage)))
+                ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
+                ->where([
+                    ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                    ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
+                ])
                 ->where([
                     ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
-                    ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                    ['a.' . $subpage, '<', '0'], // allows those overflow
                     ['c.iron_man', '!=', '4'],
                 ])
                 ->groupBy('b.username')
-                ->orderBy($this->cast('a.' . $subpage), 'desc')
+                ->orderBy($subpage, 'desc')
                 ->paginate(21);
 
         } else { // authentic
             $hiscores = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
-                ->select('b.*', DB::raw($this->cast('a.' . $subpage)))
+                ->select('b.*', DB::raw($this->cast('a', $subpage, true)))
+                ->where([
+                    ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                    ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
+                ])
                 ->where([
                     ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
-                    ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                    ['a.' . $subpage, '<', '0'], // allows those overflow
                 ])
                 ->groupBy('b.username')
-                ->orderBy($this->cast('a.' . $subpage), 'desc')
+                ->orderBy($subpage, 'desc')
                 ->paginate(21);
 
         }
@@ -283,24 +286,26 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
                     ->select('b.*', 'c.*', DB::raw('
-			(SUM('. $this->cast('a.attack') . ' +
-			'. $this->cast('a.strength') . ' +
-			'. $this->cast('a.defense') . ' +
-			'. $this->cast('a.hits') . ' +
-			'. $this->cast('a.ranged') . ' +
-			'. $this->cast('a.prayer') . ' +
-			'. $this->cast('a.magic') . ' +
-			'. $this->cast('a.cooking') . ' +
-			'. $this->cast('a.woodcut') . ' +
-			'. $this->cast('a.fletching') . ' +
-			'. $this->cast('a.fishing') . ' +
-			'. $this->cast('a.firemaking') . ' +
-			'. $this->cast('a.crafting') . ' +
-			'. $this->cast('a.smithing') . ' +
-			'. $this->cast('a.mining') . ' +
-			'. $this->cast('a.herblaw') . ' +
-			'. $this->cast('a.agility') . ' +
-			'. $this->cast('a.thieving') . ')
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'runecraft') . ') +
+			(' . $this->cast('a', 'harvesting') . '))
 			/4.0)
 			as total_xp'))
                     ->where([
@@ -318,24 +323,24 @@ class HiscoresController extends Component
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->select('b.*', 'c.*', DB::raw('
-			(SUM('. $this->cast('a.attack') . ' +
-			'. $this->cast('a.strength') . ' +
-			'. $this->cast('a.defense') . ' +
-			'. $this->cast('a.hits') . ' +
-			'. $this->cast('a.ranged') . ' +
-			'. $this->cast('a.prayer') . ' +
-			'. $this->cast('a.magic') . ' +
-			'. $this->cast('a.cooking') . ' +
-			'. $this->cast('a.woodcut') . ' +
-			'. $this->cast('a.fletching') . ' +
-			'. $this->cast('a.fishing') . ' +
-			'. $this->cast('a.firemaking') . ' +
-			'. $this->cast('a.crafting') . ' +
-			'. $this->cast('a.smithing') . ' +
-			'. $this->cast('a.mining') . ' +
-			'. $this->cast('a.herblaw') . ' +
-			'. $this->cast('a.agility') . ' +
-			'. $this->cast('a.thieving') . ')
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayer') . ') +
+			(' . $this->cast('a', 'magic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcut') . ') +
+			(' . $this->cast('a', 'fletching') . ') +
+			(' . $this->cast('a', 'fishing') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'herblaw') . ') +
+			(' . $this->cast('a', 'agility') . ') +
+			(' . $this->cast('a', 'thieving') . '))
 			/4.0)
 			as total_xp'))
                     ->where([
@@ -364,31 +369,35 @@ class HiscoresController extends Component
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                    ->select('b.*', 'c.*', DB::raw($this->cast('a.' . $subpage)))
+                    ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
+                    ->where([
+                        ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                        ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
+                    ])
                     ->where([
                         ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
-                        ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                        ['a.' . $subpage, '<', '0'], // allows those overflow
                         ['c.iron_man', '=', $iron_man],
                         ['c.iron_man', '!=', '4'],
                     ])
                     ->groupBy('b.username')
-                    ->orderBy($this->cast('a.' . $subpage), 'desc')
+                    ->orderBy($subpage, 'desc')
                     ->paginate(21);
             } else { // authentic
                 $hiscores = DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
-                    ->select('b.*', 'c.*', DB::raw($this->cast('a.' . $subpage)))
+                    ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
+                    ->where([
+                        ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                        ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
+                    ])
                     ->where([
                         ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
-                        ['a.' . $subpage, '>=', '53452'], // limits to display only level 30 and above
-                        ['a.' . $subpage, '<', '0'], // allows those overflow
                     ])
                     ->groupBy('b.username')
-                    ->orderBy($this->cast('a.' . $subpage), 'desc')
+                    ->orderBy($subpage, 'desc')
                     ->paginate(21);
             }
 
