@@ -6,7 +6,7 @@
 <div class="navbar-expand-xxl pt-2 mr-1">
     <div class="e text-center flex-row" style="background:black;">
         <span class="flex-auto p-2">
-            <a class="c" href="/">Home</a>
+            <a class="c" href="https://rsc.vet">Home</a>
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
@@ -135,7 +135,7 @@
                         {{ ucfirst($subpage ?? '') }}
                     @endif
                     <span class="d-block">
-                        <a class="c" href="{{ route('Home') }}">Main menu</a>
+                        <a class="c" href="https://rsc.vet">Main menu</a>
                     </span>
                 </div>
             </td>
@@ -157,7 +157,7 @@
                         {{ ucfirst($subpage ?? '') }}
                     @endif
                     <span class="d-block">
-                        <a class="c" href="{{ route('Home') }}">Main menu</a>
+                        <a class="c" href="https://rsc.vet">Main menu</a>
                     </span>
                 </div>
             </td>
@@ -228,14 +228,14 @@
                                     @endif
                                     <div class="d-block">
                                         @if(str_contains(url()->current(), '/player'))
-                                            <a class="c" href="{{ route('Home') }}">
+                                            <a class="c" href="https://rsc.vet">
                                                 Main menu
                                             </a> -
                                             <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">
                                                 All Hiscores
                                             </a>
                                         @else
-                                            <a class="c" href="{{ route('Home') }}">Main menu</a>
+                                            <a class="c" href="https://rsc.vet">Main menu</a>
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
