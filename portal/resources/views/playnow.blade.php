@@ -25,7 +25,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/preservation/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/preservation/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($preservation_online == 1)
@@ -46,7 +46,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/cabbage/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/cabbage/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($cabbage_online == 1)
@@ -70,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/uranium/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/uranium/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($uranium_online == 1)
@@ -91,7 +91,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/coleslaw/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/coleslaw/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($coleslaw_online == 1)
@@ -115,7 +115,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/2001scape/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/2001scape/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($retro_online == 1)
@@ -136,7 +136,7 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="/play/openpk/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/openpk/free" target="_blank" class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($openpk_online == 1)
@@ -257,9 +257,9 @@
                                         <table width=500 bgcolor=black cellpadding=4 border=0>
                                             <tr>
                                                 <td class="e">
-                                                    
+
                                                     <div class="pt-2"></div>
-                                                    
+
                                                     <div style="text-align: center;">
                                                         <b>Everyone is a Member and can use the worlds below</b>
                                                         <span class="d-block">
@@ -283,8 +283,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/preservation/members"
-                                                                                   target="_parent" class=c>World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/preservation/members"
+                                                                                   target="_blank" class=c>World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($preservation_online == 1)
@@ -306,8 +306,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/cabbage/members"
-                                                                                   target="_parent" class=c>World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/cabbage/members"
+                                                                                   target="_blank" class=c>World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($cabbage_online == 1)
@@ -332,8 +332,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/uranium/members"
-                                                                                   target="_parent" class="c">World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/uranium/members"
+                                                                                   target="_blank" class="c">World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($uranium_online == 1)
@@ -355,8 +355,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/coleslaw/members"
-                                                                                   target="_parent" class=c>World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/coleslaw/members"
+                                                                                   target="_blank" class=c>World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($coleslaw_online == 1)
@@ -381,8 +381,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/2001scape/members"
-                                                                                   target="_parent" class=c>World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/2001scape/members"
+                                                                                   target="_blank" class=c>World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($retro_online == 1)
@@ -404,8 +404,8 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign=center>
-                                                                                <a href="/play/openpk/members"
-                                                                                   target="_parent" class=c>World 1</a>
+                                                                                <a href="http://game.openrsc.com/play/openpk/members"
+                                                                                   target="_blank" class=c>World 1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($openpk_online == 1)
