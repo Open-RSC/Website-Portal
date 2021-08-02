@@ -1,6 +1,10 @@
 @extends('template')
 @section('content')
 
+    <span class="d-block">
+        Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
+    </span>
+
     <table width=500 bgcolor=black cellpadding=4 border=0>
         <tr>
             <td class="e">
@@ -25,7 +29,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/preservation/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/preservation/free" target="_parent"
+                                               class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($preservation_online == 1)
@@ -46,7 +51,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/cabbage/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/cabbage/free" target="_parent"
+                                               class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($cabbage_online == 1)
@@ -70,7 +76,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/uranium/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/uranium/free" target="_parent"
+                                               class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($uranium_online == 1)
@@ -91,7 +98,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/coleslaw/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/coleslaw/free" target="_parent"
+                                               class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($coleslaw_online == 1)
@@ -115,7 +123,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/2001scape/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/2001scape/free" target="_parent"
+                                               class=c>World 1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($retro_online == 1)
@@ -136,7 +145,8 @@
                                     </tr>
                                     <tr>
                                         <td valign=center>
-                                            <a href="http://game.openrsc.com/play/openpk/free" target="_parent" class=c>World 1</a>
+                                            <a href="http://game.openrsc.com/play/openpk/free" target="_parent" class=c>World
+                                                1</a>
                                         </td>
                                         <td align=right style="padding-left: 10px;">
                                             @if ($openpk_online == 1)
@@ -333,7 +343,8 @@
                                                                         <tr>
                                                                             <td valign=center>
                                                                                 <a href="http://game.openrsc.com/play/uranium/members"
-                                                                                   target="_parent" class="c">World 1</a>
+                                                                                   target="_parent" class="c">World
+                                                                                    1</a>
                                                                             </td>
                                                                             <td align=right style="padding-left: 10px;">
                                                                                 @if ($uranium_online == 1)
