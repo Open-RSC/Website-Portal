@@ -95,7 +95,7 @@ server {
 
 # HTTPS
 server {
-    listen                      443;
+    listen                      443 ssl;
     ssl_certificate              /etc/nginx/ssl/cloudflare.pem;
     ssl_certificate_key          /etc/nginx/ssl/cloudflare.key;
     ssl_protocols TLSv1.2 TLSv1.3;

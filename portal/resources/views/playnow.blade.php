@@ -5,168 +5,180 @@
         Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
     </span>
 
-    <table width=500 bgcolor=black cellpadding=4 border=0>
-        <tr>
-            <td class="e">
-                <div style="text-align: center;">
-                    <div class="pt-1"></div>
-                    <b>Anyone can play on the Free Worlds below</b>
-                    <span class="d-block">
-                        Each world can hold up to 2000 players
-                    </span>
-                    <div class="pt-3"></div>
-                    <table>
-                        <tr valign="top" class="pt-2">
+    <div style="text-align: center;">
+        <div style="text-align: center;">
+            <table width=500 bgcolor=black cellpadding=4 border=0>
+                <tr>
+                    <td class="e">
 
-                            <!-- Left side -->
-                            <td align=center width=160>
-                                <table>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            RSC Preservation
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/preservation/free" target="_parent"
-                                               class=c>World 1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($preservation_online == 1)
-                                                {{ $preservation_online }} player
-                                            @else
-                                                {{ $preservation_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            RSC Cabbage
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/cabbage/free" target="_parent"
-                                               class=c>World 1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($cabbage_online == 1)
-                                                {{ $cabbage_online }} player
-                                            @else
-                                                {{ $cabbage_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                        <div class="pt-2"></div>
 
-                            <!-- Center -->
-                            <td align=center width=161>
-                                <table>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            RSC Uranium
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/uranium/free" target="_parent"
-                                               class=c>World 1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($uranium_online == 1)
-                                                {{ $uranium_online }} player
-                                            @else
-                                                {{ $uranium_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            RSC Coleslaw
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/coleslaw/free" target="_parent"
-                                               class=c>World 1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($coleslaw_online == 1)
-                                                {{ $coleslaw_online }} player
-                                            @else
-                                                {{ $coleslaw_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                        <div style="text-align: center;">
+                            <b>Everyone is a Member and can use the worlds below</b>
+                            <span class="d-block">
+                                Each world can hold up to 2000 players
+                            </span>
 
-                            <!-- Right side -->
-                            <td align=center width=180>
-                                <table>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            2001scape
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/2001scape/free" target="_parent"
-                                               class=c>World 1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($retro_online == 1)
-                                                {{ $retro_online }} player
-                                            @else
-                                                {{ $retro_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan=2>
-                                            <img align=absmiddle src=/img/usflag.gif width=30 height=15 border=0>
-                                            Open PK
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign=center>
-                                            <a href="http://game.openrsc.com/play/openpk/free" target="_parent" class=c>World
-                                                1</a>
-                                        </td>
-                                        <td align=right style="padding-left: 10px;">
-                                            @if ($openpk_online == 1)
-                                                {{ $openpk_online }} player
-                                            @else
-                                                {{ $openpk_online }} players
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
-    </table>
+                            <div class="pt-3"></div>
 
-    <div class="pt-5"></div>
-    <div class="pt-2"></div>
+                            <table>
+                                <tr valign="top" class="pt-2">
+
+                                    <!-- Left side -->
+                                    <td align=center width=160>
+                                        <table>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    RSC Preservation
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/preservation/members"
+                                                       target="_parent" class=c>World 1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($preservation_online == 1)
+                                                        {{ $preservation_online }} player
+                                                    @else
+                                                        {{ $preservation_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    RSC Cabbage
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/cabbage/members"
+                                                       target="_parent" class=c>World 1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($cabbage_online == 1)
+                                                        {{ $cabbage_online }} player
+                                                    @else
+                                                        {{ $cabbage_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <!-- Center -->
+                                    <td align=center width=161>
+                                        <table>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    RSC Uranium
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/uranium/members"
+                                                       target="_parent" class="c">World
+                                                        1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($uranium_online == 1)
+                                                        {{ $uranium_online }} player
+                                                    @else
+                                                        {{ $uranium_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    RSC Coleslaw
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/coleslaw/members"
+                                                       target="_parent" class=c>World 1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($coleslaw_online == 1)
+                                                        {{ $coleslaw_online }} player
+                                                    @else
+                                                        {{ $coleslaw_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <!-- Right side -->
+                                    <td align=center width=180>
+                                        <table>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    2001scape
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/2001scape/members"
+                                                       target="_parent" class=c>World 1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($retro_online == 1)
+                                                        {{ $retro_online }} player
+                                                    @else
+                                                        {{ $retro_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <img align=absmiddle src=/img/usflag.gif
+                                                         width=30 height=15 border=0>
+                                                    Open PK
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign=center>
+                                                    <a href="/play/openpk/members"
+                                                       target="_parent" class=c>World 1</a>
+                                                </td>
+                                                <td align=right style="padding-left: 10px;">
+                                                    @if ($openpk_online == 1)
+                                                        {{ $openpk_online }} player
+                                                    @else
+                                                        {{ $openpk_online }} players
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
     <table width=100% height=100% cellpadding=0 cellspacing=0>
         <tr>
@@ -258,184 +270,8 @@
                                 </div>
 
                                 <div class="pt-5"></div>
-                                <div class="pt-5"></div>
-                                <div class="pt-2"></div>
+                                <div class="pt-3"></div>
 
-                                <div style="text-align: center;">
-                                    <br>
-                                    <center>
-                                        <table width=500 bgcolor=black cellpadding=4 border=0>
-                                            <tr>
-                                                <td class="e">
-
-                                                    <div class="pt-2"></div>
-
-                                                    <div style="text-align: center;">
-                                                        <b>Everyone is a Member and can use the worlds below</b>
-                                                        <span class="d-block">
-                                                            Use these worlds to access members only features
-                                                        </span>
-
-                                                        <div class="pt-3"></div>
-
-                                                        <table>
-                                                            <tr valign="top" class="pt-2">
-
-                                                                <!-- Left side -->
-                                                                <td align=center width=160>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                RSC Preservation
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/preservation/members"
-                                                                                   target="_parent" class=c>World 1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($preservation_online == 1)
-                                                                                    {{ $preservation_online }} player
-                                                                                @else
-                                                                                    {{ $preservation_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                RSC Cabbage
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/cabbage/members"
-                                                                                   target="_parent" class=c>World 1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($cabbage_online == 1)
-                                                                                    {{ $cabbage_online }} player
-                                                                                @else
-                                                                                    {{ $cabbage_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-
-                                                                <!-- Center -->
-                                                                <td align=center width=161>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                RSC Uranium
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/uranium/members"
-                                                                                   target="_parent" class="c">World
-                                                                                    1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($uranium_online == 1)
-                                                                                    {{ $uranium_online }} player
-                                                                                @else
-                                                                                    {{ $uranium_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                RSC Coleslaw
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/coleslaw/members"
-                                                                                   target="_parent" class=c>World 1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($coleslaw_online == 1)
-                                                                                    {{ $coleslaw_online }} player
-                                                                                @else
-                                                                                    {{ $coleslaw_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-
-                                                                <!-- Right side -->
-                                                                <td align=center width=180>
-                                                                    <table>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                2001scape
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/2001scape/members"
-                                                                                   target="_parent" class=c>World 1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($retro_online == 1)
-                                                                                    {{ $retro_online }} player
-                                                                                @else
-                                                                                    {{ $retro_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2">&nbsp;</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan=2>
-                                                                                <img align=absmiddle src=/img/usflag.gif
-                                                                                     width=30 height=15 border=0>
-                                                                                Open PK
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign=center>
-                                                                                <a href="http://game.openrsc.com/play/openpk/members"
-                                                                                   target="_parent" class=c>World 1</a>
-                                                                            </td>
-                                                                            <td align=right style="padding-left: 10px;">
-                                                                                @if ($openpk_online == 1)
-                                                                                    {{ $openpk_online }} player
-                                                                                @else
-                                                                                    {{ $openpk_online }} players
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </center>
-                                </div>
                             </td>
                         </tr>
                     </table>
@@ -443,7 +279,5 @@
             </td>
         </tr>
     </table>
-
-    <div class="pt-3"></div>
 
 @endsection

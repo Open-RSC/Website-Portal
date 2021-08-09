@@ -52,9 +52,10 @@
         <div class="pt-1"></div>
         <section class="top-border">
             <div class="top-left-border"></div>
-            <a style="display:block" href="https://rsc.vet/playnow">
-                <div class="top-middle-border2"></div>
-            </a>
+            <form name=back>
+                <div class="top-middle-border2" onClick='window.history.back()'>
+                </div>
+            </form>
             <div class="top-right-border"></div>
         </section>
         <section class="middle">

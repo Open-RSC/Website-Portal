@@ -163,39 +163,39 @@
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/hiscores/preservation">RSC Preservation</a></td>
+                                                                href="/play/preservation/members">RSC Preservation</a></td>
                                                     <td align="right">{{$preservation_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/hiscores/cabbage">RSC Cabbage</a></td>
+                                                                href="/play/cabbage/members">RSC Cabbage</a></td>
                                                     <td align="right">{{$cabbage_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/hiscores/uranium">RSC Uranium</a></td>
+                                                                href="/play/uranium/members">RSC Uranium</a></td>
                                                     <td align="right">{{$uranium_online}} cyborgs</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/hiscores/coleslaw">RSC Coleslaw</a></td>
+                                                                href="/play/coleslaw/members">RSC Coleslaw</a></td>
                                                     <td align="right">{{$coleslaw_online}} cyborgs</td>
                                                 </tr>
-                                                <tr>
+                                                <!--<tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="#">2001Scape</a></td>
-                                                    <td align="right">{{$retro_online}} players</td>
+                                                                href="/play/2001scape">2001scape</a></td>
+                                                    <td align="right">{/{$retro_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="#">Open PK</a></td>
-                                                    <td align="right">{{$openpk_online}} players</td>
-                                                </tr>
+                                                                href="/play/openpk">Open PK</a></td>
+                                                    <td align="right">{/{$openpk_online}} players</td>
+                                                </tr>-->
                                                 <!--end worlds-->
                                                 </tbody>
                                             </table>
