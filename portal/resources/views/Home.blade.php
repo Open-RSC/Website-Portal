@@ -163,25 +163,25 @@
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/preservation/members">RSC Preservation</a></td>
+                                                                href="http://game.openrsc.com/play/preservation/members">RSC Preservation</a></td>
                                                     <td align="right">{{$preservation_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/cabbage/members">RSC Cabbage</a></td>
+                                                                href="http://game.openrsc.com/play/cabbage/members">RSC Cabbage</a></td>
                                                     <td align="right">{{$cabbage_online}} players</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/uranium/members">RSC Uranium</a></td>
+                                                                href="http://game.openrsc.com/play/uranium/members">RSC Uranium</a></td>
                                                     <td align="right">{{$uranium_online}} cyborgs</td>
                                                 </tr>
                                                 <tr>
                                                     <td valign="center"><a
                                                                 style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/coleslaw/members">RSC Coleslaw</a></td>
+                                                                href="http://game.openrsc.com/play/coleslaw/members">RSC Coleslaw</a></td>
                                                     <td align="right">{{$coleslaw_online}} cyborgs</td>
                                                 </tr>
                                                 <!--<tr>

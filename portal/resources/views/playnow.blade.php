@@ -36,7 +36,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/preservation/members"
+                                                    <a href="http://game.openrsc.com/play/preservation/members"
                                                        target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
@@ -59,7 +59,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/cabbage/members"
+                                                    <a href="http://game.openrsc.com/play/cabbage/members"
                                                        target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
@@ -85,7 +85,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/uranium/members"
+                                                    <a href="http://game.openrsc.com/play/uranium/members"
                                                        target="_parent" class="c">World
                                                         1</a>
                                                 </td>
@@ -109,7 +109,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/coleslaw/members"
+                                                    <a href="http://game.openrsc.com/play/coleslaw/members"
                                                        target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
@@ -135,7 +135,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/2001scape/members"
+                                                    <a href="http://game.openrsc.com/play/2001scape/members"
                                                        target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
@@ -158,7 +158,7 @@
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="/play/openpk/members"
+                                                    <a href="http://game.openrsc.com/play/openpk/members"
                                                        target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
