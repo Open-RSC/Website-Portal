@@ -1,0 +1,40 @@
+package mudclient;
+
+public class Character {
+   public long hash;
+   public String name;
+   public int serverIndex;
+   public int br;
+   public int currentX;
+   public int currentY;
+   public int npcID;
+   public int stepCount;
+   public int animationCurrent;
+   public int animationNext;
+   public int movingStep;
+   public int waypointCurrent;
+   public int[] waypointsX = new int[10];
+   public int[] waypointsY = new int[10];
+   public int[] mr = new int[12];
+   public String message;
+   public int messageTimeout;
+   public int pr;
+   public int bubbleTimeout;
+   public int rr;
+   public int healthCurrent;
+   public int healthMax;
+   public int combatTimer;
+   public int attackable;
+   public int level = -1;
+   public int xr;
+   public int yr;
+   public int colourBottom;
+   public int as;
+   public int incomingProjectileSprite;
+   public int attackingPlayerServerIndex;
+   public int attackingNpcServerIndex;
+   public int projectileRange;
+   public boolean fs = false;
+   public int gs = -1;
+   public int hs;
+}

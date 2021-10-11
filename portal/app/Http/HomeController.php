@@ -146,26 +146,32 @@ class HomeController extends Controller
          */
         $game = preg_replace("/[^A-Za-z0-9 ]/", "_", $game);
         $members = preg_replace("/[^A-Za-z0-9 ]/", "_", $members);
+        $retro = false;
 
         if (value($game) == 'uranium') {
             $port = 43435;
-        } elseif (value($game = 'preservation')) {
+        }
+        if (value($game) == 'preservation') {
             $port = 43496;
-        } elseif (value($game = 'cabbage')) {
+        }
+        if (value($game) == 'cabbage') {
             $port = 43495;
-        } elseif (value($game = 'coleslaw')) {
+        }
+        if (value($game) == 'coleslaw') {
             $port = 43499;
-        } elseif (value($game = '2001scape')) {
+        }
+        if (value($game) == '2001scape') {
             $port = 43493;
-        } elseif (value($game = 'openpk')) {
+            $retro = true;
+        }
+        if (value($game) == 'openpk') {
             $port = 43497;
-        } else {
-            $port = 43496;
         }
 
         return view(
             'play',
             [
+                'retro' => $retro,
                 'game' => $game,
                 'members' => $members,
                 'port' => $port,

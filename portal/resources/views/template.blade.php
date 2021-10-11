@@ -49,11 +49,12 @@
 
 @elseif(Route::currentRouteName() == 'Play RuneScape')
     <main>
+        <script language="JavaScript">  function ConfirmMenu() {       var response=window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) window.history.back();/*parent.document.location.href='frame2.cgi?page=title.html';*/       return false;  }  function ConfirmTerms() {       var response=window.confirm("Clicking this link will exit the game and take you to our Terms+Conditions.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Terms and Conditions') }}";/*'frame2.cgi?page=terms/terms.html';*/       return false;  }  function ConfirmPrivacy() {       var response=window.confirm("Clicking this link will exit the game and take you to our Privacy Policy.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Privacy Policy') }}";/*'frame2.cgi?page=privacy/privacy.html';*/       return false;  }  </script>
         <div class="pt-1"></div>
         <section class="top-border">
             <div class="top-left-border"></div>
             <form name=back>
-                <div class="top-middle-border2" onClick='window.history.back()'>
+                <div class="top-middle-border2" onmousedown="return ConfirmMenu();">
                 </div>
             </form>
             <div class="top-right-border"></div>
@@ -71,9 +72,9 @@
                 <div class="copyright pt-2">
                     Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
-                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
+                    <a class="c" href="{{ route('Terms and Conditions') }}" onmousedown="return ConfirmTerms();">Terms+Conditions</a>
                     +
-                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy Policy') }}" onmousedown="return ConfirmPrivacy();">Privacy policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>

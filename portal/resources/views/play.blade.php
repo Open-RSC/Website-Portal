@@ -1,7 +1,9 @@
 @extends('template')
 @section('content')
 
-    @if ($members != 'members')
+    @if ($retro)
+        <img src="/img/banners/ad.png" alt="">
+    @elseif ($members != 'members')
         <img src="/img/banners/ad.png" alt="">
         <img src="/img/banners/hbar.gif" alt="">
     @else
@@ -10,8 +12,13 @@
         <img src="/img/banners/hbar.gif" alt="">
     @endif
 
-    <iframe src="/client/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
-            height="350px" width="513px"></iframe>
+    @if ($retro)
+        <iframe src="/client2/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
+                height="362px" width="513px"></iframe>
+    @else
+        <iframe src="/client/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
+                height="350px" width="513px"></iframe>
+    @endif
 
     @if ($members != 'members')
         <div class="d-flex">
