@@ -22,7 +22,7 @@
     "@tailwindcss/typography": "^0.3.1",
     "alpinejs": "^2.8.0",
     "autoprefixer": "^10.3.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bootstrap": "^5.0.2",
     "jquery": "^3.5",
     "laravel-mix": "^6.0.19",
