@@ -20,11 +20,11 @@ mix.js('resources/js/app.js', 'public/js')
         require('autoprefixer'),
     ]);
 
-mix.scripts([
-    'resources/assets/js/jquery.js',
-    'resources/assets/js/popper.js',
-    'resources/assets/js/bootstrap.js',
-    'resources/assets/js/app.js',
+mix.combine([
+    'resources/js/jquery.js',
+    'resources/js/popper.js',
+    'resources/js/bootstrap.js',
+    'resources/js/app.js',
 ],'public/js/app.js').version();
 
 mix.sass('resources/sass/app.scss', 'public/css').version();
