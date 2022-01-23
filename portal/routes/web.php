@@ -55,6 +55,8 @@ Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscore
 Route::any('hiscores/{db}/skill_total', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict
 Route::any('hiscores/{db}/{subpage}', 'HiscoresController@show');
 Route::any('hiscores/{db}/{subpage}/{iron_man}', 'HiscoresController@iron_man')->name('RuneScape Ironman Hiscores');
+Route::post('searchByName', 'HiscoresController@searchByName');
+
 
 // Afman staff zone
 Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
