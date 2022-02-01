@@ -6,7 +6,7 @@ Website portal that links to the various games running the Open RSC framework
 You will need:
 - PHP 8.x
 - Composer 2+ (use latest version)
-- phpBB3 (optional due to a known workaround)
+- phpBB3 (if you do not need to work on the Latest News module, this is optional due to a known workaround)
 
 ## Instructions
 - Set up PHP for development.
