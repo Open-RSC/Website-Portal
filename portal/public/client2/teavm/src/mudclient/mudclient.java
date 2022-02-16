@@ -312,7 +312,7 @@ public class mudclient extends GameConnection {
     super.offsetY = -11;
     GameConnection.vc = 500;
     GameConnection.uc = false;
-    GameConnection.xc = 6;
+    GameConnection.xc = 5;
     this.loadGameConfig();
     this.spriteMedia = 2000;
     this.zy = this.spriteMedia + 100;
