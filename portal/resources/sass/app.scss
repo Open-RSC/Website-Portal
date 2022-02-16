@@ -705,10 +705,6 @@ div.middle-content-server dl dd {
   text-align: center;
 }
 
-.search-box:first-child {
-  margin-right: 25px;
-}
-
 .error-message {
   margin: 15px;
   text-align: center;
@@ -1494,4 +1490,8 @@ li > a:only-child:after {
 
 .body-world-map {
   width: 2316px;
+
+.orsc-checkbox-label {
+  display: inline;
+
 }

@@ -124,7 +124,7 @@
                                                                     href="{{ route('Terms and Conditions') }}">terms+conditions</a>:
                                             </td>
                                             <td>
-                                                <label class="pl-1">
+                                                <label class="pl-1 orsc-checkbox-label">
                                                     <input wire:model.defer="terms" type="checkbox" value="yes"
                                                            name="terms" id="terms">
                                                     @error('terms')

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Component;
+use Illuminate\Http\Request;
 
 class HiscoresController extends Component
 {
@@ -412,5 +413,20 @@ class HiscoresController extends Component
             ])
                 ->with(compact('hiscores'));
         }
+    }
+
+    /**
+     * @function searchByName()
+     * @param $request
+     * @return void
+     * Redirects user to a player's hiscores page (to look up player by name).
+     */
+    public function searchByName(Request $request)
+    {
+        $name = $request->name;
+        $db = $request->db;
+        $urlToRedirectTo = "/player/$db/$name";
+
+        return redirect()->to($urlToRedirectTo);
     }
 }
