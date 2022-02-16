@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
-<body>
+<body class="<?= Route::currentRouteName() == 'World Map' ? "body-world-map" : "" ?>">
 
 @if(Route::currentRouteName() == 'World Map')
     <table style="width: 250px; background: black; padding: 4px;">
