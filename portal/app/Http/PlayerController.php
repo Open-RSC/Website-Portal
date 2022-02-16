@@ -140,6 +140,9 @@ class PlayerController extends Controller
                 ->where([
                     ['b.id', '=', $subpage],
                 ])
+                ->orWhere([
+                    ['b.username', '=', $subpage],
+                ])
                 ->get();
         } else { // authentic
             $players = DB::connection($db)
@@ -169,6 +172,9 @@ class PlayerController extends Controller
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.id', '=', $subpage],
+                ])
+                ->orWhere([
+                    ['b.username', '=', $subpage],
                 ])
                 ->get();
         }
