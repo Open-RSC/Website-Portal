@@ -84,28 +84,13 @@
 
     <div class="p-2"></div>
 
-    <!-- disabled until time permits figuring this part out
-
     <div class="d-flex justify-between">
-        <div class="col hiscore-search">
-            <div class="b search-box search-rank"
-                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search">
-                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-                    <label for="rank">Search by rank</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;"
-                           class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by rank" class="text-black pl-1 pr-1"
-                           style="margin-top:4px;">
-                </form>
-            </div>
-        </div>
-
         <div class="col">
             <div class="b search-box search-rank"
                  style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search">
-                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <form method="POST" role="search" action="{{url('searchByName')}}">
+                    @csrf <!-- {{ csrf_field() }} -->
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <label for="name">Search by name</label>
                     <input id="name" name="name" type="text" required="required" style="width:100px;"
                            class="bg-white text-black mt-1">
@@ -113,5 +98,6 @@
                 </form>
             </div>
         </div>
--->
+    </div>
+
 @endsection
