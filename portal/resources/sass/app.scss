@@ -1482,16 +1482,17 @@ li > a:only-child:after {
 .navbar-expand-xxl .flex-row {
   width: 596px !important;
 }
+
 @media screen and (max-width: 480px) {
-  .navbar-expand-xxl .flex-row  {
+  .navbar-expand-xxl .flex-row {
     width: auto !important;
   }
 }
 
 .body-world-map {
   width: 2316px;
+}
 
 .orsc-checkbox-label {
   display: inline;
-
 }
