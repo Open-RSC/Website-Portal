@@ -90,8 +90,8 @@ class HomeController extends Controller
                 ['banned', '!=', '1'],
                 ['online', '=', '1'],
                 ['group_id', '>=', '8'],
-				['y', '>=', '384'],
-				['y', '<=', '910'],
+                ['y', '>=', '384'],
+                ['y', '<=', '910'],
             ])
             ->get();
 
