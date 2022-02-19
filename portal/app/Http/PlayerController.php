@@ -45,8 +45,12 @@ class PlayerController extends Controller
                 ->select(DB::raw("count(a.playerid)"))
                 ->where("a.$skill", ">", function ($query) use ($db, $subpage, $skill) {
                     $query->from("experience as a")
+                        ->join("players as b", function ($join) {
+                            $join->on("a.playerid", "=", "b.id");
+                        })
                         ->select("a.$skill")
-                        ->where("a.playerid", "=", $subpage);
+                        ->where("a.playerid", "=", $subpage)
+                        ->orWhere("b.username", "=", $subpage);
                 })
                 ->where("b.banned", "=", 0)
                 ->where("b.group_id", ">=", 8)
@@ -61,8 +65,12 @@ class PlayerController extends Controller
                 ->select(DB::raw("count(a.playerid)"))
                 ->where("a.$skill", ">", function ($query) use ($db, $subpage, $skill) {
                     $query->from("experience as a")
+                        ->join("players as b", function ($join) {
+                            $join->on("a.playerid", "=", "b.id");
+                        })
                         ->select("a.$skill")
-                        ->where("a.playerid", "=", $subpage);
+                        ->where("a.playerid", "=", $subpage)
+                        ->orWhere("b.username", "=", $subpage);
                 })
                 ->where("b.banned", "=", 0)
                 ->where("b.group_id", ">=", 8)
@@ -178,6 +186,7 @@ class PlayerController extends Controller
                 ])
                 ->get();
         }
+        
         if (!$players) {
             abort(404);
         }
@@ -227,6 +236,11 @@ class PlayerController extends Controller
                                 ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
+                            ])
+                            ->orWhere([
+                                ['b.banned', '!=', '-1'],
+                                ['b.group_id', '>=', '8'],
+                                ["b.username", '=', $subpage],
                             ]);
                     }]
                 ])
