@@ -2,7 +2,7 @@
 
 @section('content')
 
-<?php if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username)) { ?>
+@if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username))
     <div style="text-align: center;">
         <table bgcolor=black cellpadding=4 border=0>
             <tr>
@@ -14,7 +14,7 @@
             </tr>
         </table>
     </div>
-<?php } else { ?>
+@else
     <div style="text-align: center;">
         <table bgcolor=black cellpadding=4 border=0>
             <tr>
@@ -139,7 +139,7 @@
     </span>
 
     <div class="p-2"></div>
-<?php } ?>
+@endif
 
 
 @endsection
