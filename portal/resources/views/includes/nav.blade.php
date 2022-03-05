@@ -1,4 +1,4 @@
-<div class="navbar-expand-xxl pt-2 mr-1">
+<div class="navbar-expand-xxl pt-2">
     <div class="e text-center flex-row" style="background:black;">
         <span class="flex-auto p-2">
             <a class="c" href="/">Home</a>
@@ -57,7 +57,8 @@
                 </a>
             </span>
         </span>
-        <span class="flex-auto p-2"><a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank">Bug Reports</a>
+        <span class="flex-auto p-2">
+            <a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank" class="c">Bug Reports</a>
         </span>
         @guest
             <span class="flex-auto p-2 dropdown">

@@ -16,7 +16,8 @@
 	<link rel="mask-icon" href="{{ asset('img/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
 
 	<!-- CSS -->
-    <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
+	<link type="text/css" rel="stylesheet" href="{{ mix('css/tailwind.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ mix('css/all.css') }}">
 
     @livewireStyles
 </head>

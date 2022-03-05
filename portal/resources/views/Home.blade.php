@@ -1,35 +1,8 @@
 @extends('template')
 @section('content')
-    <div>
+    <div class="test-class-pa">
         <img src="{{ asset('img/logo.png') }}" style="height: 120px;" alt=""/>
     </div>
-
-    <!--
-    <div class="d-block online-count" style="font-size: 14px;">
-        <ul class="menu">
-            @/guest
-
-                <li><a href="{/{ route('Secure_Login') }}">{/{ __('Secure Login') }}</a></li>
-            @/else
-                <li>
-                    <label for="drop-5" class="toggle">{/{ Auth::user()->username }} <i
-                                class="fas fa-caret-down"></i></label>
-                    <a href="#">{/{ Auth::user()->username }}</a>
-                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
-                    <ul>
-                        <li><a href="{/{ route('Logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{/{ __('Logout') }}</a>
-                        </li>
-                    </ul>
-                    <form id="logout-form" action="{/{ route('Logout') }}" method="POST"
-                          style="display: none;">
-                        @/csrf
-                    </form>
-                </li>
-            @/endguest
-        </ul>
-    </div>
-    -->
 
     <!--Latest news-->
     <table>

@@ -13,12 +13,7 @@ const mix = require('laravel-mix');
 
 mix.setResourceRoot("../");
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-        require('autoprefixer'),
-    ]);
+mix.js('resources/js/app.js', 'public/js');
 
 mix.combine([
     'resources/js/jquery.js',
@@ -27,7 +22,13 @@ mix.combine([
     'resources/js/app.js',
 ],'public/js/app.js').version();
 
-mix.sass('resources/sass/app.scss', 'public/css').version();
+mix.postCss('resources/css/tailwind.css', 'public/css', [
+    require('postcss-import'),
+    require('tailwindcss'),
+    require('autoprefixer'),
+])
+
+mix.sass('resources/sass/all.scss', 'public/css').version();
 
 /*if (mix.inProduction()) {
     mix.version();

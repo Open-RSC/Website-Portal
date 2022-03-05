@@ -3,7 +3,7 @@
 @section('content')
 
     <div style="text-align: center;">
-        <table bgcolor=black cellpadding=4 border=0>
+        <table class="hiscores-player-table" bgcolor="black" cellpadding="4" border="0">
             <tr>
                 <td class=e>
                     <div style="text-align:center;">
@@ -102,29 +102,31 @@
     <div class="p-2"></div>
 
     @isset($players->first()->username)
-        <span class="text-info">
-            Status:
-            @if ($players->first()->online == 1)
-                <span style="color: lime">
-                <strong>Online</strong>
+        <div class="hiscores-player-activity-stats">
+            <span class="hiscores-player-stat">
+                Status:
+                @if ($players->first()->online == 1)
+                    <span style="color: lime">
+                    <strong>Online</strong>
+                </span>
+                @else
+                    <span style="color: red">
+                    <strong>Offline</strong>
+                </span>
+                @endif
             </span>
-            @else
-                <span style="color: red">
-                <strong>Offline</strong>
+            <span class="hiscores-player-stat">
+                Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
             </span>
-            @endif
-        </span>
-        <span class="text-info">
-            Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
-        </span>
-        <span class="text-info">
-            Last Online:
-            @if ($players->first()->login_date)
-                {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
-            @else
-                Never
-            @endif
-        </span>
+            <span class="hiscores-player-stat">
+                Last Online:
+                @if ($players->first()->login_date)
+                    {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
+                @else
+                    Never
+                @endif
+            </span>
+        </div>
     @endif
 
     <div class="p-2"></div>

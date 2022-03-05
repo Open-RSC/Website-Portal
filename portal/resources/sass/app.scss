@@ -1,25 +1,8 @@
-// Variables
-@import 'variables';
-
-// Bootstrap
-@import "~bootstrap/scss/bootstrap";
-
-// Font Awesome
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/brands';
-
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 html {
   height: 100%;
 }
 
 html, body {
-  min-height: 100%;
   min-width: 100%;
   margin: 0;
   padding: 0;
@@ -27,18 +10,22 @@ html, body {
 }
 
 body {
-  background-color: black;
+  background-image: url("/img/background.jpg");
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: white;
+
+  @media (min-width: $tablet-breakpoint) {
+    background-image: none;
+    background-color: black;
+  }
 }
 
 a, a:visited {
-  color: rgb(144, 192, 64) !important;
+  color: rgb(144, 192, 64);
 }
 
 BODY, P, TD {
@@ -264,15 +251,24 @@ header li a:hover, .features a:hover {
 }
 
 main {
-  width: 605px;
-  height: 613px;
-  flex: 1;
+  @media (min-width: $desktop-breakpoint) {
+    width: 600px;
+    height: 613px;
+    flex: 1;
+  }
 }
 
 section.top-border {
-  width: 605px;
-  height: 43px;
-  display: flex;
+   // TODO: Can probably bring this back for mobile
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 605px;
+    height: 43px;
+    display: flex;
+  }
+
 }
 
 div.top-left-border {
@@ -294,9 +290,14 @@ div.top-middle-border2 {
 }
 
 div.top-right-border {
-  width: 100px;
-  height: 43px;
-  background-image: url("/img/edge_d.jpg");
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 100px;
+    height: 43px;
+    background-image: url("/img/edge_d.jpg");
+  }
 }
 
 .index-middle-bottom {
@@ -344,33 +345,52 @@ p.online-count {
 }
 
 section.middle {
-  width: 605px;
-  min-height: 377px;
-  height: auto;
-  display: flex;
-  flex: 1;
+  width: auto;
+
+  @media (min-width: $desktop-breakpoint) {
+    width: 605px;
+    display: flex;
+  }
+
+  // width: 605px;
+  // min-height: 377px;
+  // height: auto;
+  // display: flex;
+  // flex: 1;
 }
 
 div.mid-left-border {
-  width: 41px;
-  min-height: 377px;
-  background-image: url("/img/edge_f.jpg");
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 41px;
+    min-height: 377px;
+    background-image: url("/img/edge_f.jpg");
+  }
 }
 
 div.mid-right-border {
-  width: 41px;
-  min-height: 377px;
-  background-image: url("/img/edge_e.jpg");
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 41px;
+    min-height: 377px;
+    background-image: url("/img/edge_e.jpg");
+  }
 }
 
 div.middle-content, div.middle-play,
 div.middle-content-server {
-  width: 519px;
-  min-height: 488px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-image: url("/img/background.jpg");
+  @media (min-width: $tablet-breakpoint) {
+    background-image: url("/img/background.jpg");
+    width: 519px;
+    min-height: 488px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .features {
@@ -542,22 +562,34 @@ div.orsc-buttons, div.cabbage-buttons {
 }
 
 section.bottom-border {
-  width: 605px;
-  height: 43px;
-  display: flex;
+  @media (min-width: $desktop-breakpoint) {
+    width: 605px;
+    height: 43px;
+    display: flex;
+  }
 }
 
 section > div.bottom-left-border {
-  width: 100px;
-  height: 82px;
-  background-image: url("/img/edge_g.jpg");
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 100px;
+    height: 82px;
+    background-image: url("/img/edge_g.jpg");
+  }
+
 }
 
 section > div.bottom-middle {
+  height: 50px;
   width: 400px;
-  height: 82px;
   display: flex;
   flex-direction: column;
+
+  @media (min-width: $desktop-breakpoint) {
+    height: 82px;
+  }
 }
 
 section > div.bottom-middle > div.copyright {
@@ -567,18 +599,29 @@ section > div.bottom-middle > div.copyright {
   font-size: 11px;
   text-align: center;
   vertical-align: bottom;
+  font-family: system-ui;
 }
 
 section > div.bottom-middle > div.bottom-middle-border {
-  width: 400px;
-  height: 43px;
-  background-image: url("/img/edge_c.jpg");
+  display: none;
+ 
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 400px;
+    height: 43px;
+    background-image: url("/img/edge_c.jpg");
+  }
 }
 
 section > div.bottom-right-border {
-  width: 100px;
-  height: 82px;
-  background-image: url("/img/edge_h.jpg");
+  display: none;
+
+  @media (min-width: $desktop-breakpoint) {
+    display: block;
+    width: 100px;
+    height: 82px;
+    background-image: url("/img/edge_h.jpg");
+  }
 }
 
 .copyright p {
@@ -740,520 +783,6 @@ div.middle-content-server dl dd {
   margin: 0 15px;
 }
 
-@media (max-width: 576px) {
-
-  header {
-    flex-direction: column;
-    z-index: 2;
-  }
-  header ul {
-    padding-top: 10px;
-  }
-  header li:nth-child(6) {
-    display: none;
-  }
-  header li:nth-child(7) {
-    display: none;
-  }
-
-  main {
-    flex-direction: column;
-    flex-flow: column;
-    height: auto;
-    min-height: auto;
-    font-size: 1em;
-  }
-  main, section.middle,
-  div.middle-content, div.middle-play,
-  div.middle-content-server,
-  .orsc-buttons, .cabbage-buttons {
-    width: 100vw !important;
-  }
-  section.middle {
-    flex: 1;
-    overflow: auto;
-    min-height: auto;
-  }
-  div.middle-content {
-    min-height: auto;
-  }
-  .index-middle-bottom {
-    flex-direction: column;
-  }
-  .index-middle-bottom div:first-child {
-    padding-bottom: 10px;
-  }
-
-  .patch-notes-link {
-    margin: 0;
-  }
-
-  .patch-notes-link a, .patch-notes a {
-    color: rgb(144, 192, 64);
-  }
-
-  .patch-notes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 10px;
-  }
-
-  .patch-notes > div {
-    width: 90%;
-  }
-
-  .patch-notes ul {
-    padding-left: 10px;
-    list-style-type: "- ";
-  }
-  .patch-notes li {
-    margin-bottom: 2px;
-  }
-
-  div.middle-content, div.middle-play,
-  div.middle-content-server, div.middle-content-hiscores {
-    width: 519px;
-    min-height: 488px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: url("/img/background.jpg");
-  }
-
-  div.middle-play .buttons {
-    width: 519px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .hiscores {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 4px;
-    margin-bottom: 8px;
-    min-height: 316px;
-  }
-
-  .hiscores .page-link {
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-decoration: none;
-  }
-
-  .hiscores .page-link:hover, .hiscores .page-link:focus {
-    color: gold;
-    cursor: pointer;
-  }
-
-  .middle-content-hiscores .title .hiscores-title {
-    font-size: 1.1em;
-  }
-
-  .hiscores-panel {
-    border: 2px solid #382418;
-    outline: 2px solid black;
-    background-color: black;
-  }
-
-  .middle-content-hiscores .title {
-    width: 234px;
-    min-height: 32px;
-    padding: 4px;
-    text-align: center;
-  }
-
-  .middle-content-hiscores .title h2 {
-    font-size: 13px;
-    margin: 0;
-  }
-
-  .middle-content-hiscores .title ul {
-    padding: 0;
-    margin: 0;
-    min-height: 16px;
-    list-style: none;
-  }
-
-  .middle-content-hiscores .title li {
-    height: 16px;
-  }
-
-  a.hiscores-link {
-    font-size: 13px;
-    color: rgb(144, 192, 64);
-    text-decoration: none;
-    display: block;
-  }
-
-  .hiscore-links h4, .hiscore-table h4 {
-    font-size: 13px;
-    margin: 0;
-    margin-bottom: 2px;
-    text-align: center;
-  }
-
-  .player-page-link:hover, .clan-page-link:hover {
-    color: lightgray;
-  }
-
-  .clan-list td:not(:last-child) {
-    padding-left: 5px;
-  }
-
-  .hiscore-table .hiscores-panel.clan-list {
-    width: auto;
-  }
-
-  .hiscore-links {
-    width: 160px;
-    min-height: 310px;
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: center;
-  }
-
-  .hiscore-links .hiscores-panel {
-    text-align: center;
-    padding: 8px 4px;
-    width: 114px;
-    min-height: 264px;
-  }
-
-  .hiscores > .hiscore-links .hiscores-panel.players-nav {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 13px;
-    height: auto;
-    min-height: auto;
-  }
-
-  .hiscores > .hiscore-links .hiscores-panel.players-nav dl {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0;
-  }
-
-  .hiscores > .hiscore-links .hiscores-panel.players-nav dt,
-  .hiscores > .hiscore-links .hiscores-panel.players-nav dd {
-    flex: 1 0 45%;
-    margin: 0;
-  }
-
-  .hiscores > .hiscore-links .hiscores-panel.players-nav dt {
-    text-align: left;
-    padding-left: 5px;
-  }
-  .hiscores > .hiscore-links .hiscores-panel.players-nav dd {
-    text-align: left;
-    padding-right: 5px;
-  }
-
-  .players-nav .hiscores-link {
-    padding: 10px 0;
-  }
-
-  .hiscore-table {
-    width: 290px;
-    min-height: 312px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hiscore-table .hiscores-panel {
-    width: 254px;
-    min-height: 278px;
-    padding: 4px;
-    padding-top: 8px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .hiscore-table th {
-    font-weight: 700;
-    text-align: left;
-  }
-  .hiscore-table tr, .hiscore-table td {
-    height: 14px;
-    line-height: 14px;
-  }
-  .hiscore-table td, .hiscore-table th {
-    font-size: 13px;
-    padding: 0 1px;
-  }
-
-  .hiscores.player .hiscore-table .hiscores-panel {
-    min-height: auto;
-    padding-bottom: 10px;
-  }
-
-  .players-info {
-    flex: 2 0 30%;
-  }
-
-  .players-skills, .clan-members {
-    flex: 1 0 50%;
-    width: auto;
-  }
-
-  .players-skills table, .clan-members table {
-    width: 100%;
-  }
-
-  .player {
-    justify-content: space-between;
-  }
-
-  .hiscore-links .hiscores-panel.players-nav {
-    padding: 0;
-    width: 90%;
-  }
-
-  .hiscore-search {
-    display: flex;
-    justify-items: center;
-    align-content: space-between;
-  }
-
-  .middle-content-hiscores .title {
-    width: auto;
-  }
-
-  .hiscores {
-    width: 100vw;
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .hiscore-links, .hiscore-table, .hiscore-table .hiscores-panel {
-    max-width: 50vw;
-    width: auto;
-    height: auto;
-    max-width: 80vw;
-  }
-
-  .hiscore-table .hiscores-panel {
-    flex-wrap: wrap;
-  }
-
-  .hiscore-table .hiscores-panel table {
-    width: 100%;
-  }
-
-  .hiscore-table .hiscores-panel > a:first-child {
-    display: block;
-    order: 2;
-    flex: 1;
-    text-align: left;
-  }
-
-  .hiscore-table .hiscores-panel > a:first-child:after {
-    content: " Prev"
-  }
-
-  .hiscore-table .hiscores-panel > a:last-child {
-    display: block;
-    order: 3;
-    flex: 1;
-    text-align: right;
-  }
-
-  .hiscore-table .hiscores-panel > a:last-child:before {
-    content: "Next "
-  }
-
-  .hiscore-links h4, .hiscore-table h4, .middle-content-hiscores .title h2 {
-    font-size: 1em;
-  }
-
-  .hiscore-links h4 span {
-    display: block;
-    visibility: hidden;
-    width: 0;
-    height: 0;
-  }
-  .hiscore-links h4:after {
-    text-align: center;
-    content: 'Menu';
-  }
-
-  .hiscore-table td, .hiscore-table th {
-    font-size: 0.9em;
-  }
-
-  .hiscore-links, .hiscore-links .hiscores-panel {
-    width: auto;
-    min-height: auto;
-    margin-bottom: 10px;
-  }
-
-  .hiscores > .hiscore-links .hiscores-panel.players-nav {
-    flex-direction: column;
-    justify-content: start;
-    height: auto;
-    min-height: auto;
-  }
-  .hiscores > .hiscore-links .hiscores-panel.players-nav a {
-    flex: 0;
-  }
-
-  a.hiscores-link {
-    font-size: 1em;
-    margin-bottom: 2px;
-  }
-
-  div.hiscore-search {
-    width: 100vw;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .search-box.search-rank {
-    margin: 0;
-  }
-  .search-box input {
-    width: 90%;
-    margin-top: 2px;
-  }
-
-  div.home-buttons {
-    display: flex;
-    width: 100vw;
-    min-height: 400px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .large-button.play {
-    order: 1;
-    flex-basis: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .button.wiki {
-    order: 2;
-  }
-  .button.discord {
-    order: 2;
-  }
-  .button.launcher-button {
-    order: 2;
-  }
-  .button.code {
-    order: 2;
-  }
-  .button.single-player {
-    display: none;
-  }
-  .button.faqs {
-    order: 2;
-  }
-  .button.rscplus {
-    display: none;
-  }
-
-  div.middle-play .buttons {
-    width: 100vw;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  section.top-border {
-    z-index: 1;
-    width: 100vw;
-  }
-  div.top-left-border {
-    width: 0;
-    height: 0;
-    background-image: none;
-  }
-  div.top-middle-border {
-    width: 100vw;
-    height: 0;
-    background-image: none;
-  }
-  div.top-right-border {
-    width: 0;
-    height: 0;
-    background-image: none;
-  }
-
-
-  div.mid-left-border {
-    width: 0;
-    min-height: 488px;
-    background-image: none;
-  }
-  div.mid-right-border {
-    width: 0;
-    min-height: 488px;
-    background-image: none;
-  }
-
-  section.bottom-border {
-    width: 100vw;
-    min-height: 20px;
-  }
-  section > div.bottom-left-border {
-    width: 0;
-    height: 0;
-    background-image: none;
-  }
-  section > div.bottom-middle {
-    width: 100vw;
-    height: 40px;
-    display: flex;
-    flex-direction: column;
-    background: url('/img/background.jpg');
-  }
-  section > div.bottom-middle > div.copyright {
-    width: 100vw;
-    height: 39px;
-    font-size: 11px;
-    text-align: center;
-  }
-  section > div.bottom-middle > div.bottom-middle-border {
-    width: 400px;
-    height: 0;
-    background-image: none;
-  }
-  section > div.bottom-right-border {
-    width: 0;
-    height: 0;
-    background-image: none;
-  }
-
-}
-
-@media (max-width: 370px) {
-  .hiscores {
-    flex-direction: column;
-    align-items: center;
-  }
-  .hiscores > .hiscore-links .hiscores-panel {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  .hiscores > .hiscore-links .hiscores-panel a {
-    flex: 1 0 30%;
-  }
-}
-
-// -------- Legacy nav bar -------- //
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
 nav {
   font-size: 22px;
   line-height: 32px;
@@ -1261,12 +790,6 @@ nav {
   padding: 0;
   word-wrap: break-word;
   text-align: center;
-}
-
-nav h3 a {
-}
-
-nav a {
 }
 
 nav h1 {
@@ -1480,12 +1003,11 @@ li > a:only-child:after {
 }
 
 .navbar-expand-xxl .flex-row {
-  width: 596px !important;
-}
+  width: auto;
 
-@media screen and (max-width: 480px) {
-  .navbar-expand-xxl .flex-row {
-    width: auto !important;
+  // TODO: Could probably change all $desktop-breakpoint media queries to $tablet-breakpoint.
+  @media (min-width: $desktop-breakpoint) {
+    width: 596px;
   }
 }
 
@@ -1495,4 +1017,19 @@ li > a:only-child:after {
 
 .orsc-checkbox-label {
   display: inline;
+}
+
+.breadcrumb-bar {
+  width: 250px;
+  background: black;
+  padding: 4px;
+  margin: 20px auto 0;
+
+  @media (min-width: $desktop-breakpoint) {
+    margin: 0;
+  }
+}
+
+.orsc-pagination-link {
+  text-decoration: none;
 }

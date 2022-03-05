@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
-<body class="<?= Route::currentRouteName() == 'World Map' ? "body-world-map" : "" ?>">
+<body class="font-family-test <?= Route::currentRouteName() == 'World Map' ? "body-world-map" : "" ?>">
 
 @if(Route::currentRouteName() == 'World Map')
-    <table style="width: 250px; background: black; padding: 4px;">
+    <table class="breadcrumb-bar">
         <tbody>
         <tr>
             <td class=e>
@@ -26,7 +26,7 @@
     @yield('content')
 
 @elseif(Route::currentRouteName() == 'Wilderness Map')
-    <table style="width: 250px; background: black; padding: 4px;">
+    <table class="breadcrumb-bar">
         <tbody>
         <tr>
             <td class=e>
@@ -95,7 +95,7 @@
             <div class="mid-left-border"></div>
             <div class="middle-content">
                 @if(Route::currentRouteName() != 'Home')
-                    <table style="width: 250px; background: black; padding: 4px;">
+                    <table class="breadcrumb-bar">
                         <tbody>
                         <tr>
                             <td class=e>
