@@ -34,10 +34,10 @@
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
                 <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
+                <a class="c text-left" href="/toplist/2001scape">2001Scape</a>
+                <!--<a class="c text-left" href="/hiscores/openpk">Open PK</a>-->
                 <a class="c text-left" href="/hiscores/uranium">RSC Uranium</a>
                 <a class="c text-left" href="/hiscores/coleslaw">RSC Coleslaw</a>
-                <!--<a class="c text-left" href="/hiscores/openpk">Open PK</a>-->
-                <!--<a class="c text-left" href="/hiscores/2001scape">2001Scape</a>-->
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">

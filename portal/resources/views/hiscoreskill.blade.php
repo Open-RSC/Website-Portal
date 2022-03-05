@@ -13,7 +13,7 @@
                             <div style="width:24px;">
                                 @if($skill == 'skill_total')
                                 @else
-                                    <img src="{{ asset('img/skill_icons').'/'.$skill }}.gif" alt="{{ $skill }}"/>
+                                    <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif" alt="{{ strtolower($skill) }}"/>
                                 @endif
                             </div>
                             <div style="width:40px;">

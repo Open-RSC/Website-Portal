@@ -7,7 +7,7 @@
 
                 <div class="table-transparent pl-5 pr-5 mb-5">
                     <div id="row1" class="d-flex flex-wrap justify-content-between pt-3">
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/bar_crawl"
+                        <div data-toggle="tooltip"
                              title="It is considered a 'rite of passage'. To complete it, you must tour all the finest bars and taste the strongest drinks in RuneScape Classic.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Alfred_Grimhand_Bar_Crawl" target="_blank">
@@ -33,7 +33,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/barbarian_agility_course"
+                        <div data-toggle="tooltip"
                              title="Theoretical maximum experience rate for running the full lap is 16k agility experience per hour. However, this is rarely possible at lower levels so many choose to only repeat Low wall jump for a constant 13.5k agility experience per hour. ">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Barbarian_Outpost_Agility_Course" target="_blank">
@@ -59,7 +59,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/kitten_to_cat"
+                        <div data-toggle="tooltip"
                              title="It takes roughly 2 hours for a kitten to mature into a cat. During that time your kitten will demand attention and food.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Kitten#Maturing_and_utilizing_kittens" target="_blank">
@@ -85,7 +85,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/blurberrys_bar"
+                        <div data-toggle="tooltip"
                              title="Prepare gnomish drinks for Blurberry and be awarded some money and cooking experience per order completed.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Gnome_Bar_(minigame)" target="_blank">
@@ -113,7 +113,7 @@
                     </div>
 
                     <div id="row2" class="d-flex flex-wrap justify-content-between pt-3">
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/fishing_trawler"
+                        <div data-toggle="tooltip"
                              title="You can only get fish that correspond to your fishing level. You will get full XP for any fish you catch on the trawler.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Fishing_Trawler" target="_blank">
@@ -137,7 +137,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/gnome_ball"
+                        <div data-toggle="tooltip"
                              title="There are various methods a player may utilize to smuggle a gnomeball for use outside of the minigame.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Gnome_Ball_(minigame)" target="_blank">
@@ -163,7 +163,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/mage_arena"
+                        <div data-toggle="tooltip"
                              title="This is a dangerous Minigame, Death is very possible.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Mage_Arena" target="_blank">
@@ -189,7 +189,7 @@
 							</span>
                         </div>
 
-                        <div class="clickable-row" data-toggle="tooltip" data-href="/quest/gnome_restaurant"
+                        <div data-toggle="tooltip"
                              title="Produce gnome cuisine for Aluft Gianne and be awarded some money and cooking experience per order completed.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Gnome_Restaurant_(minigame)" target="_blank">

@@ -52,7 +52,7 @@ class PlayerController extends Controller
                         ->where("a.playerid", "=", $subpage)
                         ->orWhere("b.username", "=", $subpage);
                 })
-                ->where("b.banned", "=", 0)
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
                 ->where("c.iron_man", "!=", 4)
                 ->count();
@@ -72,7 +72,7 @@ class PlayerController extends Controller
                         ->where("a.playerid", "=", $subpage)
                         ->orWhere("b.username", "=", $subpage);
                 })
-                ->where("b.banned", "=", 0)
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
                 ->count();
         }
@@ -108,7 +108,9 @@ class PlayerController extends Controller
 
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
+            $skill_array = array('hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining');
+        } else { // modern authentic
             $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
 
@@ -152,7 +154,41 @@ class PlayerController extends Controller
                     ['b.username', '=', $subpage],
                 ])
                 ->get();
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic
+            $players = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->select('b.*', DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayGood') . ') +
+			(' . $this->cast('a', 'prayEvil') . ') +
+			(' . $this->cast('a', 'goodMagic') . ') +
+			(' . $this->cast('a', 'evilMagic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcutting') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'influence') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'tailoring') . ') +
+			(' . $this->cast('a', 'herblaw') . '))
+			/4.0)
+			as total_xp
+			'), ...$this->skill_cast('a', $skill_array))
+                ->where([
+                    ['b.id', '=', $subpage],
+                ])
+                ->orWhere([
+                    ['b.username', '=', $subpage],
+                ])
+                ->get();
+        } else { // modern authentic
             $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
@@ -199,8 +235,8 @@ class PlayerController extends Controller
                 })
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
@@ -208,8 +244,8 @@ class PlayerController extends Controller
                             ->select(DB::raw("b.skill_total"))
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
+                            ->whereNotIn('b.banned', [-1, 1])
                             ->where([
-                                ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
@@ -224,16 +260,16 @@ class PlayerController extends Controller
                     $join->on("a.playerid", "=", "b.id");
                 })
                 ->select(DB::raw("COUNT(b.skill_total) as rank"))
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ["b.skill_total", ">", function ($query) use ($subpage) {
                         $query
                             ->select(DB::raw("b.skill_total"))
                             ->from("players AS b")
                             ->orderBy('b.skill_total', 'desc')
+                            ->whereNotIn('b.banned', [-1, 1])
                             ->where([
-                                ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.id", '=', $subpage],
                             ])
@@ -311,12 +347,11 @@ class PlayerController extends Controller
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
+            ->whereNotIn('b.banned', [-1, 1])
             ->where([
-                ['b.banned', '!=', '-1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '!=', '-1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
@@ -361,12 +396,11 @@ class PlayerController extends Controller
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('itemdef as c', 'a.id', '=', 'c.id')
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
+            ->whereNotIn('b.banned', [-1, 1])
             ->where([
-                ['b.banned', '!=', '-1'],
                 ['b.id', '=', $subpage],
             ])
             ->orWhere([
-                ['b.banned', '!=', '-1'],
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')

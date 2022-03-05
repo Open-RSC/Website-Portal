@@ -47,12 +47,16 @@ class HomeController extends Controller
             'Home',
             [
                 'news_feed' => $news_feed,
-                'preservation_online' => $preservation_online,
-                'cabbage_online' => $cabbage_online,
-                'uranium_online' => $uranium_online,
-                'coleslaw_online' => $coleslaw_online,
-                'retro_online' => $retro_online,
-                'openpk_online' => $openpk_online,
+                'worlds' => [
+                    /* legit worlds */
+                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "alias"=>"preservation"),
+                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "alias"=>"cabbage"),
+                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "alias"=>"2001scape"),
+                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "alias"=>"openpk"),
+                    /* bot allowed */
+                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "alias"=>"uranium"),
+                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "alias"=>"coleslaw"),
+                ]
             ]
         );
     }
