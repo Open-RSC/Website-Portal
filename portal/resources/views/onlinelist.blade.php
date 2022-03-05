@@ -4,10 +4,10 @@
     <table cellspacing="2" cellpadding="2" bgcolor="#aaaaaa" border="0">
         <tbody>
         <tr>
-            <td width="500" bgcolor="#000000">
+            <td bgcolor="#000000">
                 <b>The following {{$onlineCount}} players are currently playing {{$world}}:</b>
                 <br>
-                <table width="650">
+                <table>
                     <tbody>
                     <tr align="left">
                         <th>Player name</th>
