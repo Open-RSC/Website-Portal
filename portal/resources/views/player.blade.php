@@ -57,8 +57,8 @@
                                     <td>
                                         @if($skill == 'skill_total')
                                         @else
-                                            <img src="{{ asset('img/skill_icons').'/'.$skill }}.gif" valign="bottom"
-                                                 width=16 height=16 alt="{{ $skill }}"/>
+                                            <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif" valign="bottom"
+                                                 width=16 height=16 alt="{{ strtolower($skill) }}"/>
                                         @endif
                                     </td>
                                     <td>

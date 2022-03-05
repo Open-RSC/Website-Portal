@@ -56,7 +56,11 @@ Route::any('hiscores/{db}/skill_total', 'HiscoresController@index')->name('RuneS
 Route::any('hiscores/{db}/{subpage}', 'HiscoresController@show');
 Route::any('hiscores/{db}/{subpage}/{iron_man}', 'HiscoresController@iron_man')->name('RuneScape Ironman Hiscores');
 Route::post('searchByName', 'HiscoresController@searchByName');
+Route::any('toplist/{db}', 'HiscoresController@toplist')->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
 
+
+// Current players
+Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
 // Afman staff zone
 Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
