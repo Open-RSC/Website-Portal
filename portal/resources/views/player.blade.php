@@ -2,6 +2,19 @@
 
 @section('content')
 
+@if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username))
+    <div style="text-align: center;">
+        <table bgcolor=black cellpadding=4 border=0>
+            <tr>
+                <td class=e>
+                    <div style="text-align:center;">
+                        Account <span style="color:yellow"><?=$subpage?></span> does not exist
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+@else
     <div style="text-align: center;">
         <table bgcolor=black cellpadding=4 border=0>
             <tr>
@@ -101,32 +114,32 @@
 
     <div class="p-2"></div>
 
-    @isset($players->first()->username)
-        <span class="text-info">
-            Status:
-            @if ($players->first()->online == 1)
-                <span style="color: lime">
-                <strong>Online</strong>
-            </span>
-            @else
-                <span style="color: red">
-                <strong>Offline</strong>
-            </span>
-            @endif
+    <span class="text-info">
+        Status:
+        @if ($players->first()->online == 1)
+            <span style="color: lime">
+            <strong>Online</strong>
         </span>
-        <span class="text-info">
-            Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
+        @else
+            <span style="color: red">
+            <strong>Offline</strong>
         </span>
-        <span class="text-info">
-            Last Online:
-            @if ($players->first()->login_date)
-                {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
-            @else
-                Never
-            @endif
-        </span>
-    @endif
+        @endif
+    </span>
+    <span class="text-info">
+        Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
+    </span>
+    <span class="text-info">
+        Last Online:
+        @if ($players->first()->login_date)
+            {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
+        @else
+            Never
+        @endif
+    </span>
 
     <div class="p-2"></div>
+@endif
+
 
 @endsection
