@@ -29,7 +29,7 @@
                             </td>
                             <td>
                                 @if ($playerLeft->creation_date)
-                                    {{ App\Http\OnlineController::formattedTimeSince($playerLeft->creation_date) }}
+                                    {{ App\Http\OnlineController::formattedCumTime($playerLeft->value/1000, $playerLeft->login_date) }}
                                 @else
                                     Never
                                 @endif
@@ -50,7 +50,7 @@
                                     </td>
                                     <td>
                                         @if ($playerRight->creation_date)
-                                            {{ App\Http\OnlineController::formattedTimeSince($playerRight->creation_date) }}
+                                            {{ App\Http\OnlineController::formattedCumTime($playerRight->value/1000, $playerRight->login_date) }}
                                         @else
                                             Never
                                         @endif
