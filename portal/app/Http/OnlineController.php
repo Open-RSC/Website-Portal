@@ -76,7 +76,30 @@ class OnlineController extends Component
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
+            ->leftJoin('player_cache as c', function($join) {
+                $join->on('b.id', '=', 'c.playerID');
+                $join->on('c.key', '=', DB::raw("'total_played'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '8'],
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
             ->orderBy('b.username');
+    }
+
+    /**
+     * Displays a RuneScape time since string
+     * @param $timestamp - the old cummulative timestamp in seconds
+     * @param $loginstamp - the login timestamp in seconds
+     * @return string
+     */
+    public static function formattedCumTime($timestamp, $loginstamp): string
+    {
+        $todaystamp = time(); // current timestamp in secs
+        $diffSec = $timestamp + ($todaystamp - $loginstamp);
+
+        return self::formattedTime($diffSec);
     }
 
     /**
@@ -89,10 +112,21 @@ class OnlineController extends Component
         $todaystamp = time(); // current timestamp in secs
         $diffSec = ($todaystamp - $timestamp);
 
-        $days = floor($diffSec / (3600 * 24));
-        $hours = floor($diffSec % (3600 * 24) / 3600);
-        $mins = floor($diffSec % 3600 / 60);
-        $secs = floor($diffSec % 60);
+        return self::formattedTime($diffSec);
+    }
+
+    /**
+     * Displays a RuneScape time since string
+     * @param $timestamp - the timestamp in seconds
+     * @return string
+     */
+    public static function formattedTime($timestamp): string
+    {
+
+        $days = floor($timestamp / (3600 * 24));
+        $hours = floor($timestamp % (3600 * 24) / 3600);
+        $mins = floor($timestamp % 3600 / 60);
+        $secs = floor($timestamp % 60);
 
         if ($days > 0) {
             // use days, hours
