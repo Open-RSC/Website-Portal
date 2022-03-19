@@ -39,6 +39,18 @@
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
+        <div class="pl-1 d-block pt-2"><span class="text-primary d-block">2001Scape</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
+            <span class="d-block"><i
+                        class="fas fa-angle-right"></i> Recreated version of RuneScape Classic from May 8 2001</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Version with retro features (pray evil, good magic, POH) as they were experienced</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> ~95% authentic replica of retro RSC based on old cache data, fansites & newsposts</span>
+            <span class="d-block"><i
+                        class="fas fa-angle-right"></i> Actively being improved for gameplay accuracy</span>
+            <span class="d-block"><i
+                        class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
+        </div>
         <div class="pl-1 d-block pt-2"><span class="text-primary d-block">RSC Uranium</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
@@ -62,10 +74,10 @@
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="pl-1 d-block pt-2"><span class="text-primary d-block">2001scape (Under development)</span>
+        <div class="pl-1 d-block pt-2"><span class="text-primary d-block">RSC Kale (Under development)</span>
             <span class="d-block"><i
-                        class="fas fa-angle-right"></i> Recreated version of RuneScape Classic from 2001</span>
-            <span class="d-block"><i class="fas fa-angle-right"></i> Unfinished features (pray evil, good magic, POH) implemented</span>
+                        class="fas fa-angle-right"></i> Expansion of RuneScape Classic post May 8 2001 (wilderness, dueling, teleport spells)</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> Implementation of retro features (hiding, pray evil, tailoring, herblaw, etc)</span>
             <span class="d-block"><i
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>

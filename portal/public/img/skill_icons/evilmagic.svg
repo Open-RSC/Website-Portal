@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" baseProfile="full">
+  <path d="M200 0h40v40h-40z"/>
+  <path fill="#000001" d="M240 0h40v40h-40zM280 0h40v40h-40zM320 0h40v40h-40z"/>
+  <path d="M360 0h40v40h-40z"/>
+  <path fill="#000001" d="M200 40h40v40h-40z"/>
+  <path fill="#1B0692" d="M240 40h40v40h-40z"/>
+  <path fill="#0006FE" d="M280 40h40v40h-40zM320 40h40v40h-40z"/>
+  <path d="M360 40h40v40h-40z"/>
+  <path fill="#000001" d="M160 80h40v40h-40zM200 80h40v40h-40z"/>
+  <path fill="#1B0692" d="M240 80h40v40h-40zM280 80h40v40h-40z"/>
+  <path fill="#0006FE" d="M320 80h40v40h-40z"/>
+  <path fill="#000001" d="M360 80h40v40h-40z"/>
+  <path d="M120 120h40v40h-40z"/>
+  <path fill="#000001" d="M160 120h40v40h-40z"/>
+  <path fill="#1B0692" d="M200 120h40v40h-40zM240 120h40v40h-40zM280 120h40v40h-40zM320 120h40v40h-40z"/>
+  <path fill="#000001" d="M360 120h40v40h-40z"/>
+  <path d="M120 160h40v40h-40z"/>
+  <path fill="#1B0692" d="M160 160h40v40h-40zM200 160h40v40h-40zM240 160h40v40h-40zM280 160h40v40h-40zM320 160h40v40h-40z"/>
+  <path fill="#000001" d="M360 160h40v40h-40zM400 160h40v40h-40zM80 200h40v40H80zM120 200h40v40h-40z"/>
+  <path fill="#1B0692" d="M160 200h40v40h-40zM200 200h40v40h-40z"/>
+  <path fill="#000001" d="M240 200h40v40h-40zM280 200h40v40h-40z"/>
+  <path fill="#1B0692" d="M320 200h40v40h-40z"/>
+  <path fill="#0006FE" d="M360 200h40v40h-40z"/>
+  <path fill="#000001" d="M400 200h40v40h-40zM80 240h40v40H80z"/>
+  <path fill="#1B0692" d="M120 240h40v40h-40zM160 240h40v40h-40z"/>
+  <path fill="#000001" d="M200 240h40v40h-40z"/>
+  <path fill="#1B0692" d="M240 240h40v40h-40zM280 240h40v40h-40zM320 240h40v40h-40z"/>
+  <path fill="#0006FE" d="M360 240h40v40h-40z"/>
+  <path fill="#000001" d="M400 240h40v40h-40z"/>
+  <path d="M440 240h40v40h-40z"/>
+  <path fill="#000001" d="M80 280h40v40H80zM120 280h40v40h-40zM160 280h40v40h-40zM200 280h40v40h-40z"/>
+  <path fill="#1B0692" d="M240 280h40v40h-40zM280 280h40v40h-40zM320 280h40v40h-40z"/>
+  <path fill="#0006FE" d="M360 280h40v40h-40zM400 280h40v40h-40z"/>
+  <path d="M440 280h40v40h-40z"/>
+  <path fill="#000001" d="M160 320h40v40h-40z"/>
+  <path fill="#1B0692" d="M200 320h40v40h-40zM240 320h40v40h-40zM280 320h40v40h-40zM320 320h40v40h-40zM360 320h40v40h-40z"/>
+  <path fill="#0006FE" d="M400 320h40v40h-40z"/>
+  <path fill="#000001" d="M440 320h40v40h-40zM480 320h40v40h-40z"/>
+  <path d="M40 360h40v40H40zM80 360h40v40H80zM120 360h40v40h-40z"/>
+  <path fill="#000001" d="M160 360h40v40h-40z"/>
+  <path fill="#1B0692" d="M200 360h40v40h-40zM240 360h40v40h-40zM280 360h40v40h-40zM320 360h40v40h-40zM360 360h40v40h-40zM400 360h40v40h-40z"/>
+  <path fill="#7A3D09" d="M440 360h40v40h-40z"/>
+  <path fill="#000001" d="M480 360h40v40h-40z"/>
+  <path d="M520 360h40v40h-40z"/>
+  <path fill="#000001" d="M560 360h40v40h-40zM600 360h40v40h-40zM0 400h40v40H0zM40 400h40v40H40z"/>
+  <path fill="#1B0692" d="M80 400h40v40H80z"/>
+  <path fill="#000001" d="M120 400h40v40h-40z"/>
+  <path fill="#7A3D09" d="M160 400h40v40h-40zM200 400h40v40h-40zM240 400h40v40h-40zM280 400h40v40h-40zM320 400h40v40h-40zM360 400h40v40h-40z"/>
+  <path fill="#AEA805" d="M400 400h40v40h-40z"/>
+  <path fill="#7A3D09" d="M440 400h40v40h-40z"/>
+  <path fill="#0006FE" d="M480 400h40v40h-40zM520 400h40v40h-40zM560 400h40v40h-40z"/>
+  <path d="M600 400h40v40h-40z"/>
+  <path fill="#000001" d="M0 440h40v40H0z"/>
+  <path fill="#1B0692" d="M40 440h40v40H40zM80 440h40v40H80zM120 440h40v40h-40zM160 440h40v40h-40zM200 440h40v40h-40z"/>
+  <path fill="#7A3D09" d="M240 440h40v40h-40zM280 440h40v40h-40zM320 440h40v40h-40z"/>
+  <path fill="#AEA805" d="M360 440h40v40h-40zM400 440h40v40h-40z"/>
+  <path fill="#0006FE" d="M440 440h40v40h-40zM480 440h40v40h-40zM520 440h40v40h-40zM560 440h40v40h-40z"/>
+  <path d="M600 440h40v40h-40z"/>
+  <path fill="#000001" d="M0 480h40v40H0zM40 480h40v40H40z"/>
+  <path fill="#1B0692" d="M80 480h40v40H80zM120 480h40v40h-40zM160 480h40v40h-40zM200 480h40v40h-40zM240 480h40v40h-40zM280 480h40v40h-40z"/>
+  <path fill="#0006FE" d="M320 480h40v40h-40zM360 480h40v40h-40zM400 480h40v40h-40zM440 480h40v40h-40zM480 480h40v40h-40zM520 480h40v40h-40zM560 480h40v40h-40z"/>
+  <path fill="#000001" d="M600 480h40v40h-40zM40 520h40v40H40z"/>
+  <path fill="#1B0692" d="M80 520h40v40H80zM120 520h40v40h-40zM160 520h40v40h-40zM200 520h40v40h-40zM240 520h40v40h-40zM280 520h40v40h-40z"/>
+  <path fill="#0006FE" d="M320 520h40v40h-40zM360 520h40v40h-40zM400 520h40v40h-40zM440 520h40v40h-40zM480 520h40v40h-40z"/>
+  <path fill="#000001" d="M520 520h40v40h-40zM560 520h40v40h-40zM600 520h40v40h-40z"/>
+  <path d="M40 560h40v40H40z"/>
+  <path fill="#000001" d="M80 560h40v40H80zM120 560h40v40h-40zM160 560h40v40h-40zM200 560h40v40h-40zM240 560h40v40h-40zM280 560h40v40h-40zM320 560h40v40h-40zM360 560h40v40h-40zM400 560h40v40h-40zM440 560h40v40h-40z"/>
+  <path d="M480 560h40v40h-40zM520 560h40v40h-40z"/>
+</svg>

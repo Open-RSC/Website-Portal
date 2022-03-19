@@ -2,12 +2,17 @@
 
 namespace App\Http;
 
+use Carbon\Carbon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Livewire\Component;
 use Illuminate\Http\Request;
+use DateTime;
 
 class HiscoresController extends Component
 {
@@ -94,8 +99,8 @@ class HiscoresController extends Component
 			(' . $this->cast('a', 'harvesting') . '))
 			/4.0)
 			as total_xp'))
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                 ])
@@ -103,7 +108,41 @@ class HiscoresController extends Component
                 ->orderBy('b.skill_total', 'desc')
                 ->orderBy('total_xp', 'desc')
                 ->paginate(21);
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic
+            $hiscores = DB::connection($db)
+                ->table('experience as a')
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->select('b.*', DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayGood') . ') +
+			(' . $this->cast('a', 'prayEvil') . ') +
+			(' . $this->cast('a', 'goodMagic') . ') +
+			(' . $this->cast('a', 'evilMagic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcutting') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'influence') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'tailoring') . ') +
+			(' . $this->cast('a', 'herblaw') . '))
+			/4.0)
+			as total_xp'))
+                ->whereNotIn('b.banned', [-1, 1])
+                ->where([
+                    ['b.group_id', '>=', '8'],
+                ])
+                ->groupBy('b.username')
+                ->orderBy('b.skill_total', 'desc')
+                ->orderBy('total_xp', 'desc')
+                ->paginate(21);
+        } else { // modern authentic
             $hiscores = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
@@ -128,8 +167,8 @@ class HiscoresController extends Component
 			(' . $this->cast('a', 'thieving') . '))
 			/4.0)
 			as total_xp'))
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                 ])
                 ->groupBy('b.username')
@@ -145,7 +184,9 @@ class HiscoresController extends Component
 
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining');
+        } else { // modern authentic
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
         return view('hiscores', [
@@ -171,7 +212,9 @@ class HiscoresController extends Component
          */
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining');
+        } else { // modern authentic
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
 
@@ -205,8 +248,8 @@ class HiscoresController extends Component
                     ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
                     ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
                 ])
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                 ])
@@ -223,8 +266,8 @@ class HiscoresController extends Component
                     ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
                     ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
                 ])
+                ->whereNotIn('b.banned', [-1, 1])
                 ->where([
-                    ['b.banned', '!=', '-1'],
                     ['b.group_id', '>=', '8'],
                 ])
                 ->groupBy('b.username')
@@ -256,7 +299,9 @@ class HiscoresController extends Component
          */
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
-        } else { // authentic
+        } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
+            $skill_array = array('skill_total', 'hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining');
+        } else { // modern authentic
             $skill_array = array('skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
         }
 
@@ -309,8 +354,8 @@ class HiscoresController extends Component
 			(' . $this->cast('a', 'harvesting') . '))
 			/4.0)
 			as total_xp'))
+                    ->whereNotIn('b.banned', [-1, 1])
                     ->where([
-                        ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
                         ['c.iron_man', '!=', '4'],
                         ['c.iron_man', '=', $iron_man],
@@ -319,7 +364,41 @@ class HiscoresController extends Component
                     ->orderBy('b.skill_total', 'desc')
                     ->orderBy('total_xp', 'desc')
                     ->paginate(21);
-            } else { // authentic
+            } else if (value($db) == '2001scape') { // retro authentic
+                $hiscores = DB::connection($db)
+                    ->table('experience as a')
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->select('b.*', 'c.*', DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayGood') . ') +
+			(' . $this->cast('a', 'prayEvil') . ') +
+			(' . $this->cast('a', 'goodMagic') . ') +
+			(' . $this->cast('a', 'evilMagic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcutting') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'influence') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'tailoring') . ') +
+			(' . $this->cast('a', 'herblaw') . '))
+			/4.0)
+			as total_xp'))
+                    ->whereNotIn('b.banned', [-1, 1])
+                    ->where([
+                        ['b.group_id', '>=', '8'],
+                    ])
+                    ->groupBy('b.username')
+                    ->orderBy('b.skill_total', 'desc')
+                    ->orderBy('total_xp', 'desc')
+                    ->paginate(21);
+            } else { // modern authentic
                 $hiscores = DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
@@ -344,8 +423,8 @@ class HiscoresController extends Component
 			(' . $this->cast('a', 'thieving') . '))
 			/4.0)
 			as total_xp'))
+                    ->whereNotIn('b.banned', [-1, 1])
                     ->where([
-                        ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
                     ])
                     ->groupBy('b.username')
@@ -375,8 +454,8 @@ class HiscoresController extends Component
                         ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
                         ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
                     ])
+                    ->whereNotIn('b.banned', [-1, 1])
                     ->where([
-                        ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
                         ['c.iron_man', '=', $iron_man],
                         ['c.iron_man', '!=', '4'],
@@ -393,8 +472,8 @@ class HiscoresController extends Component
                         ['a.' . $subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
                         ['a.' . $subpage, '<', '0', 'or'], // and those that have overflow
                     ])
+                    ->whereNotIn('b.banned', [-1, 1])
                     ->where([
-                        ['b.banned', '!=', '-1'],
                         ['b.group_id', '>=', '8'],
                     ])
                     ->groupBy('b.username')
@@ -428,5 +507,145 @@ class HiscoresController extends Component
         $urlToRedirectTo = "/player/$db/$name";
 
         return redirect()->to($urlToRedirectTo);
+    }
+
+    /**
+     * Fetches the toplist view
+     * @param $db
+     * @return Factory|View
+     */
+    public function toplist($db): Factory|View
+    {
+        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
+        $toplist_array = ["2001scape"];
+
+        /**
+         * @var $db
+         * return not found for servers where toplist was no longer a thing
+         */
+        if (!in_array($db, $toplist_array)) {
+            abort(404);
+        }
+
+        try {
+            $filename = self::getTopListFileName($db);
+            $topListContents = Storage::disk('public')->get($filename);
+        } catch (FileNotFoundException $e) {
+            $topListContents = "No Runescape hiscore tables available" . "\n";
+        }
+
+        return view('toplists', [
+            'db' => $db,
+            'topListContents' => str_replace("\n", "<br>", $topListContents),
+        ]);
+    }
+
+    static function getTopListFileName($db) : string
+    {
+        return 'toplist_' . $db . '.txt';
+    }
+
+    /**
+     * Create top list file for the specified db and filename
+     * @param $db
+     * @param $filename
+     * @return string
+     */
+    static function createTopList($db, $filename) : string
+    {
+        $already_present = false;
+        $topListContents = "";
+        try {
+            $topListContents = Storage::disk('public')->get($filename);
+            $lastmodified = Storage::disk('public')->lastModified($filename);
+            $lastmodified = DateTime::createFromFormat("U", $lastmodified);
+            if($lastmodified->format("Y-m-d") == Carbon::now()->format("Y-m-d")) {
+                $already_present = true;
+            }
+        } catch (FileNotFoundException $e) { }
+
+        if ($already_present) {
+            return $topListContents;
+        }
+
+        $filenameDated = substr($filename, 0, strrpos($filename, ".")) . "_" . date("Y-m-d") . ".txt";
+
+        $topListContents = "Runescape hiscore tables" . "\n";
+        $topListContents .= ("Last updated " . date("d-M-Y") . "\n");
+
+        $topListContents .= ("." . "\n");
+        $hiscores = (new HiscoresController)->getTopListSelect($db);
+        $topListContents .= ("Top 25 players - score is total of all skills" . "\n");
+        $index = 1;
+        foreach ($hiscores->orderBy('b.skill_total', 'desc')->get() as $hiscore)
+        {
+            $topListContents .= ($index . ": " . $hiscore->username . " " . $hiscore->skill_total . "\n");
+            $index++;
+        }
+
+        $topListContents .= ("." . "\n");
+        $hiscores = (new HiscoresController)->getTopListSelect($db);
+        $topListContents .= ("Top 25 fighters - score is average combat skill" . "\n");
+        $index = 1;
+        foreach ($hiscores->orderBy('b.combat', 'desc')->get() as $hiscore)
+        {
+            $topListContents .= ($index . ": " . $hiscore->username . " " . $hiscore->combat . "\n");
+            $index++;
+        }
+
+        $professions = array('smiths' => 'smithing', 'miners' => 'mining', 'cooks' => 'cooking', 'rangers' => 'ranged', 'crafters' => 'crafting');
+
+        foreach ($professions as $name => $skill) {
+            $topListContents .= ("." . "\n");
+            $hiscores = (new HiscoresController)->getTopListSelect($db);
+            $topListContents .= ("Top 25 " . $name . "\n");
+            $index = 1;
+            foreach ($hiscores->orderBy('a.' . $skill, 'desc')->get() as $hiscore)
+            {
+                $topListContents .= ($index . ": " . $hiscore->username . " " . $hiscore->$skill . "\n");
+                $index++;
+            }
+        }
+
+        Storage::disk('public')->put($filename, $topListContents);
+        Storage::disk('public')->put($filenameDated, $topListContents);
+
+        return $topListContents;
+    }
+
+    private function getTopListSelect($db) : Builder
+    {
+        return DB::connection($db)
+            ->table('experience as a')
+            ->join('players as b', 'a.playerID', '=', 'b.id')
+            ->join('maxstats as d', 'a.playerID', '=', 'd.playerID')
+            ->select('a.*', 'b.*', 'd.*',  DB::raw('
+			(SUM((' . $this->cast('a', 'attack') . ') +
+			(' . $this->cast('a', 'strength') . ') +
+			(' . $this->cast('a', 'defense') . ') +
+			(' . $this->cast('a', 'hits') . ') +
+			(' . $this->cast('a', 'ranged') . ') +
+			(' . $this->cast('a', 'prayGood') . ') +
+			(' . $this->cast('a', 'prayEvil') . ') +
+			(' . $this->cast('a', 'goodMagic') . ') +
+			(' . $this->cast('a', 'evilMagic') . ') +
+			(' . $this->cast('a', 'cooking') . ') +
+			(' . $this->cast('a', 'woodcutting') . ') +
+			(' . $this->cast('a', 'firemaking') . ') +
+			(' . $this->cast('a', 'crafting') . ') +
+			(' . $this->cast('a', 'smithing') . ') +
+			(' . $this->cast('a', 'mining') . ') +
+			(' . $this->cast('a', 'influence') . ') +
+			(' . $this->cast('a', 'thieving') . ') +
+			(' . $this->cast('a', 'tailoring') . ') +
+			(' . $this->cast('a', 'herblaw') . '))
+			/4.0)
+			as total_xp'))
+            ->whereNotIn('b.banned', [-1, 1])
+            ->where([
+                ['b.group_id', '>=', '8'],
+            ])
+            ->groupBy('b.username')
+            ->limit(25);
     }
 }
