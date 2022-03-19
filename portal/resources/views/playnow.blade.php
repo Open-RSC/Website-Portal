@@ -7,7 +7,7 @@
 
     <div style="text-align: center;">
         <div style="text-align: center;">
-            <table width=500 bgcolor=black cellpadding=4 border=0>
+            <table bgcolor=black cellpadding=4 border=0 class="playable-worlds-table">
                 <tr>
                     <td class="e">
 
@@ -25,7 +25,7 @@
                                 <tr valign="top" class="pt-2">
 
                                     <!-- Left side -->
-                                    <td align=center width=160>
+                                    <td align=center class="worlds-table-left-column">
                                         <table>
                                             <tr>
                                                 <td colspan=2>
@@ -74,7 +74,7 @@
                                     </td>
 
                                     <!-- Center -->
-                                    <td align=center width=161>
+                                    <td align=center class="worlds-table-middle-column">
                                         <table>
                                             <tr>
                                                 <td colspan=2>
@@ -124,7 +124,7 @@
                                     </td>
 
                                     <!-- Right side -->
-                                    <td align=center width=180>
+                                    <td align=center class="worlds-table-right-column">
                                         <table>
                                             <tr>
                                                 <td colspan=2>
@@ -180,98 +180,87 @@
         </div>
     </div>
 
-    <table width=100% height=100% cellpadding=0 cellspacing=0>
+    <table cellpadding=0 cellspacing=0>
         <tr>
             <td valign=middle>
                 <div style="text-align: center;">
-                    <table width=600 cellpadding=0 cellspacing=0 border=0 background=../img/background2.jpg>
+                    <table class="promo-tiles-and-sword-table" cellpadding=0 cellspacing=0 border=0 
+                        background=../img/background2.jpg>
                         <tr>
                             <td valign=bottom>
-                                <DIV STYLE="LEFT: 0px; TOP: -45px; POSITION: relative;">
-                                    <DIV STYLE="RIGHT: 0px; TOP: 0px; width:100%; POSITION: absolute;">
-                                        <DIV STYLE="LEFT: 0px; TOP: 45px; POSITION: relative;">
-                                            <DIV STYLE="RIGHT: 0px; TOP: 0px; width:100%; POSITION: absolute;">
-                                                <center>
-                                                    <table border=0 width=450>
-                                                        <tr>
-                                                            <td align=center>
-                                                                <table width=150 bgcolor=black cellpadding=4>
-                                                                    <tr>
-                                                                        <td class=b bgcolor=#474747
-                                                                            background='/img/stoneback.gif'>
-                                                                            <div style="text-align: center;">
-                                                                                <a href="/rules" class="c">
-                                                                                    <b>Rules of conduct</b>
-                                                                                </a>
-                                                                                <span class="d-block">
-                                                                                    Know the rules - don't risk being banned from the game
-                                                                                </span>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                            <td align=center>
-                                                                <table width=150 bgcolor=black cellpadding=4>
-                                                                    <tr>
-                                                                        <td class=b bgcolor=#474747
-                                                                            background='/img/stoneback.gif'>
-                                                                            <div style="text-align: center;">
-                                                                                <a href="https://gitlab.com/open-runescape-classic/core"
-                                                                                   class="c" target="_parent">
-                                                                                    <span style="color: #ffbb22; ">
-                                                                                        <b>
-                                                                                            Contribute Fixes
-                                                                                        </b>
-                                                                                    </span>
-                                                                                </a>
-                                                                                <span class="d-block">
-                                                                                    Report bugs and submit merge requests to help out!
-                                                                                </span>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                            <td align=center>
-                                                                <table width=150 bgcolor=black cellpadding=4>
-                                                                    <tr>
-                                                                        <td class=b bgcolor=#474747
-                                                                            background='/img/stoneback.gif'>
-                                                                            <div style="text-align: center;">
-                                                                                <a href="/faq" class="c">
-                                                                                    <b>Security tips</b>
-                                                                                </a>
-                                                                                <span class="d-block">
-                                                                                    Protect your password and read this important information
-                                                                                </span>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </center>
-                                            </div>
-                                        </div>
-                                        <center>
-                                            <table border=0 width=450>
-                                                <tr>
-                                                    <td width="150"></td>
-                                                    <td width="150" align="center">
-                                                        <img src="/img/swordarrow.gif" border="0" alt="">
-                                                    </td>
-                                                    <td width="150"></td>
-                                                </tr>
-                                            </table>
-                                        </center>
-                                    </div>
-                                </div>
-
+                                <center>
+                                    <table border=0 class="promo-tiles-table">
+                                        <tr>
+                                            <td align=center>
+                                                <table class="promo-tiles-table-left-col" bgcolor=black cellpadding=4>
+                                                    <tr>
+                                                        <td class=b bgcolor=#474747
+                                                            background='/img/stoneback.gif'>
+                                                            <div style="text-align: center;">
+                                                                <a href="/rules" class="c">
+                                                                    <b>Rules of conduct</b>
+                                                                </a>
+                                                                <span class="d-block">
+                                                                    Know the rules - don't risk being banned from the game
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td align=center>
+                                                <table class="promo-tile-middle-col" bgcolor=black cellpadding=4>
+                                                    <tr>
+                                                        <td class=b bgcolor=#474747
+                                                            background='/img/stoneback.gif'>
+                                                            <div style="text-align: center;">
+                                                                <a href="https://gitlab.com/open-runescape-classic/core"
+                                                                    class="c" target="_parent">
+                                                                    <span style="color: #ffbb22; ">
+                                                                        <b>
+                                                                            Contribute Fixes
+                                                                        </b>
+                                                                    </span>
+                                                                </a>
+                                                                <span class="d-block">
+                                                                    Report bugs and submit merge requests to help out!
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td align=center>
+                                                <table class="promo-tile-right-col" bgcolor=black cellpadding=4>
+                                                    <tr>
+                                                        <td class=b bgcolor=#474747
+                                                            background='/img/stoneback.gif'>
+                                                            <div style="text-align: center;">
+                                                                <a href="/faq" class="c">
+                                                                    <b>Security tips</b>
+                                                                </a>
+                                                                <span class="d-block">
+                                                                    Protect your password and read this important information
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border=0 class="sword-graphic-table">
+                                        <tr>
+                                            <td class="sword-left-col"></td>
+                                            <td class="sword-middle-col" align="center">
+                                                <img src="/img/swordarrow.gif" border="0" alt="">
+                                            </td>
+                                            <td class="sword-right-col"></td>
+                                        </tr>
+                                    </table>
+                                </center>
                                 <div class="pt-5"></div>
                                 <div class="pt-3"></div>
-
                             </td>
                         </tr>
                     </table>

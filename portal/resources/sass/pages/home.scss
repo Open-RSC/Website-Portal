@@ -1,3 +1,32 @@
-.test-class-pa {
-    background-color: $orange;
+.homepage-logo-container {
+    margin: 10px 0;
+
+    @media (min-width: $tablet-breakpoint) {
+        margin: 0;
+    }
+}
+
+.homepage-logo {
+    height: 120px;
+    margin: 0 auto;
+}
+
+.homepage-content {
+    padding: 0;
+    background: black;
+}
+
+.homepage-section-content {
+    padding: 0;
+    background-repeat: no-repeat;
+    background-color: black;
+    width: 100%;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 500px;
+    }
+}
+
+.homepage-online-worlds-table {
+    width: 178px;
 }

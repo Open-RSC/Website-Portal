@@ -1,0 +1,57 @@
+.playable-worlds-table {
+    width: 500px;
+}
+
+.worlds-table-left-column {
+    width: 160px;
+}
+
+.worlds-table-middle-column {
+    width: 161px;
+}
+
+.worlds-table-right-column {
+    width: 180px;
+}
+
+.promo-tiles-and-sword-table {
+    width: 600px;
+}
+
+.promo-tiles-table {
+    width: 450px;
+    // TODO: This doesn't work great because adding margin above the table f's up the bkrd.
+    // Maybe implement the sword graphic as a background image and remove the need for absolute positioning
+    position: absolute;
+    left: calc(50% - 225px); // 225px = half the width of the tiles table
+    top: calc(50% - 96px); // 96px = height of the tiles table
+
+}
+
+.promo-tile-left-col {
+    width: 150px;
+}
+
+.promo-tile-middle-col {
+    width: 150px;
+}
+
+.promo-tile-right-col {
+    width: 150px;
+}
+
+.sword-graphic-table {
+    width: 450px;
+}
+
+.sword-left-col {
+   width: 150px; 
+}
+
+.sword-middle-col {
+    width: 150px; 
+ }
+
+ .sword-right-col {
+    width: 150px; 
+ }
