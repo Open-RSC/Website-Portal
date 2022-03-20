@@ -74,7 +74,7 @@
                             </div>
                             <!--Player-->
                             <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c" href="/player/{{ $db }}/{{ $player->id }}">{{ ucfirst($player->username) }}</a>
+                                <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Total Level-->
                             <div class="text-right" style="padding-right:15px; width:30px;">

@@ -71,7 +71,7 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('PRESERVATION_DATABASE', 'openrsc'),
+            'database' => env('PRESERVATION_DATABASE', 'preservation'),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', 'root'),
             'unix_socket' => env('DB_SOCKET', ''),
