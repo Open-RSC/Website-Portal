@@ -2,12 +2,16 @@ package mudclient;
 
 import java.io.IOException;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
 import org.teavm.jso.dom.events.MouseEvent;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.TextRectangle;
 import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
@@ -42,6 +46,7 @@ public class GameShell {
    public int lastKeyCode1;
    public int lastKeyCode2;
    private HTMLCanvasElement canvas;
+   private HTMLInputElement mobileInput;
    private boolean ignoreInterlace = false;
    public boolean interlace = false;
    public String inputTextCurrent = "";
@@ -64,6 +69,25 @@ public class GameShell {
 
    public void drawHbar() {
    }
+   
+   @JSBody(params = { "event", "keyChar" }, script = "return new KeyboardEvent('keydown', { 'key': keyChar ? keyChar : event.data });")
+   public static native KeyboardEvent keyEvent(Event event, String keyChar);
+   
+   public static KeyboardEvent keyEvent(Event event) {
+	   return keyEvent(event, "");
+   }
+   
+   @JSBody(params = { "event", "type" }, script = "return new event.constructor(type ? type : event.type, event);")
+   public static native Event clone(Event event, String type);
+   
+   @JSBody(params = { "message" }, script = "console.log(message)")
+   public static native void log(Event message);
+   
+   @JSBody(params = { "object", "property", "value" }, script = "object[property] = value")
+   public static native void setProperty(JSObject object, String property, String value);
+   
+   @JSBody(params = { }, script = "return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)")
+   public static native boolean isMobile();
 
    public final void startApplication(int width, int height, String title, boolean var4) {
       this.applicationMode = true;
@@ -130,12 +154,42 @@ public class GameShell {
             int code = event.getKeyCode();
             keyUp(code);
          }
-      });                                                                     
+      });
+      
+      
+      this.mobileInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.mobileInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.mobileInput.setAttribute("style", "width:512px;");
+      this.mobileInput.setAttribute("autocorrect", "off");
+      this.mobileInput.setAttribute("autocapitalize", "none");
+      this.mobileInput.setAttribute("autocomplete", "off");
+      
+      this.mobileInput.addEventListener("keydown", new EventListener<KeyboardEvent>(){
+          public void handleEvent(KeyboardEvent evt)  {
+        	  if (evt.getKey().equals("Backspace") || evt.getKey().equals("Enter")) {
+        		  Event event = GameShell.clone((Event)evt, "keydown");
+            	  canvas.dispatchEvent(event);
+        	  }
+          }  
+      });
+      
+      this.mobileInput.addEventListener("input", new EventListener<Event>(){
+          public void handleEvent(Event evt) {
+        	  KeyboardEvent event = keyEvent(evt);
+        	  mobileInput.setValue("");
+        	  event.initEvent("keydown", true, true);
+        	  canvas.dispatchEvent(event);
+          }                                                                   
+       });
   
 
       this.graphics = new Graphics(this.canvas);
 
       HTMLDocument.current().getBody().appendChild(this.canvas);
+      if (isMobile()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.mobileInput);  
+      }
       
       this.start();
       this.run();
