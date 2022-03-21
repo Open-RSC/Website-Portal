@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
     <div aria-label="Pagination Navigation" class="pagination justify-content-center">
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+        <div class="sm:flex-1 sm:flex sm:items-center sm:justify-center">
             <div>
                 <?php
                 $start = $paginator->currentPage() - 2; // show 3 pagination links before current
