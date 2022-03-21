@@ -49,8 +49,7 @@ class PlayerController extends Controller
                             $join->on("a.playerid", "=", "b.id");
                         })
                         ->select("a.$skill")
-                        ->where("a.playerid", "=", $subpage)
-                        ->orWhere("b.username", "=", $subpage);
+                        ->where("b.username", "=", $subpage);
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
@@ -69,8 +68,7 @@ class PlayerController extends Controller
                             $join->on("a.playerid", "=", "b.id");
                         })
                         ->select("a.$skill")
-                        ->where("a.playerid", "=", $subpage)
-                        ->orWhere("b.username", "=", $subpage);
+                        ->where("b.username", "=", $subpage);
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
@@ -99,13 +97,6 @@ class PlayerController extends Controller
      */
     public function index($db, $subpage): \Illuminate\Contracts\View\View|Factory|Application
     {
-        /**
-         * @var $subpage
-         * Replaces spaces with underlines
-         */
-        $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
-        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
-
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
         } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
@@ -148,9 +139,6 @@ class PlayerController extends Controller
 			as total_xp
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
-                    ['b.id', '=', $subpage],
-                ])
-                ->orWhere([
                     ['b.username', '=', $subpage],
                 ])
                 ->get();
@@ -182,9 +170,6 @@ class PlayerController extends Controller
 			as total_xp
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
-                    ['b.id', '=', $subpage],
-                ])
-                ->orWhere([
                     ['b.username', '=', $subpage],
                 ])
                 ->get();
@@ -215,9 +200,6 @@ class PlayerController extends Controller
 			as total_xp
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
-                    ['b.id', '=', $subpage],
-                ])
-                ->orWhere([
                     ['b.username', '=', $subpage],
                 ])
                 ->get();
@@ -270,11 +252,6 @@ class PlayerController extends Controller
                             ->orderBy('b.skill_total', 'desc')
                             ->whereNotIn('b.banned', [-1, 1])
                             ->where([
-                                ['b.group_id', '>=', '8'],
-                                ["b.id", '=', $subpage],
-                            ])
-                            ->orWhere([
-                                ['b.banned', '!=', '-1'],
                                 ['b.group_id', '>=', '8'],
                                 ["b.username", '=', $subpage],
                             ]);
@@ -332,13 +309,6 @@ class PlayerController extends Controller
     public function bank($db, $subpage)
     {
         /**
-         * @var $subpage
-         * Replaces spaces with underlines
-         */
-        $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
-        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
-
-        /**
          * @var $banks
          * Fetches the table row of the player experience in view and paginates the results
          */
@@ -349,9 +319,6 @@ class PlayerController extends Controller
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->whereNotIn('b.banned', [-1, 1])
             ->where([
-                ['b.id', '=', $subpage],
-            ])
-            ->orWhere([
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
@@ -381,13 +348,6 @@ class PlayerController extends Controller
     public function invitem($db, $subpage)
     {
         /**
-         * @var $subpage
-         * Replaces spaces with underlines
-         */
-        $subpage = preg_replace("/[^A-Za-z0-9 ]/", "_", $subpage);
-        $db = preg_replace("/[^A-Za-z0-9 ]/", "_", $db);
-
-        /**
          * @var $banks
          * Fetches the table row of the player experience in view and paginates the results
          */
@@ -398,9 +358,6 @@ class PlayerController extends Controller
             ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
             ->whereNotIn('b.banned', [-1, 1])
             ->where([
-                ['b.id', '=', $subpage],
-            ])
-            ->orWhere([
                 ['b.username', '=', $subpage],
             ])
             ->orderBy('a.slot', 'asc')
