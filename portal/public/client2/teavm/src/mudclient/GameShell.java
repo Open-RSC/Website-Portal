@@ -158,11 +158,13 @@ public class GameShell {
       
       
       this.mobileInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.mobileInput.setAttribute("type", "password");
       this.mobileInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
-      this.mobileInput.setAttribute("style", "width:512px;");
+      this.mobileInput.setAttribute("style", "width:512px; height:15px;");
       this.mobileInput.setAttribute("autocorrect", "off");
       this.mobileInput.setAttribute("autocapitalize", "none");
       this.mobileInput.setAttribute("autocomplete", "off");
+      this.mobileInput.setAttribute("maxlength", "1");
       
       this.mobileInput.addEventListener("keydown", new EventListener<KeyboardEvent>(){
           public void handleEvent(KeyboardEvent evt)  {
@@ -175,10 +177,10 @@ public class GameShell {
       
       this.mobileInput.addEventListener("input", new EventListener<Event>(){
           public void handleEvent(Event evt) {
-        	  KeyboardEvent event = keyEvent(evt);
-        	  mobileInput.setValue("");
-        	  event.initEvent("keydown", true, true);
+        	  String val = mobileInput.getValue();
+        	  KeyboardEvent event = keyEvent(evt, val.substring(val.length() - 1));
         	  canvas.dispatchEvent(event);
+        	  mobileInput.setValue("");
           }                                                                   
        });
   
