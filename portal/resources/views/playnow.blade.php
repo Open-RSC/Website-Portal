@@ -1,7 +1,7 @@
 @extends('template')
 @section('content')
 
-    <span class="d-block">
+    <span class="orsc-download-links d-block">
         Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
     </span>
 
@@ -179,13 +179,12 @@
             </table>
         </div>
     </div>
-
-    <table cellpadding=0 cellspacing=0>
+    <!--TODO: These tables could maybe be cleaned up -->
+    <table cellpadding=0 cellspacing=0 class="promo-tiles-table-main">
         <tr>
             <td valign=middle>
                 <div style="text-align: center;">
-                    <table class="promo-tiles-and-sword-table" cellpadding=0 cellspacing=0 border=0 
-                        background=../img/background2.jpg>
+                    <table class="promo-tiles-and-sword-table" cellpadding=0 cellspacing=0 border=0>
                         <tr>
                             <td valign=bottom>
                                 <center>
@@ -249,17 +248,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <table border=0 class="sword-graphic-table">
-                                        <tr>
-                                            <td class="sword-left-col"></td>
-                                            <td class="sword-middle-col" align="center">
-                                                <img src="/img/swordarrow.gif" border="0" alt="">
-                                            </td>
-                                            <td class="sword-right-col"></td>
-                                        </tr>
-                                    </table>
                                 </center>
-                                <div class="pt-5"></div>
                                 <div class="pt-3"></div>
                             </td>
                         </tr>

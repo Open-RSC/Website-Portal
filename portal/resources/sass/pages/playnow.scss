@@ -1,3 +1,13 @@
+// NOTE: Mobile responsiveness has not been started for this page yet, 
+// we are currently trying to get desktop to look normal after moving styles from inline.
+
+.orsc-download-links {
+    font-family: system-ui;
+    a {
+        text-decoration: none;
+    }
+}
+
 .playable-worlds-table {
     width: 500px;
 }
@@ -14,17 +24,22 @@
     width: 180px;
 }
 
+.promo-tiles-table-main {
+    margin-top: 20px;
+}
+
 .promo-tiles-and-sword-table {
     width: 600px;
+
+    background-image: url('/img/swordarrow.gif');
+    background-repeat: no-repeat;
+    background-position: top;
+    // height: 155px;
 }
 
 .promo-tiles-table {
+    margin-top: 43px;
     width: 450px;
-    // TODO: This doesn't work great because adding margin above the table f's up the bkrd.
-    // Maybe implement the sword graphic as a background image and remove the need for absolute positioning
-    position: absolute;
-    left: calc(50% - 225px); // 225px = half the width of the tiles table
-    top: calc(50% - 96px); // 96px = height of the tiles table
 
 }
 

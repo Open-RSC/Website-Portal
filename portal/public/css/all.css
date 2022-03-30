@@ -17040,7 +17040,7 @@ body {
   }
 }
 
-a, a:visited {
+a, a:visited, a:hover {
   color: #90c040;
 }
 
@@ -17292,15 +17292,23 @@ div.top-left-border {
 }
 
 div.top-middle-border {
-  width: 400px;
   height: 43px;
   background-image: url("/img/edge_c.jpg");
 }
+@media (min-width: 768px) {
+  div.top-middle-border {
+    width: 400px;
+  }
+}
 
 div.top-middle-border2 {
-  width: 400px;
   height: 43px;
   background-image: url("/img/edge_c2.jpg");
+}
+@media (min-width: 768px) {
+  div.top-middle-border2 {
+    width: 400px;
+  }
 }
 
 div.top-right-border {
@@ -17595,24 +17603,30 @@ section > div.bottom-left-border {
 
 section > div.bottom-middle {
   height: 50px;
-  width: 400px;
+  width: auto;
   display: flex;
   flex-direction: column;
 }
 @media (min-width: 1440px) {
   section > div.bottom-middle {
+    width: 400px;
     height: 82px;
   }
 }
 
 section > div.bottom-middle > div.copyright {
   display: table-cell;
-  width: 400px;
+  width: auto;
   height: 39px;
   font-size: 11px;
   text-align: center;
   vertical-align: bottom;
   font-family: system-ui;
+}
+@media (min-width: 768px) {
+  section > div.bottom-middle > div.copyright {
+    width: 400px;
+  }
 }
 
 section > div.bottom-middle > div.bottom-middle-border {
@@ -18024,6 +18038,9 @@ nav ul li:hover > ul {
     width: 94%;
   }
 }
+.navbar-expand-xxl {
+  font-family: system-ui;
+}
 .navbar-expand-xxl .flex-row {
   width: auto;
 }
@@ -18162,6 +18179,13 @@ nav ul li:hover > ul {
   flex-basis: 100%;
 }
 
+.orsc-download-links {
+  font-family: system-ui;
+}
+.orsc-download-links a {
+  text-decoration: none;
+}
+
 .playable-worlds-table {
   width: 500px;
 }
@@ -18178,11 +18202,19 @@ nav ul li:hover > ul {
   width: 180px;
 }
 
+.promo-tiles-table-main {
+  margin-top: 20px;
+}
+
 .promo-tiles-and-sword-table {
   width: 600px;
+  background-image: url("/img/swordarrow.gif");
+  background-repeat: no-repeat;
+  background-position: top;
 }
 
 .promo-tiles-table {
+  margin-top: 43px;
   width: 450px;
 }
 

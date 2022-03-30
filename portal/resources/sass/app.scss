@@ -24,8 +24,8 @@ body {
   }
 }
 
-a, a:visited {
-  color: rgb(144, 192, 64);
+a, a:visited, a:hover {
+  color: $LinkColor;
 }
 
 BODY, P, TD {
@@ -278,15 +278,21 @@ div.top-left-border {
 }
 
 div.top-middle-border {
-  width: 400px;
   height: 43px;
   background-image: url("/img/edge_c.jpg");
+
+  @media (min-width: $tablet-breakpoint) {
+    width: 400px;
+  }
 }
 
 div.top-middle-border2 {
-  width: 400px;
   height: 43px;
   background-image: url("/img/edge_c2.jpg");
+
+  @media (min-width: $tablet-breakpoint) {
+    width: 400px;
+  }
 }
 
 div.top-right-border {
@@ -583,23 +589,28 @@ section > div.bottom-left-border {
 
 section > div.bottom-middle {
   height: 50px;
-  width: 400px;
+  width: auto; // TODO: remove all width: autos that aren't necessary
   display: flex;
   flex-direction: column;
 
   @media (min-width: $desktop-breakpoint) {
+    width: 400px;
     height: 82px;
   }
 }
 
 section > div.bottom-middle > div.copyright {
   display: table-cell;
-  width: 400px;
+  width: auto;
   height: 39px;
   font-size: 11px;
   text-align: center;
   vertical-align: bottom;
   font-family: system-ui;
+
+  @media (min-width: $tablet-breakpoint) {
+    width: 400px;
+  }
 }
 
 section > div.bottom-middle > div.bottom-middle-border {
@@ -1002,12 +1013,16 @@ li > a:only-child:after {
   }
 }
 
-.navbar-expand-xxl .flex-row {
-  width: auto;
+.navbar-expand-xxl {
+  font-family: system-ui;
 
-  // TODO: Could probably change all $desktop-breakpoint media queries to $tablet-breakpoint.
-  @media (min-width: $desktop-breakpoint) {
-    width: 596px;
+  .flex-row {
+    width: auto;
+  
+    // TODO: Could probably change all $desktop-breakpoint media queries to $tablet-breakpoint.
+    @media (min-width: $desktop-breakpoint) {
+      width: 596px;
+    }
   }
 }
 
