@@ -18181,13 +18181,16 @@ nav ul li:hover > ul {
 
 .orsc-download-links {
   font-family: system-ui;
+  text-align: center;
 }
 .orsc-download-links a {
   text-decoration: none;
 }
 
-.playable-worlds-table {
-  width: 500px;
+@media (min-width: 768px) {
+  .playable-worlds-table {
+    width: 500px;
+  }
 }
 
 .worlds-table-left-column {
@@ -18207,41 +18210,39 @@ nav ul li:hover > ul {
 }
 
 .promo-tiles-and-sword-table {
-  width: 600px;
   background-image: url("/img/swordarrow.gif");
   background-repeat: no-repeat;
   background-position: top;
 }
+@media (min-width: 768px) {
+  .promo-tiles-and-sword-table {
+    width: 600px;
+  }
+}
 
 .promo-tiles-table {
   margin-top: 43px;
-  width: 450px;
+}
+@media (min-width: 768px) {
+  .promo-tiles-table {
+    width: 450px;
+  }
 }
 
-.promo-tile-left-col {
-  width: 150px;
+@media (min-width: 768px) {
+  .promo-tile-left-col {
+    width: 150px;
+  }
 }
 
-.promo-tile-middle-col {
-  width: 150px;
+@media (min-width: 768px) {
+  .promo-tile-middle-col {
+    width: 150px;
+  }
 }
 
-.promo-tile-right-col {
-  width: 150px;
-}
-
-.sword-graphic-table {
-  width: 450px;
-}
-
-.sword-left-col {
-  width: 150px;
-}
-
-.sword-middle-col {
-  width: 150px;
-}
-
-.sword-right-col {
-  width: 150px;
+@media (min-width: 768px) {
+  .promo-tile-right-col {
+    width: 150px;
+  }
 }

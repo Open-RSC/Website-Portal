@@ -191,7 +191,7 @@
                                     <table border=0 class="promo-tiles-table">
                                         <tr>
                                             <td align=center>
-                                                <table class="promo-tiles-table-left-col" bgcolor=black cellpadding=4>
+                                                <table class="promo-tile-left-col" bgcolor=black cellpadding=4>
                                                     <tr>
                                                         <td class=b bgcolor=#474747
                                                             background='/img/stoneback.gif'>
