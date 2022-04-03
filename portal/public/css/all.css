@@ -18212,11 +18212,14 @@ nav ul li:hover > ul {
 .promo-tiles-and-sword-table {
   background-image: url("/img/swordarrow.gif");
   background-repeat: no-repeat;
-  background-position: top;
+  background-position-y: top;
+  background-position-x: 153px;
+  margin: 0 10px 0 10px;
 }
 @media (min-width: 768px) {
   .promo-tiles-and-sword-table {
     width: 600px;
+    margin: 0;
   }
 }
 
@@ -18230,19 +18233,17 @@ nav ul li:hover > ul {
 }
 
 @media (min-width: 768px) {
-  .promo-tile-left-col {
+  .promo-tile-col {
     width: 150px;
   }
 }
 
-@media (min-width: 768px) {
-  .promo-tile-middle-col {
-    width: 150px;
-  }
+.orsc-register-page {
+  background-color: black;
+  padding: 4px;
 }
-
 @media (min-width: 768px) {
-  .promo-tile-right-col {
-    width: 150px;
+  .orsc-register-page {
+    width: 500px;
   }
 }

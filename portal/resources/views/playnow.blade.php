@@ -191,7 +191,7 @@
                                     <table border=0 class="promo-tiles-table">
                                         <tr>
                                             <td align=center>
-                                                <table class="promo-tile-left-col" bgcolor=black cellpadding=4>
+                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
                                                     <tr>
                                                         <td class=b bgcolor=#474747
                                                             background='/img/stoneback.gif'>
@@ -208,7 +208,7 @@
                                                 </table>
                                             </td>
                                             <td align=center>
-                                                <table class="promo-tile-middle-col" bgcolor=black cellpadding=4>
+                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
                                                     <tr>
                                                         <td class=b bgcolor=#474747
                                                             background='/img/stoneback.gif'>
@@ -230,7 +230,7 @@
                                                 </table>
                                             </td>
                                             <td align=center>
-                                                <table class="promo-tile-right-col" bgcolor=black cellpadding=4>
+                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
                                                     <tr>
                                                         <td class=b bgcolor=#474747
                                                             background='/img/stoneback.gif'>

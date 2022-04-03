@@ -99,7 +99,7 @@
                                                                     href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
-                                                                    href="https://runescapeclassic.dev/wiki/index.php/Running_your_own_server">Running your own production server</a></span>
+                                                                    href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>
 
         <span class="text-danger font-weight-bold d-block pt-4">Who are the Open RuneScape Classic project admins?</span>
         <a class="link-success underline" target="_blank" href="https://gitlab.com/kenix3">Kenix</a>, <a

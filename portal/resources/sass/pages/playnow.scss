@@ -1,6 +1,3 @@
-// NOTE: Mobile responsiveness has not been started for this page yet, 
-// we are currently trying to get desktop to look normal after moving styles from inline.
-
 .orsc-download-links {
     font-family: system-ui;
     text-align: center;
@@ -35,10 +32,13 @@
 .promo-tiles-and-sword-table {
     background-image: url('/img/swordarrow.gif');
     background-repeat: no-repeat;
-    background-position: top;
+    background-position-y: top;
+    background-position-x: 153px;
+    margin: 0 10px 0 10px;
 
     @media (min-width: $tablet-breakpoint) {
         width: 600px;
+        margin: 0;
     }
 }
 
@@ -50,19 +50,7 @@
     }
 }
 
-.promo-tile-left-col {
-    @media (min-width: $tablet-breakpoint) {
-        width: 150px;
-    }
-}
-
-.promo-tile-middle-col {
-    @media (min-width: $tablet-breakpoint) {
-        width: 150px;
-    }
-}
-
-.promo-tile-right-col {
+.promo-tile-col {
     @media (min-width: $tablet-breakpoint) {
         width: 150px;
     }

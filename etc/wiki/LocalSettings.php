@@ -30,7 +30,7 @@ $wgMetaNamespace = "Open_RSC_Wiki";
 $wgScriptPath = "/wiki";
 
 ## The protocol and server name to use in fully-qualified URLs
-## $wgServer = "https://wiki.runescapeclassic.dev";
+## $wgServer = "https://rsc.vet/wiki";
 $wgServer = "http://localhost";
 
 ## The URL path to static resources (images, scripts, etc.)
