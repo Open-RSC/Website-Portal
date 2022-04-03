@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.core.JSString;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLInputElement;
@@ -94,6 +95,7 @@ public class GameShell {
 
    private HTMLCanvasElement canvas;
    private HTMLInputElement mobileInput;
+   private HTMLInputElement switchInput;
    private boolean ignoreInterlace = false;
 
    // $FF: renamed from: a () void
@@ -125,10 +127,16 @@ public class GameShell {
    public static native void log(Event message);
    
    @JSBody(params = { "object", "property", "value" }, script = "object[property] = value")
-   public static native void setProperty(JSObject object, String property, String value);
+   public static native void setProperty(JSObject object, String property, JSObject value);
+   
+   @JSBody(params = { "object", "property", "elem" }, script = "return object[property]")
+   public static native <S extends JSObject> S getProperty(JSObject object, String property, S elem);
    
    @JSBody(params = { }, script = "return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)")
    public static native boolean isMobile();
+   
+   @JSBody(params = { }, script = "return /NintendoBrowser/i.test(navigator.userAgent)")
+   public static native boolean isSwitch();
 
    // $FF: renamed from: a (int, int, java.lang.String, boolean) void
    public final void startApplication(int width, int height, String title, boolean var4) {
@@ -208,6 +216,15 @@ public class GameShell {
       this.mobileInput.setAttribute("autocomplete", "off");
       this.mobileInput.setAttribute("maxlength", "1");
       
+      this.switchInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.switchInput.setAttribute("type", "password");
+      this.switchInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.switchInput.setAttribute("style", "width:512px; height:15px;");
+      this.switchInput.setAttribute("autocorrect", "off");
+      this.switchInput.setAttribute("autocapitalize", "none");
+      this.switchInput.setAttribute("autocomplete", "off");
+      this.switchInput.setAttribute("maxlength", "1");
+      
       this.mobileInput.addEventListener("keydown", new EventListener<KeyboardEvent>(){
           public void handleEvent(KeyboardEvent evt)  {
         	  if (evt.getKey().equals("Backspace") || evt.getKey().equals("Enter")) {
@@ -225,6 +242,24 @@ public class GameShell {
         	  mobileInput.setValue("");
           }                                                                   
        });
+      
+      this.switchInput.addEventListener("textInput", new EventListener<Event>(){
+          public void handleEvent(Event evt)  {
+        	  String val = getProperty(evt, "data", JSString.valueOf("")).stringValue();
+        	  for (char c : val.toCharArray()) {
+        		  keyDown(c);  
+        	  }
+          }  
+      });
+      
+      this.switchInput.addEventListener("input", new EventListener<KeyboardEvent>(){
+          public void handleEvent(KeyboardEvent evt)  {
+        	  if (getProperty(evt, "inputType", JSString.valueOf("")).stringValue().equals("deleteContentBackward")) {
+        		  keyDown(8);
+            	  switchInput.setValue("1");
+        	  }
+          }  
+      });
   
 
       this.graphics = new Graphics(this.canvas);
@@ -233,6 +268,9 @@ public class GameShell {
       if (isMobile()) {
     	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
           HTMLDocument.current().getBody().appendChild(this.mobileInput);  
+      } else if (isSwitch()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.switchInput);
       }
 
       this.start();
