@@ -131,42 +131,23 @@
                                                         <span class="m-1">Raleigh</span>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="http://game.openrsc.com/play/preservation/members">RSC Preservation</a></td>
-                                                    <td align="right">{{$preservation_online}} players</td>
-                                                </tr>
-                                                <tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="http://game.openrsc.com/play/cabbage/members">RSC Cabbage</a></td>
-                                                    <td align="right">{{$cabbage_online}} players</td>
-                                                </tr>
-                                                <tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="http://game.openrsc.com/play/uranium/members">RSC Uranium</a></td>
-                                                    <td align="right">{{$uranium_online}} cyborgs</td>
-                                                </tr>
-                                                <tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="http://game.openrsc.com/play/coleslaw/members">RSC Coleslaw</a></td>
-                                                    <td align="right">{{$coleslaw_online}} cyborgs</td>
-                                                </tr>
-                                                <!--<tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/2001scape">2001scape</a></td>
-                                                    <td align="right">{/{$retro_online}} players</td>
-                                                </tr>
-                                                <tr>
-                                                    <td valign="center"><a
-                                                                style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
-                                                                href="/play/openpk">Open PK</a></td>
-                                                    <td align="right">{/{$openpk_online}} players</td>
-                                                </tr>-->
+                                                @foreach($worlds as $world)
+                                                    @if(!$world["dev"])
+                                                        <tr>
+                                                            <td valign="center"><a
+                                                                        style="color: rgb(144, 192, 64) !important; TEXT-DECORATION: none;"
+                                                                        href="http://game.openrsc.com/play/{{$world['alias']}}/members">{{$world["name"]}}</a></td>
+                                                            <td align="right">
+                                                                @if ($world["type"] == "players")
+                                                                    <a
+                                                                            href="/onlinelist/{{$world['alias']}}"><font color="#ffffff">{{$world["online"]}} {{$world["type"]}}</font></a>
+                                                                @else
+                                                                    {{$world["online"]}} {{$world["type"]}}
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
                                                 <!--end worlds-->
                                                 </tbody>
                                             </table>

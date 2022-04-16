@@ -130,7 +130,7 @@
                                                 <td colspan=2>
                                                     <img align=absmiddle src=/img/usflag.gif
                                                          width=30 height=15 border=0>
-                                                    2001scape
+                                                    2001Scape
                                                 </td>
                                             </tr>
                                             <tr>

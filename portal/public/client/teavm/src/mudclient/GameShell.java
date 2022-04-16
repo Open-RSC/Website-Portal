@@ -2,14 +2,19 @@ package mudclient;
 
 import java.io.IOException;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.core.JSString;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.TextRectangle;
-import org.teavm.jso.typedarrays.Uint8ClampedArray;
+import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
 import org.teavm.jso.dom.events.MouseEvent;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 
 // $FF: renamed from: a.a.a
@@ -63,8 +68,6 @@ public class GameShell {
    public boolean keyLeftDown;
    // $FF: renamed from: A boolean
    public boolean keyRightDown;
-   // $FF: renamed from: D boolean
-   public boolean keySpaceDown;
    // $FF: renamed from: F int
    public int field_32;
    // $FF: renamed from: G int
@@ -91,6 +94,9 @@ public class GameShell {
    public String pmToSend;
 
    private HTMLCanvasElement canvas;
+   private HTMLInputElement mobileInput;
+   private HTMLInputElement switchInput;
+   private boolean ignoreInterlace = false;
 
    // $FF: renamed from: a () void
    public void startGame() {}
@@ -106,6 +112,31 @@ public class GameShell {
 
    // $FF: renamed from: e () void
    public void method_6() {}
+   
+   @JSBody(params = { "event", "keyChar" }, script = "return new KeyboardEvent('keydown', { 'key': keyChar ? keyChar : event.data });")
+   public static native KeyboardEvent keyEvent(Event event, String keyChar);
+   
+   public static KeyboardEvent keyEvent(Event event) {
+	   return keyEvent(event, "");
+   }
+   
+   @JSBody(params = { "event", "type" }, script = "return new event.constructor(type ? type : event.type, event);")
+   public static native Event clone(Event event, String type);
+   
+   @JSBody(params = { "message" }, script = "console.log(message)")
+   public static native void log(Event message);
+   
+   @JSBody(params = { "object", "property", "value" }, script = "object[property] = value")
+   public static native void setProperty(JSObject object, String property, JSObject value);
+   
+   @JSBody(params = { "object", "property", "elem" }, script = "return object[property]")
+   public static native <S extends JSObject> S getProperty(JSObject object, String property, S elem);
+   
+   @JSBody(params = { }, script = "return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)")
+   public static native boolean isMobile();
+   
+   @JSBody(params = { }, script = "return /NintendoBrowser/i.test(navigator.userAgent)")
+   public static native boolean isSwitch();
 
    // $FF: renamed from: a (int, int, java.lang.String, boolean) void
    public final void startApplication(int width, int height, String title, boolean var4) {
@@ -155,11 +186,15 @@ public class GameShell {
                                                                            
             char charCode =                                                 
                event.getKey().length() == 1 ? event.getKey().charAt(0) : (char) code;
-                                                                           
+
+            if (charCode == 112 && code == 80) {
+               ignoreInterlace = true;
+            }
+
             if (code == 8 || code == 13 || code == 10 || code == 9) {       
                charCode = (char) code;                                     
             }
-                                                                           
+
             keyDown(charCode);
          }                                                                   
       });                                                                     
@@ -169,12 +204,74 @@ public class GameShell {
             int code = event.getKeyCode();
             keyUp(code);
          }
-      });                                                                     
+      });
+      
+      
+      this.mobileInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.mobileInput.setAttribute("type", "password");
+      this.mobileInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.mobileInput.setAttribute("style", "width:512px; height:15px;");
+      this.mobileInput.setAttribute("autocorrect", "off");
+      this.mobileInput.setAttribute("autocapitalize", "none");
+      this.mobileInput.setAttribute("autocomplete", "off");
+      this.mobileInput.setAttribute("maxlength", "1");
+      
+      this.switchInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.switchInput.setAttribute("type", "password");
+      this.switchInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.switchInput.setAttribute("style", "width:512px; height:15px;");
+      this.switchInput.setAttribute("autocorrect", "off");
+      this.switchInput.setAttribute("autocapitalize", "none");
+      this.switchInput.setAttribute("autocomplete", "off");
+      this.switchInput.setAttribute("maxlength", "1");
+      
+      this.mobileInput.addEventListener("keydown", new EventListener<KeyboardEvent>(){
+          public void handleEvent(KeyboardEvent evt)  {
+        	  if (evt.getKey().equals("Backspace") || evt.getKey().equals("Enter")) {
+        		  Event event = GameShell.clone((Event)evt, "keydown");
+            	  canvas.dispatchEvent(event);
+        	  }
+          }  
+      });
+      
+      this.mobileInput.addEventListener("input", new EventListener<Event>(){
+          public void handleEvent(Event evt) {
+        	  String val = mobileInput.getValue();
+        	  KeyboardEvent event = keyEvent(evt, val.substring(val.length() - 1));
+        	  canvas.dispatchEvent(event);
+        	  mobileInput.setValue("");
+          }                                                                   
+       });
+      
+      this.switchInput.addEventListener("textInput", new EventListener<Event>(){
+          public void handleEvent(Event evt)  {
+        	  String val = getProperty(evt, "data", JSString.valueOf("")).stringValue();
+        	  for (char c : val.toCharArray()) {
+        		  keyDown(c);  
+        	  }
+          }  
+      });
+      
+      this.switchInput.addEventListener("input", new EventListener<KeyboardEvent>(){
+          public void handleEvent(KeyboardEvent evt)  {
+        	  if (getProperty(evt, "inputType", JSString.valueOf("")).stringValue().equals("deleteContentBackward")) {
+        		  keyDown(8);
+            	  switchInput.setValue("1");
+        	  }
+          }  
+      });
   
 
       this.graphics = new Graphics(this.canvas);
 
       HTMLDocument.current().getBody().appendChild(this.canvas);
+      if (isMobile()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.mobileInput);  
+      } else if (isSwitch()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.switchInput);
+      }
 
       this.start();
       this.run();
@@ -208,17 +305,21 @@ public class GameShell {
       this.field_38 = code;
       this.lastMouseAction = 0;
 
-      if(code == KeyEvent.VK_LEFT) {
+      if (code == KeyEvent.VK_LEFT) {
          this.keyLeftDown = true;
       } else if (code == KeyEvent.VK_RIGHT) {
          this.keyRightDown = true;
-      } else if ((char)code == KeyEvent.VK_SPACE) {
-         this.keySpaceDown = true;
-      } else if ((char)code == KeyEvent.VK_F1) {
-         this.interlace = !this.interlace;
       } else {
          // quick hack for now to prevent those keys from inputting into the chat box
          this.handleKeyPress(code);
+      }
+
+      if (!ignoreInterlace) {
+         if ((char)code == KeyEvent.VK_F1) {
+            this.interlace = !this.interlace;
+         }
+      } else {
+         this.ignoreInterlace = false;
       }
 
       boolean isText = false;
@@ -271,10 +372,6 @@ public class GameShell {
 
       if(var2 == KeyEvent.VK_RIGHT) {
          this.keyRightDown = false;
-      }
-
-      if((char)var2 == KeyEvent.VK_SPACE) {
-         this.keySpaceDown = false;
       }
 
       return true;
@@ -730,7 +827,6 @@ public class GameShell {
       this.helvetica = new Font("Helvetica", 0, 12);
       this.keyLeftDown = false;
       this.keyRightDown = false;
-      this.keySpaceDown = false;
       this.field_32 = 1;
       this.interlace = false;
       this.inputTextCurrent = "";

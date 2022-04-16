@@ -2,6 +2,19 @@
 
 @section('content')
 
+@if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username))
+    <div style="text-align: center;">
+        <table bgcolor=black cellpadding=4 border=0>
+            <tr>
+                <td class=e>
+                    <div style="text-align:center;">
+                        Account <span style="color:yellow"><?=$subpage?></span> does not exist
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+@else
     <div style="text-align: center;">
         <table class="hiscores-player-table" bgcolor="black" cellpadding="4" border="0">
             <tr>
@@ -57,8 +70,8 @@
                                     <td>
                                         @if($skill == 'skill_total')
                                         @else
-                                            <img src="{{ asset('img/skill_icons').'/'.$skill }}.gif" valign="bottom"
-                                                 width=16 height=16 alt="{{ $skill }}"/>
+                                            <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif" valign="bottom"
+                                                 width=16 height=16 alt="{{ strtolower($skill) }}"/>
                                         @endif
                                     </td>
                                     <td>
@@ -126,9 +139,14 @@
                     Never
                 @endif
             </span>
+            <span class="hiscores-player-stat">
+                ID: {{ $players->first()->id }}
+            </span>
         </div>
     @endif
 
     <div class="p-2"></div>
+@endif
+
 
 @endsection

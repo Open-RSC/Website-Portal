@@ -12,7 +12,7 @@
                             <div style="width:24px;">
                                 @if($skill == 'skill_total')
                                 @else
-                                    <img src="{{ asset('img/skill_icons').'/'.$skill }}.gif" alt="{{ $skill }}"/>
+                                    <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif" alt="{{ strtolower($skill) }}"/>
                                 @endif
                             </div>
                             <div style="width:40px;">
@@ -73,7 +73,7 @@
                             </div>
                             <!--Player-->
                             <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c" href="/player/{{ $db }}/{{ $player->id }}">{{ ucfirst($player->username) }}</a>
+                                <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Total Level-->
                             <div class="text-right" style="padding-right:15px; width:30px;">
