@@ -179,83 +179,43 @@
             </table>
         </div>
     </div>
-    <!--TODO: These tables could maybe be cleaned up -->
-    <table cellpadding=0 cellspacing=0 class="promo-tiles-table-main">
-        <tr>
-            <td valign=middle>
-                <div style="text-align: center;">
-                    <table class="promo-tiles-and-sword-table" cellpadding=0 cellspacing=0 border=0>
-                        <tr>
-                            <td valign=bottom>
-                                <center>
-                                    <table border=0 class="promo-tiles-table">
-                                        <tr>
-                                            <td align=center>
-                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
-                                                    <tr>
-                                                        <td class=b bgcolor=#474747
-                                                            background='/img/stoneback.gif'>
-                                                            <div style="text-align: center;">
-                                                                <a href="/rules" class="c">
-                                                                    <b>Rules of conduct</b>
-                                                                </a>
-                                                                <span class="d-block">
-                                                                    Know the rules - don't risk being banned from the game
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td align=center>
-                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
-                                                    <tr>
-                                                        <td class=b bgcolor=#474747
-                                                            background='/img/stoneback.gif'>
-                                                            <div style="text-align: center;">
-                                                                <a href="https://gitlab.com/open-runescape-classic/core"
-                                                                    class="c" target="_parent">
-                                                                    <span style="color: #ffbb22; ">
-                                                                        <b>
-                                                                            Contribute Fixes
-                                                                        </b>
-                                                                    </span>
-                                                                </a>
-                                                                <span class="d-block">
-                                                                    Report bugs and submit merge requests to help out!
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td align=center>
-                                                <table class="promo-tile-col" bgcolor=black cellpadding=4>
-                                                    <tr>
-                                                        <td class=b bgcolor=#474747
-                                                            background='/img/stoneback.gif'>
-                                                            <div style="text-align: center;">
-                                                                <a href="/faq" class="c">
-                                                                    <b>Security tips</b>
-                                                                </a>
-                                                                <span class="d-block">
-                                                                    Protect your password and read this important information
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </center>
-                                <div class="pt-3"></div>
-                            </td>
-                        </tr>
-                    </table>
+    <div class="promo-tiles-and-sword-table">
+        <div class="promo-tiles-table-main">
+            <div class="promo-tile-col">
+                <div class="promo-tile-col-inner b">
+                    <a href="/rules" class="c">
+                        <b>Rules of conduct</b>
+                    </a>
+                    <span class="d-block">
+                        Know the rules - don't risk being banned from the game
+                    </span>
                 </div>
-            </td>
-        </tr>
-    </table>
-
+            </div>
+            <div class="promo-tile-col">
+                <div class="promo-tile-col-inner b">
+                    <a href="https://gitlab.com/open-runescape-classic/core"
+                        class="c" target="_parent">
+                        <span style="color: #ffbb22; ">
+                            <b>
+                                Contribute Fixes
+                            </b>
+                        </span>
+                    </a>
+                    <span class="d-block">
+                        Report bugs and submit merge requests to help out!
+                    </span>
+                </div>
+            </div>
+            <div class="promo-tile-col">
+                <div class="promo-tile-col-inner b">
+                    <a href="/faq" class="c">
+                        <b>Security tips</b>
+                    </a>
+                    <span class="d-block">
+                        Protect your password and read this important information
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

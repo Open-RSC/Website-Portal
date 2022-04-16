@@ -18207,19 +18207,27 @@ nav ul li:hover > ul {
 
 .promo-tiles-table-main {
   margin-top: 20px;
+  text-align: center;
+  display: flex;
+}
+@media (min-width: 768px) {
+  .promo-tiles-table-main {
+    margin-top: 45px;
+  }
 }
 
 .promo-tiles-and-sword-table {
   background-image: url("/img/swordarrow.gif");
   background-repeat: no-repeat;
   background-position-y: top;
-  background-position-x: 153px;
+  background-position-x: calc(50% - 5px);
   margin: 0 10px 0 10px;
+  height: 100%;
 }
 @media (min-width: 768px) {
   .promo-tiles-and-sword-table {
-    width: 600px;
-    margin: 0;
+    background-position-x: 204px;
+    margin: 20px auto;
   }
 }
 
@@ -18232,9 +18240,26 @@ nav ul li:hover > ul {
   }
 }
 
+.promo-tile-col {
+  margin-top: 50px;
+  padding: 2px;
+  background-color: black;
+}
 @media (min-width: 768px) {
   .promo-tile-col {
+    margin: 0;
     width: 150px;
+  }
+}
+
+.promo-tile-col-inner {
+  background-color: #474747;
+  background-image: url("/img/stoneback.gif");
+  min-height: 125px;
+}
+@media (min-width: 768px) {
+  .promo-tile-col-inner {
+    min-height: auto;
   }
 }
 
