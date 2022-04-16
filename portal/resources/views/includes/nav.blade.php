@@ -31,7 +31,7 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+            <span class="p-2 dropdown-content nav-hiscores-dropdown">
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
                 <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
                 <a class="c text-left" href="/toplist/2001scape">2001Scape</a>

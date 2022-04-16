@@ -17945,6 +17945,17 @@ li > a:only-child:after {
   content: "";
 }
 
+.nav-hiscores-dropdown {
+  background: black;
+  width: 130px;
+  transform: translate(-20px);
+}
+@media (min-width: 768px) {
+  .nav-hiscores-dropdown {
+    transform: none;
+  }
+}
+
 .nav-guides-dropdown {
   background: black;
   width: 150px;
