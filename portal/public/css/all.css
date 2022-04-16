@@ -17265,7 +17265,7 @@ header li a:hover, .features a:hover {
   color: gold;
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   main {
     width: 600px;
     height: 613px;
@@ -17276,7 +17276,7 @@ header li a:hover, .features a:hover {
 section.top-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section.top-border {
     display: block;
     width: 605px;
@@ -17285,10 +17285,20 @@ section.top-border {
   }
 }
 
+section.orsc-webclient-mobile-border {
+  display: block;
+}
+
 div.top-left-border {
-  width: 100px;
-  height: 43px;
-  background-image: url("/img/edge_a.jpg");
+  display: none;
+}
+@media (min-width: 768px) {
+  div.top-left-border {
+    display: block;
+    width: 100px;
+    height: 43px;
+    background-image: url("/img/edge_a.jpg");
+  }
 }
 
 div.top-middle-border {
@@ -17304,17 +17314,19 @@ div.top-middle-border {
 div.top-middle-border2 {
   height: 43px;
   background-image: url("/img/edge_c2.jpg");
+  background-position-x: 53px;
 }
 @media (min-width: 768px) {
   div.top-middle-border2 {
     width: 400px;
+    background-position-x: 0;
   }
 }
 
 div.top-right-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   div.top-right-border {
     display: block;
     width: 100px;
@@ -17367,10 +17379,7 @@ p.online-count {
   line-height: 20px;
 }
 
-section.middle {
-  width: auto;
-}
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section.middle {
     width: 605px;
     display: flex;
@@ -17380,7 +17389,7 @@ section.middle {
 div.mid-left-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   div.mid-left-border {
     display: block;
     width: 41px;
@@ -17392,7 +17401,7 @@ div.mid-left-border {
 div.mid-right-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   div.mid-right-border {
     display: block;
     width: 41px;
@@ -17581,7 +17590,7 @@ div.orsc-buttons, div.cabbage-buttons {
   flex: 1 0 32%;
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section.bottom-border {
     width: 605px;
     height: 43px;
@@ -17592,7 +17601,7 @@ div.orsc-buttons, div.cabbage-buttons {
 section > div.bottom-left-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section > div.bottom-left-border {
     display: block;
     width: 100px;
@@ -17603,11 +17612,10 @@ section > div.bottom-left-border {
 
 section > div.bottom-middle {
   height: 50px;
-  width: auto;
   display: flex;
   flex-direction: column;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section > div.bottom-middle {
     width: 400px;
     height: 82px;
@@ -17616,7 +17624,6 @@ section > div.bottom-middle {
 
 section > div.bottom-middle > div.copyright {
   display: table-cell;
-  width: auto;
   height: 39px;
   font-size: 11px;
   text-align: center;
@@ -17632,7 +17639,7 @@ section > div.bottom-middle > div.copyright {
 section > div.bottom-middle > div.bottom-middle-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section > div.bottom-middle > div.bottom-middle-border {
     display: block;
     width: 400px;
@@ -17644,7 +17651,7 @@ section > div.bottom-middle > div.bottom-middle-border {
 section > div.bottom-right-border {
   display: none;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   section > div.bottom-right-border {
     display: block;
     width: 100px;
@@ -17754,7 +17761,6 @@ div.middle-content-server dl dd {
 
 .players-skills, .clan-members {
   flex: 1 0 50%;
-  width: auto;
 }
 
 .players-skills table, .clan-members table {
@@ -17939,6 +17945,17 @@ li > a:only-child:after {
   content: "";
 }
 
+.nav-guides-dropdown {
+  background: black;
+  width: 150px;
+  transform: translate(-70px);
+}
+@media (min-width: 768px) {
+  .nav-guides-dropdown {
+    transform: none;
+  }
+}
+
 /* Media Queries
 --------------------------------------------- */
 @media all and (max-width: 768px) {
@@ -18041,10 +18058,7 @@ nav ul li:hover > ul {
 .navbar-expand-xxl {
   font-family: system-ui;
 }
-.navbar-expand-xxl .flex-row {
-  width: auto;
-}
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   .navbar-expand-xxl .flex-row {
     width: 596px;
   }
@@ -18064,7 +18078,7 @@ nav ul li:hover > ul {
   padding: 4px;
   margin: 20px auto 0;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   .breadcrumb-bar {
     margin: 0;
   }
@@ -18123,7 +18137,7 @@ nav ul li:hover > ul {
 .hiscores-skill-list {
   width: 146px;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   .hiscores-skill-list {
     width: 170px;
     padding: 0 12px;
@@ -18138,7 +18152,7 @@ nav ul li:hover > ul {
   width: 276px;
   margin-top: 20px;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   .hiscores-player-list {
     width: 300px;
     padding: 0 12px;
@@ -18159,7 +18173,7 @@ nav ul li:hover > ul {
 .hiscores-player-table {
   margin: 0 auto;
 }
-@media (min-width: 1440px) {
+@media (min-width: 768px) {
   .hiscores-player-table {
     margin: 0;
   }
@@ -18171,6 +18185,11 @@ nav ul li:hover > ul {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+}
+@media (min-width: 768px) {
+  .hiscores-player-activity-stats {
+    flex-wrap: nowrap;
+  }
 }
 
 .hiscores-player-stat {

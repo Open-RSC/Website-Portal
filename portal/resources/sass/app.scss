@@ -251,7 +251,7 @@ header li a:hover, .features a:hover {
 }
 
 main {
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     width: 600px;
     height: 613px;
     flex: 1;
@@ -259,22 +259,29 @@ main {
 }
 
 section.top-border {
-   // TODO: Can probably bring this back for mobile
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 605px;
     height: 43px;
     display: flex;
   }
+}
 
+section.orsc-webclient-mobile-border {
+  display: block;
 }
 
 div.top-left-border {
-  width: 100px;
-  height: 43px;
-  background-image: url("/img/edge_a.jpg");
+  display: none;
+
+  @media (min-width: $tablet-breakpoint) {
+    display: block;
+    width: 100px;
+    height: 43px;
+    background-image: url("/img/edge_a.jpg");
+  }
 }
 
 div.top-middle-border {
@@ -289,16 +296,18 @@ div.top-middle-border {
 div.top-middle-border2 {
   height: 43px;
   background-image: url("/img/edge_c2.jpg");
+  background-position-x: 53px;
 
   @media (min-width: $tablet-breakpoint) {
     width: 400px;
+    background-position-x: 0;
   }
 }
 
 div.top-right-border {
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 100px;
     height: 43px;
@@ -351,24 +360,16 @@ p.online-count {
 }
 
 section.middle {
-  width: auto;
-
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     width: 605px;
     display: flex;
   }
-
-  // width: 605px;
-  // min-height: 377px;
-  // height: auto;
-  // display: flex;
-  // flex: 1;
 }
 
 div.mid-left-border {
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 41px;
     min-height: 377px;
@@ -379,7 +380,7 @@ div.mid-left-border {
 div.mid-right-border {
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 41px;
     min-height: 377px;
@@ -568,7 +569,7 @@ div.orsc-buttons, div.cabbage-buttons {
 }
 
 section.bottom-border {
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     width: 605px;
     height: 43px;
     display: flex;
@@ -578,7 +579,7 @@ section.bottom-border {
 section > div.bottom-left-border {
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 100px;
     height: 82px;
@@ -589,11 +590,10 @@ section > div.bottom-left-border {
 
 section > div.bottom-middle {
   height: 50px;
-  width: auto; // TODO: remove all width: autos that aren't necessary
   display: flex;
   flex-direction: column;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     width: 400px;
     height: 82px;
   }
@@ -601,7 +601,6 @@ section > div.bottom-middle {
 
 section > div.bottom-middle > div.copyright {
   display: table-cell;
-  width: auto;
   height: 39px;
   font-size: 11px;
   text-align: center;
@@ -616,7 +615,7 @@ section > div.bottom-middle > div.copyright {
 section > div.bottom-middle > div.bottom-middle-border {
   display: none;
  
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 400px;
     height: 43px;
@@ -627,7 +626,7 @@ section > div.bottom-middle > div.bottom-middle-border {
 section > div.bottom-right-border {
   display: none;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     display: block;
     width: 100px;
     height: 82px;
@@ -736,7 +735,6 @@ div.middle-content-server dl dd {
 
 .players-skills, .clan-members {
   flex: 1 0 50%;
-  width: auto;
 }
 
 .players-skills table, .clan-members table {
@@ -872,9 +870,6 @@ nav a {
   text-decoration: none;
 }
 
-nav ul li ul li:hover {
-}
-
 /* Background color change on Hover */
 nav a:hover {
   color: rgb(255, 255, 255);
@@ -922,6 +917,16 @@ li > a:after {
 
 li > a:only-child:after {
   content: '';
+}
+
+.nav-guides-dropdown {
+  background: black;
+  width: 150px;
+  transform: translate(-70px);
+
+  @media (min-width: $tablet-breakpoint) {
+    transform: none;
+  }
 }
 
 /* Media Queries
@@ -1017,10 +1022,7 @@ li > a:only-child:after {
   font-family: system-ui;
 
   .flex-row {
-    width: auto;
-  
-    // TODO: Could probably change all $desktop-breakpoint media queries to $tablet-breakpoint.
-    @media (min-width: $desktop-breakpoint) {
+    @media (min-width: $tablet-breakpoint) {
       width: 596px;
     }
   }
@@ -1040,7 +1042,7 @@ li > a:only-child:after {
   padding: 4px;
   margin: 20px auto 0;
 
-  @media (min-width: $desktop-breakpoint) {
+  @media (min-width: $tablet-breakpoint) {
     margin: 0;
   }
 }

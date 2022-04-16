@@ -42,7 +42,7 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Guides <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:150px;">
+            <span class="p-2 dropdown-content nav-guides-dropdown">
                 <a class="c text-left" href="{{ route('Wilderness Map') }}"><i
                             class="fas fa-map"></i> Wilderness Map</a>
                 <a class="c text-left" href="{{ route('Monster Database') }}"><i class="fas fa-book"></i> Monster Database</a>
