@@ -137,7 +137,9 @@
             Never
         @endif
     </span>
-
+    <span class="text-info">
+        ID: {{ $players->first()->id }}
+    </span>
     <div class="p-2"></div>
 @endif
 

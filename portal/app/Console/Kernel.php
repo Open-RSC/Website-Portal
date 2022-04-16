@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        /*$schedule->command('toplist:bi-monthly')
-            ->twiceMonthly(1, 16, '12:00');*/
+        $schedule->command('toplist:bi-monthly')
+            ->twiceMonthly(1, 16, '12:00');
     }
 
     /**
