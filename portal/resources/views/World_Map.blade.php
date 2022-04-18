@@ -11,6 +11,14 @@
 
         <div class="text-center" style="overflow: auto;">
             <script>
+                if (document) {
+                    document.addEventListener("DOMContentLoaded", function(event) {
+                        var scrollposX = sessionStorage.getItem('scrollposX');
+                        var scrollposY = sessionStorage.getItem('scrollposY');
+                        if (scrollposX && scrollPosY) window.scrollTo(scrollposX, scrollposY);
+                    });
+                }
+
                 function showPlayerPositions(context, img, charX, charY, username, charAdderX, charMultiplier, charAdderY,
                     crosshairWidth, crosshairHeight) {
                     context.drawImage(img, <?= mapWidth ?> - ((charX + charAdderX) * charMultiplier), 
@@ -20,16 +28,14 @@
                         (charY + charAdderY) * charMultiplier);
                 }
 
-                //automatically reload the page every 10 seconds
+                // Automatically reload the page every 20 seconds
                 function autoRefreshPage() {
-                    if (document && document.location) {
-                        document.location.reload(true)
-                    } else if (window && window.location) {
-                        window.location.reload(true)
-                    }
+                    sessionStorage.setItem('scrollposX', window.scrollX);
+                    sessionStorage.setItem('scrollposY', window.scrollY);
+                    location.reload();
                 }
                 
-                setInterval('autoRefreshPage()', 10000);
+                setInterval('autoRefreshPage()', 15000);
 
                 function drawPosition() {
                     const charAdderX = 6
