@@ -2,8 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('includes.header')
 
-<?# TODO: Determine if this file is used at all ?>
-
 @if(Route::currentRouteName() == 'World Map')
     <table class="breadcrumb-bar">
         <tbody>
