@@ -17274,19 +17274,14 @@ header li a:hover, .features a:hover {
 }
 
 section.top-border {
-  display: none;
+  display: block;
 }
 @media (min-width: 768px) {
   section.top-border {
-    display: block;
+    display: flex;
     width: 605px;
     height: 43px;
-    display: flex;
   }
-}
-
-section.orsc-webclient-mobile-border {
-  display: block;
 }
 
 div.top-left-border {
