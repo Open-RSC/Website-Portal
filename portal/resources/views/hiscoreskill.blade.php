@@ -1,10 +1,9 @@
 @extends('template')
 @section('content')
-    <div style="width:450px;">
-        <div class="row">
-
-            <div style="width:170px;">
-                <div style="padding-left: 10px;">
+    <div class="hiscores-page">
+        <div class="hiscores-list-container">
+            <div class="hiscores-skill-list">
+                <div class="hiscores-list-label">
                     <b>Select hiscore table</b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
@@ -43,8 +42,8 @@
                 </div>
             </div>
 
-            <div style="width:300px;">
-                <div style="padding-left: 75px;">
+            <div class="hiscores-player-list">
+                <div class="hiscores-list-label">
                     @if($subpage == null)
                         <b>Overall Hiscores</b>
                     @elseif($subpage == 'hits')
@@ -91,37 +90,18 @@
             </div>
         </div>
     </div>
-
     <div class="p-2"></div>
-
-    <!-- disabled until time permits figuring this part out
-
-    <div class="d-flex justify-between">
-        <div class="col hiscore-search">
-            <div class="b search-box search-rank"
-                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search">
-                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-                    <label for="rank">Search by rank</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;"
-                           class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by rank" class="text-black pl-1 pr-1"
-                           style="margin-top:4px;">
-                </form>
-            </div>
+    <div class="d-flex hiscores-search-bar">
+        <div class="b search-box search-rank"
+            style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
+            <form method="POST" role="search" action="{{url('searchByName')}}">
+                @csrf <!-- {{ csrf_field() }} -->
+                <input type="hidden" name="db" value="<?= $db ?>">
+                <label for="name">Search by name</label>
+                <input id="name" name="name" type="text" required="required" style="width:100px;"
+                    class="bg-white text-black mt-1">
+                <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
+            </form>
         </div>
-
-        <div class="col">
-            <div class="b search-box search-rank"
-                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search">
-                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-                    <label for="name">Search by name</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;"
-                           class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
-                </form>
-            </div>
-        </div>
-        -->
+    </div>
 @endsection

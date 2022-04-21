@@ -1,4 +1,4 @@
-<table style="width: 500px; background-color: black; padding: 4px;">
+<table class="orsc-register-page">
     <form>
         @csrf
         <tr>

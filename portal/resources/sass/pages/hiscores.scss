@@ -1,0 +1,72 @@
+/** Hiscores Page **/
+
+.hiscores-page {
+    font-family: system-ui;
+}
+
+.hiscores-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hiscores-skill-list {
+    width: 146px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 170px;
+        padding: 0 12px;
+    }
+}
+
+.hiscores-list-label {
+    text-align: center;
+}
+
+.hiscores-player-list {
+    width: 276px;
+    margin-top: 20px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 300px;
+        padding: 0 12px;
+        margin-top: 0;
+    }
+}
+
+.hiscores-page-link {
+    color: white;
+    font-size:16px;
+}
+
+.hiscores-search-bar {
+    justify-content: center;
+}
+
+/** Player Page **/
+
+.hiscores-player-table {
+    margin: 0 auto;
+
+    @media (min-width: $tablet-breakpoint) {
+        margin: 0;
+    }
+}
+
+.hiscores-player-activity-stats {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    @media (min-width: $tablet-breakpoint) {
+        flex-wrap: nowrap;
+    }
+}
+
+.hiscores-player-stat {
+    color: $HiscoresPlayerStatColor;
+    font-family: system-ui;
+    flex-basis: 100%;
+}

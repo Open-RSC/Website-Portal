@@ -1,0 +1,19 @@
+.orsc-login-page {
+    background-color: black;
+    padding: 4px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 500px;
+        height: 300px;
+    }
+}
+
+.login-help-tile {
+    background-color: black;
+    width: 150px;
+    padding: 4px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 200px;
+    }
+}

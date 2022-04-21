@@ -4,7 +4,7 @@
 <body class="<?= Route::currentRouteName() == 'World Map' ? "body-world-map" : "" ?>">
 
 @if(Route::currentRouteName() == 'World Map')
-    <table style="width: 250px; background: black; padding: 4px;">
+    <table class="breadcrumb-bar">
         <tbody>
         <tr>
             <td class=e>
@@ -26,7 +26,7 @@
     @yield('content')
 
 @elseif(Route::currentRouteName() == 'Wilderness Map')
-    <table style="width: 250px; background: black; padding: 4px;">
+    <table class="breadcrumb-bar">
         <tbody>
         <tr>
             <td class=e>
@@ -51,7 +51,7 @@
     <main>
         <script language="JavaScript">  function ConfirmMenu() {       var response=window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) window.history.back();/*parent.document.location.href='frame2.cgi?page=title.html';*/       return false;  }  function ConfirmTerms() {       var response=window.confirm("Clicking this link will exit the game and take you to our Terms+Conditions.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Terms and Conditions') }}";/*'frame2.cgi?page=terms/terms.html';*/       return false;  }  function ConfirmPrivacy() {       var response=window.confirm("Clicking this link will exit the game and take you to our Privacy Policy.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Privacy Policy') }}";/*'frame2.cgi?page=privacy/privacy.html';*/       return false;  }  </script>
         <div class="pt-1"></div>
-        <section class="top-border">
+        <section class="top-border orsc-webclient-mobile-border">
             <div class="top-left-border"></div>
             <form name=back>
                 <div class="top-middle-border2" onmousedown="return ConfirmMenu();">
@@ -95,7 +95,7 @@
             <div class="mid-left-border"></div>
             <div class="middle-content">
                 @if(Route::currentRouteName() != 'Home')
-                    <table style="width: 250px; background: black; padding: 4px;">
+                    <table class="breadcrumb-bar">
                         <tbody>
                         <tr>
                             <td class=e>

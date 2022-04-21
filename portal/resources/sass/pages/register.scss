@@ -1,0 +1,8 @@
+.orsc-register-page {
+    background-color: black;
+    padding: 4px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 500px;
+    }
+}

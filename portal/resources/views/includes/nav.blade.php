@@ -1,4 +1,4 @@
-<div class="navbar-expand-xxl pt-2 mr-1">
+<div class="navbar-expand-xxl pt-2">
     <div class="e text-center flex-row" style="background:black;">
         <span class="flex-auto p-2">
             <a class="c" href="/">Home</a>
@@ -31,7 +31,7 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+            <span class="p-2 dropdown-content nav-hiscores-dropdown">
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
                 <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
                 <a class="c text-left" href="/toplist/2001scape">2001Scape</a>
@@ -42,7 +42,7 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Guides <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:150px;">
+            <span class="p-2 dropdown-content nav-guides-dropdown">
                 <a class="c text-left" href="{{ route('Wilderness Map') }}"><i
                             class="fas fa-map"></i> Wilderness Map</a>
                 <a class="c text-left" href="{{ route('Monster Database') }}"><i class="fas fa-book"></i> Monster Database</a>
@@ -57,7 +57,8 @@
                 </a>
             </span>
         </span>
-        <span class="flex-auto p-2"><a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank">Bug Reports</a>
+        <span class="flex-auto p-2">
+            <a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank" class="c">Bug Reports</a>
         </span>
         @guest
             <span class="flex-auto p-2 dropdown">

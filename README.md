@@ -27,6 +27,16 @@ You will need:
 - Run `php artisan db:seed`.
 - Finally, run `php artisan serve`. The site should now be accessible at http://127.0.0.1:8000.
 
+## Making CSS Changes - Do's & Don't's
+**Do**: 
+- Write mobile-specific CSS first, then handle tablet and/or desktop CSS in media queries.
+- Add new `.scss` files to pages/ for any page you want to style that doesn't have its own dedicated `.scss` file yet. After adding the new `.scss` file, make sure to import it in `all.scss`.
+- Use the variables in `_variables.scss` to your advantage. These can be referenced in any `.scss` file like this: `$tablet-breakpoint`.
+
+**Don't**:
+- Use inline styles. It's bad practice.
+- Use `!important` (in most cases). It's bad practice, and there are ways around it by using more specific CSS.
+
 ## Compiling SASS
 To see changes to `.scss` files on your local site, you need to compile SASS. To do this:
 - In a terminal, `cd` into the `portal` directory.

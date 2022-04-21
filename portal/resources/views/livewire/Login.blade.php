@@ -1,6 +1,6 @@
 <form>
     @csrf
-    <table class="" style="width: 500px; height: 300px; background-color: black; padding: 4px;">
+    <table class="orsc-login-page">
         <tr>
             <td class=e>
                     <span class="d-block text-center" style="color: #ffbb22;">
@@ -90,7 +90,7 @@
                     <table>
                         <tr>
                             <td class="align-content-center">
-                                <table style="background-color: black; width: 200px; padding: 4px;">
+                                <table class="login-help-tile">
                                     <tr>
                                         <td class="b" background="{{ asset('img/stoneback.gif') }}"
                                             style="background-color: #474747">
@@ -107,7 +107,7 @@
                             <td>
                             <td style="width: 20px;"></td>
                             <td class="align-content-center">
-                                <table style="background-color: black; width: 200px; padding: 4px;">
+                                <table class="login-help-tile">
                                     <tr>
                                         <td class="b" background="{{ asset('img/stoneback.gif') }}"
                                             style="background-color: #474747">
