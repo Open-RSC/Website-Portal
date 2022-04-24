@@ -407,9 +407,10 @@
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="/hiscores/preservation" class="c">
-                                                <img src="{{ asset('img/mm2_rs2b.jpg') }}"
-                                                     alt="">
+                                            <a href="https://2009scape.org" class="c">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mms_rsclassic.png') }}"
+                                                     alt="RS2 Beta">
                                             </a>
                                         </td>
                                         <td style="width: 120px;">
