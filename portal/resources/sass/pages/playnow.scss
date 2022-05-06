@@ -1,79 +1,35 @@
-.orsc-download-links {
-    font-family: system-ui;
-    text-align: center;
+.play-now-container {
+    position: relative;
+}
 
-    a {
-        text-decoration: none;
+.play-now-left-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    @media (min-width: $tablet-breakpoint) {
+        height: 490px;
     }
 }
 
-.playable-worlds-table {
+.play-now-right-button {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 0;
+    bottom: 0;
+
     @media (min-width: $tablet-breakpoint) {
-        width: 500px;
+        height: 490px;
     }
 }
 
-.worlds-table-left-column {
-    width: 160px;
-}
-
-.worlds-table-middle-column {
-    width: 161px;
-}
-
-.worlds-table-right-column {
-    width: 180px;
-}
-
-.promo-tiles-table-main {
-    margin-top: 20px;
-    text-align: center;
-    display: flex;
+.play-now-image {
+    width: 100%;
 
     @media (min-width: $tablet-breakpoint) {
-        margin-top: 45px;
-    }
-}
-
-.promo-tiles-and-sword-table {
-    background-image: url('/img/swordarrow.gif');
-    background-repeat: no-repeat;
-    background-position-y: top;
-    background-position-x: calc(50% - 5px);
-    margin: 0 10px 0 10px;
-    height: 100%;
-
-    @media (min-width: $tablet-breakpoint) {
-        background-position-x: 204px;
-        margin: 20px auto;
-    }
-}
-
-.promo-tiles-table {
-    margin-top: 43px;
-
-    @media (min-width: $tablet-breakpoint) {
-        width: 450px;
-    }
-}
-
-.promo-tile-col {
-    margin-top: 50px;
-    padding: 2px;
-    background-color: black;
-
-    @media (min-width: $tablet-breakpoint) {
-        margin: 0;
-        width: 150px;
-    }
-}
-
-.promo-tile-col-inner {
-    background-color: #474747;
-    background-image: url('/img/stoneback.gif');
-    min-height: 125px; // Prevents promo tiles from being different heights on most mobile devices
-
-    @media (min-width: $tablet-breakpoint) {
-        min-height: auto;
+        width: auto; // hopefully this calculates to its inherent width of 520px?
     }
 }

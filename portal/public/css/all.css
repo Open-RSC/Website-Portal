@@ -18205,6 +18205,45 @@ nav ul li:hover > ul {
   flex-basis: 100%;
 }
 
+.play-now-container {
+  position: relative;
+}
+
+.play-now-left-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+@media (min-width: 768px) {
+  .play-now-left-button {
+    height: 490px;
+  }
+}
+
+.play-now-right-button {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 0;
+  bottom: 0;
+}
+@media (min-width: 768px) {
+  .play-now-right-button {
+    height: 490px;
+  }
+}
+
+.play-now-image {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .play-now-image {
+    width: auto;
+  }
+}
+
 .orsc-download-links {
   font-family: system-ui;
   text-align: center;
