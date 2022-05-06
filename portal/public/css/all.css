@@ -17073,6 +17073,7 @@ BODY, P, TD {
 
 .c {
   TEXT-DECORATION: none;
+  cursor: pointer;
 }
 
 .f {

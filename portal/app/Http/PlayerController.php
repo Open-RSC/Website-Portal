@@ -229,7 +229,7 @@ class PlayerController extends Controller
                             ->whereNotIn('b.banned', [-1, 1])
                             ->where([
                                 ['b.group_id', '>=', '8'],
-                                ["b.id", '=', $subpage],
+                                ["b.username", '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
                             ]);
                     }]
