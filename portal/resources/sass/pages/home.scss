@@ -27,6 +27,42 @@
     }
 }
 
+.homepage-world-differences {
+    font-size: 12px;
+    text-align: center;
+}
+
+.homepage-world-differences-link {
+    text-decoration: none;
+}
+
 .homepage-online-worlds-table {
-    width: 200px;
+    width: 170px;
+
+    @media (min-width: $tablet-breakpoint) {
+        width: 200px;
+    }
+}
+
+.homepage-world-location {
+    display: table;
+    margin: 0 auto;
+}
+
+.homepage-world-type {
+    font-weight: bold;
+    text-align: center;
+}
+
+.homepage-world-link {
+    color: $LinkColor;
+    text-decoration: none;
+}
+
+.homepage-botting-worlds-list {
+    margin-left: 10px;
+
+    @media (min-width: $tablet-breakpoint) {
+        margin-left: 50px;
+    }
 }
