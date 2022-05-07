@@ -4,7 +4,7 @@
         <a href="/playnow/worldlist" class="play-now-left-button" 
             aria-label="Play Open RSC servers via the web client"></a>
         <a href="{{ $gameClientUrl }}" class="play-now-right-button"
-            aria-label="Play Open RSC servers via the game client (launcher)"></a>
+            aria-label="Play Open RSC servers via the {{ $gameClientName }}"></a>
         <img src="{{ $graphicImageUrl }}" class="play-now-image" 
             alt="Knight and Magician present two options for playing Open RSC servers" />
     </div>

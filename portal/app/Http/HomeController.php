@@ -110,25 +110,30 @@ class HomeController extends Controller
     {
         $desktopClientUrl = 'https://rsc.vet/downloads/OpenRSC.jar';
         $androidClientUrl = 'https://rsc.vet/downloads/openrsc.apk';
+        $desktopClientName = 'Desktop Client';
+        $androidClientName = 'Android Client';
 
         $gameClientUrl = $desktopClientUrl;
+        $gameClientName = $desktopClientName;
         $graphicImageUrl = '/img/PlayNowGraphic-Desktop.png';
         $otherOSName = 'Android';
         $otherClientUrl = $androidClientUrl;
-        $otherClientName = 'Android Client';
+        $otherClientName = $androidClientName;
 
         // Detect Android client and change properties
         $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
         if (strpos($useragent, 'android') !== false) {
             $gameClientUrl = $androidClientUrl;
+            $gameClientName = $androidClientName;
             $graphicImageUrl = '/img/PlayNowGraphic-Android.png';
             $otherOSName = 'PC';
             $otherClientUrl = $desktopClientUrl;
-            $otherClientName = 'Desktop Client';
+            $otherClientName = $desktopClientName;
         }
 
         return view('playnow', [
             'gameClientUrl' => $gameClientUrl,
+            'gameClientName' => $gameClientName,
             'graphicImageUrl' => $graphicImageUrl,
             'otherOSName' => $otherOSName,
             'otherClientUrl' => $otherClientUrl,
