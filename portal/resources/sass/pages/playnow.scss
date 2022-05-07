@@ -6,8 +6,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    right: 50%;
+    bottom: 15%;
 
     @media (min-width: $tablet-breakpoint) {
         height: 490px;
@@ -19,7 +19,7 @@
     top: 0;
     left: 50%;
     right: 0;
-    bottom: 0;
+    bottom: 15%;
 
     @media (min-width: $tablet-breakpoint) {
         height: 490px;
@@ -32,4 +32,17 @@
     @media (min-width: $tablet-breakpoint) {
         width: auto; // hopefully this calculates to its inherent width of 520px?
     }
+}
+
+.play-now-other-clients {
+    text-align: center;
+    font-family: system-ui;
+}
+
+.play-now-other-client-name {
+    font-weight: bold;
+}
+
+.play-now-other-client-link {
+    text-decoration: none;
 }

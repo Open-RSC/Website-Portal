@@ -27,17 +27,13 @@
                                     for world differences
                                 </p>
 
-                                <div class="pb-3"></div>
-
                                 <!-- World online counts -->
-                                <div class="d-flex justify-content-center">
+                                <div class="homepage-online-worlds-flex-container">
                                     <!-- Regular worlds -->
                                     @include('partials.homepage-regular-worlds-list')
                                     <!-- Botting worlds -->
                                     @include('partials.homepage-botting-worlds-list')
                                 </div>
-
-                                <div class="pb-3"></div>
                             </td>
                             <td style="width: 7px;" background="{{ asset('img/fm_middle.gif') }}"></td>
                         </tr>

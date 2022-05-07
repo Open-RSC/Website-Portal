@@ -60,20 +60,19 @@
                                                 <td colspan=2>
                                                     <img align=absmiddle src=/img/usflag.gif
                                                          width=30 height=15 border=0>
-                                                    RSC Uranium
+                                                    2001Scape
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="http://game.openrsc.com/play/uranium/members"
-                                                       target="_parent" class="c">World
-                                                        1</a>
+                                                    <a href="http://game.openrsc.com/play/2001scape/members"
+                                                       target="_parent" class=c>World 1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
-                                                    @if ($uranium_online == 1)
-                                                        {{ $uranium_online }} cyborg
+                                                    @if ($retro_online == 1)
+                                                        {{ $retro_online }} player
                                                     @else
-                                                        {{ $uranium_online }} cyborgs
+                                                        {{ $retro_online }} players
                                                     @endif
                                                 </td>
                                             </tr>
@@ -90,19 +89,20 @@
                                                 <td colspan=2>
                                                     <img align=absmiddle src=/img/usflag.gif
                                                          width=30 height=15 border=0>
-                                                    2001Scape
+                                                    RSC Uranium
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td valign=center>
-                                                    <a href="http://game.openrsc.com/play/2001scape/members"
-                                                       target="_parent" class=c>World 1</a>
+                                                    <a href="http://game.openrsc.com/play/uranium/members"
+                                                       target="_parent" class="c">World
+                                                        1</a>
                                                 </td>
                                                 <td align=right style="padding-left: 10px;">
-                                                    @if ($retro_online == 1)
-                                                        {{ $retro_online }} player
+                                                    @if ($uranium_online == 1)
+                                                        {{ $uranium_online }} cyborg
                                                     @else
-                                                        {{ $retro_online }} players
+                                                        {{ $uranium_online }} cyborgs
                                                     @endif
                                                 </td>
                                             </tr>

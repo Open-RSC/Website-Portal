@@ -18135,13 +18135,19 @@ nav ul li:hover > ul {
   text-decoration: none;
 }
 
-.homepage-online-worlds-table {
-  width: 170px;
+.homepage-online-worlds-flex-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-@media (min-width: 768px) {
-  .homepage-online-worlds-table {
-    width: 200px;
+@media (min-width: 640px) {
+  .homepage-online-worlds-flex-container {
+    margin-bottom: 1rem;
   }
+}
+
+.homepage-online-worlds-table {
+  width: 200px;
 }
 
 .homepage-world-location {
@@ -18160,10 +18166,11 @@ nav ul li:hover > ul {
 }
 
 .homepage-botting-worlds-list {
-  margin-left: 10px;
+  margin-top: 25px;
 }
 @media (min-width: 768px) {
   .homepage-botting-worlds-list {
+    margin-top: 0;
     margin-left: 50px;
   }
 }
@@ -18251,8 +18258,8 @@ nav ul li:hover > ul {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  right: 50%;
+  bottom: 15%;
 }
 @media (min-width: 768px) {
   .play-now-left-button {
@@ -18265,7 +18272,7 @@ nav ul li:hover > ul {
   top: 0;
   left: 50%;
   right: 0;
-  bottom: 0;
+  bottom: 15%;
 }
 @media (min-width: 768px) {
   .play-now-right-button {
@@ -18280,6 +18287,19 @@ nav ul li:hover > ul {
   .play-now-image {
     width: auto;
   }
+}
+
+.play-now-other-clients {
+  text-align: center;
+  font-family: system-ui;
+}
+
+.play-now-other-client-name {
+  font-weight: bold;
+}
+
+.play-now-other-client-link {
+  text-decoration: none;
 }
 
 .orsc-download-links {

@@ -4,7 +4,7 @@
             <a class="c" href="/">Home</a>
         </span>
         <span class="flex-auto p-2 dropdown">
-            <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
+            <a class="c" href="/playnow">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:140px;">
                 <a class="c text-left" href="/playnow">
                     <i class="fas fa-globe-americas"></i>&nbsp; In-Browser

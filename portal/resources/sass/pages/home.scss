@@ -36,12 +36,18 @@
     text-decoration: none;
 }
 
-.homepage-online-worlds-table {
-    width: 170px;
+.homepage-online-worlds-flex-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 
-    @media (min-width: $tablet-breakpoint) {
-        width: 200px;
+    @media (min-width: $mobile-breakpoint) {
+        margin-bottom: 1rem;
     }
+}
+
+.homepage-online-worlds-table {
+    width: 200px;
 }
 
 .homepage-world-location {
@@ -60,9 +66,10 @@
 }
 
 .homepage-botting-worlds-list {
-    margin-left: 10px;
+    margin-top: 25px;
 
     @media (min-width: $tablet-breakpoint) {
+        margin-top: 0;
         margin-left: 50px;
     }
 }

@@ -9,6 +9,11 @@
         <tbody>
         <tr>
             <td>
+                <!--World list-->
+                @include('partials.homepage-worlds-table')
+
+                <div class="pb-3"></div>
+
                 <table class="homepage-content">
                     <tbody>
                     <tr>
@@ -89,11 +94,6 @@
                     </tr>
                     </tbody>
                 </table>
-
-                <div class="pb-3"></div>
-
-                <!--World list-->
-                @include('partials.homepage-worlds-table')
 
                 <div class="pb-3"></div>
 
