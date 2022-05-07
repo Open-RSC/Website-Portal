@@ -17033,7 +17033,7 @@ body {
   font-size: 1em;
   color: white;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   body {
     background-image: none;
     background-color: black;
@@ -17266,7 +17266,7 @@ header li a:hover, .features a:hover {
   color: gold;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   main {
     width: 600px;
     height: 613px;
@@ -17277,7 +17277,7 @@ header li a:hover, .features a:hover {
 section.top-border {
   display: block;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section.top-border {
     display: flex;
     width: 605px;
@@ -17288,7 +17288,7 @@ section.top-border {
 div.top-left-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.top-left-border {
     display: block;
     width: 100px;
@@ -17301,7 +17301,7 @@ div.top-middle-border {
   height: 43px;
   background-image: url("/img/edge_c.jpg");
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.top-middle-border {
     width: 400px;
   }
@@ -17312,7 +17312,7 @@ div.top-middle-border2 {
   background-image: url("/img/edge_c2.jpg");
   background-position-x: 53px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.top-middle-border2 {
     width: 400px;
     background-position-x: 0;
@@ -17322,7 +17322,7 @@ div.top-middle-border2 {
 div.top-right-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.top-right-border {
     display: block;
     width: 100px;
@@ -17375,7 +17375,7 @@ p.online-count {
   line-height: 20px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section.middle {
     width: 605px;
     display: flex;
@@ -17385,7 +17385,7 @@ p.online-count {
 div.mid-left-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.mid-left-border {
     display: block;
     width: 41px;
@@ -17397,7 +17397,7 @@ div.mid-left-border {
 div.mid-right-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.mid-right-border {
     display: block;
     width: 41px;
@@ -17406,7 +17406,7 @@ div.mid-right-border {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   div.middle-content, div.middle-play,
 div.middle-content-server {
     background-image: url("/img/background.jpg");
@@ -17586,7 +17586,7 @@ div.orsc-buttons, div.cabbage-buttons {
   flex: 1 0 32%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section.bottom-border {
     width: 605px;
     height: 43px;
@@ -17597,7 +17597,7 @@ div.orsc-buttons, div.cabbage-buttons {
 section > div.bottom-left-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section > div.bottom-left-border {
     display: block;
     width: 100px;
@@ -17611,7 +17611,7 @@ section > div.bottom-middle {
   display: flex;
   flex-direction: column;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section > div.bottom-middle {
     width: 400px;
     height: 82px;
@@ -17626,7 +17626,7 @@ section > div.bottom-middle > div.copyright {
   vertical-align: bottom;
   font-family: system-ui;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section > div.bottom-middle > div.copyright {
     width: 400px;
   }
@@ -17635,7 +17635,7 @@ section > div.bottom-middle > div.copyright {
 section > div.bottom-middle > div.bottom-middle-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section > div.bottom-middle > div.bottom-middle-border {
     display: block;
     width: 400px;
@@ -17647,7 +17647,7 @@ section > div.bottom-middle > div.bottom-middle-border {
 section > div.bottom-right-border {
   display: none;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   section > div.bottom-right-border {
     display: block;
     width: 100px;
@@ -17946,7 +17946,7 @@ li > a:only-child:after {
   width: 130px;
   transform: translate(-20px);
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .nav-hiscores-dropdown {
     transform: none;
   }
@@ -17957,7 +17957,7 @@ li > a:only-child:after {
   width: 150px;
   transform: translate(-70px);
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .nav-guides-dropdown {
     transform: none;
   }
@@ -18065,7 +18065,7 @@ nav ul li:hover > ul {
 .navbar-expand-xxl {
   font-family: system-ui;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .navbar-expand-xxl .flex-row {
     width: 596px;
   }
@@ -18085,7 +18085,7 @@ nav ul li:hover > ul {
   padding: 4px;
   margin: 20px auto 0;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .breadcrumb-bar {
     margin: 0;
   }
@@ -18098,7 +18098,7 @@ nav ul li:hover > ul {
 .homepage-logo-container {
   margin: 10px 0;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .homepage-logo-container {
     margin: 0;
   }
@@ -18120,7 +18120,7 @@ nav ul li:hover > ul {
   background-color: black;
   width: 100%;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .homepage-section-content {
     width: 500px;
   }
@@ -18168,7 +18168,7 @@ nav ul li:hover > ul {
 .homepage-botting-worlds-list {
   margin-top: 25px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .homepage-botting-worlds-list {
     margin-top: 0;
     margin-left: 50px;
@@ -18189,7 +18189,7 @@ nav ul li:hover > ul {
 .hiscores-skill-list {
   width: 146px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .hiscores-skill-list {
     width: 170px;
     padding: 0 12px;
@@ -18204,7 +18204,7 @@ nav ul li:hover > ul {
   width: 276px;
   margin-top: 20px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .hiscores-player-list {
     width: 300px;
     padding: 0 12px;
@@ -18225,7 +18225,7 @@ nav ul li:hover > ul {
 .hiscores-player-table {
   margin: 0 auto;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .hiscores-player-table {
     margin: 0;
   }
@@ -18238,7 +18238,7 @@ nav ul li:hover > ul {
   align-items: center;
   justify-content: center;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .hiscores-player-activity-stats {
     flex-wrap: nowrap;
   }
@@ -18261,7 +18261,7 @@ nav ul li:hover > ul {
   right: 50%;
   bottom: 15%;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .play-now-left-button {
     height: 490px;
   }
@@ -18274,7 +18274,7 @@ nav ul li:hover > ul {
   right: 0;
   bottom: 15%;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .play-now-right-button {
     height: 490px;
   }
@@ -18283,7 +18283,7 @@ nav ul li:hover > ul {
 .play-now-image {
   width: 100%;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .play-now-image {
     width: auto;
   }
@@ -18310,7 +18310,7 @@ nav ul li:hover > ul {
   text-decoration: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .playable-worlds-table {
     width: 500px;
   }
@@ -18333,7 +18333,7 @@ nav ul li:hover > ul {
   text-align: center;
   display: flex;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .promo-tiles-table-main {
     margin-top: 45px;
   }
@@ -18347,7 +18347,7 @@ nav ul li:hover > ul {
   margin: 0 10px 0 10px;
   height: 100%;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .promo-tiles-and-sword-table {
     background-position-x: 204px;
     margin: 20px auto;
@@ -18357,7 +18357,7 @@ nav ul li:hover > ul {
 .promo-tiles-table {
   margin-top: 43px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .promo-tiles-table {
     width: 450px;
   }
@@ -18368,7 +18368,7 @@ nav ul li:hover > ul {
   padding: 2px;
   background-color: black;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .promo-tile-col {
     margin: 0;
     width: 150px;
@@ -18380,7 +18380,7 @@ nav ul li:hover > ul {
   background-image: url("/img/stoneback.gif");
   min-height: 125px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .promo-tile-col-inner {
     min-height: auto;
   }
@@ -18390,7 +18390,7 @@ nav ul li:hover > ul {
   background-color: black;
   padding: 4px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .orsc-register-page {
     width: 500px;
   }

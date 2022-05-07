@@ -8,7 +8,7 @@
 }
 
 .playable-worlds-table {
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 500px;
     }
 }
@@ -30,7 +30,7 @@
     text-align: center;
     display: flex;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         margin-top: 45px;
     }
 }
@@ -43,7 +43,7 @@
     margin: 0 10px 0 10px;
     height: 100%;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         background-position-x: 204px;
         margin: 20px auto;
     }
@@ -52,7 +52,7 @@
 .promo-tiles-table {
     margin-top: 43px;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 450px;
     }
 }
@@ -62,7 +62,7 @@
     padding: 2px;
     background-color: black;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         margin: 0;
         width: 150px;
     }
@@ -73,7 +73,7 @@
     background-image: url('/img/stoneback.gif');
     min-height: 125px; // Prevents promo tiles from being different heights on most mobile devices
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         min-height: auto;
     }
 }

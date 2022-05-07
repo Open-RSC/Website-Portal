@@ -9,7 +9,7 @@
     right: 50%;
     bottom: 15%;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         height: 490px;
     }
 }
@@ -21,7 +21,7 @@
     right: 0;
     bottom: 15%;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         height: 490px;
     }
 }
@@ -29,8 +29,8 @@
 .play-now-image {
     width: 100%;
 
-    @media (min-width: $tablet-breakpoint) {
-        width: auto; // hopefully this calculates to its inherent width of 520px?
+    @media (min-width: $mobile-breakpoint) {
+        width: auto;
     }
 }
 
