@@ -4,29 +4,23 @@
             <a class="c" href="/">Home</a>
         </span>
         <span class="flex-auto p-2 dropdown">
-            <a class="c" href="#">Play Now <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:140px;">
-                <a class="c text-left" href="/playnow">
-                    <i class="fas fa-globe-americas"></i>&nbsp; In-Browser
-                </a>
-                <a class="c text-left" href="{{ asset('downloads/OpenRSC.jar') }}">
-                    <i class="fas fa-download"></i>&nbsp; PC Launcher
-                </a>
-                <a class="c text-left" href="{{ asset('downloads/openrsc.apk') }}">
-                    <i class="fab fa-android"></i>&nbsp; Android APK
-                </a>
-                <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
-                    <i class="fab fa-gitlab"></i>&nbsp; Source Code
-                </a>
-            </span>
+            <a class="c" href="/playnow">Play Now</a>
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
-                <a class="c text-left" href="/board"><i class="far fa-comment-alt"></i> Forums</a>
-                <a class="c text-left" href="https://discord.gg/ABdFCqn" target="_blank"><i class="fab fa-discord"></i> Discord</a>
-                <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank"><i
-                            class="fab fa-reddit-alien"></i> Reddit</a>
+                <a class="c text-left" href="/board">
+                    <i class="far fa-comment-alt"></i> Forums
+                </a>
+                <a class="c text-left" href="https://discord.gg/ABdFCqn" target="_blank">
+                    <i class="fab fa-discord"></i> Discord
+                </a>
+                <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank">
+                    <i class="fab fa-reddit-alien"></i> Reddit
+                </a>
+                <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
+                    <i class="fab fa-gitlab"></i>&nbsp; Source Code
+                </a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">

@@ -13,7 +13,7 @@
 .hiscores-skill-list {
     width: 146px;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 170px;
         padding: 0 12px;
     }
@@ -27,7 +27,7 @@
     width: 276px;
     margin-top: 20px;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 300px;
         padding: 0 12px;
         margin-top: 0;
@@ -48,7 +48,7 @@
 .hiscores-player-table {
     margin: 0 auto;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         margin: 0;
     }
 }
@@ -60,7 +60,7 @@
     align-items: center;
     justify-content: center;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         flex-wrap: nowrap;
     }
 }

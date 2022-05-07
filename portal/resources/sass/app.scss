@@ -18,7 +18,7 @@ body {
   font-size: 1em;
   color: white;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     background-image: none;
     background-color: black;
   }
@@ -252,7 +252,7 @@ header li a:hover, .features a:hover {
 }
 
 main {
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 600px;
     height: 613px;
     flex: 1;
@@ -262,7 +262,7 @@ main {
 section.top-border {
   display: block;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: flex;
     width: 605px;
     height: 43px;
@@ -272,7 +272,7 @@ section.top-border {
 div.top-left-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 100px;
     height: 43px;
@@ -284,7 +284,7 @@ div.top-middle-border {
   height: 43px;
   background-image: url("/img/edge_c.jpg");
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 400px;
   }
 }
@@ -294,7 +294,7 @@ div.top-middle-border2 {
   background-image: url("/img/edge_c2.jpg");
   background-position-x: 53px;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 400px;
     background-position-x: 0;
   }
@@ -303,7 +303,7 @@ div.top-middle-border2 {
 div.top-right-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 100px;
     height: 43px;
@@ -356,7 +356,7 @@ p.online-count {
 }
 
 section.middle {
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 605px;
     display: flex;
   }
@@ -365,7 +365,7 @@ section.middle {
 div.mid-left-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 41px;
     min-height: 377px;
@@ -376,7 +376,7 @@ div.mid-left-border {
 div.mid-right-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 41px;
     min-height: 377px;
@@ -386,7 +386,7 @@ div.mid-right-border {
 
 div.middle-content, div.middle-play,
 div.middle-content-server {
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     background-image: url("/img/background.jpg");
     width: 519px;
     min-height: 488px;
@@ -565,7 +565,7 @@ div.orsc-buttons, div.cabbage-buttons {
 }
 
 section.bottom-border {
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 605px;
     height: 43px;
     display: flex;
@@ -575,7 +575,7 @@ section.bottom-border {
 section > div.bottom-left-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 100px;
     height: 82px;
@@ -589,7 +589,7 @@ section > div.bottom-middle {
   display: flex;
   flex-direction: column;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 400px;
     height: 82px;
   }
@@ -603,7 +603,7 @@ section > div.bottom-middle > div.copyright {
   vertical-align: bottom;
   font-family: system-ui;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     width: 400px;
   }
 }
@@ -611,7 +611,7 @@ section > div.bottom-middle > div.copyright {
 section > div.bottom-middle > div.bottom-middle-border {
   display: none;
  
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 400px;
     height: 43px;
@@ -622,7 +622,7 @@ section > div.bottom-middle > div.bottom-middle-border {
 section > div.bottom-right-border {
   display: none;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 100px;
     height: 82px;
@@ -920,7 +920,7 @@ li > a:only-child:after {
   width: 130px;
   transform: translate(-20px);
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     transform: none;
   }
 }
@@ -930,7 +930,7 @@ li > a:only-child:after {
   width: 150px;
   transform: translate(-70px);
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     transform: none;
   }
 }
@@ -1028,7 +1028,7 @@ li > a:only-child:after {
   font-family: system-ui;
 
   .flex-row {
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
       width: 596px;
     }
   }
@@ -1048,7 +1048,7 @@ li > a:only-child:after {
   padding: 4px;
   margin: 20px auto 0;
 
-  @media (min-width: $tablet-breakpoint) {
+  @media (min-width: $mobile-breakpoint) {
     margin: 0;
   }
 }

@@ -106,7 +106,42 @@ class HomeController extends Controller
         ]);
     }
 
-    public function playnow()
+    public function playnow() 
+    {
+        $desktopClientUrl = 'https://rsc.vet/downloads/OpenRSC.jar';
+        $androidClientUrl = 'https://rsc.vet/downloads/openrsc.apk';
+        $desktopClientName = 'Desktop Client';
+        $androidClientName = 'Android Client';
+
+        $gameClientUrl = $desktopClientUrl;
+        $gameClientName = $desktopClientName;
+        $graphicImageUrl = '/img/PlayNowGraphic-Desktop.png';
+        $otherOSName = 'Android';
+        $otherClientUrl = $androidClientUrl;
+        $otherClientName = $androidClientName;
+
+        // Detect Android client and change properties
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if (strpos($useragent, 'android') !== false) {
+            $gameClientUrl = $androidClientUrl;
+            $gameClientName = $androidClientName;
+            $graphicImageUrl = '/img/PlayNowGraphic-Android.png';
+            $otherOSName = 'PC';
+            $otherClientUrl = $desktopClientUrl;
+            $otherClientName = $desktopClientName;
+        }
+
+        return view('playnow', [
+            'gameClientUrl' => $gameClientUrl,
+            'gameClientName' => $gameClientName,
+            'graphicImageUrl' => $graphicImageUrl,
+            'otherOSName' => $otherOSName,
+            'otherClientUrl' => $otherClientUrl,
+            'otherClientName' => $otherClientName
+        ]);
+    }
+
+    public function worldlist()
     {
         $preservation_online = DB::connection('preservation')->table('players')
             ->where('online', '=', '1')
@@ -132,7 +167,7 @@ class HomeController extends Controller
             ->where('online', '=', '1')
             ->count('online');
 
-        return view('playnow',
+        return view('worldlist',
             [
                 'preservation_online' => $preservation_online,
                 'cabbage_online' => $cabbage_online,

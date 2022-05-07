@@ -2,7 +2,7 @@
     background-color: black;
     padding: 4px;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 500px;
         height: 300px;
     }
@@ -13,7 +13,7 @@
     width: 150px;
     padding: 4px;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 200px;
     }
 }

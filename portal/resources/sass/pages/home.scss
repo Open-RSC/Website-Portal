@@ -1,7 +1,7 @@
 .homepage-logo-container {
     margin: 10px 0;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         margin: 0;
     }
 }
@@ -22,11 +22,54 @@
     background-color: black;
     width: 100%;
 
-    @media (min-width: $tablet-breakpoint) {
+    @media (min-width: $mobile-breakpoint) {
         width: 500px;
+    }
+}
+
+.homepage-world-differences {
+    font-size: 12px;
+    text-align: center;
+}
+
+.homepage-world-differences-link {
+    text-decoration: none;
+}
+
+.homepage-online-worlds-flex-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @media (min-width: $mobile-breakpoint) {
+        margin-bottom: 1rem;
     }
 }
 
 .homepage-online-worlds-table {
     width: 200px;
+}
+
+.homepage-world-location {
+    display: table;
+    margin: 0 auto;
+}
+
+.homepage-world-type {
+    font-weight: bold;
+    text-align: center;
+}
+
+.homepage-world-link {
+    color: $LinkColor;
+    text-decoration: none;
+}
+
+.homepage-botting-worlds-list {
+    margin-top: 25px;
+
+    @media (min-width: $mobile-breakpoint) {
+        margin-top: 0;
+        margin-left: 50px;
+    }
 }

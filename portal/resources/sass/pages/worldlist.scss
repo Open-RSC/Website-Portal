@@ -1,0 +1,79 @@
+.orsc-download-links {
+    font-family: system-ui;
+    text-align: center;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.playable-worlds-table {
+    @media (min-width: $mobile-breakpoint) {
+        width: 500px;
+    }
+}
+
+.worlds-table-left-column {
+    width: 160px;
+}
+
+.worlds-table-middle-column {
+    width: 161px;
+}
+
+.worlds-table-right-column {
+    width: 180px;
+}
+
+.promo-tiles-table-main {
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+
+    @media (min-width: $mobile-breakpoint) {
+        margin-top: 45px;
+    }
+}
+
+.promo-tiles-and-sword-table {
+    background-image: url('/img/swordarrow.gif');
+    background-repeat: no-repeat;
+    background-position-y: top;
+    background-position-x: calc(50% - 5px);
+    margin: 0 10px 0 10px;
+    height: 100%;
+
+    @media (min-width: $mobile-breakpoint) {
+        background-position-x: 204px;
+        margin: 20px auto;
+    }
+}
+
+.promo-tiles-table {
+    margin-top: 43px;
+
+    @media (min-width: $mobile-breakpoint) {
+        width: 450px;
+    }
+}
+
+.promo-tile-col {
+    margin-top: 50px;
+    padding: 2px;
+    background-color: black;
+
+    @media (min-width: $mobile-breakpoint) {
+        margin: 0;
+        width: 150px;
+    }
+}
+
+.promo-tile-col-inner {
+    background-color: #474747;
+    background-image: url('/img/stoneback.gif');
+    min-height: 125px; // Prevents promo tiles from being different heights on most mobile devices
+
+    @media (min-width: $mobile-breakpoint) {
+        min-height: auto;
+    }
+}
