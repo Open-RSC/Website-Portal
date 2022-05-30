@@ -26,14 +26,17 @@ RUN apt-get update && \
         gnupg1 \
         gnupg2 \
         gnupg \
-        libicu-dev
+        libicu-dev \
+        libmcrypt-dev
 
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
 # Install the PHP mcrypt extention (from PECL, mcrypt has been removed from PHP 7.2)
-RUN pecl install mcrypt-1.0.4
+RUN pecl install mcrypt-1.0.5
 RUN docker-php-ext-enable mcrypt
+
+RUN apt-get -y install libmagickwand-dev
 
 # Install the PHP pcntl extention
 RUN docker-php-ext-install pcntl
@@ -155,5 +158,11 @@ RUN usermod -u 1000 www-data
 WORKDIR /var/www
 
 EXPOSE 9000
+
+RUN apt-get install -y libbz2-dev \
+    && docker-php-ext-install bz2
+
+RUN git clone https://github.com/Imagick/imagick
+RUN cd imagick && phpize && ./configure && make && make install
 
 CMD ["php-fpm"]
