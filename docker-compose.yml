@@ -9,6 +9,8 @@ services:
       - '8080:80'
     volumes:
       - "./etc/phpmyadmin/config.inc.php:/var/www/html/config.inc.php:ro" # phpMyAdmin config is located in etc
+      - "./portal/public/client:/var/www/html/client:ro"
+      - "./portal/public/client2:/var/www/html/client2:ro"
     environment:
       PMA_HOST: mariadb
 
