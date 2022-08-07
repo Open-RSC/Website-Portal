@@ -14,5 +14,6 @@
 	"monobook-more-actions": "Viac",
 	"monobook-notifications-link": "Upozornenia ($1)",
 	"monobook-notifications-link-none": "Upozornenia",
-	"monobook-responsive-label": "Zapnúť responzívny dizajn MonoBooku"
+	"monobook-view-history": "História",
+	"monobook-action-undelete": "Obnoviť {{PLURAL:$1|jednu úpravu|$1 úpravy|$1 úprav}}"
 }

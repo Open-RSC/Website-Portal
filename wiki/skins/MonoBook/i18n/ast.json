@@ -16,5 +16,6 @@
 	"monobook-cactions-label": "Aiciones de páxina",
 	"monobook-notifications-link": "Avisos ($1)",
 	"monobook-notifications-link-none": "Avisos",
-	"monobook-responsive-label": "Activar el diseñu adautable de MonoBook"
+	"monobook-view-history": "Historial",
+	"monobook-action-undelete": "Restaurar {{PLURAL:$1|una edición|$1 ediciones}}"
 }

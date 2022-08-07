@@ -1,12 +1,14 @@
 <?php
 
+use MediaWiki\Block\BlockActionInfo;
 use MediaWiki\Block\BlockRestrictionStore;
 use MediaWiki\Block\BlockUtils;
 use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Block\Restriction\NamespaceRestriction;
 use MediaWiki\Block\Restriction\PageRestriction;
 use MediaWiki\Cache\LinkBatchFactory;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\CommentFormatter\RowCommentFormatter;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\TestingAccessWrapper;
@@ -17,53 +19,61 @@ use Wikimedia\TestingAccessWrapper;
  */
 class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 
-	/**
-	 * @var LinkBatchFactory
-	 */
-	private $linkBatchFactory;
+	/** @var BlockActionInfo */
+	private $blockActionInfo;
 
 	/** @var BlockRestrictionStore */
 	private $blockRestrictionStore;
 
-	/** @var ILoadBalancer */
-	private $loadBalancer;
-
-	/** @var SpecialPageFactory */
-	private $specialPageFactory;
-
-	/** @var ActorMigration */
-	private $actorMigration;
+	/** @var BlockUtils */
+	private $blockUtils;
 
 	/** @var CommentStore */
 	private $commentStore;
 
-	/** @var BlockUtils */
-	private $blockUtils;
+	/** @var LinkRenderer */
+	private $linkRenderer;
 
-	protected function setUp() : void {
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
+
+	/** @var ILoadBalancer */
+	private $loadBalancer;
+
+	/** @var RowCommentFormatter */
+	private $rowCommentFormatter;
+
+	/** @var SpecialPageFactory */
+	private $specialPageFactory;
+
+	protected function setUp(): void {
 		parent::setUp();
 
-		$services = MediaWikiServices::getInstance();
-		$this->linkBatchFactory = $services->getLinkBatchFactory();
+		$services = $this->getServiceContainer();
+		$this->blockActionInfo = $services->getBlockActionInfo();
 		$this->blockRestrictionStore = $services->getBlockRestrictionStore();
-		$this->loadBalancer = $services->getDBLoadBalancer();
-		$this->specialPageFactory = $services->getSpecialPageFactory();
-		$this->actorMigration = $services->getActorMigration();
-		$this->commentStore = $services->getCommentStore();
 		$this->blockUtils = $services->getBlockUtils();
+		$this->commentStore = $services->getCommentStore();
+		$this->linkBatchFactory = $services->getLinkBatchFactory();
+		$this->linkRenderer = $services->getLinkRenderer();
+		$this->loadBalancer = $services->getDBLoadBalancer();
+		$this->rowCommentFormatter = $services->getRowCommentFormatter();
+		$this->specialPageFactory = $services->getSpecialPageFactory();
 	}
 
 	private function getBlockListPager() {
 		return new BlockListPager(
-			new SpecialPage(),
-			[],
-			$this->linkBatchFactory,
+			RequestContext::getMain(),
+			$this->blockActionInfo,
 			$this->blockRestrictionStore,
-			$this->loadBalancer,
-			$this->specialPageFactory,
-			$this->actorMigration,
+			$this->blockUtils,
 			$this->commentStore,
-			$this->blockUtils
+			$this->linkBatchFactory,
+			$this->linkRenderer,
+			$this->loadBalancer,
+			$this->rowCommentFormatter,
+			$this->specialPageFactory,
+			[]
 		);
 	}
 
@@ -85,10 +95,7 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 		$wrappedPager->mCurrentRow = $row;
 
 		$formatted = $pager->formatValue( $name, $value );
-		$this->assertEquals( $expected, $formatted );
-
-		// Reset the time.
-		MWTimestamp::setFakeTime( false );
+		$this->assertStringMatchesFormat( $expected, $formatted );
 	}
 
 	/**
@@ -147,7 +154,7 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 			],
 			[
 				'ipb_by',
-				$row->ipb_by_text,
+				'<a %s><bdi>Admin</bdi></a>%s',
 				$row,
 			],
 			[
@@ -228,15 +235,23 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::preprocessResults
 	 */
 	public function testPreprocessResults() {
+		$this->tablesUsed[] = 'ipblocks';
+		$this->tablesUsed[] = 'ipblocks_restrictions';
+		$this->tablesUsed[] = 'comment';
+		$this->tablesUsed[] = 'page';
+		$this->tablesUsed[] = 'user';
+
 		// Test the Link Cache.
-		$linkCache = MediaWikiServices::getInstance()->getLinkCache();
+		$linkCache = $this->getServiceContainer()->getLinkCache();
 		$wrappedlinkCache = TestingAccessWrapper::newFromObject( $linkCache );
+		$admin = $this->getTestSysop()->getUser();
 
 		$links = [
 			'User:127.0.0.1',
 			'User_talk:127.0.0.1',
-			'User:Admin',
-			'User_talk:Admin',
+			$admin->getUserPage()->getPrefixedDBkey(),
+			$admin->getTalkPage()->getPrefixedDBkey(),
+			'Comment_link'
 		];
 
 		foreach ( $links as $link ) {
@@ -245,25 +260,31 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 
 		$row = (object)[
 			'ipb_address' => '127.0.0.1',
-			'by_user_name' => 'Admin',
+			'ipb_by' => $admin->getId(),
+			'ipb_by_text' => $admin->getName(),
 			'ipb_sitewide' => 1,
 			'ipb_timestamp' => $this->db->timestamp( wfTimestamp( TS_MW ) ),
+			'ipb_reason_text' => '[[Comment link]]',
+			'ipb_reason_data' => null,
 		];
 		$pager = $this->getBlockListPager();
-		$pager->preprocessResults( [ $row ] );
+		$pager->preprocessResults( new FakeResultWrapper( [ $row ] ) );
 
 		foreach ( $links as $link ) {
-			$this->assertSame( 1, $wrappedlinkCache->badLinks->get( $link ) );
+			$this->assertSame( 1, $wrappedlinkCache->badLinks->get( $link ), "Bad link [[$link]]" );
 		}
 
 		// Test sitewide blocks.
 		$row = (object)[
 			'ipb_address' => '127.0.0.1',
-			'by_user_name' => 'Admin',
+			'ipb_by' => $admin->getId(),
+			'ipb_by_text' => $admin->getName(),
 			'ipb_sitewide' => 1,
+			'ipb_reason_text' => '',
+			'ipb_reason_data' => null,
 		];
 		$pager = $this->getBlockListPager();
-		$pager->preprocessResults( [ $row ] );
+		$pager->preprocessResults( new FakeResultWrapper( [ $row ] ) );
 
 		$this->assertObjectNotHasAttribute( 'ipb_restrictions', $row );
 
@@ -276,7 +297,7 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 		// Test partial blocks.
 		$block = new DatabaseBlock( [
 			'address' => $target,
-			'by' => $this->getTestSysop()->getUser()->getId(),
+			'by' => $this->getTestSysop()->getUser(),
 			'reason' => 'Parce que',
 			'expiry' => $this->db->getInfinity(),
 			'sitewide' => false,
@@ -284,10 +305,14 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 		$block->setRestrictions( [
 			new PageRestriction( 0, $page->getId() ),
 		] );
-		$blockStore = MediaWikiServices::getInstance()->getDatabaseBlockStore();
+		$blockStore = $this->getServiceContainer()->getDatabaseBlockStore();
 		$blockStore->insertBlock( $block );
 
-		$result = $this->db->select( 'ipblocks', [ '*' ], [ 'ipb_id' => $block->getId() ] );
+		$result = $this->db->newSelectQueryBuilder()
+			->queryInfo( DatabaseBlock::getQueryInfo() )
+			->where( [ 'ipb_id' => $block->getId() ] )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 
 		$pager = $this->getBlockListPager();
 		$pager->preprocessResults( $result );
@@ -302,8 +327,5 @@ class BlockListPagerTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $page->getId(), $restriction->getTitle()->getArticleID() );
 		$this->assertEquals( $title->getDBkey(), $restriction->getTitle()->getDBkey() );
 		$this->assertEquals( $title->getNamespace(), $restriction->getTitle()->getNamespace() );
-
-		// Delete the block and the restrictions.
-		$blockStore->deleteBlock( $block );
 	}
 }

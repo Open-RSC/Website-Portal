@@ -20,6 +20,7 @@
  */
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\CommentFormatter\RowCommentFormatter;
 use MediaWiki\Linker\LinkRenderer;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -28,20 +29,29 @@ class ProtectedPagesPager extends TablePager {
 	public $mConds;
 	private $type, $level, $namespace, $sizetype, $size, $indefonly, $cascadeonly, $noredirect;
 
-	/** @var LinkBatchFactory */
-	private $linkBatchFactory;
-
 	/** @var CommentStore */
 	private $commentStore;
 
-	/** @var ActorMigration */
-	private $actorMigration;
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/** @var UserCache */
 	private $userCache;
 
+	/** @var RowCommentFormatter */
+	private $rowCommentFormatter;
+
+	/** @var string[] */
+	private $formattedComments = [];
+
 	/**
-	 * @param SpecialPage $form
+	 * @param IContextSource $context
+	 * @param CommentStore $commentStore
+	 * @param LinkBatchFactory $linkBatchFactory
+	 * @param LinkRenderer $linkRenderer
+	 * @param ILoadBalancer $loadBalancer
+	 * @param RowCommentFormatter $rowCommentFormatter
+	 * @param UserCache $userCache
 	 * @param array $conds
 	 * @param string $type
 	 * @param string $level
@@ -51,15 +61,15 @@ class ProtectedPagesPager extends TablePager {
 	 * @param bool $indefonly
 	 * @param bool $cascadeonly
 	 * @param bool $noredirect
-	 * @param LinkRenderer $linkRenderer
-	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param ILoadBalancer $loadBalancer
-	 * @param CommentStore $commentStore
-	 * @param ActorMigration $actorMigration
-	 * @param UserCache $userCache
 	 */
 	public function __construct(
-		$form,
+		IContextSource $context,
+		CommentStore $commentStore,
+		LinkBatchFactory $linkBatchFactory,
+		LinkRenderer $linkRenderer,
+		ILoadBalancer $loadBalancer,
+		RowCommentFormatter $rowCommentFormatter,
+		UserCache $userCache,
 		$conds,
 		$type,
 		$level,
@@ -68,17 +78,15 @@ class ProtectedPagesPager extends TablePager {
 		$size,
 		$indefonly,
 		$cascadeonly,
-		$noredirect,
-		LinkRenderer $linkRenderer,
-		LinkBatchFactory $linkBatchFactory,
-		ILoadBalancer $loadBalancer,
-		CommentStore $commentStore,
-		ActorMigration $actorMigration,
-		UserCache $userCache
+		$noredirect
 	) {
 		// Set database before parent constructor to avoid setting it there with wfGetDB
 		$this->mDb = $loadBalancer->getConnectionRef( ILoadBalancer::DB_REPLICA );
-		parent::__construct( $form->getContext(), $linkRenderer );
+		parent::__construct( $context, $linkRenderer );
+		$this->commentStore = $commentStore;
+		$this->linkBatchFactory = $linkBatchFactory;
+		$this->rowCommentFormatter = $rowCommentFormatter;
+		$this->userCache = $userCache;
 		$this->mConds = $conds;
 		$this->type = $type ?: 'edit';
 		$this->level = $level;
@@ -88,10 +96,6 @@ class ProtectedPagesPager extends TablePager {
 		$this->indefonly = (bool)$indefonly;
 		$this->cascadeonly = (bool)$cascadeonly;
 		$this->noredirect = (bool)$noredirect;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->commentStore = $commentStore;
-		$this->actorMigration = $actorMigration;
-		$this->userCache = $userCache;
 	}
 
 	public function preprocessResults( $result ) {
@@ -101,9 +105,8 @@ class ProtectedPagesPager extends TablePager {
 
 		foreach ( $result as $row ) {
 			$lb->add( $row->page_namespace, $row->page_title );
-			// field is nullable, maybe null on old protections
-			if ( $row->log_user !== null ) {
-				$userids[] = $row->log_user;
+			if ( $row->actor_user !== null ) {
+				$userids[] = $row->actor_user;
 			}
 		}
 
@@ -120,6 +123,9 @@ class ProtectedPagesPager extends TablePager {
 		}
 
 		$lb->execute();
+
+		// Format the comments
+		$this->formattedComments = $this->rowCommentFormatter->formatRows( $result, 'log_comment' );
 	}
 
 	protected function getFieldNames() {
@@ -130,7 +136,7 @@ class ProtectedPagesPager extends TablePager {
 				'log_timestamp' => 'protectedpages-timestamp',
 				'pr_page' => 'protectedpages-page',
 				'pr_expiry' => 'protectedpages-expiry',
-				'log_user' => 'protectedpages-performer',
+				'actor_user' => 'protectedpages-performer',
 				'pr_params' => 'protectedpages-params',
 				'log_comment' => 'protectedpages-reason',
 			];
@@ -144,7 +150,7 @@ class ProtectedPagesPager extends TablePager {
 
 	/**
 	 * @param string $field
-	 * @param string $value
+	 * @param string|null $value
 	 * @return string HTML
 	 * @throws MWException
 	 */
@@ -195,7 +201,7 @@ class ProtectedPagesPager extends TablePager {
 
 			case 'pr_expiry':
 				$formatted = htmlspecialchars( $this->getLanguage()->formatExpiry(
-					$value, /* User preference timezone */true ) );
+					$value, /* User preference timezone */true, 'infinity', $this->getUser() ) );
 				$title = Title::makeTitleSafe( $row->page_namespace, $row->page_title );
 				if ( $title && $this->getAuthority()->isAllowed( 'protect' ) ) {
 					$changeProtection = $linkRenderer->makeKnownLink(
@@ -212,7 +218,7 @@ class ProtectedPagesPager extends TablePager {
 				}
 				break;
 
-			case 'log_user':
+			case 'actor_user':
 				// when timestamp is null, this is a old protection row
 				if ( $row->log_timestamp === null ) {
 					$formatted = Html::rawElement(
@@ -221,18 +227,14 @@ class ProtectedPagesPager extends TablePager {
 						$this->msg( 'protectedpages-unknown-performer' )->escaped()
 					);
 				} else {
-					$username = $this->userCache->getProp( $value, 'name' );
+					$username = $row->actor_name;
 					if ( LogEventsList::userCanBitfield(
 						$row->log_deleted,
 						LogPage::DELETED_USER,
 						$this->getUser()
 					) ) {
-						if ( $username === false ) {
-							$formatted = htmlspecialchars( $value );
-						} else {
-							$formatted = Linker::userLink( $value, $username )
-								. Linker::userToolLinks( $value, $username );
-						}
+						$formatted = Linker::userLink( (int)$value, $username )
+							. Linker::userToolLinks( (int)$value, $username );
 					} else {
 						$formatted = $this->msg( 'rev-deleted-user' )->escaped();
 					}
@@ -266,8 +268,7 @@ class ProtectedPagesPager extends TablePager {
 						LogPage::DELETED_COMMENT,
 						$this->getUser()
 					) ) {
-						$value = $this->commentStore->getComment( 'log_comment', $row )->text;
-						$formatted = Linker::formatComment( $value ?? '' );
+						$formatted = $this->formattedComments[$this->getResultOffset()];
 					} else {
 						$formatted = $this->msg( 'rev-deleted-comment' )->escaped();
 					}
@@ -317,12 +318,11 @@ class ProtectedPagesPager extends TablePager {
 		}
 
 		$commentQuery = $this->commentStore->getJoin( 'log_comment' );
-		$actorQuery = $this->actorMigration->getJoin( 'log_user' );
 
 		return [
 			'tables' => [
 				'page', 'page_restrictions', 'log_search',
-				'logparen' => [ 'logging' ] + $commentQuery['tables'] + $actorQuery['tables'],
+				'logparen' => [ 'logging', 'actor' ] + $commentQuery['tables'],
 			],
 			'fields' => [
 				'pr_id',
@@ -335,7 +335,9 @@ class ProtectedPagesPager extends TablePager {
 				'pr_cascade',
 				'log_timestamp',
 				'log_deleted',
-			] + $commentQuery['fields'] + $actorQuery['fields'],
+				'actor_name',
+				'actor_user'
+			] + $commentQuery['fields'],
 			'conds' => $conds,
 			'join_conds' => [
 				'log_search' => [
@@ -347,8 +349,13 @@ class ProtectedPagesPager extends TablePager {
 					'LEFT JOIN', [
 						'ls_log_id = log_id'
 					]
+				],
+				'actor' => [
+					'JOIN', [
+						'actor_id=log_actor'
+					]
 				]
-			] + $commentQuery['joins'] + $actorQuery['joins']
+			] + $commentQuery['joins']
 		];
 	}
 

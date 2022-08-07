@@ -89,7 +89,7 @@ class HistoryAction extends FormlessAction {
 		// Precache various messages
 		if ( !isset( $this->message ) ) {
 			$this->message = [];
-			$msgs = [ 'cur', 'last', 'pipe-separator' ];
+			$msgs = [ 'cur', 'tooltip-cur', 'last', 'tooltip-last', 'pipe-separator' ];
 			foreach ( $msgs as $msg ) {
 				$this->message[$msg] = $this->msg( $msg )->escaped();
 			}
@@ -117,8 +117,8 @@ class HistoryAction extends FormlessAction {
 			$day = cal_days_in_month( CAL_GREGORIAN, $month, $year );
 
 			// Left pad the months and days
-			$month = str_pad( $month, 2, "0", STR_PAD_LEFT );
-			$day = str_pad( $day, 2, "0", STR_PAD_LEFT );
+			$month = str_pad( (string)$month, 2, "0", STR_PAD_LEFT );
+			$day = str_pad( (string)$day, 2, "0", STR_PAD_LEFT );
 		}
 
 		$before = $request->getVal( 'date-range-to' );
@@ -203,8 +203,8 @@ class HistoryAction extends FormlessAction {
 
 		// Fail nicely if article doesn't exist.
 		if ( !$this->getWikiPage()->exists() ) {
-			global $wgSend404Code;
-			if ( $wgSend404Code ) {
+			$send404Code = $config->get( 'Send404Code' );
+			if ( $send404Code ) {
 				$out->setStatusCode( 404 );
 			}
 			$out->addWikiMsg( 'nohistory' );
@@ -258,7 +258,7 @@ class HistoryAction extends FormlessAction {
 				'name' => 'date-range-to',
 			],
 			[
-				'label-raw' => $this->msg( 'tag-filter' )->parse(),
+				'label-message' => 'tag-filter',
 				'type' => 'tagfilter',
 				'id' => 'tagfilter',
 				'name' => 'tagfilter',
@@ -281,9 +281,9 @@ class HistoryAction extends FormlessAction {
 			->setAction( wfScript() )
 			->setCollapsibleOptions( true )
 			->setId( 'mw-history-searchform' )
-			->setSubmitText( $this->msg( 'historyaction-submit' )->text() )
+			->setSubmitTextMsg( 'historyaction-submit' )
 			->setWrapperAttributes( [ 'id' => 'mw-history-search' ] )
-			->setWrapperLegend( $this->msg( 'history-fieldset-title' )->text() );
+			->setWrapperLegendMsg( 'history-fieldset-title' );
 		$htmlForm->loadData();
 
 		$out->addHTML( $htmlForm->getHTML( false ) );
@@ -296,13 +296,13 @@ class HistoryAction extends FormlessAction {
 		// Create and output the list.
 		$dateComponents = explode( '-', $ts );
 		if ( count( $dateComponents ) > 1 ) {
-			$y = $dateComponents[0];
-			$m = $dateComponents[1];
-			$d = $dateComponents[2];
+			$y = (int)$dateComponents[0];
+			$m = (int)$dateComponents[1];
+			$d = (int)$dateComponents[2];
 		} else {
-			$y = '';
-			$m = '';
-			$d = '';
+			$y = 0;
+			$m = 0;
+			$d = 0;
 		}
 		$pager = new HistoryPager(
 			$this,
@@ -312,14 +312,15 @@ class HistoryAction extends FormlessAction {
 			$conds,
 			$d,
 			$services->getLinkBatchFactory(),
-			$watchlistManager
+			$watchlistManager,
+			$services->getCommentFormatter()
 		);
 		$out->addHTML(
 			$pager->getNavigationBar() .
 			$pager->getBody() .
 			$pager->getNavigationBar()
 		);
-		$out->preventClickjacking( $pager->getPreventClickjacking() );
+		$out->setPreventClickjacking( $pager->getPreventClickjacking() );
 
 		return null;
 	}
@@ -357,6 +358,10 @@ class HistoryAction extends FormlessAction {
 		$page_id = $this->getWikiPage()->getId();
 
 		$revQuery = MediaWikiServices::getInstance()->getRevisionStore()->getQueryInfo();
+		// T270033 Index renaming
+		$revIndex = $dbr->indexExists( 'revision', 'page_timestamp',  __METHOD__ )
+			? 'page_timestamp'
+			: 'rev_page_timestamp';
 		return $dbr->select(
 			$revQuery['tables'],
 			$revQuery['fields'],
@@ -364,7 +369,7 @@ class HistoryAction extends FormlessAction {
 			__METHOD__,
 			[
 				'ORDER BY' => "rev_timestamp $dirs",
-				'USE INDEX' => [ 'revision' => 'page_timestamp' ],
+				'USE INDEX' => [ 'revision' => $revIndex ],
 				'LIMIT' => $limit
 			],
 			$revQuery['joins']
@@ -391,7 +396,7 @@ class HistoryAction extends FormlessAction {
 			$this->getTitle()->getFullURL( 'action=history' )
 		);
 
-		// Get a limit on number of feed entries. Provide a sane default
+		// Get a limit on number of feed entries. Provide a sensible default
 		// of 10 if none is defined (but limit to $wgFeedLimit max)
 		$limit = $request->getInt( 'limit', 10 );
 		$limit = min(
@@ -401,11 +406,15 @@ class HistoryAction extends FormlessAction {
 
 		$items = $this->fetchRevisions( $limit, 0, self::DIR_NEXT );
 
+		// Preload comments
+		$formattedComments = MediaWikiServices::getInstance()->getRowCommentFormatter()
+			->formatRows( $items, 'rev_comment' );
+
 		// Generate feed elements enclosed between header and footer.
 		$feed->outHeader();
 		if ( $items->numRows() ) {
-			foreach ( $items as $row ) {
-				$feed->outItem( $this->feedItem( $row ) );
+			foreach ( $items as $i => $row ) {
+				$feed->outItem( $this->feedItem( $row, $formattedComments[$i] ) );
 			}
 		} else {
 			$feed->outItem( $this->feedEmpty() );
@@ -430,19 +439,20 @@ class HistoryAction extends FormlessAction {
 	 * includes a diff to the previous revision (if any).
 	 *
 	 * @param stdClass|array $row Database row
+	 * @param string $formattedComment The comment in HTML format
 	 * @return FeedItem
 	 */
-	private function feedItem( $row ) {
+	private function feedItem( $row, $formattedComment ) {
 		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
 		$rev = $revisionStore->newRevisionFromRow( $row, 0, $this->getTitle() );
 		$prevRev = $revisionStore->getPreviousRevision( $rev );
 		$revComment = $rev->getComment() === null ? null : $rev->getComment()->text;
-		$text = FeedUtils::formatDiffRow(
+		$text = FeedUtils::formatDiffRow2(
 			$this->getTitle(),
 			$prevRev ? $prevRev->getId() : false,
 			$rev->getId(),
 			$rev->getTimestamp(),
-			$revComment
+			$formattedComment
 		);
 		$revUserText = $rev->getUser() ? $rev->getUser()->getName() : '';
 		if ( $revComment == '' ) {

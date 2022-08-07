@@ -20,6 +20,7 @@ class ResponseFactoryTest extends MediaWikiUnitTestCase {
 			[ '/', '"/"' ],
 			[ '£', '"£"' ],
 			[ [], '[]' ],
+			[ "\xc0", "\"\u{FFFD}\"" ] // T289597
 		];
 	}
 
@@ -161,7 +162,7 @@ class ResponseFactoryTest extends MediaWikiUnitTestCase {
 		$body->rewind();
 		$data = json_decode( $body->getContents(), true );
 		$this->assertSame( 500, $data['httpCode'] );
-		$this->assertSame( 'Error: exception of type Exception', $data['message'] );
+		$this->assertSame( 'Error: exception of type Exception: hello', $data['message'] );
 	}
 
 	public function testCreateFromExceptionWrapped() {

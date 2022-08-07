@@ -8,9 +8,11 @@ use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Rest\BasicAccess\BasicAuthorizerInterface;
 use MediaWiki\Rest\PathTemplateMatcher\PathMatcher;
+use MediaWiki\Rest\Reporter\ErrorReporter;
 use MediaWiki\Rest\Validator\Validator;
+use Throwable;
 use Wikimedia\Message\MessageValue;
-use Wikimedia\ObjectFactory;
+use Wikimedia\ObjectFactory\ObjectFactory;
 
 /**
  * The REST router is responsible for gathering handler configuration, matching
@@ -63,13 +65,16 @@ class Router {
 	/** @var CorsUtils|null */
 	private $cors;
 
+	/** @var ErrorReporter */
+	private $errorReporter;
+
 	/** @var HookContainer */
 	private $hookContainer;
 
 	/**
 	 * @param string[] $routeFiles List of names of JSON files containing routes
 	 * @param array $extraRoutes Extension route array
-	 * @param string $baseUrl The base URL
+	 * @param string $baseUrl
 	 * @param string $rootPath The base path for routes, relative to the base URL
 	 * @param BagOStuff $cacheBag A cache in which to store the matcher trees
 	 * @param ResponseFactory $responseFactory
@@ -77,13 +82,23 @@ class Router {
 	 * @param Authority $authority
 	 * @param ObjectFactory $objectFactory
 	 * @param Validator $restValidator
+	 * @param ErrorReporter $errorReporter
 	 * @param HookContainer $hookContainer
 	 * @internal
 	 */
-	public function __construct( $routeFiles, $extraRoutes, $baseUrl, $rootPath,
-		BagOStuff $cacheBag, ResponseFactory $responseFactory,
-		BasicAuthorizerInterface $basicAuth, Authority $authority,
-		ObjectFactory $objectFactory, Validator $restValidator, HookContainer $hookContainer
+	public function __construct(
+		$routeFiles,
+		$extraRoutes,
+		$baseUrl,
+		$rootPath,
+		BagOStuff $cacheBag,
+		ResponseFactory $responseFactory,
+		BasicAuthorizerInterface $basicAuth,
+		Authority $authority,
+		ObjectFactory $objectFactory,
+		Validator $restValidator,
+		ErrorReporter $errorReporter,
+		HookContainer $hookContainer
 	) {
 		$this->routeFiles = $routeFiles;
 		$this->extraRoutes = $extraRoutes;
@@ -95,6 +110,7 @@ class Router {
 		$this->authority = $authority;
 		$this->objectFactory = $objectFactory;
 		$this->restValidator = $restValidator;
+		$this->errorReporter = $errorReporter;
 		$this->hookContainer = $hookContainer;
 	}
 
@@ -322,6 +338,9 @@ class Router {
 			return $this->executeHandler( $handler );
 		} catch ( HttpException $e ) {
 			return $this->responseFactory->createFromException( $e );
+		} catch ( Throwable $e ) {
+			$this->errorReporter->reportError( $e, $handler, $request );
+			return $this->responseFactory->createFromException( $e );
 		}
 	}
 
@@ -331,7 +350,7 @@ class Router {
 	 * @param string $relPath
 	 * @return array
 	 */
-	private function getAllowedMethods( string $relPath ) : array {
+	private function getAllowedMethods( string $relPath ): array {
 		// Check for 405 wrong method
 		$allowed = [];
 		foreach ( $this->getMatchers() as $allowedMethod => $allowedMatcher ) {
@@ -407,7 +426,7 @@ class Router {
 	 * @param CorsUtils $cors
 	 * @return self
 	 */
-	public function setCors( CorsUtils $cors ) : self {
+	public function setCors( CorsUtils $cors ): self {
 		$this->cors = $cors;
 
 		return $this;

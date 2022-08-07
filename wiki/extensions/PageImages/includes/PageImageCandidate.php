@@ -23,6 +23,9 @@ class PageImageCandidate implements JsonSerializable {
 	/** @var int */
 	private $handlerWidth = 0;
 
+	/** @var string */
+	private $frameClass = '';
+
 	/**
 	 * Private constructor.
 	 * Use self::newFromFileAndParams to instantiate.
@@ -35,13 +38,17 @@ class PageImageCandidate implements JsonSerializable {
 	 * @param array $fileParams from ParserMakeImageParams hook.
 	 * @return PageImageCandidate
 	 */
-	public static function newFromFileAndParams( File $file, array $fileParams ) : self {
+	public static function newFromFileAndParams( File $file, array $fileParams ): self {
 		$instance = new self();
 		$instance->fileName = $file->getTitle()->getDBkey();
 		$instance->fullWidth = $file->getWidth() ?? 0;
 		$instance->fullHeight = $file->getHeight() ?? 0;
 		if ( isset( $fileParams['handler']['width'] ) ) {
 			$instance->handlerWidth = $fileParams['handler']['width'] ?? 0;
+		}
+		if ( isset( $fileParams['frame']['class'] ) ) {
+			// $fileParams['frame']['class'] is set in Parser::makeImage
+			$instance->frameClass = $fileParams['frame']['class'] ?? '';
 		}
 		return $instance;
 	}
@@ -53,7 +60,7 @@ class PageImageCandidate implements JsonSerializable {
 	 * @return PageImageCandidate
 	 * @internal
 	 */
-	public static function newFromArray( array $array ) : self {
+	public static function newFromArray( array $array ): self {
 		$instance = new self();
 		$instance->fileName = $array['filename'];
 		$instance->fullWidth = $array['fullwidth'] ?? 0;
@@ -61,13 +68,16 @@ class PageImageCandidate implements JsonSerializable {
 		if ( isset( $array['handler']['width'] ) ) {
 			$instance->handlerWidth = $array['handler']['width'] ?? 0;
 		}
+		if ( isset( $array['frame']['class'] ) ) {
+			$instance->frameClass = $array['frame']['class'] ?? '';
+		}
 		return $instance;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getFileName() : string {
+	public function getFileName(): string {
 		return $this->fileName;
 	}
 
@@ -93,6 +103,13 @@ class PageImageCandidate implements JsonSerializable {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getFrameClass(): string {
+		return $this->frameClass;
+	}
+
+	/**
 	 * @internal
 	 * @return array
 	 */
@@ -104,6 +121,9 @@ class PageImageCandidate implements JsonSerializable {
 			// Wrap in handler array for backwards-compatibility.
 			'handler' => [
 				'width' => $this->getHandlerWidth()
+			],
+			'frame' => [
+				'class' => $this->getFrameClass()
 			]
 		];
 	}

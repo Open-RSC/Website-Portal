@@ -4,11 +4,11 @@
 			"Joanmp17"
 		]
 	},
-	"tag-visualeditor": "[[{{MediaWiki:visualeditor-descriptionpagelink}}|ርእየታዊ ምምዕርራይ]]",
-	"tag-visualeditor-wikitext": "ኮድ መታዓራረይ 2017",
-	"tag-visualeditor-switched": "[[{{MediaWiki:visualeditor-descriptionpagelink}}|ርእየታዊ ምምዕርራይ፦ ተላወጠ]]",
-	"visualeditor-welcomedialog-action": "ምምዕርራይ ጀምር",
-	"visualeditor-welcomedialog-switch": "ናብ ኮድ መታዓራረይ ለውጥ",
-	"visualeditor-welcomedialog-switch-ve": "ናብ ርእየታዊ መታዓራረይ ለውጥ",
-	"visualeditor-welcomedialog-title": "ናብ $2 {{GENDER:$1|እንቋዕ ብደሓን መጻኻ}}"
+	"tag-visualeditor": "[[{{MediaWiki:visualeditor-descriptionpagelink}}|ርእየታዊ ኣርትዖት]]",
+	"tag-visualeditor-wikitext": "ኣርታዒ ኮድ 2017",
+	"tag-visualeditor-switched": "[[{{MediaWiki:visualeditor-descriptionpagelink}}|ርእየታዊ ኣርትዖት፦ ተለዊጡ]]",
+	"visualeditor-welcomedialog-action": "ኣርትዖት ጀምር",
+	"visualeditor-welcomedialog-switch": "ናብ ኣርታዒ ኮድ ለውጥ",
+	"visualeditor-welcomedialog-switch-ve": "ናብ ርእየታዊ ኣርታዒ ለውጥ",
+	"visualeditor-welcomedialog-title": "{{GENDER:$1|እንቋዕ ብደሓን መጻእካ|እንቋዕ ብደሓን መጻእኪ}} ናብ $2"
 }

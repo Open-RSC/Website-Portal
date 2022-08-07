@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @group large
  * @group Upload
@@ -14,7 +12,7 @@ class UploadFromUrlTest extends ApiTestCase {
 
 	private $user;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->user = self::$users['sysop']->getUser();
 
@@ -24,7 +22,7 @@ class UploadFromUrlTest extends ApiTestCase {
 		] );
 		$this->setGroupPermissions( 'sysop', 'upload_by_url', true );
 
-		if ( MediaWikiServices::getInstance()->getRepoGroup()->getLocalRepo()
+		if ( $this->getServiceContainer()->getRepoGroup()->getLocalRepo()
 			->newFile( 'UploadFromUrlTest.png' )->exists()
 		) {
 			$this->deleteFile( 'UploadFromUrlTest.png' );
@@ -37,9 +35,10 @@ class UploadFromUrlTest extends ApiTestCase {
 	 * Ensure that the job queue is empty before continuing
 	 */
 	public function testClearQueue() {
-		$job = JobQueueGroup::singleton()->pop();
+		$jobQueueGroup = $this->getServiceContainer()->getJobQueueGroup();
+		$job = $jobQueueGroup->pop();
 		while ( $job ) {
-			$job = JobQueueGroup::singleton()->pop();
+			$job = $jobQueueGroup->pop();
 		}
 		$this->assertFalse( $job );
 	}
@@ -144,7 +143,7 @@ class UploadFromUrlTest extends ApiTestCase {
 		}
 		$this->assertTrue( $exception, "Got exception" );
 
-		$this->user->removeGroup( 'sysop' );
+		$this->getServiceContainer()->getUserGroupManager()->removeUserFromGroup( $this->user, 'sysop' );
 		$exception = false;
 		try {
 			$this->doApiRequest( [
@@ -183,15 +182,12 @@ class UploadFromUrlTest extends ApiTestCase {
 		$file = __DIR__ . '/../../data/upload/png-plain.png';
 		$this->installMockHttp( file_get_contents( $file ) );
 
-		$token = $this->user->getEditToken();
-
-		$this->user->addGroup( 'users' );
-		$data = $this->doApiRequest( [
+		$this->getServiceContainer()->getUserGroupManager()->addUserToGroup( $this->user, 'users' );
+		$data = $this->doApiRequestWithToken( [
 			'action' => 'upload',
 			'filename' => 'UploadFromUrlTest.png',
 			'url' => 'http://upload.wikimedia.org/wikipedia/mediawiki/b/bc/Wiki.png',
 			'ignorewarnings' => true,
-			'token' => $token,
 		], $data );
 
 		$this->assertEquals( 'Success', $data[0]['upload']['result'] );
@@ -205,12 +201,12 @@ class UploadFromUrlTest extends ApiTestCase {
 		$this->assertTrue( $t->exists(), "File '$name' exists" );
 
 		if ( $t->exists() ) {
-			$file = MediaWikiServices::getInstance()->getRepoGroup()
+			$file = $this->getServiceContainer()->getRepoGroup()
 				->findFile( $name, [ 'ignoreRedirect' => true ] );
 			$empty = "";
 			FileDeleteForm::doDelete( $t, $file, $empty, "none", true, $this->user );
-			$page = WikiPage::factory( $t );
-			$page->doDeleteArticleReal( "testing", $this->user );
+			$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $t );
+			$this->deletePage( $page );
 		}
 		$t = Title::newFromText( $name, NS_FILE );
 

@@ -27,7 +27,7 @@ class TOTPDisableForm extends OATHAuthOOUIHTMLForm implements IManageForm {
 				'required' => true,
 				'autofocus' => true,
 				'dir' => 'ltr',
-				'autocomplete' => false,
+				'autocomplete' => 'one-time-code',
 				'spellcheck' => false,
 			]
 		];
@@ -65,7 +65,7 @@ class TOTPDisableForm extends OATHAuthOOUIHTMLForm implements IManageForm {
 		}
 
 		$this->oathUser->setKeys();
-		$this->oathRepo->remove( $this->oathUser, $this->getRequest()->getIP() );
+		$this->oathRepo->remove( $this->oathUser, $this->getRequest()->getIP(), true );
 
 		return true;
 	}

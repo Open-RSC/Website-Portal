@@ -55,10 +55,12 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 	public $singleBackend;
 	private static $backendToUse;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		global $wgFileBackends;
 		parent::setUp();
 		$tmpDir = $this->getNewTempDirectory();
+		$lockManagerGroup = $this->getServiceContainer()
+			->getLockManagerGroupFactory()->getLockManagerGroup();
 		if ( $this->getCliArg( 'use-filebackend' ) ) {
 			if ( self::$backendToUse ) {
 				$this->singleBackend = self::$backendToUse;
@@ -75,13 +77,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 				$useConfig['shardViaHashLevels'] = [ // test sharding
 					'unittest-cont1' => [ 'levels' => 1, 'base' => 16, 'repeat' => 1 ]
 				];
-				if ( isset( $useConfig['fileJournal'] ) ) {
-					$useConfig['fileJournal'] = ObjectFactory::getObjectFromSpec(
-						[ 'backend' => $name ] + $useConfig['fileJournal'],
-						[ 'specIsArg' => true, 'assertClass' => FileJournal::class ]
-					);
-				}
-				$useConfig['lockManager'] = LockManagerGroup::singleton()->get( $useConfig['lockManager'] );
+				$useConfig['lockManager'] = $lockManagerGroup->get( $useConfig['lockManager'] );
 				$class = $useConfig['class'];
 				self::$backendToUse = new $class( $useConfig );
 				$this->singleBackend = self::$backendToUse;
@@ -89,8 +85,8 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 		} else {
 			$this->singleBackend = new FSFileBackend( [
 				'name' => 'localtesting',
-				'lockManager' => LockManagerGroup::singleton()->get( 'fsLockManager' ),
-				'wikiId' => wfWikiID(),
+				'lockManager' => $lockManagerGroup->get( 'fsLockManager' ),
+				'wikiId' => WikiMap::getCurrentWikiId(),
 				'logger' => LoggerFactory::getInstance( 'FileOperation' ),
 				'containerPaths' => [
 					'unittest-cont1' => "{$tmpDir}/localtesting-cont1",
@@ -99,7 +95,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 		}
 		$this->multiBackend = new FileBackendMultiWrite( [
 			'name' => 'localtesting',
-			'lockManager' => LockManagerGroup::singleton()->get( 'fsLockManager' ),
+			'lockManager' => $lockManagerGroup->get( 'fsLockManager' ),
 			'parallelize' => 'implicit',
 			'wikiId' => 'testdb',
 			'logger' => LoggerFactory::getInstance( 'FileOperation' ),
@@ -170,7 +166,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 			"Store from $source to $dest succeeded ($backendName)." );
 		$this->assertEquals( [ 0 => true ], $status->success,
 			"Store from $source to $dest has proper 'success' field in Status ($backendName)." );
-		$this->assertTrue( file_exists( $source ),
+		$this->assertTrue( is_file( $source ),
 			"Source file $source still exists ($backendName)." );
 		$this->assertTrue( $this->backend->fileExists( [ 'src' => $dest ] ),
 			"Destination file $dest exists ($backendName)." );
@@ -1552,7 +1548,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 		$url = $this->backend->getFileHttpUrl( [ 'src' => $source ] );
 
 		if ( $url !== null ) { // supported
-			$data = MediaWikiServices::getInstance()->getHttpRequestFactory()->
+			$data = $this->getServiceContainer()->getHttpRequestFactory()->
 				get( $url, [], __METHOD__ );
 			$this->assertEquals( $content, $data,
 				"HTTP GET of URL has right contents ($backendName)." );
@@ -2510,7 +2506,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 		$be = TestingAccessWrapper::newFromObject(
 			new FileBackendMultiWrite( [
 				'name' => 'localtesting',
-				'wikiId' => wfWikiID() . mt_rand(),
+				'wikiId' => WikiMap::getCurrentWikiId() . mt_rand(),
 				'backends' => [
 					[ // backend 0
 						'name' => 'multitesting0',
@@ -2560,7 +2556,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 		$be = TestingAccessWrapper::newFromObject(
 			new FileBackendMultiWrite( [
 				'name' => 'localtesting',
-				'wikiId' => wfWikiID() . mt_rand(),
+				'wikiId' => WikiMap::getCurrentWikiId() . mt_rand(),
 				'backends' => [
 					[ // backend 0
 						'name' => 'multitesting0',
@@ -2605,7 +2601,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 	public function testSanitizeOpHeaders() {
 		$be = TestingAccessWrapper::newFromObject( new MemoryFileBackend( [
 			'name' => 'localtesting',
-			'wikiId' => wfWikiID()
+			'wikiId' => WikiMap::getCurrentWikiId()
 		] ) );
 
 		$input = [
@@ -2624,10 +2620,7 @@ class FileBackendIntegrationTest extends MediaWikiIntegrationTestCase {
 			]
 		];
 
-		Wikimedia\suppressWarnings();
-		$actual = $be->sanitizeOpHeaders( $input );
-		Wikimedia\restoreWarnings();
-
+		$actual = @$be->sanitizeOpHeaders( $input );
 		$this->assertEquals( $expected, $actual, "Header sanitized properly" );
 	}
 

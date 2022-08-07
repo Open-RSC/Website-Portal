@@ -93,7 +93,7 @@ class UpdateMediaWiki extends Maintenance {
 		}
 
 		$this->fileHandle = null;
-		if ( substr( $this->getOption( 'schema' ), 0, 2 ) === "--" ) {
+		if ( substr( $this->getOption( 'schema', '' ), 0, 2 ) === "--" ) {
 			$this->fatalError( "The --schema option requires a file as an argument.\n" );
 		} elseif ( $this->hasOption( 'schema' ) ) {
 			$file = $this->getOption( 'schema' );
@@ -139,7 +139,7 @@ class UpdateMediaWiki extends Maintenance {
 
 		# Attempt to connect to the database as a privileged user
 		# This will vomit up an error if there are permissions problems
-		$db = $this->getDB( DB_MASTER );
+		$db = $this->getDB( DB_PRIMARY );
 
 		# Check to see whether the database server meets the minimum requirements
 		/** @var DatabaseInstaller $dbInstallerClass */
@@ -162,7 +162,7 @@ class UpdateMediaWiki extends Maintenance {
 
 		if ( !$this->hasOption( 'quick' ) ) {
 			$this->output( "Abort with control-c in the next five seconds "
-				. "(skip this countdown with --quick) ... " );
+				. "(skip this countdown with --quick) ..." );
 			$this->countDown( 5 );
 		}
 
@@ -180,13 +180,13 @@ class UpdateMediaWiki extends Maintenance {
 
 		$updater = DatabaseUpdater::newForDB( $db, $shared, $this );
 
-		// Avoid upgrading from versions older than 1.27
-		// Using an implicit marker (bot_passwords table didn't exist until 1.27)
+		// Avoid upgrading from versions older than 1.29
+		// Using an implicit marker (ct_id field didn't exist until 1.29)
 		// TODO: Use an explicit marker
 		// See T259771
-		if ( !$updater->tableExists( 'bot_passwords' ) ) {
+		if ( !$updater->getDB()->fieldExists( 'change_tag', 'ct_id' ) ) {
 			$this->fatalError(
-				"Can not upgrade from versions older than 1.27, please upgrade to that version or later first."
+				"Can not upgrade from versions older than 1.29, please upgrade to that version or later first."
 			);
 		}
 

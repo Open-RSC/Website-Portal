@@ -59,6 +59,14 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 		// key before it expires should never have the end-result of purging that key. Using
 		// the web request time becomes increasingly problematic the longer the request lasts.
 		ini_set( 'apc.use_request_time', '0' );
+
+		if ( PHP_SAPI === 'cli' ) {
+			$this->attrMap[self::ATTR_DURABILITY] = ini_get( 'apc.enable_cli' )
+				? self::QOS_DURABILITY_SCRIPT
+				: self::QOS_DURABILITY_NONE;
+		} else {
+			$this->attrMap[self::ATTR_DURABILITY] = self::QOS_DURABILITY_SERVICE;
+		}
 	}
 
 	protected function doGet( $key, $flags = 0, &$casToken = null ) {
@@ -76,13 +84,15 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 
 	protected function doSet( $key, $value, $exptime = 0, $flags = 0 ) {
 		$blob = $this->nativeSerialize ? $value : $this->getSerialized( $value, $key );
-		$success = apcu_store( $key . self::KEY_SUFFIX, $blob, $exptime );
+		$ttl = $this->getExpirationAsTTL( $exptime );
+		$success = apcu_store( $key . self::KEY_SUFFIX, $blob, $ttl );
 		return $success;
 	}
 
 	protected function doAdd( $key, $value, $exptime = 0, $flags = 0 ) {
 		$blob = $this->nativeSerialize ? $value : $this->getSerialized( $value, $key );
-		$success = apcu_add( $key . self::KEY_SUFFIX, $blob, $exptime );
+		$ttl = $this->getExpirationAsTTL( $exptime );
+		$success = apcu_add( $key . self::KEY_SUFFIX, $blob, $ttl );
 		return $success;
 	}
 
@@ -94,6 +104,7 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 
 	public function incr( $key, $value = 1, $flags = 0 ) {
 		$result = false;
+		$value = (int)$value;
 
 		// https://github.com/krakjoe/apcu/issues/166
 		for ( $i = 0; $i < self::$CAS_MAX_ATTEMPTS; ++$i ) {
@@ -101,7 +112,7 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 			if ( !is_int( $oldCount ) ) {
 				break;
 			}
-			$count = $oldCount + (int)$value;
+			$count = $oldCount + $value;
 			if ( apcu_cas( $key . self::KEY_SUFFIX, $oldCount, $count ) ) {
 				$result = $count;
 				break;
@@ -113,6 +124,7 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 
 	public function decr( $key, $value = 1, $flags = 0 ) {
 		$result = false;
+		$value = (int)$value;
 
 		// https://github.com/krakjoe/apcu/issues/166
 		for ( $i = 0; $i < self::$CAS_MAX_ATTEMPTS; ++$i ) {
@@ -120,7 +132,7 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 			if ( !is_int( $oldCount ) ) {
 				break;
 			}
-			$count = $oldCount - (int)$value;
+			$count = $oldCount - $value;
 			if ( apcu_cas( $key . self::KEY_SUFFIX, $oldCount, $count ) ) {
 				$result = $count;
 				break;
@@ -130,25 +142,26 @@ class APCUBagOStuff extends MediumSpecificBagOStuff {
 		return $result;
 	}
 
-	public function incrWithInit( $key, $exptime, $value = 1, $init = null, $flags = 0 ) {
-		$init = is_int( $init ) ? $init : $value;
+	protected function doIncrWithInit( $key, $exptime, $step, $init, $flags ) {
 		// Use apcu 5.1.12 $ttl argument if apcu_inc() will initialize to $init:
 		// https://www.php.net/manual/en/function.apcu-inc.php
-		if ( $value === $init && $this->useIncrTTLArg ) {
+		if ( $step === $init && $this->useIncrTTLArg ) {
 			/** @noinspection PhpMethodParametersCountMismatchInspection */
-			$result = apcu_inc( $key . self::KEY_SUFFIX, $value, $success, $exptime );
+			$ttl = $this->getExpirationAsTTL( $exptime );
+			$result = apcu_inc( $key . self::KEY_SUFFIX, $step, $success, $ttl );
 		} else {
 			$result = false;
 			for ( $i = 0; $i < self::$CAS_MAX_ATTEMPTS; ++$i ) {
 				$oldCount = apcu_fetch( $key . self::KEY_SUFFIX );
 				if ( $oldCount === false ) {
-					$count = (int)$init;
-					if ( apcu_add( $key . self::KEY_SUFFIX, $count, $exptime ) ) {
+					$count = $init;
+					$ttl = $this->getExpirationAsTTL( $exptime );
+					if ( apcu_add( $key . self::KEY_SUFFIX, $count, $ttl ) ) {
 						$result = $count;
 						break;
 					}
 				} elseif ( is_int( $oldCount ) ) {
-					$count = $oldCount + (int)$value;
+					$count = $oldCount + $step;
 					if ( apcu_cas( $key . self::KEY_SUFFIX, $oldCount, $count ) ) {
 						$result = $count;
 						break;

@@ -37,26 +37,35 @@ class SpecialBotPasswords extends FormSpecialPage {
 	/** @var BotPassword|null Bot password being edited, if any */
 	private $botPassword = null;
 
-	/** @var string Operation being performed: create, update, delete */
+	/** @var string|null Operation being performed: create, update, delete */
 	private $operation = null;
 
-	/** @var string New password set, for communication between onSubmit() and onSuccess() */
+	/** @var string|null New password set, for communication between onSubmit() and onSuccess() */
 	private $password = null;
 
 	/** @var Psr\Log\LoggerInterface */
-	private $logger = null;
+	private $logger;
 
 	/** @var PasswordFactory */
 	private $passwordFactory;
 
+	/** @var CentralIdLookup */
+	private $centralIdLookup;
+
 	/**
 	 * @param PasswordFactory $passwordFactory
 	 * @param AuthManager $authManager
+	 * @param CentralIdLookup $centralIdLookup
 	 */
-	public function __construct( PasswordFactory $passwordFactory, AuthManager $authManager ) {
+	public function __construct(
+		PasswordFactory $passwordFactory,
+		AuthManager $authManager,
+		CentralIdLookup $centralIdLookup
+	) {
 		parent::__construct( 'BotPasswords', 'editmyprivateinfo' );
 		$this->logger = LoggerFactory::getInstance( 'authentication' );
 		$this->passwordFactory = $passwordFactory;
+		$this->centralIdLookup = $centralIdLookup;
 		$this->setAuthManager( $authManager );
 	}
 
@@ -98,7 +107,7 @@ class SpecialBotPasswords extends FormSpecialPage {
 			throw new ErrorPageError( 'botpasswords', 'botpasswords-disabled' );
 		}
 
-		$this->userId = CentralIdLookup::factory()->centralIdFromLocalUser( $this->getUser() );
+		$this->userId = $this->centralIdLookup->centralIdFromLocalUser( $this->getUser() );
 		if ( !$this->userId ) {
 			throw new ErrorPageError( 'botpasswords', 'botpasswords-no-central-id' );
 		}
@@ -160,7 +169,8 @@ class SpecialBotPasswords extends FormSpecialPage {
 						static function ( $rights ) use ( $lang ) {
 							return $lang->semicolonList( array_map( [ User::class, 'getRightDescription' ], $rights ) );
 						},
-						array_intersect_key( MWGrants::getRightsByGrant(), array_flip( $showGrants ) )
+						array_intersect_key( MWGrants::getRightsByGrant(),
+							array_fill_keys( $showGrants, true ) )
 					)
 				),
 				'force-options-on' => array_map(

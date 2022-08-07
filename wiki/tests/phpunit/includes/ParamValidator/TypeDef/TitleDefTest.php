@@ -35,10 +35,10 @@ class TitleDefTest extends TypeDefTestCase {
 		if ( $this->dataName() === 'must exist (success)' ) {
 			$updater = MediaWikiServices::getInstance()->getWikiPageFactory()
 				->newFromTitle( Title::newFromText( 'exists' ) )
-				->newPageUpdater( new User );
-			$updater->setContent( SlotRecord::MAIN, new WikitextContent( 'exists' ) );
+				->newPageUpdater( new User )
+				->setContent( SlotRecord::MAIN, new WikitextContent( 'exists' ) );
 			$updater->saveRevision( CommentStoreComment::newUnsavedComment( 'test' ) );
-			$this->assertTrue( $updater->getStatus()->isOK(), 'sanity' );
+			$this->assertTrue( $updater->getStatus()->isOK() );
 		}
 		parent::testValidate( $value, $expect, $settings, $options, $expectConds );
 	}

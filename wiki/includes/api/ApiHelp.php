@@ -32,6 +32,23 @@ use Wikimedia\ParamValidator\ParamValidator;
  * @ingroup API
  */
 class ApiHelp extends ApiBase {
+	/** @var SkinFactory */
+	private $skinFactory;
+
+	/**
+	 * @param ApiMain $main
+	 * @param string $action
+	 * @param SkinFactory $skinFactory
+	 */
+	public function __construct(
+		ApiMain $main,
+		$action,
+		SkinFactory $skinFactory
+	) {
+		parent::__construct( $main, $action );
+		$this->skinFactory = $skinFactory;
+	}
+
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$modules = [];
@@ -42,8 +59,7 @@ class ApiHelp extends ApiBase {
 
 		// Get the help
 		$context = new DerivativeContext( $this->getMain()->getContext() );
-		$skinFactory = MediaWikiServices::getInstance()->getSkinFactory();
-		$context->setSkin( $skinFactory->makeSkin( 'apioutput' ) );
+		$context->setSkin( $this->skinFactory->makeSkin( 'apioutput' ) );
 		$context->setLanguage( $this->getMain()->getLanguage() );
 		$context->setTitle( SpecialPage::getTitleFor( 'ApiHelp' ) );
 		$out = new OutputPage( $context );
@@ -163,6 +179,7 @@ class ApiHelp extends ApiBase {
 		$haveModules = [];
 		$html = self::getHelpInternal( $context, $modules, $options, $haveModules );
 		if ( !empty( $options['toc'] ) && $haveModules ) {
+			// @phan-suppress-next-line SecurityCheck-DoubleEscaped Triggered by Linker?
 			$out->addHTML( Linker::generateTOC( $haveModules, $context->getLanguage() ) );
 		}
 		$out->addHTML( $html );
@@ -360,7 +377,13 @@ class ApiHelp extends ApiBase {
 			}
 			$help['flags'] .= Html::openElement( 'ul' );
 			foreach ( $flags as $flag ) {
-				$help['flags'] .= Html::rawElement( 'li', null,
+				$help['flags'] .= Html::rawElement( 'li', [],
+					// The follow classes are used here:
+					// * apihelp-flag-generator
+					// * apihelp-flag-internal
+					// * apihelp-flag-mustbeposted
+					// * apihelp-flag-readrights
+					// * apihelp-flag-writerights
 					self::wrap( $context->msg( "api-help-flag-$flag" ), "apihelp-flag-$flag" )
 				);
 			}
@@ -372,7 +395,7 @@ class ApiHelp extends ApiBase {
 					// Probably English, so wrap it.
 					$extname = Html::element( 'span', [ 'dir' => 'ltr', 'lang' => 'en' ], $sourceInfo['name'] );
 				}
-				$help['flags'] .= Html::rawElement( 'li', null,
+				$help['flags'] .= Html::rawElement( 'li', [],
 					self::wrap(
 						$context->msg( 'api-help-source', $extname, $sourceInfo['name'] ),
 						'apihelp-source'
@@ -389,14 +412,14 @@ class ApiHelp extends ApiBase {
 				} else {
 					$msg = $context->msg( 'api-help-license-unknown' );
 				}
-				$help['flags'] .= Html::rawElement( 'li', null,
+				$help['flags'] .= Html::rawElement( 'li', [],
 					self::wrap( $msg, 'apihelp-license' )
 				);
 			} else {
-				$help['flags'] .= Html::rawElement( 'li', null,
+				$help['flags'] .= Html::rawElement( 'li', [],
 					self::wrap( $context->msg( 'api-help-source-unknown' ), 'apihelp-source' )
 				);
-				$help['flags'] .= Html::rawElement( 'li', null,
+				$help['flags'] .= Html::rawElement( 'li', [],
 					self::wrap( $context->msg( 'api-help-license-unknown' ), 'apihelp-license' )
 				);
 			}
@@ -424,7 +447,7 @@ class ApiHelp extends ApiBase {
 				}
 				$help['help-urls'] .= Html::openElement( 'ul' );
 				foreach ( $urls as $url ) {
-					$help['help-urls'] .= Html::rawElement( 'li', null,
+					$help['help-urls'] .= Html::rawElement( 'li', [],
 						Html::element( 'a', [ 'href' => $url, 'dir' => 'ltr' ], $url )
 					);
 				}
@@ -456,7 +479,7 @@ class ApiHelp extends ApiBase {
 						$groups[] = $name;
 					}
 
-					$help['parameters'] .= Html::rawElement( 'dt', null,
+					$help['parameters'] .= Html::rawElement( 'dt', [],
 						Html::element( 'span', [ 'dir' => 'ltr', 'lang' => 'en' ], $module->encodeParamName( $name ) )
 					);
 
@@ -548,7 +571,7 @@ class ApiHelp extends ApiBase {
 						$module->getModuleName(),
 						$module->getModulePath()
 					] );
-					$help['parameters'] .= Html::element( 'dt', null, '*' );
+					$help['parameters'] .= Html::element( 'dt', [], '*' );
 					$help['parameters'] .= Html::rawElement( 'dd',
 						[ 'class' => 'description' ], $dynamicParams->parse() );
 				}
@@ -578,8 +601,8 @@ class ApiHelp extends ApiBase {
 
 					$link = wfAppendQuery( wfScript( 'api' ), $qs );
 					$sandbox = SpecialPage::getTitleFor( 'ApiSandbox' )->getLocalURL() . '#' . $qs;
-					$help['examples'] .= Html::rawElement( 'dt', null, $msg->parse() );
-					$help['examples'] .= Html::rawElement( 'dd', null,
+					$help['examples'] .= Html::rawElement( 'dt', [], $msg->parse() );
+					$help['examples'] .= Html::rawElement( 'dd', [],
 						Html::element( 'a', [ 'href' => $link, 'dir' => 'ltr' ], "api.php?$qs" ) . ' ' .
 						Html::rawElement( 'a', [ 'href' => $sandbox ],
 							$context->msg( 'api-help-open-in-apisandbox' )->parse() )

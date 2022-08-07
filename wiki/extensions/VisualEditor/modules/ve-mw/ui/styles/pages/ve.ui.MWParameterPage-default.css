@@ -24,8 +24,6 @@
 	cursor: default;
 	padding-left: 2.5em;
 	width: 80%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -34,35 +32,35 @@
 	position: absolute;
 	top: -0.3125em;
 	right: 4em; /* 1.5em for PanelLayout's padding + 2.5em */
-	width: 25%;
 	text-align: right;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
 .ve-ui-mwParameterPage-label {
-	display: inline;
-	vertical-align: middle;
 	font-size: 1.1em;
-	font-weight: bold;
 	line-height: 1.705em;
 }
 
-.ve-ui-mwParameterPage-statusIndicator {
-	display: inline-block;
-	vertical-align: middle;
-	opacity: 0.5;
-}
-
-.ve-ui-mwParameterPage-description {
+.ve-ui-mwParameterPage-doc {
 	font-size: 0.9em;
 	line-height: 1.5em;
+	overflow-wrap: break-word;
 	padding: 0.25em 1em;
 }
 
-.ve-ui-mwParameterPage-description-required,
-.ve-ui-mwParameterPage-description-deprecated {
+.ve-ui-mwParameterPage-inlineDescription .ve-ui-expandableContent-collapsible > :first-child {
+	margin-top: 0;
+}
+
+.ve-ui-mwParameterPage-inlineDescription .ve-ui-mwParameterPage-doc {
+	font-size: inherit;
+	padding: 0;
+	clear: both;
+}
+
+.ve-ui-mwParameterPage-doc-required,
+.ve-ui-mwParameterPage-doc-deprecated,
+.ve-ui-mwParameterPage-inlineDescription .ve-ui-mwParameterPage-doc-example {
 	font-style: italic;
 	color: #54595d;
 }
@@ -88,12 +86,14 @@
 	clear: both;
 }
 
+.ve-ui-mwParameterPage-field.ve-ui-mwParameterPage-inlineDescription {
+	padding-bottom: 2em;
+}
+
 .ve-ui-mwParameterPage .oo-ui-textInputWidget {
 	display: inline-block;
 	vertical-align: top;
 	width: 100%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -101,11 +101,11 @@
 	height: 2.5em;
 }
 
-.ve-ui-mwParameterPage-more {
+.ve-ui-mwParameterPage-addUndocumented {
 	display: none;
 	margin: 1em 0 0.5em 0;
 }
 
-.ve-ui-mwParameterPage:last-child .ve-ui-mwParameterPage-more {
+.ve-ui-mwParameterPage:last-child .ve-ui-mwParameterPage-addUndocumented {
 	display: block;
 }

@@ -7,7 +7,8 @@
 			"MaGa",
 			"SpeedyGonsales",
 			"Srdjan m",
-			"Srđan"
+			"Srđan",
+			"Ponor"
 		]
 	},
 	"categorytree": "Stablasti prikaz hijerarhije kategorija",
@@ -24,8 +25,6 @@
 	"categorytree-mode-all": "sve stranice",
 	"categorytree-collapse": "sklopi",
 	"categorytree-expand": "raširi",
-	"categorytree-expand-bullet": "►",
-	"categorytree-empty-bullet": "►",
 	"categorytree-member-counts": "sadrži {{PLURAL:$1|1 potkategoriju|$1 potkategorije|$1 potkategorija}}, {{PLURAL:$2|1 stranicu|$2 stranice|$2 stranica}} i {{PLURAL:$3|1 datoteku|$3 datoteke|$3 datoteka}}",
 	"categorytree-num-categories": "$1 kat.",
 	"categorytree-num-pages": "$1 str.",
@@ -33,7 +32,7 @@
 	"categorytree-num-empty": "prazna",
 	"categorytree-load": "učitaj",
 	"categorytree-loading": "učitavam...",
-	"categorytree-nothing-found": "nije pronađena ijedna stavka",
+	"categorytree-nothing-found": "nije pronađena nijedna stavka",
 	"categorytree-no-subcategories": "nema potkategorija",
 	"categorytree-no-parent-categories": "nema viših kategorija",
 	"categorytree-no-pages": "Nema članaka ili potkategorija.",

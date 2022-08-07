@@ -127,6 +127,7 @@ ve.ui.MWLanguageVariantInspector.prototype.getContentFromInspector = null;
  */
 ve.ui.MWLanguageVariantInspector.prototype.createTextTarget = function ( placeholder ) {
 	return ve.init.target.createTargetWidget( {
+		toolbarGroups: [],
 		includeCommands: this.constructor.static.includeCommands,
 		excludeCommands: this.constructor.static.excludeCommands,
 		importRules: this.constructor.static.getImportRules(),
@@ -163,8 +164,7 @@ ve.ui.MWLanguageVariantInspector.prototype.setupTextTargetDoc = function ( textT
  *  language variant node.
  */
 ve.ui.MWLanguageVariantInspector.prototype.getHtmlForDoc = function ( doc ) {
-	var surface = new ve.dm.Surface( doc ),
-		targetHtmlDoc;
+	var surface = new ve.dm.Surface( doc );
 
 	// Remove outermost p-wrapping, if present
 	try {
@@ -177,7 +177,7 @@ ve.ui.MWLanguageVariantInspector.prototype.getHtmlForDoc = function ( doc ) {
 		// That's okay: ignore the error and use what we've got.
 	}
 	// XXX return a flag to indicate whether contents are now inline or block?
-	targetHtmlDoc = ve.dm.converter.getDomFromModel( doc );
+	var targetHtmlDoc = ve.dm.converter.getDomFromModel( doc );
 	return ve.properInnerHtml( targetHtmlDoc.body );
 };
 
@@ -238,8 +238,7 @@ ve.ui.MWLanguageVariantInspector.prototype.getTeardownProcess = function ( data 
 	data = data || {};
 	return ve.ui.MWLanguageVariantInspector.super.prototype.getTeardownProcess.call( this, data )
 		.first( function () {
-			var surfaceModel = this.getFragment().getSurface(),
-				newContent;
+			var surfaceModel = this.getFragment().getSurface();
 
 			if ( data.action === 'remove' ) {
 				surfaceModel.popStaging();
@@ -247,7 +246,7 @@ ve.ui.MWLanguageVariantInspector.prototype.getTeardownProcess = function ( data 
 				this.getFragment().removeContent();
 			} else if ( data.action === 'done' ) {
 				// Edit language variant node
-				newContent = this.getContentFromInspector(
+				var newContent = this.getContentFromInspector(
 					ve.copy( this.variantNode.getVariantInfo() )
 				);
 				if ( newContent[ 0 ].type === this.variantNode.getType() ) {
@@ -597,23 +596,21 @@ ve.ui.MWLanguageVariantTwoWayInspector.prototype.getSetupProcess = function ( da
  *  documents for this mapping item.
  */
 ve.ui.MWLanguageVariantTwoWayInspector.prototype.createItem = function ( lang, content ) {
-	var languageInput, textTarget, clearButton, layout, item;
-
-	languageInput = new ve.ui.LanguageInputWidget( {
+	var languageInput = new ve.ui.LanguageInputWidget( {
 		dialogManager: this.manager.getSurface().getDialogs(),
 		dirInput: 'none'
 	} );
-	textTarget = this.createTextTarget( OO.ui.msg(
+	var textTarget = this.createTextTarget( OO.ui.msg(
 		'visualeditor-mwlanguagevariantinspector-twoway-text-placeholder'
 	) );
-	clearButton = new OO.ui.ButtonInputWidget( {
+	var clearButton = new OO.ui.ButtonInputWidget( {
 		icon: 'clear',
 		title: OO.ui.deferMsg(
 			'visualeditor-mwlanguagevariantinspector-twoway-clear-button'
 		),
 		framed: false
 	} );
-	layout = new OO.ui.FieldLayout(
+	var layout = new OO.ui.FieldLayout(
 		new OO.ui.Widget( {
 			content: [
 				new OO.ui.ActionFieldLayout(
@@ -624,7 +621,7 @@ ve.ui.MWLanguageVariantTwoWayInspector.prototype.createItem = function ( lang, c
 			]
 		} ), {}
 	);
-	item = {
+	var item = {
 		languageInput: languageInput,
 		textTarget: textTarget,
 		clearButton: clearButton,
@@ -671,7 +668,7 @@ ve.ui.MWLanguageVariantTwoWayInspector.prototype.onAddButtonClick = function () 
 /**
  * Remove a mapping item from the inspector.
  *
- * @param {Object} item Item
+ * @param {Object} item
  */
 ve.ui.MWLanguageVariantTwoWayInspector.prototype.onClearButtonClick = function ( item ) {
 	var idx = this.items.indexOf( item );
@@ -749,26 +746,24 @@ ve.ui.MWLanguageVariantOneWayInspector.prototype.getSetupProcess = function ( da
  *  documents for this mapping item.
  */
 ve.ui.MWLanguageVariantOneWayInspector.prototype.createItem = function ( from, lang, to ) {
-	var fromTextTarget, languageInput, toTextTarget, clearButton, layout, item;
-
-	fromTextTarget = this.createTextTarget( OO.ui.msg(
+	var fromTextTarget = this.createTextTarget( OO.ui.msg(
 		'visualeditor-mwlanguagevariantinspector-oneway-from-text-placeholder'
 	) );
-	languageInput = new ve.ui.LanguageInputWidget( {
+	var languageInput = new ve.ui.LanguageInputWidget( {
 		dialogManager: this.manager.getSurface().getDialogs(),
 		dirInput: 'none'
 	} );
-	toTextTarget = this.createTextTarget( OO.ui.msg(
+	var toTextTarget = this.createTextTarget( OO.ui.msg(
 		'visualeditor-mwlanguagevariantinspector-oneway-to-text-placeholder'
 	) );
-	clearButton = new OO.ui.ButtonInputWidget( {
+	var clearButton = new OO.ui.ButtonInputWidget( {
 		icon: 'clear',
 		title: OO.ui.deferMsg(
 			'visualeditor-mwlanguagevariantinspector-oneway-clear-button'
 		),
 		framed: false
 	} );
-	layout = new OO.ui.FieldLayout(
+	var layout = new OO.ui.FieldLayout(
 		new OO.ui.Widget( {
 			content: [
 				new OO.ui.ActionFieldLayout(
@@ -780,7 +775,7 @@ ve.ui.MWLanguageVariantOneWayInspector.prototype.createItem = function ( from, l
 			]
 		} ), {}
 	);
-	item = {
+	var item = {
 		fromTextTarget: fromTextTarget,
 		languageInput: languageInput,
 		toTextTarget: toTextTarget,
@@ -830,7 +825,7 @@ ve.ui.MWLanguageVariantOneWayInspector.prototype.onAddButtonClick = function () 
 /**
  * Remove a mapping item from the inspector.
  *
- * @param {Object} item Item
+ * @param {Object} item
  */
 ve.ui.MWLanguageVariantOneWayInspector.prototype.onClearButtonClick = function ( item ) {
 	var idx = this.items.indexOf( item );

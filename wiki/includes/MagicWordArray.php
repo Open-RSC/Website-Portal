@@ -36,12 +36,13 @@ class MagicWordArray {
 	/** @var MagicWordFactory */
 	private $factory;
 
-	/** @var array */
+	/** @var array|null */
 	private $hash;
 
 	/** @var string[]|null */
 	private $baseRegex;
 
+	/** @var string[]|null */
 	private $regex;
 
 	/**
@@ -104,7 +105,7 @@ class MagicWordArray {
 	 * @return string[]
 	 * @internal
 	 */
-	public function getBaseRegex( bool $capture = true, string $delimiter = '/' ) : array {
+	public function getBaseRegex( bool $capture = true, string $delimiter = '/' ): array {
 		if ( $capture && $delimiter === '/' && $this->baseRegex !== null ) {
 			return $this->baseRegex;
 		}

@@ -7,7 +7,12 @@
  * @details
  */
 
+use MediaWiki\Linker\LinkTarget;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Permissions\Authority;
+use MediaWiki\User\UserIdentity;
+use Wikimedia\AtEase\AtEase;
 
 /**
  * Base code for file repositories.
@@ -119,8 +124,8 @@ class FileRepo {
 	 */
 	protected $abbrvThreshold;
 
-	/** @var string The URL of the repo's favicon, if any */
-	protected $favicon;
+	/** @var null|string The URL to a favicon (optional, may be a server-local path URL). */
+	protected $favicon = null;
 
 	/** @var bool Whether all zones should be private (e.g. private wiki repo) */
 	protected $isPrivate;
@@ -252,29 +257,25 @@ class FileRepo {
 	 * Get an explanatory message if this repo is read-only.
 	 * This checks if an administrator disabled writes to the backend.
 	 *
-	 * @return string|bool Returns false if the repo is not read-only
+	 * @return string|false Returns false if the repo is not read-only
 	 */
 	public function getReadOnlyReason() {
 		return $this->backend->getReadOnlyReason();
 	}
 
 	/**
-	 * Check if a single zone or list of zones is defined for usage
+	 * Ensure that a single zone or list of zones is defined for usage
 	 *
 	 * @param string[]|string $doZones Only do a particular zones
 	 * @throws MWException
-	 * @return Status
 	 */
-	protected function initZones( $doZones = [] ) {
-		$status = $this->newGood();
+	protected function initZones( $doZones = [] ): void {
 		foreach ( (array)$doZones as $zone ) {
 			$root = $this->getZonePath( $zone );
 			if ( $root === null ) {
 				throw new MWException( "No '$zone' zone defined in the {$this->name} repo." );
 			}
 		}
-
-		return $status;
 	}
 
 	/**
@@ -292,7 +293,7 @@ class FileRepo {
 	 * The suffix, if supplied, is considered to be unencoded, and will be
 	 * URL-encoded before being returned.
 	 *
-	 * @param string|bool $suffix
+	 * @param string|false $suffix
 	 * @return string
 	 */
 	public function getVirtualUrl( $suffix = false ) {
@@ -309,13 +310,14 @@ class FileRepo {
 	 *
 	 * @param string $zone One of: public, deleted, temp, thumb
 	 * @param string|null $ext Optional file extension
-	 * @return string|bool
+	 * @return string|false
 	 */
 	public function getZoneUrl( $zone, $ext = null ) {
 		if ( in_array( $zone, [ 'public', 'thumb', 'transcoded' ] ) ) {
 			// standard public zones
 			if ( $ext !== null && isset( $this->zones[$zone]['urlsByExt'][$ext] ) ) {
 				// custom URL for extension/zone
+				// @phan-suppress-next-line PhanTypeArraySuspiciousNullable
 				return $this->zones[$zone]['urlsByExt'][$ext];
 			} elseif ( isset( $this->zones[$zone]['url'] ) ) {
 				// custom URL for zone
@@ -408,8 +410,8 @@ class FileRepo {
 	/**
 	 * Create a new File object from the local repository
 	 *
-	 * @param Title|string $title Title object or string
-	 * @param bool|string $time Time at which the image was uploaded. If this
+	 * @param PageIdentity|LinkTarget|string $title
+	 * @param string|false $time Time at which the image was uploaded. If this
 	 *   is specified, the returned object will be an instance of the
 	 *   repository's old file class instead of a current file. Repositories
 	 *   not supporting version control should return false if this parameter
@@ -437,24 +439,25 @@ class FileRepo {
 	 * Returns false if the file does not exist. Repositories not supporting
 	 * version control should return false if the time is specified.
 	 *
-	 * @param Title|string $title Title object or string
+	 * @param PageIdentity|LinkTarget|string $title
 	 * @param array $options Associative array of options:
 	 *   time:           requested time for a specific file version, or false for the
 	 *                   current version. An image object will be returned which was
 	 *                   created at the specified time (which may be archived or current).
 	 *   ignoreRedirect: If true, do not follow file redirects
-	 *   private:        If a User object, return restricted (deleted) files if the
-	 *                   user is allowed to view them. Otherwise, such files will not
-	 *                   be found. If set and not a User object, throws an exception
+	 *   private:        If an Authority object, return restricted (deleted) files if the
+	 *                   performer is allowed to view them. Otherwise, such files will not
+	 *                   be found. If set and not an Authority object, throws an exception.
+	 *                   Authority is only accepted since 1.37, User was required before.
 	 *   latest:         If true, load from the latest available data into File objects
-	 * @return File|bool False on failure
+	 * @return File|false False on failure
 	 * @throws InvalidArgumentException
 	 */
 	public function findFile( $title, $options = [] ) {
-		if ( !empty( $options['private'] ) && !( $options['private'] instanceof User ) ) {
+		if ( !empty( $options['private'] ) && !( $options['private'] instanceof Authority ) ) {
 			throw new InvalidArgumentException(
 				__METHOD__ . ' called with the `private` option set to something ' .
-				'other than a User object'
+				'other than an Authority object'
 			);
 		}
 
@@ -485,7 +488,7 @@ class FileRepo {
 					if ( !$img->isDeleted( File::DELETED_FILE ) ) {
 						return $img; // always OK
 					} elseif (
-						// If its not empty, its a User object
+						// If its not empty, its an Authority object
 						!empty( $options['private'] ) &&
 						$img->userCan( File::DELETED_FILE, $options['private'] )
 					) {
@@ -531,7 +534,7 @@ class FileRepo {
 	 *     - FileRepo::NAME_AND_TIME_ONLY : return a (search title => (title,timestamp)) map.
 	 *       The search title uses the input titles; the other is the final post-redirect title.
 	 *       All titles are returned as string DB keys and the inner array is associative.
-	 * @return array Map of (file name => File objects) for matches
+	 * @return array Map of (file name => File objects) for matches or (search title => (title,timestamp))
 	 */
 	public function findFiles( array $items, $flags = 0 ) {
 		$result = [];
@@ -543,9 +546,9 @@ class FileRepo {
 
 				if (
 					!empty( $options['private'] ) &&
-					!( $options['private'] instanceof User )
+					!( $options['private'] instanceof Authority )
 				) {
-					$options['private'] = RequestContext::getMain()->getUser();
+					$options['private'] = RequestContext::getMain()->getAuthority();
 				}
 			} else {
 				$title = $item;
@@ -575,14 +578,14 @@ class FileRepo {
 	 *
 	 * @param string $sha1 Base 36 SHA-1 hash
 	 * @param array $options Option array, same as findFile().
-	 * @return File|bool False on failure
-	 * @throws InvalidArgumentException if the `private` option is set and not a User object
+	 * @return File|false False on failure
+	 * @throws InvalidArgumentException if the `private` option is set and not an Authority object
 	 */
 	public function findFileFromKey( $sha1, $options = [] ) {
-		if ( !empty( $options['private'] ) && !( $options['private'] instanceof User ) ) {
+		if ( !empty( $options['private'] ) && !( $options['private'] instanceof Authority ) ) {
 			throw new InvalidArgumentException(
 				__METHOD__ . ' called with the `private` option set to something ' .
-				'other than a User object'
+				'other than an Authority object'
 			);
 		}
 
@@ -602,7 +605,7 @@ class FileRepo {
 				if ( !$img->isDeleted( File::DELETED_FILE ) ) {
 					return $img; // always OK
 				} elseif (
-					// If its not empty, its a User object
+					// If its not empty, its an Authority object
 					!empty( $options['private'] ) &&
 					$img->userCan( File::DELETED_FILE, $options['private'] )
 				) {
@@ -704,12 +707,12 @@ class FileRepo {
 	}
 
 	/**
-	 * Get the name of a file from its title object
+	 * Get the name of a file from its title
 	 *
-	 * @param Title $title
+	 * @param PageIdentity|LinkTarget $title
 	 * @return string
 	 */
-	public function getNameFromTitle( Title $title ) {
+	public function getNameFromTitle( $title ) {
 		if (
 			$this->initialCapital !=
 			MediaWikiServices::getInstance()->getNamespaceInfo()->isCapitalized( NS_FILE )
@@ -798,9 +801,9 @@ class FileRepo {
 	/**
 	 * Make an url to this repo
 	 *
-	 * @param string|string[] $query Query string to append
+	 * @param string|array $query Query string to append
 	 * @param string $entry Entry point; defaults to index
-	 * @return string|bool False on failure
+	 * @return string|false False on failure
 	 */
 	public function makeUrl( $query = '', $entry = 'index' ) {
 		if ( isset( $this->scriptDirUrl ) ) {
@@ -879,7 +882,7 @@ class FileRepo {
 	/**
 	 * Get the URL of the stylesheet to apply to description pages
 	 *
-	 * @return string|bool False on failure
+	 * @return string|false False on failure
 	 */
 	public function getDescriptionStylesheetUrl() {
 		if ( isset( $this->scriptDirUrl ) ) {
@@ -988,9 +991,8 @@ class FileRepo {
 		if ( $flags & self::SKIP_LOCKING ) {
 			$opts['nonLocking'] = true;
 		}
-		$status->merge( $backend->doOperations( $operations, $opts ) );
 
-		return $status;
+		return $status->merge( $backend->doOperations( $operations, $opts ) );
 	}
 
 	/**
@@ -1025,14 +1027,13 @@ class FileRepo {
 		if ( $flags & self::SKIP_LOCKING ) {
 			$opts['nonLocking'] = true;
 		}
-		$status->merge( $this->backend->doOperations( $operations, $opts ) );
 
-		return $status;
+		return $status->merge( $this->backend->doOperations( $operations, $opts ) );
 	}
 
 	/**
 	 * Import a file from the local file system into the repo.
-	 * This does no locking nor journaling and overrides existing files.
+	 * This does no locking and overrides existing files.
 	 * This function can be used to write to otherwise read-only foreign repos.
 	 * This is intended for copying generated thumbnails into the repo.
 	 *
@@ -1053,7 +1054,7 @@ class FileRepo {
 
 	/**
 	 * Import a batch of files from the local file system into the repo.
-	 * This does no locking nor journaling and overrides existing files.
+	 * This does no locking and overrides existing files.
 	 * This function can be used to write to otherwise read-only foreign repos.
 	 * This is intended for copying generated thumbnails into the repo.
 	 *
@@ -1097,13 +1098,12 @@ class FileRepo {
 			];
 			$status->merge( $this->initDirectory( dirname( $dst ) ) );
 		}
-		$status->merge( $this->backend->doQuickOperations( $operations ) );
 
-		return $status;
+		return $status->merge( $this->backend->doQuickOperations( $operations ) );
 	}
 
 	/**
-	 * Purge a file from the repo. This does no locking nor journaling.
+	 * Purge a file from the repo. This does no locking.
 	 * This function can be used to write to otherwise read-only foreign repos.
 	 * This is intended for purging thumbnails.
 	 *
@@ -1122,19 +1122,19 @@ class FileRepo {
 	 * @return Status
 	 */
 	public function quickCleanDir( $dir ) {
-		$status = $this->newGood();
-		$status->merge( $this->backend->clean(
-			[ 'dir' => $this->resolveToStoragePathIfVirtual( $dir ) ] ) );
-
-		return $status;
+		return $this->newGood()->merge(
+			$this->backend->clean(
+				[ 'dir' => $this->resolveToStoragePathIfVirtual( $dir ) ]
+			)
+		);
 	}
 
 	/**
 	 * Purge a batch of files from the repo.
 	 * This function can be used to write to otherwise read-only foreign repos.
-	 * This does no locking nor journaling and is intended for purging thumbnails.
+	 * This does no locking and is intended for purging thumbnails.
 	 *
-	 * @param array $paths List of virtual URLs or storage paths
+	 * @param string[] $paths List of virtual URLs or storage paths
 	 * @return Status
 	 */
 	public function quickPurgeBatch( array $paths ) {
@@ -1198,7 +1198,7 @@ class FileRepo {
 	/**
 	 * Concatenate a list of temporary files into a target file location.
 	 *
-	 * @param array $srcPaths Ordered list of source virtual URLs/storage paths
+	 * @param string[] $srcPaths Ordered list of source virtual URLs/storage paths
 	 * @param string $dstPath Target file system path
 	 * @param int $flags Bitwise combination of the following flags:
 	 *   self::DELETE_SOURCE     Delete the source files on success
@@ -1289,10 +1289,7 @@ class FileRepo {
 
 		$backend = $this->backend; // convenience
 		// Try creating directories
-		$status = $this->initZones( 'public' );
-		if ( !$status->isOK() ) {
-			return $status;
-		}
+		$this->initZones( 'public' );
 
 		$status = $this->newGood( [] );
 
@@ -1332,7 +1329,7 @@ class FileRepo {
 
 			// Archive destination file if it exists.
 			// This will check if the archive file also exists and fail if does.
-			// This is a sanity check to avoid data loss. On Windows and Linux,
+			// This is a check to avoid data loss. On Windows and Linux,
 			// copy() will overwrite, so the existence check is vulnerable to
 			// race conditions unless a functioning LockManager is used.
 			// LocalFile also uses SELECT FOR UPDATE for synchronization.
@@ -1380,9 +1377,9 @@ class FileRepo {
 		}
 		// Cleanup for disk source files...
 		foreach ( $sourceFSFilesToDelete as $file ) {
-			Wikimedia\suppressWarnings();
+			AtEase::suppressWarnings();
 			unlink( $file ); // FS cleanup
-			Wikimedia\restoreWarnings();
+			AtEase::restoreWarnings();
 		}
 
 		return $status;
@@ -1393,7 +1390,7 @@ class FileRepo {
 	 * Callers are responsible for doing read-only and "writable repo" checks.
 	 *
 	 * @param string $dir Virtual URL (or storage path) of directory to clean
-	 * @return Status
+	 * @return Status Good status without value for success, fatal otherwise.
 	 */
 	protected function initDirectory( $dir ) {
 		$path = $this->resolveToStoragePathIfVirtual( $dir );
@@ -1409,10 +1406,7 @@ class FileRepo {
 			$params = [ 'noAccess' => true, 'noListing' => true ] + $params;
 		}
 
-		$status = $this->newGood();
-		$status->merge( $this->backend->prepare( $params ) );
-
-		return $status;
+		return $this->newGood()->merge( $this->backend->prepare( $params ) );
 	}
 
 	/**
@@ -1424,18 +1418,18 @@ class FileRepo {
 	public function cleanDir( $dir ) {
 		$this->assertWritableRepo(); // fail out if read-only
 
-		$status = $this->newGood();
-		$status->merge( $this->backend->clean(
-			[ 'dir' => $this->resolveToStoragePathIfVirtual( $dir ) ] ) );
-
-		return $status;
+		return $this->newGood()->merge(
+			$this->backend->clean(
+				[ 'dir' => $this->resolveToStoragePathIfVirtual( $dir ) ]
+			)
+		);
 	}
 
 	/**
 	 * Checks existence of a file
 	 *
 	 * @param string $file Virtual URL (or storage path) of file to check
-	 * @return bool
+	 * @return bool|null Whether the file exists, or null in case of I/O errors
 	 */
 	public function fileExists( $file ) {
 		$result = $this->fileExistsBatch( [ $file ] );
@@ -1447,7 +1441,8 @@ class FileRepo {
 	 * Checks existence of an array of files.
 	 *
 	 * @param string[] $files Virtual URLs (or storage paths) of files to check
-	 * @return array Map of files and existence flags, or false
+	 * @return array<string|int,bool|null> Map of files and either bool indicating whether the files exist,
+	 *   or null in case of I/O errors
 	 */
 	public function fileExistsBatch( array $files ) {
 		$paths = array_map( [ $this, 'resolveToStoragePathIfVirtual' ], $files );
@@ -1499,10 +1494,7 @@ class FileRepo {
 		$this->assertWritableRepo(); // fail out if read-only
 
 		// Try creating directories
-		$status = $this->initZones( [ 'public', 'deleted' ] );
-		if ( !$status->isOK() ) {
-			return $status;
-		}
+		$this->initZones( [ 'public', 'deleted' ] );
 
 		$status = $this->newGood();
 
@@ -1524,7 +1516,7 @@ class FileRepo {
 			$archiveDir = dirname( $archivePath ); // does not touch FS
 
 			// Create destination directories
-			if ( !$this->initDirectory( $archiveDir )->isOK() ) {
+			if ( !$this->initDirectory( $archiveDir )->isGood() ) {
 				return $this->newFatal( 'directorycreateerror', $archiveDir );
 			}
 
@@ -1542,9 +1534,7 @@ class FileRepo {
 		// We're now committed to returning an OK result, which will
 		// lead to the files being moved in the DB also.
 		$opts = [ 'force' => true ];
-		$status->merge( $backend->doOperations( $operations, $opts ) );
-
-		return $status;
+		return $status->merge( $backend->doOperations( $operations, $opts ) );
 	}
 
 	/**
@@ -1629,7 +1619,7 @@ class FileRepo {
 	 */
 	public function getFileProps( $virtualUrl ) {
 		$fsFile = $this->getLocalReference( $virtualUrl );
-		$mwProps = new MWFileProps( MediaWiki\MediaWikiServices::getInstance()->getMimeAnalyzer() );
+		$mwProps = new MWFileProps( MediaWikiServices::getInstance()->getMimeAnalyzer() );
 		if ( $fsFile ) {
 			$props = $mwProps->getPropsFromPath( $fsFile->getPath(), true );
 		} else {
@@ -1643,7 +1633,7 @@ class FileRepo {
 	 * Get the timestamp of a file with a given virtual URL/storage path
 	 *
 	 * @param string $virtualUrl
-	 * @return string|bool False on failure
+	 * @return string|false False on failure
 	 */
 	public function getFileTimestamp( $virtualUrl ) {
 		$path = $this->resolveToStoragePathIfVirtual( $virtualUrl );
@@ -1667,7 +1657,7 @@ class FileRepo {
 	 * Get the sha1 (base 36) of a file with a given virtual URL/storage path
 	 *
 	 * @param string $virtualUrl
-	 * @return string|bool
+	 * @return string|false
 	 */
 	public function getFileSha1( $virtualUrl ) {
 		$path = $this->resolveToStoragePathIfVirtual( $virtualUrl );
@@ -1692,8 +1682,7 @@ class FileRepo {
 		ob_start( null, 1048576 );
 		ob_implicit_flush( true );
 
-		$status = $this->newGood();
-		$status->merge( $this->backend->streamFile( $params ) );
+		$status = $this->newGood()->merge( $this->backend->streamFile( $params ) );
 
 		// T186565: Close the buffer, unless it has already been closed
 		// in HTTPFileStreamer::resetOutputBuffers().
@@ -1828,10 +1817,10 @@ class FileRepo {
 	 * title object. If not, return false.
 	 * STUB
 	 *
-	 * @param Title $title Title of image
-	 * @return bool
+	 * @param PageIdentity|LinkTarget $title Title of image
+	 * @return Title|false
 	 */
-	public function checkRedirect( Title $title ) {
+	public function checkRedirect( $title ) {
 		return false;
 	}
 
@@ -1840,9 +1829,9 @@ class FileRepo {
 	 * Doesn't do anything for repositories that don't support image redirects.
 	 *
 	 * STUB
-	 * @param Title $title Title of image
+	 * @param PageIdentity|LinkTarget $title Title of image
 	 */
-	public function invalidateImageRedirect( Title $title ) {
+	public function invalidateImageRedirect( $title ) {
 	}
 
 	/**
@@ -1851,10 +1840,10 @@ class FileRepo {
 	 * @return string
 	 */
 	public function getDisplayName() {
-		global $wgSitename;
+		$sitename = MediaWikiServices::getInstance()->getMainConfig()->get( 'Sitename' );
 
 		if ( $this->isLocal() ) {
-			return $wgSitename;
+			return $sitename;
 		}
 
 		// 'shared-repo-name-wikimediacommons' is used when $wgUseInstantCommons = true
@@ -1960,10 +1949,10 @@ class FileRepo {
 	/**
 	 * Get an UploadStash associated with this repo.
 	 *
-	 * @param User|null $user
+	 * @param UserIdentity|null $user
 	 * @return UploadStash
 	 */
-	public function getUploadStash( User $user = null ) {
+	public function getUploadStash( UserIdentity $user = null ) {
 		return new UploadStash( $this, $user );
 	}
 
@@ -1971,7 +1960,7 @@ class FileRepo {
 	 * Throw an exception if this repo is read-only by design.
 	 * This does not and should not check getReadOnlyReason().
 	 *
-	 * @return void
+	 * @return void|never
 	 * @throws MWException
 	 */
 	protected function assertWritableRepo() {
@@ -1992,13 +1981,23 @@ class FileRepo {
 		];
 
 		$optionalSettings = [
-			'url', 'thumbUrl', 'initialCapital', 'descBaseUrl', 'scriptDirUrl', 'articleUrl',
-			'fetchDescription', 'descriptionCacheExpiry', 'favicon'
+			'url',
+			'thumbUrl',
+			'initialCapital',
+			'descBaseUrl',
+			'scriptDirUrl',
+			'articleUrl',
+			'fetchDescription',
+			'descriptionCacheExpiry',
 		];
 		foreach ( $optionalSettings as $k ) {
 			if ( isset( $this->$k ) ) {
 				$ret[$k] = $this->$k;
 			}
+		}
+		if ( isset( $this->favicon ) ) {
+			// Expand any local path to full URL to improve API usability (T77093).
+			$ret['favicon'] = wfExpandUrl( $this->favicon );
 		}
 
 		return $ret;

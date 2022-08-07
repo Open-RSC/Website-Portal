@@ -22,6 +22,7 @@
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Wikimedia\AtEase\AtEase;
 use Wikimedia\Mime\MimeMap;
 use Wikimedia\Mime\MimeMapMinimal;
 
@@ -99,7 +100,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		$this->loadFiles();
 	}
 
-	protected function loadFiles() : void {
+	protected function loadFiles(): void {
 		# Allow media handling extensions adding MIME-types and MIME-info
 		if ( $this->initCallback ) {
 			call_user_func( $this->initCallback, $this );
@@ -149,7 +150,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		}
 	}
 
-	protected function parseMimeTypes( string $rawMimeTypes ) : void {
+	protected function parseMimeTypes( string $rawMimeTypes ): void {
 		$rawMimeTypes = str_replace( [ "\r\n", "\n\r", "\n\n", "\r\r", "\r" ], "\n", $rawMimeTypes );
 		$rawMimeTypes = str_replace( "\t", " ", $rawMimeTypes );
 
@@ -170,7 +171,6 @@ class MimeAnalyzer implements LoggerAwareInterface {
 				continue;
 			}
 
-			$mime = substr( $s, 0, $i );
 			$ext = trim( substr( $s, $i + 1 ) );
 
 			if ( empty( $ext ) ) {
@@ -186,7 +186,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		}
 	}
 
-	protected function parseMimeInfo( string $rawMimeInfo ) : void {
+	protected function parseMimeInfo( string $rawMimeInfo ): void {
 		$rawMimeInfo = str_replace( [ "\r\n", "\n\r", "\n\n", "\r\r", "\r" ], "\n", $rawMimeInfo );
 		$rawMimeInfo = str_replace( "\t", " ", $rawMimeInfo );
 
@@ -255,7 +255,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 *
 	 * @param string $types
 	 */
-	public function addExtraTypes( string $types ) : void {
+	public function addExtraTypes( string $types ): void {
 		$this->extraTypes .= "\n" . $types;
 	}
 
@@ -267,7 +267,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 *
 	 * @param string $info
 	 */
-	public function addExtraInfo( string $info ) : void {
+	public function addExtraInfo( string $info ): void {
 		$this->extraInfo .= "\n" . $info;
 	}
 
@@ -294,7 +294,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $mime
 	 * @return string[]
 	 */
-	public function getExtensionsFromMimeType( string $mime ) : array {
+	public function getExtensionsFromMimeType( string $mime ): array {
 		$mime = strtolower( $mime );
 		if ( !isset( $this->mimeToExts[$mime] ) && isset( $this->mimeTypeAliases[$mime] ) ) {
 			$mime = $this->mimeTypeAliases[$mime];
@@ -311,7 +311,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $ext
 	 * @return string[]
 	 */
-	public function getMimeTypesFromExtension( string $ext ) : array {
+	public function getMimeTypesFromExtension( string $ext ): array {
 		$ext = strtolower( $ext );
 		return $this->extToMimes[$ext] ?? [];
 	}
@@ -324,7 +324,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $ext
 	 * @return string|null
 	 */
-	public function getMimeTypeFromExtensionOrNull( string $ext ) : ?string {
+	public function getMimeTypeFromExtensionOrNull( string $ext ): ?string {
 		$types = $this->getMimeTypesFromExtension( $ext );
 		return $types[0] ?? null;
 	}
@@ -362,7 +362,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $mime
 	 * @return string|null
 	 */
-	public function getExtensionFromMimeTypeOrNull( string $mime ) : ?string {
+	public function getExtensionFromMimeTypeOrNull( string $mime ): ?string {
 		$exts = $this->getExtensionsFromMimeType( $mime );
 		return $exts[0] ?? null;
 	}
@@ -376,7 +376,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $mime
 	 * @return bool|null
 	 */
-	public function isMatchingExtension( string $extension, string $mime ) : ?bool {
+	public function isMatchingExtension( string $extension, string $mime ): ?bool {
 		$exts = $this->getExtensionsFromMimeType( $mime );
 
 		if ( !$exts ) {
@@ -393,7 +393,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $mime
 	 * @return bool
 	 */
-	public function isPHPImageType( string $mime ) : bool {
+	public function isPHPImageType( string $mime ): bool {
 		// As defined by imagegetsize and image_type_to_mime
 		static $types = [
 			'image/gif', 'image/jpeg', 'image/png',
@@ -420,7 +420,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $extension
 	 * @return bool
 	 */
-	public function isRecognizableExtension( string $extension ) : bool {
+	public function isRecognizableExtension( string $extension ): bool {
 		static $types = [
 			// Types recognized by getimagesize()
 			'gif', 'jpeg', 'jpg', 'png', 'swf', 'psd',
@@ -455,11 +455,11 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @return string|null The improved MIME type, or null if the MIME type is
 	 *   unknown/unknown and the extension is not recognized.
 	 */
-	public function improveTypeFromExtension( string $mime, string $ext ) : ?string {
+	public function improveTypeFromExtension( string $mime, string $ext ): ?string {
 		if ( $mime === 'unknown/unknown' ) {
 			if ( $this->isRecognizableExtension( $ext ) ) {
 				$this->logger->info( __METHOD__ . ': refusing to guess mime type for .' .
-					"$ext file, we should have recognized it\n" );
+					"$ext file, we should have recognized it" );
 			} else {
 				// Not something we can detect, so simply
 				// trust the file extension
@@ -473,7 +473,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			} else {
 				$this->logger->info( __METHOD__ .
 					": refusing to guess better type for $mime file, " .
-					".$ext is not a known OPC extension.\n" );
+					".$ext is not a known OPC extension." );
 				$mime = 'application/zip';
 			}
 		} elseif ( $mime === 'text/plain' && $this->findMediaType( ".$ext" ) === MEDIATYPE_TEXT ) {
@@ -490,11 +490,11 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			$callback( $this, $ext, $mime /* by reference */ );
 		}
 
-		if ( isset( $this->mimeTypeAliases[$mime] ) ) {
+		if ( $mime !== null && isset( $this->mimeTypeAliases[$mime] ) ) {
 			$mime = $this->mimeTypeAliases[$mime];
 		}
 
-		$this->logger->info( __METHOD__ . ": improved mime type for .$ext: $mime\n" );
+		$this->logger->info( __METHOD__ . ": improved mime type for .$ext: $mime" );
 		return $mime;
 	}
 
@@ -511,18 +511,18 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * Set to false, use improveTypeFromExtension($mime, $ext) later to improve MIME type.
 	 * @return string The MIME type of $file
 	 */
-	public function guessMimeType( string $file, $ext = true ) : string {
+	public function guessMimeType( string $file, $ext = true ): string {
 		if ( $ext ) { // TODO: make $ext default to false. Or better, remove it.
 			$this->logger->info( __METHOD__ .
 				": WARNING: use of the \$ext parameter is deprecated. " .
-				"Use improveTypeFromExtension(\$mime, \$ext) instead.\n" );
+				"Use improveTypeFromExtension(\$mime, \$ext) instead." );
 		}
 
 		$mime = $this->doGuessMimeType( $file, $ext );
 
 		if ( !$mime ) {
 			$this->logger->info( __METHOD__ .
-				": internal type detection failed for $file (.$ext)...\n" );
+				": internal type detection failed for $file (.$ext)..." );
 			$mime = $this->detectMimeType( $file, $ext );
 		}
 
@@ -530,7 +530,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			$mime = $this->mimeTypeAliases[$mime];
 		}
 
-		$this->logger->info( __METHOD__ . ": guessed mime type of $file: $mime\n" );
+		$this->logger->info( __METHOD__ . ": guessed mime type of $file: $mime" );
 		return $mime;
 	}
 
@@ -546,9 +546,9 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 */
 	private function doGuessMimeType( string $file, $ext ) {
 		// Read a chunk of the file
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$f = fopen( $file, 'rb' );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 
 		if ( !$f ) {
 			return 'unknown/unknown';
@@ -560,6 +560,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		}
 
 		$head = fread( $f, 1024 );
+		$head16k = $head . fread( $f, 16384 - 1024 ); // some WebM files have big headers
 		$tailLength = min( 65558, $fsize ); // 65558 = maximum size of a zip EOCDR
 		if ( fseek( $f, -1 * $tailLength, SEEK_END ) === -1 ) {
 			throw new UnexpectedValueException(
@@ -568,7 +569,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		$tail = $tailLength ? fread( $f, $tailLength ) : '';
 
 		$this->logger->info( __METHOD__ .
-			": analyzing head and tail of $file for magic numbers.\n" );
+			": analyzing head and tail of $file for magic numbers." );
 
 		// Hardcode a few magic number checks...
 		$headers = [
@@ -596,35 +597,35 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		foreach ( $headers as $magic => $candidate ) {
 			if ( strncmp( $head, $magic, strlen( $magic ) ) == 0 ) {
 				$this->logger->info( __METHOD__ .
-					": magic header in $file recognized as $candidate\n" );
+					": magic header in $file recognized as $candidate" );
 				return $candidate;
 			}
 		}
 
 		/* Look for WebM and Matroska files */
-		if ( strncmp( $head, pack( "C4", 0x1a, 0x45, 0xdf, 0xa3 ), 4 ) == 0 ) {
-			$doctype = strpos( $head, "\x42\x82" );
+		if ( strncmp( $head16k, pack( "C4", 0x1a, 0x45, 0xdf, 0xa3 ), 4 ) == 0 ) {
+			$doctype = strpos( $head16k, "\x42\x82" );
 			if ( $doctype ) {
 				// Next byte is datasize, then data (sizes larger than 1 byte are stupid muxers)
-				$data = substr( $head, $doctype + 3, 8 );
+				$data = substr( $head16k, $doctype + 3, 8 );
 				if ( strncmp( $data, "matroska", 8 ) == 0 ) {
-					$this->logger->info( __METHOD__ . ": recognized file as video/x-matroska\n" );
+					$this->logger->info( __METHOD__ . ": recognized file as video/x-matroska" );
 					return "video/x-matroska";
 				} elseif ( strncmp( $data, "webm", 4 ) == 0 ) {
 					// XXX HACK look for a video track, if we don't find it, this is an audio file
-					$videotrack = strpos( $head, "\x86\x85V_VP" );
+					$videotrack = strpos( $head16k, "\x86\x85V_VP" );
 
 					if ( $videotrack ) {
 						// There is a video track, so this is a video file.
-						$this->logger->info( __METHOD__ . ": recognized file as video/webm\n" );
+						$this->logger->info( __METHOD__ . ": recognized file as video/webm" );
 						return "video/webm";
 					}
 
-					$this->logger->info( __METHOD__ . ": recognized file as audio/webm\n" );
+					$this->logger->info( __METHOD__ . ": recognized file as audio/webm" );
 					return "audio/webm";
 				}
 			}
-			$this->logger->info( __METHOD__ . ": unknown EBML file\n" );
+			$this->logger->info( __METHOD__ . ": unknown EBML file" );
 			return "unknown/unknown";
 		}
 
@@ -632,19 +633,19 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		if ( strncmp( $head, "RIFF", 4 ) == 0 &&
 			strncmp( substr( $head, 8, 7 ), "WEBPVP8", 7 ) == 0
 		) {
-			$this->logger->info( __METHOD__ . ": recognized file as image/webp\n" );
+			$this->logger->info( __METHOD__ . ": recognized file as image/webp" );
 			return "image/webp";
 		}
 
 		/* Look for JPEG2000 */
 		if ( strncmp( $head, "\x00\x00\x00\x0cjP\x20\x20\x0d\x0a\x87\x0a", 12 ) == 0 ) {
-			$this->logger->info( __METHOD__ . ": recognized as JPEG2000\n" );
+			$this->logger->info( __METHOD__ . ": recognized as JPEG2000" );
 			// we skip 4 bytes
 			if ( strncmp( substr( $head, 16, 8 ), "ftypjp2 ", 8 ) == 0 ) {
-				$this->logger->info( __METHOD__ . ": recognized file as image/jp2\n" );
+				$this->logger->info( __METHOD__ . ": recognized file as image/jp2" );
 				return 'image/jp2';
 			} elseif ( strncmp( substr( $head, 16, 8 ), "ftypjpx ", 8 ) == 0 ) {
-				$this->logger->info( __METHOD__ . ": recognized file as image/jpx\n" );
+				$this->logger->info( __METHOD__ . ": recognized file as image/jpx" );
 				return 'image/jpx';
 			}
 		}
@@ -674,16 +675,16 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			( strpos( $head, "<\x00?\x00\t" ) !== false ) ||
 			( strpos( $head, "<\x00?\x00=" ) !== false )
 		) {
-			$this->logger->info( __METHOD__ . ": recognized $file as application/x-php\n" );
+			$this->logger->info( __METHOD__ . ": recognized $file as application/x-php" );
 			return 'application/x-php';
 		}
 
 		/**
 		 * look for XML formats (XHTML and SVG)
 		 */
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$xml = new XmlTypeCheck( $file );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 		if ( $xml->wellFormed ) {
 			$xmlTypes = $this->xmlTypes;
 			return $xmlTypes[$xml->getRootElement()] ?? 'application/xml';
@@ -724,7 +725,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 
 			if ( preg_match( '%/?([^\s]+/)(\w+)%', $head, $match ) ) {
 				$mime = "application/x-{$match[2]}";
-				$this->logger->info( __METHOD__ . ": shell script recognized as $mime\n" );
+				$this->logger->info( __METHOD__ . ": shell script recognized as $mime" );
 				return $mime;
 			}
 		}
@@ -732,7 +733,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		// Check for ZIP variants (before getimagesize)
 		$eocdrPos = strpos( $tail, "PK\x05\x06" );
 		if ( $eocdrPos !== false && $eocdrPos <= strlen( $tail ) - 22 ) {
-			$this->logger->info( __METHOD__ . ": ZIP signature present in $file\n" );
+			$this->logger->info( __METHOD__ . ": ZIP signature present in $file" );
 			// Check if it really is a ZIP file, make sure the EOCDR is at the end (T40432)
 			$commentLength = unpack( "n", substr( $tail, $eocdrPos + 20 ) )[1];
 			if ( $eocdrPos + 22 + $commentLength !== strlen( $tail ) ) {
@@ -759,13 +760,13 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			}
 		}
 
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$gis = getimagesize( $file );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 
 		if ( $gis && isset( $gis['mime'] ) ) {
 			$mime = $gis['mime'];
-			$this->logger->info( __METHOD__ . ": getimagesize detected $file as $mime\n" );
+			$this->logger->info( __METHOD__ . ": getimagesize detected $file as $mime" );
 			return $mime;
 		}
 
@@ -794,11 +795,11 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * use improveTypeFromExtension($mime, $ext) later to improve MIME type.
 	 * @return string
 	 */
-	public function detectZipType( string $header, ?string $tail = null, $ext = false ) : string {
+	public function detectZipType( string $header, ?string $tail = null, $ext = false ): string {
 		if ( $ext ) { # TODO: remove $ext param
 			$this->logger->info( __METHOD__ .
 				": WARNING: use of the \$ext parameter is deprecated. " .
-				"Use improveTypeFromExtension(\$mime, \$ext) instead.\n" );
+				"Use improveTypeFromExtension(\$mime, \$ext) instead." );
 		}
 
 		$mime = 'application/zip';
@@ -839,7 +840,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 
 		if ( preg_match( $opendocRegex, substr( $header, 30 ), $matches ) ) {
 			$mime = $matches[1];
-			$this->logger->info( __METHOD__ . ": detected $mime from ZIP archive\n" );
+			$this->logger->info( __METHOD__ . ": detected $mime from ZIP archive" );
 		} elseif ( preg_match( $openxmlRegex, substr( $header, 30 ) ) ) {
 			$mime = "application/x-opc+zip";
 			# TODO: remove the block below, as soon as improveTypeFromExtension is used everywhere
@@ -858,7 +859,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 				}
 			}
 			$this->logger->info( __METHOD__ .
-				": detected an Open Packaging Conventions archive: $mime\n" );
+				": detected an Open Packaging Conventions archive: $mime" );
 		} elseif ( substr( $header, 0, 8 ) == "\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" &&
 			( $headerpos = strpos( $tail, "PK\x03\x04" ) ) !== false &&
 			preg_match( $openxmlRegex, substr( $tail, $headerpos + 30 ) ) ) {
@@ -888,9 +889,9 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			}
 
 			$this->logger->info( __METHOD__ .
-				": detected a MS Office document with OPC trailer\n" );
+				": detected a MS Office document with OPC trailer" );
 		} else {
-			$this->logger->info( __METHOD__ . ": unable to identify type of ZIP archive\n" );
+			$this->logger->info( __METHOD__ . ": unable to identify type of ZIP archive" );
 		}
 		return $mime;
 	}
@@ -902,7 +903,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param resource $handle An opened seekable file handle
 	 * @return string The detected MIME type
 	 */
-	private function detectMicrosoftBinaryType( $handle ) : string {
+	private function detectMicrosoftBinaryType( $handle ): string {
 		$info = MSCompoundFileReader::readHandle( $handle );
 		if ( !$info['valid'] ) {
 			$this->logger->info( __METHOD__ . ': invalid file format' );
@@ -917,7 +918,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 
 	/**
 	 * Internal MIME type detection. Detection is done using the fileinfo
-	 * extension if it is available. It can be overriden by callback, which could
+	 * extension if it is available. It can be overridden by callback, which could
 	 * use an external program, for example. If detection fails and $ext is not false,
 	 * the MIME type is guessed from the file extension, using getMimeTypeFromExtensionOrNull.
 	 *
@@ -931,12 +932,12 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * improveTypeFromExtension($mime, $ext) later to improve MIME type.
 	 * @return string The MIME type of $file
 	 */
-	private function detectMimeType( string $file, $ext = true ) : string {
+	private function detectMimeType( string $file, $ext = true ): string {
 		/** @todo Make $ext default to false. Or better, remove it. */
 		if ( $ext ) {
 			$this->logger->info( __METHOD__ .
 				": WARNING: use of the \$ext parameter is deprecated. "
-				. "Use improveTypeFromExtension(\$mime, \$ext) instead.\n" );
+				. "Use improveTypeFromExtension(\$mime, \$ext) instead." );
 		}
 
 		$callback = $this->detectCallback;
@@ -956,7 +957,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 			if ( strpos( $m, 'unknown' ) !== false ) {
 				$m = null;
 			} else {
-				$this->logger->info( __METHOD__ . ": magic mime type of $file: $m\n" );
+				$this->logger->info( __METHOD__ . ": magic mime type of $file: $m" );
 				return $m;
 			}
 		}
@@ -969,18 +970,18 @@ class MimeAnalyzer implements LoggerAwareInterface {
 		if ( $ext ) {
 			if ( $this->isRecognizableExtension( $ext ) ) {
 				$this->logger->info( __METHOD__ . ": refusing to guess mime type for .$ext file, "
-					. "we should have recognized it\n" );
+					. "we should have recognized it" );
 			} else {
 				$m = $this->getMimeTypeFromExtensionOrNull( $ext );
 				if ( $m ) {
-					$this->logger->info( __METHOD__ . ": extension mime type of $file: $m\n" );
+					$this->logger->info( __METHOD__ . ": extension mime type of $file: $m" );
 					return $m;
 				}
 			}
 		}
 
 		// Unknown type
-		$this->logger->info( __METHOD__ . ": failed to guess mime type for $file!\n" );
+		$this->logger->info( __METHOD__ . ": failed to guess mime type for $file!" );
 		return 'unknown/unknown';
 	}
 
@@ -999,7 +1000,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string|null $mime MIME type. If null it will be guessed using guessMimeType.
 	 * @return string A value to be used with the MEDIATYPE_xxx constants.
 	 */
-	public function getMediaType( string $path = null, string $mime = null ) : string {
+	public function getMediaType( string $path = null, string $mime = null ): string {
 		if ( !$mime && !$path ) {
 			return MEDIATYPE_UNKNOWN;
 		}
@@ -1119,7 +1120,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 *
 	 * @return string[]
 	 */
-	public function getMediaTypes() : array {
+	public function getMediaTypes(): array {
 		return array_keys( $this->mediaTypes );
 	}
 
@@ -1132,7 +1133,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 * @param string $proposed The MIME type proposed by the server
 	 * @return string[]
 	 */
-	public function getIEMimeTypes( string $fileName, string $chunk, string $proposed ) : array {
+	public function getIEMimeTypes( string $fileName, string $chunk, string $proposed ): array {
 		$ca = $this->getIEContentAnalyzer();
 		return $ca->getRealMimesFromData( $fileName, $chunk, $proposed );
 	}
@@ -1142,7 +1143,7 @@ class MimeAnalyzer implements LoggerAwareInterface {
 	 *
 	 * @return IEContentAnalyzer
 	 */
-	protected function getIEContentAnalyzer() : IEContentAnalyzer {
+	protected function getIEContentAnalyzer(): IEContentAnalyzer {
 		if ( $this->IEAnalyzer === null ) {
 			$this->IEAnalyzer = new IEContentAnalyzer;
 		}

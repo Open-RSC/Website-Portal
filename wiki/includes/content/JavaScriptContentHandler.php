@@ -18,6 +18,10 @@
  * @file
  */
 
+use MediaWiki\Content\Renderer\ContentParseParams;
+use MediaWiki\Content\Transform\PreSaveTransformParams;
+use MediaWiki\MediaWikiServices;
+
 /**
  * Content handler for JavaScript pages.
  *
@@ -58,5 +62,95 @@ class JavaScriptContentHandler extends CodeContentHandler {
 		$url = $destination->getFullURL( 'action=raw&ctype=text/javascript', false, PROTO_RELATIVE );
 		$class = $this->getContentClass();
 		return new $class( '/* #REDIRECT */' . Xml::encodeJsCall( 'mw.loader.load', [ $url ] ) );
+	}
+
+	public function preSaveTransform(
+		Content $content,
+		PreSaveTransformParams $pstParams
+	): Content {
+		$shouldCallDeprecatedMethod = $this->shouldCallDeprecatedContentTransformMethod(
+			$content,
+			$pstParams
+		);
+
+		if ( $shouldCallDeprecatedMethod ) {
+			return $this->callDeprecatedContentPST(
+				$content,
+				$pstParams
+			);
+		}
+
+		'@phan-var JavascriptContent $content';
+
+		$parserOptions = $pstParams->getParserOptions();
+		// @todo Make pre-save transformation optional for script pages (T34858)
+		$services = MediaWikiServices::getInstance();
+		if ( !$services->getUserOptionsLookup()->getBoolOption( $pstParams->getUser(), 'pst-cssjs' ) ) {
+			// Allow bot users to disable the pre-save transform for CSS/JS (T236828).
+			$parserOptions = clone $parserOptions;
+			$parserOptions->setPreSaveTransform( false );
+		}
+
+		$text = $content->getText();
+		$pst = $services->getParser()->preSaveTransform(
+			$text,
+			$pstParams->getPage(),
+			$pstParams->getUser(),
+			$parserOptions
+		);
+
+		$contentClass = $this->getContentClass();
+		return new $contentClass( $pst );
+	}
+
+	/**
+	 * Fills the provided ParserOutput object with information derived from the content.
+	 * Unless $cpo->getGenerateHtml was false, this includes an HTML representation of the content.
+	 *
+	 * For content models listed in $wgTextModelsToParse, this method will call the MediaWiki
+	 * wikitext parser on the text to extract any (wikitext) links, magic words, etc.
+	 *
+	 * Subclasses may override this to provide custom content processing..
+	 *
+	 * @stable to override
+	 *
+	 * @since 1.38
+	 * @param Content $content
+	 * @param ContentParseParams $cpoParams
+	 * @param ParserOutput &$output The output object to fill (reference).
+	 */
+	protected function fillParserOutput(
+		Content $content,
+		ContentParseParams $cpoParams,
+		ParserOutput &$output
+	) {
+		$textModelsToParse = MediaWikiServices::getInstance()->getMainConfig()->get( 'TextModelsToParse' );
+		'@phan-var TextContent $content';
+		if ( in_array( $content->getModel(), $textModelsToParse ) ) {
+			// parse just to get links etc into the database, HTML is replaced below.
+			$output = MediaWikiServices::getInstance()->getParser()
+				->parse(
+					$content->getText(),
+					$cpoParams->getPage(),
+					$cpoParams->getParserOptions(),
+					true,
+					true,
+					$cpoParams->getRevId()
+				);
+		}
+
+		if ( $cpoParams->getGenerateHtml() ) {
+			// Return JavaScript wrapped in a <pre> tag.
+			$html = Html::element(
+				'pre',
+				[ 'class' => 'mw-code mw-js', 'dir' => 'ltr' ],
+				"\n" . $content->getText() . "\n"
+			) . "\n";
+		} else {
+			$html = '';
+		}
+
+		$output->clearWrapperDivClass();
+		$output->setText( $html );
 	}
 }

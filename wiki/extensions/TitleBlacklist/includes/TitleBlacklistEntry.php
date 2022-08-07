@@ -7,7 +7,9 @@
  * @file
  */
 
+use MediaWiki\Extension\AntiSpoof\AntiSpoof;
 use MediaWiki\MediaWikiServices;
+use Wikimedia\AtEase\AtEase;
 
 /**
  * @ingroup Extensions
@@ -110,7 +112,7 @@ class TitleBlacklistEntry {
 				$status = $cache->getWithSetCallback(
 					$cache->makeKey( 'titleblacklist', 'normalized-unicode-status', md5( $title ) ),
 					$cache::TTL_MONTH,
-					function () use ( $title ) {
+					static function () use ( $title ) {
 						return AntiSpoof::checkUnicodeStringStatus( $title );
 					},
 					[ 'pcTTL' => $cache::TTL_PROC_LONG ]
@@ -129,13 +131,13 @@ class TitleBlacklistEntry {
 			}
 		}
 
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		// @phan-suppress-next-line SecurityCheck-ReDoS
 		$match = preg_match(
 			"/^(?:{$this->mRegex})$/us" . ( isset( $this->mParams['casesensitive'] ) ? '' : 'i' ),
 			$title
 		);
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 
 		if ( $match ) {
 			if ( isset( $this->mParams['moveonly'] ) && $action != 'move' ) {
@@ -221,7 +223,7 @@ class TitleBlacklistEntry {
 						$mword[2]
 					);
 					if ( is_string( $cpf_result ) ) {
-						// All result will have the same value, so we can just use str_seplace()
+						// All result will have the same value, so we can just use str_replace()
 						$regex = str_replace( $mword[0], $cpf_result, $regex );
 					}
 					break;

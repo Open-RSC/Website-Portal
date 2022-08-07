@@ -351,7 +351,6 @@ class Preprocessor_Hash extends Preprocessor {
 							$wsLength = $i - $wsStart;
 							$endIndex = count( $accum ) - 1;
 
-							// Sanity check
 							if ( $wsLength > 0
 								&& $endIndex >= 0
 								&& is_string( $accum[$endIndex] )
@@ -674,6 +673,7 @@ class Preprocessor_Hash extends Preprocessor {
 					$i += $count;
 					continue;
 				}
+				// @phan-suppress-next-line PhanTypeArraySuspiciousNullable
 				$name = $rule['names'][$matchingCount];
 				if ( $name === null ) {
 					// No element, just literal text

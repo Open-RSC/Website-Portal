@@ -32,11 +32,6 @@ class SqliteUpdater extends DatabaseUpdater {
 
 	protected function getCoreUpdateList() {
 		return [
-			// 1.28
-			[ 'addIndex', 'recentchanges', 'rc_name_type_patrolled_timestamp',
-				'patch-add-rc_name_type_patrolled_timestamp_index.sql' ],
-			[ 'addField', 'change_tag', 'ct_id', 'patch-change_tag-ct_id.sql' ],
-
 			// 1.29
 			[ 'addField', 'externallinks', 'el_index_60', 'patch-externallinks-el_index_60.sql' ],
 			[ 'addField', 'user_groups', 'ug_expiry', 'patch-user_groups-ug_expiry.sql' ],
@@ -129,8 +124,7 @@ class SqliteUpdater extends DatabaseUpdater {
 			[ 'addIndex', 'recentchanges', 'rc_this_oldid', 'patch-recentchanges-rc_this_oldid-index.sql' ],
 			[ 'dropTable', 'transcache' ],
 			[ 'runMaintenance', PopulateChangeTagDef::class, 'maintenance/populateChangeTagDef.php' ],
-			[ 'addIndex', 'change_tag', 'change_tag_rc_tag_id',
-				'patch-change_tag-change_tag_rc_tag_id.sql' ],
+			[ 'dropIndex', 'change_tag', 'change_tag_rc_tag', 'patch-change_tag-change_tag_rc_tag_id.sql' ],
 			[ 'addField', 'ipblocks', 'ipb_sitewide', 'patch-ipb_sitewide.sql' ],
 			[ 'addTable', 'ipblocks_restrictions', 'patch-ipblocks_restrictions-table.sql' ],
 			[ 'migrateImageCommentTemp' ],
@@ -213,6 +207,26 @@ class SqliteUpdater extends DatabaseUpdater {
 			[ 'modifyField', 'page', 'page_title', 'patch-page-page_title-varbinary.sql' ],
 			[ 'modifyField', 'user', 'user_name', 'patch-user_table-updates.sql' ],
 
+			// 1.37
+			[ 'renameIndex', 'revision', 'page_timestamp', 'rev_page_timestamp', false,
+				'patch-revision-rename-index.sql' ],
+			[ 'addField', 'objectcache', 'modtoken', 'patch-objectcache-modtoken.sql' ],
+			[ 'modifyField', 'revision', 'rev_timestamp', 'patch-revision-rev_timestamp-drop-default.sql' ],
+			[ 'addIndex', 'oldimage', 'oi_timestamp', 'patch-oldimage-oi_timestamp.sql' ],
+			[ 'renameIndex', 'page', 'name_title', 'page_name_title', false,
+				'patch-page-rename-name_title-index.sql' ],
+			[ 'renameIndex', 'change_tag', 'change_tag_rc_tag_id', 'ct_rc_tag_id', false,
+				'patch-change_tag-rename-indexes.sql' ],
+
+			// 1.38
+			[ 'doConvertDjvuMetadata' ],
+			[ 'dropField', 'page_restrictions', 'pr_user', 'patch-drop-page_restrictions-pr_user.sql' ],
+			[ 'addTable', 'linktarget', 'patch-linktarget.sql' ],
+			[ 'dropIndex', 'revision', 'rev_page_id', 'patch-drop-rev_page_id.sql' ],
+			[ 'modifyField', 'page_restrictions', 'pr_page', 'patch-page_restrictions-pr_page.sql' ],
+			[ 'modifyField', 'page_props', 'pp_page', 'patch-page_props-pp_page.sql' ],
+			[ 'modifyField', 'ipblocks_restrictions', 'ir_value', 'patch-ipblocks_restrictions-ir_value.sql' ],
+			[ 'addField', 'templatelinks', 'tl_target_id', 'patch-templatelinks-target_id.sql' ],
 		];
 	}
 

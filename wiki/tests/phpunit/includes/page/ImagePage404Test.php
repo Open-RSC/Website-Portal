@@ -8,7 +8,7 @@ class ImagePage404Test extends MediaWikiMediaTestCase {
 		return parent::getRepoOptions() + [ 'transformVia404' => true ];
 	}
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		$this->setMwGlobals( 'wgImageLimits', [
 			[ 320, 240 ],
 			[ 640, 480 ],
@@ -40,7 +40,7 @@ class ImagePage404Test extends MediaWikiMediaTestCase {
 		$reflMethod->setAccessible( true );
 
 		$actual = $reflMethod->invoke( $iPage, 545, 700 );
-		$this->assertEquals( count( $actual ), $expectedNumberThumbs );
+		$this->assertCount( $expectedNumberThumbs, $actual );
 	}
 
 	public function providerGetThumbSizes() {

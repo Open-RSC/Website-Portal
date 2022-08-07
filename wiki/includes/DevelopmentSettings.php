@@ -56,11 +56,17 @@ unset( $logDir );
  * Make testing possible (or easier)
  */
 
-global $wgRateLimits, $wgEnableJavaScriptTest, $wgRestAPIAdditionalRouteFiles;
+global $wgRateLimits, $wgEnableJavaScriptTest, $wgRestAPIAdditionalRouteFiles,
+	$wgDeferredUpdateStrategy;
 
-// Disable rate-limiting to allow integration tests to run unthrottled
-// in CI and for devs locally (T225796)
-$wgRateLimits = [];
+// Set almost infinite rate limits. This allows integration tests to run unthrottled
+// in CI and for devs locally (T225796), but doesn't turn a large chunk of production
+// code completely off during testing (T284804)
+foreach ( $wgRateLimits as $right => &$limit ) {
+	foreach ( $limit as $group => &$groupLimit ) {
+		$groupLimit[0] = PHP_INT_MAX;
+	}
+}
 
 // Enable Special:JavaScriptTest and allow `npm run qunit` to work
 // https://www.mediawiki.org/wiki/Manual:JavaScript_unit_testing
@@ -69,19 +75,30 @@ $wgEnableJavaScriptTest = true;
 // Enable development/experimental endpoints
 $wgRestAPIAdditionalRouteFiles = [ 'includes/Rest/coreDevelopmentRoutes.json' ];
 
+// Greatly raise the limits on short/long term login attempts,
+// so that automated tests run in parallel don't error.
+$wgPasswordAttemptThrottle = [
+	[ 'count' => 1000, 'seconds' => 300 ],
+	[ 'count' => 100000, 'seconds' => 60 * 60 * 48 ],
+];
+
+// Run deferred updates before sending a response to the client.
+// This ensures that in end-to-end tests, a GET request will see the
+// effect of all previous POST requests (T230211).
+// Caveat: this does not wait for jobs to be executed, and it does
+// not wait for database replication to complete.
+$wgForceDeferredUpdatesPreSend = true;
+
 /**
  * Experimental changes that may later become the default.
  * (Must reference a Phabricator ticket)
  */
 
-global $wgSQLMode, $wgLegacyJavaScriptGlobals, $wgLocalisationCacheConf,
+global $wgSQLMode, $wgLocalisationCacheConf,
 	$wgCacheDirectory, $wgEnableUploads, $wgCiteBookReferencing;
 
 // Enable MariaDB/MySQL strict mode (T108255)
 $wgSQLMode = 'TRADITIONAL';
-
-// Disable legacy javascript globals in CI and for devs (T72470)
-$wgLegacyJavaScriptGlobals = false;
 
 // Localisation Cache to StaticArray (T218207)
 $wgLocalisationCacheConf['store'] = 'array';

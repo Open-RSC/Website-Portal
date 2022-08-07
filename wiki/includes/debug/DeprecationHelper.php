@@ -71,6 +71,13 @@ trait DeprecationHelper {
 	protected $deprecatedPublicProperties = [];
 
 	/**
+	 * Whether to emit a deprecation warning when unknown properties are accessed.
+	 *
+	 * @var bool|array
+	 */
+	private $dynamicPropertiesAccessDeprecated = false;
+
+	/**
 	 * Mark a property as deprecated. Only use this for properties that used to be public and only
 	 *   call it in the constructor.
 	 *
@@ -105,8 +112,10 @@ trait DeprecationHelper {
 	 *
 	 * @param string $property The name of the property.
 	 * @param string $version MediaWiki version where the property became deprecated.
-	 * @param callable $getter an user provided getter that implements a `get` logic for the property
-	 * @param callable|null $setter an user provided getter that implements a `set` logic for the property
+	 * @param callable|string $getter A user provided getter that implements a `get` logic
+	 *        for the property. If a string is given, it is called as a method on $this.
+	 * @param callable|string|null $setter A user provided setter that implements a `set` logic
+	 *        for the property. If a string is given, it is called as a method on $this.
 	 * @param string|null $class The class which has the deprecated property.
 	 * @param string|null $component
 	 *
@@ -116,8 +125,8 @@ trait DeprecationHelper {
 	protected function deprecatePublicPropertyFallback(
 		string $property,
 		string $version,
-		callable $getter,
-		?callable $setter = null,
+		$getter,
+		$setter = null,
 		$class = null,
 		$component = null
 	) {
@@ -131,13 +140,57 @@ trait DeprecationHelper {
 		];
 	}
 
+	/**
+	 * Emit deprecation warnings when dynamic and unknown properties
+	 * are accessed.
+	 *
+	 * @param string $version MediaWiki version where the property became deprecated.
+	 * @param string|null $class The class which has the deprecated property.
+	 * @param string|null $component
+	 */
+	protected function deprecateDynamicPropertiesAccess(
+		string $version,
+		string $class = null,
+		string $component = null
+	) {
+		$this->dynamicPropertiesAccessDeprecated = [ $version, $class ?: __CLASS__, $component ];
+	}
+
+	public function __isset( $name ) {
+		// Overriding magic __isset is required not only for isset() and empty(),
+		// but to correctly support null coalescing for dynamic properties,
+		// e.g. $foo->bar ?? 'default'
+		if ( isset( $this->deprecatedPublicProperties[$name] ) ) {
+			list( $version, $class, $component, $getter ) = $this->deprecatedPublicProperties[$name];
+			$qualifiedName = $class . '::$' . $name;
+			wfDeprecated( $qualifiedName, $version, $component, 3 );
+			if ( $getter ) {
+				return $this->deprecationHelperCallGetter( $getter );
+			}
+			return true;
+		}
+
+		$ownerClass = $this->deprecationHelperGetPropertyOwner( $name );
+		if ( $ownerClass ) {
+			// Someone tried to access a normal non-public property. Try to behave like PHP would.
+			return false;
+		} else {
+			if ( $this->dynamicPropertiesAccessDeprecated ) {
+				[ $version, $class, $component ] = $this->dynamicPropertiesAccessDeprecated;
+				$qualifiedName = $class . '::$' . $name;
+				wfDeprecated( $qualifiedName, $version, $component, 3 );
+			}
+			return false;
+		}
+	}
+
 	public function __get( $name ) {
 		if ( isset( $this->deprecatedPublicProperties[$name] ) ) {
 			list( $version, $class, $component, $getter ) = $this->deprecatedPublicProperties[$name];
 			$qualifiedName = $class . '::$' . $name;
 			wfDeprecated( $qualifiedName, $version, $component, 3 );
 			if ( $getter ) {
-				return $getter();
+				return $this->deprecationHelperCallGetter( $getter );
 			}
 			return $this->$name;
 		}
@@ -147,6 +200,12 @@ trait DeprecationHelper {
 		if ( $ownerClass ) {
 			// Someone tried to access a normal non-public property. Try to behave like PHP would.
 			trigger_error( "Cannot access non-public property $qualifiedName", E_USER_ERROR );
+		} elseif ( property_exists( $this, $name ) ) {
+			// Normally __get method will not be even called if the property exists,
+			// but in tests if we mock an object that uses DeprecationHelper,
+			// __get and __set magic methods will be mocked as well, and called
+			// regardless of the property existence. Support that use-case.
+			return $this->$name;
 		} else {
 			// Non-existing property. Try to behave like PHP would.
 			trigger_error( "Undefined property: $qualifiedName", E_USER_NOTICE );
@@ -160,7 +219,7 @@ trait DeprecationHelper {
 			$qualifiedName = $class . '::$' . $name;
 			wfDeprecated( $qualifiedName, $version, $component, 3 );
 			if ( $setter ) {
-				$setter( $value );
+				$this->deprecationHelperCallSetter( $setter, $value );
 			} elseif ( property_exists( $this, $name ) ) {
 				$this->$name = $value;
 			} else {
@@ -175,6 +234,11 @@ trait DeprecationHelper {
 			// Someone tried to access a normal non-public property. Try to behave like PHP would.
 			trigger_error( "Cannot access non-public property $qualifiedName", E_USER_ERROR );
 		} else {
+			if ( $this->dynamicPropertiesAccessDeprecated ) {
+				[ $version, $class, $component ] = $this->dynamicPropertiesAccessDeprecated;
+				$qualifiedName = $class . '::$' . $name;
+				wfDeprecated( $qualifiedName, $version, $component, 3 );
+			}
 			// Non-existing property. Try to behave like PHP would.
 			$this->$name = $value;
 		}
@@ -205,5 +269,19 @@ trait DeprecationHelper {
 			}
 		}
 		return false;
+	}
+
+	private function deprecationHelperCallGetter( $getter ) {
+		if ( is_string( $getter ) ) {
+			$getter = [ $this, $getter ];
+		}
+		return $getter();
+	}
+
+	private function deprecationHelperCallSetter( $setter, $value ) {
+		if ( is_string( $setter ) ) {
+			$setter = [ $this, $setter ];
+		}
+		$setter( $value );
 	}
 }

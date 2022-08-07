@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * Test class for SpecialShortPages class
  *
@@ -17,14 +15,14 @@ class SpecialShortPagesTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetQueryInfoRespectsContentNS( $contentNS, $blacklistNS, $expectedNS ) {
 		$this->setMwGlobals( [
-			'wgShortPagesNamespaceBlacklist' => $blacklistNS,
+			'wgShortPagesNamespaceExclusions' => $blacklistNS,
 			'wgContentNamespaces' => $contentNS
 		] );
 		$this->setTemporaryHook( 'ShortPagesQuery', static function () {
 			// empty hook handler
 		} );
 
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		$page = new SpecialShortPages(
 			$services->getNamespaceInfo(),
 			$services->getDBLoadBalancer(),

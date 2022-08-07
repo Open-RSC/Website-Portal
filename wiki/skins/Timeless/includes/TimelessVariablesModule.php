@@ -1,25 +1,14 @@
 <?php
+
+namespace MediaWiki\Skin\Timeless;
+
+use ResourceLoaderContext;
+use ResourceLoaderSkinModule;
+
 /**
  * ResourceLoader module to set some LESS variables for the skin
  */
 class TimelessVariablesModule extends ResourceLoaderSkinModule {
-	/**
-	 * Add compatibility to < 1.36
-	 * @inheritDoc
-	 */
-	public function __construct(
-			array $options = [],
-			$localBasePath = null,
-			$remoteBasePath = null
-	) {
-			global $wgVersion;
-			if ( version_compare( $wgVersion, '1.36', '<' ) ) {
-				$options['features'] = [ "logo", "legacy" ];
-			}
-
-			parent::__construct( $options, $localBasePath, $remoteBasePath );
-	}
-
 	/**
 	 * Add our LESS variables
 	 *
@@ -38,7 +27,7 @@ class TimelessVariablesModule extends ResourceLoaderSkinModule {
 			$backdrop = 'images/cat.svg';
 		}
 
-		$vars = array_merge(
+		return array_merge(
 			$vars,
 			[
 				'backdrop-image' => "url($backdrop)",
@@ -47,8 +36,6 @@ class TimelessVariablesModule extends ResourceLoaderSkinModule {
 				// +width cutoffs ...
 			]
 		);
-
-		return $vars;
 	}
 
 	/**

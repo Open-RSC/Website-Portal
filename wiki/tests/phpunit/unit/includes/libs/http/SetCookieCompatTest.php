@@ -10,8 +10,7 @@ class SetCookieCompatTest extends TestCase {
 	use MediaWikiCoversValidator;
 
 	public static function provideSetCookieEmulated() {
-		// Expected values are all copied from PHP 7.3
-		// phpcs:disable Generic.Files.LineLength.TooLong
+		// Expected values are all copied from PHP 7.4
 		return [
 			'unrecognised key' => [
 				true, 'a', '',
@@ -120,6 +119,16 @@ class SetCookieCompatTest extends TestCase {
 				[
 					'headers' => [
 						'Set-Cookie: a=%25',
+					],
+					'returnValue' => true,
+					'errors' => [],
+				]
+			],
+			'encoded value with space' => [
+				true, 'a', 'b c', [],
+				[
+					'headers' => [
+						'Set-Cookie: a=b%20c',
 					],
 					'returnValue' => true,
 					'errors' => [],

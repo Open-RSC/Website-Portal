@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @group ContentHandler
  * @group Database
@@ -116,19 +114,6 @@ class JavaScriptContentTest extends TextContentTest {
 		];
 	}
 
-	public static function dataPreloadTransform() {
-		return [
-			[
-				'hello this is ~~~',
-				'hello this is ~~~',
-			],
-			[
-				'hello \'\'this\'\' is <noinclude>foo</noinclude><includeonly>bar</includeonly>',
-				'hello \'\'this\'\' is <noinclude>foo</noinclude><includeonly>bar</includeonly>',
-			],
-		];
-	}
-
 	public static function dataGetRedirectTarget() {
 		return [
 			[ '#REDIRECT [[Test]]',
@@ -209,7 +194,7 @@ class JavaScriptContentTest extends TextContentTest {
 	 * @covers JavaScriptContent::matchMagicWord
 	 */
 	public function testMatchMagicWord() {
-		$mw = MediaWikiServices::getInstance()->getMagicWordFactory()->get( "staticredirect" );
+		$mw = $this->getServiceContainer()->getMagicWordFactory()->get( "staticredirect" );
 
 		$content = $this->newContent( "#REDIRECT [[FOO]]\n__STATICREDIRECT__" );
 		$this->assertFalse(
@@ -238,7 +223,6 @@ class JavaScriptContentTest extends TextContentTest {
 	}
 
 	public static function provideUpdateRedirect() {
-		// phpcs:disable Generic.Files.LineLength
 		return [
 			[
 				'#REDIRECT [[Someplace]]',
@@ -299,7 +283,6 @@ class JavaScriptContentTest extends TextContentTest {
 	 * Keep this in sync with JavaScriptContentHandlerTest::provideMakeRedirectContent()
 	 */
 	public static function provideGetRedirectTarget() {
-		// phpcs:disable Generic.Files.LineLength
 		return [
 			[
 				'MediaWiki:MonoBook.js',

@@ -1,6 +1,8 @@
 <?php
 
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\MockObject\MockObject;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * The urls herein are not actually called, because we mock the return results.
@@ -18,12 +20,12 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 	private function createClient( $options = [] ) {
 		$client = $this->getMockBuilder( MultiHttpClient::class )
 			->setConstructorArgs( [ $options ] )
-			->setMethods( [ 'isCurlEnabled' ] )->getMock();
+			->onlyMethods( [ 'isCurlEnabled' ] )->getMock();
 		$client->method( 'isCurlEnabled' )->willReturn( false );
 		return $client;
 	}
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->client = $this->createClient( [] );
 	}
@@ -33,18 +35,15 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 			'timeout' => 1,
 			'connectTimeout' => 1
 		];
-		$httpRequest = $this->getMockBuilder( PhpHttpRequest::class )
+		$httpRequest = $this->getMockBuilder( MWHttpRequest::class )
 			->setConstructorArgs( [ '', $options ] )
 			->getMock();
-		$httpRequest->expects( $this->any() )
-			->method( 'execute' )
+		$httpRequest->method( 'execute' )
 			->willReturn( Status::wrap( $statusValue ) );
-		$httpRequest->expects( $this->any() )
-			->method( 'getResponseHeaders' )
+		$httpRequest->method( 'getResponseHeaders' )
 			->willReturn( $headers );
-		$httpRequest->expects( $this->any() )
-				->method( 'getStatus' )
-				->willReturn( $statusCode );
+		$httpRequest->method( 'getStatus' )
+			->willReturn( $statusCode );
 		return $httpRequest;
 	}
 
@@ -52,8 +51,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 		$factory = $this->getMockBuilder( MediaWiki\Http\HttpRequestFactory::class )
 			->disableOriginalConstructor()
 			->getMock();
-		$factory->expects( $this->any() )
-			->method( 'create' )
+		$factory->method( 'create' )
 			->willReturn( $httpRequest );
 		return $factory;
 	}
@@ -71,7 +69,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 			'url' => "http://example.test",
 		] );
 
-		$this->assertEquals( 200, $rcode );
+		$this->assertSame( 200, $rcode );
 	}
 
 	/**
@@ -88,8 +86,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 			'url' => "http://www.example.test",
 		] );
 
-		$failure = $rcode < 200 || $rcode >= 400;
-		$this->assertTrue( $failure );
+		$this->assertSame( 0, $rcode );
 	}
 
 	/**
@@ -113,7 +110,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 		$responses = $this->client->runMulti( $reqs );
 		foreach ( $responses as $response ) {
 			list( $rcode, $rdesc, /* $rhdrs */, $rbody, $rerr ) = $response['response'];
-			$this->assertEquals( 200, $rcode );
+			$this->assertSame( 200, $rcode );
 		}
 	}
 
@@ -139,8 +136,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 		$responses = $this->client->runMulti( $reqs );
 		foreach ( $responses as $response ) {
 			list( $rcode, $rdesc, /* $rhdrs */, $rbody, $rerr ) = $response['response'];
-			$failure = $rcode < 200 || $rcode >= 400;
-			$this->assertTrue( $failure );
+			$this->assertSame( 404, $rcode );
 		}
 	}
 
@@ -171,7 +167,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 			'url' => 'http://example.test',
 		] );
 
-		$this->assertEquals( 200, $rcode );
+		$this->assertSame( 200, $rcode );
 		$this->assertSame( count( $headers ), count( $rhdrs ) );
 		foreach ( $headers as $name => $values ) {
 			$value = implode( ', ', $values );
@@ -255,8 +251,7 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 		$factory = $this->getMockBuilder( MediaWiki\Http\HttpRequestFactory::class )
 			->disableOriginalConstructor()
 			->getMock();
-		$factory->expects( $this->any() )
-			->method( 'create' )
+		$factory->method( 'create' )
 			->with(
 				$url,
 				$this->callback(
@@ -276,6 +271,58 @@ class MultiHttpClientTest extends MediaWikiIntegrationTestCase {
 			$runOptions
 		);
 
-		$this->assertTrue( true );
+		$this->addToAssertionCount( 1 );
+	}
+
+	public function testUseReverseProxy() {
+		// TODO: Cannot use TestingAccessWrapper here because it doesn't
+		// support pass-by-reference (T287318)
+		$class = new ReflectionClass( MultiHttpClient::class );
+		$func = $class->getMethod( 'useReverseProxy' );
+		$func->setAccessible( true );
+		$req = [
+			'url' => 'https://example.org/path?query=string',
+		];
+		$func->invokeArgs( new MultiHttpClient( [] ), [ &$req, 'http://localhost:1234' ] );
+		$this->assertSame( 'http://localhost:1234/path?query=string', $req['url'] );
+		$this->assertSame( 'example.org', $req['headers']['Host'] );
+	}
+
+	public function testNormalizeRequests() {
+		// TODO: Cannot use TestingAccessWrapper here because it doesn't
+		// support pass-by-reference (T287318)
+		$class = new ReflectionClass( MultiHttpClient::class );
+		$func = $class->getMethod( 'normalizeRequests' );
+		$func->setAccessible( true );
+		$reqs = [
+			[ 'GET', 'https://example.org/path?query=string' ],
+			[
+				'method' => 'GET',
+				'url' => 'https://example.com/path?query=another%20string'
+			],
+		];
+		$client = new MultiHttpClient( [
+			'localVirtualHosts' => [ 'example.org' ],
+			'localProxy' => 'http://localhost:1234',
+		] );
+		$func->invokeArgs( $client, [ &$reqs ] );
+		// Req #0 transformed to use reverse proxy
+		$this->assertSame( 'http://localhost:1234/path?query=string', $reqs[0]['url'] );
+		$this->assertSame( 'example.org', $reqs[0]['headers']['host'] );
+		$this->assertFalse( $reqs[0]['proxy'] );
+		// Req #1 left alone, domain doesn't match
+		$this->assertSame( 'https://example.com/path?query=another%20string', $reqs[1]['url'] );
+	}
+
+	public function testGetCurlMulti() {
+		$cm = TestingAccessWrapper::newFromObject( new MultiHttpClient( [] ) );
+		$resource = $cm->getCurlMulti( [ 'usePipelining' => true ] );
+		$this->assertThat(
+			$resource,
+			$this->logicalOr(
+				$this->isType( IsType::TYPE_RESOURCE ),
+				$this->isInstanceOf( 'CurlMultiHandle' )
+			)
+		);
 	}
 }

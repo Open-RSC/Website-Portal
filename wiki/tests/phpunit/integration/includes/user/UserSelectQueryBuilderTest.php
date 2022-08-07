@@ -54,7 +54,7 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 		$queryBuilder = $this->getStore()
 			->newSelectQueryBuilder()
 			->limit( $options['limit'] )
-			->userNamePrefix( $prefix )
+			->whereUserNamePrefix( $prefix )
 			->caller( __METHOD__ )
 			->orderByName( $options['sort'] ?? SelectQueryBuilder::SORT_ASC );
 		$actors = iterator_to_array( $queryBuilder->fetchUserIdentities() );
@@ -90,7 +90,7 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 		$actors = iterator_to_array(
 			$this->getStore()
 				->newSelectQueryBuilder()
-				->userIds( $ids )
+				->whereUserIds( $ids )
 				->caller( __METHOD__ )
 				->orderByUserId( $options['sort'] ?? SelectQueryBuilder::SORT_ASC )
 				->fetchUserIdentities()
@@ -141,7 +141,7 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 		$actors = iterator_to_array(
 			$this->getStore()
 				->newSelectQueryBuilder()
-				->userNames( $names )
+				->whereUserNames( $names )
 				->caller( __METHOD__ )
 				->orderByUserId( $options['sort'] ?? SelectQueryBuilder::SORT_ASC )
 				->fetchUserIdentities()
@@ -160,7 +160,7 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 			new UserIdentityValue( 24, 'TestUser' ),
 			$this->getStore()
 				->newSelectQueryBuilder()
-				->userIds( 24 )
+				->whereUserIds( 24 )
 				->fetchUserIdentity()
 		);
 	}
@@ -204,7 +204,7 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 			$this->getStore()
 				->newSelectQueryBuilder()
 				->limit( 100 )
-				->userNamePrefix( '' )
+				->whereUserNamePrefix( '' )
 				->anon()
 				->fetchUserIdentities()
 		);
@@ -212,6 +212,74 @@ class UserSelectQueryBuilderTest extends ActorStoreTestBase {
 		$this->assertSameActors(
 			new UserIdentityValue( 0, self::IP ),
 			$actors[0]
+		);
+	}
+
+	/**
+	 * @covers ::hidden
+	 */
+	public function testHidden() {
+		$hiddenUser = $this->getMutableTestUser()->getUserIdentity();
+		$normalUser = $this->getMutableTestUser()->getUserIdentity();
+		$this->getServiceContainer()->getBlockUserFactory()->newBlockUser(
+			$hiddenUser,
+			$this->getTestSysop()->getUser(),
+			'infinity',
+			'Test',
+			[
+				'isHideUser' => true
+			]
+		)->placeBlockUnsafe( true );
+
+		// hidden set to true
+		$actors = iterator_to_array(
+			$this->getStore()
+			->newSelectQueryBuilder()
+			->limit( 100 )
+			->whereUserIds( [
+				$hiddenUser->getId(),
+				$normalUser->getId()
+			] )
+			->hidden( true )
+			->fetchUserIdentities()
+		);
+		$this->assertCount( 1, $actors );
+		$this->assertSameActors(
+			$hiddenUser,
+			$actors[0]
+		);
+
+		// hidden set to false
+		$actors = iterator_to_array(
+			$this->getStore()
+				->newSelectQueryBuilder()
+				->limit( 100 )
+				->whereUserIds( [
+					$hiddenUser->getId(),
+					$normalUser->getId()
+				] )
+				->hidden( false )
+				->fetchUserIdentities()
+		);
+		$this->assertCount( 1, $actors );
+		$this->assertSameActors(
+			$normalUser,
+			$actors[0]
+		);
+
+		// hidden not set
+		$usernames = $this->getStore()
+			->newSelectQueryBuilder()
+			->limit( 100 )
+			->whereUserIds( [
+				$hiddenUser->getId(),
+				$normalUser->getId()
+			] )
+			->fetchUserNames();
+		$this->assertCount( 2, $usernames );
+		$this->assertArrayEquals(
+			[ $normalUser->getName(), $hiddenUser->getName() ],
+			$usernames
 		);
 	}
 }

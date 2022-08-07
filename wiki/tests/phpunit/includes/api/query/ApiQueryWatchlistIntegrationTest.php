@@ -1,7 +1,6 @@
 <?php
 
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
 
 /**
@@ -13,7 +12,7 @@ use MediaWiki\Revision\SlotRecord;
  */
 class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->tablesUsed = array_unique(
 			array_merge( $this->tablesUsed, [ 'watchlist', 'recentchanges', 'page' ] )
@@ -33,48 +32,42 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 	private function doPageEdit( User $user, LinkTarget $target, $content, $summary ) {
 		$title = Title::newFromLinkTarget( $target );
 		$page = WikiPage::factory( $title );
-		$page->doEditContent(
+		$page->doUserEditContent(
 			ContentHandler::makeContent( $content, $title ),
-			$summary,
-			0,
-			false,
-			$user
+			$user,
+			$summary
 		);
 	}
 
 	private function doMinorPageEdit( User $user, LinkTarget $target, $content, $summary ) {
 		$title = Title::newFromLinkTarget( $target );
 		$page = WikiPage::factory( $title );
-		$page->doEditContent(
+		$page->doUserEditContent(
 			ContentHandler::makeContent( $content, $title ),
+			$user,
 			$summary,
-			EDIT_MINOR,
-			false,
-			$user
+			EDIT_MINOR
 		);
 	}
 
 	private function doBotPageEdit( User $user, LinkTarget $target, $content, $summary ) {
 		$title = Title::newFromLinkTarget( $target );
 		$page = WikiPage::factory( $title );
-		$page->doEditContent(
+		$page->doUserEditContent(
 			ContentHandler::makeContent( $content, $title ),
+			$user,
 			$summary,
-			EDIT_FORCE_BOT,
-			false,
-			$user
+			EDIT_FORCE_BOT
 		);
 	}
 
 	private function doAnonPageEdit( LinkTarget $target, $content, $summary ) {
 		$title = Title::newFromLinkTarget( $target );
 		$page = WikiPage::factory( $title );
-		$page->doEditContent(
+		$page->doUserEditContent(
 			ContentHandler::makeContent( $content, $title ),
-			$summary,
-			0,
-			false,
-			User::newFromId( 0 )
+			User::newFromId( 0 ),
+			$summary
 		);
 	}
 
@@ -93,14 +86,8 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 		$updater->setContent( SlotRecord::MAIN, ContentHandler::makeContent( $content, $title ) );
 		$rev = $updater->saveRevision( $summary );
 
-		$rc = MediaWikiServices::getInstance()->getRevisionStore()->getRecentChange( $rev );
+		$rc = $this->getServiceContainer()->getRevisionStore()->getRecentChange( $rev );
 		$rc->doMarkPatrolled( $patrollingUser, false, [] );
-	}
-
-	private function deletePage( LinkTarget $target, $reason ) {
-		$title = Title::newFromLinkTarget( $target );
-		$page = WikiPage::factory( $title );
-		$page->doDeleteArticleReal( $reason, $this->getTestSysop()->getUser() );
 	}
 
 	/**
@@ -143,7 +130,7 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 	}
 
 	private function getWatchedItemStore() {
-		return MediaWikiServices::getInstance()->getWatchedItemStore();
+		return $this->getServiceContainer()->getWatchedItemStore();
 	}
 
 	/**
@@ -207,7 +194,8 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 		// not checking values of all keys of the actual item, so removing unwanted keys from comparison
 		$actualItemsOnlyComparedValues = array_map(
 			static function ( array $item ) use ( $keysUsedInValueComparison ) {
-				return array_intersect_key( $item, array_flip( $keysUsedInValueComparison ) );
+				return array_intersect_key( $item,
+					array_fill_keys( $keysUsedInValueComparison, true ) );
 			},
 			$actualItems
 		);
@@ -225,7 +213,7 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 	}
 
 	private function getPrefixedText( LinkTarget $target ) {
-		return MediaWikiServices::getInstance()->getTitleFormatter()->getPrefixedText( $target );
+		return $this->getServiceContainer()->getTitleFormatter()->getPrefixedText( $target );
 	}
 
 	private function cleanTestUsersWatchlist() {
@@ -633,7 +621,8 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 			'Some Content',
 			'Create the page that will be deleted'
 		);
-		$this->deletePage( $target, 'Important Reason' );
+		$wikiPage = $this->getServiceContainer()->getWikiPageFactory()->newFromLinkTarget( $target );
+		$this->deletePage( $wikiPage, 'Important Reason' );
 	}
 
 	public function testLoginfoPropParameter() {
@@ -1056,7 +1045,6 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 		$title = Title::newFromLinkTarget( $target );
 
 		$rc = new RecentChange;
-		$rc->mTitle = $title;
 		$rc->mAttribs = [
 			'rc_timestamp' => wfTimestamp( TS_MW ),
 			'rc_namespace' => $title->getNamespace(),
@@ -1151,7 +1139,7 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 			]
 		);
 		$title = Title::newFromLinkTarget( $subjectTarget );
-		$revision = MediaWikiServices::getInstance()
+		$revision = $this->getServiceContainer()
 			->getRevisionLookup()
 			->getRevisionByTitle( $title );
 
@@ -1468,8 +1456,10 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 			'Create the page'
 		);
 
+		$userOptionsManager = $this->getServiceContainer()->getUserOptionsManager();
+
 		$otherUser = $this->getNonLoggedInTestUser();
-		$otherUser->setOption( 'watchlisttoken', '1234567890' );
+		$userOptionsManager->setOption( $otherUser, 'watchlisttoken', '1234567890' );
 		$otherUser->saveSettings();
 
 		$this->watchPages( $otherUser, [ $target ] );
@@ -1496,8 +1486,10 @@ class ApiQueryWatchlistIntegrationTest extends ApiTestCase {
 	}
 
 	public function testOwnerAndTokenParams_wrongToken() {
+		$userOptionsManager = $this->getServiceContainer()->getUserOptionsManager();
+
 		$otherUser = $this->getNonLoggedInTestUser();
-		$otherUser->setOption( 'watchlisttoken', '1234567890' );
+		$userOptionsManager->setOption( $otherUser, 'watchlisttoken', '1234567890' );
 		$otherUser->saveSettings();
 
 		$this->expectException( ApiUsageException::class );

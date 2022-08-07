@@ -21,6 +21,7 @@
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LogLevel;
+use Wikimedia\NormalizedException\INormalizedException;
 use Wikimedia\Rdbms\DBError;
 use Wikimedia\Rdbms\DBQueryError;
 
@@ -36,7 +37,7 @@ class MWExceptionHandler {
 	/** @var string Error reported by direct logException() call */
 	public const CAUGHT_BY_OTHER = 'other';
 
-	/** @var string $reservedMemory */
+	/** @var string|null */
 	protected static $reservedMemory;
 
 	/**
@@ -47,7 +48,7 @@ class MWExceptionHandler {
 	 * As such, these should be sent to MediaWiki's "exception" channel.
 	 * Normally, the error handler logs them to the "error" channel.
 	 *
-	 * @var array $fatalErrorTypes
+	 * @var array
 	 */
 	protected static $fatalErrorTypes = [
 		E_ERROR,
@@ -118,11 +119,11 @@ class MWExceptionHandler {
 	 *
 	 * This method is used to attempt to recover from exceptions
 	 *
-	 * @since 1.23
+	 * @since 1.37
 	 * @param Throwable $e
 	 * @param string $catcher CAUGHT_BY_* class constant indicating what caught the error
 	 */
-	public static function rollbackMasterChangesAndLog(
+	public static function rollbackPrimaryChangesAndLog(
 		Throwable $e,
 		$catcher = self::CAUGHT_BY_OTHER
 	) {
@@ -130,11 +131,11 @@ class MWExceptionHandler {
 		if ( !$services->isServiceDisabled( 'DBLoadBalancerFactory' ) ) {
 			// Rollback DBs to avoid transaction notices. This might fail
 			// to rollback some databases due to connection issues or exceptions.
-			// However, any sane DB driver will rollback implicitly anyway.
+			// However, any sensible DB driver will rollback implicitly anyway.
 			try {
-				$services->getDBLoadBalancerFactory()->rollbackMasterChanges( __METHOD__ );
+				$services->getDBLoadBalancerFactory()->rollbackPrimaryChanges( __METHOD__ );
 			} catch ( DBError $e2 ) {
-				// If the DB is unreacheable, rollback() will throw an error
+				// If the DB is unreachable, rollback() will throw an error
 				// and the error report() method might need messages from the DB,
 				// which would result in an exception loop. PHP may escalate such
 				// errors to "Exception thrown without a stack frame" fatals, but
@@ -144,6 +145,19 @@ class MWExceptionHandler {
 		}
 
 		self::logException( $e, $catcher );
+	}
+
+	/**
+	 * @deprecated since 1.37; please use rollbackPrimaryChangesAndLog() instead.
+	 * @param Throwable $e
+	 * @param string $catcher CAUGHT_BY_* class constant indicating what caught the error
+	 */
+	public static function rollbackMasterChangesAndLog(
+		Throwable $e,
+		$catcher = self::CAUGHT_BY_OTHER
+	) {
+		wfDeprecated( __METHOD__, '1.37' );
+		self::rollbackPrimaryChangesAndLog( $e, $catcher );
 	}
 
 	/**
@@ -158,6 +172,9 @@ class MWExceptionHandler {
 		// Make sure we don't claim success on exit for CLI scripts (T177414)
 		if ( wfIsCLI() ) {
 			register_shutdown_function(
+				/**
+				 * @return never
+				 */
 				static function () {
 					exit( 255 );
 				}
@@ -181,7 +198,7 @@ class MWExceptionHandler {
 	 * @param string $catcher CAUGHT_BY_* class constant indicating what caught the error
 	 */
 	public static function handleException( Throwable $e, $catcher = self::CAUGHT_BY_OTHER ) {
-		self::rollbackMasterChangesAndLog( $e, $catcher );
+		self::rollbackPrimaryChangesAndLog( $e, $catcher );
 		self::report( $e );
 	}
 
@@ -262,7 +279,6 @@ class MWExceptionHandler {
 					$file = $real['file'];
 					$line = $real['line'];
 					$message = $real['message'];
-					$prefix = '';
 				}
 				break;
 			default:
@@ -428,7 +444,7 @@ TXT;
 	 *
 	 * @since 1.26
 	 * @param array $trace Stacktrace
-	 * @return array Stacktrace with arugment values converted to data types
+	 * @return array Stacktrace with argument values converted to data types
 	 */
 	public static function redactTrace( array $trace ) {
 		return array_map( static function ( $frame ) {
@@ -475,7 +491,11 @@ TXT;
 
 		if ( $e instanceof DBQueryError ) {
 			$message = "A database query error has occurred. Did you forget to run"
-				. " your application's database schema updater after upgrading?\n\n"
+				. " your application's database schema updater after upgrading"
+				. " or after adding a new extension?\n\nPlease see"
+				. " https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Upgrading and"
+				. " https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:How_to_debug"
+				. " for more information.\n\n"
 				. $message;
 		}
 
@@ -492,10 +512,20 @@ TXT;
 	 * @return string
 	 */
 	public static function getLogNormalMessage( Throwable $e ) {
-		$type = get_class( $e );
-		$message = $e->getMessage();
+		if ( $e instanceof INormalizedException ) {
+			$message = $e->getNormalizedMessage();
+		} else {
+			$message = $e->getMessage();
+		}
+		if ( !$e instanceof ErrorException ) {
+			// ErrorException is something we use internally to represent
+			// PHP errors (runtime warnings that aren't thrown or caught),
+			// don't bother putting it in the logs. Let the log message
+			// lead with "PHP Warning: " instead (see ::handleError).
+			$message = get_class( $e ) . ": $message";
+		}
 
-		return "[{reqId}] {exception_url}   $type: $message";
+		return "[{reqId}] {exception_url}   $message";
 	}
 
 	/**
@@ -523,7 +553,7 @@ TXT;
 	 * @return array
 	 */
 	public static function getLogContext( Throwable $e, $catcher = self::CAUGHT_BY_OTHER ) {
-		return [
+		$context = [
 			'exception' => $e,
 			'exception_url' => self::getURL() ?: '[no req]',
 			// The reqId context key use the same familiar name and value as the top-level field
@@ -535,6 +565,10 @@ TXT;
 			'reqId' => WebRequest::getRequestId(),
 			'caught_by' => $catcher
 		];
+		if ( $e instanceof INormalizedException ) {
+			$context += $e->getMessageContext();
+		}
+		return $context;
 	}
 
 	/**
@@ -547,13 +581,19 @@ TXT;
 	 * @since 1.26
 	 * @param Throwable $e
 	 * @param string $catcher CAUGHT_BY_* class constant indicating what caught the error
+	 * @param bool|null $includeBacktrace Whether to include a backtrace. If null,
+	 *        the value of $wgLogExceptionBacktrace will be used.
 	 * @return array
 	 */
 	public static function getStructuredExceptionData(
 		Throwable $e,
-		$catcher = self::CAUGHT_BY_OTHER
+		$catcher = self::CAUGHT_BY_OTHER,
+		?bool $includeBacktrace = null
 	) {
 		global $wgLogExceptionBacktrace;
+		if ( $includeBacktrace === null ) {
+			$includeBacktrace = $wgLogExceptionBacktrace;
+		}
 
 		$data = [
 			'id' => WebRequest::getRequestId(),
@@ -569,11 +609,11 @@ TXT;
 		if ( $e instanceof ErrorException &&
 			( error_reporting() & $e->getSeverity() ) === 0
 		) {
-			// Flag surpressed errors
+			// Flag suppressed errors
 			$data['suppressed'] = true;
 		}
 
-		if ( $wgLogExceptionBacktrace ) {
+		if ( $includeBacktrace ) {
 			$data['backtrace'] = self::getRedactedTrace( $e );
 		}
 
@@ -716,7 +756,7 @@ TXT;
 			);
 		}
 
-		// Include all errors in the json log (surpressed errors will be flagged)
+		// Include all errors in the json log (suppressed errors will be flagged)
 		$json = self::jsonSerializeException( $e, false, FormatJson::ALL_OK, $catcher );
 		if ( $json !== false ) {
 			$logger = LoggerFactory::getInstance( "{$channel}-json" );
@@ -724,7 +764,7 @@ TXT;
 			// and emits messages even if wikimedia/at-ease was used to suppress the
 			// error. To avoid clobbering Logstash dashboards with these, make sure
 			// those have their level casted to DEBUG so that they are excluded by
-			// level-based filteres automatically instead of requiring a dedicated filter
+			// level-based filters automatically instead of requiring a dedicated filter
 			// for this channel. To be improved: T193472.
 			$unfilteredLevel = $suppressed ? LogLevel::DEBUG : $level;
 			$logger->log( $unfilteredLevel, $json, [ 'private' => true ] );

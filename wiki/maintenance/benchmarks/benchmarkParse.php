@@ -80,8 +80,7 @@ class BenchmarkParse extends Maintenance {
 
 		$title = Title::newFromText( $this->getArg( 0 ) );
 		if ( !$title ) {
-			$this->error( "Invalid title" );
-			exit( 1 );
+			$this->fatalError( "Invalid title" );
 		}
 
 		$revLookup = MediaWikiServices::getInstance()->getRevisionLookup();
@@ -89,18 +88,16 @@ class BenchmarkParse extends Maintenance {
 			$pageTimestamp = wfTimestamp( TS_MW, strtotime( $this->getOption( 'page-time' ) ) );
 			$id = $this->getRevIdForTime( $title, $pageTimestamp );
 			if ( !$id ) {
-				$this->error( "The page did not exist at that time" );
-				exit( 1 );
+				$this->fatalError( "The page did not exist at that time" );
 			}
 
-			$revision = $revLookup->getRevisionById( $id );
+			$revision = $revLookup->getRevisionById( (int)$id );
 		} else {
 			$revision = $revLookup->getRevisionByTitle( $title );
 		}
 
 		if ( !$revision ) {
-			$this->error( "Unable to load revision, incorrect title?" );
-			exit( 1 );
+			$this->fatalError( "Unable to load revision, incorrect title?" );
 		}
 
 		$warmup = $this->getOption( 'warmup', 1 );
@@ -148,7 +145,7 @@ class BenchmarkParse extends Maintenance {
 				'rev_timestamp <= ' . $dbr->addQuotes( $timestamp )
 			],
 			__METHOD__,
-			[ 'ORDER BY' => 'rev_timestamp DESC', 'LIMIT' => 1 ],
+			[ 'ORDER BY' => 'rev_timestamp DESC' ],
 			[ 'revision' => [ 'JOIN', 'rev_page=page_id' ] ]
 		);
 
@@ -156,15 +153,14 @@ class BenchmarkParse extends Maintenance {
 	}
 
 	/**
-	 * Parse the text from a given Revision
+	 * Parse the text from a given RevisionRecord
 	 *
 	 * @param RevisionRecord $revision
 	 */
 	private function runParser( RevisionRecord $revision ) {
 		$content = $revision->getContent( SlotRecord::MAIN );
-		$title = Title::newFromLinkTarget( $revision->getPageAsLinkTarget() );
-
-		$content->getParserOutput( $title, $revision->getId() );
+		$contentRenderer = MediaWikiServices::getInstance()->getContentRenderer();
+		$contentRenderer->getParserOutput( $content, $revision->getPage(), $revision->getId() );
 		if ( $this->clearLinkCache ) {
 			$this->linkCache->clear();
 		}

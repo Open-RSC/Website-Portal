@@ -14,8 +14,10 @@
 	"monobook-jumptonavigation": "Hopp til navigering",
 	"monobook-jumptosearch": "Hopp til søk",
 	"monobook-more-actions": "Mer",
+	"cactions-mobile": "Sidehandlinger",
 	"monobook-cactions-label": "Sidehandlinger",
 	"monobook-notifications-link": "Varsler ($1)",
 	"monobook-notifications-link-none": "Varsler",
-	"monobook-responsive-label": "Aktiver responsivt MonoBook-design"
+	"monobook-view-history": "Historikk",
+	"monobook-action-undelete": "Gjenopprett {{PLURAL:$1|én revisjon|$1 revisjoner}}"
 }

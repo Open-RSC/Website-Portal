@@ -40,7 +40,7 @@ abstract class ApiQueryBase extends ApiBase {
 	private $mQueryModule, $mDb;
 
 	/**
-	 * @var SelectQueryBuilder
+	 * @var SelectQueryBuilder|null
 	 */
 	private $queryBuilder;
 
@@ -217,7 +217,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * Same as addFields(), but add the fields only if a condition is met
 	 * @param array|string $value See addFields()
 	 * @param bool $condition If false, do nothing
-	 * @return bool $condition
+	 * @return bool
 	 */
 	protected function addFieldsIf( $value, $condition ) {
 		if ( $condition ) {
@@ -244,7 +244,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 */
 	protected function addWhere( $value ) {
 		if ( is_array( $value ) ) {
-			// Sanity check: don't insert empty arrays,
+			// Double check: don't insert empty arrays,
 			// Database::makeList() chokes on them
 			if ( count( $value ) ) {
 				$this->getQueryBuilder()->where( $value );
@@ -258,7 +258,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * Same as addWhere(), but add the WHERE clauses only if a condition is met
 	 * @param string|array $value
 	 * @param bool $condition If false, do nothing
-	 * @return bool $condition
+	 * @return bool
 	 */
 	protected function addWhereIf( $value, $condition ) {
 		if ( $condition ) {
@@ -328,9 +328,9 @@ abstract class ApiQueryBase extends ApiBase {
 	 * @param string $field Field name
 	 * @param string $dir If 'newer', sort in ascending order, otherwise
 	 *  sort in descending order
-	 * @param string|null $start Value to start the list at. If $dir == 'newer'
+	 * @param string|int|null $start Value to start the list at. If $dir == 'newer'
 	 *  this is the lower boundary, otherwise it's the upper boundary
-	 * @param string|null $end Value to end the list at. If $dir == 'newer' this
+	 * @param string|int|null $end Value to end the list at. If $dir == 'newer' this
 	 *  is the upper boundary, otherwise it's the lower boundary
 	 * @param bool $sort If false, don't add an ORDER BY clause
 	 */
@@ -414,7 +414,7 @@ abstract class ApiQueryBase extends ApiBase {
 			$queryBuilder->joinConds( (array)$extraQuery['join_conds'] );
 		}
 
-		if ( $hookData !== null && Hooks::isRegistered( 'ApiQueryBaseBeforeQuery' ) ) {
+		if ( $hookData !== null && $this->getHookContainer()->isRegistered( 'ApiQueryBaseBeforeQuery' ) ) {
 			$info = $queryBuilder->getQueryInfo();
 			$this->getHookRunner()->onApiQueryBaseBeforeQuery(
 				$this, $info['tables'], $info['fields'], $info['conds'],
@@ -470,7 +470,7 @@ abstract class ApiQueryBase extends ApiBase {
 
 	/**
 	 * Add a sub-element under the page element with the given page ID
-	 * @param int $pageId Page ID
+	 * @param int $pageId
 	 * @param array $data Data array à la ApiResult
 	 * @return bool Whether the element fit in the result
 	 */
@@ -485,7 +485,7 @@ abstract class ApiQueryBase extends ApiBase {
 
 	/**
 	 * Same as addPageSubItems(), but one element of $data at a time
-	 * @param int $pageId Page ID
+	 * @param int $pageId
 	 * @param mixed $item Data à la ApiResult
 	 * @param string|null $elemname XML element name. If null, getModuleName()
 	 *  is used
@@ -522,7 +522,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * $namespace should always be specified in order to handle per-namespace
 	 * capitalization settings.
 	 *
-	 * @param string $titlePart Title part
+	 * @param string $titlePart
 	 * @param int $namespace Namespace of the title
 	 * @return string DBkey (no namespace prefix)
 	 */
@@ -548,7 +548,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * Convert an input title or title prefix into a TitleValue.
 	 *
 	 * @since 1.35
-	 * @param string $titlePart Title part
+	 * @param string $titlePart
 	 * @param int $defaultNamespace Default namespace if none is given
 	 * @return TitleValue
 	 */
@@ -608,6 +608,7 @@ abstract class ApiQueryBase extends ApiBase {
 		return $this->getAuthority()->isAllowedAny(
 			'deletedhistory',
 			'deletedtext',
+			'deleterevision',
 			'suppressrevision',
 			'viewsuppressed'
 		);

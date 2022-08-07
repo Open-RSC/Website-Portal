@@ -24,12 +24,12 @@ namespace MediaWiki\Revision;
 
 use Html;
 use InvalidArgumentException;
+use MediaWiki\Content\Renderer\ContentRenderer;
 use MediaWiki\Permissions\Authority;
 use ParserOptions;
 use ParserOutput;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Title;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
@@ -53,21 +53,27 @@ class RevisionRenderer {
 	/** @var SlotRoleRegistry */
 	private $roleRegistery;
 
+	/** @var ContentRenderer */
+	private $contentRenderer;
+
 	/** @var string|bool */
 	private $dbDomain;
 
 	/**
 	 * @param ILoadBalancer $loadBalancer
 	 * @param SlotRoleRegistry $roleRegistry
+	 * @param ContentRenderer $contentRenderer
 	 * @param bool|string $dbDomain DB domain of the relevant wiki or false for the current one
 	 */
 	public function __construct(
 		ILoadBalancer $loadBalancer,
 		SlotRoleRegistry $roleRegistry,
+		ContentRenderer $contentRenderer,
 		$dbDomain = false
 	) {
 		$this->loadBalancer = $loadBalancer;
 		$this->roleRegistery = $roleRegistry;
+		$this->contentRenderer = $contentRenderer;
 		$this->dbDomain = $dbDomain;
 		$this->saveParseLogger = new NullLogger();
 	}
@@ -85,7 +91,7 @@ class RevisionRenderer {
 	 * @param Authority|null $forPerformer User for privileged access. Default is unprivileged
 	 *        (public) access, unless the 'audience' hint is set to something else RevisionRecord::RAW.
 	 * @param array $hints Hints given as an associative array. Known keys:
-	 *      - 'use-master' Use master when rendering for the parser cache during save.
+	 *      - 'use-master' Use primary DB when rendering for the parser cache during save.
 	 *        Default is to use a replica.
 	 *      - 'audience' the audience to use for content access. Default is
 	 *        RevisionRecord::FOR_PUBLIC if $forUser is not set, RevisionRecord::FOR_THIS_USER
@@ -114,7 +120,7 @@ class RevisionRenderer {
 
 		if ( !$rev->audienceCan( RevisionRecord::DELETED_TEXT, $audience, $forPerformer ) ) {
 			// Returning null here is awkward, but consistent with the signature of
-			// Revision::getContent() and RevisionRecord::getContent().
+			// RevisionRecord::getContent().
 			return null;
 		}
 
@@ -124,10 +130,10 @@ class RevisionRenderer {
 			);
 		}
 
-		$useMaster = $hints['use-master'] ?? false;
+		$usePrimary = $hints['use-master'] ?? false;
 
-		$dbIndex = $useMaster
-			? DB_MASTER // use latest values
+		$dbIndex = $usePrimary
+			? DB_PRIMARY // use latest values
 			: DB_REPLICA; // T154554
 
 		$options->setSpeculativeRevIdCallback( function () use ( $dbIndex ) {
@@ -144,12 +150,10 @@ class RevisionRenderer {
 			$options->setTimestamp( $rev->getTimestamp() );
 		}
 
-		$title = Title::newFromLinkTarget( $rev->getPageAsLinkTarget() );
-
 		$renderedRevision = new RenderedRevision(
-			$title,
 			$rev,
 			$options,
+			$this->contentRenderer,
 			function ( RenderedRevision $rrev, array $hints ) {
 				return $this->combineSlotOutput( $rrev, $hints );
 			},
@@ -167,7 +171,7 @@ class RevisionRenderer {
 	}
 
 	private function getSpeculativeRevId( $dbIndex ) {
-		// Use a separate master connection in order to see the latest data, by avoiding
+		// Use a separate primary DB connection in order to see the latest data, by avoiding
 		// stale data from REPEATABLE-READ snapshots.
 		$flags = ILoadBalancer::CONN_TRX_AUTOCOMMIT;
 
@@ -182,7 +186,7 @@ class RevisionRenderer {
 	}
 
 	private function getSpeculativePageId( $dbIndex ) {
-		// Use a separate master connection in order to see the latest data, by avoiding
+		// Use a separate primary DB connection in order to see the latest data, by avoiding
 		// stale data from REPEATABLE-READ snapshots.
 		$flags = ILoadBalancer::CONN_TRX_AUTOCOMMIT;
 

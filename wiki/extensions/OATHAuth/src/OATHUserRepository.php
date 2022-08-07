@@ -19,10 +19,10 @@
 namespace MediaWiki\Extension\OATHAuth;
 
 use BagOStuff;
-use CentralIdLookup;
 use ConfigException;
 use FormatJson;
 use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MediaWikiServices;
 use MWException;
 use Psr\Log\LoggerInterface;
 use RequestContext;
@@ -78,7 +78,10 @@ class OATHUserRepository {
 		if ( !$oathUser ) {
 			$oathUser = new OATHUser( $user, [] );
 
-			$uid = CentralIdLookup::factory()->centralIdFromLocalUser( $user );
+			$uid = MediaWikiServices::getInstance()
+				->getCentralIdLookupFactory()
+				->getLookup()
+				->centralIdFromLocalUser( $user );
 			$res = $this->getDB( DB_REPLICA )->selectRow(
 				'oathauth_users',
 				'*',
@@ -131,11 +134,14 @@ class OATHUserRepository {
 		$prevUser = $this->findByUser( $user->getUser() );
 		$data = $user->getModule()->getDataFromUser( $user );
 
-		$this->getDB( DB_MASTER )->replace(
+		$this->getDB( DB_PRIMARY )->replace(
 			'oathauth_users',
 			'id',
 			[
-				'id' => CentralIdLookup::factory()->centralIdFromLocalUser( $user->getUser() ),
+				'id' => MediaWikiServices::getInstance()
+					->getCentralIdLookupFactory()
+					->getLookup()
+					->centralIdFromLocalUser( $user->getUser() ),
 				'module' => $user->getModule()->getName(),
 				'data' => FormatJson::encode( $data )
 			],
@@ -149,12 +155,15 @@ class OATHUserRepository {
 			$this->logger->info( 'OATHAuth updated for {user} from {clientip}', [
 				'user' => $userName,
 				'clientip' => $clientInfo,
+				'oldoathtype' => $prevUser->getModule()->getName(),
+				'newoathtype' => $user->getModule()->getName(),
 			] );
 		} else {
 			// If findByUser() has returned false, there was no user row or cache entry
 			$this->logger->info( 'OATHAuth enabled for {user} from {clientip}', [
 				'user' => $userName,
 				'clientip' => $clientInfo,
+				'oathtype' => $user->getModule()->getName(),
 			] );
 		}
 	}
@@ -162,11 +171,15 @@ class OATHUserRepository {
 	/**
 	 * @param OATHUser $user
 	 * @param string $clientInfo
+	 * @param bool $self Whether they disabled it themselves
 	 */
-	public function remove( OATHUser $user, $clientInfo ) {
-		$this->getDB( DB_MASTER )->delete(
+	public function remove( OATHUser $user, $clientInfo, bool $self ) {
+		$this->getDB( DB_PRIMARY )->delete(
 			'oathauth_users',
-			[ 'id' => CentralIdLookup::factory()->centralIdFromLocalUser( $user->getUser() ) ],
+			[ 'id' => MediaWikiServices::getInstance()
+				->getCentralIdLookupFactory()
+				->getLookup()
+				->centralIdFromLocalUser( $user->getUser() ) ],
 			__METHOD__
 		);
 
@@ -176,11 +189,13 @@ class OATHUserRepository {
 		$this->logger->info( 'OATHAuth disabled for {user} from {clientip}', [
 			'user' => $userName,
 			'clientip' => $clientInfo,
+			'oathtype' => $user->getModule()->getName(),
 		] );
+		Notifications\Manager::notifyDisabled( $user, $self );
 	}
 
 	/**
-	 * @param int $index DB_MASTER/DB_REPLICA
+	 * @param int $index DB_PRIMARY/DB_REPLICA
 	 * @return DBConnRef
 	 */
 	private function getDB( $index ) {

@@ -267,7 +267,7 @@ class SpecialSearch extends SpecialPage {
 		list( $this->limit, $this->offset ) = $request->getLimitOffsetForUser(
 			$this->getUser(),
 			20,
-			''
+			'searchlimit'
 		);
 		$this->mPrefix = $request->getVal( 'prefix', '' );
 		if ( $this->mPrefix !== '' ) {
@@ -321,7 +321,7 @@ class SpecialSearch extends SpecialPage {
 		}
 
 		$this->fulltext = $request->getVal( 'fulltext' );
-		$this->runSuggestion = (bool)$request->getVal( 'runsuggestion', true );
+		$this->runSuggestion = (bool)$request->getVal( 'runsuggestion', '1' );
 		$this->profile = $profile;
 	}
 
@@ -365,8 +365,7 @@ class SpecialSearch extends SpecialPage {
 	}
 
 	private function redirectOnExactMatch() {
-		global $wgSearchMatchRedirectPreference;
-		if ( !$wgSearchMatchRedirectPreference ) {
+		if ( !$this->getConfig()->get( 'SearchMatchRedirectPreference' ) ) {
 			// If the preference for whether to redirect is disabled, use the default setting
 			$defaultOptions = $this->userOptionsManager->getDefaultOptions();
 			return $defaultOptions['search-match-redirect'];
@@ -390,6 +389,8 @@ class SpecialSearch extends SpecialPage {
 			$this,
 			$this->searchConfig,
 			$this->getHookContainer(),
+			$this->languageConverterFactory->getLanguageConverter( $this->getLanguage() ),
+			$this->nsInfo,
 			$this->getSearchProfiles()
 		);
 		$filePrefix = $this->getContentLanguage()->getFormattedNsText( NS_FILE ) . ':';
@@ -423,7 +424,7 @@ class SpecialSearch extends SpecialPage {
 		}
 
 		$title = Title::newFromText( $term );
-		$languageConverter = $this->languageConverterFactory->getLanguageConverter();
+		$languageConverter = $this->languageConverterFactory->getLanguageConverter( $this->getContentLanguage() );
 		if ( $languageConverter->hasVariants() ) {
 			// findVariantLink will replace the link arg as well but we want to keep our original
 			// search string, use a copy in the $variantTerm var so that $term remains intact.
@@ -564,7 +565,7 @@ class SpecialSearch extends SpecialPage {
 	}
 
 	/**
-	 * @param Title $title
+	 * @param Title|null $title
 	 * @param int $num The number of search results found
 	 * @param null|ISearchResultSet $titleMatches Results from title search
 	 * @param null|ISearchResultSet $textMatches Results from text search
@@ -594,7 +595,6 @@ class SpecialSearch extends SpecialPage {
 			} elseif (
 				$this->contentHandlerFactory->getContentHandler( $title->getContentModel() )
 					->supportsDirectEditing()
-				&& $this->getAuthority()->probablyCan( 'create', $title )
 				&& $this->getAuthority()->probablyCan( 'edit', $title )
 			) {
 				$messageName = 'searchmenu-new';
@@ -631,7 +631,7 @@ class SpecialSearch extends SpecialPage {
 		$this->outputHeader();
 		// TODO: Is this true? The namespace remember uses a user token
 		// on save.
-		$out->allowClickjacking();
+		$out->setPreventClickjacking( false );
 		$this->addHelpLink( 'Help:Searching' );
 
 		if ( strval( $term ) !== '' ) {
@@ -862,8 +862,7 @@ class SpecialSearch extends SpecialPage {
 	 * @param string $term
 	 * @param OutputPage $out
 	 */
-	private function prevNextLinks( ?int $totalRes, ?ISearchResultSet $textMatches, string $term,
-								   OutputPage $out ) {
+	private function prevNextLinks( ?int $totalRes, ?ISearchResultSet $textMatches, string $term, OutputPage $out ) {
 		if ( $totalRes > $this->limit || $this->offset ) {
 			// Allow matches to define the correct offset, as interleaved
 			// AB testing may require a different next page offset.

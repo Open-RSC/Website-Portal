@@ -164,7 +164,7 @@
 	"config-admin-error-user": "Panloob na kamalian kapag nililikha ang isang tagapangasiwa na may pangalang \"<nowiki>$1</nowiki>\".",
 	"config-admin-error-password": "Panloob na kamalian kapag nagtatakda ng isang password na para sa tagapangasiwang \"<nowiki>$1</nowiki>\": <pre>$2</pre>",
 	"config-admin-error-bademail": "Nagpasok ka ng isang hindi katanggap-tanggap na tirahan ng e-liham.",
-	"config-subscribe": "Tumanggap mula sa [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce talaan ng mga pinadadalhan ng mga nilalabas na mga pabatid].",
+	"config-subscribe": "Tumanggap mula sa [https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ talaan ng mga pinadadalhan ng mga nilalabas na mga pabatid].",
 	"config-subscribe-help": "Isang itong tala ng pagliliham na mababa ang dami na ginagamit para sa pagpapakawala ng mga pahayag, kabilang na ang mahahalagang mga pahayag na pangkatiwasayan. Dapat kang magpasipi nito at isapanahon ang iyong nakaluklok na MediaWiki kapag lumalabas ang bagong mga bersiyon.",
 	"config-subscribe-noemail": "Sinubukan mong magpasipi sa tala ng nililihaman ng pagpapakawala ng mga pahayag na hindi nagbibigay ng isang tirahan ng -eliham. Paki magbigay ng isang tirahan ng e-liham kung nais mong magpasipi sa listahan ng pagliliham.",
 	"config-almost-done": "Halos tapos ka na!\nMaaari mo ngayong laktawan ang natitira pang pag-aayos at iluklok na ang wiki ngayon.",
@@ -188,7 +188,7 @@
 	"config-license-help": "Maraming mga pangmadlang wiki ang naglalagay ng lahat ng mga ambag sa ilalim ng [https://freedomdefined.org/Definition lisensiyang malaya].\nNakakatulong ito sa paglikha ng isang diwa ng pagmamay-ari ng pamayanan at nakapanghihikayat ng ambag na pangmahabang panahon.\nSa pangkalahatan, hindi kailangan ang isang wiking pribado o pangsamahan.\n\nKung nais mong magamit ang teksto magmula sa Wikipedia, at nais mong makatanggap ang Wikipedia ng tekstong kinopya magmula sa wiki mo, dapat mong piliin ang <strong>{{int:config-license-cc-by-sa}}</strong>.\n\nDating ginamit ng Wikipedia ang Lisensiya ng Kasulatang Malaya ng GNU (GNU Free Documentation License o GFDL).\nIsang katanggap-tanggap na lisensiya ang GFDL, subalit mahirap itong maunawaan.\nMahirap din ang paggamit na muli ng nilalaman na nasa ilalim ng GFDL.",
 	"config-email-settings": "Mga katakdaan ng e-liham",
 	"config-enable-email": "Paganahin ang palabas na e-liham",
-	"config-enable-email-help": "Kung nais mong gumana ang e-liham, ang mga katakdaan ng liham ng [Config-dbsupport-oracle/manual/en/mail.configuration.php PHP] ay kailangang maging wasto ang pagkakaayos.\nKung ayaw mo nang anumang mga katampukan ng e-liham, maaari mong huwag paganahin ang mga ito rito.",
+	"config-enable-email-help": "Kung nais mong gumana ang e-liham, ang mga katakdaan ng liham ng [https://www.php.net/manual/en/mail.configuration.php PHP] ay kailangang maging wasto ang pagkakaayos.\nKung ayaw mo nang anumang mga katampukan ng e-liham, maaari mong huwag paganahin ang mga ito rito.",
 	"config-email-user": "Paganahin ang tagagamit-sa-tagagamit na e-liham",
 	"config-email-user-help": "Payagan ang lahat ng mga tagagamit na magpadala ng e-liham sa bawat isa kapag pinagana nila ito sa kanilang mga nais.",
 	"config-email-usertalk": "Paganahin ang pabatid na pampahina ng usapan ng tagagamit",
@@ -204,8 +204,6 @@
 	"config-upload-help": "Ang paitaas na mga pagkakarga ng mga talaksan ay maaaring makapaglantad ng iyong tagapaghain sa mga panganib na pangkatiwasayan.\nPara sa mas marami pang kabatiran, basahin ang [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Security seksiyon ng katiwasayan] sa loob ng gabay.\n\nUpang mapagana ang paitaas na mga pagkakarga ng talaksan, baguhin ang gawi roon sa subdirektoryo ng <code>mga imahe</code> sa ilalim ng ugat na direktoryo ng MediaWiki upang ang tagapaghain ng kasaputan ay makapagsulat dito.\nPagkaraan ay paganahin ang pipiliing ito.",
 	"config-upload-deleted": "Direktoryo para sa binurang mga talaksan:",
 	"config-upload-deleted-help": "Pumili ng isang direktoryong pagsusupnayan ng naburang mga talaksan.\nIdeyal na dapat itong  hindi mapupuntahan mula sa web.",
-	"config-logo": "URL ng logo:",
-	"config-logo-help": "Ang likas na nakatakdang pabalat ng MediaWiki ay nagsasama ng puwang para sa isang logong 135x160 ang piksel na nasa itaas ng menu ng panggilid na bareta.\nMagkargang papaitaas ng isang imahe na mayroong naaangkop na sukat, at ipasok dito ang URL.\n\nMaaari mong gamiting ang <code>$wgStylePath</code> o <code>$wgScriptPath</code> kung ang iyong logo ay kaugnay sa mga daan na iyon.\n\nKung ayaw mo ng isang logo, iwanang walang laman ang kahong ito.",
 	"config-instantcommons": "Paganahin ang Mga Pangkaraniwang Biglaan",
 	"config-instantcommons-help": "Ang [https://www.mediawiki.org/wiki/InstantCommons Instant Commons] ay isang tampok na nagpapahintulot sa mga wiki upang gumamit ng mga imahe, mga tunog at iba pang mga midyang matatagpuan sa pook ng [https://commons.wikimedia.org/ Wikimedia Commons].\nUpang magawa ito, nangangailangan ang MediaWiki ng pagka nakakapunta sa Internet.\n\nPara sa mas marami pang kabatiran hinggil sa tampok na ito, kabilang na ang mga tagubilin sa kung paano ito itakda para sa mga wiki na bukod pa kaysa sa Wikimedia Commons, sumangguni sa [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgForeignFileRepos gabay].",
 	"config-cc-error": "Hindi nagbigay ng resulta ang pampili ng lisensiya ng Malikhaing Pangkaraniwan.\nIpasok na kinakamay ang pangalan ng lisensiya.",
@@ -254,7 +252,7 @@
 	"config-install-stats": "Sinisimulan ang estadistika",
 	"config-install-keys": "Ginagawa ang lihim na mga susi",
 	"config-install-sysop": "Nililikha ang account ng tagagamit na tagapangasiwa",
-	"config-install-subscribe-fail": "Hindi nagawang magpasipi mula sa mediawiki-announce: $1",
+	"config-install-subscribe-fail": "Hindi nagawang magpasipi mula sa mediawiki-announce[https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ mediawiki-announce]: $1",
 	"config-install-subscribe-notpossible": "Hindi nakalagak ang cURL at hindi makukuha ang <code>allow_url_fopen</code>",
 	"config-install-mainpage": "Nililikha ang pangunahing pahina na may likas na nakatakdang nilalaman",
 	"config-install-mainpage-exists": "Ang pangunahing pahina ay nakasaad na, ipagpatuloy ang paglalathala",
@@ -265,5 +263,5 @@
 	"config-help": "saklolo",
 	"config-nofile": "Hindi matagpuan ang talaksang \"$1\". Binura na ba ito?",
 	"mainpagetext": "'''Matagumpay na ininstala ang MediaWiki.'''",
-	"mainpagedocfooter": "Silipin ang [https://meta.wikimedia.org/wiki/Help:Contents Patnubay sa Tagagamit] (''\"User's Guide\"'') para sa kaalaman sa paggamit ng wiking ''software''.\n\n== Pagsisimula ==\n\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Tala ng mga nakatakdang kumpigurasyon]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ Mga malimit itanong sa MediaWiki]\n* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce Tala ng mga pinadadalhan ng liham ng MediaWiki]"
+	"mainpagedocfooter": "Silipin ang [https://meta.wikimedia.org/wiki/Help:Contents Patnubay sa Tagagamit] (''\"User's Guide\"'') para sa kaalaman sa paggamit ng wiking ''software''.\n\n== Pagsisimula ==\n\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Tala ng mga nakatakdang kumpigurasyon]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ Mga malimit itanong sa MediaWiki]\n* [https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ Tala ng mga pinadadalhan ng liham ng MediaWiki]"
 }

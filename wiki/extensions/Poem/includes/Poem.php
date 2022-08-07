@@ -1,5 +1,12 @@
 <?php
 
+namespace MediaWiki\Extension\Poem;
+
+use Html;
+use Parser;
+use PPFrame;
+use Sanitizer;
+
 /**
  * This class handles formatting poems in WikiText, specifically anything within
  * <poem></poem> tags.
@@ -34,7 +41,7 @@ class Poem {
 		// replace colons with indented spans
 		$text = preg_replace_callback(
 			'/^(:++)(.+)$/m',
-			function ( array $matches ) {
+			static function ( array $matches ) {
 				$indentation = strlen( $matches[1] ) . 'em';
 				return Html::rawElement(
 					'span',
@@ -61,7 +68,7 @@ class Poem {
 		// replace spaces at the beginning of a line with non-breaking spaces
 		$text = preg_replace_callback(
 			'/^ +/m',
-			function ( array $matches ) {
+			static function ( array $matches ) {
 				return str_repeat( '&#160;', strlen( $matches[0] ) );
 			},
 			$text

@@ -22,6 +22,7 @@
  * @license GPL-2.0-or-later
  * @since 1.19
  */
+
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\MediaWikiServices;
@@ -52,10 +53,10 @@ class LogFormatter {
 	 * @return LogFormatter
 	 */
 	public static function newFromEntry( LogEntry $entry ) {
-		global $wgLogActionsHandlers;
+		$logActionsHandlers = MediaWikiServices::getInstance()->getMainConfig()->get( 'LogActionsHandlers' );
 		$fulltype = $entry->getFullType();
 		$wildcard = $entry->getType() . '/*';
-		$handler = $wgLogActionsHandlers[$fulltype] ?? $wgLogActionsHandlers[$wildcard] ?? '';
+		$handler = $logActionsHandlers[$fulltype] ?? $logActionsHandlers[$wildcard] ?? '';
 
 		if ( $handler !== '' && is_string( $handler ) && class_exists( $handler ) ) {
 			return new $handler( $entry );
@@ -94,11 +95,11 @@ class LogFormatter {
 	 * be included in page history or send to IRC feed. Links are replaced
 	 * with plaintext or with [[pagename]] kind of syntax, that is parsed
 	 * by page histories and IRC feeds.
-	 * @var string
+	 * @var bool
 	 */
 	protected $plaintext = false;
 
-	/** @var string */
+	/** @var bool */
 	protected $irctext = false;
 
 	/**
@@ -404,7 +405,7 @@ class LogFormatter {
 						$duration = $contLang->translateBlockExpiry(
 							$rawDuration,
 							null,
-							wfTimestamp( TS_UNIX, $entry->getTimestamp() )
+							(int)wfTimestamp( TS_UNIX, $entry->getTimestamp() )
 						);
 						$flags = BlockLogFormatter::formatBlockFlags( $rawFlags, $contLang );
 						$text = wfMessage( 'blocklogentry' )
@@ -418,7 +419,7 @@ class LogFormatter {
 						$duration = $contLang->translateBlockExpiry(
 							$parameters['5::duration'],
 							null,
-							wfTimestamp( TS_UNIX, $entry->getTimestamp() )
+							(int)wfTimestamp( TS_UNIX, $entry->getTimestamp() )
 						);
 						$flags = BlockLogFormatter::formatBlockFlags( $parameters['6::flags'],
 							$contLang );
@@ -467,7 +468,7 @@ class LogFormatter {
 				$element = $this->plaintext ? $element->text() : $element->escaped();
 			}
 			if ( $this->entry->isDeleted( LogPage::DELETED_ACTION ) ) {
-				$element = $this->styleRestricedElement( $element );
+				$element = $this->styleRestrictedElement( $element );
 			}
 		} else {
 			$sep = $this->msg( 'word-separator' );
@@ -540,7 +541,7 @@ class LogFormatter {
 			}
 			list( $index, $type, ) = explode( ':', $key, 3 );
 			if ( ctype_digit( $index ) ) {
-				$params[$index - 1] = $this->formatParameterValue( $type, $value );
+				$params[(int)$index - 1] = $this->formatParameterValue( $type, $value );
 			}
 		}
 
@@ -612,7 +613,7 @@ class LogFormatter {
 	 *     * number: Format value as number
 	 *     * list: Format value as a comma-separated list
 	 * @param mixed $value The parameter value that should be formatted
-	 * @return string|array Formated value
+	 * @return string|array Formatted value
 	 * @since 1.21
 	 */
 	protected function formatParameterValue( $type, $value ) {
@@ -708,7 +709,7 @@ class LogFormatter {
 			$performerIdentity = $this->entry->getPerformerIdentity();
 			$element = $this->makeUserLink( $performerIdentity );
 			if ( $this->entry->isDeleted( LogPage::DELETED_USER ) ) {
-				$element = $this->styleRestricedElement( $element );
+				$element = $this->styleRestrictedElement( $element );
 			}
 		} else {
 			$element = $this->getRestrictedElement( 'rev-deleted-user' );
@@ -728,7 +729,7 @@ class LogFormatter {
 			// No hard coded spaces thanx
 			$element = ltrim( $comment );
 			if ( $this->entry->isDeleted( LogPage::DELETED_COMMENT ) ) {
-				$element = $this->styleRestricedElement( $element );
+				$element = $this->styleRestrictedElement( $element );
 			}
 		} else {
 			$element = $this->getRestrictedElement( 'rev-deleted-comment' );
@@ -759,13 +760,24 @@ class LogFormatter {
 	 * @param string $content
 	 * @return string HTML or wiki text
 	 */
-	protected function styleRestricedElement( $content ) {
+	protected function styleRestrictedElement( $content ) {
 		if ( $this->plaintext ) {
 			return $content;
 		}
 		$attribs = [ 'class' => 'history-deleted' ];
 
 		return Html::rawElement( 'span', $attribs, $content );
+	}
+
+	/**
+	 * Helper method for styling restricted element.
+	 * @deprecated since 1.37, use ::styleRestrictedElement instead
+	 * @param string $content
+	 * @return string HTML or wiki text
+	 */
+	protected function styleRestricedElement( $content ) {
+		wfDeprecated( __METHOD__, '1.37' );
+		return $this->styleRestrictedElement( $content );
 	}
 
 	/**
@@ -803,7 +815,7 @@ class LogFormatter {
 					true, // redContribsWhenNoEdits
 					$toolFlags,
 					$editCount,
-					// do not render parenthesises in the HTML markup (CSS will provide)
+					// do not render parentheses in the HTML markup (CSS will provide)
 					false
 				);
 			}
@@ -930,7 +942,6 @@ class LogFormatter {
 			case 'title-link':
 				$title = Title::newFromText( $value );
 				if ( !$title ) {
-					// Huh? Do something halfway sane.
 					$title = SpecialPage::getTitleFor( 'Badtitle', $value );
 				}
 				$value = [];

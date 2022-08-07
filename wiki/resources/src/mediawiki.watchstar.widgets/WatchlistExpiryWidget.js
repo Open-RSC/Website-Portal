@@ -18,12 +18,10 @@ function WatchlistExpiryWidget( action, pageTitle, updateWatchLink, config ) {
 		onDropdownChange,
 		api,
 		$link,
-		$li,
 		expiryOptions = [];
 
 	config = config || {};
 	$link = config.$link;
-	$li = config.$li;
 
 	WatchlistExpiryWidget.parent.call( this, config );
 
@@ -50,7 +48,7 @@ function WatchlistExpiryWidget( action, pageTitle, updateWatchLink, config ) {
 			// This is because there is no CSS class or ID on the link itself,
 			// and skins could manipulate the position of the link. The accessKey
 			// however is always present on the link.
-			if ( document.activeElement.accessKey === mw.message( 'accesskey-ca-watch' ).text() ) {
+			if ( document.activeElement.accessKey === mw.msg( 'accesskey-ca-watch' ) ) {
 				e.preventDefault();
 				expiryDropdown.focus();
 
@@ -111,21 +109,7 @@ function WatchlistExpiryWidget( action, pageTitle, updateWatchLink, config ) {
 					// Resume the mw.notify once the label has been updated
 					notif.resume();
 
-					updateWatchLink( $link, 'unwatch', 'idle', watchResponse.expiry );
-
-					if ( typeof $li !== 'undefined' ) {
-						if ( value === 'infinite' ) {
-							$li.removeClass( 'mw-watchlink-temp' );
-						} else {
-							$li.addClass( 'mw-watchlink-temp' );
-						}
-					}
-
-					// Update the "Watch this page" checkbox on action=edit when the
-					// page is watched or unwatched via the tab.
-					if ( document.getElementById( 'wpWatchlistExpiryWidget' ) ) {
-						OO.ui.infuse( $( '#wpWatchlistExpiryWidget' ) ).setValue( value );
-					}
+					updateWatchLink( mwTitle, 'unwatch', 'idle', watchResponse.expiry, value );
 				} )
 				.fail( function ( code, data ) {
 					// Format error message
@@ -143,8 +127,6 @@ function WatchlistExpiryWidget( action, pageTitle, updateWatchLink, config ) {
 
 		expiryDropdown.on( 'change', onDropdownChange );
 		this.$element.append( dropdownLabel.$element, expiryDropdown.$element );
-	} else if ( typeof $li !== 'undefined' ) {
-		$li.removeClass( 'mw-watchlink-temp' );
 	}
 }
 

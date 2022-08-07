@@ -1,6 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Session\BotPasswordSessionProvider;
 use MediaWiki\Session\SessionManager;
 use Wikimedia\TestingAccessWrapper;
@@ -13,7 +12,7 @@ use Wikimedia\TestingAccessWrapper;
  * @covers ApiLogin
  */
 class ApiLoginTest extends ApiTestCase {
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->tablesUsed[] = 'bot_passwords';
@@ -286,20 +285,21 @@ class ApiLoginTest extends ApiTestCase {
 			$manager->sessionProviders = $tmp + $manager->getProviders();
 		}
 		$this->assertNotNull(
-			SessionManager::singleton()->getProvider( BotPasswordSessionProvider::class ),
-			'sanity check'
+			SessionManager::singleton()->getProvider( BotPasswordSessionProvider::class )
 		);
 
 		$user = self::$users['sysop'];
-		$centralId = CentralIdLookup::factory()->centralIdFromLocalUser( $user->getUser() );
-		$this->assertNotSame( 0, $centralId, 'sanity check' );
+		$centralId = $this->getServiceContainer()
+			->getCentralIdLookup()
+			->centralIdFromLocalUser( $user->getUser() );
+		$this->assertNotSame( 0, $centralId );
 
 		$password = 'ngfhmjm64hv0854493hsj5nncjud2clk';
-		$passwordFactory = MediaWikiServices::getInstance()->getPasswordFactory();
+		$passwordFactory = $this->getServiceContainer()->getPasswordFactory();
 		// A is unsalted MD5 (thus fast) ... we don't care about security here, this is test only
 		$passwordHash = $passwordFactory->newFromPlaintext( $password );
 
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$dbw->insert(
 			'bot_passwords',
 			[

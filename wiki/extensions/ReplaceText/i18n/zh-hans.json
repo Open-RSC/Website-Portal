@@ -7,6 +7,8 @@
 			"Mywood",
 			"Onecountry",
 			"PhiLiP",
+			"Xiplus",
+			"Xzonn",
 			"Yfdyh000"
 		]
 	},
@@ -23,7 +25,7 @@
 	"replacetext_editpages": "仅在页面内容中替换",
 	"replacetext_movepages": "可能的话，在页面名称中替换",
 	"replacetext_givetarget": "必须指定查找的字符串。",
-	"replacetext_nonamespace": "您必须选择至少一个名字空间。",
+	"replacetext_nonamespace": "您必须选择至少一个命名空间。",
 	"replacetext_editormove": "必须选择至少一个替换选项。",
 	"replacetext_choosepagesforedit": "在以下{{PLURAL:$3|页面}}的文本中，将“$1”替换成“$2”。",
 	"replacetext_choosepagesformove": "将{{PLURAL:$3|以下页面中标题|以下$3个页面中标题}}的“$1”替换为“$2”：",
@@ -43,7 +45,10 @@
 	"replacetext_continue": "继续",
 	"replacetext_announce": "通过$1和监视列表通知这些编辑",
 	"replacetext_editsummary": "文本替换 - 替换“$1”为“$2”",
+	"replacetext_reminder": "要同时修改其他页面中链入此页面的链接，请前往$1。",
+	"replacetext_cfg_error": "ReplaceText配置错误",
+	"replacetext_no_compress": "您的wiki将无法使用ReplaceText：如果$wgCompressRevisions设置为true，则无法运行文本替换。",
+	"replacetext_no_external_stores": "您的wiki将无法使用ReplaceText：如果$wgExternalStores非空，则无法运行文本替换。",
 	"right-replacetext": "在整个wiki进行字符串替换",
-	"action-replacetext": "在整个wiki进行字符串替换",
-	"replacetext_reminder": "要同时修改其他页面中链入此页面的链接，请前往$1。"
+	"action-replacetext": "在整个wiki进行字符串替换"
 }

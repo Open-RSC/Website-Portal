@@ -1,5 +1,12 @@
 <?php
 
+namespace MediaWiki\Extension\Renameuser;
+
+use MediaWiki\Extension\Renameuser\Hook\RenameUserAbortHook;
+use MediaWiki\Extension\Renameuser\Hook\RenameUserCompleteHook;
+use MediaWiki\Extension\Renameuser\Hook\RenameUserPreRenameHook;
+use MediaWiki\Extension\Renameuser\Hook\RenameUserSQLHook;
+use MediaWiki\Extension\Renameuser\Hook\RenameUserWarningHook;
 use MediaWiki\HookContainer\HookContainer;
 
 class RenameuserHookRunner implements
@@ -24,7 +31,7 @@ class RenameuserHookRunner implements
 		);
 	}
 
-	public function onRenameUserComplete( int $uid, string $old, string $new ) : void {
+	public function onRenameUserComplete( int $uid, string $old, string $new ): void {
 		$this->container->run(
 			'RenameUserComplete',
 			[ $uid, $old, $new ],
@@ -32,7 +39,7 @@ class RenameuserHookRunner implements
 		);
 	}
 
-	public function onRenameUserPreRename( int $uid, string $old, string $new ) : void {
+	public function onRenameUserPreRename( int $uid, string $old, string $new ): void {
 		$this->container->run(
 			'RenameUserPreRename',
 			[ $uid, $old, $new ],
@@ -40,7 +47,7 @@ class RenameuserHookRunner implements
 		);
 	}
 
-	public function onRenameUserSQL( RenameuserSQL $renameUserSql ) : void {
+	public function onRenameUserSQL( RenameuserSQL $renameUserSql ): void {
 		$this->container->run(
 			'RenameUserSQL',
 			[ $renameUserSql ],
@@ -48,7 +55,7 @@ class RenameuserHookRunner implements
 		);
 	}
 
-	public function onRenameUserWarning( string $oldUsername, string $newUsername, array &$warnings ) : void {
+	public function onRenameUserWarning( string $oldUsername, string $newUsername, array &$warnings ): void {
 		$this->container->run(
 			'RenameUserWarning',
 			[ $oldUsername, $newUsername, &$warnings ],

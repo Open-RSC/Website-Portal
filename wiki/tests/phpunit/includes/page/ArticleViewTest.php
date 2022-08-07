@@ -1,6 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\MutableRevisionRecord;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
@@ -12,7 +11,7 @@ use Wikimedia\TestingAccessWrapper;
  */
 class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->setUserLang( 'qqx' );
@@ -36,21 +35,28 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 			$title = Title::makeTitle( $this->getDefaultWikitextNS(), $title );
 		}
 
-		$page = WikiPage::factory( $title );
+		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $title );
 
 		$user = $this->getTestUser()->getUser();
+
+		// Make sure all revision have different timestamps all the time,
+		// to make timestamp asserts below deterministic.
+		$time = time() - 86400;
+		MWTimestamp::setFakeTime( $time );
 
 		foreach ( $revisionContents as $key => $cont ) {
 			if ( is_string( $cont ) ) {
 				$cont = new WikitextContent( $cont );
 			}
 
-			$u = $page->newPageUpdater( $user );
-			$u->setContent( SlotRecord::MAIN, $cont );
-			$rev = $u->saveRevision( CommentStoreComment::newUnsavedComment( 'Rev ' . $key ) );
+			$rev = $page->newPageUpdater( $user )
+				->setContent( SlotRecord::MAIN, $cont )
+				->saveRevision( CommentStoreComment::newUnsavedComment( 'Rev ' . $key ) );
 
 			$revisions[ $key ] = $rev;
+			MWTimestamp::setFakeTime( ++$time );
 		}
+		MWTimestamp::setFakeTime( false );
 
 		// Clear content model cache to support tests that mock the revision
 		$this->getServiceContainer()->getMainWANObjectCache()->clearProcessCache();
@@ -63,9 +69,6 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 	 * @covers Article::getRevIdFetched()
 	 */
 	public function testGetOldId() {
-		$this->hideDeprecated( 'Article::getRevisionFetched' );
-		$this->hideDeprecated( 'Revision::__construct' );
-
 		$revisions = [];
 		$page = $this->getPage( __METHOD__, [ 1 => 'Test A', 2 => 'Test B' ], $revisions );
 
@@ -75,13 +78,13 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		// oldid in constructor
 		$article = new Article( $page->getTitle(), $idA );
 		$this->assertSame( $idA, $article->getOldID() );
-		$article->getRevisionFetched();
+		$article->fetchRevisionRecord();
 		$this->assertSame( $idA, $article->getRevIdFetched() );
 
 		// oldid 0 in constructor
 		$article = new Article( $page->getTitle(), 0 );
 		$this->assertSame( 0, $article->getOldID() );
-		$article->getRevisionFetched();
+		$article->fetchRevisionRecord();
 		$this->assertSame( $idB, $article->getRevIdFetched() );
 
 		// oldid in request
@@ -90,7 +93,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		$context->setRequest( new FauxRequest( [ 'oldid' => $idA ] ) );
 		$article->setContext( $context );
 		$this->assertSame( $idA, $article->getOldID() );
-		$article->getRevisionFetched();
+		$article->fetchRevisionRecord();
 		$this->assertSame( $idA, $article->getRevIdFetched() );
 
 		// no oldid
@@ -99,7 +102,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		$context->setRequest( new FauxRequest( [] ) );
 		$article->setContext( $context );
 		$this->assertSame( 0, $article->getOldID() );
-		$article->getRevisionFetched();
+		$article->fetchRevisionRecord();
 		$this->assertSame( $idB, $article->getRevIdFetched() );
 	}
 
@@ -124,7 +127,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		$article = new Article( $page->getTitle(), 0 );
 		$article->getContext()->getOutput()->setTitle( $page->getTitle() );
 
-		$cache = MediaWikiServices::getInstance()->getParserCache();
+		$cache = $this->getServiceContainer()->getParserCache();
 		$cache->save( $po, $page, $article->getParserOptions() );
 
 		$article->view();
@@ -136,8 +139,9 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers Article::getPage()
-	 * @covers WikiPage::getRedirectTarget()
+	 * @covers Article::getPage
+	 * @covers WikiPage::getRedirectTarget
+	 * @covers \Mediawiki\Page\RedirectLookup::getRedirectTarget
 	 */
 	public function testViewRedirect() {
 		$target = Title::makeTitle( $this->getDefaultWikitextNS(), 'Test_Target' );
@@ -149,12 +153,14 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		$article->getContext()->getOutput()->setTitle( $page->getTitle() );
 		$article->view();
 
+		$redirectStore = $this->getServiceContainer()->getRedirectStore();
+
 		$this->assertNotNull(
-			$article->getPage()->getRedirectTarget()->getPrefixedDBkey()
+			$redirectStore->getRedirectTarget( $article->getPage() )->getPrefixedDBkey()
 		);
 		$this->assertSame(
 			$target->getPrefixedDBkey(),
-			$article->getPage()->getRedirectTarget()->getPrefixedDBkey()
+			$redirectStore->getRedirectTarget( $article->getPage() )->getPrefixedDBkey()
 		);
 
 		$output = $article->getContext()->getOutput();
@@ -172,12 +178,13 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 		/** @var MockObject|ContentHandler $mockHandler */
 		$mockHandler = $this->getMockBuilder( ContentHandler::class )
-			->setMethods(
+			->onlyMethods(
 				[
 					'isParserCacheSupported',
 					'serializeContent',
 					'unserializeContent',
 					'makeEmptyContent',
+					'getParserOutput',
 				]
 			)
 			->setConstructorArgs( [ 'NotText', [ 'application/frobnitz' ] ] )
@@ -185,6 +192,8 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 		$mockHandler->method( 'isParserCacheSupported' )
 			->willReturn( false );
+		$mockHandler->method( 'getParserOutput' )
+			->willReturn( new ParserOutput( 'Structured Output' ) );
 
 		$this->setTemporaryHook(
 			'ContentHandlerForModelID',
@@ -195,8 +204,6 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 		/** @var MockObject|Content $content */
 		$content = $this->createMock( Content::class );
-		$content->method( 'getParserOutput' )
-			->willReturn( new ParserOutput( 'Structured Output' ) );
 		$content->method( 'getModel' )
 			->willReturn( 'NotText' );
 		$content->expects( $this->never() )->method( 'getNativeData' );
@@ -214,7 +221,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 		/** @var MockObject|WikiPage $page */
 		$page = $this->getMockBuilder( WikiPage::class )
-			->setMethods( [ 'getRevisionRecord', 'getLatest' ] )
+			->onlyMethods( [ 'getRevisionRecord', 'getLatest' ] )
 			->setConstructorArgs( [ $title ] )
 			->getMock();
 
@@ -248,6 +255,8 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 		$this->assertStringNotContainsString( 'id="revision-info-current"', $output->getSubtitle() );
 		$this->assertStringNotContainsString( 'Test B', $this->getHtml( $output ) );
+		$this->assertSame( $idA, $output->getRevisionId() );
+		$this->assertSame( $revisions[1]->getTimestamp(), $output->getRevisionTimestamp() );
 	}
 
 	public function testViewOfOldRevisionFromCache() {
@@ -261,28 +270,36 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 				],
 			],
 		] );
+
 		$revisions = [];
 		$page = $this->getPage( __METHOD__, [ 1 => 'Test A', 2 => 'Test B' ], $revisions );
 		$idA = $revisions[1]->getId();
+		$this->setMwGlobals( 'wgTitle', $page->getTitle() );
 
+		// View the revision once (to get it into the cache)
 		$article = new Article( $page->getTitle(), $idA );
-		$article->getContext()->getOutput()->setTitle( $page->getTitle() );
-
-		// Force cache
-		MediaWikiServices::getInstance()
-			->getParserOutputAccess()
-			->getParserOutput(
-				$page,
-				ParserOptions::newCanonical( $article->getContext()->getUser() ),
-				$revisions[1]
-			);
-
 		$article->view();
 
+		// Reset the output page and view the revision again (from ParserCache)
+		$article = new Article( $page->getTitle(), $idA );
+		$context = RequestContext::getMain();
+		$context->setOutput( new OutputPage( $context ) );
+		$article->setContext( $context );
+
+		$outputPageBeforeHTMLRevisionId = null;
+		$this->setTemporaryHook( 'OutputPageBeforeHTML',
+			static function ( OutputPage $out ) use ( &$outputPageBeforeHTMLRevisionId ) {
+				$outputPageBeforeHTMLRevisionId = $out->getRevisionId();
+			}
+		);
+
+		$article->view();
 		$output = $article->getContext()->getOutput();
 		$this->assertStringContainsString( 'Test A', $this->getHtml( $output ) );
 		$this->assertSame( 1, substr_count( $output->getSubtitle(), 'class="mw-revision warningbox"' ) );
 		$this->assertSame( $idA, $output->getRevisionId() );
+		$this->assertSame( $idA, $outputPageBeforeHTMLRevisionId );
+		$this->assertSame( $revisions[1]->getTimestamp(), $output->getRevisionTimestamp() );
 	}
 
 	public function testViewOfCurrentRevision() {
@@ -376,7 +393,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 
 	public function testViewDeletedPage() {
 		$page = $this->getPage( __METHOD__, [ 1 => 'Test A', 2 => 'Test B' ] );
-		$page->doDeleteArticleReal( 'Test', $this->getTestSysop()->getUser() );
+		$this->deletePage( $page );
 
 		$article = new Article( $page->getTitle() );
 		$article->getContext()->getOutput()->setTitle( $page->getTitle() );
@@ -481,7 +498,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		// use ArticleViewHeader hook to bypass the parser cache
 		$this->setTemporaryHook(
 			'ArticleViewHeader',
-			static function ( Article $articlePage, &$outputDone, &$useParserCache ) use ( $article ) {
+			static function ( Article $articlePage, &$outputDone, &$useParserCache ) {
 				$useParserCache = false;
 			}
 		);
@@ -540,7 +557,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 		// use ArticleViewHeader hook to bypass the parser cache
 		$this->setTemporaryHook(
 			'ArticleViewHeader',
-			static function ( Article $articlePage, &$outputDone, &$useParserCache ) use ( $article ) {
+			static function ( Article $articlePage, &$outputDone, &$useParserCache ) {
 				$useParserCache = false;
 			}
 		);
@@ -586,7 +603,7 @@ class ArticleViewTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function getRevDelRevisionList( $title, $revisionId ) {
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		return new RevDelRevisionList(
 			RequestContext::getMain(),
 			$title,

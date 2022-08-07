@@ -15,7 +15,7 @@ use MediaWiki\Permissions\PermissionManager;
  */
 class EditPageConstraintsTest extends MediaWikiLangTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->setContentLang( $this->getServiceContainer()->getContentLanguage() );
@@ -72,12 +72,17 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 		$this->assertNotNull( $title );
 
 		$page = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $title );
+
+		if ( $user == null ) {
+			$user = $this->getTestUser()->getUser();
+		}
+
 		if ( $baseText !== null ) {
 			$content = ContentHandler::makeContent( $baseText, $title );
-			$page->doEditContent( $content, "base text for test" );
+			$page->doUserEditContent( $content, $user, "base text for test" );
 
 			// Set the latest timestamp back a while
-			$dbw = wfGetDB( DB_MASTER );
+			$dbw = wfGetDB( DB_PRIMARY );
 			$dbw->update(
 				'revision',
 				[ 'rev_timestamp' => $dbw->timestamp( '20120101000000' ) ],
@@ -85,20 +90,17 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 			);
 			$page->clear();
 
-			// sanity check
-			$currentText = ContentHandler::getContentText( $page->getContent() );
+			$content = $page->getContent();
+			$this->assertInstanceOf( TextContent::class, $content );
+			$currentText = $content->getText();
 
 			# EditPage rtrim() the user input, so we alter our expected text
 			# to reflect that.
 			$this->assertEquals(
 				rtrim( $baseText ),
 				rtrim( $currentText ),
-				'Sanity check: page should have the text specified'
+				'page should have the text specified'
 			);
-		}
-
-		if ( $user == null ) {
-			$user = $this->getTestUser()->getUser();
 		}
 
 		if ( !isset( $edit['wpEditToken'] ) ) {
@@ -158,7 +160,7 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 		// Set the time of the deletion to be a specific time, so we can be sure to start the
 		// edit before it. Since the constraint will query for the most recent timestamp,
 		// update *all* deletion logs for the page to the same timestamp (1 January 2020)
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$dbw->update(
 			'logging',
 			[ 'log_timestamp' => $dbw->timestamp( '20200101000000' ) ],
@@ -263,7 +265,7 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 		$this->assertSame(
 			CONTENT_MODEL_WIKITEXT,
 			$title->getContentModel(),
-			'Sanity check: title should start as wikitext content model'
+			'title should start as wikitext content model'
 		);
 
 		$this->assertEdit(
@@ -376,13 +378,13 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 
 	public function provideTestEditFilterMergedContentHookConstraint() {
 		yield 'Hook returns false, status is good, no value set' => [
-			false, null, false, EditPage::AS_HOOK_ERROR, 'AS_HOOK_ERROR'
+			false, null, false, EditPage::AS_HOOK_ERROR_EXPECTED, 'AS_HOOK_ERROR_EXPECTED'
 		];
 		yield 'Hook returns false, status is good, value set' => [
 			false, 1234567, false, 1234567, 'custom value 1234567'
 		];
 		yield 'Hook returns false, status is not good' => [
-			false, null, true, EditPage::AS_HOOK_ERROR, 'AS_HOOK_ERROR'
+			false, null, true, EditPage::AS_HOOK_ERROR_EXPECTED, 'AS_HOOK_ERROR_EXPECTED'
 		];
 		yield 'Hook returns true, status is not ok' => [
 			true, null, true, EditPage::AS_HOOK_ERROR_EXPECTED, 'AS_HOOK_ERROR_EXPECTED'
@@ -521,7 +523,7 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 
 	/** PageSizeConstraint integration */
 	public function testPageSizeConstraintBeforeMerge() {
-		// Max size: 1 kilobyte
+		// Max size: 1 kibibyte
 		$this->setMwGlobals( [
 			'wgMaxArticleSize' => 1
 		] );
@@ -541,7 +543,7 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 
 	/** PageSizeConstraint integration */
 	public function testPageSizeConstraintAfterMerge() {
-		// Max size: 1 kilobyte
+		// Max size: 1 kibibyte
 		$this->setMwGlobals( [
 			'wgMaxArticleSize' => 1
 		] );
@@ -648,6 +650,7 @@ class EditPageConstraintsTest extends MediaWikiLangTestCase {
 		$permissionManager = $this->createMock( PermissionManager::class );
 		// Needs edit rights to pass EditRightConstraint and reach UserBlockConstraint
 		$permissionManager->method( 'userHasRight' )->willReturn( true );
+		$permissionManager->method( 'userCan' )->willReturn( true );
 
 		// Not worried about the specifics of the method call, those are tested in
 		// the UserBlockConstraintTest

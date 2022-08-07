@@ -19,13 +19,12 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup Extensions
  * @author Daniel Kinzler, brightbyte.de
  */
 
 ( function () {
 	var loadChildren,
-		data = require( './data.json' );
+		config = require( './data.json' );
 
 	/**
 	 * Expands a given node (loading it's children if not loaded)
@@ -35,13 +34,13 @@
 	function expandNode( $link ) {
 		// Show the children node
 		var $children = $link.parents( '.CategoryTreeItem' )
-			.siblings( '.CategoryTreeChildren' );
-		$children.show();
+			.siblings( '.CategoryTreeChildren' )
+			.css( 'display', '' );
 
-		$link
-			.text( mw.msg( 'categorytree-collapse-bullet' ) )
-			.attr( 'title', mw.msg( 'categorytree-collapse' ) )
-			.data( 'ct-state', 'expanded' );
+		$link.attr( {
+			title: mw.msg( 'categorytree-collapse' ),
+			'data-ct-state': 'expanded'
+		} );
 
 		if ( !$link.data( 'ct-loaded' ) ) {
 			loadChildren( $link, $children );
@@ -56,22 +55,23 @@
 	function collapseNode( $link ) {
 		// Hide the children node
 		$link.parents( '.CategoryTreeItem' )
-			.siblings( '.CategoryTreeChildren' ).hide();
+			.siblings( '.CategoryTreeChildren' )
+			.css( 'display', 'none' );
 
-		$link
-			.text( mw.msg( 'categorytree-expand-bullet' ) )
-			.attr( 'title', mw.msg( 'categorytree-expand' ) )
-			.data( 'ct-state', 'collapsed' );
+		$link.attr( {
+			title: mw.msg( 'categorytree-expand' ),
+			'data-ct-state': 'collapsed'
+		} );
 	}
 
 	/**
 	 * Handles clicks on the expand buttons, and calls the appropriate function
 	 *
-	 * @context {Element} CategoryTreeToggle
+	 * @this {Element} CategoryTreeToggle
 	 */
 	function handleNode() {
 		var $link = $( this );
-		if ( $link.data( 'ct-state' ) === 'collapsed' ) {
+		if ( $link.attr( 'data-ct-state' ) === 'collapsed' ) {
 			expandNode( $link );
 		} else {
 			collapseNode( $link );
@@ -88,7 +88,7 @@
 			.on( 'click', handleNode )
 			.attr( 'title', function () {
 				return mw.msg(
-					$( this ).data( 'ct-state' ) === 'collapsed' ?
+					$( this ).attr( 'data-ct-state' ) === 'collapsed' ?
 						'categorytree-expand' :
 						'categorytree-collapse'
 				);
@@ -146,7 +146,7 @@
 		ctTitle = $link.attr( 'data-ct-title' );
 		ctMode = $linkParentCTTag.data( 'ct-mode' );
 		ctMode = typeof ctMode === 'number' ? ctMode : undefined;
-		ctOptions = $linkParentCTTag.attr( 'data-ct-options' ) || data.defaultCtOptions;
+		ctOptions = $linkParentCTTag.attr( 'data-ct-options' ) || config.defaultCtOptions;
 
 		// Mode and options have defaults or fallbacks, title does not.
 		// Don't make a request if there is no title.
@@ -167,33 +167,20 @@
 			data = data.categorytree.html;
 
 			if ( data === '' ) {
-				switch ( ctMode ) {
-					// CategoryTreeMode::CATEGORIES = 0
-					case 0:
-						data = mw.msg( 'categorytree-no-subcategories' );
-						break;
-					// CategoryTreeMode::PAGES = 10
-					case 10:
-						data = mw.msg( 'categorytree-no-pages' );
-						break;
-					// CategoryTreeMode::PARENTS = 100
-					case 100:
-						data = mw.msg( 'categorytree-no-parent-categories' );
-						break;
-					// CategoryTreeMode::ALL = 20
-					default:
-						data = mw.msg( 'categorytree-nothing-found' );
-				}
-
-				$data = $( '<i>' ).addClass( 'CategoryTreeNotice' ).text( data );
+				$data = $( '<i>' ).addClass( 'CategoryTreeNotice' )
+					// eslint-disable-next-line mediawiki/msg-doc
+					.text( mw.msg( {
+						0: 'categorytree-no-subcategories',
+						10: 'categorytree-no-pages',
+						100: 'categorytree-no-parent-categories'
+					}[ ctMode ] || 'categorytree-nothing-found' ) );
 			} else {
 				$data = $( $.parseHTML( data ) );
 				attachHandler( $data );
 			}
 
 			$children.empty().append( $data );
-		} )
-			.fail( error );
+		} ).fail( error );
 	};
 
 	// Register click events

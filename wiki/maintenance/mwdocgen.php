@@ -60,8 +60,6 @@ class MWDocGen extends Maintenance {
 	private $excludePatterns;
 	/** @var bool */
 	private $doDot;
-	/** @var bool */
-	private $doMan;
 
 	/**
 	 * Prepare Maintenance class
@@ -136,7 +134,7 @@ class MWDocGen extends Maintenance {
 			}
 		}
 
-		$this->doDot = shell_exec( 'which dot' );
+		$this->doDot = (bool)shell_exec( 'which dot' );
 	}
 
 	public function execute() {

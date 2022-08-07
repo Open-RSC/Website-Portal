@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @group Search
  * @group Database
@@ -47,7 +45,7 @@ class SearchEnginePrefixTest extends MediaWikiLangTestCase {
 		$this->insertPage( 'External' );
 	}
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		if ( !$this->isWikitextNS( NS_MAIN ) ) {
@@ -60,7 +58,7 @@ class SearchEnginePrefixTest extends MediaWikiLangTestCase {
 			'wgHooks' => [],
 		] );
 
-		$this->search = MediaWikiServices::getInstance()->newSearchEngine();
+		$this->search = $this->getServiceContainer()->newSearchEngine();
 		$this->search->setNamespaces( [] );
 	}
 
@@ -87,6 +85,11 @@ class SearchEnginePrefixTest extends MediaWikiLangTestCase {
 				'results' => [],
 			] ],
 			[ [
+				'All invalid characters, effectively empty',
+				'query' => '[',
+				'results' => [],
+			] ],
+			[ [
 				'Main namespace with title prefix',
 				'query' => 'Sa',
 				'results' => [
@@ -98,6 +101,16 @@ class SearchEnginePrefixTest extends MediaWikiLangTestCase {
 				'offsetresult' => [
 					'Sample Who',
 				],
+			] ],
+			[ [
+				'Some invalid characters',
+				'query' => '[[Sa]]',
+				'results' => [
+					'Sample',
+					'Sample Ban',
+					'Sample Eat',
+				],
+				'offsetresult' => [ 'Sample Who' ],
 			] ],
 			[ [
 				'Talk namespace prefix',
@@ -379,13 +392,12 @@ class SearchEnginePrefixTest extends MediaWikiLangTestCase {
 
 	private function mockSearchWithResults( $titleStrings, $limit = 3 ) {
 		$search = $stub = $this->getMockBuilder( SearchEngine::class )
-			->setMethods( [ 'completionSearchBackend' ] )->getMock();
+			->onlyMethods( [ 'completionSearchBackend' ] )->getMock();
 
 		$return = SearchSuggestionSet::fromStrings( $titleStrings );
 
-		$search->expects( $this->any() )
-			->method( 'completionSearchBackend' )
-			->will( $this->returnValue( $return ) );
+		$search->method( 'completionSearchBackend' )
+			->willReturn( $return );
 
 		$search->setLimitOffset( $limit );
 		return $search;

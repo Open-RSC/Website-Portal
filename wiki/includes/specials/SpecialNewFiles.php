@@ -21,8 +21,8 @@
  * @ingroup SpecialPage
  */
 
-use MediaWiki\Permissions\PermissionManager;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Permissions\GroupPermissionsLookup;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class SpecialNewFiles extends IncludableSpecialPage {
@@ -32,44 +32,32 @@ class SpecialNewFiles extends IncludableSpecialPage {
 	/** @var string[] */
 	protected $mediaTypes;
 
-	/** @var PermissionManager */
-	private $permissionManager;
-
-	/** @var ActorMigration */
-	private $actorMigration;
+	/** @var GroupPermissionsLookup */
+	private $groupPermissionsLookup;
 
 	/** @var ILoadBalancer */
 	private $loadBalancer;
 
-	/** @var UserCache */
-	private $userCache;
-
-	/** @var UserFactory */
-	private $userFactory;
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/**
 	 * @param MimeAnalyzer $mimeAnalyzer
-	 * @param PermissionManager $permissionManager
-	 * @param ActorMigration $actorMigration
+	 * @param GroupPermissionsLookup $groupPermissionsLookup
 	 * @param ILoadBalancer $loadBalancer
-	 * @param UserCache $userCache
-	 * @param UserFactory $userFactory
+	 * @param LinkBatchFactory $linkBatchFactory
 	 */
 	public function __construct(
 		MimeAnalyzer $mimeAnalyzer,
-		PermissionManager $permissionManager,
-		ActorMigration $actorMigration,
+		GroupPermissionsLookup $groupPermissionsLookup,
 		ILoadBalancer $loadBalancer,
-		UserCache $userCache,
-		UserFactory $userFactory
+		LinkBatchFactory $linkBatchFactory
 	) {
 		parent::__construct( 'Newimages' );
-		$this->permissionManager = $permissionManager;
-		$this->actorMigration = $actorMigration;
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->loadBalancer = $loadBalancer;
 		$this->mediaTypes = $mimeAnalyzer->getMediaTypes();
-		$this->userCache = $userCache;
-		$this->userFactory = $userFactory;
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	public function execute( $par ) {
@@ -83,7 +71,6 @@ class SpecialNewFiles extends IncludableSpecialPage {
 
 		$opts = new FormOptions();
 
-		$opts->add( 'like', '' );
 		$opts->add( 'user', '' );
 		$opts->add( 'showbots', false );
 		$opts->add( 'hidepatrolled', false );
@@ -96,7 +83,7 @@ class SpecialNewFiles extends IncludableSpecialPage {
 		$opts->fetchValuesFromRequest( $this->getRequest() );
 
 		if ( $par !== null ) {
-			$opts->setValue( is_numeric( $par ) ? 'limit' : 'like', $par );
+			$opts->setValue( 'limit', $par );
 		}
 
 		// If start date comes after end date chronologically, swap them.
@@ -140,13 +127,11 @@ class SpecialNewFiles extends IncludableSpecialPage {
 
 		$pager = new NewFilesPager(
 			$context,
-			$opts,
+			$this->groupPermissionsLookup,
+			$this->linkBatchFactory,
 			$this->getLinkRenderer(),
-			$this->permissionManager,
-			$this->actorMigration,
 			$this->loadBalancer,
-			$this->userCache,
-			$this->userFactory
+			$opts
 		);
 
 		$out->addHTML( $pager->getBody() );
@@ -169,12 +154,6 @@ class SpecialNewFiles extends IncludableSpecialPage {
 		ksort( $mediaTypesOptions );
 
 		$formDescriptor = [
-			'like' => [
-				'type' => 'text',
-				'label-message' => 'newimages-label',
-				'name' => 'like',
-			],
-
 			'user' => [
 				'class' => HTMLUserTextField::class,
 				'label-message' => 'newimages-user',
@@ -226,10 +205,6 @@ class SpecialNewFiles extends IncludableSpecialPage {
 				'name' => 'end',
 			],
 		];
-
-		if ( $this->getConfig()->get( 'MiserMode' ) ) {
-			unset( $formDescriptor['like'] );
-		}
 
 		if ( !$this->getUser()->useFilePatrol() ) {
 			unset( $formDescriptor['hidepatrolled'] );

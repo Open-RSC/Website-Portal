@@ -13,7 +13,7 @@
  * @param {string} name Symbolic name for the command
  * @param {string} action Action to execute when command is triggered
  * @param {string} method Method to call on action when executing
- * @param {Object} [options] Command options
+ * @param {Object} [options]
  * @param {string[]|null} [options.supportedSelections] List of supported selection types, or null for all
  * @param {Array} [options.args] Additional arguments to pass to the action when executing
  */
@@ -32,7 +32,7 @@ ve.ui.Command = function VeUiCommand( name, action, method, options ) {
  * Execute command on a surface.
  *
  * @param {ve.ui.Surface} surface Surface to execute command on
- * @param {Object} [args] Custom arguments to override defaults
+ * @param {Array} [args] Custom arguments to override defaults
  * @param {string} [source] Label for the source of the command, for tracking
  * @return {boolean} Command was executed
  */

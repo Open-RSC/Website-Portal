@@ -117,7 +117,7 @@ class LoadMonitor implements ILoadMonitor {
 	 * @throws DBAccessError
 	 */
 	protected function getServerStates( array $serverIndexes, $domain ) {
-		// Represent the cluster by the name of the master DB
+		// Represent the cluster by the name of the primary DB
 		$cluster = $this->lb->getServerName( $this->lb->getWriterIndex() );
 
 		// Randomize logical TTLs to reduce stampedes
@@ -148,7 +148,7 @@ class LoadMonitor implements ILoadMonitor {
 			$this->getStatesCacheKey( $this->wanCache, $serverIndexes ),
 			self::TIME_TILL_REFRESH, // 1 second logical expiry
 			function ( $oldValue, &$ttl ) use ( $serverIndexes, $domain, $staleValue, &$updated ) {
-				// Sanity check for circular recursion in computeServerStates()/getWeightScale().
+				// Double check for circular recursion in computeServerStates()/getWeightScale().
 				// Mainly, connection attempts should use LoadBalancer::getServerConnection()
 				// rather than something that will pick a server based on the server states.
 				$scopedLock = $this->acquireServerStatesLoopGuard();
@@ -199,7 +199,7 @@ class LoadMonitor implements ILoadMonitor {
 	 * @throws DBAccessError
 	 */
 	protected function computeServerStates( array $serverIndexes, $domain, $priorStates ) {
-		// Check if there is just a master DB (no replication involved)
+		// Check if there is just a primary DB (no replication involved)
 		if ( $this->lb->getServerCount() <= 1 ) {
 			return $this->getPlaceholderServerStates( $serverIndexes );
 		}
@@ -209,11 +209,11 @@ class LoadMonitor implements ILoadMonitor {
 		$lagTimes = [];
 		$weightScales = [];
 		foreach ( $serverIndexes as $i ) {
-			$isMaster = ( $i == $this->lb->getWriterIndex() );
-			// If the master DB has zero load, then typical read queries do not use it.
+			$isPrimary = ( $i == $this->lb->getWriterIndex() );
+			// If the primary DB has zero load, then typical read queries do not use it.
 			// In that case, avoid connecting to it since this method might run in any
-			// datacenter, and the master DB might be geographically remote.
-			if ( $isMaster && $this->lb->getServerInfo( $i )['load'] <= 0 ) {
+			// datacenter, and the primary DB might be geographically remote.
+			if ( $isPrimary && $this->lb->getServerInfo( $i )['load'] <= 0 ) {
 				$lagTimes[$i] = 0;
 				// Callers only use this DB if they have *no choice* anyway (e.g. writes)
 				$weightScales[$i] = 1.0;
@@ -242,12 +242,12 @@ class LoadMonitor implements ILoadMonitor {
 				$this->movingAveRatio
 			);
 
-			// Scale from 0% to 100% of nominal weight (sanity)
+			// Scale from 0% to 100% of nominal weight
 			$weightScales[$i] = max( $newScale, 0.0 );
 
-			// Mark replication lag on this server as "false" if it is unreacheable
+			// Mark replication lag on this server as "false" if it is unreachable
 			if ( !$conn ) {
-				$lagTimes[$i] = $isMaster ? 0 : false;
+				$lagTimes[$i] = $isPrimary ? 0 : false;
 				$this->replLogger->error(
 					__METHOD__ . ": host {db_server} is unreachable",
 					[ 'db_server' => $host ]
@@ -270,9 +270,9 @@ class LoadMonitor implements ILoadMonitor {
 				);
 			} elseif ( $lagTimes[$i] > $this->lagWarnThreshold ) {
 				$this->replLogger->warning(
-					"Server {dbserver} has {lag} seconds of lag (>= {maxlag})",
+					"Server {db_server} has {lag} seconds of lag (>= {maxlag})",
 					[
-						'dbserver' => $host,
+						'db_server' => $host,
 						'lag' => $lagTimes[$i],
 						'maxlag' => $this->lagWarnThreshold
 					]
@@ -361,7 +361,7 @@ class LoadMonitor implements ILoadMonitor {
 	 */
 	private function getStatesCacheKey( $cache, array $serverIndexes ) {
 		sort( $serverIndexes );
-		// Lag is per-server, not per-DB, so key on the master DB name
+		// Lag is per-server, not per-DB, so key on the primary DB name
 		return $cache->makeGlobalKey(
 			'rdbms-server-states',
 			self::VERSION,

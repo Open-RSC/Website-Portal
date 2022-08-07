@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @author Addshore
  *
@@ -17,14 +15,15 @@ class SpecialEditWatchlistTest extends SpecialPageTestBase {
 	 * @return SpecialPage
 	 */
 	protected function newSpecialPage() {
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		return new SpecialEditWatchlist(
 			$services->getWatchedItemStore(),
 			$services->getTitleParser(),
 			$services->getGenderCache(),
 			$services->getLinkBatchFactory(),
 			$services->getNamespaceInfo(),
-			$services->getWikiPageFactory()
+			$services->getWikiPageFactory(),
+			$services->getWatchlistManager()
 		);
 	}
 

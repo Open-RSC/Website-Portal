@@ -18,17 +18,27 @@
  * @file
  */
 
+use MediaWiki\Content\Renderer\ContentParseParams;
+use MediaWiki\Content\Transform\PreSaveTransformParams;
+
 /**
- * Content handler for JSON.
+ * Content handler for JSON text.
+ *
+ * Useful for maintaining JSON that can be viewed and edit directly by users.
  *
  * @author Ori Livneh <ori@wikimedia.org>
  * @author Kunal Mehta <legoktm@gmail.com>
  *
  * @since 1.24
+ * @stable to extend
  * @ingroup Content
  */
 class JsonContentHandler extends CodeContentHandler {
 
+	/**
+	 * @param string $modelId
+	 * @stable to call
+	 */
 	public function __construct( $modelId = CONTENT_MODEL_JSON ) {
 		parent::__construct( $modelId, [ CONTENT_FORMAT_JSON ] );
 	}
@@ -43,5 +53,57 @@ class JsonContentHandler extends CodeContentHandler {
 	public function makeEmptyContent() {
 		$class = $this->getContentClass();
 		return new $class( '{}' );
+	}
+
+	public function preSaveTransform(
+		Content $content,
+		PreSaveTransformParams $pstParams
+	): Content {
+		$shouldCallDeprecatedMethod = $this->shouldCallDeprecatedContentTransformMethod(
+			$content,
+			$pstParams
+		);
+
+		if ( $shouldCallDeprecatedMethod ) {
+			return $this->callDeprecatedContentPST(
+				$content,
+				$pstParams
+			);
+		}
+
+		'@phan-var JsonContent $content';
+
+		// FIXME: WikiPage::doEditContent invokes PST before validation. As such, native data
+		// may be invalid (though PST result is discarded later in that case).
+		if ( !$content->isValid() ) {
+			return $content;
+		}
+
+		$contentClass = $this->getContentClass();
+		return new $contentClass( JsonContent::normalizeLineEndings( $content->beautifyJSON() ) );
+	}
+
+	/**
+	 * Set the HTML and add the appropriate styles.
+	 *
+	 * @since 1.38
+	 * @param Content $content
+	 * @param ContentParseParams $cpoParams
+	 * @param ParserOutput &$parserOutput The output object to fill (reference).
+	 */
+	protected function fillParserOutput(
+		Content $content,
+		ContentParseParams $cpoParams,
+		ParserOutput &$parserOutput
+	) {
+		'@phan-var JsonContent $content';
+		// FIXME: WikiPage::doEditContent generates parser output before validation.
+		// As such, native data may be invalid (though output is discarded later in that case).
+		if ( $cpoParams->getGenerateHtml() && $content->isValid() ) {
+			$parserOutput->setText( $content->rootValueTable( $content->getData()->getValue() ) );
+			$parserOutput->addModuleStyles( [ 'mediawiki.content.json' ] );
+		} else {
+			$parserOutput->setText( '' );
+		}
 	}
 }

@@ -18,7 +18,7 @@
  * @file
  * @ingroup Cache
  */
-use Wikimedia\ObjectFactory;
+use Wikimedia\ObjectFactory\ObjectFactory;
 
 /**
  * A cache class that directs writes to one set of servers and reads to
@@ -48,7 +48,7 @@ class ReplicatedBagOStuff extends BagOStuff {
 	/**
 	 * Constructor. Parameters are:
 	 *   - writeFactory: ObjectFactory::getObjectFromSpec array yielding BagOStuff.
-	 *      This object will be used for writes (e.g. the master DB).
+	 *      This object will be used for writes (e.g. the primary DB).
 	 *   - readFactory: ObjectFactory::getObjectFromSpec array yielding BagOStuff.
 	 *      This object will be used for reads (e.g. a replica DB).
 	 *   - sessionConsistencyWindow: Seconds to read from the master source for a key
@@ -88,7 +88,13 @@ class ReplicatedBagOStuff extends BagOStuff {
 			// Otherwise, just use the default "read" store
 			: $this->readStore;
 
-		return $store->proxyCall( __FUNCTION__, self::ARG0_KEY, self::RES_NONKEY, func_get_args() );
+		return $store->proxyCall(
+			__FUNCTION__,
+			self::ARG0_KEY,
+			self::RES_NONKEY,
+			func_get_args(),
+			$this
+		);
 	}
 
 	public function set( $key, $value, $exptime = 0, $flags = 0 ) {
@@ -98,7 +104,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -109,7 +116,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -120,7 +128,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -131,7 +140,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -142,16 +152,18 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
-	public function lock( $key, $timeout = 6, $expiry = 6, $rclass = '' ) {
+	public function lock( $key, $timeout = 6, $exptime = 6, $rclass = '' ) {
 		return $this->writeStore->proxyCall(
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -160,20 +172,23 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
 	public function deleteObjectsExpiringBefore(
 		$timestamp,
 		callable $progress = null,
-		$limit = INF
+		$limit = INF,
+		string $tag = null
 	) {
 		return $this->writeStore->proxyCall(
 			__FUNCTION__,
 			self::ARG0_NONKEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -187,7 +202,13 @@ class ReplicatedBagOStuff extends BagOStuff {
 			// Otherwise, just use the default "read" store
 			: $this->readStore;
 
-		return $store->proxyCall( __FUNCTION__, self::ARG0_KEYARR, self::RES_KEYMAP, func_get_args() );
+		return $store->proxyCall(
+			__FUNCTION__,
+			self::ARG0_KEYARR,
+			self::RES_KEYMAP,
+			func_get_args(),
+			$this
+		);
 	}
 
 	public function setMulti( array $valueByKey, $exptime = 0, $flags = 0 ) {
@@ -197,7 +218,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEYMAP,
 			self::RES_KEYMAP,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -208,7 +230,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEYARR,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -219,7 +242,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEYARR,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -230,7 +254,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
@@ -241,30 +266,21 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 
-	public function incrWithInit( $key, $exptime, $value = 1, $init = null, $flags = 0 ) {
+	public function incrWithInit( $key, $exptime, $step = 1, $init = null, $flags = 0 ) {
 		$this->remarkRecentSessionWrite( [ $key ] );
 
 		return $this->writeStore->proxyCall(
 			__FUNCTION__,
 			self::ARG0_KEY,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
-	}
-
-	public function getLastError() {
-		return ( $this->writeStore->getLastError() !== self::ERR_NONE )
-			? $this->writeStore->getLastError()
-			: $this->readStore->getLastError();
-	}
-
-	public function clearLastError() {
-		$this->writeStore->clearLastError();
-		$this->readStore->clearLastError();
 	}
 
 	public function makeKeyInternal( $keyspace, $components ) {
@@ -292,7 +308,8 @@ class ReplicatedBagOStuff extends BagOStuff {
 			__FUNCTION__,
 			self::ARG0_KEYMAP,
 			self::RES_NONKEY,
-			func_get_args()
+			func_get_args(),
+			$this
 		);
 	}
 

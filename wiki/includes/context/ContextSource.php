@@ -20,6 +20,7 @@
  */
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Session\CsrfTokenSet;
 use Wikimedia\NonSerializable\NonSerializableTrait;
 
 /**
@@ -47,7 +48,7 @@ abstract class ContextSource implements IContextSource {
 		if ( $this->context === null ) {
 			$class = static::class;
 			wfDebug( __METHOD__ . " ($class): called and \$context is null. " .
-				"Using RequestContext::getMain() for sanity" );
+				"Using RequestContext::getMain()" );
 			$this->context = RequestContext::getMain();
 		}
 
@@ -115,6 +116,17 @@ abstract class ContextSource implements IContextSource {
 	 */
 	public function getWikiPage() {
 		return $this->getContext()->getWikiPage();
+	}
+
+	/**
+	 * Get the action name for the current web request.
+	 *
+	 * @since 1.38
+	 * @stable to override
+	 * @return string
+	 */
+	public function getActionName(): string {
+		return $this->getContext()->getActionName();
 	}
 
 	/**
@@ -207,5 +219,15 @@ abstract class ContextSource implements IContextSource {
 	 */
 	public function exportSession() {
 		return $this->getContext()->exportSession();
+	}
+
+	/**
+	 * Get a repository to obtain and match CSRF tokens.
+	 *
+	 * @return CsrfTokenSet
+	 * @since 1.37
+	 */
+	public function getCsrfTokenSet(): CsrfTokenSet {
+		return $this->getContext()->getCsrfTokenSet();
 	}
 }

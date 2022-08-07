@@ -52,8 +52,6 @@ ve.dm.BlockImageNode.static.preserveHtmlAttributes = function ( attribute ) {
 
 ve.dm.BlockImageNode.static.handlesOwnChildren = true;
 
-ve.dm.BlockImageNode.static.ignoreChildren = true;
-
 ve.dm.BlockImageNode.static.childNodeTypes = [ 'imageCaption' ];
 
 ve.dm.BlockImageNode.static.matchTagNames = [ 'figure' ];
@@ -63,16 +61,14 @@ ve.dm.BlockImageNode.static.matchFunction = function ( element ) {
 };
 
 ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) {
-	var dataElement, figure, classAttr, img, caption, attributes, width, height;
+	var figure = domElements[ 0 ];
+	var classAttr = figure.getAttribute( 'class' );
+	var img = figure.children[ 0 ];
+	var width = img.getAttribute( 'width' );
+	var height = img.getAttribute( 'height' );
+	var caption = figure.children[ 1 ];
 
-	figure = domElements[ 0 ];
-	classAttr = figure.getAttribute( 'class' );
-	img = figure.children[ 0 ];
-	width = img.getAttribute( 'width' );
-	height = img.getAttribute( 'height' );
-	caption = figure.children[ 1 ];
-
-	attributes = {
+	var attributes = {
 		src: img.getAttribute( 'src' ),
 		width: width !== null && width !== '' ? +width : null,
 		height: height !== null && height !== '' ? +height : null,
@@ -81,7 +77,7 @@ ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) 
 
 	this.setClassAttributes( attributes, classAttr );
 
-	dataElement = {
+	var dataElement = {
 		type: this.name,
 		attributes: attributes
 	};
@@ -90,7 +86,7 @@ ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) 
 		return [
 			dataElement,
 			{ type: 'imageCaption' },
-			{ type: 'imageCaption' },
+			{ type: '/imageCaption' },
 			{ type: '/' + this.name }
 		];
 	} else {
@@ -105,24 +101,24 @@ ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) 
 // should be more conditional.
 ve.dm.BlockImageNode.static.toDomElements = function ( data, doc, converter ) {
 	var dataElement = data[ 0 ],
-		classAttr = this.getClassAttrFromAttributes( dataElement.attributes ),
 		figure = doc.createElement( 'figure' ),
-		img = doc.createElement( 'img' ),
-		wrapper = doc.createElement( 'div' ),
-		captionData = data.slice( 1, -1 );
+		img = doc.createElement( 'img' );
 
 	ve.setDomAttributes( img, dataElement.attributes, [ 'alt', 'src', 'width', 'height' ] );
 
 	figure.appendChild( img );
 
+	var classAttr = this.getClassAttrFromAttributes( dataElement.attributes );
 	if ( classAttr ) {
 		// eslint-disable-next-line mediawiki/class-doc
 		figure.className = classAttr;
 	}
 
+	var captionData = data.slice( 1, -1 );
 	// If length of captionData is smaller or equal to 2 it means that there is no caption or that
 	// it is empty - in both cases we are going to skip appending <figcaption>.
 	if ( captionData.length > 2 ) {
+		var wrapper = doc.createElement( 'div' );
 		converter.getDomSubtreeFromData( data.slice( 1, -1 ), wrapper );
 		while ( wrapper.firstChild ) {
 			figure.appendChild( wrapper.firstChild );

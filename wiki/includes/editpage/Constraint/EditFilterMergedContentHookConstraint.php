@@ -55,7 +55,7 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 	private $status;
 
 	/** @var string */
-	private $hookError;
+	private $hookError = '';
 
 	/**
 	 * @param HookContainer $hookContainer
@@ -77,10 +77,9 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 		$this->summary = $summary;
 		$this->minorEdit = $minorEdit;
 		$this->status = Status::newGood();
-		$this->hookError = '';
 	}
 
-	public function checkConstraint() : string {
+	public function checkConstraint(): string {
 		$hookResult = $this->hookRunner->onEditFilterMergedContent(
 			$this->context,
 			$this->content,
@@ -102,7 +101,8 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 			}
 			// Use the existing $status->value if the hook set it
 			if ( !$this->status->value ) {
-				$this->status->value = self::AS_HOOK_ERROR;
+				// T273354: Should be AS_HOOK_ERROR_EXPECTED to display error message
+				$this->status->value = self::AS_HOOK_ERROR_EXPECTED;
 			}
 			return self::CONSTRAINT_FAILED;
 		}
@@ -122,7 +122,7 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 		return self::CONSTRAINT_PASSED;
 	}
 
-	public function getLegacyStatus() : StatusValue {
+	public function getLegacyStatus(): StatusValue {
 		// This returns a Status instead of a StatusValue since a Status object is
 		// used in the hook
 		return $this->status;
@@ -137,7 +137,7 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 	 * @internal
 	 * @return string
 	 */
-	public function getHookError() : string {
+	public function getHookError(): string {
 		return $this->hookError;
 	}
 
@@ -146,7 +146,7 @@ class EditFilterMergedContentHookConstraint implements IEditConstraint {
 	 * @param Status $status
 	 * @return string
 	 */
-	private function formatStatusErrors( Status $status ) : string {
+	private function formatStatusErrors( Status $status ): string {
 		$errmsg = $status->getWikiText(
 			'edit-error-short',
 			'edit-error-long',

@@ -39,12 +39,12 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	public function toHTML() {
 		$resolveFilesViaParser = $this->mParser instanceof Parser;
 		if ( $resolveFilesViaParser ) {
-			$out = $this->mParser->getOutput();
+			$parserOutput = $this->mParser->getOutput();
 			$repoGroup = null;
 			$linkRenderer = $this->mParser->getLinkRenderer();
 			$badFileLookup = $this->mParser->getBadFileLookup();
 		} else {
-			$out = $this->getOutput();
+			$parserOutput = $this->getOutput();
 			$services = MediaWikiServices::getInstance();
 			$repoGroup = $services->getRepoGroup();
 			$linkRenderer = $services->getLinkRenderer();
@@ -60,8 +60,8 @@ class TraditionalImageGallery extends ImageGalleryBase {
 		$attribs = Sanitizer::mergeAttributes(
 			[ 'class' => 'gallery mw-gallery-' . $this->mMode ], $this->mAttribs );
 
-		$out->addModules( $this->getModules() );
-		$out->addModuleStyles( 'mediawiki.page.gallery.styles' );
+		$parserOutput->addModules( $this->getModules() );
+		$parserOutput->addModuleStyles( [ 'mediawiki.page.gallery.styles' ] );
 		$output = Xml::openElement( 'ul', $attribs );
 		if ( $this->mCaption ) {
 			$output .= "\n\t<li class='gallerycaption'>{$this->mCaption}</li>";
@@ -79,13 +79,15 @@ class TraditionalImageGallery extends ImageGalleryBase {
 		}
 
 		$lang = $this->getRenderLang();
+		$enableLegacyMediaDOM = $this->getConfig()->get( 'ParserEnableLegacyMediaDOM' );
+
 		# Output each image...
 		foreach ( $this->mImages as [ $nt, $text, $alt, $link, $handlerOpts, $loading ] ) {
 			// "text" means "caption" here
 			/** @var Title $nt */
 
 			$descQuery = false;
-			if ( $nt->getNamespace() === NS_FILE ) {
+			if ( $nt->inNamespace( NS_FILE ) && !$nt->isExternal() ) {
 				# Get the file...
 				if ( $resolveFilesViaParser ) {
 					# Give extensions a chance to select the file revision for us
@@ -118,7 +120,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 			} elseif ( $this->mHideBadImages &&
 				$badFileLookup->isBadFile( $nt->getDBkey(), $this->getContextTitle() )
 			) {
-				# The image is blacklisted, just show it as a text link.
+				# The image is bad, so just show it as a text link.
 				$thumbhtml = "\n\t\t\t" . '<div class="thumb" style="height: ' .
 					( $this->getThumbPadding() + $this->mHeights ) . 'px;">' .
 					$linkRenderer->makeKnownLink( $nt, $nt->getText() ) .
@@ -155,22 +157,56 @@ class TraditionalImageGallery extends ImageGalleryBase {
 
 					Linker::processResponsiveImages( $img, $thumb, $transformOptions );
 
+					switch ( $img->getMediaType() ) {
+						case 'AUDIO':
+							$rdfaType = 'mw:Audio';
+							break;
+						case 'VIDEO':
+							$rdfaType = 'mw:Video';
+							break;
+						default:
+							$rdfaType = 'mw:Image';
+					}
+
+					$thumbhtml = $thumb->toHtml( $imageParameters );
+
+					if ( !$enableLegacyMediaDOM ) {
+						$thumbhtml = Html::rawElement(
+							'span', [ 'typeof' => $rdfaType ], $thumbhtml
+						);
+					}
+
+					if ( $enableLegacyMediaDOM ) {
+						$thumbhtml = Html::rawElement( 'div', [
+							# Auto-margin centering for block-level elements. Needed
+							# now that we have video handlers since they may emit block-
+							# level elements as opposed to simple <img> tags. ref
+							# http://css-discuss.incutio.com/?page=CenteringBlockElement
+							'style' => "margin:{$vpad}px auto;",
+						], $thumbhtml );
+					}
+
 					# Set both fixed width and min-height.
-					$thumbhtml = "\n\t\t\t"
-						. '<div class="thumb" style="width: '
-						. $this->getThumbDivWidth( $thumb->getWidth() ) . 'px;">'
-						# Auto-margin centering for block-level elements. Needed
-						# now that we have video handlers since they may emit block-
-						# level elements as opposed to simple <img> tags. ref
-						# http://css-discuss.incutio.com/?page=CenteringBlockElement
-						. '<div style="margin:' . $vpad . 'px auto;">'
-						. $thumb->toHtml( $imageParameters ) . '</div></div>';
+					$width = $this->getThumbDivWidth( $thumb->getWidth() );
+					$height = $this->getThumbPadding() + $this->mHeights;
+					$thumbhtml = "\n\t\t\t" . Html::rawElement( 'div', [
+						'class' => 'thumb',
+						'style' => "width: {$width}px;" .
+							( !$enableLegacyMediaDOM && $this->mMode === 'traditional' ?
+								" height: {$height}px;" : '' ),
+					], $thumbhtml );
 
 					// Call parser transform hook
-					/** @var MediaHandler $handler */
-					$handler = $img->getHandler();
-					if ( $resolveFilesViaParser && $handler ) {
-						$handler->parserTransformHook( $this->mParser, $img );
+					if ( $resolveFilesViaParser ) {
+						/** @var MediaHandler $handler */
+						$handler = $img->getHandler();
+						if ( $handler ) {
+							$handler->parserTransformHook( $this->mParser, $img );
+						}
+						if ( $img ) {
+							$this->mParser->modifyImageHtml(
+								$img, [ 'handler' => $imageParameters ], $thumbhtml );
+						}
 					}
 				}
 			}
@@ -178,7 +214,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 			$meta = [];
 			if ( $img ) {
 				if ( $this->mShowDimensions ) {
-					$meta[] = $img->getDimensionsString();
+					$meta[] = htmlspecialchars( $img->getDimensionsString() );
 				}
 				if ( $this->mShowBytes ) {
 					$meta[] = htmlspecialchars( $lang->formatSize( $img->getSize() ) );
@@ -206,10 +242,12 @@ class TraditionalImageGallery extends ImageGalleryBase {
 			# Can be safely removed if FF2 falls completely out of existence
 			$output .= "\n\t\t" . '<li class="gallerybox" style="width: '
 				. $gbWidth . '">'
-				. '<div style="width: ' . $gbWidth . '">'
+				. ( $enableLegacyMediaDOM ? '<div style="width: ' . $gbWidth . '">' : '' )
 				. $thumbhtml
 				. $galleryText
-				. "\n\t\t</div></li>";
+				. "\n\t\t"
+				. ( $enableLegacyMediaDOM ? '</div>' : '' )
+				. "</li>";
 		}
 		$output .= "\n</ul>";
 
@@ -240,7 +278,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 * Add the wrapper html around the thumb's caption
 	 *
 	 * @param string $galleryText The caption
-	 * @param MediaTransformOutput|bool $thumb The thumb this caption is for
+	 * @param MediaTransformOutput|false $thumb The thumb this caption is for
 	 *   or false for bad image.
 	 * @return string
 	 */
@@ -259,7 +297,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 * How much padding the thumb has between the image and the inner div
 	 * that contains the border. This is for both vertical and horizontal
 	 * padding. (However, it is cut in half in the vertical direction).
-	 * @return int
+	 * @return float
 	 */
 	protected function getThumbPadding() {
 		return 30;
@@ -312,7 +350,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 *
 	 * @param int $boxHeight How high we want the box to be.
 	 * @param int $thumbHeight How high the thumbnail is.
-	 * @return int Vertical padding to add on each side.
+	 * @return float Vertical padding to add on each side.
 	 */
 	protected function getVPad( $boxHeight, $thumbHeight ) {
 		return ( $this->getThumbPadding() + $boxHeight - $thumbHeight ) / 2;
@@ -336,7 +374,7 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 * question. This is the div with the class of "thumb".
 	 *
 	 * @param int $thumbWidth The width of the thumbnail.
-	 * @return int Width of inner thumb div.
+	 * @return float Width of inner thumb div.
 	 */
 	protected function getThumbDivWidth( $thumbWidth ) {
 		return $this->mWidths + $this->getThumbPadding();
@@ -349,8 +387,8 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 * plus padding on gallerybox.
 	 *
 	 * @note Important: parameter will be false if no thumb used.
-	 * @param MediaTransformOutput|bool $thumb MediaTransformObject object or false.
-	 * @return int Width of gallerybox element
+	 * @param MediaTransformOutput|false $thumb MediaTransformObject object or false.
+	 * @return float Width of gallerybox element
 	 */
 	protected function getGBWidth( $thumb ) {
 		return $this->mWidths + $this->getThumbPadding() + $this->getGBPadding();
@@ -364,8 +402,8 @@ class TraditionalImageGallery extends ImageGalleryBase {
 	 * plus padding on gallerybox.
 	 *
 	 * @note Important: parameter will be false if no thumb used.
-	 * @param MediaTransformOutput|bool $thumb MediaTransformObject object or false.
-	 * @return bool|string Ignored if false.
+	 * @param MediaTransformOutput|false $thumb MediaTransformObject object or false.
+	 * @return string|false Ignored if false.
 	 */
 	protected function getGBWidthOverwrite( $thumb ) {
 		return false;

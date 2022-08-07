@@ -91,13 +91,12 @@ OO.mixinClass( ve.ui.TargetWidget, OO.ui.mixin.PendingElement );
 /**
  * Create the target for this widget to use
  *
- * @return {ve.init.Target} Target
+ * @return {ve.init.Target}
  */
 ve.ui.TargetWidget.prototype.createTarget = function () {
 	return new ve.init.Target( {
 		register: false,
 		toolbarGroups: this.toolbarGroups,
-		inTargetWidget: true,
 		modes: this.modes,
 		defaultMode: this.defaultMode
 	} );
@@ -108,13 +107,12 @@ ve.ui.TargetWidget.prototype.createTarget = function () {
  *
  * This replaces the entire surface in the target.
  *
- * @param {ve.dm.Document} doc Document
+ * @param {ve.dm.Document} doc
  */
 ve.ui.TargetWidget.prototype.setDocument = function ( doc ) {
-	var surface;
 	// Destroy the previous surface
 	this.clear();
-	surface = this.target.addSurface( doc, {
+	var surface = this.target.addSurface( doc, {
 		inTargetWidget: true,
 		includeCommands: this.includeCommands,
 		excludeCommands: this.excludeCommands,
@@ -134,9 +132,28 @@ ve.ui.TargetWidget.prototype.setDocument = function ( doc ) {
 	} );
 	// Rethrow as target events so users don't have to re-bind when the surface is changed
 	this.getSurface().getModel().connect( this, { history: [ 'emit', 'change' ] } );
-	this.getSurface().connect( this, { submit: [ 'emit', 'submit' ] } );
+	this.getSurface().connect( this, { submit: 'onSurfaceSubmit' } );
 
 	this.emit( 'setup' );
+};
+
+/**
+ * Check if the surface has been modified.
+ *
+ * @fires submit
+ * @return {boolean} The surface has been modified
+ */
+ve.ui.TargetWidget.prototype.onSurfaceSubmit = function () {
+	var submitHandled = this.emit( 'submit' );
+	if ( !submitHandled && this.inDialog ) {
+		// If we are in a dialog, re-throw a fake Ctrl+Enter keydown
+		// event to potentially trigger the dialog's primary action.
+		// (See OO.ui.Dialog#onDialogKeyDown)
+		this.$element.parent().trigger( $.Event( 'keydown', {
+			which: OO.ui.Keys.ENTER,
+			ctrlKey: true
+		} ) );
+	}
 };
 
 /**
@@ -173,7 +190,7 @@ ve.ui.TargetWidget.prototype.isReadOnly = function () {
 /**
  * Get surface.
  *
- * @return {ve.ui.Surface|null} Surface
+ * @return {ve.ui.Surface|null}
  */
 ve.ui.TargetWidget.prototype.getSurface = function () {
 	return this.target.getSurface();
@@ -182,7 +199,7 @@ ve.ui.TargetWidget.prototype.getSurface = function () {
 /**
  * Get toolbar.
  *
- * @return {OO.ui.Toolbar} Toolbar
+ * @return {OO.ui.Toolbar}
  */
 ve.ui.TargetWidget.prototype.getToolbar = function () {
 	return this.target.getToolbar();

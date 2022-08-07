@@ -25,6 +25,7 @@
 
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageReference;
 use MediaWiki\User\ActorNormalization;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -38,8 +39,8 @@ class LogPager extends ReverseChronologicalPager {
 	/** @var string Events limited to those by performer when set */
 	private $performer = '';
 
-	/** @var string|Title Events limited to those about Title when set */
-	private $title = '';
+	/** @var string Events limited to those about this page when set */
+	private $page = '';
 
 	/** @var bool */
 	private $pattern = false;
@@ -75,7 +76,7 @@ class LogPager extends ReverseChronologicalPager {
 	 * @param LogEventsList $list
 	 * @param string|array $types Log types to show
 	 * @param string $performer The user who made the log entries
-	 * @param string|Title $title The page title the log entries are for
+	 * @param string|PageReference $page The page the log entries are for
 	 * @param bool $pattern Do a prefix search rather than an exact title match
 	 * @param array $conds Extra conditions for the query
 	 * @param int|bool $year The year to start from. Default: false
@@ -88,7 +89,7 @@ class LogPager extends ReverseChronologicalPager {
 	 * @param ILoadBalancer|null $loadBalancer
 	 * @param ActorNormalization|null $actorNormalization
 	 */
-	public function __construct( $list, $types = [], $performer = '', $title = '',
+	public function __construct( $list, $types = [], $performer = '', $page = '',
 		$pattern = false, $conds = [], $year = false, $month = false, $day = false,
 		$tagFilter = '', $action = '', $logId = 0,
 		LinkBatchFactory $linkBatchFactory = null,
@@ -112,10 +113,10 @@ class LogPager extends ReverseChronologicalPager {
 		$this->limitType( $types ); // also excludes hidden types
 		$this->limitFilterTypes();
 		$this->limitPerformer( $performer );
-		$this->limitTitle( $title, $pattern );
+		$this->limitTitle( $page, $pattern );
 		$this->limitAction( $action );
 		$this->getDateCond( $year, $month, $day );
-		$this->mTagFilter = $tagFilter;
+		$this->mTagFilter = (string)$tagFilter;
 	}
 
 	public function getDefaultQuery() {
@@ -193,7 +194,7 @@ class LogPager extends ReverseChronologicalPager {
 		}
 		$this->types = $types;
 		// Don't show private logs to unprivileged users.
-		// Also, only show them upon specific request to avoid suprises.
+		// Also, only show them upon specific request to avoid surprises.
 		// Exception: if we are showing only a single log entry based on the log id,
 		// we don't require that "specific request" so that the links-in-logs feature
 		// works. See T269761
@@ -241,29 +242,29 @@ class LogPager extends ReverseChronologicalPager {
 	 * Set the log reader to return only entries affecting the given page.
 	 * (For the block and rights logs, this is a user page.)
 	 *
-	 * @param string|Title $page Title name
+	 * @param string|PageReference $page
 	 * @param bool $pattern
 	 * @return void
 	 */
 	private function limitTitle( $page, $pattern ) {
-		if ( $page instanceof Title ) {
-			$title = $page;
-		} else {
-			$title = Title::newFromText( $page );
-			if ( strlen( $page ) == 0 || !$title instanceof Title ) {
+		if ( !$page instanceof PageReference ) {
+			// NOTE: For some types of logs, the title may be something strange, like "User:#12345"!
+			$page = Title::newFromText( $page );
+			if ( !$page ) {
 				return;
 			}
 		}
 
-		$this->title = $title->getPrefixedText();
-		$ns = $title->getNamespace();
+		$titleFormatter = MediaWikiServices::getInstance()->getTitleFormatter();
+		$this->page = $titleFormatter->getPrefixedDBkey( $page );
+		$ns = $page->getNamespace();
 		$db = $this->mDb;
 
 		$interwikiDelimiter = $this->getConfig()->get( 'UserrightsInterwikiDelimiter' );
 
 		$doUserRightsLogLike = false;
 		if ( $this->types == [ 'rights' ] ) {
-			$parts = explode( $interwikiDelimiter, $title->getDBkey() );
+			$parts = explode( $interwikiDelimiter, $page->getDBkey() );
 			if ( count( $parts ) == 2 ) {
 				list( $name, $database ) = array_map( 'trim', $parts );
 				if ( strstr( $database, '*' ) ) { // Search for wildcard in database name
@@ -295,10 +296,10 @@ class LogPager extends ReverseChronologicalPager {
 			array_pop( $params ); // Get rid of the last % we added.
 			$this->mConds[] = 'log_title' . $db->buildLike( ...$params );
 		} elseif ( $pattern && !$this->getConfig()->get( 'MiserMode' ) ) {
-			$this->mConds[] = 'log_title' . $db->buildLike( $title->getDBkey(), $db->anyString() );
+			$this->mConds[] = 'log_title' . $db->buildLike( $page->getDBkey(), $db->anyString() );
 			$this->pattern = $pattern;
 		} else {
-			$this->mConds['log_title'] = $title->getDBkey();
+			$this->mConds['log_title'] = $page->getDBkey();
 		}
 		$this->enforceActionRestrictions();
 	}
@@ -375,17 +376,11 @@ class LogPager extends ReverseChronologicalPager {
 		// `logging` and filesorting is somehow better than querying $limit+1 rows from `logging`.
 		// Tell it not to reorder the query. But not when tag filtering or log_search was used, as it
 		// seems as likely to be harmed as helped in that case.
-		if ( !$this->mTagFilter && !array_key_exists( 'ls_field', $this->mConds ) ) {
+		if ( $this->mTagFilter === '' && !array_key_exists( 'ls_field', $this->mConds ) ) {
 			$options[] = 'STRAIGHT_JOIN';
 		}
-		if ( $this->performer !== '' || $this->types !== [] ) {
-			// Index being renamed
-			$index = $this->mDb->indexExists( 'logging', 'times', __METHOD__ ) ? 'times' : 'log_times';
 
-			// T223151, T237026: MariaDB's optimizer, at least 10.1, likes to choose a wildly bad plan for
-			// some reason for these code paths. Tell it not to use the wrong index it wants to pick.
-			$options['IGNORE INDEX'] = [ 'logging' => [ $index ] ];
-		}
+		$options['MAX_EXECUTION_TIME'] = $this->getConfig()->get( 'MaxExecutionTimeForExpensiveQueries' );
 
 		$info = [
 			'tables' => $tables,
@@ -458,7 +453,7 @@ class LogPager extends ReverseChronologicalPager {
 	 * @return string
 	 */
 	public function getPage() {
-		return $this->title;
+		return $this->page;
 	}
 
 	/**

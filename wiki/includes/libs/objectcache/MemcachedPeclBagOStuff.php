@@ -71,6 +71,7 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 		$params += [
 			'compress_threshold' => 1500,
 			'connect_timeout' => 0.5,
+			'timeout' => 500000,
 			'serializer' => 'php',
 			'use_binary_protocol' => false,
 			'allow_tcp_nagle_delay' => true
@@ -196,7 +197,6 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 				$casToken = $res['cas'];
 			} else {
 				$result = false;
-				$casToken = null;
 			}
 		} else {
 			$result = $client->get( $routeKey );
@@ -275,6 +275,29 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 		return $this->checkResult( $key, $result );
 	}
 
+	protected function doIncrWithInit( $key, $exptime, $step, $init, $flags ) {
+		$this->debug( "incrWithInit($key)" );
+
+		$routeKey = $this->validateKeyAndPrependRoute( $key );
+
+		$client = $this->acquireSyncClient();
+		$watchPoint = $this->watchErrors();
+		$result = $client->increment( $routeKey, $step );
+		$newValue = $this->checkResult( $key, $result );
+		if ( $newValue === false && !$this->getLastError( $watchPoint ) ) {
+			// No key set; initialize
+			$result = $client->add( $routeKey, $init, $this->fixExpiry( $exptime ) );
+			$newValue = $this->checkResult( $key, $result ) ? $init : false;
+			if ( $newValue === false && !$this->getLastError( $watchPoint ) ) {
+				// Raced out initializing; increment
+				$result = $client->increment( $routeKey, $step );
+				$newValue = $this->checkResult( $key, $result );
+			}
+		}
+
+		return $newValue;
+	}
+
 	public function setNewPreparedValues( array $valueByKey ) {
 		// The PECL driver does the serializing and will not reuse anything from here
 		$sizes = [];
@@ -292,17 +315,32 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 	 * the client, but some day we might find a case where it should be
 	 * different.
 	 *
-	 * @param string $key The key used by the caller, or false if there wasn't one.
+	 * @param string|false $key The key used by the caller, or false if there wasn't one.
 	 * @param mixed $result The return value
 	 * @return mixed
 	 */
 	protected function checkResult( $key, $result ) {
+		static $statusByCode = [
+			Memcached::RES_HOST_LOOKUP_FAILURE => self::ERR_UNREACHABLE,
+			Memcached::RES_SERVER_MARKED_DEAD => self::ERR_UNREACHABLE,
+			Memcached::RES_SERVER_TEMPORARILY_DISABLED => self::ERR_UNREACHABLE,
+			Memcached::RES_UNKNOWN_READ_FAILURE => self::ERR_NO_RESPONSE,
+			Memcached::RES_WRITE_FAILURE => self::ERR_NO_RESPONSE,
+			Memcached::RES_PARTIAL_READ => self::ERR_NO_RESPONSE,
+			// Hard-code values that only exist in recent versions of the PECL extension.
+			// https://github.com/JetBrains/phpstorm-stubs/blob/master/memcached/memcached.php
+			3 /* Memcached::RES_CONNECTION_FAILURE */ => self::ERR_UNREACHABLE,
+			27 /* Memcached::RES_FAIL_UNIX_SOCKET */ => self::ERR_UNREACHABLE,
+			6 /* Memcached::RES_READ_FAILURE */ => self::ERR_NO_RESPONSE
+		];
+
 		if ( $result !== false ) {
 			return $result;
 		}
 
 		$client = $this->syncClient;
-		switch ( $client->getResultCode() ) {
+		$code = $client->getResultCode();
+		switch ( $code ) {
 			case Memcached::RES_SUCCESS:
 				break;
 			case Memcached::RES_DATA_EXISTS:
@@ -323,7 +361,7 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 					$msg = "Memcached error: $msg";
 				}
 				$this->logger->error( $msg, $logCtx );
-				$this->setLastError( BagOStuff::ERR_UNEXPECTED );
+				$this->setLastError( $statusByCode[$code] ?? self::ERR_UNEXPECTED );
 		}
 		return $result;
 	}
@@ -366,10 +404,15 @@ class MemcachedPeclBagOStuff extends MemcachedBagOStuff {
 		// https://github.com/php-memcached-dev/php-memcached/blob/master/php_memcached.c#L1852
 		if ( $this->fieldHasFlags( $flags, self::WRITE_BACKGROUND ) ) {
 			$client = $this->acquireAsyncClient();
-			$result = $client->setMulti( $dataByRouteKey, $exptime );
+			// Ignore "failed to set" warning from php-memcached 3.x (T251450)
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			$result = @$client->setMulti( $dataByRouteKey, $exptime );
 			$this->releaseAsyncClient( $client );
 		} else {
-			$result = $this->acquireSyncClient()->setMulti( $dataByRouteKey, $exptime );
+			$client = $this->acquireSyncClient();
+			// Ignore "failed to set" warning from php-memcached 3.x (T251450)
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			$result = @$client->setMulti( $dataByRouteKey, $exptime );
 		}
 
 		return $this->checkResult( false, $result );

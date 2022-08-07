@@ -38,14 +38,17 @@
 	"replacetext_success": "„$1“ wird durch „$2“ in $3 {{PLURAL:$3|Seite|Seiten}} ersetzt.",
 	"replacetext_noreplacement": "Es wurde keine Seite gefunden, die den Text „$1“ enthält.",
 	"replacetext_nomove": "Es wurde keine Seite gefunden, deren Titel den Text „$1“ enthält.",
-	"replacetext_nosuchcategory": "Es ist keine Kategorie namens „$1“ vorhanden.",
+	"replacetext_nosuchcategory": "Es ist keine Kategorie mit dem Namen „$1“ vorhanden.",
 	"replacetext_return": "Zurück zum Formular.",
 	"replacetext_warning": "'''Warnung:''' $1 {{PLURAL:$1|Seite enthält|Seiten enthalten}} bereits den zu ersetzenden Textteil „$2“.\nSofern du nun die {{PLURAL:$1|Ersetzung|Ersetzungen}} durchführst, ist eine spätere Unterscheidung zwischen den nunmehr zu ersetzenden und den bereits vorhandenen Textteilen nicht mehr möglich.",
 	"replacetext_blankwarning": "'''Warnung:''' Da der zu ersetzende Textteil leer ist, kann die Operation nicht rückgängig gemacht werden. Möchtest du dennoch fortfahren?",
 	"replacetext_continue": "Fortfahren",
 	"replacetext_announce": "Diese Bearbeitungen auch auf „$1“ und in den Beobachtungslisten anzeigen",
 	"replacetext_editsummary": "Textersetzung - „$1“ durch „$2“",
+	"replacetext_reminder": "Um auch Links auf diese Seite in anderen Seiten zu verändern, gehe zu $1.",
+	"replacetext_cfg_error": "ReplaceText-Konfigurationsfehler",
+	"replacetext_no_compress": "Deine Wiki wird nicht mit ReplaceText funktionieren: Textersetzungen können nicht ausgeführt werden, wenn $wgCompressRevisions auf true gesetzt ist.",
+	"replacetext_no_external_stores": "Dein Wiki wird nicht mit ReplaceText funktionieren: Textersetzungen können nicht ausgeführt werden, wenn $wgExternalStores gesetzt ist.",
 	"right-replacetext": "Textersetzung für das gesamte Wiki durchführen",
-	"action-replacetext": "im gesamten Wiki Zeichenfolgeersetzungen durchzuführen",
-	"replacetext_reminder": "Um auch Links auf diese Seite in anderen Seiten zu verändern, gehe zu $1."
+	"action-replacetext": "im gesamten Wiki Zeichenfolgeersetzungen durchzuführen"
 }

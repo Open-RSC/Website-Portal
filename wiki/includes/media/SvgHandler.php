@@ -23,6 +23,8 @@
 
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Shell\Shell;
+use Wikimedia\AtEase\AtEase;
+use Wikimedia\RequestTimeout\TimeoutException;
 use Wikimedia\ScopedCallback;
 
 /**
@@ -45,8 +47,9 @@ class SvgHandler extends ImageHandler {
 	];
 
 	public function isEnabled() {
-		global $wgSVGConverters, $wgSVGConverter;
-		if ( !isset( $wgSVGConverters[$wgSVGConverter] ) ) {
+		$svgConverters = MediaWikiServices::getInstance()->getMainConfig()->get( 'SVGConverters' );
+		$svgConverter = MediaWikiServices::getInstance()->getMainConfig()->get( 'SVGConverter' );
+		if ( !isset( $svgConverters[$svgConverter] ) ) {
 			wfDebug( "\$wgSVGConverter is invalid, disabling SVG rendering." );
 
 			return false;
@@ -69,12 +72,9 @@ class SvgHandler extends ImageHandler {
 	 */
 	public function isAnimatedImage( $file ) {
 		# @todo Detect animated SVGs
-		$metadata = $file->getMetadata();
-		if ( $metadata ) {
-			$metadata = $this->unpackMetadata( $metadata );
-			if ( isset( $metadata['animated'] ) ) {
-				return $metadata['animated'];
-			}
+		$metadata = $this->validateMetadata( $file->getMetadataArray() );
+		if ( isset( $metadata['animated'] ) ) {
+			return $metadata['animated'];
 		}
 
 		return false;
@@ -93,15 +93,12 @@ class SvgHandler extends ImageHandler {
 	 * @return string[] Array of language codes, or empty if no language switching supported.
 	 */
 	public function getAvailableLanguages( File $file ) {
-		$metadata = $file->getMetadata();
 		$langList = [];
-		if ( $metadata ) {
-			$metadata = $this->unpackMetadata( $metadata );
-			if ( isset( $metadata['translations'] ) ) {
-				foreach ( $metadata['translations'] as $lang => $langType ) {
-					if ( $langType === SVGReader::LANG_FULL_MATCH ) {
-						$langList[] = strtolower( $lang );
-					}
+		$metadata = $this->validateMetadata( $file->getMetadataArray() );
+		if ( isset( $metadata['translations'] ) ) {
+			foreach ( $metadata['translations'] as $lang => $langType ) {
+				if ( $langType === SVGReader::LANG_FULL_MATCH ) {
+					$langList[] = strtolower( $lang );
 				}
 			}
 		}
@@ -192,21 +189,21 @@ class SvgHandler extends ImageHandler {
 	 * @return array Modified $params
 	 */
 	protected function normaliseParamsInternal( $image, $params ) {
-		global $wgSVGMaxSize;
+		$svgMaxSize = MediaWikiServices::getInstance()->getMainConfig()->get( 'SVGMaxSize' );
 
 		# Don't make an image bigger than wgMaxSVGSize on the smaller side
 		if ( $params['physicalWidth'] <= $params['physicalHeight'] ) {
-			if ( $params['physicalWidth'] > $wgSVGMaxSize ) {
+			if ( $params['physicalWidth'] > $svgMaxSize ) {
 				$srcWidth = $image->getWidth( $params['page'] );
 				$srcHeight = $image->getHeight( $params['page'] );
-				$params['physicalWidth'] = $wgSVGMaxSize;
-				$params['physicalHeight'] = File::scaleHeight( $srcWidth, $srcHeight, $wgSVGMaxSize );
+				$params['physicalWidth'] = $svgMaxSize;
+				$params['physicalHeight'] = File::scaleHeight( $srcWidth, $srcHeight, $svgMaxSize );
 			}
-		} elseif ( $params['physicalHeight'] > $wgSVGMaxSize ) {
+		} elseif ( $params['physicalHeight'] > $svgMaxSize ) {
 			$srcWidth = $image->getWidth( $params['page'] );
 			$srcHeight = $image->getHeight( $params['page'] );
-			$params['physicalWidth'] = File::scaleHeight( $srcHeight, $srcWidth, $wgSVGMaxSize );
-			$params['physicalHeight'] = $wgSVGMaxSize;
+			$params['physicalWidth'] = File::scaleHeight( $srcHeight, $srcWidth, $svgMaxSize );
+			$params['physicalHeight'] = $svgMaxSize;
 		}
 		// To prevent the proliferation of thumbnails in languages not present in SVGs, unless
 		// explicitly forced by user.
@@ -239,8 +236,8 @@ class SvgHandler extends ImageHandler {
 			return new ThumbnailImage( $image, $dstUrl, $dstPath, $params );
 		}
 
-		$metadata = $this->unpackMetadata( $image->getMetadata() );
-		if ( isset( $metadata['error'] ) ) { // sanity check
+		$metadata = $this->validateMetadata( $image->getMetadataArray() );
+		if ( isset( $metadata['error'] ) ) {
 			$err = wfMessage( 'svg-long-error', $metadata['error']['message'] );
 
 			return new MediaTransformError( 'thumbnail_error', $clientWidth, $clientHeight, $err );
@@ -281,10 +278,10 @@ class SvgHandler extends ImageHandler {
 		$ok = symlink( $srcPath, $lnPath );
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$cleaner = new ScopedCallback( static function () use ( $tmpDir, $lnPath ) {
-			Wikimedia\suppressWarnings();
+			AtEase::suppressWarnings();
 			unlink( $lnPath );
 			rmdir( $tmpDir );
-			Wikimedia\restoreWarnings();
+			AtEase::restoreWarnings();
 		} );
 		if ( !$ok ) {
 			wfDebugLog( 'thumbnail',
@@ -309,20 +306,23 @@ class SvgHandler extends ImageHandler {
 	 * This function can be called outside of thumbnail contexts
 	 * @param string $srcPath
 	 * @param string $dstPath
-	 * @param string $width
-	 * @param string $height
-	 * @param bool|string $lang Language code of the language to render the SVG in
+	 * @param int $width
+	 * @param int $height
+	 * @param string|false $lang Language code of the language to render the SVG in
 	 * @throws MWException
 	 * @return bool|MediaTransformError
 	 */
 	public function rasterize( $srcPath, $dstPath, $width, $height, $lang = false ) {
-		global $wgSVGConverters, $wgSVGConverter, $wgSVGConverterPath;
+		$mainConfig = MediaWikiServices::getInstance()->getMainConfig();
+		$svgConverters = $mainConfig->get( 'SVGConverters' );
+		$svgConverter = $mainConfig->get( 'SVGConverter' );
+		$svgConverterPath = $mainConfig->get( 'SVGConverterPath' );
 		$err = false;
 		$retval = '';
-		if ( isset( $wgSVGConverters[$wgSVGConverter] ) ) {
-			if ( is_array( $wgSVGConverters[$wgSVGConverter] ) ) {
+		if ( isset( $svgConverters[$svgConverter] ) ) {
+			if ( is_array( $svgConverters[$svgConverter] ) ) {
 				// This is a PHP callable
-				$func = $wgSVGConverters[$wgSVGConverter][0];
+				$func = $svgConverters[$svgConverter][0];
 				if ( !is_callable( $func ) ) {
 					throw new MWException( "$func is not callable" );
 				}
@@ -331,19 +331,19 @@ class SvgHandler extends ImageHandler {
 					$width,
 					$height,
 					$lang,
-					...array_slice( $wgSVGConverters[$wgSVGConverter], 1 )
+					...array_slice( $svgConverters[$svgConverter], 1 )
 				);
 				$retval = (bool)$err;
 			} else {
 				// External command
 				$cmd = str_replace(
 					[ '$path/', '$width', '$height', '$input', '$output' ],
-					[ $wgSVGConverterPath ? Shell::escape( "$wgSVGConverterPath/" ) : "",
+					[ $svgConverterPath ? Shell::escape( "{$svgConverterPath}/" ) : "",
 						intval( $width ),
 						intval( $height ),
 						Shell::escape( $srcPath ),
 						Shell::escape( $dstPath ) ],
-					$wgSVGConverters[$wgSVGConverter]
+					$svgConverters[$svgConverter]
 				);
 
 				$env = [];
@@ -366,8 +366,9 @@ class SvgHandler extends ImageHandler {
 
 	public static function rasterizeImagickExt( $srcPath, $dstPath, $width, $height ) {
 		$im = new Imagick( $srcPath );
-		$im->setImageFormat( 'png' );
 		$im->setBackgroundColor( 'transparent' );
+		$im->readImage( $srcPath );
+		$im->setImageFormat( 'png' );
 		$im->setImageDepth( 8 );
 
 		if ( !$im->thumbnailImage( intval( $width ), intval( $height ), /* fit */ false ) ) {
@@ -375,26 +376,6 @@ class SvgHandler extends ImageHandler {
 		}
 		if ( !$im->writeImage( $dstPath ) ) {
 			return "Could not write to $dstPath";
-		}
-	}
-
-	/**
-	 * @param File|FSFile $file
-	 * @param string $path Unused
-	 * @param bool|array $metadata
-	 * @return array|false
-	 */
-	public function getImageSize( $file, $path, $metadata = false ) {
-		if ( $metadata === false && $file instanceof File ) {
-			$metadata = $file->getMetadata();
-		}
-		$metadata = $this->unpackMetadata( $metadata );
-
-		if ( isset( $metadata['width'] ) && isset( $metadata['height'] ) ) {
-			return [ $metadata['width'], $metadata['height'], 'SVG',
-				"width=\"{$metadata['width']}\" height=\"{$metadata['height']}\"" ];
-		} else { // error
-			return [ 0, 0, 'SVG', "width=\"0\" height=\"0\"" ];
 		}
 	}
 
@@ -412,14 +393,10 @@ class SvgHandler extends ImageHandler {
 	 * @return string
 	 */
 	public function getLongDesc( $file ) {
-		global $wgLang;
-
-		$metadata = $this->unpackMetadata( $file->getMetadata() );
+		$metadata = $this->validateMetadata( $file->getMetadataArray() );
 		if ( isset( $metadata['error'] ) ) {
 			return wfMessage( 'svg-long-error', $metadata['error']['message'] )->text();
 		}
-
-		$size = $wgLang->formatSize( $file->getSize() );
 
 		if ( $this->isAnimatedImage( $file ) ) {
 			$msg = wfMessage( 'svg-long-desc-animated' );
@@ -427,22 +404,22 @@ class SvgHandler extends ImageHandler {
 			$msg = wfMessage( 'svg-long-desc' );
 		}
 
-		$msg->numParams( $file->getWidth(), $file->getHeight() )->params( $size );
-
-		return $msg->parse();
+		return $msg->numParams( $file->getWidth(), $file->getHeight() )->sizeParams( $file->getSize() )->parse();
 	}
 
 	/**
-	 * @param File|FSFile $file
+	 * @param MediaHandlerState $state
 	 * @param string $filename
-	 * @return string Serialised metadata
+	 * @return array
 	 */
-	public function getMetadata( $file, $filename ) {
+	public function getSizeAndMetadata( $state, $filename ) {
 		$metadata = [ 'version' => self::SVG_METADATA_VERSION ];
 
 		try {
 			$svgReader = new SVGReader( $filename );
 			$metadata += $svgReader->getMetadata();
+		} catch ( TimeoutException $e ) {
+			throw $e;
 		} catch ( Exception $e ) { // @todo SVG specific exceptions
 			// File not found, broken, etc.
 			$metadata['error'] = [
@@ -452,17 +429,18 @@ class SvgHandler extends ImageHandler {
 			wfDebug( __METHOD__ . ': ' . $e->getMessage() );
 		}
 
-		return serialize( $metadata );
+		return [
+			'width' => $metadata['width'] ?? 0,
+			'height' => $metadata['height'] ?? 0,
+			'metadata' => $metadata
+		];
 	}
 
-	protected function unpackMetadata( $metadata ) {
-		Wikimedia\suppressWarnings();
-		$unser = unserialize( $metadata );
-		Wikimedia\restoreWarnings();
+	protected function validateMetadata( $unser ) {
 		if ( isset( $unser['version'] ) && $unser['version'] == self::SVG_METADATA_VERSION ) {
 			return $unser;
 		} else {
-			return false;
+			return null;
 		}
 	}
 
@@ -470,9 +448,9 @@ class SvgHandler extends ImageHandler {
 		return 'parsed-svg';
 	}
 
-	public function isMetadataValid( $image, $metadata ) {
-		$meta = $this->unpackMetadata( $metadata );
-		if ( $meta === false ) {
+	public function isFileMetadataValid( $image ) {
+		$meta = $this->validateMetadata( $image->getMetadataArray() );
+		if ( !$meta ) {
 			return self::METADATA_BAD;
 		}
 		if ( !isset( $meta['originalWidth'] ) ) {
@@ -499,11 +477,7 @@ class SvgHandler extends ImageHandler {
 			'visible' => [],
 			'collapsed' => []
 		];
-		$metadata = $file->getMetadata();
-		if ( !$metadata ) {
-			return false;
-		}
-		$metadata = $this->unpackMetadata( $metadata );
+		$metadata = $this->validateMetadata( $file->getMetadataArray() );
 		if ( !$metadata || isset( $metadata['error'] ) ) {
 			return false;
 		}
@@ -564,7 +538,7 @@ class SvgHandler extends ImageHandler {
 
 	/**
 	 * @param array $params Name=>value pairs of parameters
-	 * @return string Filename to use
+	 * @return string|false Filename to use
 	 */
 	public function makeParamString( $params ) {
 		$lang = '';
@@ -608,11 +582,7 @@ class SvgHandler extends ImageHandler {
 	}
 
 	public function getCommonMetaArray( File $file ) {
-		$metadata = $file->getMetadata();
-		if ( !$metadata ) {
-			return [];
-		}
-		$metadata = $this->unpackMetadata( $metadata );
+		$metadata = $this->validateMetadata( $file->getMetadataArray() );
 		if ( !$metadata || isset( $metadata['error'] ) ) {
 			return [];
 		}

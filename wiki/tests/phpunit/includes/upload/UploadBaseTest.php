@@ -10,7 +10,7 @@ class UploadBaseTest extends MediaWikiIntegrationTestCase {
 	/** @var UploadTestHandler */
 	protected $upload;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->upload = new UploadTestHandler;
@@ -138,7 +138,6 @@ class UploadBaseTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public static function provideCheckSvgScriptCallback() {
-		// phpcs:disable Generic.Files.LineLength
 		return [
 			// html5sec SVG vectors
 			[

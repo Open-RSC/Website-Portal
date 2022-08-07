@@ -23,6 +23,10 @@
  * @ingroup Content
  */
 
+use MediaWiki\Content\Renderer\ContentParseParams;
+use MediaWiki\Content\Transform\PreSaveTransformParams;
+use MediaWiki\MediaWikiServices;
+
 /**
  * Base content handler implementation for flat text contents.
  *
@@ -135,7 +139,7 @@ class TextContentHandler extends ContentHandler {
 	/**
 	 * @see ContentHandler::supportsDirectEditing
 	 *
-	 * @return bool Default is true for TextContent and derivatives.
+	 * @return bool Should return true for TextContent and derivatives.
 	 */
 	public function supportsDirectEditing() {
 		return true;
@@ -160,4 +164,85 @@ class TextContentHandler extends ContentHandler {
 		return $fields;
 	}
 
+	public function preSaveTransform(
+		Content $content,
+		PreSaveTransformParams $pstParams
+	): Content {
+		$shouldCallDeprecatedMethod = $this->shouldCallDeprecatedContentTransformMethod(
+			$content,
+			$pstParams
+		);
+
+		if ( $shouldCallDeprecatedMethod ) {
+			return $this->callDeprecatedContentPST(
+				$content,
+				$pstParams
+			);
+		}
+
+		'@phan-var TextContent $content';
+
+		$text = $content->getText();
+
+		$pst = TextContent::normalizeLineEndings( $text );
+
+		$contentClass = $this->getContentClass();
+		return ( $text === $pst ) ? $content : new $contentClass( $pst, $content->getModel() );
+	}
+
+	/**
+	 * Fills the provided ParserOutput object with information derived from the content.
+	 * Unless $generateHtml was false, this includes an HTML representation of the content
+	 * provided by getHtml().
+	 *
+	 * For content models listed in $wgTextModelsToParse, this method will call the MediaWiki
+	 * wikitext parser on the text to extract any (wikitext) links, magic words, etc.
+	 *
+	 * Subclasses may override this to provide custom content processing.
+	 * For custom HTML generation alone, it is sufficient to override getHtml().
+	 *
+	 * @stable to override
+	 *
+	 * @since 1.38
+	 * @param Content $content
+	 * @param ContentParseParams $cpoParams
+	 * @param ParserOutput &$output The output object to fill (reference).
+	 */
+	protected function fillParserOutput(
+		Content $content,
+		ContentParseParams $cpoParams,
+		ParserOutput &$output
+	) {
+		$textModelsToParse = MediaWikiServices::getInstance()->getMainConfig()->get( 'TextModelsToParse' );
+		'@phan-var TextContent $content';
+		if ( in_array( $content->getModel(), $textModelsToParse ) ) {
+			// parse just to get links etc into the database, HTML is replaced below.
+			$output = MediaWikiServices::getInstance()->getParser()
+				->parse(
+					$content->getText(),
+					$cpoParams->getPage(),
+					$cpoParams->getParserOptions(),
+					true,
+					true,
+					$cpoParams->getRevId()
+				);
+		}
+
+		if ( $cpoParams->getGenerateHtml() ) {
+			// Temporary changes as getHtml() is deprecated, we are working on removing usage of it.
+			if ( method_exists( $content, 'getHtml' ) ) {
+				$method = new ReflectionMethod( $content, 'getHtml' );
+				$method->setAccessible( true );
+				$html = $method->invoke( $content );
+			} else {
+				// Return an HTML representation of the content
+				$html = htmlspecialchars( $content->getText(), ENT_COMPAT );
+			}
+		} else {
+			$html = '';
+		}
+
+		$output->clearWrapperDivClass();
+		$output->setText( $html );
+	}
 }

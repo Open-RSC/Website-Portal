@@ -21,6 +21,7 @@
  * @ingroup Installer
  */
 
+use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -209,7 +210,7 @@ class WebInstaller extends Installer {
 		}
 
 		# Get the page name.
-		$pageName = $this->request->getVal( 'page' );
+		$pageName = $this->request->getVal( 'page', '' );
 
 		if ( in_array( $pageName, $this->otherPages ) ) {
 			# Out of sequence
@@ -470,7 +471,7 @@ class WebInstaller extends Installer {
 	 * @param string $name
 	 * @param array|null $default
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	public function getSession( $name, $default = null ) {
 		return $this->session[$name] ?? $default;
@@ -517,13 +518,14 @@ class WebInstaller extends Installer {
 	 * Retrieves MediaWiki language from Accept-Language HTTP header.
 	 *
 	 * @return string
+	 * @return-taint none It can only return a known-good code.
 	 */
 	public function getAcceptLanguage() {
 		global $wgLanguageCode, $wgRequest;
 
 		$mwLanguages = MediaWikiServices::getInstance()
 			->getLanguageNameUtils()
-			->getLanguageNames( null, 'mwfile' );
+			->getLanguageNames( LanguageNameUtils::AUTONYMS, LanguageNameUtils::SUPPORTED );
 		$headerLanguages = array_keys( $wgRequest->getAcceptLang() );
 
 		foreach ( $headerLanguages as $lang ) {
@@ -646,15 +648,15 @@ class WebInstaller extends Installer {
 	 * Get HTML for an information message box with an icon.
 	 *
 	 * @param string|HtmlArmor $text Wikitext to be parsed (from Message::plain) or raw HTML.
-	 * @param string|bool $icon Icon name, file in mw-config/images. Default: false
-	 * @param string|bool $class Additional class name to add to the wrapper div. Default: false.
+	 * @param string|false $icon Icon name, file in mw-config/images. Default: false
+	 * @param string $class Additional class name to add to the wrapper div. Default: Empty string.
 	 * @return string HTML
 	 */
-	public function getInfoBox( $text, $icon = false, $class = false ) {
+	public function getInfoBox( $text, $icon = false, $class = '' ) {
 		$html = ( $text instanceof HtmlArmor ) ?
 			HtmlArmor::getHtml( $text ) :
 			$this->parse( $text, true );
-		$icon = ( $icon == false ) ?
+		$icon = ( !$icon ) ?
 			'images/info-32.png' :
 			'images/' . $icon;
 		$alt = wfMessage( 'config-information' )->text();
@@ -725,7 +727,7 @@ class WebInstaller extends Installer {
 	 * label before it.
 	 *
 	 * @param string $msg
-	 * @param string $forId
+	 * @param string|false $forId
 	 * @param string $contents HTML
 	 * @param string $helpData
 	 * @return string HTML
@@ -1037,12 +1039,12 @@ class WebInstaller extends Installer {
 	 */
 	public function showStatusBox( $status ) {
 		if ( !$status->isGood() ) {
-			$text = $status->getWikiText();
+			$html = $status->getHTML();
 
 			if ( $status->isOK() ) {
-				$box = Html::warningBox( $text, 'config-warning-box' );
+				$box = Html::warningBox( $html, 'config-warning-box' );
 			} else {
-				$box = Html::errorBox( $text, '', 'config-error-box' );
+				$box = Html::errorBox( $html, '', 'config-error-box' );
 			}
 
 			$this->output->addHTML( $box );
@@ -1194,13 +1196,14 @@ class WebInstaller extends Installer {
 	 * @return string
 	 */
 	protected function envGetDefaultServer() {
-		return WebRequest::detectServer();
+		$assumeProxiesUseDefaultProtocolPorts =
+			$this->getVar( 'wgAssumeProxiesUseDefaultProtocolPorts' );
+
+		return WebRequest::detectServer( $assumeProxiesUseDefaultProtocolPorts );
 	}
 
 	/**
 	 * Actually output LocalSettings.php for download
-	 *
-	 * @suppress SecurityCheck-XSS
 	 */
 	private function outputLS() {
 		$this->request->response()->header( 'Content-type: application/x-httpd-php' );

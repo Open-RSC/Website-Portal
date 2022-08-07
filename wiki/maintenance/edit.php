@@ -45,12 +45,15 @@ class EditCLI extends Maintenance {
 		$this->addOption( 'nocreate', 'Don\'t create new pages', false, false );
 		$this->addOption( 'createonly', 'Only create new pages', false, false );
 		$this->addOption( 'slot', 'Slot role name', false, true );
+		$this->addOption(
+			'parse-title',
+			'Parse title input as a message, e.g. "{{int:mainpage}}" or "News_{{CURRENTYEAR}}',
+			false, false, 'p'
+		);
 		$this->addArg( 'title', 'Title of article to edit' );
 	}
 
 	public function execute() {
-		global $wgUser;
-
 		$userName = $this->getOption( 'user', false );
 		$summary = $this->getOption( 'summary', '' );
 		$remove = $this->hasOption( 'remove' );
@@ -61,7 +64,7 @@ class EditCLI extends Maintenance {
 		$slot = $this->getOption( 'slot', SlotRecord::MAIN );
 
 		if ( $userName === false ) {
-			$user = User::newSystemUser( 'Maintenance script', [ 'steal' => true ] );
+			$user = User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] );
 		} else {
 			$user = User::newFromName( $userName );
 		}
@@ -71,9 +74,15 @@ class EditCLI extends Maintenance {
 		if ( $user->isAnon() ) {
 			$user->addToDatabase();
 		}
-		$wgUser = $user;
+		StubGlobalUser::setUser( $user );
 
-		$title = Title::newFromText( $this->getArg( 0 ) );
+		$titleInput = $this->getArg( 0 );
+
+		if ( $this->hasOption( 'parse-title' ) ) {
+			$titleInput = ( new RawMessage( '$1' ) )->params( $titleInput )->text();
+		}
+
+		$title = Title::newFromText( $titleInput );
 		if ( !$title ) {
 			$this->fatalError( "Invalid title" );
 		}
@@ -99,7 +108,7 @@ class EditCLI extends Maintenance {
 		}
 
 		# Do the edit
-		$this->output( "Saving... " );
+		$this->output( "Saving..." );
 		$updater = $page->newPageUpdater( $user );
 
 		$flags = ( $minor ? EDIT_MINOR : 0 ) |
@@ -118,15 +127,13 @@ class EditCLI extends Maintenance {
 
 		if ( $status->isOK() ) {
 			$this->output( "done\n" );
-			$exit = 0;
 		} else {
 			$this->output( "failed\n" );
-			$exit = 1;
 		}
 		if ( !$status->isGood() ) {
 			$this->output( $status->getMessage( false, false, 'en' )->text() . "\n" );
 		}
-		exit( $exit );
+		return $status->isOK();
 	}
 }
 

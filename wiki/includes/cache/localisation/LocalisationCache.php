@@ -51,7 +51,7 @@ class LocalisationCache {
 	 * Setting this reduces the overhead of cache freshness checking, which
 	 * requires doing a stat() for every extension i18n file.
 	 */
-	private $manualRecache = false;
+	private $manualRecache;
 
 	/**
 	 * The cache data. 3-d array, where the first key is the language code,
@@ -122,7 +122,7 @@ class LocalisationCache {
 	 */
 	public static $allKeys = [
 		'fallback', 'namespaceNames', 'bookstoreList',
-		'magicWords', 'messages', 'rtl', 'capitalizeAllNouns',
+		'magicWords', 'messages', 'rtl',
 		'digitTransformTable', 'separatorTransformTable',
 		'minimumGroupingDigits', 'fallback8bitEncoding',
 		'linkPrefixExtension', 'linkTrail', 'linkPrefixCharset',
@@ -204,7 +204,7 @@ class LocalisationCache {
 	 * @param string|false|null $fallbackCacheDir In case 'storeDirectory' isn't specified
 	 * @return LCStore
 	 */
-	public static function getStoreFromConf( array $conf, $fallbackCacheDir ) : LCStore {
+	public static function getStoreFromConf( array $conf, $fallbackCacheDir ): LCStore {
 		$storeArg = [];
 		$storeArg['directory'] =
 			$conf['storeDirectory'] ?: $fallbackCacheDir;
@@ -241,8 +241,8 @@ class LocalisationCache {
 	];
 
 	/**
-	 * For constructor parameters, see the documentation in DefaultSettings.php
-	 * for $wgLocalisationCacheConf.
+	 * For constructor parameters, see the documentation for the LocalisationCacheConf
+	 * setting in docs/Configuration.md.
 	 *
 	 * Do not construct this directly. Use MediaWikiServices.
 	 *
@@ -285,13 +285,13 @@ class LocalisationCache {
 	 */
 	public function isMergeableKey( $key ) {
 		if ( $this->mergeableKeys === null ) {
-			$this->mergeableKeys = array_flip( array_merge(
+			$this->mergeableKeys = array_fill_keys( array_merge(
 				self::$mergeableMapKeys,
 				self::$mergeableListKeys,
 				self::$mergeableAliasListKeys,
 				self::$optionalMergeKeys,
 				self::$magicWordKeys
-			) );
+			), true );
 		}
 
 		return isset( $this->mergeableKeys[$key] );
@@ -661,15 +661,19 @@ class LocalisationCache {
 	 * Load the plural XML files.
 	 */
 	protected function loadPluralFiles() {
-		global $IP;
-		$cldrPlural = "$IP/languages/data/plurals.xml";
-		$mwPlural = "$IP/languages/data/plurals-mediawiki.xml";
-		// Load CLDR plural rules
-		$this->loadPluralFile( $cldrPlural );
-		if ( file_exists( $mwPlural ) ) {
-			// Override or extend
-			$this->loadPluralFile( $mwPlural );
+		foreach ( $this->getPluralFiles() as $fileName ) {
+			$this->loadPluralFile( $fileName );
 		}
+	}
+
+	private function getPluralFiles(): array {
+		global $IP;
+		return [
+			// Load CLDR plural rules
+			"$IP/languages/data/plurals.xml",
+			// Override or extend with MW-specific rules
+			"$IP/languages/data/plurals-mediawiki.xml",
+		];
 	}
 
 	/**
@@ -719,26 +723,25 @@ class LocalisationCache {
 	 * @return array
 	 */
 	protected function readSourceFilesAndRegisterDeps( $code, &$deps ) {
-		global $IP;
-
 		// This reads in the PHP i18n file with non-messages l10n data
 		$fileName = $this->langNameUtils->getMessagesFileName( $code );
-		if ( !file_exists( $fileName ) ) {
+		if ( !is_file( $fileName ) ) {
 			$data = [];
 		} else {
 			$deps[] = new FileDependency( $fileName );
 			$data = $this->readPHPFile( $fileName, 'core' );
 		}
 
-		# Load CLDR plural rules for JavaScript
+		// Load CLDR plural rules for JavaScript
 		$data['pluralRules'] = $this->getPluralRules( $code );
-		# And for PHP
+		// And for PHP
 		$data['compiledPluralRules'] = $this->getCompiledPluralRules( $code );
-		# Load plural rule types
+		// Load plural rule types
 		$data['pluralRuleTypes'] = $this->getPluralRuleTypes( $code );
 
-		$deps['plurals'] = new FileDependency( "$IP/languages/data/plurals.xml" );
-		$deps['plurals-mw'] = new FileDependency( "$IP/languages/data/plurals-mediawiki.xml" );
+		foreach ( $this->getPluralFiles() as $fileName ) {
+			$deps[] = new FileDependency( $fileName );
+		}
 
 		return $data;
 	}
@@ -1024,7 +1027,7 @@ class LocalisationCache {
 		$this->hookRunner->onLocalisationCacheRecache( $this, $code, $allData, $unused );
 
 		if ( $allData['namespaceNames'] === null ) {
-			throw new MWException( __METHOD__ . ': Localisation data failed sanity check! ' .
+			throw new MWException( __METHOD__ . ': Localisation data failed validation check! ' .
 				'Check that your languages/messages/MessagesEn.php file is intact.' );
 		}
 

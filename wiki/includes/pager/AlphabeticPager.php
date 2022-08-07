@@ -70,20 +70,17 @@ abstract class AlphabeticPager extends IndexPager {
 		}
 
 		$extra = '';
-		$first = true;
 		$msgs = $this->getOrderTypeMessages();
-		foreach ( array_keys( $msgs ) as $order ) {
-			if ( $first ) {
-				$first = false;
-			} else {
+		foreach ( $msgs as $order => $msg ) {
+			if ( $extra !== '' ) {
 				$extra .= $this->msg( 'pipe-separator' )->escaped();
 			}
 
 			if ( $order == $this->mOrderType ) {
-				$extra .= $this->msg( $msgs[$order] )->escaped();
+				$extra .= $this->msg( $msg )->escaped();
 			} else {
 				$extra .= $this->makeLink(
-					$this->msg( $msgs[$order] )->escaped(),
+					$this->msg( $msg )->escaped(),
 					[ 'order' => $order ]
 				);
 			}
@@ -105,7 +102,7 @@ abstract class AlphabeticPager extends IndexPager {
 	 *
 	 * @stable to override
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	protected function getOrderTypeMessages() {
 		return null;

@@ -27,6 +27,8 @@ use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\HookContainer\HookRunner;
 use MediaWiki\User\UserGroupManager;
+use MediaWiki\User\UserIdentity;
+use MediaWiki\User\UserIdentityValue;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
@@ -61,37 +63,35 @@ class UsersPager extends AlphabeticPager {
 	/** @var string */
 	protected $requestedUser;
 
-	/** @var LinkBatchFactory */
-	private $linkBatchFactory;
-
 	/** @var HookRunner */
 	private $hookRunner;
+
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/** @var UserGroupManager */
 	private $userGroupManager;
 
 	/**
-	 * @param IContextSource|null $context
+	 * @param IContextSource $context
+	 * @param HookContainer $hookContainer
+	 * @param LinkBatchFactory $linkBatchFactory
+	 * @param ILoadBalancer $loadBalancer
+	 * @param UserGroupManager $userGroupManager
 	 * @param string|null $par
 	 * @param bool|null $including Whether this page is being transcluded in
 	 * another page
-	 * @param LinkBatchFactory $linkBatchFactory
-	 * @param HookContainer $hookContainer
-	 * @param ILoadBalancer $loadBalancer
-	 * @param UserGroupManager $userGroupManager
 	 */
 	public function __construct(
-		?IContextSource $context,
-		$par,
-		$including,
-		LinkBatchFactory $linkBatchFactory,
+		IContextSource $context,
 		HookContainer $hookContainer,
+		LinkBatchFactory $linkBatchFactory,
 		ILoadBalancer $loadBalancer,
-		UserGroupManager $userGroupManager
+		UserGroupManager $userGroupManager,
+		$par,
+		$including
 	) {
-		if ( $context ) {
-			$this->setContext( $context );
-		}
+		$this->setContext( $context );
 
 		$request = $this->getRequest();
 		$par = $par ?? '';
@@ -135,9 +135,9 @@ class UsersPager extends AlphabeticPager {
 		// Set database before parent constructor to avoid setting it there with wfGetDB
 		$this->mDb = $loadBalancer->getConnectionRef( ILoadBalancer::DB_REPLICA );
 		parent::__construct();
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->hookRunner = new HookRunner( $hookContainer );
 		$this->userGroupManager = $userGroupManager;
+		$this->hookRunner = new HookRunner( $hookContainer );
+		$this->linkBatchFactory = $linkBatchFactory;
 	}
 
 	/**
@@ -236,7 +236,8 @@ class UsersPager extends AlphabeticPager {
 		$lang = $this->getLanguage();
 
 		$groups = '';
-		$ugms = self::getGroupMemberships( intval( $row->user_id ), $this->userGroupCache );
+		$userIdentity = new UserIdentityValue( intval( $row->user_id ), $userName );
+		$ugms = $this->getGroupMemberships( $userIdentity );
 
 		if ( !$this->including && count( $ugms ) > 0 ) {
 			$list = [];
@@ -462,16 +463,14 @@ class UsersPager extends AlphabeticPager {
 	 * Get an associative array containing groups the specified user belongs to,
 	 * and the relevant UserGroupMembership objects
 	 *
-	 * @param int $uid User id
-	 * @param array[]|null $cache
+	 * @param UserIdentity $user
 	 * @return UserGroupMembership[] (group name => UserGroupMembership object)
 	 */
-	protected static function getGroupMemberships( $uid, $cache = null ) {
-		if ( $cache === null ) {
-			$user = User::newFromId( $uid );
-			return $user->getGroupMemberships();
+	protected function getGroupMemberships( $user ) {
+		if ( $this->userGroupCache === null ) {
+			return $this->userGroupManager->getUserGroupMemberships( $user );
 		} else {
-			return $cache[$uid] ?? [];
+			return $this->userGroupCache[$user->getId()] ?? [];
 		}
 	}
 

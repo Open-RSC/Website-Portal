@@ -1,11 +1,11 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @covers SearchNearMatcher
  */
 class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
+	use LinkCacheTestTrait;
+
 	public function nearMatchProvider() {
 		return [
 			'empty request returns nothing' => [ null, 'en', '', 'Near Match Test' ],
@@ -37,10 +37,10 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 			'check language with variants direct' => [ 'Near', 'tg', 'near', 'Near' ],
 			'check language with variants converted' => [ 'Near', 'tg', 'неар', 'Near' ],
 			'no matching' => [ null, 'en', 'near match test',  'Far Match Test' ],
-// Special cases: files
+			// Special cases: files
 			'file ok' => [ 'File:Example.svg', 'en', 'File:Example.svg', 'File:Example.svg' ],
 			'file not ok' => [ null, 'en', 'File:Example_s.svg', 'File:Example.svg' ],
-// Special cases: users
+			// Special cases: users
 			'user ok' => [ 'User:Superuser', 'en', 'User:Superuser', 'User:Superuser' ],
 			'user ok even if no user' => [
 				'User:SuperuserNew', 'en', 'User:SuperuserNew', 'User:Superuser'
@@ -48,7 +48,7 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 			'user search use by IP' => [
 				'Special:Contributions/132.17.48.1', 'en', 'User:132.17.48.1', 'User:Superuser', true,
 			],
-// Special cases: other content types
+			// Special cases: other content types
 			'mediawiki ok even if no page' => [
 				'MediaWiki:Add New Page', 'en', 'MediaWiki:Add New Page', 'MediaWiki:Add Old Page'
 			],
@@ -73,8 +73,8 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 		$titleText,
 		$enableSearchContributorsByIP = false
 	) {
-		$services = MediaWikiServices::getInstance();
-		$services->getLinkCache()->addGoodLinkObj( 42, Title::newFromText( $titleText ) );
+		$services = $this->getServiceContainer();
+		$this->addGoodLinkObject( 42, Title::newFromText( $titleText ) );
 		$config = new HashConfig( [
 			'EnableSearchContributorsByIP' => $enableSearchContributorsByIP,
 		] );
@@ -99,7 +99,7 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 	 * @covers SearchNearMatcher::getNearMatch
 	 */
 	public function testNearMatch_Hooks( $hook ) {
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		$config = new HashConfig( [
 			'EnableSearchContributorsByIP' => false,
 		] );
@@ -125,8 +125,8 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 	 * @covers SearchNearMatcher::getNearMatchResultSet
 	 */
 	public function testGetNearMatchResultSet() {
-		$services = MediaWikiServices::getInstance();
-		$services->getLinkCache()->addGoodLinkObj( 42, Title::newFromText( "Test Link" ) );
+		$services = $this->getServiceContainer();
+		$this->addGoodLinkObject( 42, Title::newFromText( "Test Link" ) );
 
 		$config = new HashConfig( [
 			'EnableSearchContributorsByIP' => false,
@@ -142,7 +142,7 @@ class SearchNearMatcherTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 0, $result->numRows() );
 	}
 
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		Title::clearCaches();
 		parent::tearDown();
 	}

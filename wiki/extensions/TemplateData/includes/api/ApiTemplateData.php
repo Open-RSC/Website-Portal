@@ -6,8 +6,18 @@
  * @file
  */
 
+namespace MediaWiki\Extension\TemplateData\Api;
+
+use ApiBase;
+use ApiContinuationManager;
+use ApiFormatBase;
+use ApiPageSet;
+use ApiResult;
+use ExtensionRegistry;
+use MediaWiki\Extension\EventLogging\EventLogging;
+use MediaWiki\Extension\TemplateData\TemplateDataBlob;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Revision\RevisionRecord;
+use TextContent;
 
 /**
  * @ingroup API
@@ -39,7 +49,7 @@ class ApiTemplateData extends ApiBase {
 	/**
 	 * @return ApiPageSet
 	 */
-	private function getPageSet() {
+	private function getPageSet(): ApiPageSet {
 		if ( $this->mPageSet === null ) {
 			$this->mPageSet = new ApiPageSet( $this );
 		}
@@ -61,7 +71,6 @@ class ApiTemplateData extends ApiBase {
 			$langCode = false;
 		} elseif ( !$services->getLanguageNameUtils()->isValidCode( $params['lang'] ) ) {
 			$this->dieWithError( [ 'apierror-invalidlang', 'lang' ] );
-			throw new LogicException();
 		} else {
 			$langCode = $params['lang'];
 		}
@@ -79,7 +88,7 @@ class ApiTemplateData extends ApiBase {
 
 		if ( !$titles && ( !$includeMissingTitles || !$missingTitles ) ) {
 			$result->addValue( null, 'pages', (object)[] );
-			$this->setContinuationManager( null );
+			$this->setContinuationManager();
 			$continuationManager->setContinuationIntoResult( $this->getResult() );
 			return;
 		}
@@ -104,7 +113,7 @@ class ApiTemplateData extends ApiBase {
 					'pp_propname' => 'templatedata'
 				],
 				__METHOD__,
-				[ 'ORDER BY', 'pp_page' ]
+				[ 'ORDER BY' => 'pp_page' ]
 			);
 
 			foreach ( $res as $row ) {
@@ -126,10 +135,9 @@ class ApiTemplateData extends ApiBase {
 
 				// HACK: don't let ApiResult's formatversion=1 compatibility layer mangle our booleans
 				// to empty strings / absent properties
-				foreach ( $data->params as &$param ) {
+				foreach ( $data->params as $param ) {
 					$param->{ApiResult::META_BC_BOOLS} = [ 'required', 'suggested', 'deprecated' ];
 				}
-				unset( $param );
 
 				$data->params->{ApiResult::META_TYPE} = 'kvp';
 				$data->params->{ApiResult::META_KVP_KEY_NAME} = 'key';
@@ -158,31 +166,31 @@ class ApiTemplateData extends ApiBase {
 					continue;
 				}
 
-				$content = $wikiPageFactory->newFromTitle( $pageInfo['title'] )
-					->getContent( RevisionRecord::FOR_PUBLIC );
+				$content = $wikiPageFactory->newFromTitle( $pageInfo['title'] )->getContent();
 				$text = $content instanceof TextContent
 					? $content->getText()
 					: $content->getTextForSearchIndex();
-				$resp[ $pageId ][ 'params' ] = TemplateDataBlob::getRawParams( $text );
+				$resp[$pageId]['params'] = $this->getRawParams( $text );
 			}
 		}
 
 		// TODO tracking will only be implemented temporarily to answer questions on
 		// template usage for the Technical Wishes topic area see T258917
 		if ( ExtensionRegistry::getInstance()->isLoaded( 'EventLogging' ) ) {
-			foreach ( $resp as $pageId => $pageInfo ) {
-				\EventLogging::logEvent(
+			foreach ( $resp as $pageInfo ) {
+				EventLogging::logEvent(
 					'TemplateDataApi',
 					-1,
 					[
 						'template_name' => $wikiPageFactory->newFromTitle( $pageInfo['title'] )
 							->getTitle()->getDBkey(),
-						'has_template_data' => !( isset( $pageInfo['notemplatedata'] ) ?: false ),
+						'has_template_data' => !isset( $pageInfo['notemplatedata'] ),
 					]
 				);
 			}
 		}
 
+		$pageSet->populateGeneratorData( $resp );
 		ApiResult::setArrayType( $resp, 'kvp', 'id' );
 		ApiResult::setIndexedTagName( $resp, 'page' );
 
@@ -198,8 +206,39 @@ class ApiTemplateData extends ApiBase {
 			$result->addValue( null, 'redirects', $redirects );
 		}
 
-		$this->setContinuationManager( null );
+		$this->setContinuationManager();
 		$continuationManager->setContinuationIntoResult( $this->getResult() );
+	}
+
+	/**
+	 * Get parameter descriptions from raw wikitext (used for templates that have no templatedata).
+	 * @param string $wikitext The text to extract parameters from.
+	 * @return array[] Parameter info in the same format as the templatedata 'params' key.
+	 */
+	private function getRawParams( string $wikitext ): array {
+		// Ignore non-wikitext content in comments and wikitext-escaping tags
+		$wikitext = preg_replace( '/<!--.*?-->/s', '', $wikitext );
+		$wikitext = preg_replace( '/<nowiki\s*>.*?<\/nowiki\s*>/s', '', $wikitext );
+		$wikitext = preg_replace( '/<pre\s*>.*?<\/pre\s*>/s', '', $wikitext );
+
+		// This regex matches the one in ext.TemplateDataGenerator.sourceHandler.js
+		if ( !preg_match_all( '/{{{+([^\n#={|}]*?)([<|]|}}})/m', $wikitext, $rawParams ) ) {
+			return [];
+		}
+
+		$params = [];
+		$normalizedParams = [];
+		foreach ( $rawParams[1] as $rawParam ) {
+			// This normalization process is repeated in JS in ext.TemplateDataGenerator.sourceHandler.js
+			$normalizedParam = strtolower( trim( preg_replace( '/[-_ ]+/', ' ', $rawParam ) ) );
+			if ( !$normalizedParam || in_array( $normalizedParam, $normalizedParams ) ) {
+				// This or a similarly-named parameter has already been found.
+				continue;
+			}
+			$normalizedParams[] = $normalizedParam;
+			$params[ trim( $rawParam ) ] = [];
+		}
+		return $params;
 	}
 
 	/**

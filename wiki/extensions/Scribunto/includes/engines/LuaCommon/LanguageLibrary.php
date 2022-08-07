@@ -46,11 +46,10 @@ class Scribunto_LuaLanguageLibrary extends Scribunto_LuaLibraryBase {
 		foreach ( $statics as $name ) {
 			$lib[$name] = [ $this, $name ];
 		}
-		$ths = $this;
 		foreach ( $methods as $name ) {
-			$lib[$name] = function () use ( $ths, $name ) {
+			$lib[$name] = function () use ( $name ) {
 				$args = func_get_args();
-				return $ths->languageMethod( $name, $args );
+				return $this->languageMethod( $name, $args );
 			};
 		}
 		return $this->getEngine()->registerInterface( 'mw.language.lua', $lib );
@@ -283,7 +282,7 @@ class Scribunto_LuaLanguageLibrary extends Scribunto_LuaLibraryBase {
 				$parserOptions = $this->getParserOptions();
 				if ( $parserOptions->getInterfaceMessage() ) {
 					$genderCache = MediaWikiServices::getInstance()->getGenderCache();
-					$gender = $genderCache->getGenderOf( $parserOptions->getUser(), __METHOD__ );
+					$gender = $genderCache->getGenderOf( $parserOptions->getUserIdentity(), __METHOD__ );
 				}
 			}
 		}

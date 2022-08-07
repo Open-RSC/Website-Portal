@@ -4,7 +4,6 @@ use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkRendererFactory;
 use MediaWiki\SpecialPage\SpecialPageFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers MediaWiki\Linker\LinkRendererFactory
@@ -22,11 +21,6 @@ class LinkRendererFactoryTest extends MediaWikiUnitTestCase {
 	private $linkCache;
 
 	/**
-	 * @var NamespaceInfo
-	 */
-	private $nsInfo;
-
-	/**
 	 * @var SpecialPageFactory
 	 */
 	private $specialPageFactory;
@@ -36,12 +30,11 @@ class LinkRendererFactoryTest extends MediaWikiUnitTestCase {
 	 */
 	private $hookContainer;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->titleFormatter = $this->createMock( TitleFormatter::class );
 		$this->linkCache = $this->createMock( LinkCache::class );
-		$this->nsInfo = $this->createMock( NamespaceInfo::class );
 		$this->specialPageFactory = $this->createMock( SpecialPageFactory::class );
 		$this->hookContainer = $this->createMock( HookContainer::class );
 	}
@@ -62,12 +55,7 @@ class LinkRendererFactoryTest extends MediaWikiUnitTestCase {
 				[ 'https' ],
 				'getExpandURLs',
 				PROTO_HTTPS
-			],
-			[
-				[ 'stubThreshold' => 150 ],
-				'getStubThreshold',
-				150
-			],
+			]
 		];
 	}
 
@@ -76,37 +64,43 @@ class LinkRendererFactoryTest extends MediaWikiUnitTestCase {
 	 */
 	public function testCreateFromLegacyOptions( $options, $func, $val ) {
 		$factory = new LinkRendererFactory(
-				$this->titleFormatter, $this->linkCache, $this->nsInfo,
-				$this->specialPageFactory, $this->hookContainer
-			);
+			$this->titleFormatter,
+			$this->linkCache,
+			$this->specialPageFactory,
+			$this->hookContainer
+		);
 		$linkRenderer = $factory->createFromLegacyOptions(
 			$options
 		);
 		$this->assertInstanceOf( LinkRenderer::class, $linkRenderer );
 		$this->assertEquals( $val, $linkRenderer->$func(), $func );
+		$this->assertFalse(
+			$linkRenderer->isForComment(),
+			'isForComment should default to false in legacy implementation'
+		);
 	}
 
 	public function testCreate() {
 		$factory = new LinkRendererFactory(
-			$this->titleFormatter, $this->linkCache, $this->nsInfo,
-			$this->specialPageFactory, $this->hookContainer
+			$this->titleFormatter,
+			$this->linkCache,
+			$this->specialPageFactory,
+			$this->hookContainer
 		);
-		$this->assertInstanceOf( LinkRenderer::class, $factory->create() );
+		$linkRenderer = $factory->create();
+		$this->assertInstanceOf( LinkRenderer::class, $linkRenderer );
+		$this->assertFalse( $linkRenderer->isForComment(), 'isForComment should default to false' );
 	}
 
-	public function testCreateForUser() {
-		/** @var MockObject|User $user */
-		$user = $this->getMockBuilder( User::class )
-			->onlyMethods( [ 'getStubThreshold' ] )->getMock();
-		$user->expects( $this->once() )
-			->method( 'getStubThreshold' )
-			->willReturn( 15 );
+	public function testCreateForComment() {
 		$factory = new LinkRendererFactory(
-			$this->titleFormatter, $this->linkCache, $this->nsInfo,
-			$this->specialPageFactory, $this->hookContainer
+			$this->titleFormatter,
+			$this->linkCache,
+			$this->specialPageFactory,
+			$this->hookContainer
 		);
-		$linkRenderer = $factory->createForUser( $user );
+		$linkRenderer = $factory->create( [ 'renderForComment' => true ] );
 		$this->assertInstanceOf( LinkRenderer::class, $linkRenderer );
-		$this->assertEquals( 15, $linkRenderer->getStubThreshold() );
+		$this->assertTrue( $linkRenderer->isForComment() );
 	}
 }

@@ -7,7 +7,7 @@ use MediaWiki\Logger\LegacyLogger;
  * @group GlobalFunctions
  */
 class GlobalTest extends MediaWikiIntegrationTestCase {
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$readOnlyFile = $this->getNewTempFile();
@@ -32,7 +32,7 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testWfArrayDiff2( $a, $b, $expected ) {
 		$this->assertEquals(
-			wfArrayDiff2( $a, $b ), $expected
+			$expected, wfArrayDiff2( $a, $b )
 		);
 	}
 
@@ -192,7 +192,8 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 			[ 'foo', [ 'foo' => '' ] ], // missing =
 			[ 'foo=bar&qwerty=asdf', [ 'foo' => 'bar', 'qwerty' => 'asdf' ] ], // multiple value
 			[ 'foo=A%26B%3D5%2B6%40%21%22%27', [ 'foo' => 'A&B=5+6@!"\'' ] ], // urldecoding test
-			[ 'foo%5Bbar%5D=baz', [ 'foo' => [ 'bar' => 'baz' ] ] ],
+			[ 'foo[bar]=baz', [ 'foo' => [ 'bar' => 'baz' ] ] ],
+			[ 'foo%5Bbar%5D=baz', [ 'foo' => [ 'bar' => 'baz' ] ] ],  // urldecoding test 2
 			[
 				'foo%5Bbar%5D=baz&foo%5Bqwerty%5D=asdf',
 				[ 'foo' => [ 'bar' => 'baz', 'qwerty' => 'asdf' ] ]
@@ -202,6 +203,8 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 				'foo%5Bbar%5D%5Bbar%5D=baz',
 				[ 'foo' => [ 'bar' => [ 'bar' => 'baz' ] ] ]
 			],
+			[ 'foo[]=x&foo[]=y', [ 'foo' => [ '' => 'y' ] ] ], // implicit keys are NOT handled like in PHP (bug?)
+			[ 'foo=x&foo[]=y', [ 'foo' => [ '' => 'y' ] ] ], // mixed value/array doesn't cause errors
 		];
 	}
 
@@ -235,83 +238,9 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::mimeTypeMatch
-	 */
-	public function testMimeTypeMatch() {
-		$this->assertEquals(
-			'text/html',
-			mimeTypeMatch( 'text/html',
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.7,
-					'text/plain' => 0.3 ] ) );
-		$this->assertEquals(
-			'text/*',
-			mimeTypeMatch( 'text/html',
-				[ 'image/*' => 1.0,
-					'text/*' => 0.5 ] ) );
-		$this->assertEquals(
-			'*/*',
-			mimeTypeMatch( 'text/html',
-				[ '*/*' => 1.0 ] ) );
-		$this->assertNull(
-			mimeTypeMatch( 'text/html',
-				[ 'image/png' => 1.0,
-					'image/svg+xml' => 0.5 ] ) );
-	}
-
-	/**
-	 * @covers ::wfNegotiateType
-	 */
-	public function testNegotiateType() {
-		$this->hideDeprecated( 'wfNegotiateType' );
-
-		$this->assertEquals(
-			'text/html',
-			wfNegotiateType(
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.7,
-					'text/plain' => 0.5,
-					'text/*' => 0.2 ],
-				[ 'text/html' => 1.0 ] ) );
-		$this->assertEquals(
-			'application/xhtml+xml',
-			wfNegotiateType(
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.7,
-					'text/plain' => 0.5,
-					'text/*' => 0.2 ],
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.5 ] ) );
-		$this->assertEquals(
-			'text/html',
-			wfNegotiateType(
-				[ 'text/html' => 1.0,
-					'text/plain' => 0.5,
-					'text/*' => 0.5,
-					'application/xhtml+xml' => 0.2 ],
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.5 ] ) );
-		$this->assertEquals(
-			'text/html',
-			wfNegotiateType(
-				[ 'text/*' => 1.0,
-					'image/*' => 0.7,
-					'*/*' => 0.3 ],
-				[ 'application/xhtml+xml' => 1.0,
-					'text/html' => 0.5 ] ) );
-		$this->assertNull(
-			wfNegotiateType(
-				[ 'text/*' => 1.0 ],
-				[ 'application/xhtml+xml' => 1.0 ] ) );
-	}
-
-	/**
 	 * @covers ::wfDebug
-	 * @covers ::wfDebugMem
 	 */
 	public function testDebugFunctionTest() {
-		$this->hideDeprecated( 'wfDebugMem' );
-
 		$debugLogFile = $this->getNewTempFile();
 
 		$this->setMwGlobals( [
@@ -332,20 +261,6 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals(
 			" 05This has böth UTF and control chars \n",
 			file_get_contents( $debugLogFile )
-		);
-
-		unlink( $debugLogFile );
-		wfDebugMem();
-		$this->assertGreaterThan(
-			1000,
-			preg_replace( '/\D/', '', file_get_contents( $debugLogFile ) )
-		);
-
-		unlink( $debugLogFile );
-		wfDebugMem( true );
-		$this->assertGreaterThan(
-			1000000,
-			preg_replace( '/\D/', '', file_get_contents( $debugLogFile ) )
 		);
 
 		unlink( $debugLogFile );
@@ -493,8 +408,9 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 	 * @group medium
 	 * @covers ::wfMerge
 	 */
-	public function testMerge( $old, $mine, $yours, $expectedMergeResult, $expectedText,
-							   $expectedMergeAttemptResult ) {
+	public function testMerge(
+		$old, $mine, $yours, $expectedMergeResult, $expectedText, $expectedMergeAttemptResult
+	) {
 		$this->markTestSkippedIfNoDiff3();
 
 		$mergedText = null;
@@ -646,10 +562,7 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 	public function testWfMkdirParents() {
 		// Should not return true if file exists instead of directory
 		$fname = $this->getNewTempFile();
-		Wikimedia\suppressWarnings();
-		$ok = wfMkdirParents( $fname );
-		Wikimedia\restoreWarnings();
-		$this->assertFalse( $ok );
+		$this->assertFalse( @wfMkdirParents( $fname ) );
 	}
 
 	/**
@@ -667,7 +580,11 @@ class GlobalTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $expected, $actual, $description );
 	}
 
-	public function wfWikiID() {
+	/**
+	 * @covers ::wfWikiID
+	 */
+	public function testWfWikiID() {
+		$this->hideDeprecated( 'wfWikiID' );
 		$this->setMwGlobals( [
 			'wgDBname' => 'example',
 			'wgDBprefix' => '',

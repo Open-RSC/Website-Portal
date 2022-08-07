@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2014
  *
@@ -20,6 +21,18 @@
  * @file
  */
 
+namespace MediaWiki\Extension\Gadgets\Content;
+
+use Content;
+use DeferrableUpdate;
+use FormatJson;
+use JsonContentHandler;
+use Linker;
+use MediaWiki\Content\Renderer\ContentParseParams;
+use MediaWiki\Revision\SlotRenderingProvider;
+use ParserOutput;
+use Title;
+
 class GadgetDefinitionContentHandler extends JsonContentHandler {
 	public function __construct() {
 		parent::__construct( 'GadgetDefinition' );
@@ -37,7 +50,7 @@ class GadgetDefinitionContentHandler extends JsonContentHandler {
 	 * @return string
 	 */
 	protected function getContentClass() {
-		return 'GadgetDefinitionContent';
+		return GadgetDefinitionContent::class;
 	}
 
 	public function makeEmptyContent() {
@@ -50,18 +63,124 @@ class GadgetDefinitionContentHandler extends JsonContentHandler {
 			'settings' => [
 				'rights' => [],
 				'default' => false,
+				'package' => false,
 				'hidden' => false,
 				'skins' => [],
-				'category' => ''
+				'actions' => [],
+				'category' => '',
+				'supportsUrlLoad' => false,
 			],
 			'module' => [
 				'scripts' => [],
 				'styles' => [],
+				'datas' => [],
 				'peers' => [],
 				'dependencies' => [],
 				'messages' => [],
 				'type' => '',
 			],
 		];
+	}
+
+	/**
+	 * @param Title $title The title of the page to supply the updates for.
+	 * @param string $role The role (slot) in which the content is being used.
+	 * @return DeferrableUpdate[] A list of DeferrableUpdate objects for putting information
+	 *        about this content object somewhere.
+	 */
+	public function getDeletionUpdates( Title $title, $role ) {
+		return array_merge(
+			parent::getDeletionUpdates( $title, $role ),
+			[ new GadgetDefinitionDeletionUpdate( $title ) ]
+		);
+	}
+
+	/**
+	 * @param Title $title The title of the page to supply the updates for.
+	 * @param Content $content The content to generate data updates for.
+	 * @param string $role The role (slot) in which the content is being used.
+	 * @param SlotRenderingProvider $slotOutput A provider that can be used to gain access to
+	 *        a ParserOutput of $content by calling $slotOutput->getSlotParserOutput( $role, false ).
+	 * @return DeferrableUpdate[] A list of DeferrableUpdate objects for putting information
+	 *        about this content object somewhere.
+	 */
+	public function getSecondaryDataUpdates(
+		Title $title,
+		Content $content,
+		$role,
+		SlotRenderingProvider $slotOutput
+	) {
+		return array_merge(
+			parent::getSecondaryDataUpdates( $title, $content, $role, $slotOutput ),
+			[ new GadgetDefinitionSecondaryDataUpdate( $title ) ]
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function fillParserOutput(
+		Content $content,
+		ContentParseParams $cpoParams,
+		ParserOutput &$parserOutput
+	) {
+		'@phan-var GadgetDefinitionContent $content';
+		// Create a deep clone. FIXME: unserialize(serialize()) is hacky.
+		$data = unserialize( serialize( $content->getData()->getValue() ) );
+		if ( $data !== null ) {
+			foreach ( [ 'scripts', 'styles', 'datas' ] as $type ) {
+				if ( isset( $data->module->{$type} ) ) {
+					foreach ( $data->module->{$type} as &$page ) {
+						$title = Title::makeTitleSafe( NS_GADGET, $page );
+						$this->makeLink( $parserOutput, $page, $title );
+					}
+				}
+			}
+			foreach ( $data->module->dependencies as &$dep ) {
+				if ( str_starts_with( $dep, 'ext.gadget.' ) ) {
+					$gadgetId = explode( 'ext.gadget.', $dep )[1];
+					$title = Title::makeTitleSafe( NS_GADGET_DEFINITION, $gadgetId );
+					$this->makeLink( $parserOutput, $dep, $title );
+				}
+			}
+			foreach ( $data->module->peers as &$peer ) {
+				$title = Title::makeTitleSafe( NS_GADGET_DEFINITION, $peer );
+				$this->makeLink( $parserOutput, $peer, $title );
+			}
+			foreach ( $data->module->messages as &$msg ) {
+				$title = Title::makeTitleSafe( NS_MEDIAWIKI, $msg );
+				$this->makeLink( $parserOutput, $msg, $title );
+			}
+			if ( $data->settings->category ) {
+				$this->makeLink(
+					$parserOutput,
+					$data->settings->category,
+					Title::makeTitleSafe( NS_MEDIAWIKI, "gadget-section-" . $data->settings->category )
+				);
+			}
+		}
+
+		if ( !$cpoParams->getGenerateHtml() || !$content->isValid() ) {
+			$parserOutput->setText( '' );
+		} else {
+			$parserOutput->setText( $content->rootValueTable( $data ) );
+			$parserOutput->addModuleStyles( [ 'mediawiki.content.json' ] );
+		}
+	}
+
+	/**
+	 * Create a link on the page
+	 * @param ParserOutput $parserOutput
+	 * @param string &$text The text to link
+	 * @param Title|null $title Link target title
+	 * @return void
+	 */
+	private function makeLink( ParserOutput $parserOutput, string &$text, ?Title $title ) {
+		if ( $title ) {
+			$parserOutput->addLink( $title );
+			$text = new GadgetDefinitionContentArmor(
+				Linker::link( $title, htmlspecialchars( '"' . $text . '"' ) )
+			);
+		}
 	}
 }

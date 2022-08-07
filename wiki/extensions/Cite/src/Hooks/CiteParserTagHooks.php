@@ -36,7 +36,7 @@ class CiteParserTagHooks {
 		array $argv,
 		Parser $parser,
 		PPFrame $frame
-	) : string {
+	): string {
 		$cite = self::citeForParser( $parser );
 		$result = $cite->ref( $parser, $text, $argv );
 
@@ -45,8 +45,8 @@ class CiteParserTagHooks {
 		}
 
 		$parserOutput = $parser->getOutput();
-		$parserOutput->addModules( 'ext.cite.ux-enhancements' );
-		$parserOutput->addModuleStyles( 'ext.cite.styles' );
+		$parserOutput->addModules( [ 'ext.cite.ux-enhancements' ] );
+		$parserOutput->addModuleStyles( [ 'ext.cite.styles' ] );
 
 		$frame->setVolatile();
 		return $result;
@@ -67,7 +67,7 @@ class CiteParserTagHooks {
 		array $argv,
 		Parser $parser,
 		PPFrame $frame
-	) : string {
+	): string {
 		$cite = self::citeForParser( $parser );
 		$result = $cite->references( $parser, $text, $argv );
 
@@ -89,7 +89,7 @@ class CiteParserTagHooks {
 	 *
 	 * @return Cite
 	 */
-	private static function citeForParser( Parser $parser ) : Cite {
+	private static function citeForParser( Parser $parser ): Cite {
 		if ( !isset( $parser->extCite ) ) {
 			$parser->extCite = new Cite( $parser );
 		}

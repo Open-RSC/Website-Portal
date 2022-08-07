@@ -1,14 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"MemphisA5",
 			"Ykhwong",
-			"아라"
+			"아라",
+			"Bluehill"
 		]
 	},
 	"apierror-visualeditor-badcachekey": "해당 키로써 캐시된 직렬화를 찾을 수 없습니다",
 	"apierror-visualeditor-difffailed": "차이 생성 실패",
+	"apierror-visualeditor-docserver-http-error": "Parsoid/RESTBase 서버와 통신하는 중 오류가 발생했습니다: $1",
+	"apierror-visualeditor-docserver-http": "Parsoid/RESTBase 서버와 통신하는 중 오류가 발생했습니다 (HTTP $1)",
 	"apierror-visualeditor-docserver-unconfigured": "문서 서버를 위한 VirtualRESTService가 정의되어 있지 않습니다. https://www.mediawiki.org/wiki/Extension:VisualEditor 를 참고하십시오",
-	"apierror-visualeditor-docserver": "Parsoid/RESTbase 서버와 통신하는 중 오류가 발생했습니다",
+	"apierror-visualeditor-docserver": "Parsoid/RESTBase 서버와 통신하는 중 오류가 발생했습니다 (응답 없음)",
+	"apierror-visualeditor-latestnotfound": "제목에 대한 최신 판을 찾을 수 없습니다",
 	"apihelp-visualeditor-description": "Parsoid 서비스에서 문서를 위해 HTML5를 반환합니다.",
 	"apihelp-visualeditor-param-basetimestamp": "저장할 때, 편집한 판의 시간스탬프로 설정합니다. 편집 충돌을 감지하는 데 사용합니다.",
 	"apihelp-visualeditor-param-cachekey": "serialize 또는 diff를 위해, 이 키로 이전의 serializeforcache 요청 결과를 사용합니다. $1html을 덮어씁니다.",
@@ -31,6 +36,7 @@
 	"apihelp-visualeditoredit-param-cachekey": "이 키로 이전의 serializeforcache 요청 결과를 사용합니다. $1html을 덮어씁니다.",
 	"apihelp-visualeditoredit-param-captchaid": "캡차 ID입니다. (캡차 응답으로 저장할 때)",
 	"apihelp-visualeditoredit-param-captchaword": "캡차의 응답입니다. (캡차 응답으로 저장할 때)",
+	"apihelp-visualeditoredit-param-plugins": "API 요청과 관련된 플러그인입니다.",
 	"apihelp-visualeditoredit-param-etag": "보낼 ETag.",
 	"apihelp-visualeditoredit-param-html": "위키텍스트 대신 Parsoid로 보낼 HTML입니다.",
 	"apihelp-visualeditoredit-param-minor": "사소한 편집의 표시입니다.",

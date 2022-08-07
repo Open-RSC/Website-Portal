@@ -3,7 +3,6 @@
 namespace MediaWiki\Page;
 
 use DBAccessObjectUtils;
-use InvalidArgumentException;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Page\Hook\WikiPageFactoryHook;
 use stdClass;
@@ -50,14 +49,16 @@ class WikiPageFactory {
 	 *
 	 * @return WikiPage
 	 */
-	public function newFromTitle( PageIdentity $pageIdentity ) {
+	public function newFromTitle( PageIdentity $pageIdentity ): WikiPage {
 		if ( $pageIdentity instanceof WikiPage ) {
 			return $pageIdentity;
 		}
 
 		if ( !$pageIdentity->canExist() ) {
-			throw new InvalidArgumentException(
-				"The given PageIdentity does not represent a proper page"
+			// BC with the Title class
+			throw new PageAssertionException(
+				'The given PageIdentity {pageIdentity} does not represent a proper page',
+				[ 'pageIdentity' => $pageIdentity ]
 			);
 		}
 
@@ -103,8 +104,8 @@ class WikiPageFactory {
 	 * @param stdClass $row Database row containing at least fields returned by getQueryInfo().
 	 * @param string|int $from Source of $data:
 	 *        - "fromdb" or WikiPage::READ_NORMAL: from a replica DB
-	 *        - "fromdbmaster" or WikiPage::READ_LATEST: from the master DB
-	 *        - "forupdate" or WikiPage::READ_LOCKING: from the master DB using SELECT FOR UPDATE
+	 *        - "fromdbmaster" or WikiPage::READ_LATEST: from the primary DB
+	 *        - "forupdate" or WikiPage::READ_LOCKING: from the primary DB using SELECT FOR UPDATE
 	 *
 	 * @return WikiPage
 	 */
@@ -120,7 +121,7 @@ class WikiPageFactory {
 	 * @param int $id Article ID to load
 	 * @param string|int $from One of the following values:
 	 *        - "fromdb" or WikiPage::READ_NORMAL to select from a replica DB
-	 *        - "fromdbmaster" or WikiPage::READ_LATEST to select from the master database
+	 *        - "fromdbmaster" or WikiPage::READ_LATEST to select from the primary database
 	 *
 	 * @return WikiPage|null Null when no page exists with that ID
 	 */

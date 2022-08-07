@@ -7,7 +7,7 @@ trait LanguageConverterTestTrait {
 
 	private $codeRegex = '/^(.+)ConverterTest$/';
 
-	protected function code():string {
+	protected function code(): string {
 		if ( preg_match( $this->codeRegex, get_class( $this ), $m ) ) {
 			return mb_strtolower( $m[1] );
 		}
@@ -18,15 +18,21 @@ trait LanguageConverterTestTrait {
 	 *
 	 * @return ILanguageConverter
 	 */
-	protected function getLanguageConverter() : ILanguageConverter {
+	protected function getLanguageConverter(): ILanguageConverter {
 		$code = $this->code();
 
 		$language = MediaWikiServices::getInstance()->getLanguageFactory()
 			->getLanguage( $code );
 
-		$factory = new LanguageConverterFactory( false, false, false, static function () use ( $language ) {
-			return $language;
-		} );
+		$factory = new LanguageConverterFactory(
+			MediaWikiServices::getInstance()->getObjectFactory(),
+			false,
+			false,
+			false,
+			static function () use ( $language ) {
+				return $language;
+			}
+		);
 
 		return $factory->getLanguageConverter( $language );
 	}

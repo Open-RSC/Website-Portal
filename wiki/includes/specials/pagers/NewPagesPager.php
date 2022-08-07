@@ -22,8 +22,7 @@
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\HookContainer\HookRunner;
-use MediaWiki\Permissions\PermissionManager;
-use MediaWiki\User\UserFactory;
+use MediaWiki\Permissions\GroupPermissionsLookup;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
@@ -41,57 +40,45 @@ class NewPagesPager extends ReverseChronologicalPager {
 	 */
 	protected $mForm;
 
-	/** @var LinkBatchFactory */
-	private $linkBatchFactory;
+	/** @var GroupPermissionsLookup */
+	private $groupPermissionsLookup;
 
 	/** @var HookRunner */
 	private $hookRunner;
 
-	/** @var PermissionManager */
-	private $permissionManager;
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
 
 	/** @var NamespaceInfo */
 	private $namespaceInfo;
 
-	/** @var ActorMigration */
-	private $actorMigration;
-
-	/** @var UserFactory */
-	private $userFactory;
-
 	/**
 	 * @param SpecialNewpages $form
-	 * @param FormOptions $opts
-	 * @param LinkBatchFactory $linkBatchFactory
+	 * @param GroupPermissionsLookup $groupPermissionsLookup
 	 * @param HookContainer $hookContainer
-	 * @param PermissionManager $permissionManager
+	 * @param LinkBatchFactory $linkBatchFactory
 	 * @param ILoadBalancer $loadBalancer
 	 * @param NamespaceInfo $namespaceInfo
-	 * @param ActorMigration $actorMigration
-	 * @param UserFactory $userFactory
+	 * @param FormOptions $opts
 	 */
 	public function __construct(
-		$form,
-		FormOptions $opts,
-		LinkBatchFactory $linkBatchFactory,
+		SpecialNewpages $form,
+		GroupPermissionsLookup $groupPermissionsLookup,
 		HookContainer $hookContainer,
-		PermissionManager $permissionManager,
+		LinkBatchFactory $linkBatchFactory,
 		ILoadBalancer $loadBalancer,
 		NamespaceInfo $namespaceInfo,
-		ActorMigration $actorMigration,
-		UserFactory $userFactory
+		FormOptions $opts
 	) {
 		// Set database before parent constructor to avoid setting it there with wfGetDB
 		$this->mDb = $loadBalancer->getConnectionRef( ILoadBalancer::DB_REPLICA );
 		parent::__construct( $form->getContext() );
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
+		$this->hookRunner = new HookRunner( $hookContainer );
+		$this->linkBatchFactory = $linkBatchFactory;
+		$this->namespaceInfo = $namespaceInfo;
 		$this->mForm = $form;
 		$this->opts = $opts;
-		$this->linkBatchFactory = $linkBatchFactory;
-		$this->hookRunner = new HookRunner( $hookContainer );
-		$this->permissionManager = $permissionManager;
-		$this->namespaceInfo = $namespaceInfo;
-		$this->actorMigration = $actorMigration;
-		$this->userFactory = $userFactory;
 	}
 
 	public function getQueryInfo() {
@@ -113,13 +100,10 @@ class NewPagesPager extends ReverseChronologicalPager {
 		}
 
 		if ( $user ) {
-			$userObj = $this->userFactory->newFromName( $user->getText(), UserFactory::RIGOR_NONE );
-			$conds[] = $this->actorMigration->getWhere(
-				$this->getDatabase(), 'rc_user', $userObj, false
-			)['conds'];
+			$conds['actor_name'] = $user->getText();
 		} elseif ( $this->canAnonymousUsersCreatePages() && $this->opts->getValue( 'hideliu' ) ) {
 			# If anons cannot make new pages, don't "exclude logged in users"!
-			$conds[] = $this->actorMigration->isAnon( $rcQuery['fields']['rc_user'] );
+			$conds['actor_user'] = null;
 		}
 
 		$conds = array_merge( $conds, $this->getNamespaceCond() );
@@ -170,8 +154,8 @@ class NewPagesPager extends ReverseChronologicalPager {
 	}
 
 	private function canAnonymousUsersCreatePages() {
-		return $this->permissionManager->groupHasPermission( '*', 'createpage' ) ||
-			$this->permissionManager->groupHasPermission( '*', 'createtalk' );
+		return $this->groupPermissionsLookup->groupHasPermission( '*', 'createpage' ) ||
+			$this->groupPermissionsLookup->groupHasPermission( '*', 'createtalk' );
 	}
 
 	// Based on ContribsPager.php

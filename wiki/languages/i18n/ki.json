@@ -15,5 +15,7 @@
 	"tuesday": "Wagatatu",
 	"wednesday": "Wakana",
 	"thursday": "Wagatano",
-	"protectedarticle": "nimenyeriri [[$1]]"
+	"action-delete": "Futa",
+	"protectedarticle": "nimenyeriri [[$1]]",
+	"skin-action-delete": "Futa"
 }

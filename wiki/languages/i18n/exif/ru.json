@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chadyka",
 			"Dim Grits",
 			"Eleferen",
 			"Facenapalm",
@@ -11,7 +12,8 @@
 			"MaxSem",
 			"Okras",
 			"Putnik",
-			"Александр Сигачёв"
+			"Александр Сигачёв",
+			"Fenixs-ru"
 		]
 	},
 	"exif-imagewidth": "Ширина",
@@ -134,7 +136,7 @@
 	"exif-countrycodecreated": "Код страны, где была сделана фотография",
 	"exif-provinceorstatecreated": "Область, провинция или штат, где была сделана фотография",
 	"exif-citycreated": "Город, где была сделана фотография",
-	"exif-sublocationcreated": "Район города, где была сделана фоторафия",
+	"exif-sublocationcreated": "Район города, где была сделана фотография",
 	"exif-worldregiondest": "Изображённый регион мира",
 	"exif-countrydest": "Изображённая страна",
 	"exif-countrycodedest": "Код изображённой страны",
@@ -377,6 +379,12 @@
 	"exif-usepanoramaviewer": "Использовать программу просмотра панорам",
 	"exif-usepanoramaviewer-true": "Да",
 	"exif-usepanoramaviewer-false": "Нет",
+	"exif-exposurelockused": "Используется блокировка экспозиции",
 	"exif-exposurelockused-true": "Да",
-	"exif-exposurelockused-false": "Нет"
+	"exif-exposurelockused-false": "Нет",
+	"exif-croppedareaimagewidthpixels": "Обрезанная ширина панорамы",
+	"exif-croppedareaimageheightpixels": "Обрезанная высота панорамы",
+	"exif-fullpanowidthpixels": "Полная ширина панорамы",
+	"exif-fullpanoheightpixels": "Полная высота панорамы",
+	"exif-stitchingsoftware": "Программное обеспечение для сшивания"
 }

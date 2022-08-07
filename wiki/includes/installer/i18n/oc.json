@@ -124,7 +124,6 @@
 	"config-upload-settings": "Telecargament dels imatges e dels fichièrs",
 	"config-upload-enable": "Activar lo telecargament dels fichièrs",
 	"config-upload-deleted": "Repertòri pels fichièrs suprimits :",
-	"config-logo": "URL del lògo :",
 	"config-instantcommons": "Activar ''InstantCommons''",
 	"config-cc-again": "Causissètz tornarmai...",
 	"config-advanced-settings": "Configuracion avançada",
@@ -160,5 +159,5 @@
 	"config-help": "ajuda",
 	"config-help-tooltip": "clicar per agrandir",
 	"mainpagetext": "<strong>MediaWiki es estat installat amb succès.<strong>",
-	"mainpagedocfooter": "Consultatz lo [https://meta.wikimedia.org/wiki/Help:Contents/fr Guida de l'utilizaire] per mai d'entresenhas sus l'utilizacion d'aqueste logicial de wiki.\n\n== Per començar ==\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Lista dels paramètres de configuracion]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ/oc FAQ MediaWiki]\n* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce Lista de discussions de las distribucions de MediaWiki]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Localisation#Translation_resources Adaptatz MediaWiki dins vòstra lenga]"
+	"mainpagedocfooter": "Consultatz lo [https://meta.wikimedia.org/wiki/Help:Contents/fr Guida de l'utilizaire] per mai d'entresenhas sus l'utilizacion d'aqueste logicial de wiki.\n\n== Per començar ==\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Lista dels paramètres de configuracion]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ/oc FAQ MediaWiki]\n* [https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ Lista de discussions de las distribucions de MediaWiki]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Localisation#Translation_resources Adaptatz MediaWiki dins vòstra lenga]"
 }

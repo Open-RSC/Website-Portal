@@ -23,7 +23,6 @@
 
 use MediaWiki\Auth\AuthManager;
 use MediaWiki\Logger\LoggerFactory;
-use MediaWiki\Permissions\PermissionManager;
 
 /**
  * Implements Special:CreateAccount
@@ -42,30 +41,17 @@ class SpecialCreateAccount extends LoginSignupSpecialPage {
 		'authform-wrongtoken' => 'sessionfailure',
 	];
 
-	/** @var PermissionManager */
-	private $permManager;
-
 	/**
-	 * @param PermissionManager $permManager
 	 * @param AuthManager $authManager
 	 */
-	public function __construct( PermissionManager $permManager, AuthManager $authManager ) {
-		parent::__construct( 'CreateAccount' );
+	public function __construct( AuthManager $authManager ) {
+		parent::__construct( 'CreateAccount', 'createaccount' );
 
-		$this->permManager = $permManager;
 		$this->setAuthManager( $authManager );
 	}
 
 	public function doesWrites() {
 		return true;
-	}
-
-	public function isRestricted() {
-		return !$this->permManager->groupHasPermission( '*', 'createaccount' );
-	}
-
-	public function userCanExecute( User $user ) {
-		return $this->permManager->userHasRight( $user, 'createaccount' );
 	}
 
 	public function checkPermissions() {
@@ -156,7 +142,8 @@ class SpecialCreateAccount extends LoginSignupSpecialPage {
 		 */
 		$this->getHookRunner()->onBeforeWelcomeCreation( $welcome_creation_msg, $injected_html );
 
-		$this->showSuccessPage( 'signup', $this->msg( 'welcomeuser', $this->getUser()->getName() ),
+		$this->showSuccessPage( 'signup',
+			$this->msg( 'welcomeuser', $this->getUser()->getName() )->escaped(),
 			$welcome_creation_msg, $injected_html, $extraMessages );
 	}
 

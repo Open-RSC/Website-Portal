@@ -21,7 +21,7 @@
  * @author Daniel Kinzler
  */
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReference;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Assert\ParameterAssertionException;
 use Wikimedia\Assert\ParameterTypeException;
@@ -39,29 +39,17 @@ use Wikimedia\Assert\ParameterTypeException;
  */
 class TitleValue implements LinkTarget {
 
-	/**
-	 * @deprecated in 1.31. This class is immutable. Use the getter for access.
-	 * @var int
-	 */
-	protected $namespace;
+	/** @var int */
+	private $namespace;
 
-	/**
-	 * @deprecated in 1.31. This class is immutable. Use the getter for access.
-	 * @var string
-	 */
-	protected $dbkey;
+	/** @var string */
+	private $dbkey;
 
-	/**
-	 * @deprecated in 1.31. This class is immutable. Use the getter for access.
-	 * @var string
-	 */
-	protected $fragment;
+	/** @var string */
+	private $fragment;
 
-	/**
-	 * @deprecated in 1.31. This class is immutable. Use the getter for access.
-	 * @var string
-	 */
-	protected $interwiki;
+	/** @var string */
+	private $interwiki;
 
 	/**
 	 * Text form including namespace/interwiki, initialised on demand
@@ -86,9 +74,7 @@ class TitleValue implements LinkTarget {
 	 *   No validation or normalization is applied.
 	 * @param string $interwiki The interwiki component.
 	 *   No validation or normalization is applied.
-	 *
 	 * @return TitleValue|null
-	 *
 	 * @throws InvalidArgumentException
 	 */
 	public static function tryNew( $namespace, $title, $fragment = '', $interwiki = '' ) {
@@ -104,38 +90,47 @@ class TitleValue implements LinkTarget {
 	}
 
 	/**
-	 * Constructs a TitleValue from a local PageIdentity.
+	 * Create a TitleValue from a local PageReference.
 	 *
-	 * @note PageIdentities from another wiki are not supported, this method will
-	 *       throw if $page->getWikiId() doesn't return false.
+	 * @note The PageReference may belong to another wiki. In that case, the resulting TitleValue
+	 *       is also logically bound to that other wiki. No attempt is made to map the
+	 *       PageReference wiki ID to an interwiki prefix for the TitleValue.
 	 *
 	 * @since 1.36
-	 *
-	 * @param PageIdentity $page
-	 *
-	 * @throws InvalidArgumentException if $page does not belong to the local wiki.
+	 * @param PageReference $page
 	 * @return TitleValue
 	 */
-	public static function newFromPage( PageIdentity $page ) : TitleValue {
-		if ( $page->getWikiId() ) {
-			// TODO: we could allow "foreign" PageIdentities by providing an interwiki prefix,
-			// but the exact semantics seem unclear. For instance, would the interwiki prefix
-			// be valid in the context of the local wiki, or the wiki indicated by getWikiId()?
-			throw new InvalidArgumentException( 'Not a local PageIdentity: ' . $page );
-		}
-
+	public static function newFromPage( PageReference $page ): TitleValue {
 		return new TitleValue( $page->getNamespace(), $page->getDBkey() );
 	}
 
 	/**
-	 * Constructs a TitleValue.
+	 * Casts a PageReference to a LinkTarget.
+	 *
+	 * If $page is null, null is returned.
+	 * If $page is also an instance of LinkTarget, $page is returned unchanged.
+	 *
+	 * @see newFromPage()
+	 * @since 1.37
+	 * @param PageReference|null $page
+	 * @return LinkTarget|null
+	 */
+	public static function castPageToLinkTarget( ?PageReference $page ): ?LinkTarget {
+		if ( !$page || $page instanceof LinkTarget ) {
+			return $page;
+		}
+
+		return self::newFromPage( $page );
+	}
+
+	/**
+	 * Construct a TitleValue.
 	 *
 	 * @note TitleValue expects a valid namespace and name; typically, a TitleValue is constructed
 	 * either from a database entry, or by a TitleParser. For constructing a TitleValue from user
 	 * input or external sources, use a TitleParser.
 	 *
 	 * @stable to call
-	 *
 	 * @param int $namespace The namespace ID. This is not validated.
 	 * @param string $title The page title in either DBkey or text form. No normalization is applied
 	 *   beyond underscore/space conversion.
@@ -143,7 +138,6 @@ class TitleValue implements LinkTarget {
 	 *   No validation or normalization is applied.
 	 * @param string $interwiki The interwiki component.
 	 *   No validation or normalization is applied.
-	 *
 	 * @throws InvalidArgumentException
 	 */
 	public function __construct( $namespace, $title, $fragment = '', $interwiki = '' ) {
@@ -156,7 +150,8 @@ class TitleValue implements LinkTarget {
 	}
 
 	/**
-	 * Asserts that the given parameters could be used to construct a TitleValue object.
+	 * Assert that the given parameters could be used to construct a TitleValue object.
+	 *
 	 * Performs basic syntax and consistency checks. Does not perform full validation,
 	 * use TitleParser::makeTitleValueSafe() for that.
 	 *
@@ -164,9 +159,8 @@ class TitleValue implements LinkTarget {
 	 * @param string $title
 	 * @param string $fragment
 	 * @param string $interwiki
-	 *
 	 * @throws InvalidArgumentException if the combination of parameters is not valid for
-	 *         constructing a TitleValue.
+	 *  constructing a TitleValue.
 	 */
 	public static function assertValidSpec( $namespace, $title, $fragment = '', $interwiki = '' ) {
 		if ( !is_int( $namespace ) ) {
@@ -197,75 +191,31 @@ class TitleValue implements LinkTarget {
 		);
 	}
 
-	/**
-	 * @since 1.23
-	 * @return int
-	 */
-	public function getNamespace() {
+	public function getNamespace(): int {
 		return $this->namespace;
 	}
 
-	/**
-	 * @since 1.27
-	 * @param int $ns
-	 * @return bool
-	 */
-	public function inNamespace( $ns ) {
+	public function inNamespace( int $ns ): bool {
 		return $this->namespace == $ns;
 	}
 
-	/**
-	 * @since 1.23
-	 * @return string
-	 */
-	public function getFragment() {
+	public function getFragment(): string {
 		return $this->fragment;
 	}
 
-	/**
-	 * @since 1.27
-	 * @return bool
-	 */
-	public function hasFragment() {
+	public function hasFragment(): bool {
 		return $this->fragment !== '';
 	}
 
-	/**
-	 * Returns the title's DB key, as supplied to the constructor,
-	 * without namespace prefix or fragment.
-	 * @since 1.23
-	 *
-	 * @return string
-	 */
-	public function getDBkey() {
+	public function getDBkey(): string {
 		return $this->dbkey;
 	}
 
-	/**
-	 * Returns the title in text form,
-	 * without namespace prefix or fragment.
-	 * @since 1.23
-	 *
-	 * This is computed from the DB key by replacing any underscores with spaces.
-	 *
-	 * @note To get a title string that includes the namespace and/or fragment,
-	 *       use a TitleFormatter.
-	 *
-	 * @return string
-	 */
-	public function getText() {
+	public function getText(): string {
 		return str_replace( '_', ' ', $this->dbkey );
 	}
 
-	/**
-	 * Creates a new TitleValue for a different fragment of the same page.
-	 *
-	 * @since 1.27
-	 * @param string $fragment The fragment name, or "" for the entire page.
-	 *
-	 * @return TitleValue
-	 */
-	public function createFragmentTarget( $fragment ) {
+	public function createFragmentTarget( string $fragment ): self {
 		return new TitleValue(
 			$this->namespace,
 			$this->dbkey,
@@ -274,23 +224,11 @@ class TitleValue implements LinkTarget {
 		);
 	}
 
-	/**
-	 * Whether it has an interwiki part
-	 *
-	 * @since 1.27
-	 * @return bool
-	 */
-	public function isExternal() {
+	public function isExternal(): bool {
 		return $this->interwiki !== '';
 	}
 
-	/**
-	 * Returns the interwiki part
-	 *
-	 * @since 1.27
-	 * @return string
-	 */
-	public function getInterwiki() {
+	public function getInterwiki(): string {
 		return $this->interwiki;
 	}
 
@@ -298,8 +236,8 @@ class TitleValue implements LinkTarget {
 	 * Returns a string representation of the title, for logging. This is purely informative
 	 * and must not be used programmatically. Use the appropriate TitleFormatter to generate
 	 * the correct string representation for a given use.
-	 * @since 1.23
 	 *
+	 * @since 1.23
 	 * @return string
 	 */
 	public function __toString(): string {
@@ -316,12 +254,7 @@ class TitleValue implements LinkTarget {
 		return $name;
 	}
 
-	/**
-	 * @param LinkTarget $other
-	 *
-	 * @return bool
-	 */
-	public function isSameLinkAs( LinkTarget $other ) {
+	public function isSameLinkAs( LinkTarget $other ): bool {
 		// NOTE: keep in sync with Title::isSameLinkAs()!
 		return ( $other->getInterwiki() === $this->getInterwiki() )
 			&& ( $other->getDBkey() === $this->getDBkey() )

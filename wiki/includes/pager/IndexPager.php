@@ -185,7 +185,9 @@ abstract class IndexPager extends ContextSource implements Pager {
 		$this->mOffset = $this->mRequest->getText( 'offset' );
 
 		# Use consistent behavior for the limit options
-		$this->mDefaultLimit = $this->getUser()->getIntOption( 'rclimit' );
+		$this->mDefaultLimit = MediaWikiServices::getInstance()
+			->getUserOptionsLookup()
+			->getIntOption( $this->getUser(), 'rclimit' );
 		if ( !$this->mLimit ) {
 			// Don't override if a subclass calls $this->setLimit() in its constructor.
 			list( $this->mLimit, /* $offset */ ) = $this->mRequest
@@ -239,6 +241,8 @@ abstract class IndexPager extends ContextSource implements Pager {
 	/**
 	 * Get the Database object in use
 	 *
+	 * @since 1.20
+	 *
 	 * @return IDatabase
 	 */
 	public function getDatabase() {
@@ -260,7 +264,6 @@ abstract class IndexPager extends ContextSource implements Pager {
 
 		# Plus an extra row so that we can tell the "next" link should be shown
 		$queryLimit = $this->mLimit + 1;
-
 		if ( $this->mOffset == '' ) {
 			$isFirst = true;
 		} else {
@@ -302,6 +305,13 @@ abstract class IndexPager extends ContextSource implements Pager {
 	 */
 	public function getResult() {
 		return $this->mResult;
+	}
+
+	/**
+	 * @return int The current offset into the result. Valid during formatRow().
+	 */
+	public function getResultOffset() {
+		return $this->mResult->key();
 	}
 
 	/**
@@ -576,6 +586,18 @@ abstract class IndexPager extends ContextSource implements Pager {
 	}
 
 	/**
+	 * Get the HTML of a pager row.
+	 *
+	 * @stable to override
+	 * @since 1.38
+	 * @param stdClass $row
+	 * @return string
+	 */
+	protected function getRow( $row ): string {
+		return $this->formatRow( $row );
+	}
+
+	/**
 	 * Get the formatted result list. Calls getStartBody(), formatRow() and
 	 * getEndBody(), concatenates the results and returns them.
 	 *
@@ -584,6 +606,7 @@ abstract class IndexPager extends ContextSource implements Pager {
 	 * @return string
 	 */
 	public function getBody() {
+		$this->getOutput()->addModuleStyles( $this->getModuleStyles() );
 		if ( !$this->mQueryDone ) {
 			$this->doQuery();
 		}
@@ -602,20 +625,42 @@ abstract class IndexPager extends ContextSource implements Pager {
 				for ( $i = $numRows - 1; $i >= 0; $i-- ) {
 					$this->mResult->seek( $i );
 					$row = $this->mResult->fetchObject();
-					$s .= $this->formatRow( $row );
+					$s .= $this->getRow( $row );
 				}
 			} else {
 				$this->mResult->seek( 0 );
 				for ( $i = 0; $i < $numRows; $i++ ) {
 					$row = $this->mResult->fetchObject();
-					$s .= $this->formatRow( $row );
+					$s .= $this->getRow( $row );
 				}
 			}
+			$s .= $this->getFooter();
 		} else {
 			$s .= $this->getEmptyBody();
 		}
 		$s .= $this->getEndBody();
 		return $s;
+	}
+
+	/**
+	 * ResourceLoader modules that must be loaded to provide correct styling for this pager
+	 *
+	 * @stable to override
+	 * @since 1.38
+	 * @return string[]
+	 */
+	public function getModuleStyles() {
+		return [ 'mediawiki.pager.styles' ];
+	}
+
+	/**
+	 * Classes can extend to output a footer at the bottom of the pager list.
+	 *
+	 * @since 1.38
+	 * @return string
+	 */
+	protected function getFooter(): string {
+		return '';
 	}
 
 	/**
@@ -979,7 +1024,7 @@ abstract class IndexPager extends ContextSource implements Pager {
 	 */
 	protected function getLinkRenderer() {
 		if ( $this->linkRenderer === null ) {
-			 $this->linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+			$this->linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
 		}
 		return $this->linkRenderer;
 	}

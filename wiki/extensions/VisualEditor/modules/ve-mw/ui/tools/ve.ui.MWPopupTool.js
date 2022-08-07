@@ -12,7 +12,7 @@
  * @abstract
  * @extends OO.ui.PopupTool
  * @constructor
- * @param {string} title Title
+ * @param {string} title
  * @param {OO.ui.ToolGroup} toolGroup
  * @param {Object} [config]
  * @cfg {number} [width] Popup width. Upstream default is 320.
@@ -122,6 +122,7 @@ ve.ui.MWNoticesPopupTool.prototype.setNotices = function ( notices ) {
 	this.noticeItems = [];
 
 	notices.forEach( function ( item ) {
+		// eslint-disable-next-line no-jquery/no-html
 		var $element = $( '<div>' )
 			.addClass( 've-ui-mwNoticesPopupTool-item' )
 			.html( typeof item === 'string' ? item : item.message );
@@ -238,11 +239,10 @@ ve.ui.MWHelpPopupTool.prototype.onFeedbackClick = function () {
 	this.popup.toggle( false );
 	if ( !this.feedbackPromise ) {
 		this.feedbackPromise = mw.loader.using( 'mediawiki.feedback' ).then( function () {
-			var feedbackConfig, veConfig,
-				mode = tool.toolbar.getSurface().getMode();
+			var mode = tool.toolbar.getSurface().getMode();
 
 			// This can't be constructed until the editor has loaded as it uses special messages
-			feedbackConfig = {
+			var feedbackConfig = {
 				bugsLink: new mw.Uri( 'https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=VisualEditor' ),
 				bugsListLink: new mw.Uri( 'https://phabricator.wikimedia.org/maniphest/query/eSHgNozkIsuv/' ),
 				showUseragentCheckbox: true,
@@ -250,7 +250,7 @@ ve.ui.MWHelpPopupTool.prototype.onFeedbackClick = function () {
 			};
 
 			// If so configured, tell mw.feedback that we're posting to a remote wiki and set the title
-			veConfig = mw.config.get( 'wgVisualEditorConfig' );
+			var veConfig = mw.config.get( 'wgVisualEditorConfig' );
 			if ( veConfig.feedbackApiUrl ) {
 				feedbackConfig.apiUrl = veConfig.feedbackApiUrl;
 				feedbackConfig.title = new mw.Title(
@@ -286,18 +286,15 @@ ve.ui.MWHelpPopupTool.prototype.onKeyboardShortcutsClick = function () {
  * @inheritdoc
  */
 ve.ui.MWHelpPopupTool.prototype.onSelect = function () {
-	var $version;
-
 	// Parent method
 	ve.ui.MWHelpPopupTool.super.prototype.onSelect.apply( this, arguments );
 
 	if ( !this.versionPromise && this.popup.isVisible() ) {
-		$version = $( '<div>' ).addClass( 've-ui-mwHelpPopupTool-item oo-ui-pendingElement-pending' ).text( '\u00a0' );
+		var $version = $( '<div>' ).addClass( 've-ui-mwHelpPopupTool-item oo-ui-pendingElement-pending' ).text( '\u00a0' );
 		this.$items.append( $version );
 		this.versionPromise = ve.init.target.getLocalApi().get( {
 			action: 'query',
 			meta: 'siteinfo',
-			format: 'json',
 			siprop: 'extensions'
 		} ).then( function ( response ) {
 			var extension = response.query.extensions.filter( function ( ext ) {

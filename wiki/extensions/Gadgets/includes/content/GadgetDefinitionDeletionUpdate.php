@@ -20,6 +20,10 @@
  * @file
  */
 
+namespace MediaWiki\Extension\Gadgets\Content;
+
+use DataUpdate;
+use MediaWiki\Extension\Gadgets\GadgetRepo;
 use MediaWiki\Linker\LinkTarget;
 
 /**

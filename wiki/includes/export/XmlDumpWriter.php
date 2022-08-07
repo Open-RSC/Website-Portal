@@ -92,13 +92,13 @@ class XmlDumpWriter {
 		$schemaVersion = XML_DUMP_SCHEMA_VERSION_11
 	) {
 		Assert::parameter(
-			in_array( $contentMode, [ self::WRITE_CONTENT, self::WRITE_STUB ] ),
+			in_array( $contentMode, [ self::WRITE_CONTENT, self::WRITE_STUB ], true ),
 			'$contentMode',
 			'must be one of the following constants: WRITE_CONTENT or WRITE_STUB.'
 		);
 
 		Assert::parameter(
-			in_array( $schemaVersion, self::$supportedSchemas ),
+			in_array( $schemaVersion, self::$supportedSchemas, true ),
 			'$schemaVersion',
 			'must be one of the following schema versions: '
 				. implode( ',', self::$supportedSchemas )
@@ -163,16 +163,16 @@ class XmlDumpWriter {
 	 * @return string
 	 */
 	private function sitename() {
-		global $wgSitename;
-		return Xml::element( 'sitename', [], $wgSitename );
+		$sitename = MediaWikiServices::getInstance()->getMainConfig()->get( 'Sitename' );
+		return Xml::element( 'sitename', [], $sitename );
 	}
 
 	/**
 	 * @return string
 	 */
 	private function dbname() {
-		global $wgDBname;
-		return Xml::element( 'dbname', [], $wgDBname );
+		$dbname = MediaWikiServices::getInstance()->getMainConfig()->get( 'DBname' );
+		return Xml::element( 'dbname', [], $dbname );
 	}
 
 	/**
@@ -193,9 +193,9 @@ class XmlDumpWriter {
 	 * @return string
 	 */
 	private function caseSetting() {
-		global $wgCapitalLinks;
+		$capitalLinks = MediaWikiServices::getInstance()->getMainConfig()->get( 'CapitalLinks' );
 		// "case-insensitive" option is reserved for future
-		$sensitivity = $wgCapitalLinks ? 'first-letter' : 'case-sensitive';
+		$sensitivity = $capitalLinks ? 'first-letter' : 'case-sensitive';
 		return Xml::element( 'case', [], $sensitivity );
 	}
 
@@ -246,10 +246,12 @@ class XmlDumpWriter {
 		$out .= '    ' . Xml::element( 'ns', [], strval( $row->page_namespace ) ) . "\n";
 		$out .= '    ' . Xml::element( 'id', [], strval( $row->page_id ) ) . "\n";
 		if ( $row->page_is_redirect ) {
-			$page = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $this->currentTitle );
+			$services = MediaWikiServices::getInstance();
+			$page = $services->getWikiPageFactory()->newFromTitle( $this->currentTitle );
+			$redirectStore = $services->getRedirectStore();
 			$redirect = $this->invokeLenient(
-				static function () use ( $page ) {
-					return $page->getRedirectTarget();
+				static function () use ( $page, $redirectStore ) {
+					return $redirectStore->getRedirectTarget( $page );
 				},
 				'Failed to get redirect target of page ' . $page->getId()
 			);
@@ -297,6 +299,7 @@ class XmlDumpWriter {
 	 * @return SqlBlobStore
 	 */
 	private function getBlobStore() {
+		// @phan-suppress-next-line PhanTypeMismatchReturnSuperType
 		return MediaWikiServices::getInstance()->getBlobStore();
 	}
 
@@ -589,7 +592,7 @@ class XmlDumpWriter {
 		if ( $row->log_deleted & LogPage::DELETED_USER ) {
 			$out .= "    " . Xml::element( 'contributor', [ 'deleted' => 'deleted' ] ) . "\n";
 		} else {
-			$out .= $this->writeContributor( $row->log_user, $row->user_name, "    " );
+			$out .= $this->writeContributor( $row->actor_user, $row->actor_name, "    " );
 		}
 
 		if ( $row->log_deleted & LogPage::DELETED_COMMENT ) {
@@ -695,19 +698,26 @@ class XmlDumpWriter {
 		} else {
 			$contents = '';
 		}
-		if ( $file->isDeleted( File::DELETED_COMMENT ) ) {
-			$comment = Xml::element( 'comment', [ 'deleted' => 'deleted' ] );
+		$uploader = $file->getUploader( File::FOR_PUBLIC );
+		if ( $uploader ) {
+			$uploader = $this->writeContributor( $uploader->getId(), $uploader->getName() );
 		} else {
-			$comment = Xml::elementClean( 'comment', null, strval( $file->getDescription() ) );
+			$uploader = Xml::element( 'contributor', [ 'deleted' => 'deleted' ] ) . "\n";
+		}
+		$comment = $file->getDescription( File::FOR_PUBLIC );
+		if ( ( $comment ?? '' ) !== '' ) {
+			$comment = Xml::elementClean( 'comment', null, $comment );
+		} else {
+			$comment = Xml::element( 'comment', [ 'deleted' => 'deleted' ] );
 		}
 		return "    <upload>\n" .
 			$this->writeTimestamp( $file->getTimestamp() ) .
-			$this->writeContributor( $file->getUser( 'id' ), $file->getUser( 'text' ) ) .
+			$uploader .
 			"      " . $comment . "\n" .
 			"      " . Xml::element( 'filename', null, $file->getName() ) . "\n" .
 			$archiveName .
 			"      " . Xml::element( 'src', null, $file->getCanonicalUrl() ) . "\n" .
-			"      " . Xml::element( 'size', null, $file->getSize() ) . "\n" .
+			"      " . Xml::element( 'size', null, (string)( $file->getSize() ?: 0 ) ) . "\n" .
 			"      " . Xml::element( 'sha1base36', null, $file->getSha1() ) . "\n" .
 			"      " . Xml::element( 'rel', null, $file->getRel() ) . "\n" .
 			$contents .

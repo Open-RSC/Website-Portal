@@ -1,50 +1,52 @@
 /** @module search */
-var
+
+const
 	Vue = require( 'vue' ).default || require( 'vue' ),
 	App = require( './App.vue' ),
 	config = require( './config.json' );
 
 /**
- * @param {HTMLElement} searchForm
- * @param {HTMLInputElement} search
+ * @param {Element} searchBox
  * @return {void}
  */
-function initApp( searchForm, search ) {
-	// eslint-disable-next-line no-new
-	new Vue( {
-		el: '#p-search',
-		/**
-		 *
-		 * @param {Function} createElement
-		 * @return {Vue.VNode}
-		 */
-		render: function ( createElement ) {
-			return createElement( App, {
-				props: $.extend( {
-					autofocusInput: search === document.activeElement,
-					action: searchForm.getAttribute( 'action' ),
-					searchAccessKey: search.getAttribute( 'accessKey' ),
-					searchTitle: search.getAttribute( 'title' ),
-					searchPlaceholder: search.getAttribute( 'placeholder' ),
-					searchQuery: search.value
-				},
-				// Pass additional config from server.
-				config
-				)
-			} );
-		}
-	} );
+function initApp( searchBox ) {
+	const searchForm = searchBox.querySelector( '.vector-search-box-form' ),
+		titleInput = /** @type {HTMLInputElement|null} */ (
+			searchBox.querySelector( 'input[name=title]' )
+		),
+		search = /** @type {HTMLInputElement|null} */ ( searchBox.querySelector( 'input[name="search"]' ) ),
+		searchPageTitle = titleInput && titleInput.value;
+
+	if ( !searchForm || !search || !titleInput ) {
+		throw new Error( 'Attempted to create Vue search element from an incompatible element.' );
+	}
+
+	// @ts-ignore
+	Vue.createMwApp(
+		App, $.extend( {
+			id: searchForm.id,
+			autofocusInput: search === document.activeElement,
+			action: searchForm.getAttribute( 'action' ),
+			searchAccessKey: search.getAttribute( 'accessKey' ),
+			searchPageTitle: searchPageTitle,
+			searchTitle: search.getAttribute( 'title' ),
+			searchPlaceholder: search.getAttribute( 'placeholder' ),
+			searchQuery: search.value,
+			autoExpandWidth: searchBox ? searchBox.classList.contains( 'vector-search-box-auto-expand-width' ) : false
+		// Pass additional config from server.
+		}, config )
+	)
+		.mount( searchForm.parentNode );
 }
 /**
  * @param {Document} document
  * @return {void}
  */
 function main( document ) {
-	var
-		searchForm = /** @type {HTMLElement} */ ( document.querySelector( '#searchform' ) ),
-		search = /** @type {HTMLInputElement|null} */ ( document.getElementById( 'searchInput' ) );
-	if ( search && searchForm ) {
-		initApp( searchForm, search );
-	}
+	const searchBoxes = document.querySelectorAll( '.vector-search-box' );
+
+	searchBoxes.forEach( ( searchBox ) => {
+		initApp( searchBox );
+	} );
 }
 main( document );

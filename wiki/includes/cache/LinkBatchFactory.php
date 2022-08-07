@@ -28,6 +28,8 @@ use Language;
 use LinkBatch;
 use LinkCache;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\PageReference;
+use Psr\Log\LoggerInterface;
 use TitleFormatter;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -62,38 +64,39 @@ class LinkBatchFactory {
 	 */
 	private $loadBalancer;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	public function __construct(
 		LinkCache $linkCache,
 		TitleFormatter $titleFormatter,
 		Language $contentLanguage,
 		GenderCache $genderCache,
-		ILoadBalancer $loadBalancer
+		ILoadBalancer $loadBalancer,
+		LoggerInterface $logger
 	) {
 		$this->linkCache = $linkCache;
 		$this->titleFormatter = $titleFormatter;
 		$this->contentLanguage = $contentLanguage;
 		$this->genderCache = $genderCache;
 		$this->loadBalancer = $loadBalancer;
+		$this->logger = $logger;
 	}
 
 	/**
-	 * @param iterable|LinkTarget[] $initialItems Initial items to be added to the batch
+	 * @param iterable<LinkTarget>|iterable<PageReference> $initialItems items to be added
+	 *
 	 * @return LinkBatch
 	 */
-	public function newLinkBatch( iterable $initialItems = [] ) : LinkBatch {
-		$batch = new LinkBatch(
-			[],
+	public function newLinkBatch( iterable $initialItems = [] ): LinkBatch {
+		return new LinkBatch(
+			$initialItems,
 			$this->linkCache,
 			$this->titleFormatter,
 			$this->contentLanguage,
 			$this->genderCache,
-			$this->loadBalancer
+			$this->loadBalancer,
+			$this->logger
 		);
-
-		foreach ( $initialItems as $item ) {
-			$batch->addObj( $item );
-		}
-
-		return $batch;
 	}
 }

@@ -20,6 +20,8 @@
  * @author Roan Kattouw
  */
 
+use Wikimedia\RequestTimeout\TimeoutException;
+
 /**
  * Module for ResourceLoader initialization.
  *
@@ -48,8 +50,8 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 		// for forward compatibility so that they can be safely referenced by mediawiki.js,
 		// even when the code is cached and the order of registrations (and implicit
 		// group ids) changes between versions of the software.
-		'user' => 0,
-		'private' => 1,
+		self::GROUP_USER => 0,
+		self::GROUP_PRIVATE => 1,
 	];
 
 	/**
@@ -65,7 +67,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 		array $registryData,
 		string $moduleName,
 		array $handled = []
-	) : array {
+	): array {
 		static $dependencyCache = [];
 
 		// No modules will be added or changed server-side after this point,
@@ -125,7 +127,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 *  - string 'source'
 	 * @phan-param array<string,array{version:string,dependencies:array,group:?string,source:string}> &$registryData
 	 */
-	public static function compileUnresolvedDependencies( array &$registryData ) : void {
+	public static function compileUnresolvedDependencies( array &$registryData ): void {
 		foreach ( $registryData as $name => &$data ) {
 			$dependencies = $data['dependencies'];
 			try {
@@ -149,7 +151,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 * @param ResourceLoaderContext $context
 	 * @return string JavaScript code for registering all modules with the client loader
 	 */
-	public function getModuleRegistrations( ResourceLoaderContext $context ) : string {
+	public function getModuleRegistrations( ResourceLoaderContext $context ): string {
 		$resourceLoader = $context->getResourceLoader();
 		// Future developers: Use WebRequest::getRawVal() instead getVal().
 		// The getVal() method performs slow Language+UTF logic. (f303bb9360)
@@ -168,6 +170,8 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 		// don't require on-demand loading of more information.
 		try {
 			$resourceLoader->preloadModuleInfo( $moduleNames, $context );
+		} catch ( TimeoutException $e ) {
+			throw $e;
 		} catch ( Exception $e ) {
 			// Don't fail the request (T152266)
 			// Also print the error in the main output
@@ -203,8 +207,19 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 				continue;
 			}
 
+			// Optimization: Exclude modules in the `noscript` group. These are only ever used
+			// directly by HTML without use of JavaScript (T291735).
+			if ( $module->getGroup() === self::GROUP_NOSCRIPT ) {
+				continue;
+			}
+
 			try {
+				// The version should be formatted by ResourceLoader::makeHash and be of
+				// length ResourceLoader::HASH_LENGTH (or empty string).
+				// The getVersionHash method is final and is covered by tests, as is makeHash().
 				$versionHash = $module->getVersionHash( $context );
+			} catch ( TimeoutException $e ) {
+				throw $e;
 			} catch ( Exception $e ) {
 				// Don't fail the request (T152266)
 				// Also print the error in the main output
@@ -217,20 +232,6 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 				);
 				$versionHash = '';
 				$states[$name] = 'error';
-			}
-
-			if ( $versionHash !== '' && strlen( $versionHash ) !== ResourceLoader::HASH_LENGTH ) {
-				$e = new RuntimeException( "Badly formatted module version hash" );
-				$resourceLoader->outputErrorAndLog( $e,
-						"Module '{module}' produced an invalid version hash: '{version}'.",
-					[
-						'module' => $name,
-						'version' => $versionHash,
-					]
-				);
-				// Module implementation either broken or deviated from ResourceLoader::makeHash
-				// Asserted by tests/phpunit/structure/ResourcesTest.
-				$versionHash = ResourceLoader::makeHash( $versionHash );
 			}
 
 			$skipFunction = $module->getSkipFunction();
@@ -281,7 +282,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 		return $out;
 	}
 
-	private function getGroupId( $groupName ) : ?int {
+	private function getGroupId( $groupName ): ?int {
 		if ( $groupName === null ) {
 			return null;
 		}
@@ -298,7 +299,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 *
 	 * @return array
 	 */
-	private function getBaseModules() : array {
+	private function getBaseModules(): array {
 		return [ 'jquery', 'mediawiki.base' ];
 	}
 
@@ -308,7 +309,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 *
 	 * @return string localStorage item key for JavaScript
 	 */
-	private function getStoreKey() : string {
+	private function getStoreKey(): string {
 		return 'MediaWikiModuleStore:' . $this->getConfig()->get( 'DBname' );
 	}
 
@@ -316,7 +317,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 * @see $wgResourceLoaderMaxQueryLength
 	 * @return int
 	 */
-	private function getMaxQueryLength() : int {
+	private function getMaxQueryLength(): int {
 		$len = $this->getConfig()->get( 'ResourceLoaderMaxQueryLength' );
 		// - Ignore -1, which in MW 1.34 and earlier was used to mean "unlimited".
 		// - Ignore invalid values, e.g. non-int or other negative values.
@@ -333,7 +334,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 * @param ResourceLoaderContext $context
 	 * @return string String of concatenated vary conditions
 	 */
-	private function getStoreVary( ResourceLoaderContext $context ) : string {
+	private function getStoreVary( ResourceLoaderContext $context ): string {
 		return implode( ':', [
 			$context->getSkin(),
 			$this->getConfig()->get( 'ResourceLoaderStorageVersion' ),
@@ -345,7 +346,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 * @param ResourceLoaderContext $context
 	 * @return string JavaScript code
 	 */
-	public function getScript( ResourceLoaderContext $context ) : string {
+	public function getScript( ResourceLoaderContext $context ): string {
 		global $IP;
 		$conf = $this->getConfig();
 
@@ -355,13 +356,10 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 
 		$startupCode = file_get_contents( "$IP/resources/src/startup/startup.js" );
 
-		// The files read here MUST be kept in sync with maintenance/jsduck/eg-iframe.html,
-		// and MUST be considered by 'fileHashes' in StartUpModule::getDefinitionSummary().
+		// The files read here MUST be kept in sync with maintenance/jsduck/eg-iframe.html.
 		$mwLoaderCode = file_get_contents( "$IP/resources/src/startup/mediawiki.js" ) .
+			file_get_contents( "$IP/resources/src/startup/mediawiki.loader.js" ) .
 			file_get_contents( "$IP/resources/src/startup/mediawiki.requestIdleCallback.js" );
-		if ( $context->getDebug() ) {
-			$mwLoaderCode .= file_get_contents( "$IP/resources/src/startup/mediawiki.log.js" );
-		}
 		if ( $conf->get( 'ResourceLoaderEnableJSProfiler' ) ) {
 			$mwLoaderCode .= file_get_contents( "$IP/resources/src/startup/profiler.js" );
 		}
@@ -372,19 +370,32 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			// (such as when using the default lang/skin).
 			'$VARS.reqBase' => $context->encodeJson( (object)$context->getReqBase() ),
 			'$VARS.baseModules' => $context->encodeJson( $this->getBaseModules() ),
-			'$VARS.maxQueryLength' => $context->encodeJson( $this->getMaxQueryLength() ),
+			'$VARS.maxQueryLength' => $context->encodeJson(
+				// In debug mode (except legacy debug mode), let the client fetch each module in
+				// its own dedicated request (T85805).
+				// This is effectively the equivalent of ResourceLoaderClientHtml::makeLoad,
+				// which does this for stylesheets.
+				( !$context->getDebug() || $context->getDebug() === $context::DEBUG_LEGACY ) ?
+					$this->getMaxQueryLength() :
+					0
+			),
 			// The client-side module cache can be disabled by site configuration.
 			// It is also always disabled in debug mode.
-			'$VARS.storeEnabled' => $context->encodeJson(
-				$conf->get( 'ResourceLoaderStorageEnabled' ) && !$context->getDebug()
-			),
-			'$VARS.wgLegacyJavaScriptGlobals' => $context->encodeJson(
-				$conf->get( 'LegacyJavaScriptGlobals' )
+			'$VARS.storeDisabled' => $context->encodeJson(
+				!$conf->get( 'ResourceLoaderStorageEnabled' ) || $context->getDebug()
 			),
 			'$VARS.storeKey' => $context->encodeJson( $this->getStoreKey() ),
 			'$VARS.storeVary' => $context->encodeJson( $this->getStoreVary( $context ) ),
-			'$VARS.groupUser' => $context->encodeJson( $this->getGroupId( 'user' ) ),
-			'$VARS.groupPrivate' => $context->encodeJson( $this->getGroupId( 'private' ) ),
+			'$VARS.groupUser' => $context->encodeJson( $this->getGroupId( self::GROUP_USER ) ),
+			'$VARS.groupPrivate' => $context->encodeJson( $this->getGroupId( self::GROUP_PRIVATE ) ),
+			// Only expose private mw.loader.isES6ForTest in test mode.
+			'$CODE.test( isES6Supported )' => $conf->get( 'EnableJavaScriptTest' ) ?
+				'(mw.loader.isES6ForTest !== undefined ? mw.loader.isES6ForTest : isES6Supported)' :
+				'isES6Supported',
+			// Only expose private mw.redefineFallbacksForTest in test mode.
+			'$CODE.maybeRedefineFallbacksForTest();' => $conf->get( 'EnableJavaScriptTest' ) ?
+				'mw.redefineFallbacksForTest = defineFallbacks;' :
+				'',
 		];
 		$profilerStubs = [
 			'$CODE.profileExecuteStart();' => 'mw.loader.profiler.onExecuteStart( module );',
@@ -392,13 +403,16 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			'$CODE.profileScriptStart();' => 'mw.loader.profiler.onScriptStart( module );',
 			'$CODE.profileScriptEnd();' => 'mw.loader.profiler.onScriptEnd( module );',
 		];
-		if ( $conf->get( 'ResourceLoaderEnableJSProfiler' ) ) {
-			// When profiling is enabled, insert the calls.
-			$mwLoaderPairs += $profilerStubs;
-		} else {
-			// When disabled (by default), insert nothing.
-			$mwLoaderPairs += array_fill_keys( array_keys( $profilerStubs ), '' );
-		}
+		$debugStubs = [
+			'$CODE.consoleLog();' => 'console.log.apply( console, arguments );',
+		];
+		// When profiling is enabled, insert the calls. When disabled (by default), insert nothing.
+		$mwLoaderPairs += $conf->get( 'ResourceLoaderEnableJSProfiler' )
+			? $profilerStubs
+			: array_fill_keys( array_keys( $profilerStubs ), '' );
+		$mwLoaderPairs += $context->getDebug()
+			? $debugStubs
+			: array_fill_keys( array_keys( $debugStubs ), '' );
 		$mwLoaderCode = strtr( $mwLoaderCode, $mwLoaderPairs );
 
 		// Perform string replacements for startup.js
@@ -415,14 +429,14 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	/**
 	 * @return bool
 	 */
-	public function supportsURLLoading() : bool {
+	public function supportsURLLoading(): bool {
 		return false;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function enableModuleContentVersion() : bool {
+	public function enableModuleContentVersion(): bool {
 		// Enabling this means that ResourceLoader::getVersionHash will simply call getScript()
 		// and hash it to determine the version (as used by E-Tag HTTP response header).
 		return true;

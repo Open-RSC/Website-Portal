@@ -17,5 +17,6 @@
 	"monobook-cactions-label": "Agoj pri paĝo",
 	"monobook-notifications-link": "Sciigoj ($1)",
 	"monobook-notifications-link-none": "Sciigoj",
-	"monobook-responsive-label": "Ŝalti respondeman dezajnon de MonoBook"
+	"monobook-view-history": "Historio",
+	"monobook-action-undelete": "Malforigi {{PLURAL:$1|redakton|$1 redaktojn}}"
 }

@@ -41,11 +41,13 @@
 	"apihelp-visualeditor-param-stash": "Lors de l’enregistrement, mettre ceci à vrai si vous voulez utiliser l’API de réserve.",
 	"apihelp-visualeditor-param-wikitext": "Wikicode à envoyer à Parsoid pour être converti en HTML (paction=parsefragment).",
 	"apihelp-visualeditor-summary": "Renvoie une page HTML5 du service Parsoid.",
-	"apihelp-visualeditoredit-description": "Enregistre une page HTML5 en Mediawiki (convertie en wikicode via le service Parsoid).",
+	"apihelp-visualeditoredit-description": "Enregistre une page HTML5 en MediaWiki (convertie en wikicode via le service Parsoid).",
 	"apihelp-visualeditoredit-param-basetimestamp": "Lors de l’enregistrement, initialiser ceci avec l’horodatage de la version de la page qui était modifiée. Utilisé pour détecter les conflits d’édition.",
 	"apihelp-visualeditoredit-param-cachekey": "Utilise le résultat d’une précédente requête <tt>serializeforcache</tt> avec cette clé. Ceci remplace $1html.",
 	"apihelp-visualeditoredit-param-captchaid": "Identifiant CAPTCHA (lors d’un enregistrement avec une réponse CAPTCHA).",
 	"apihelp-visualeditoredit-param-captchaword": "Réponse au CAPTCHA (lors d’un enregistrement avec une réponse CAPTCHA).",
+	"apihelp-visualeditoredit-param-plugins": "Modules associés avec la requête de l’API.",
+	"apihelp-visualeditoredit-param-data-{plugin}": "Données arbitraires envoyées par un module avec la requête de l’API.",
 	"apihelp-visualeditoredit-param-etag": "ETag à envoyer.",
 	"apihelp-visualeditoredit-param-html": "HTML à envoyer à Parsoid en échange de wikicode.",
 	"apihelp-visualeditoredit-param-minor": "Marquage d’édition mineure.",
@@ -58,6 +60,6 @@
 	"apihelp-visualeditoredit-param-starttimestamp": "Lors de l’enregistrement, règle ceci avec l’horodatage du moment où la page a été chargée. Utilisé pour détecter les conflits d’édition.",
 	"apihelp-visualeditoredit-param-summary": "Modifier le résumé.",
 	"apihelp-visualeditoredit-param-tags": "Modifier les balises à appliquer à la modification.",
-	"apihelp-visualeditoredit-param-wikitext": "Le wikitexte avec lequel travailler.",
-	"apihelp-visualeditoredit-summary": "Enregistrer une page HTML5 dans Médiawiki (convertie en wikitexte via le service Parsoid)."
+	"apihelp-visualeditoredit-param-wikitext": "Le wikicode avec lequel agir.",
+	"apihelp-visualeditoredit-summary": "Enregistrer une page HTML5 en MediaWiki (convertie en wikicode via le service Parsoid)."
 }

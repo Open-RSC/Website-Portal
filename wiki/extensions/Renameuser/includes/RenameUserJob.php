@@ -1,6 +1,12 @@
 <?php
 
+namespace MediaWiki\Extension\Renameuser;
+
+use InvalidArgumentException;
+use Job;
+use LogicException;
 use MediaWiki\MediaWikiServices;
+use Title;
 
 /**
  * Custom job to perform updates on tables in busier environments
@@ -47,7 +53,7 @@ class RenameUserJob extends Job {
 	public function run() {
 		global $wgUpdateRowsPerQuery;
 
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$table = $this->params['table'];
 		$column = $this->params['column'];
 

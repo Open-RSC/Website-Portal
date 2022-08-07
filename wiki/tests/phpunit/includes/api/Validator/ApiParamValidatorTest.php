@@ -8,7 +8,6 @@ use ApiMessage;
 use ApiTestCase;
 use ApiUsageException;
 use FauxRequest;
-use MediaWiki\MediaWikiServices;
 use Message;
 use Wikimedia\Message\DataMessageValue;
 use Wikimedia\Message\MessageValue;
@@ -24,16 +23,16 @@ use Wikimedia\TestingAccessWrapper;
  */
 class ApiParamValidatorTest extends ApiTestCase {
 
-	private function getValidator( FauxRequest $request ) : array {
+	private function getValidator( FauxRequest $request ): array {
 		$context = $this->apiContext->newTestContext( $request, $this->getTestUser()->getUser() );
 		$main = new ApiMain( $context );
 		return [
-			new ApiParamValidator( $main, MediaWikiServices::getInstance()->getObjectFactory() ),
+			new ApiParamValidator( $main, $this->getServiceContainer()->getObjectFactory() ),
 			$main
 		];
 	}
 
-	public function testKnownTypes() : void {
+	public function testKnownTypes(): void {
 		[ $validator ] = $this->getValidator( new FauxRequest( [] ) );
 		$this->assertSame(
 			[
@@ -49,12 +48,12 @@ class ApiParamValidatorTest extends ApiTestCase {
 	 * @param array|mixed $settings
 	 * @param array $expect
 	 */
-	public function testNormalizeSettings( $settings, array $expect ) : void {
+	public function testNormalizeSettings( $settings, array $expect ): void {
 		[ $validator ] = $this->getValidator( new FauxRequest( [] ) );
 		$this->assertEquals( $expect, $validator->normalizeSettings( $settings ) );
 	}
 
-	public function provideNormalizeSettings() : array {
+	public function provideNormalizeSettings(): array {
 		return [
 			'Basic test' => [
 				[],
@@ -141,13 +140,13 @@ class ApiParamValidatorTest extends ApiTestCase {
 	 * @param string $name Parameter to test.
 	 * @param array $expect
 	 */
-	public function testCheckSettings( array $params, string $name, array $expect ) : void {
+	public function testCheckSettings( array $params, string $name, array $expect ): void {
 		[ $validator, $main ] = $this->getValidator( new FauxRequest( [] ) );
 		$module = $main->getModuleFromPath( 'query+allpages' );
 
 		$mock = $this->getMockBuilder( ParamValidator::class )
 			->disableOriginalConstructor()
-			->setMethods( [ 'checkSettings' ] )
+			->onlyMethods( [ 'checkSettings' ] )
 			->getMock();
 		$mock->expects( $this->once() )->method( 'checkSettings' )
 			->willReturnCallback( function ( $n, $settings, $options ) use ( $name, $module ) {
@@ -257,18 +256,6 @@ class ApiParamValidatorTest extends ApiTestCase {
 						ApiBase::PARAM_HELP_MSG_INFO => 'PARAM_HELP_MSG_INFO must be an array, got string',
 						ApiBase::PARAM_HELP_MSG_PER_VALUE => 'PARAM_HELP_MSG_PER_VALUE must be an array, got boolean',
 						ApiBase::PARAM_TEMPLATE_VARS => 'PARAM_TEMPLATE_VARS must be an array, got boolean',
-					],
-					'allowedKeys' => $keys,
-					'messages' => [],
-				]
-			],
-			'PARAM_VALUE_LINKS is deprecated' => [
-				[ 'test' => [ ApiBase::PARAM_VALUE_LINKS => null ] ],
-				'test',
-				[
-					'issues' => [
-						'X',
-						ApiBase::PARAM_VALUE_LINKS => 'PARAM_VALUE_LINKS was deprecated in MediaWiki 1.35',
 					],
 					'allowedKeys' => $keys,
 					'messages' => [],
@@ -530,7 +517,7 @@ class ApiParamValidatorTest extends ApiTestCase {
 	/**
 	 * @dataProvider provideGetValue
 	 */
-	public function testGetValue( ?string $data, $settings, $expect ) : void {
+	public function testGetValue( ?string $data, $settings, $expect ): void {
 		[ $validator, $main ] = $this->getValidator( new FauxRequest( [ 'aptest' => $data ] ) );
 		$module = $main->getModuleFromPath( 'query+allpages' );
 		$options = [
@@ -551,7 +538,7 @@ class ApiParamValidatorTest extends ApiTestCase {
 		}
 	}
 
-	public function provideGetValue() : array {
+	public function provideGetValue(): array {
 		return [
 			'Basic test' => [
 				'1234',
@@ -617,7 +604,7 @@ class ApiParamValidatorTest extends ApiTestCase {
 	/**
 	 * @dataProvider provideValidateValue
 	 */
-	public function testValidateValue( $value, $settings, $expect ) : void {
+	public function testValidateValue( $value, $settings, $expect ): void {
 		[ $validator, $main ] = $this->getValidator( new FauxRequest() );
 		$module = $main->getModuleFromPath( 'query+allpages' );
 
@@ -637,7 +624,7 @@ class ApiParamValidatorTest extends ApiTestCase {
 		}
 	}
 
-	public function provideValidateValue() : array {
+	public function provideValidateValue(): array {
 		return [
 			'Basic test' => [
 				1234,
@@ -678,15 +665,15 @@ class ApiParamValidatorTest extends ApiTestCase {
 
 		$mock = $this->getMockBuilder( ParamValidator::class )
 			->disableOriginalConstructor()
-			->setMethods( [ 'getParamInfo' ] )
+			->onlyMethods( [ 'getParamInfo' ] )
 			->getMock();
 		$mock->expects( $this->once() )->method( 'getParamInfo' )
-		   ->with(
+			->with(
 				$this->identicalTo( 'aptest' ),
 				$this->identicalTo( $settings ),
 				$this->identicalTo( $options + [ 'module' => $module ] )
-		   )
-		   ->willReturn( [ $dummy ] );
+			)
+			->willReturn( [ $dummy ] );
 
 		TestingAccessWrapper::newFromObject( $validator )->paramValidator = $mock;
 		$this->assertSame( [ $dummy ], $validator->getParamInfo( $module, 'test', $settings, $options ) );
@@ -705,18 +692,18 @@ class ApiParamValidatorTest extends ApiTestCase {
 
 		$mock = $this->getMockBuilder( ParamValidator::class )
 			->disableOriginalConstructor()
-			->setMethods( [ 'getHelpInfo' ] )
+			->onlyMethods( [ 'getHelpInfo' ] )
 			->getMock();
 		$mock->expects( $this->once() )->method( 'getHelpInfo' )
-		   ->with(
+			->with(
 				$this->identicalTo( 'aptest' ),
 				$this->identicalTo( $settings ),
 				$this->identicalTo( $options + [ 'module' => $module ] )
-		   )
-		   ->willReturn( [
-			   'mv1' => MessageValue::new( 'parentheses', [ 'foobar' ] ),
-			   'mv2' => MessageValue::new( 'paramvalidator-help-continue' ),
-		   ] );
+			)
+			->willReturn( [
+				'mv1' => MessageValue::new( 'parentheses', [ 'foobar' ] ),
+				'mv2' => MessageValue::new( 'paramvalidator-help-continue' ),
+			] );
 
 		TestingAccessWrapper::newFromObject( $validator )->paramValidator = $mock;
 		$ret = $validator->getHelpInfo( $module, 'test', $settings, $options );

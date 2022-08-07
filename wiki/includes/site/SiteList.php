@@ -32,7 +32,7 @@ class SiteList extends GenericArrayObject {
 	 *
 	 * @since 1.21
 	 *
-	 * @var array Array of integer
+	 * @var array Maps int identifiers to local ArrayObject keys
 	 */
 	protected $byInternalId = [];
 
@@ -41,7 +41,7 @@ class SiteList extends GenericArrayObject {
 	 *
 	 * @since 1.21
 	 *
-	 * @var array Array of string
+	 * @var array Maps string identifiers to local ArrayObject keys
 	 */
 	protected $byGlobalId = [];
 
@@ -51,7 +51,7 @@ class SiteList extends GenericArrayObject {
 	 *
 	 * @since 1.23
 	 *
-	 * @var array Array of string
+	 * @var array Maps string identifiers to local ArrayObject keys
 	 */
 	protected $byNavigationId = [];
 
@@ -332,21 +332,17 @@ class SiteList extends GenericArrayObject {
 	}
 
 	/**
-	 * @see GenericArrayObject::unserialize
+	 * @see GenericArrayObject::__unserialize
 	 *
-	 * @since 1.21
+	 * @since 1.38
 	 *
-	 * @param string $serialization
-	 *
-	 * @return array
+	 * @param array $serializationData
 	 */
-	public function unserialize( $serialization ) {
-		$serializationData = parent::unserialize( $serialization );
+	public function __unserialize( $serializationData ) {
+		parent::__unserialize( $serializationData );
 
 		$this->byInternalId = $serializationData['internalIds'];
 		$this->byGlobalId = $serializationData['globalIds'];
 		$this->byNavigationId = $serializationData['navigationIds'];
-
-		return $serializationData;
 	}
 }

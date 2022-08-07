@@ -18,7 +18,8 @@
  *
  * Attribution notice: when this file was created, much of its content was taken
  * from the Revision.php file as present in release 1.30. Refer to the history
- * of that file for original authorship.
+ * of that file for original authorship (that file was removed entirely in 1.37,
+ * but its history can still be found in prior versions of MediaWiki).
  *
  * @file
  */
@@ -26,6 +27,7 @@
 namespace MediaWiki\Revision;
 
 use ActorMigration;
+use BagOStuff;
 use CommentStore;
 use MediaWiki\Content\IContentHandlerFactory;
 use MediaWiki\HookContainer\HookContainer;
@@ -59,6 +61,8 @@ class RevisionStoreFactory {
 	private $dbLoadBalancerFactory;
 	/** @var WANObjectCache */
 	private $cache;
+	/** @var BagOStuff */
+	private $localCache;
 	/** @var LoggerInterface */
 	private $logger;
 
@@ -92,6 +96,7 @@ class RevisionStoreFactory {
 	 * @param NameTableStoreFactory $nameTables
 	 * @param SlotRoleRegistry $slotRoleRegistry
 	 * @param WANObjectCache $cache
+	 * @param BagOStuff $localCache
 	 * @param CommentStore $commentStore
 	 * @param ActorMigration $actorMigration
 	 * @param ActorStoreFactory $actorStoreFactory
@@ -107,6 +112,7 @@ class RevisionStoreFactory {
 		NameTableStoreFactory $nameTables,
 		SlotRoleRegistry $slotRoleRegistry,
 		WANObjectCache $cache,
+		BagOStuff $localCache,
 		CommentStore $commentStore,
 		ActorMigration $actorMigration,
 		ActorStoreFactory $actorStoreFactory,
@@ -121,6 +127,7 @@ class RevisionStoreFactory {
 		$this->slotRoleRegistry = $slotRoleRegistry;
 		$this->nameTables = $nameTables;
 		$this->cache = $cache;
+		$this->localCache = $localCache;
 		$this->commentStore = $commentStore;
 		$this->actorMigration = $actorMigration;
 		$this->actorStoreFactory = $actorStoreFactory;
@@ -144,7 +151,8 @@ class RevisionStoreFactory {
 		$store = new RevisionStore(
 			$this->dbLoadBalancerFactory->getMainLB( $dbDomain ),
 			$this->blobStoreFactory->newSqlBlobStore( $dbDomain ),
-			$this->cache, // Pass local cache instance; Leave cache sharing to RevisionStore.
+			$this->cache, // Pass cache local to wiki; Leave cache sharing to RevisionStore.
+			$this->localCache,
 			$this->commentStore,
 			$this->nameTables->getContentModels( $dbDomain ),
 			$this->nameTables->getSlotRoles( $dbDomain ),

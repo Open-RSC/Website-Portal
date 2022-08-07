@@ -21,6 +21,7 @@
  * @ingroup Installer
  */
 
+use Wikimedia\AtEase\AtEase;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\DBConnectionError;
 use Wikimedia\Rdbms\DBExpectedError;
@@ -204,13 +205,13 @@ abstract class DatabaseInstaller {
 	 *
 	 * @param string $sourceFileMethod
 	 * @param string $stepName
-	 * @param bool $archiveTableMustNotExist
+	 * @param bool|string $tableThatMustNotExist
 	 * @return Status
 	 */
 	private function stepApplySourceFile(
 		$sourceFileMethod,
 		$stepName,
-		$archiveTableMustNotExist = false
+		$tableThatMustNotExist = false
 	) {
 		$status = $this->getConnection();
 		if ( !$status->isOK() ) {
@@ -218,7 +219,7 @@ abstract class DatabaseInstaller {
 		}
 		$this->db->selectDB( $this->getVar( 'wgDBname' ) );
 
-		if ( $archiveTableMustNotExist && $this->db->tableExists( 'archive', __METHOD__ ) ) {
+		if ( $tableThatMustNotExist && $this->db->tableExists( $tableThatMustNotExist, __METHOD__ ) ) {
 			$status->warning( "config-$stepName-tables-exist" );
 			$this->enableLB();
 
@@ -254,7 +255,7 @@ abstract class DatabaseInstaller {
 	 * @return Status
 	 */
 	public function createTables() {
-		return $this->stepApplySourceFile( 'getGeneratedSchemaPath', 'install', true );
+		return $this->stepApplySourceFile( 'getGeneratedSchemaPath', 'install', 'archive' );
 	}
 
 	/**
@@ -264,11 +265,11 @@ abstract class DatabaseInstaller {
 	 * @return Status
 	 */
 	public function createManualTables() {
-		return $this->stepApplySourceFile( 'getSchemaPath', 'install-manual', false );
+		return $this->stepApplySourceFile( 'getSchemaPath', 'install-manual' );
 	}
 
 	/**
-	 * Insert update keys into table to prevent running unneded updates.
+	 * Insert update keys into table to prevent running unneeded updates.
 	 * @stable to override
 	 *
 	 * @return Status
@@ -497,6 +498,7 @@ abstract class DatabaseInstaller {
 	 * Get a name=>value map of MW configuration globals for the default values.
 	 * @stable to override
 	 * @return array
+	 * @return-taint none
 	 */
 	public function getGlobalDefaults() {
 		$defaults = [];
@@ -786,10 +788,10 @@ abstract class DatabaseInstaller {
 			return $status;
 		}
 		global $IP;
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$rows = file( "$IP/maintenance/interwiki.list",
 			FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 		$interwikis = [];
 		if ( !$rows ) {
 			return Status::newFatal( 'config-install-interwiki-list' );

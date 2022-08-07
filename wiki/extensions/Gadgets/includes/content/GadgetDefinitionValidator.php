@@ -1,5 +1,9 @@
 <?php
 
+namespace MediaWiki\Extension\Gadgets\Content;
+
+use Status;
+
 /**
  * Class responsible for validating Gadget definition contents
  *
@@ -16,11 +20,15 @@ class GadgetDefinitionValidator {
 		'settings.rights' => [ 'is_array', 'array' , 'is_string', 'string' ],
 		'settings.default' => [ 'is_bool', 'boolean' ],
 		'settings.hidden' => [ 'is_bool', 'boolean' ],
+		'settings.package' => [ 'is_bool', 'boolean' ],
 		'settings.skins' => [ [ __CLASS__, 'isArrayOrTrue' ], 'array or true', 'is_string', 'string' ],
+		'settings.actions' => [ 'is_array', 'array', 'is_string', 'string' ],
 		'settings.category' => [ 'is_string', 'string' ],
+		'settings.supportsUrlLoad' => [ 'is_bool', 'boolean' ],
 		'module' => [ 'is_array', 'array' ],
 		'module.scripts' => [ 'is_array', 'array', 'is_string', 'string' ],
 		'module.styles' => [ 'is_array', 'array', 'is_string', 'string' ],
+		'module.datas' => [ 'is_array', 'array', 'is_string', 'string' ],
 		'module.dependencies' => [ 'is_array', 'array', 'is_string', 'string' ],
 		'module.peers' => [ 'is_array', 'array', 'is_string', 'string' ],
 		'module.messages' => [ 'is_array', 'array', 'is_string', 'string' ],
@@ -52,9 +60,9 @@ class GadgetDefinitionValidator {
 					if ( $tolerateMissing ) {
 						// Skip validation of this property altogether
 						continue 2;
-					} else {
-						return Status::newFatal( 'gadgets-validate-notset', $property );
 					}
+
+					return Status::newFatal( 'gadgets-validate-notset', $property );
 				}
 				$val = $val[$p];
 			}
@@ -63,10 +71,10 @@ class GadgetDefinitionValidator {
 			$func = $validation[0];
 			if ( !call_user_func( $func, $val ) ) {
 				return Status::newFatal(
-						'gadgets-validate-wrongtype',
-						$property,
-						$validation[1],
-						gettype( $val )
+					'gadgets-validate-wrongtype',
+					$property,
+					$validation[1],
+					gettype( $val )
 				);
 			}
 
@@ -76,10 +84,10 @@ class GadgetDefinitionValidator {
 				foreach ( $val as $i => $v ) {
 					if ( !call_user_func( $func, $v ) ) {
 						return Status::newFatal(
-								'gadgets-validate-wrongtype',
-								"{$property}[{$i}]",
-								$validation[3],
-								gettype( $v )
+							'gadgets-validate-wrongtype',
+							"{$property}[{$i}]",
+							$validation[3],
+							gettype( $v )
 						);
 					}
 				}

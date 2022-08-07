@@ -93,7 +93,7 @@ class SpecialRecentChangesLinked extends SpecialRecentChanges {
 		$title = Title::newFromText( $target );
 		if ( !$title || $title->isExternal() ) {
 			$outputPage->addHTML(
-				Html::errorBox( $this->msg( 'allpagesbadtitle' )->parse() )
+				Html::errorBox( $this->msg( 'allpagesbadtitle' )->parse(), '', 'mw-recentchangeslinked-errorbox' )
 			);
 			return false;
 		}
@@ -115,9 +115,9 @@ class SpecialRecentChangesLinked extends SpecialRecentChanges {
 		$dbkey = $title->getDBkey();
 
 		$rcQuery = RecentChange::getQueryInfo();
-		$tables = array_merge( $tables, $rcQuery['tables'] );
+		$tables = array_merge( $rcQuery['tables'], $tables );
 		$select = array_merge( $rcQuery['fields'], $select );
-		$join_conds = array_merge( $join_conds, $rcQuery['joins'] );
+		$join_conds = array_merge( $rcQuery['joins'], $join_conds );
 
 		// Join with watchlist and watchlist_expiry tables to highlight watched rows.
 		$this->addWatchlistJoins( $dbr, $tables, $select, $join_conds, $conds );
@@ -127,7 +127,7 @@ class SpecialRecentChangesLinked extends SpecialRecentChanges {
 		$join_conds['page'] = [ 'LEFT JOIN', 'rc_cur_id=page_id' ];
 		$select[] = 'page_latest';
 
-		$tagFilter = $opts['tagfilter'] ? explode( '|', $opts['tagfilter'] ) : [];
+		$tagFilter = $opts['tagfilter'] !== '' ? explode( '|', $opts['tagfilter'] ) : [];
 		ChangeTags::modifyDisplayQuery(
 			$tables,
 			$select,
@@ -249,7 +249,6 @@ class SpecialRecentChangesLinked extends SpecialRecentChanges {
 				' ORDER BY rc_timestamp DESC';
 			$sql = $dbr->limitResult( $sql, $limit, false );
 		}
-
 		return $dbr->query( $sql, __METHOD__ );
 	}
 

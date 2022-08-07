@@ -82,6 +82,7 @@ abbr[ title ], /* Note: Duplicate ruleset if skins load `normalize` and `legacy`
 	cursor: help;
 }
 
+/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
 @supports ( text-decoration: underline dotted ) {
 	abbr[ title ], /* FIXME: Remove similar to `abbr` above. */
 	.explain[ title ] {
@@ -128,9 +129,10 @@ td.mw-submit {
 	white-space: nowrap;
 }
 
-@import 'content.thumbnails.less';
+@import 'content.links.less';
+@import 'content.thumbnails-legacy.less';
 @import 'interface.category.less';
-@import '../mediawiki.action/styles.less';
+@import '../mediawiki.action.styles/styles.less';
 
 /* The auto-generated edit comments */
 .autocomment,
@@ -150,11 +152,6 @@ td.mw-submit {
 span.mw-revdelundel-link,
 strong.mw-revdelundel-link {
 	font-size: 90%;
-}
-
-span.mw-revdelundel-hidden,
-input.mw-revdelundel-hidden {
-	visibility: hidden;
 }
 
 /* red links; see T38276 */
@@ -183,19 +180,11 @@ a.new {
 	color: #14866d;
 }
 
-/**
- * `HTML::infobox` `.mw-infobox` class.
- *
- * Deprecated since 1.36.
- */
-// Deprecate on directory base to uniquely mark its status.
-@import 'deprecated/mw-infobox.less';
-
 .visualClear {
 	clear: both;
 }
 
-@import '../mediawiki.pager.tablePager/DataTable.less';
+@import '../mediawiki.pager.styles/DataTable.less';
 
 .mw-ajax-loader {
 	background-image: url( images/ajax-loader.gif );

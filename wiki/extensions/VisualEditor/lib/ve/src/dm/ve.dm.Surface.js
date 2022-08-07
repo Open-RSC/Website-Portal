@@ -16,7 +16,7 @@
  * @param {ve.dm.Document} doc Document model to create surface for
  * @param {ve.dm.BranchNode} [attachedRoot] Node to surface; default is document node
  * @param {Object} [config] Configuration options
- * @cfg {boolean} [sourceMode] Source editing mode
+ * @cfg {boolean} [sourceMode=false] Source editing mode
  */
 ve.dm.Surface = function VeDmSurface( doc, attachedRoot, config ) {
 	// Support old (doc, config) argument order
@@ -77,6 +77,7 @@ ve.dm.Surface = function VeDmSurface( doc, attachedRoot, config ) {
 		precommit: 'onDocumentPreCommit'
 	} );
 	this.storeChangesListener = this.storeChanges.bind( this );
+	this.storeDocStorageListener = this.storeDocStorage.bind( this );
 };
 
 /* Inheritance */
@@ -357,19 +358,17 @@ ve.dm.Surface.prototype.pushStaging = function ( allowUndo ) {
  * @return {ve.dm.Transaction[]|undefined} Staging transactions, or undefined if not staging
  */
 ve.dm.Surface.prototype.popStaging = function () {
-	var i, transaction, staging, transactions,
-		reverseTransactions = [];
-
 	if ( !this.isStaging() ) {
 		return;
 	}
 
-	staging = this.stagingStack.pop();
-	transactions = staging.transactions;
+	var staging = this.stagingStack.pop();
+	var transactions = staging.transactions;
+	var reverseTransactions = [];
 
 	// Not applying, so rollback transactions
-	for ( i = transactions.length - 1; i >= 0; i-- ) {
-		transaction = transactions[ i ].reversed();
+	for ( var i = transactions.length - 1; i >= 0; i-- ) {
+		var transaction = transactions[ i ].reversed();
 		reverseTransactions.push( transaction );
 	}
 	this.changeInternal( reverseTransactions, staging.selectionBefore, true );
@@ -391,12 +390,11 @@ ve.dm.Surface.prototype.popStaging = function () {
  * @fires history
  */
 ve.dm.Surface.prototype.applyStaging = function () {
-	var staging;
 	if ( !this.isStaging() ) {
 		return;
 	}
 
-	staging = this.stagingStack.pop();
+	var staging = this.stagingStack.pop();
 
 	if ( this.isStaging() ) {
 		// Merge popped transactions into the current item in the staging stack
@@ -428,12 +426,11 @@ ve.dm.Surface.prototype.applyStaging = function () {
  * @return {ve.dm.Transaction[]|undefined} Staging transactions, or undefined if not staging
  */
 ve.dm.Surface.prototype.popAllStaging = function () {
-	var transactions = [];
-
 	if ( !this.isStaging() ) {
 		return;
 	}
 
+	var transactions = [];
 	while ( this.isStaging() ) {
 		ve.batchSplice( transactions, 0, 0, this.popStaging() );
 	}
@@ -716,10 +713,11 @@ ve.dm.Surface.prototype.setNullSelection = function () {
  * @return {ve.Range} Regularized range, possibly object-identical to the original
  */
 ve.dm.Surface.prototype.fixupRangeForLinks = function ( range ) {
-	var rangeAnnotations, startLink, endLink,
-		linearData = this.getDocument().data,
-		start = range.start,
-		end = range.end;
+	if ( range.isCollapsed() ) {
+		return range;
+	}
+
+	var linearData = this.getDocument().data;
 
 	function getLinks( offset ) {
 		return linearData.getAnnotationsFromOffset( offset ).filter( function ( ann ) {
@@ -727,15 +725,13 @@ ve.dm.Surface.prototype.fixupRangeForLinks = function ( range ) {
 		} );
 	}
 
-	if ( range.isCollapsed() ) {
-		return range;
-	}
-
 	// Search for links at start/end that don't cover the whole range.
 	// Assume at most one such link at each end.
-	rangeAnnotations = linearData.getAnnotationsFromRange( range );
-	startLink = getLinks( start ).diffWith( rangeAnnotations ).getHash( 0 );
-	endLink = getLinks( end ).diffWith( rangeAnnotations ).getHash( 0 );
+	var start = range.start;
+	var end = range.end;
+	var rangeAnnotations = linearData.getAnnotationsFromRange( range );
+	var startLink = getLinks( start ).diffWith( rangeAnnotations ).getHash( 0 );
+	var endLink = getLinks( end ).diffWith( rangeAnnotations ).getHash( 0 );
 
 	if ( startLink === undefined && endLink === undefined ) {
 		return range;
@@ -768,14 +764,8 @@ ve.dm.Surface.prototype.fixupRangeForLinks = function ( range ) {
  * @fires contextChange
  */
 ve.dm.Surface.prototype.setSelection = function ( selection ) {
-	var maxOffset, insertionAnnotations, selectedNode, range, selectedAnnotations,
-		rangeFocus, oldRangeFocus, focusRangeMovingBack,
-		oldSelection = this.selection,
-		branchNodes = {},
-		selectionChange = false,
-		contextChange = false,
-		linearData = this.getDocument().data;
-
+	var oldSelection = this.selection;
+	var maxOffset;
 	if (
 		selection instanceof ve.dm.LinearSelection &&
 		( maxOffset = this.getDocument().getDocumentRange().end ) &&
@@ -799,12 +789,17 @@ ve.dm.Surface.prototype.setSelection = function ( selection ) {
 		return;
 	}
 
+	var selectionChange = false;
 	// this.selection needs to be updated before we call setInsertionAnnotations
 	if ( !oldSelection.equals( selection ) ) {
 		selectionChange = true;
 		this.selection = selection;
 	}
 
+	var range;
+	var selectedNode;
+	var branchNodes = {};
+	var contextChange = false;
 	if ( selection instanceof ve.dm.LinearSelection ) {
 		range = selection.getRange();
 
@@ -819,8 +814,9 @@ ve.dm.Surface.prototype.setSelection = function ( selection ) {
 
 		// Source mode optimization
 		if ( !this.sourceMode ) {
+			var linearData = this.getDocument().data;
 			// Reset insertionAnnotations based on the neighbouring document data
-			insertionAnnotations = linearData.getInsertionAnnotationsFromRange( range );
+			var insertionAnnotations = linearData.getInsertionAnnotationsFromRange( range );
 			// If there's *any* difference in insertion annotations (even order), then:
 			// * emit insertionAnnotationsChange
 			// * emit contextChange (TODO: is this desirable?)
@@ -828,6 +824,7 @@ ve.dm.Surface.prototype.setSelection = function ( selection ) {
 				this.setInsertionAnnotations( insertionAnnotations );
 			}
 
+			var selectedAnnotations;
 			// Reset selectedAnnotations
 			if ( range.isCollapsed() ) {
 				selectedAnnotations = linearData.getAnnotationsFromOffset( range.start );
@@ -843,9 +840,9 @@ ve.dm.Surface.prototype.setSelection = function ( selection ) {
 			// change? (i.e. did the selection move in/out of an annotation as it
 			// expanded?)
 			if ( selectionChange && !range.isCollapsed() && oldSelection instanceof ve.dm.LinearSelection ) {
-				rangeFocus = new ve.Range( range.to );
-				oldRangeFocus = new ve.Range( oldSelection.getRange().to );
-				focusRangeMovingBack = rangeFocus.to < oldRangeFocus.to;
+				var rangeFocus = new ve.Range( range.to );
+				var oldRangeFocus = new ve.Range( oldSelection.getRange().to );
+				var focusRangeMovingBack = rangeFocus.to < oldRangeFocus.to;
 				// If we're moving back in the document, getInsertionAnnotationsFromRange
 				// needs to be told to fetch the annotations after the cursor, otherwise
 				// it'll trigger one position too soon.
@@ -901,6 +898,8 @@ ve.dm.Surface.prototype.setSelection = function ( selection ) {
 
 /**
  * Place the selection at the first content offset in the document.
+ *
+ * @deprecated Use ve.ce.Surface#selectFirstSelectableContentOffset
  */
 ve.dm.Surface.prototype.selectFirstContentOffset = function () {
 	var firstOffset = this.getDocument().data.getNearestContentOffset(
@@ -918,6 +917,8 @@ ve.dm.Surface.prototype.selectFirstContentOffset = function () {
 
 /**
  * Place the selection at the last content offset in the document.
+ *
+ * @deprecated Use ve.ce.Surface#selectLastSelectableContentOffset
  */
 ve.dm.Surface.prototype.selectLastContentOffset = function () {
 	var data = this.getDocument().data,
@@ -950,15 +951,14 @@ ve.dm.Surface.prototype.change = function ( transactions, selection ) {
  *
  * @private
  * @param {ve.dm.Transaction|ve.dm.Transaction[]|null} transactions
- * @param {ve.dm.Selection} [selection] [selection]
+ * @param {ve.dm.Selection} [selection]
  * @param {boolean} [skipUndoStack=false] If true, do not modify the undo stack. Used by undo/redo
  * @fires select
  * @fires history
  * @fires contextChange
  */
 ve.dm.Surface.prototype.changeInternal = function ( transactions, selection, skipUndoStack ) {
-	var i, len, selectionAfter, committed,
-		selectionBefore = this.selection,
+	var selectionBefore = this.selection,
 		contextChange = false;
 
 	this.startQueueingContextChanges();
@@ -969,8 +969,9 @@ ve.dm.Surface.prototype.changeInternal = function ( transactions, selection, ski
 			transactions = [ transactions ];
 		}
 		this.transacting = true;
-		for ( i = 0, len = transactions.length; i < len; i++ ) {
+		for ( var i = 0, len = transactions.length; i < len; i++ ) {
 			if ( !transactions[ i ].isNoOp() ) {
+				var committed;
 				// The .commit() call below indirectly invokes setSelection()
 				try {
 					committed = false;
@@ -1004,7 +1005,7 @@ ve.dm.Surface.prototype.changeInternal = function ( transactions, selection, ski
 		this.undoConflict = false;
 		this.emit( 'history' );
 	}
-	selectionAfter = this.selection;
+	var selectionAfter = this.selection;
 
 	// Apply selection change
 	if ( selection ) {
@@ -1038,10 +1039,10 @@ ve.dm.Surface.prototype.changeInternal = function ( transactions, selection, ski
  * @fires undoStackChange
  */
 ve.dm.Surface.prototype.breakpoint = function () {
-	var breakpointSet = false;
 	if ( this.readOnly ) {
 		return false;
 	}
+	var breakpointSet = false;
 	this.resetHistoryTrackingInterval();
 	if ( this.newTransactions.length > 0 ) {
 		this.undoStack.push( {
@@ -1065,9 +1066,6 @@ ve.dm.Surface.prototype.breakpoint = function () {
  * @fires undoStackChange
  */
 ve.dm.Surface.prototype.undo = function () {
-	var i, item, transaction, authorId,
-		history, done, result, selection,
-		transactions = [];
 
 	if ( !this.canUndo() ) {
 		return;
@@ -1080,12 +1078,14 @@ ve.dm.Surface.prototype.undo = function () {
 	this.breakpoint();
 	this.undoIndex++;
 
+	var transactions = [];
+	var item;
 	if ( !this.isMultiUser() ) {
 		item = this.undoStack[ this.undoStack.length - this.undoIndex ];
 		if ( item ) {
 			// Apply reversed transactions in reversed order
-			for ( i = item.transactions.length - 1; i >= 0; i-- ) {
-				transaction = item.transactions[ i ].reversed();
+			for ( var i = item.transactions.length - 1; i >= 0; i-- ) {
+				var transaction = item.transactions[ i ].reversed();
 				transactions.push( transaction );
 			}
 			this.changeInternal( transactions, item.selectionBefore, true );
@@ -1096,7 +1096,7 @@ ve.dm.Surface.prototype.undo = function () {
 		while ( this.undoIndex <= this.undoStack.length ) {
 			item = this.undoStack[ this.undoStack.length - this.undoIndex ];
 			// Assume every transaction in the stack item has the same author (see ve.dm.Change#applyTo)
-			authorId = item.transactions[ 0 ].authorId;
+			var authorId = item.transactions[ 0 ].authorId;
 			if ( authorId === null || authorId === this.getAuthorId() ) {
 				break;
 			}
@@ -1104,8 +1104,8 @@ ve.dm.Surface.prototype.undo = function () {
 			this.undoIndex++;
 		}
 		if ( item ) {
-			history = this.getDocument().getChangeSince( item.start + item.transactions.length );
-			done = new ve.dm.Change(
+			var history = this.getDocument().getChangeSince( item.start + item.transactions.length );
+			var done = new ve.dm.Change(
 				item.start,
 				item.transactions,
 				item.transactions.map( function () {
@@ -1114,7 +1114,7 @@ ve.dm.Surface.prototype.undo = function () {
 				} ),
 				{}
 			);
-			result = ve.dm.Change.static.rebaseUncommittedChange( history, done.reversed() );
+			var result = ve.dm.Change.static.rebaseUncommittedChange( history, done.reversed() );
 			if ( result.rejected ) {
 				// Rebasing conflict: move pointer back and don't try again until next transaction
 				this.undoIndex--;
@@ -1122,7 +1122,7 @@ ve.dm.Surface.prototype.undo = function () {
 				// Undo stack didn't change, but ability to undo did
 				this.emit( 'history' );
 			} else {
-				selection = item.selectionBefore.translateByChange( result.transposedHistory );
+				var selection = item.selectionBefore.translateByChange( result.transposedHistory );
 				// Undo cannot add store items, so we can safely apply just transactions
 				this.changeInternal( result.rebased.transactions, selection, true );
 				this.emit( 'undoStackChange' );
@@ -1140,14 +1140,13 @@ ve.dm.Surface.prototype.undo = function () {
  * @fires undoStackChange
  */
 ve.dm.Surface.prototype.redo = function () {
-	var item;
 	if ( !this.canRedo() ) {
 		return;
 	}
 
 	this.breakpoint();
 
-	item = this.undoStack[ this.undoStack.length - this.undoIndex ];
+	var item = this.undoStack[ this.undoStack.length - this.undoIndex ];
 	if ( item ) {
 		this.undoIndex--;
 		// ve.copy( item.transactions ) invokes .clone() on each transaction in item.transactions
@@ -1184,18 +1183,16 @@ ve.dm.Surface.prototype.getSelectedNode = function () {
  * @return {ve.dm.Node|null} Selected node
  */
 ve.dm.Surface.prototype.getSelectedNodeFromSelection = function ( selection ) {
-	var range, startNode,
-		selectedNode = null;
-
 	selection = selection || this.getSelection();
 
 	if ( !( selection instanceof ve.dm.LinearSelection ) ) {
 		return null;
 	}
 
-	range = selection.getRange();
+	var selectedNode = null;
+	var range = selection.getRange();
 	if ( !range.isCollapsed() ) {
-		startNode = this.getDocument().documentNode.getNodeFromOffset( range.start + 1 );
+		var startNode = this.getDocument().documentNode.getNodeFromOffset( range.start + 1 );
 		if ( startNode && startNode.getOuterRange().equalsSelection( range ) ) {
 			selectedNode = startNode;
 		}
@@ -1223,10 +1220,8 @@ ve.dm.Surface.prototype.onDocumentPreCommit = function ( tx ) {
  * @return {ve.Range[]} Modified ranges
  */
 ve.dm.Surface.prototype.getModifiedRanges = function ( includeCollapsed, includeInternalList ) {
-	var doc = this.getDocument(),
-		ranges = [],
-		compactRanges = [],
-		lastRange = null;
+	var doc = this.getDocument();
+	var ranges = [];
 
 	this.getHistory().forEach( function ( stackItem ) {
 		stackItem.transactions.forEach( function ( tx ) {
@@ -1244,6 +1239,8 @@ ve.dm.Surface.prototype.getModifiedRanges = function ( includeCollapsed, include
 		} );
 	} );
 
+	var compactRanges = [];
+	var lastRange = null;
 	ranges
 		.sort( function ( a, b ) {
 			return a.start - b.start;
@@ -1270,13 +1267,13 @@ ve.dm.Surface.prototype.getModifiedRanges = function ( includeCollapsed, include
  * @throws {Error} Offset out of bounds
  */
 ve.dm.Surface.prototype.getOffsetFromSourceOffset = function ( offset ) {
-	var lineOffset = 0,
-		line = 0,
-		lines = this.getDocument().getDocumentNode().getChildren();
-
 	if ( offset < 0 ) {
 		throw new Error( 'Offset out of bounds' );
 	}
+
+	var lineOffset = 0,
+		line = 0,
+		lines = this.getDocument().getDocumentNode().getChildren();
 
 	while ( lineOffset < offset + 1 ) {
 		if ( !lines[ line ] || lines[ line ].isInternal() ) {
@@ -1296,13 +1293,13 @@ ve.dm.Surface.prototype.getOffsetFromSourceOffset = function ( offset ) {
  * @throws {Error} Offset out of bounds
  */
 ve.dm.Surface.prototype.getSourceOffsetFromOffset = function ( offset ) {
-	var lineOffset = 0,
-		line = 0,
-		lines = this.getDocument().getDocumentNode().getChildren();
-
 	if ( offset < 0 ) {
 		throw new Error( 'Offset out of bounds' );
 	}
+
+	var lineOffset = 0,
+		line = 0,
+		lines = this.getDocument().getDocumentNode().getChildren();
 
 	while ( lineOffset < offset ) {
 		if ( !lines[ line ] || lines[ line ].isInternal() ) {
@@ -1354,14 +1351,12 @@ ve.dm.Surface.prototype.setAuthorId = function ( authorId ) {
  * Store latest transactions into session storage
  */
 ve.dm.Surface.prototype.storeChanges = function () {
-	var dmDoc, change;
-
 	if ( this.autosaveFailed ) {
 		return;
 	}
 
-	dmDoc = this.getDocument();
-	change = dmDoc.getChangeSince( this.lastStoredChange );
+	var dmDoc = this.getDocument();
+	var change = dmDoc.getChangeSince( this.lastStoredChange );
 	if ( !change.isEmpty() ) {
 		if ( this.storage.appendToList( this.autosavePrefix + 've-changes', JSON.stringify( change ) ) ) {
 			this.lastStoredChange = dmDoc.getCompleteHistoryLength();
@@ -1373,6 +1368,18 @@ ve.dm.Surface.prototype.storeChanges = function () {
 			this.emit( 'autosaveFailed' );
 		}
 	}
+};
+
+/**
+ * Store persistent document storage into session storage
+ */
+ve.dm.Surface.prototype.storeDocStorage = function () {
+	if ( this.autosaveFailed ) {
+		return;
+	}
+
+	var dmDoc = this.getDocument();
+	this.storage.setObject( this.autosavePrefix + 've-docstorage', dmDoc.getStorage() );
 };
 
 /**
@@ -1392,6 +1399,7 @@ ve.dm.Surface.prototype.setAutosaveDocId = function ( docId ) {
  */
 ve.dm.Surface.prototype.startStoringChanges = function () {
 	this.on( 'undoStackChange', this.storeChangesListener );
+	this.getDocument().on( 'storage', this.storeDocStorageListener );
 };
 
 /**
@@ -1399,6 +1407,7 @@ ve.dm.Surface.prototype.startStoringChanges = function () {
  */
 ve.dm.Surface.prototype.stopStoringChanges = function () {
 	this.off( 'undoStackChange', this.storeChangesListener );
+	this.getDocument().off( 'storage', this.storeDocStorageListener );
 };
 
 /**
@@ -1408,8 +1417,7 @@ ve.dm.Surface.prototype.stopStoringChanges = function () {
  * @throws {Error} Failed to restore auto-saved session
  */
 ve.dm.Surface.prototype.restoreChanges = function () {
-	var selection,
-		surface = this,
+	var surface = this,
 		restored = false,
 		changes = this.storage.getList( this.autosavePrefix + 've-changes' );
 
@@ -1421,6 +1429,12 @@ ve.dm.Surface.prototype.restoreChanges = function () {
 			surface.breakpoint();
 		} );
 		restored = !!changes.length;
+
+		this.getDocument().setStorage(
+			this.storage.getObject( this.autosavePrefix + 've-docstorage' ) || {}
+		);
+
+		var selection;
 		try {
 			selection = ve.dm.Selection.static.newFromJSON(
 				this.storage.getObject( this.autosavePrefix + 've-selection' )
@@ -1454,7 +1468,6 @@ ve.dm.Surface.prototype.restoreChanges = function () {
  * @return {boolean} Doc state was successfully stored
  */
 ve.dm.Surface.prototype.storeDocState = function ( state, html ) {
-	var useLatestHtml = html === undefined;
 	// Clear any changes that may have stored up to this point
 	this.removeDocStateAndChanges();
 	if ( state ) {
@@ -1463,6 +1476,7 @@ ve.dm.Surface.prototype.storeDocState = function ( state, html ) {
 			return false;
 		}
 	}
+	var useLatestHtml = html === undefined;
 	// Store HTML separately to avoid wasteful JSON encoding
 	if ( !this.storage.set( this.autosavePrefix + 've-dochtml', useLatestHtml ? this.getHtml() : html ) ) {
 		// If we failed to store the html, wipe the docstate

@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Akapochtli"
+			"Akapochtli",
+			"Languaeditor"
 		]
 	},
-	"timeless-more": "Ocachi",
-	"timeless-pagemisc": "Ocachi"
+	"timeless-more": "Achiyok",
+	"timeless-pagemisc": "Achiyok",
+	"timeless-view-history": "Tlahtollotl",
+	"timeless-action-undelete": "Ahticpoloz {{PLURAL:$1|ce tlapatlaliztli|$1 tlapatlaliztli}}"
 }

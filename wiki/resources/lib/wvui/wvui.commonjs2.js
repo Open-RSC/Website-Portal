@@ -82,7 +82,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,9 +93,9 @@ module.exports = require("vue");
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-// extracted by mini-css-extract-plugin
+module.exports = require("@vue/composition-api");
 
 /***/ }),
 /* 2 */
@@ -129,66 +129,168 @@ module.exports = require("vue");
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Button_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Button_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Button_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Button_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Button_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 8 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Icon_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Icon_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Icon_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Icon_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Icon_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 9 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Input_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_OptionsMenu_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_OptionsMenu_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_OptionsMenu_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_OptionsMenu_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Dropdown_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Dropdown_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Dropdown_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Dropdown_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Input_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Input_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Input_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Input_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 10 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestionTitle_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ProgressBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ProgressBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ProgressBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ProgressBar_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Radio_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Radio_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Radio_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Radio_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ToggleButton_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ToggleButton_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ToggleButton_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ToggleButton_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestionTitle_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestionTitle_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestionTitle_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestionTitle_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 11 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestion_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestion_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestion_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestion_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSuggestion_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 12 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSearch_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSearch_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSearch_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSearch_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
  /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_1_0_node_modules_css_loader_dist_cjs_js_ref_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_node_modules_less_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_TypeaheadSearch_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
-/* 13 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -197,45 +299,75 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "version", function() { return /* binding */ version; });
-__webpack_require__.d(__webpack_exports__, "restSearchClient", function() { return /* reexport */ restSearchClient; });
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=template&id=4cd168f9&
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=template&id=000e54fa&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"wvui-button",class:_vm.rootClasses,on:{"click":_vm.onClick}},[_vm._t("default")],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/button/Button.vue?vue&type=template&id=4cd168f9&
+// CONCATENATED MODULE: ./src/components/button/Button.vue?vue&type=template&id=000e54fa&
 
-// CONCATENATED MODULE: ./src/actions/PrimaryAction.ts
+// CONCATENATED MODULE: ./src/components/button/ButtonType.ts
+/**
+ * Which button type to use. These types are styled differently, to communicate the different
+ * roles they play in the UI.
+ */
+var ButtonType;
+(function (ButtonType) {
+    /**
+     * A normal button that has a frame and is not the most important action.
+     */
+    ButtonType["Normal"] = "normal";
+    /**
+     * A primary button triggers the most important action. There should be only one primary button
+     * in every view. When using this, also set the type prop to a non-default value, to indicate
+     * what kind of action will be taken.
+     *
+     * When the action prop is set to its default value, a primary button looks the same as a
+     * secondary button.
+     */
+    ButtonType["Primary"] = "primary";
+    /**
+     * A frameless button. Use this sparingly, in situations where a framed button would distract
+     * too much from the surrounding content. This is most often used with icon-only buttons.
+     */
+    ButtonType["Quiet"] = "quiet";
+})(ButtonType || (ButtonType = {}));
+function isButtonType(val) {
+    // This could just be Object.values( ButtonType ).includes( val ), but we are limited to ES6.
+    return Object.keys(ButtonType).some(function (key) { return ButtonType[key] === val; });
+}
+
+// CONCATENATED MODULE: ./src/components/button/ButtonAction.ts
 /**
  * Signals the consequence of proceeding in a given view. Do not use more than one non-default
- * action per layout as they should guide the user to the most important action ("call to action").
+ * action per layout as they should guide the user to the most important action (“call to action”).
  */
-var PrimaryAction;
-(function (PrimaryAction) {
+var ButtonAction;
+(function (ButtonAction) {
     /**
-     * A generic or secondary action that is neither progressive nor destructive. For example,
+     * A generic action that is neither progressive nor destructive. For example,
      * notice dismissal.
      */
-    PrimaryAction["Default"] = "default";
+    ButtonAction["Default"] = "default";
     /**
      * The consequence of this action is to proceed to the next step in or conclude the current
-     * process. For example, creation of a page or confirmation that .
+     * process. For example, creation of a page or submitting data.
      */
-    PrimaryAction["Progressive"] = "progressive";
+    ButtonAction["Progressive"] = "progressive";
     /**
      * The consequence of this action is irreversible, data loss, or is difficult to undo. For
      * example, deleting a page, discarding a draft edit, or blocking a user. **Never** use
      * Destructive for cancellation.
      */
-    PrimaryAction["Destructive"] = "destructive";
-})(PrimaryAction || (PrimaryAction = {}));
+    ButtonAction["Destructive"] = "destructive";
+})(ButtonAction || (ButtonAction = {}));
 /**
  * @param val
- * @return whether an input is a PrimaryAction.
+ * @return whether an input is a ButtonAction.
  */
-function isPrimaryAction(val) {
-    return Object.keys(PrimaryAction).some(function (key) { return PrimaryAction[key] === val; });
+function isButtonAction(val) {
+    return Object.keys(ButtonAction).some(function (key) { return ButtonAction[key] === val; });
 }
 
 // EXTERNAL MODULE: external "vue"
@@ -243,6 +375,7 @@ var external_vue_ = __webpack_require__(0);
 var external_vue_default = /*#__PURE__*/__webpack_require__.n(external_vue_);
 
 // CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/button/Button.vue?vue&type=script&lang=ts&
+
 
 
 /**
@@ -253,23 +386,36 @@ var external_vue_default = /*#__PURE__*/__webpack_require__.n(external_vue_);
 /* harmony default export */ var Buttonvue_type_script_lang_ts_ = (external_vue_default.a.extend({
     name: 'WvuiButton',
     props: {
-        /** See PrimaryAction. */
+        /**
+         * What type of action the button will cause to be taken when clicked.
+         * See ButtonAction for what each value means.
+         */
         action: {
             type: String,
-            default: PrimaryAction.Default,
-            validator: isPrimaryAction
+            default: ButtonAction.Default,
+            // use arrow function for type inference of property
+            validator: function (value) { return isButtonAction(value); }
         },
-        /** True if button should be visually less prominent. */
-        quiet: Boolean
+        /**
+         * Button type. See ButtonType for what each value means.
+         */
+        type: {
+            type: String,
+            default: ButtonType.Normal,
+            // use arrow function for type inference of property
+            validator: function (value) { return isButtonType(value); }
+        }
     },
     computed: {
         rootClasses: function () {
             return {
-                'wvui-button--default': this.action === PrimaryAction.Default,
-                'wvui-button--progressive': this.action === PrimaryAction.Progressive,
-                'wvui-button--destructive': this.action === PrimaryAction.Destructive,
-                'wvui-button--framed': !this.quiet,
-                'wvui-button--quiet': this.quiet
+                'wvui-button--action-default': this.action === ButtonAction.Default,
+                'wvui-button--action-progressive': this.action === ButtonAction.Progressive,
+                'wvui-button--action-destructive': this.action === ButtonAction.Destructive,
+                'wvui-button--type-primary': this.type === ButtonType.Primary,
+                'wvui-button--type-normal': this.type === ButtonType.Normal,
+                'wvui-button--type-quiet': this.type === ButtonType.Quiet,
+                'wvui-button--framed': this.type !== ButtonType.Quiet
             };
         }
     },
@@ -283,7 +429,7 @@ var external_vue_default = /*#__PURE__*/__webpack_require__.n(external_vue_);
 // CONCATENATED MODULE: ./src/components/button/Button.vue?vue&type=script&lang=ts&
  /* harmony default export */ var button_Buttonvue_type_script_lang_ts_ = (Buttonvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/button/Button.vue?vue&type=style&index=0&lang=less&
-var Buttonvue_type_style_index_0_lang_less_ = __webpack_require__(7);
+var Buttonvue_type_style_index_0_lang_less_ = __webpack_require__(14);
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 /* globals __VUE_SSR_CONTEXT__ */
@@ -406,12 +552,216 @@ var component = normalizeComponent(
 )
 
 /* harmony default export */ var Button = (component.exports);
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/icon/Icon.vue?vue&type=template&id=6133cde4&
-var Iconvue_type_template_id_6133cde4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"wvui-icon",class:_vm.rootClasses,on:{"click":_vm.onClick}},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg","width":"20","height":"20","viewBox":"0 0 20 20","aria-hidden":_vm.lacksTitle}},[(_vm.iconTitle)?_c('title',[_vm._v(_vm._s(_vm.iconTitle))]):_vm._e(),_vm._v(" "),_c('g',{attrs:{"fill":_vm.iconColor}},[_c('path',{attrs:{"d":_vm.iconPath}})])])])}
-var Iconvue_type_template_id_6133cde4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/checkbox/Checkbox.vue?vue&type=template&id=166bc27a&
+var Checkboxvue_type_template_id_166bc27a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',{ref:"label",staticClass:"wvui-checkbox",class:_vm.rootClasses,attrs:{"aria-disabled":_vm.disabled},on:{"click":_vm.focusInput,"keydown":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }$event.preventDefault();return _vm.clickLabel($event)}}},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.wrappedModel),expression:"wrappedModel"}],ref:"input",staticClass:"wvui-checkbox__input",attrs:{"type":"checkbox","disabled":_vm.disabled},domProps:{"value":_vm.inputValue,"indeterminate":_vm.indeterminate,"checked":Array.isArray(_vm.wrappedModel)?_vm._i(_vm.wrappedModel,_vm.inputValue)>-1:(_vm.wrappedModel)},on:{"change":function($event){var $$a=_vm.wrappedModel,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=_vm.inputValue,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.wrappedModel=$$a.concat([$$v]))}else{$$i>-1&&(_vm.wrappedModel=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.wrappedModel=$$c}}}}),_vm._v(" "),_c('span',{staticClass:"wvui-checkbox__icon"}),_vm._v(" "),_c('span',{staticClass:"wvui-checkbox__label-content"},[_vm._t("default")],2)])}
+var Checkboxvue_type_template_id_166bc27a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/icon/Icon.vue?vue&type=template&id=6133cde4&
+// CONCATENATED MODULE: ./src/components/checkbox/Checkbox.vue?vue&type=template&id=166bc27a&
+
+// EXTERNAL MODULE: external "@vue/composition-api"
+var composition_api_ = __webpack_require__(1);
+var composition_api_default = /*#__PURE__*/__webpack_require__.n(composition_api_);
+
+// CONCATENATED MODULE: ./src/composables/useModelWrapper.ts
+
+/**
+ * Provide a computed property that models an input value.
+ *
+ * This is useful when setting v-model on a component, which then needs to set
+ * v-model on an input that it contains. We can't just reuse the first v-model
+ * because that would mean mutating a prop. Instead, we need a separate computed
+ * property that manually handles setting the value and emitting an event.
+ *
+ * See the Radio component for sample usage.
+ *
+ * @param modelValueRef A reactive reference of the modelValue prop provided by
+ *                      the parent component via v-model.
+ * @param emit Vue's $emit function
+ * @return The computed property
+ */
+function useModelWrapper(modelValueRef, 
+// This is Vue's emit function; we don't need to type it more specifically.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+emit) {
+    return Object(composition_api_["computed"])({
+        get: function () { return modelValueRef.value; },
+        set: function (value) { return emit('input', value); }
+    });
+}
+// Prop type definition for the component's modelValue prop.
+var modelValueProp = {
+    type: [String, Number, Boolean, Array],
+    default: false
+};
+
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/checkbox/Checkbox.vue?vue&type=script&lang=ts&
+
+
+
+external_vue_default.a.use(composition_api_default.a);
+/**
+ * A binary input that can exist by itself or in a group. When in a group, any
+ * number of checkboxes can be checked at a time.
+ *
+ * Typical use will involve using v-for to loop through an array of items and
+ * output a Checkbox component for each one. Each Checkbox will have the same
+ * v-model prop, but different inputValue props and label content.
+ *
+ * For a single checkbox, the v-model value will be a boolean true when the box
+ * is checked and false when unchecked.
+ *
+ * For multiple checkboxes, the v-model value will be an array of the
+ * inputValues of any current checked boxes (or an empty array if no boxes are
+ * checked).
+ *
+ * @fires {Event} input
+ */
+/* harmony default export */ var Checkboxvue_type_script_lang_ts_ = (Object(composition_api_["defineComponent"])({
+    name: 'WvuiCheckbox',
+    model: {
+        prop: 'modelValue',
+        event: 'input'
+    },
+    props: {
+        /**
+         * Value provided by v-model in a parent component.
+         *
+         * Rather than directly binding a value prop to this component, use
+         * v-model on this component in the parent component.
+         */
+        modelValue: modelValueProp,
+        /**
+         * HTML "value" attribute to assign to the input.
+         *
+         * A unique inputValue is required when using the same v-model for
+         * multiple inputs. If this is a standalone checkbox, the inputValue
+         * prop can be ommitted and will default to false.
+         */
+        inputValue: {
+            type: [String, Number, Boolean],
+            default: false
+        },
+        /**
+         * Whether the disabled attribute should be added to the input.
+         */
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        /**
+         * Whether the indeterminate visual state should be displayed.
+         *
+         * The indeterminate state indicates that a checkbox is neither on nor
+         * off. Within this component, this state is purely visual. The parent
+         * component must house the logic to set a checkbox to the indeterminate
+         * state via this prop (e.g. in the case of a set of nested checkboxes
+         * where some boxes are checked and some are not, making the parent
+         * checkbox neither fully on nor fully off).
+         *
+         * This prop is independent of the value provided by v-model. If
+         * indeterminate is set to true, the indeterminate visual state will
+         * display, but the value will not be affected. Nor will the value
+         * affect the visual state: indeterminate overrides the checked and
+         * unchecked visual states. If indeterminate changes to false, the
+         * visual state will reflect the current v-model value.
+         */
+        indeterminate: {
+            type: Boolean,
+            default: false
+        },
+        /**
+         * Whether the component should display inline.
+         *
+         * By default, `display: block` is set and a margin exists between
+         * sibling components, for a stacked layout.
+         */
+        inline: {
+            type: Boolean,
+            default: false
+        }
+    },
+    setup: function (props, _a) {
+        var emit = _a.emit;
+        var rootClasses = Object(composition_api_["computed"])(function () {
+            return {
+                'wvui-checkbox--inline': !!props.inline
+            };
+        });
+        // Declare template refs.
+        var input = Object(composition_api_["ref"])();
+        var label = Object(composition_api_["ref"])();
+        /**
+         * When the label is clicked, focus on the input.
+         *
+         * This doesn't happen automatically in Firefox or Safari.
+         */
+        var focusInput = function () {
+            input.value.focus();
+        };
+        /**
+         * On enter keydown, click the label to toggle the input.
+         */
+        var clickLabel = function () {
+            label.value.click();
+        };
+        // Take the modelValue provided by the parent component via v-model and
+        // generate a wrapped model that we can use for the input element in
+        // this component.
+        var modelValueRef = Object(composition_api_["toRef"])(props, 'modelValue');
+        var wrappedModel = useModelWrapper(modelValueRef, emit);
+        return {
+            rootClasses: rootClasses,
+            input: input,
+            label: label,
+            wrappedModel: wrappedModel,
+            focusInput: focusInput,
+            clickLabel: clickLabel
+        };
+    }
+}));
+
+// CONCATENATED MODULE: ./src/components/checkbox/Checkbox.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var checkbox_Checkboxvue_type_script_lang_ts_ = (Checkboxvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/checkbox/Checkbox.vue?vue&type=style&index=0&lang=less&
+var Checkboxvue_type_style_index_0_lang_less_ = __webpack_require__(15);
+
+// CONCATENATED MODULE: ./src/components/checkbox/Checkbox.vue
+
+
+
+
+
+
+/* normalize component */
+
+var Checkbox_component = normalizeComponent(
+  checkbox_Checkboxvue_type_script_lang_ts_,
+  Checkboxvue_type_template_id_166bc27a_render,
+  Checkboxvue_type_template_id_166bc27a_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Checkbox = (Checkbox_component.exports);
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/dropdown/Dropdown.vue?vue&type=template&id=119ed76a&
+var Dropdownvue_type_template_id_119ed76a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-dropdown",class:_vm.rootClasses},[_c('div',{ref:"handle",staticClass:"wvui-dropdown__handle",attrs:{"tabindex":"0","role":"combobox","aria-autocomplete":"list","aria-owns":_vm.menuId,"aria-haspopup":"listbox","aria-disabled":_vm.disabled ? 'true' : null,"aria-expanded":_vm.showMenu ? 'true' : 'false'},on:{"mousedown":function($event){$event.preventDefault();},"click":_vm.onClick,"blur":function($event){_vm.showMenu = false},"keydown":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")&&_vm._k($event.keyCode,"up",38,$event.key,["Up","ArrowUp"])&&_vm._k($event.keyCode,"down",40,$event.key,["Down","ArrowDown"])){ return null; }$event.preventDefault();$event.stopPropagation();return _vm.onKeyNavigation($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"esc",27,$event.key,["Esc","Escape"])){ return null; }$event.preventDefault();$event.stopPropagation();_vm.showMenu = false}]}},[_vm._t("selectedItem",[_vm._v("\n\t\t\t"+_vm._s(_vm.selectedItem ? _vm.selectedItem.label : _vm.defaultLabel)+"\n\t\t")],{"item":_vm.selectedItem,"defaultLabel":_vm.defaultLabel}),_vm._v(" "),_c('wvui-icon',{staticClass:"wvui-dropdown__indicator",attrs:{"icon":_vm.wvuiIconExpand}})],2),_vm._v(" "),_c('wvui-options-menu',{directives:[{name:"show",rawName:"v-show",value:(_vm.showMenu),expression:"showMenu"}],ref:"menu",staticClass:"wvui-dropdown__menu",attrs:{"id":_vm.menuId,"items":_vm.items},on:{"select":function($event){_vm.showMenu = false}},scopedSlots:_vm._u([{key:"default",fn:function(ref){
+var item = ref.item;
+return [_vm._t("menuItem",null,{"item":item})]}}],null,true),model:{value:(_vm.wrappedModel),callback:function ($$v) {_vm.wrappedModel=$$v},expression:"wrappedModel"}})],1)}
+var Dropdownvue_type_template_id_119ed76a_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/dropdown/Dropdown.vue?vue&type=template&id=119ed76a&
+
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/icon/Icon.vue?vue&type=template&id=883488d6&
+var Iconvue_type_template_id_883488d6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"wvui-icon",class:_vm.rootClasses,on:{"click":_vm.onClick}},[_c('svg',{attrs:{"xmlns":"http://www.w3.org/2000/svg","width":"20","height":"20","viewBox":"0 0 20 20","aria-hidden":_vm.lacksTitle}},[(_vm.iconTitle)?_c('title',[_vm._v(_vm._s(_vm.iconTitle))]):_vm._e(),_vm._v(" "),_c('path',{attrs:{"fill":"currentColor","d":_vm.iconPath}})])])}
+var Iconvue_type_template_id_883488d6_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/icon/Icon.vue?vue&type=template&id=883488d6&
 
 // CONCATENATED MODULE: ./src/components/icon/iconTypes.ts
 /**
@@ -483,16 +833,6 @@ function shouldFlip(icon, langCode) {
             required: true
         },
         /**
-         * Paint value. Numerical color value (e.g. hex code, rgba), color
-         * keywords, and paint keywords are allowed. See
-         * https://www.w3.org/TR/SVG/painting.html#SpecifyingPaint for all
-         * options.
-         */
-        iconColor: {
-            type: String,
-            default: '#000'
-        },
-        /**
          * Accessible title for SVG. String or message object. If not included,
          * the SVG will be hidden from screen readers via aria-hidden="true".
          */
@@ -531,6 +871,7 @@ function shouldFlip(icon, langCode) {
         }
     },
     mounted: function () {
+        // Now that the component is mounted, check its computed style and update dir
         var computedStyle = window.getComputedStyle(this.$el);
         this.dir = (computedStyle === null || computedStyle === void 0 ? void 0 : computedStyle.direction) || this.dir;
     },
@@ -544,7 +885,7 @@ function shouldFlip(icon, langCode) {
 // CONCATENATED MODULE: ./src/components/icon/Icon.vue?vue&type=script&lang=ts&
  /* harmony default export */ var icon_Iconvue_type_script_lang_ts_ = (Iconvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/icon/Icon.vue?vue&type=style&index=0&lang=less&
-var Iconvue_type_style_index_0_lang_less_ = __webpack_require__(8);
+var Iconvue_type_style_index_0_lang_less_ = __webpack_require__(16);
 
 // CONCATENATED MODULE: ./src/components/icon/Icon.vue
 
@@ -557,8 +898,8 @@ var Iconvue_type_style_index_0_lang_less_ = __webpack_require__(8);
 
 var Icon_component = normalizeComponent(
   icon_Iconvue_type_script_lang_ts_,
-  Iconvue_type_template_id_6133cde4_render,
-  Iconvue_type_template_id_6133cde4_staticRenderFns,
+  Iconvue_type_template_id_883488d6_render,
+  Iconvue_type_template_id_883488d6_staticRenderFns,
   false,
   null,
   null,
@@ -567,30 +908,281 @@ var Icon_component = normalizeComponent(
 )
 
 /* harmony default export */ var Icon = (Icon_component.exports);
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/input/Input.vue?vue&type=template&id=0c400756&
-var Inputvue_type_template_id_0c400756_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-input",class:_vm.rootClasses},[_c('input',_vm._b({ref:"input",staticClass:"wvui-input__input",attrs:{"dir":"auto","disabled":_vm.disabled,"type":_vm.type},domProps:{"value":_vm.computedValue},on:{"input":_vm.onInput,"change":_vm.onChange,"focus":_vm.onFocus,"blur":_vm.onBlur}},'input',_vm.$attrs,false)),_vm._v(" "),(_vm.startIcon)?_c('wvui-icon',{staticClass:"wvui-input__start-icon",attrs:{"icon":_vm.startIcon}}):_vm._e(),_vm._v(" "),(_vm.isClearable || _vm.endIcon)?_c('wvui-icon',{staticClass:"wvui-input__end-icon",attrs:{"icon":_vm.endIcon || _vm.clearIcon},on:{"click":_vm.onEndIconClick}}):_vm._e()],1)}
-var Inputvue_type_template_id_0c400756_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/options-menu/OptionsMenu.vue?vue&type=template&id=74359c5d&
+var OptionsMenuvue_type_template_id_74359c5d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"wvui-options-menu",attrs:{"role":"listbox","aria-activedescendant":_vm.activeDescendantId}},_vm._l((_vm.items),function(item,index){return _c('li',{key:item.id,staticClass:"wvui-options-menu__item",class:_vm.itemClasses( item, index ),attrs:{"id":_vm.prefixId( item.id ),"role":"option","aria-disabled":item.disabled ? true : null,"aria-selected":_vm.selectedItemId === item.id},on:{"click":function($event){return _vm.onItemClick( item )},"mousedown":function($event){$event.preventDefault();return _vm.onItemMousedown( item, index )}}},[_vm._t("default",[_vm._v("\n\t\t\t"+_vm._s(item.label)+"\n\t\t")],{"item":item})],2)}),0)}
+var OptionsMenuvue_type_template_id_74359c5d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/input/Input.vue?vue&type=template&id=0c400756&
+// CONCATENATED MODULE: ./src/components/options-menu/OptionsMenu.vue?vue&type=template&id=74359c5d&
 
-// CONCATENATED MODULE: ./src/components/input/InputType.ts
-/*
-* Defines types for text inputs
-*/
-var InputType;
-(function (InputType) {
-    InputType["Text"] = "text";
-    InputType["Search"] = "search";
-})(InputType || (InputType = {}));
+// CONCATENATED MODULE: ./src/components/options-menu/OptionsMenuItem.ts
+
+
+// CONCATENATED MODULE: ./src/composables/useGeneratedId.ts
+
+
+var counter = 0;
 /**
- * @param val
- * @return whether an input is a InputType.
+ * Composable for automatic ID generation. Provides a computed property called `id` that returns an
+ * automatically generated unique ID to use for the HTML `id` attribute. If an `id` attribute is
+ * already set on the component by its parent, the manually set ID is used instead of an
+ * automatically generated one. Generated IDs look like 'wvui-my-component-42'.
+ *
+ * Also provides a utility method called `prefixId` that can be used to generate sub-IDs for
+ * elements in the component. For example, if the component's ID is 'wvui-my-component-42', then
+ * `prefixId( 'foo' )` will return 'wvui-my-component-42-foo'.
+ *
+ * @param componentName Component name to use in the generated ID, typically in kebab-case
+ * @return Object with a computed property called ID and a function called prefixId
  */
-function isInputType(val) {
-    return Object.keys(InputType).some(function (key) { return InputType[key] === val; });
+function useGeneratedId(componentName) {
+    var componentNameWithDash = componentName === undefined ? '' : componentName + '-';
+    var generatedId = "wvui-" + componentNameWithDash + counter++;
+    var id = Object(composition_api_["computed"])(function (vm) { return vm.$attrs.id || generatedId; });
+    var prefixId = function (suffix) {
+        // Don't use `this.id` here, because we want `prefixId` to work even if `id` isn't
+        // composed in.
+        return (this.$attrs.id || generatedId) + "-" + suffix;
+    };
+    return {
+        id: id,
+        prefixId: prefixId
+    };
 }
 
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/options-menu/OptionsMenu.vue?vue&type=script&lang=ts&
+
+
+
+
+external_vue_default.a.use(composition_api_default.a);
+/**
+ * Menu that displays a set of options, and lets the user select one.
+ *
+ * This component is designed to be used inside other components. The logic for keyboard navigation
+ * between items is implemented here, but this component doesn't attach keyboard event listeners.
+ * The parent component is expected to listen for keyboard events and call handleKeyboardEvent().
+ *
+ * Set the available items through the items prop, and get/set the ID of the selected item through
+ * v-model. The v-model value will be the .id property of the selected item, or null if no item
+ * is selected.
+ *
+ * How items are displayed in the menu can be customized through the main slot. By default, the
+ * item's label is used.
+ *
+ * @example
+ *     <wvui-options-menu
+ *         v-model="number"
+ *         :items="[{id: 1, label: 'One'}, {id: 2, label: 'Two'}]"
+ *     />
+ *
+ * @example
+ *     <wvui-options-menu
+ *         #default="{ item }"
+ *         v-model="number"
+ *         :items="[{id: 1, label: 'One'}, {id: 2, label: 'Two'}]"
+ *     >
+ *         {{ item.label }} (id: {{ item.id }})
+ *     </wvui-options-menu>
+ */
+/* harmony default export */ var OptionsMenuvue_type_script_lang_ts_ = (Object(composition_api_["defineComponent"])({
+    name: 'WvuiOptionsMenu',
+    model: {
+        prop: 'selectedItemId',
+        event: 'select'
+    },
+    props: {
+        /**
+         * Items to list in the menu. Item IDs must be unique within each menu.
+         */
+        items: {
+            type: Array,
+            required: true,
+            validator: function (items) {
+                if (!Array.isArray(items)) {
+                    return false;
+                }
+                // Check for duplicate item IDs
+                var seenIDs = {};
+                for (var _i = 0, _a = items; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    if (seenIDs[item.id]) {
+                        // eslint-disable-next-line no-console
+                        console.error("Duplicate item ID " + item.id);
+                        return false;
+                    }
+                    seenIDs[item.id] = true;
+                }
+                return true;
+            }
+        },
+        /**
+         * The ID of the selected item, or null if no item is selected. This is the v-model value.
+         */
+        selectedItemId: {
+            type: String,
+            default: null
+        }
+    },
+    setup: function () {
+        var prefixId = useGeneratedId('options-menu').prefixId;
+        return {
+            prefixId: prefixId
+        };
+    },
+    data: function () {
+        return {
+            // Index of the active item (item the mouse is being held down on), or null if none
+            activeItemIndex: null,
+            // Index of the item currently highlighted with keyboard navigation, or null if none
+            highlightedItemIndex: null
+        };
+    },
+    computed: {
+        activeDescendantId: function () {
+            if (this.highlightedItemIndex !== null) {
+                return this.prefixId(this.items[this.highlightedItemIndex].id);
+            }
+            if (this.selectedItemId) {
+                return this.prefixId(this.selectedItemId);
+            }
+            return null;
+        }
+    },
+    watch: {
+        items: function () {
+            // If the items array changes, the indexes may not point to the same items anymore,
+            // and may be out of bounds
+            this.activeItemIndex = null;
+            this.highlightedItemIndex = null;
+        }
+    },
+    methods: {
+        itemClasses: function (item, index) {
+            return {
+                'wvui-options-menu__item--selected': this.selectedItemId === item.id,
+                'wvui-options-menu__item--active': this.activeItemIndex === index,
+                'wvui-options-menu__item--highlighted': this.highlightedItemIndex === index,
+                'wvui-options-menu__item--enabled': !item.disabled,
+                'wvui-options-menu__item--disabled': !!item.disabled
+            };
+        },
+        onItemMousedown: function (item, index) {
+            var _this = this;
+            if (item.disabled) {
+                return;
+            }
+            this.activeItemIndex = index;
+            var mouseupHandler = function () {
+                _this.activeItemIndex = null;
+                document.documentElement.removeEventListener('mouseup', mouseupHandler);
+            };
+            document.documentElement.addEventListener('mouseup', mouseupHandler);
+        },
+        onItemClick: function (item) {
+            if (!item.disabled) {
+                this.$emit('select', item.id);
+                this.highlightedItemIndex = null;
+            }
+        },
+        // This is a method instead of a computed property because it's needed so infrequently
+        getSelectedItemIndex: function () {
+            if (this.selectedItemId === null) {
+                return null;
+            }
+            // We're not allowed to use .findIndex() because we're targeting ES5
+            var selectedItemIndex = -1;
+            for (var i = 0; i < this.items.length; i++) {
+                if (this.items[i].id === this.selectedItemId) {
+                    selectedItemIndex = i;
+                }
+            }
+            return selectedItemIndex === -1 ? null : selectedItemIndex;
+        },
+        moveHighlight: function (direction) {
+            var _this = this;
+            if (this.items.length === 0) {
+                return;
+            }
+            var move = direction === 'backward' ? -1 : 1;
+            // Function that returns the previous/next index, wrapping around the start/end.
+            // ( i + move ) % length doesn't work, because -1 % length is -1, but we need length-1.
+            // Adding length to the left-hand side gets us the right result when i=0 and move=-1.
+            var nextIndex = function (i) {
+                return (i + move + _this.items.length) % _this.items.length;
+            };
+            var startIndex;
+            if (this.highlightedItemIndex === null) {
+                // Start at the selected item, if there is one, and move by one.
+                // If no item is selected, start at the first item and don't move.
+                var selectedItemIndex = this.getSelectedItemIndex();
+                startIndex = selectedItemIndex === null ? 0 : nextIndex(selectedItemIndex);
+            }
+            else {
+                startIndex = nextIndex(this.highlightedItemIndex);
+            }
+            // startIndex is the item we would like to highlight next, but it may be disabled.
+            // If it is, keep stepping until we find a non-disabled item, or until we loop
+            // back around to startIndex
+            var potentialIndex = startIndex;
+            if (this.items[potentialIndex].disabled) {
+                potentialIndex = nextIndex(potentialIndex);
+                while (this.items[potentialIndex].disabled && potentialIndex !== startIndex) {
+                    potentialIndex = nextIndex(potentialIndex);
+                }
+                if (this.items[potentialIndex].disabled) {
+                    // We looped around and didn't find a non-disabled item: all items are disabled
+                    potentialIndex = null;
+                }
+            }
+            this.highlightedItemIndex = potentialIndex;
+        },
+        selectHighlightedItem: function () {
+            if (this.highlightedItemIndex !== null) {
+                this.$emit('select', this.items[this.highlightedItemIndex].id);
+                this.highlightedItemIndex = null;
+            }
+        },
+        handleKeyboardEvent: function (event) {
+            if (event.key === 'Enter') {
+                this.selectHighlightedItem();
+            }
+            else if (event.key === 'ArrowUp') {
+                this.moveHighlight('backward');
+            }
+            else if (event.key === 'ArrowDown') {
+                this.moveHighlight('forward');
+            }
+        }
+    }
+}));
+
+// CONCATENATED MODULE: ./src/components/options-menu/OptionsMenu.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var options_menu_OptionsMenuvue_type_script_lang_ts_ = (OptionsMenuvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/options-menu/OptionsMenu.vue?vue&type=style&index=0&lang=less&
+var OptionsMenuvue_type_style_index_0_lang_less_ = __webpack_require__(17);
+
+// CONCATENATED MODULE: ./src/components/options-menu/OptionsMenu.vue
+
+
+
+
+
+
+/* normalize component */
+
+var OptionsMenu_component = normalizeComponent(
+  options_menu_OptionsMenuvue_type_script_lang_ts_,
+  OptionsMenuvue_type_template_id_74359c5d_render,
+  OptionsMenuvue_type_template_id_74359c5d_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var OptionsMenu = (OptionsMenu_component.exports);
 // CONCATENATED MODULE: ./src/themes/icons.ts
 /**
  * Wikimedia icons.
@@ -1012,11 +1604,12 @@ var wvuiIconReferences = {
 var wvuiIconReload = 'M15.65 4.35A8 8 0 1017.4 13h-2.22a6 6 0 11-1-7.22L11 9h7V2z';
 var wvuiIconRestore = 'M1.22 0L0 1.22l4 4V17a2 2 0 002 2h8a2 2 0 002-1.8l2.8 2.8 1.2-1.22zM17 4V2h-3.5l-1-1h-5l-1 1h-.84l2 2zM8.66 5H16v7.34z';
 var wvuiIconRobot = 'M10.5 5h6.505C18.107 5 19 5.896 19 6.997V14h-7v2h5.005c1.102 0 1.995.888 1.995 2v2H1v-2c0-1.105.893-2 1.995-2H8v-2H1V6.997C1 5.894 1.893 5 2.995 5H9.5V2.915a1.5 1.5 0 111 0zm-4 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm7 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z';
-var wvuiIconSearch = 'M7.5 13c3.04 0 5.5-2.46 5.5-5.5S10.54 2 7.5 2 2 4.46 2 7.5 4.46 13 7.5 13zm4.55.46A7.432 7.432 0 017.5 15C3.36 15 0 11.64 0 7.5S3.36 0 7.5 0C11.64 0 15 3.36 15 7.5c0 1.71-.57 3.29-1.54 4.55l6.49 6.49-1.41 1.41-6.49-6.49z';
+var wvuiIconSearch = 'M12.2 13.6a7 7 0 111.4-1.4l5.4 5.4-1.4 1.4-5.4-5.4zM3 8a5 5 0 1010 0A5 5 0 103 8z';
 var wvuiIconSearchCaseSensitive = 'M11.59 15.87h-1.52a.64.64 0 01-.42-.13.84.84 0 01-.24-.32l-1-2.67H3.18l-1 2.67a.8.8 0 01-.23.31.63.63 0 01-.42.14H0L4.8 3.76h2zm-3.72-4.54L6.2 6.91a12.12 12.12 0 01-.41-1.3q-.09.4-.2.73c-.07.22-.14.42-.2.58l-1.67 4.41zm5.58-2.84a4.91 4.91 0 013.46-1.35 3.41 3.41 0 011.32.24 2.62 2.62 0 011 .68 3 3 0 01.6 1 4.08 4.08 0 01.17 1.36v5.45h-.81a.78.78 0 01-.39-.08.61.61 0 01-.23-.32l-.18-.7a7.87 7.87 0 01-.65.53 4.12 4.12 0 01-.66.39 3.3 3.3 0 01-.73.24 4.3 4.3 0 01-.86.08 3.18 3.18 0 01-1-.14 2.12 2.12 0 01-.78-.43 2 2 0 01-.52-.72 2.48 2.48 0 01-.19-1 2 2 0 01.26-1 2.42 2.42 0 01.87-.85 5.66 5.66 0 011.6-.62 11.7 11.7 0 012.51-.25v-.57A2.06 2.06 0 0017.85 9a1.46 1.46 0 00-1.16-.45 2.53 2.53 0 00-.87.13 3.9 3.9 0 00-.62.32l-.46.28a.77.77 0 01-.43.13.52.52 0 01-.32-.1.81.81 0 01-.21-.24zm4.79 3.63a11.49 11.49 0 00-1.63.15 4.61 4.61 0 00-1.08.31 1.42 1.42 0 00-.59.45 1 1 0 00-.18.57 1.25 1.25 0 00.1.52.94.94 0 00.27.35 1.08 1.08 0 00.4.2 1.93 1.93 0 00.51.06 2.59 2.59 0 001.21-.27 3.79 3.79 0 001-.77z';
 var wvuiIconSearchDiacritics = 'M5.31 7.87a7.27 7.27 0 015.13-2 5.06 5.06 0 011.95.35 3.91 3.91 0 011.43 1 4.44 4.44 0 01.88 1.54 6.05 6.05 0 01.3 2v8.04h-1.2a1.18 1.18 0 01-.58-.12.91.91 0 01-.34-.48l-.26-1a11.5 11.5 0 01-1 .78 6 6 0 01-1 .58 4.81 4.81 0 01-1.08.35 6.39 6.39 0 01-1.21.09 4.72 4.72 0 01-1.44-.21 3.14 3.14 0 01-1.15-.64A3 3 0 015 17.08a3.67 3.67 0 01-.28-1.49 2.89 2.89 0 01.39-1.43 3.58 3.58 0 011.29-1.25A8.37 8.37 0 018.76 12a17.22 17.22 0 013.64-.41v-.85a3 3 0 00-.59-2A2.15 2.15 0 0010.1 8a3.77 3.77 0 00-1.29.19 5.87 5.87 0 00-.91.42L7.21 9a1.15 1.15 0 01-.63.19.76.76 0 01-.47-.14 1.17 1.17 0 01-.32-.36zm6.2-5.8a.83.83 0 00.62-.23 1.11 1.11 0 00.24-.77H14a3.75 3.75 0 01-.17 1.18 2.74 2.74 0 01-.49.91 2.19 2.19 0 01-.76.59 2.27 2.27 0 01-1 .2 2 2 0 01-.82-.17 6.55 6.55 0 01-.72-.37L9.43 3a1.16 1.16 0 00-.56-.17.8.8 0 00-.62.24A1.12 1.12 0 008 3.9H6.37a3.67 3.67 0 01.18-1.18A2.81 2.81 0 017 1.8a2.25 2.25 0 01.76-.59 2.22 2.22 0 011-.21 2.06 2.06 0 01.83.17 6.42 6.42 0 01.72.37l.69.36a1.12 1.12 0 00.51.17zm.9 11.18a17 17 0 00-2.42.23 6.87 6.87 0 00-1.59.46 2.1 2.1 0 00-.88.67 1.45 1.45 0 00-.27.85 1.85 1.85 0 00.14.77 1.39 1.39 0 00.4.52 1.6 1.6 0 00.6.3 2.85 2.85 0 00.75.09 3.84 3.84 0 001.8-.39 5.61 5.61 0 001.46-1.14z';
 var wvuiIconSearchRegularExpression = 'M1.62 10a13.63 13.63 0 00.45 3.51A13.39 13.39 0 003.4 16.7a.91.91 0 01.1.27.41.41 0 010 .21.38.38 0 01-.1.15l-.14.11-.83.5a14.89 14.89 0 01-1.11-2 13.62 13.62 0 01-.74-2 13.22 13.22 0 01-.42-2 16.4 16.4 0 010-4.14 13.22 13.22 0 01.42-2 13.84 13.84 0 01.74-2A14.94 14.94 0 012.4 2l.83.51.14.11a.4.4 0 01.1.15.41.41 0 010 .21.93.93 0 01-.1.27A13.6 13.6 0 001.62 10zM15.8 8.79l-.54.94-1.75-1-.34-.23a1.38 1.38 0 01-.27-.26A1.84 1.84 0 0113 9v2h-1V9a2.16 2.16 0 01.12-.76 1.82 1.82 0 01-.58.48l-1.74 1-.54-.94 1.73-1a2.25 2.25 0 01.75-.29 1.77 1.77 0 01-.75-.28L9.2 6.2l.54-.94 1.75 1 .33.24a1.64 1.64 0 01.27.27A2 2 0 0112 6V4h1v2a2.93 2.93 0 010 .4 1.36 1.36 0 01-.1.36 2.24 2.24 0 01.59-.49l1.74-1 .54.94-1.73 1-.36.18a1.29 1.29 0 01-.36.1 2.11 2.11 0 01.36.1 2 2 0 01.36.19zM18.37 10a13.65 13.65 0 00-.45-3.51 13.81 13.81 0 00-1.32-3.27.93.93 0 01-.1-.27.45.45 0 010-.21.36.36 0 01.1-.15l.14-.11.86-.48a15.54 15.54 0 011.1 2 13.79 13.79 0 01.74 2 13.18 13.18 0 01.42 2 16.16 16.16 0 01.14 2 16.21 16.21 0 01-.13 2 13.18 13.18 0 01-.42 2 13.57 13.57 0 01-.74 2 15.49 15.49 0 01-1.1 2l-.84-.5-.14-.11a.35.35 0 01-.1-.15.44.44 0 010-.21.91.91 0 01.1-.27 13.62 13.62 0 001.31-3.23 13.69 13.69 0 00.43-3.53z M8 13.5 A1.5 1.5 0 0 1 6.5 15 A1.5 1.5 0 0 1 5 13.5 A1.5 1.5 0 0 1 8 13.5 z';
 var wvuiIconSettings = 'M11.5 0l.42 2.75a7.67 7.67 0 0 1 1.87.77L16 1.87 18.16 4 16.49 6.23a7.67 7.67 0 0 1 .76 1.85L20 8.5v3l-2.75.42a7.67 7.67 0 0 1-.77 1.87L18.13 16 16 18.16l-2.24-1.67a7.67 7.67 0 0 1-1.85.76L11.5 20h-3l-.42-2.75a7.45 7.45 0 0 1-1.86-.77L4 18.13 1.87 16l1.65-2.23a7 7 0 0 1-.77-1.85L0 11.5v-3l2.75-.42a7.45 7.45 0 0 1 .77-1.86L1.87 4 4 1.87 6.23 3.52a7.17 7.17 0 0 1 1.85-.77L8.5 0ZM10 6.5A3.5 3.5 0 1 0 13.5 10 3.5 3.5 0 0 0 10 6.5Z';
+var wvuiIconShare = 'M12 6V2l7 7-7 7v-4c-5 0-8.5 1.5-11 5l.8-3 .2-.4A12 12 0 0112 6z';
 var wvuiIconSignature = {
     path: 'M0 18h20v1H0zm-.003-6.155l1.06-1.06 4.363 4.362-1.06 1.06z M.004 15.147l4.363-4.363 1.06 1.061-4.362 4.363zM17 5c0 9-11 9-11 9v-1.5s8 .5 9.5-6.5C16 4 15 2.5 14 2.5S11 4 10.75 10c-.08 2 .75 4.5 3.25 4.5 1.5 0 2-1 3.5-1a2.07 2.07 0 012.25 2.5h-1.5s.13-1-.5-1C16 15 16 16 14 16c0 0-4.75 0-4.75-6S12 1 14 1c.5 0 3 0 3 4z',
     shouldFlip: true
@@ -1160,6 +1753,218 @@ var wvuiIconWindow = 'M2 2a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V4a2 2 0 00
 var wvuiIconZoomIn = 'M19 17l-5.15-5.15a7 7 0 10-2 2L17 19zM3.5 8A4.5 4.5 0 118 12.5 4.49 4.49 0 013.5 8z M11 7.25H8.75V5h-1.5v2.25H5v1.5h2.25V11h1.5V8.75H11z';
 var wvuiIconZoomOut = 'M19 17l-5.15-5.15a7 7 0 10-2 2L17 19zM3.5 8A4.5 4.5 0 118 12.5 4.49 4.49 0 013.5 8z M5 7.25h6v1.5H5z';
 
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/dropdown/Dropdown.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+external_vue_default.a.use(composition_api_default.a);
+/**
+ * Dropdown menu, like HTML `<select>`. Displays the selected item (or a default label, if no item
+ * is selected), and expands on click to show all available items.
+ *
+ * Set the available items through the items prop, and get/set the ID of the selected item through
+ * v-model. The v-model value will be the .id property of the selected item, or null if no item
+ * is selected.
+ *
+ * How items are displayed can be customized through named slots. The menuItem slot is used for the
+ * display of items in the menu, and the selectedItem slot is used for the display of the currently
+ * selected item. Note that the item passed to the selectedItem slot will be null if no item is
+ * selected.
+ *
+ * @example
+ *     <wvui-dropdown v-model="number" :items="[{id: 1, label: 'One'}, {id: 2, label: 'Two'}]" />
+ *
+ * @example
+ *     <wvui-dropdown v-model="..." :items="...">
+ *         <template #menuItem="{ item }">
+ *             {{ item.label }} (id: {{item.id}})
+ *         </template>
+ *         <template #selectedItem="{ item, defaultLabel }">
+ *             <template v-if="item !== null">
+ *                 {{ item.label }} (id: {{item.id }})
+ *             </template>
+ *             <template v-else>
+ *                 {{ defaultLabel }}
+ *             </template>
+ *         </template>
+ *     </wvui-dropdown>
+ */
+/* harmony default export */ var Dropdownvue_type_script_lang_ts_ = (Object(composition_api_["defineComponent"])({
+    name: 'WvuiDropdown',
+    components: { WvuiIcon: Icon, WvuiOptionsMenu: OptionsMenu },
+    model: {
+        prop: 'selectedItemId',
+        event: 'change'
+    },
+    props: {
+        /**
+         * Available items in the menu. The items' IDs must be unique within each dropdown.
+         */
+        items: {
+            type: Array,
+            required: true
+            // No validation here; if the value is invalid, the OptionsMenu validator will catch it
+        },
+        /**
+         * The ID of the selected item, or null if no item is selected. This is the v-model value.
+         */
+        selectedItemId: {
+            type: String,
+            default: null
+        },
+        /**
+         * Label to display when no item is selected.
+         */
+        defaultLabel: {
+            type: String,
+            default: ''
+        },
+        /**
+         * Whether the dropdown is disabled. Disabled dropdowns can't be interacted with.
+         */
+        disabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    setup: function () {
+        var prefixId = useGeneratedId('dropdown').prefixId;
+        return {
+            prefixId: prefixId
+        };
+    },
+    data: function () { return ({
+        wvuiIconExpand: wvuiIconExpand,
+        // Whether the menu is visible
+        showMenu: false
+    }); },
+    computed: {
+        wrappedModel: {
+            get: function () {
+                return this.selectedItemId;
+            },
+            set: function (newValue) {
+                /**
+                 * Emitted when the selected item changes
+                 *
+                 * @param {string|null} newValue ID of the selected item, or null if no selection
+                 */
+                this.$emit('change', newValue);
+            }
+        },
+        rootClasses: function () {
+            return {
+                'wvui-dropdown--disabled': this.disabled,
+                'wvui-dropdown--open': this.showMenu,
+                'wvui-dropdown--value-selected': this.selectedItemId !== null,
+                'wvui-dropdown--no-selections': this.selectedItemId === null
+            };
+        },
+        menuId: function () {
+            return this.prefixId('menu');
+        },
+        itemsById: function () {
+            var result = {};
+            for (var _i = 0, _a = this.items; _i < _a.length; _i++) {
+                var item = _a[_i];
+                result[item.id] = item;
+            }
+            return result;
+        },
+        selectedItem: function () {
+            return this.selectedItemId !== null && this.itemsById[this.selectedItemId] || null;
+        }
+    },
+    methods: {
+        onKeyNavigation: function (event) {
+            if (this.disabled) {
+                return;
+            }
+            var wasShown = this.showMenu;
+            if (!this.showMenu) {
+                this.showMenu = true;
+                if (event.key === 'Enter') {
+                    // This Enter keypress means we wanted to open the menu, not select anything, so
+                    // don't delegate this keypress to the menu. If we do, it could trigger a
+                    // selection and immediately close the menu again.
+                    return;
+                }
+            }
+            // Delegate to the menu component
+            this.$refs.menu
+                .handleKeyboardEvent(event);
+            if (event.key === 'Enter' && wasShown) {
+                // Make sure the menu is hidden. handleKeyboardEvent() may have emitted a
+                // select event, in which case onSelect() will already have hidden the menu.
+                // But if this enter keypress didn't cause anything to be selected, we
+                // still want to hide the menu.
+                this.showMenu = false;
+            }
+        },
+        onClick: function () {
+            if (this.disabled) {
+                return;
+            }
+            this.showMenu = !this.showMenu;
+            this.$refs.handle.focus();
+        }
+    }
+}));
+
+// CONCATENATED MODULE: ./src/components/dropdown/Dropdown.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var dropdown_Dropdownvue_type_script_lang_ts_ = (Dropdownvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/dropdown/Dropdown.vue?vue&type=style&index=0&lang=less&
+var Dropdownvue_type_style_index_0_lang_less_ = __webpack_require__(18);
+
+// CONCATENATED MODULE: ./src/components/dropdown/Dropdown.vue
+
+
+
+
+
+
+/* normalize component */
+
+var Dropdown_component = normalizeComponent(
+  dropdown_Dropdownvue_type_script_lang_ts_,
+  Dropdownvue_type_template_id_119ed76a_render,
+  Dropdownvue_type_template_id_119ed76a_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Dropdown = (Dropdown_component.exports);
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/input/Input.vue?vue&type=template&id=726d0109&
+var Inputvue_type_template_id_726d0109_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-input",class:_vm.rootClasses},[_c('input',_vm._b({ref:"input",staticClass:"wvui-input__input",attrs:{"disabled":_vm.disabled,"type":_vm.type},domProps:{"value":_vm.computedValue},on:{"input":_vm.onInput,"change":_vm.onChange,"focus":_vm.onFocus,"blur":_vm.onBlur}},'input',_vm.$attrs,false)),_vm._v(" "),(_vm.startIcon)?_c('wvui-icon',{staticClass:"wvui-input__start-icon",attrs:{"icon":_vm.startIcon}}):_vm._e(),_vm._v(" "),(_vm.isClearable || _vm.endIcon)?_c('wvui-icon',{staticClass:"wvui-input__end-icon",attrs:{"icon":_vm.endIcon || _vm.clearIcon},on:{"click":_vm.onEndIconClick}}):_vm._e()],1)}
+var Inputvue_type_template_id_726d0109_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/input/Input.vue?vue&type=template&id=726d0109&
+
+// CONCATENATED MODULE: ./src/components/input/InputType.ts
+/**
+ * Defines types for text inputs.
+ */
+var InputType;
+(function (InputType) {
+    InputType["Text"] = "text";
+    InputType["Search"] = "search";
+})(InputType || (InputType = {}));
+/**
+ * @param val
+ * @return whether an input is a InputType.
+ */
+function isInputType(val) {
+    return Object.keys(InputType).some(function (key) { return InputType[key] === val; });
+}
+
 // CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/input/Input.vue?vue&type=script&lang=ts&
 
 
@@ -1182,7 +1987,8 @@ var wvuiIconZoomOut = 'M19 17l-5.15-5.15a7 7 0 10-2 2L17 19zM3.5 8A4.5 4.5 0 118
         type: {
             type: String,
             default: InputType.Text,
-            validator: isInputType
+            // use arrow function for type inference of property
+            validator: function (value) { return isInputType(value); }
         },
         disabled: {
             type: Boolean,
@@ -1273,7 +2079,7 @@ var wvuiIconZoomOut = 'M19 17l-5.15-5.15a7 7 0 10-2 2L17 19zM3.5 8A4.5 4.5 0 118
 // CONCATENATED MODULE: ./src/components/input/Input.vue?vue&type=script&lang=ts&
  /* harmony default export */ var input_Inputvue_type_script_lang_ts_ = (Inputvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/input/Input.vue?vue&type=style&index=0&lang=less&
-var Inputvue_type_style_index_0_lang_less_ = __webpack_require__(9);
+var Inputvue_type_style_index_0_lang_less_ = __webpack_require__(19);
 
 // CONCATENATED MODULE: ./src/components/input/Input.vue
 
@@ -1286,8 +2092,8 @@ var Inputvue_type_style_index_0_lang_less_ = __webpack_require__(9);
 
 var Input_component = normalizeComponent(
   input_Inputvue_type_script_lang_ts_,
-  Inputvue_type_template_id_0c400756_render,
-  Inputvue_type_template_id_0c400756_staticRenderFns,
+  Inputvue_type_template_id_726d0109_render,
+  Inputvue_type_template_id_726d0109_staticRenderFns,
   false,
   null,
   null,
@@ -1296,29 +2102,280 @@ var Input_component = normalizeComponent(
 )
 
 /* harmony default export */ var Input = (Input_component.exports);
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=template&id=041c4de3&
-var TypeaheadSearchvue_type_template_id_041c4de3_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-typeahead-search",class:_vm.rootClasses,attrs:{"role":"combobox","aria-expanded":_vm.isExpandedString,"aria-haspopup":"listbox","aria-owns":_vm.suggestionsId},on:{"mouseover":_vm.onRootMouseOver,"mouseout":_vm.onRootMouseOut,"keydown":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"up",38,$event.key,["Up","ArrowUp"])){ return null; }return _vm.onKeyDownUp($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"down",40,$event.key,["Down","ArrowDown"])){ return null; }return _vm.onKeyDownDown($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"escape",undefined,$event.key,undefined)){ return null; }return _vm.onKeyDownEscape($event)}]}},[_c('form',{staticClass:"wvui-typeahead-search__form",attrs:{"id":_vm.id,"action":_vm.formAction},on:{"submit":_vm.onSubmit}},[_c('div',{staticClass:"wvui-typeahead-search__wrapper"},[_c('wvui-input',_vm._b({staticClass:"wvui-typeahead-search__input",attrs:{"start-icon":_vm.startIcon,"value":_vm.inputValue,"type":_vm.InputType.Search,"name":"search","dir":"auto","autocapitalize":"off","autocomplete":"off","aria-autocomplete":"list","aria-controls":_vm.suggestionsId,"aria-activedescendant":_vm.activeSuggestionId},on:{"input":_vm.onInput,"blur":_vm.onInputBlur,"focus":_vm.onInputFocus}},'wvui-input',_vm.$attrs,false)),_vm._v(" "),_vm._t("default"),_vm._v(" "),_c('ol',{staticClass:"wvui-typeahead-search__suggestions",attrs:{"id":_vm.suggestionsId,"role":"listbox","aria-label":_vm.suggestionsLabel}},[_vm._l((_vm.suggestionsList),function(suggestion,index){return _c('li',{key:index,attrs:{"role":"option"}},[_c('wvui-typeahead-suggestion',{key:suggestion.id,staticClass:"wvui-typeahead-search__suggestion",attrs:{"id":_vm.getSuggestionId( suggestion ),"article-path":_vm.formAction,"query":_vm.searchQuery,"active":_vm.suggestionActiveIndex === index,"suggestion":suggestion,"show-thumbnail":_vm.showThumbnail,"show-description":_vm.showDescription},on:{"mouseover":function($event){return _vm.onSuggestionMouseOver( index )},"click":function($event){return _vm.onSuggestionClick( suggestion )}},nativeOn:{"mousedown":function($event){return _vm.onSuggestionMouseDown($event)}}})],1)}),_vm._v(" "),_c('li',{attrs:{"role":"option"}},[_c('a',{ref:"footer",staticClass:"wvui-typeahead-search__suggestions__footer",class:_vm.footerClasses,attrs:{"id":_vm.footerId,"tabindex":"-1","href":_vm.footerUrl},on:{"mouseover":_vm.onFooterHover,"mousedown":_vm.onSuggestionMouseDown,"click":function($event){return _vm.onSuggestionClick()}}},[_c('wvui-icon',{staticClass:"wvui-typeahead-search__suggestions-footer-article-icon",attrs:{"icon":_vm.articleIcon}}),_vm._v(" "),_c('span',{staticClass:"wvui-typeahead-search__suggestions__footer__text"},[_vm._v(_vm._s(_vm.footerSearchText)+" "),_c('strong',[_vm._v("\""+_vm._s(_vm.searchQuery)+"\"")])])],1)])],2)],2),_vm._v(" "),_c('wvui-button',{staticClass:"wvui-typeahead-search__submit"},[_vm._v("\n\t\t\t"+_vm._s(_vm.buttonLabel)+"\n\t\t")])],1)])}
-var TypeaheadSearchvue_type_template_id_041c4de3_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/progress-bar/ProgressBar.vue?vue&type=template&id=94844768&
+var ProgressBarvue_type_template_id_94844768_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)}
+var ProgressBarvue_type_template_id_94844768_staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-progress-bar",attrs:{"role":"progressbar","aria-valuemin":"0","aria-valuemax":"100"}},[_c('div',{staticClass:"wvui-progress-bar__bar"})])}]
 
 
-// CONCATENATED MODULE: ./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=template&id=041c4de3&
+// CONCATENATED MODULE: ./src/components/progress-bar/ProgressBar.vue?vue&type=template&id=94844768&
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=template&id=3d427b3c&
-var TypeaheadSuggestionvue_type_template_id_3d427b3c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.suggestion)?_c('a',{staticClass:"wvui-typeahead-suggestion",class:_vm.rootClasses,attrs:{"href":_vm.suggestionWikiLink},on:{"mouseover":_vm.onMouseOver,"click":_vm.onClick}},[(_vm.showThumbnail && _vm.suggestion.thumbnail)?_c('span',{staticClass:"wvui-typeahead-suggestion__thumbnail",style:({backgroundImage: _vm.thumbnailBackgroundImage})}):(_vm.showThumbnail)?_c('span',{staticClass:"wvui-typeahead-suggestion__thumbnail-placeholder"},[_c('wvui-icon',{staticClass:"wvui-typeahead-suggestion__thumbnail-icon",attrs:{"icon":_vm.defaultThumbnailIcon}})],1):_vm._e(),_vm._v(" "),_c('span',{staticClass:"wvui-typeahead-suggestion__text"},[_c('wvui-typeahead-suggestion-title',{attrs:{"query":_vm.query,"title":_vm.suggestion.title}}),_vm._v(" "),(_vm.showDescription && _vm.suggestion.description)?_c('span',{staticClass:"wvui-typeahead-suggestion__description"},[_vm._v(_vm._s(_vm.suggestion.description))]):_vm._e()],1)]):_vm._e()}
-var TypeaheadSuggestionvue_type_template_id_3d427b3c_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/progress-bar/ProgressBar.vue?vue&type=script&lang=ts&
+
+/**
+ * Progress bar, currently only supports indeterminate type (i.e. the bar will scroll across the
+ * width of the display and then reappear at the start, rather than reflecting a specific amount
+ * of progress having been made).
+ *
+ * @author DannyS712
+ */
+/* harmony default export */ var ProgressBarvue_type_script_lang_ts_ = (external_vue_default.a.extend({
+    name: 'WvuiProgressBar'
+}));
+
+// CONCATENATED MODULE: ./src/components/progress-bar/ProgressBar.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var progress_bar_ProgressBarvue_type_script_lang_ts_ = (ProgressBarvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/progress-bar/ProgressBar.vue?vue&type=style&index=0&lang=less&
+var ProgressBarvue_type_style_index_0_lang_less_ = __webpack_require__(20);
+
+// CONCATENATED MODULE: ./src/components/progress-bar/ProgressBar.vue
 
 
-// CONCATENATED MODULE: ./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=template&id=3d427b3c&
+
+
+
+
+/* normalize component */
+
+var ProgressBar_component = normalizeComponent(
+  progress_bar_ProgressBarvue_type_script_lang_ts_,
+  ProgressBarvue_type_template_id_94844768_render,
+  ProgressBarvue_type_template_id_94844768_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var ProgressBar = (ProgressBar_component.exports);
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/radio/Radio.vue?vue&type=template&id=ab831004&
+var Radiovue_type_template_id_ab831004_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('label',{staticClass:"wvui-radio",class:_vm.rootClasses,attrs:{"aria-disabled":_vm.disabled},on:{"click":_vm.focusInput}},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.wrappedModel),expression:"wrappedModel"}],ref:"input",staticClass:"wvui-radio__input",attrs:{"type":"radio","name":_vm.name,"disabled":_vm.disabled},domProps:{"value":_vm.inputValue,"checked":_vm._q(_vm.wrappedModel,_vm.inputValue)},on:{"change":function($event){_vm.wrappedModel=_vm.inputValue}}}),_vm._v(" "),_c('span',{staticClass:"wvui-radio__icon"}),_vm._v(" "),_c('span',{staticClass:"wvui-radio__label-content"},[_vm._t("default")],2)])}
+var Radiovue_type_template_id_ab831004_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/radio/Radio.vue?vue&type=template&id=ab831004&
+
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/radio/Radio.vue?vue&type=script&lang=ts&
+
+
+
+external_vue_default.a.use(composition_api_default.a);
+/**
+ * A binary input that always exists in a group, in which only one input can be
+ * on at a time.
+ *
+ * Typical use will involve using v-for to loop through an array of items and
+ * output a Radio component for each one. Each Radio will have the same v-model
+ * and name props, but different inputValue props and label content.
+ *
+ * The v-model value is the inputValue of the Radio that is currently on.
+ *
+ * @fires {Event} input
+ */
+/* harmony default export */ var Radiovue_type_script_lang_ts_ = (Object(composition_api_["defineComponent"])({
+    name: 'WvuiRadio',
+    model: {
+        prop: 'modelValue',
+        event: 'input'
+    },
+    props: {
+        /**
+         * Value provided by v-model in a parent component.
+         *
+         * Rather than directly binding a value prop to this component, use
+         * v-model to bind a string, number, or boolean value. This value
+         * represents the value of the radio input that is currently on.
+         */
+        modelValue: modelValueProp,
+        /**
+         * HTML "value" attribute to assign to the input.
+         *
+         * Required for input groups.
+         */
+        inputValue: {
+            type: [String, Number, Boolean],
+            default: false
+        },
+        /**
+         * Whether the disabled attribute should be added to the input.
+         */
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        /**
+         * HTML "name" attribute to assign to the input.
+         *
+         * Required for input groups
+         */
+        name: {
+            type: String,
+            default: ''
+        },
+        /**
+         * Whether the component should display inline.
+         *
+         * By default, `display: block` is set and a margin exists between
+         * sibling components, for a stacked layout.
+         */
+        inline: {
+            type: Boolean,
+            default: false
+        }
+    },
+    setup: function (props, _a) {
+        var emit = _a.emit;
+        var rootClasses = Object(composition_api_["computed"])(function () {
+            return {
+                'wvui-radio--inline': !!props.inline
+            };
+        });
+        // Declare template ref.
+        var input = Object(composition_api_["ref"])();
+        /**
+         * When the label is clicked, focus on the input.
+         *
+         * This doesn't happen automatically in Firefox or Safari.
+         */
+        var focusInput = function () {
+            input.value.focus();
+        };
+        // Take the modelValue provided by the parent component via v-model and
+        // generate a wrapped model that we can use for the input element in
+        // this component.
+        var modelValueRef = Object(composition_api_["toRef"])(props, 'modelValue');
+        var wrappedModel = useModelWrapper(modelValueRef, emit);
+        return {
+            rootClasses: rootClasses,
+            input: input,
+            focusInput: focusInput,
+            wrappedModel: wrappedModel
+        };
+    }
+}));
+
+// CONCATENATED MODULE: ./src/components/radio/Radio.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var radio_Radiovue_type_script_lang_ts_ = (Radiovue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/radio/Radio.vue?vue&type=style&index=0&lang=less&
+var Radiovue_type_style_index_0_lang_less_ = __webpack_require__(21);
+
+// CONCATENATED MODULE: ./src/components/radio/Radio.vue
+
+
+
+
+
+
+/* normalize component */
+
+var Radio_component = normalizeComponent(
+  radio_Radiovue_type_script_lang_ts_,
+  Radiovue_type_template_id_ab831004_render,
+  Radiovue_type_template_id_ab831004_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var Radio = (Radio_component.exports);
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/toggle-button/ToggleButton.vue?vue&type=template&id=002cf358&
+var ToggleButtonvue_type_template_id_002cf358_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"wvui-toggle-button",class:_vm.rootClasses,attrs:{"aria-pressed":_vm.isActive},on:{"mousedown":function($event){$event.preventDefault();},"click":_vm.onClick}},[_vm._t("default")],2)}
+var ToggleButtonvue_type_template_id_002cf358_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/toggle-button/ToggleButton.vue?vue&type=template&id=002cf358&
+
+// CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/toggle-button/ToggleButton.vue?vue&type=script&lang=ts&
+
+/**
+ * A toggle button wrapping slotted content.
+ *
+ * @author DannyS712
+ *
+ * @fires {Event} change
+ */
+/* harmony default export */ var ToggleButtonvue_type_script_lang_ts_ = (external_vue_default.a.extend({
+    name: 'WvuiToggleButton',
+    props: {
+        /**
+         * Whether the button should be set to "on" or not. It is the responsibility
+         * of the calling code to handle updating this property each time the button
+         * is toggled, by listening to the 'change' event.
+         */
+        isActive: {
+            type: Boolean,
+            required: true
+        }
+    },
+    computed: {
+        rootClasses: function () {
+            // Provide --inactive too so that we can simplify selectors
+            return {
+                'wvui-toggle-button--active': this.isActive,
+                'wvui-toggle-button--inactive': !this.isActive
+            };
+        }
+    },
+    methods: {
+        onClick: function () {
+            // Event provides the new value, listener should save this in a property
+            // that is bound to isActive so that the toggle gets updated as well.
+            this.$emit('change', !this.isActive);
+        }
+    }
+}));
+
+// CONCATENATED MODULE: ./src/components/toggle-button/ToggleButton.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var toggle_button_ToggleButtonvue_type_script_lang_ts_ = (ToggleButtonvue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/toggle-button/ToggleButton.vue?vue&type=style&index=0&lang=less&
+var ToggleButtonvue_type_style_index_0_lang_less_ = __webpack_require__(22);
+
+// CONCATENATED MODULE: ./src/components/toggle-button/ToggleButton.vue
+
+
+
+
+
+
+/* normalize component */
+
+var ToggleButton_component = normalizeComponent(
+  toggle_button_ToggleButtonvue_type_script_lang_ts_,
+  ToggleButtonvue_type_template_id_002cf358_render,
+  ToggleButtonvue_type_template_id_002cf358_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var ToggleButton = (ToggleButton_component.exports);
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=template&id=12b7de50&
+var TypeaheadSearchvue_type_template_id_12b7de50_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"wvui-typeahead-search",class:_vm.rootClasses,attrs:{"role":"combobox","aria-expanded":_vm.isExpandedString,"aria-haspopup":"listbox","aria-owns":_vm.suggestionsId},on:{"mouseover":_vm.onRootMouseOver,"mouseout":_vm.onRootMouseOut,"keydown":[function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"up",38,$event.key,["Up","ArrowUp"])){ return null; }return _vm.onKeyDownUp($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"down",40,$event.key,["Down","ArrowDown"])){ return null; }return _vm.onKeyDownDown($event)},function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"escape",undefined,$event.key,undefined)){ return null; }return _vm.onKeyDownEscape($event)}]}},[_c('form',{staticClass:"wvui-typeahead-search__form",attrs:{"id":_vm.id,"action":_vm.formAction},on:{"submit":_vm.onSubmit}},[_c('div',{staticClass:"wvui-typeahead-search__wrapper"},[_c('wvui-input',_vm._b({staticClass:"wvui-typeahead-search__input",attrs:{"start-icon":_vm.startIcon,"value":_vm.inputValue,"type":_vm.InputType.Search,"name":"search","autocapitalize":"off","autocomplete":"off","aria-autocomplete":"list","aria-controls":_vm.suggestionsId,"aria-activedescendant":_vm.activeSuggestionId},on:{"input":_vm.onInput,"blur":_vm.onInputBlur,"focus":_vm.onInputFocus}},'wvui-input',_vm.$attrs,false)),_vm._v(" "),_vm._t("default"),_vm._v(" "),_c('ol',{staticClass:"wvui-typeahead-search__suggestions",attrs:{"id":_vm.suggestionsId,"role":"listbox","aria-label":_vm.suggestionsLabel}},[_vm._l((_vm.suggestionsList),function(suggestion,index){return _c('li',{key:index,attrs:{"role":"option","aria-selected":_vm.isSuggestionSelected(index)}},[_c('wvui-typeahead-suggestion',{key:suggestion.id,staticClass:"wvui-typeahead-search__suggestion",attrs:{"id":_vm.getSuggestionId( suggestion ),"search-page-title":_vm.searchPageTitle,"article-path":_vm.formAction,"query":_vm.searchQuery,"active":_vm.suggestionActiveIndex === index,"suggestion":suggestion,"show-thumbnail":_vm.showThumbnail,"show-description":_vm.showDescription,"highlight-query":_vm.highlightQuery},on:{"mouseover":function($event){return _vm.onSuggestionMouseOver( index )},"mousedown":_vm.onSuggestionMouseDown,"click":function($event){return _vm.onSuggestionClick( suggestion )}}})],1)}),_vm._v(" "),_c('li',{attrs:{"role":"option"}},[_c('a',{ref:"footer",staticClass:"wvui-typeahead-search__suggestions__footer",class:_vm.footerClasses,attrs:{"id":_vm.footerId,"tabindex":"-1","href":_vm.footerUrl},on:{"mouseover":_vm.onFooterHover,"mousedown":_vm.onSuggestionMouseDown,"click":function($event){return _vm.onSuggestionClick()}}},[_c('wvui-icon',{staticClass:"wvui-typeahead-search__suggestions__footer__icon",attrs:{"icon":_vm.articleIcon}}),_vm._v(" "),_c('span',{staticClass:"wvui-typeahead-search__suggestions__footer__text"},[_vm._t("search-footer-text",[_c('strong',{staticClass:"wvui-typeahead-search__suggestions__footer__text__query"},[_vm._v("\n\t\t\t\t\t\t\t\t\t"+_vm._s(_vm.searchQuery)+"\n\t\t\t\t\t\t\t\t")])],{"searchQuery":_vm.searchQuery})],2)],1)])],2)],2),_vm._v(" "),_c('wvui-button',{staticClass:"wvui-typeahead-search__submit"},[_vm._v("\n\t\t\t"+_vm._s(_vm.buttonLabel)+"\n\t\t")])],1)])}
+var TypeaheadSearchvue_type_template_id_12b7de50_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=template&id=12b7de50&
+
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=template&id=e306f976&
+var TypeaheadSuggestionvue_type_template_id_e306f976_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.suggestion)?_c('a',{staticClass:"wvui-typeahead-suggestion",class:_vm.rootClasses,attrs:{"href":_vm.suggestionWikiLink},on:{"mouseover":_vm.onMouseOver,"mousedown":_vm.onMouseDown,"click":_vm.onClick}},[(_vm.showThumbnail && _vm.suggestion.thumbnail)?_c('span',{staticClass:"wvui-typeahead-suggestion__thumbnail",style:({backgroundImage: _vm.thumbnailBackgroundImage})}):(_vm.showThumbnail)?_c('span',{staticClass:"wvui-typeahead-suggestion__thumbnail-placeholder"},[_c('wvui-icon',{staticClass:"wvui-typeahead-suggestion__thumbnail-icon",attrs:{"icon":_vm.defaultThumbnailIcon}})],1):_vm._e(),_vm._v(" "),_c('span',{staticClass:"wvui-typeahead-suggestion__text"},[_c('wvui-typeahead-suggestion-title',{attrs:{"query":_vm.query,"title":_vm.suggestion.title,"highlight-query":_vm.highlightQuery}}),_vm._v(" "),(_vm.showDescription && _vm.suggestion.description)?_c('span',{staticClass:"wvui-typeahead-suggestion__description"},[_vm._v(_vm._s(_vm.suggestion.description))]):_vm._e()],1)]):_vm._e()}
+var TypeaheadSuggestionvue_type_template_id_e306f976_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=template&id=e306f976&
 
 // CONCATENATED MODULE: ./src/components/typeahead-search/http/SearchClient.ts
 
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=template&id=1fb45517&
-var TypeaheadSuggestionTitlevue_type_template_id_1fb45517_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"wvui-typeahead-suggestion__title"},[_vm._v("\n\t"+_vm._s(_vm.titleChunks[ 0 ])),_c('span',{staticClass:"wvui-typeahead-suggestion__match"},[_vm._v(_vm._s(_vm.titleChunks[ 1 ]))]),_vm._v(_vm._s(_vm.titleChunks[ 2 ])+"\n")])}
-var TypeaheadSuggestionTitlevue_type_template_id_1fb45517_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=template&id=6a5e47ec&
+var TypeaheadSuggestionTitlevue_type_template_id_6a5e47ec_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"wvui-typeahead-suggestion__title"},[_vm._v("\n\t"+_vm._s(_vm.titleChunks[ 0 ])),_c('span',{staticClass:"wvui-typeahead-suggestion__match"},[_vm._v(_vm._s(_vm.titleChunks[ 1 ]))]),_vm._v(_vm._s(_vm.titleChunks[ 2 ])+"\n")])}
+var TypeaheadSuggestionTitlevue_type_template_id_6a5e47ec_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=template&id=1fb45517&
+// CONCATENATED MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=template&id=6a5e47ec&
 
 // CONCATENATED MODULE: ./src/utils/StringUtils.ts
 /**
@@ -1347,6 +2404,13 @@ function buildQueryString(obj) {
 
 // CONCATENATED MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitleUtils.ts
 
+// The following was written by Trey Jones as part of https://phabricator.wikimedia.org/T35242. See
+// https://gerrit.wikimedia.org/r/c/mediawiki/core/+/530929/ for additional detail.
+//
+// Equivalent to \p{Mark} (which is not currently available in JavaScript).
+//
+// eslint-disable-next-line max-len
+var COMBINING_MARK = '[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u07FD\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08D3-\u08E1\u08E3-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u09FE\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0AFA-\u0AFF\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C04\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D00-\u0D03\u0D3B\u0D3C\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EB9\u0EBB\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u1885\u1886\u18A9\u1920-\u192B\u1930-\u193B\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF2-\u1CF4\u1CF7-\u1CF9\u1DC0-\u1DF9\u1DFB-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69E\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C5\uA8E0-\uA8F1\uA8FF\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2F]';
 /**
  * Formats title adding highlighted query if it matches.
  *
@@ -1359,11 +2423,17 @@ function splitStringAtMatch(query, title) {
         return [title, '', ''];
     }
     var sanitizedQuery = regExpEscape(query);
-    var matchStartIndex = title.search(new RegExp(sanitizedQuery, 'i'));
-    if (matchStartIndex < 0) {
+    var match = title.match(new RegExp(
+    // Per https://www.regular-expressions.info/unicode.html, "any code point that is not a
+    // combining mark can be followed by any number of combining marks." See also the discussion
+    // in https://phabricator.wikimedia.org/T35242.
+    sanitizedQuery + COMBINING_MARK + '*', 'i'));
+    // Note well that index is an optional property that could be zero.
+    if (!match || match.index === undefined) {
         return [title, '', ''];
     }
-    var matchEndIndex = matchStartIndex + sanitizedQuery.length;
+    var matchStartIndex = match.index;
+    var matchEndIndex = matchStartIndex + match[0].length;
     var highlightedTitle = title.substring(matchStartIndex, matchEndIndex);
     var beforeHighlight = title.substring(0, matchStartIndex);
     var afterHighlight = title.substring(matchEndIndex, title.length);
@@ -1383,16 +2453,25 @@ function splitStringAtMatch(query, title) {
         title: {
             type: String,
             required: true
+        },
+        highlightQuery: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
         /**
-         * Formats title adding highlighted query if it matches.
+         * If highlighting is enabled, returns the title with the part that matches the query
+         * highlighted. If highlighting is disabled, returns the unmodified title in a form
+         * compatible with the template above.
          *
          * @return [ string, string, string ]
          */
         titleChunks: function () {
-            return splitStringAtMatch(this.query, this.title);
+            if (this.highlightQuery) {
+                return splitStringAtMatch(this.query, this.title);
+            }
+            return ['', this.title, ''];
         }
     }
 }));
@@ -1400,7 +2479,7 @@ function splitStringAtMatch(query, title) {
 // CONCATENATED MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=script&lang=ts&
  /* harmony default export */ var typeahead_suggestion_title_TypeaheadSuggestionTitlevue_type_script_lang_ts_ = (TypeaheadSuggestionTitlevue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue?vue&type=style&index=0&lang=less&
-var TypeaheadSuggestionTitlevue_type_style_index_0_lang_less_ = __webpack_require__(10);
+var TypeaheadSuggestionTitlevue_type_style_index_0_lang_less_ = __webpack_require__(23);
 
 // CONCATENATED MODULE: ./src/components/typeahead-suggestion-title/TypeaheadSuggestionTitle.vue
 
@@ -1413,8 +2492,8 @@ var TypeaheadSuggestionTitlevue_type_style_index_0_lang_less_ = __webpack_requir
 
 var TypeaheadSuggestionTitle_component = normalizeComponent(
   typeahead_suggestion_title_TypeaheadSuggestionTitlevue_type_script_lang_ts_,
-  TypeaheadSuggestionTitlevue_type_template_id_1fb45517_render,
-  TypeaheadSuggestionTitlevue_type_template_id_1fb45517_staticRenderFns,
+  TypeaheadSuggestionTitlevue_type_template_id_6a5e47ec_render,
+  TypeaheadSuggestionTitlevue_type_template_id_6a5e47ec_staticRenderFns,
   false,
   null,
   null,
@@ -1490,6 +2569,10 @@ function createDefaultUrlGenerator() {
             type: Object,
             required: true
         },
+        searchPageTitle: {
+            type: String,
+            default: 'Special:Search'
+        },
         urlGenerator: {
             type: Object,
             default: createDefaultUrlGenerator
@@ -1499,6 +2582,10 @@ function createDefaultUrlGenerator() {
             default: true
         },
         showDescription: {
+            type: Boolean,
+            default: true
+        },
+        highlightQuery: {
             type: Boolean,
             default: true
         }
@@ -1520,7 +2607,9 @@ function createDefaultUrlGenerator() {
          * @return {string}
          * */
         suggestionWikiLink: function () {
-            return this.urlGenerator.generateUrl(this.suggestion, undefined, this.articlePath);
+            return this.urlGenerator.generateUrl(this.suggestion, {
+                title: this.searchPageTitle
+            }, this.articlePath);
         },
         /**
          * Generates a proper value for background-image.
@@ -1536,6 +2625,9 @@ function createDefaultUrlGenerator() {
         onMouseOver: function (event) {
             this.$emit('mouseover', event);
         },
+        onMouseDown: function (event) {
+            this.$emit('mousedown', event);
+        },
         onClick: function (event) {
             this.$emit('click', event);
         }
@@ -1545,7 +2637,7 @@ function createDefaultUrlGenerator() {
 // CONCATENATED MODULE: ./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=script&lang=ts&
  /* harmony default export */ var typeahead_suggestion_TypeaheadSuggestionvue_type_script_lang_ts_ = (TypeaheadSuggestionvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/typeahead-suggestion/TypeaheadSuggestion.vue?vue&type=style&index=0&lang=less&
-var TypeaheadSuggestionvue_type_style_index_0_lang_less_ = __webpack_require__(11);
+var TypeaheadSuggestionvue_type_style_index_0_lang_less_ = __webpack_require__(24);
 
 // CONCATENATED MODULE: ./src/components/typeahead-suggestion/TypeaheadSuggestion.vue
 
@@ -1558,8 +2650,8 @@ var TypeaheadSuggestionvue_type_style_index_0_lang_less_ = __webpack_require__(1
 
 var TypeaheadSuggestion_component = normalizeComponent(
   typeahead_suggestion_TypeaheadSuggestionvue_type_script_lang_ts_,
-  TypeaheadSuggestionvue_type_template_id_3d427b3c_render,
-  TypeaheadSuggestionvue_type_template_id_3d427b3c_staticRenderFns,
+  TypeaheadSuggestionvue_type_template_id_e306f976_render,
+  TypeaheadSuggestionvue_type_template_id_e306f976_staticRenderFns,
   false,
   null,
   null,
@@ -1568,94 +2660,6 @@ var TypeaheadSuggestion_component = normalizeComponent(
 )
 
 /* harmony default export */ var TypeaheadSuggestion = (TypeaheadSuggestion_component.exports);
-// CONCATENATED MODULE: ./src/http/fetch.ts
-var fetch_assign = (undefined && undefined.__assign) || function () {
-    fetch_assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return fetch_assign.apply(this, arguments);
-};
-var nullAbortController = {
-    abort: function () {
-        // Do nothing (no-op)
-    },
-    signal: undefined
-};
-// A wrapper which combines native fetch() in browsers and the following json() call.
-function fetchJson(resource, init) {
-    // As of 2020, browser support for AbortController is limited:
-    // https://caniuse.com/abortcontroller
-    // so replacing it with no-op if it doesn't exist.
-    var controller = window.AbortController ?
-        new AbortController() :
-        nullAbortController;
-    var getJson = fetch(resource, fetch_assign(fetch_assign({}, init), { signal: controller.signal }))
-        .then(function (response) {
-        if (!response.ok) {
-            return Promise.reject("Network request failed with HTTP code " + response.status + ".");
-        }
-        return response.json();
-    });
-    return {
-        fetch: getJson,
-        abort: function () { return controller.abort(); }
-    };
-}
-
-// CONCATENATED MODULE: ./src/components/typeahead-search/http/restSearchClient.ts
-
-
-
-function adaptApiResponse(query, restResponse) {
-    return {
-        query: query,
-        results: restResponse.pages
-            .map(function (_a) {
-            var _b, _c;
-            var id = _a.id, key = _a.key, title = _a.title, description = _a.description, thumbnail = _a.thumbnail;
-            return ({
-                id: id,
-                key: key,
-                title: title,
-                description: description,
-                thumbnail: thumbnail ? {
-                    url: thumbnail.url,
-                    width: (_b = thumbnail.width) !== null && _b !== void 0 ? _b : undefined,
-                    height: (_c = thumbnail.height) !== null && _c !== void 0 ? _c : undefined
-                } : undefined
-            });
-        })
-    };
-}
-function restSearchClient(getJson) {
-    if (getJson === void 0) { getJson = fetchJson; }
-    return {
-        // https://www.mediawiki.org/wiki/API:REST_API/Reference#Autocomplete_page_title
-        fetchByTitle: function (query, domain, limit) {
-            if (limit === void 0) { limit = 10; }
-            var params = {
-                q: query,
-                limit: limit
-            };
-            var headers = {
-                accept: 'application/json'
-            };
-            var url = "//" + domain + "/w/rest.php/v1/search/title?" + buildQueryString(params);
-            var _a = getJson(url, { headers: headers }), fetch = _a.fetch, abort = _a.abort;
-            var searchResponsePromise = fetch.then(function (res) { return adaptApiResponse(query, res); });
-            return {
-                abort: abort,
-                fetch: searchResponsePromise
-            };
-        }
-    };
-}
-
 // CONCATENATED MODULE: ./src/components/typeahead-search/lifecycle-events/index.ts
 
 
@@ -1663,10 +2667,9 @@ function restSearchClient(getJson) {
 /**
  * The length of the delay (ms) before dispatching a request via the SearchClient.
  */
-var DEBOUNCE_INTERVAL = 200;
+var DEBOUNCE_INTERVAL = 120;
 
 // CONCATENATED MODULE: ./node_modules/ts-loader??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -1698,7 +2701,7 @@ var DEBOUNCE_INTERVAL = 200;
         },
         client: {
             type: Object,
-            default: function () { return restSearchClient(); }
+            required: true
         },
         urlGenerator: {
             type: Object,
@@ -1708,9 +2711,13 @@ var DEBOUNCE_INTERVAL = 200;
             type: String,
             default: 'en.wikipedia.org'
         },
-        footerSearchText: {
+        /**
+         * Used on projects where search does not match the MediaWiki default
+         * e.g. Wikimedia Commons
+         */
+        searchPageTitle: {
             type: String,
-            required: true
+            default: 'Special:Search'
         },
         suggestionsLabel: {
             type: String,
@@ -1731,6 +2738,14 @@ var DEBOUNCE_INTERVAL = 200;
         showDescription: {
             type: Boolean,
             default: true
+        },
+        highlightQuery: {
+            type: Boolean,
+            default: true
+        },
+        autoExpandWidth: {
+            type: Boolean,
+            default: false
         }
     },
     data: function () {
@@ -1753,20 +2768,25 @@ var DEBOUNCE_INTERVAL = 200;
         rootClasses: function () {
             return {
                 'wvui-typeahead-search--active': this.isHovered,
+                'wvui-typeahead-search--focused': this.isFocused,
                 'wvui-typeahead-search--has-value': !!this.searchQuery,
                 'wvui-typeahead-search--expanded': this.isExpanded,
-                'wvui-typeahead-search--show-thumbnail': this.showThumbnail
+                'wvui-typeahead-search--show-thumbnail': this.showThumbnail,
+                'wvui-typeahead-search--auto-expand-width': this.showThumbnail && this.autoExpandWidth,
+                'wvui-typeahead-search--full-width': this.showThumbnail && !this.autoExpandWidth
             };
         },
         footerClasses: function () {
             return {
-                'wvui-typeahead-search__suggestions__footer--active': this.isFooterSelected
+                'wvui-typeahead-search__suggestions__footer--active': this.isFooterActive
             };
         },
         footerUrl: function () {
-            return this.urlGenerator.generateUrl(this.searchQuery);
+            return this.urlGenerator.generateUrl(this.searchQuery, {
+                title: this.searchPageTitle
+            }, this.formAction);
         },
-        isFooterSelected: function () {
+        isFooterActive: function () {
             return this.suggestionActiveIndex === this.suggestionsList.length;
         },
         suggestionsId: function () {
@@ -1780,7 +2800,7 @@ var DEBOUNCE_INTERVAL = 200;
                 this.suggestionActiveIndex > this.suggestionsList.length) {
                 return '';
             }
-            if (this.isFooterSelected) {
+            if (this.isFooterActive) {
                 return this.footerId;
             }
             return this.getSuggestionId(this.suggestionsList[this.suggestionActiveIndex]);
@@ -1800,6 +2820,27 @@ var DEBOUNCE_INTERVAL = 200;
         }
     },
     methods: {
+        /**
+         * Return value of "aria-selected" for a given suggestion
+         *
+         * Suggestion is considered "selected" if input value matches suggestion
+         * "selected" is distinct from "active", 'suggestionActiveIndex' updates on hover and
+         * doesn't affect the input value, This definition means a user can enter a value that
+         * matches a suggestion exactly and that suggestion is considered "selected" even
+         * though the user doesn't interact with the list via keyboard or mouse.
+         *
+         * This behavior is approximately equivalent to
+         * W3's "List Autocomplete with Automatic Selection" example
+         * https://www.w3.org/TR/wai-aria-practices-1.1/examples/combobox/aria1.1pattern/listbox-combo.html#ex2_label
+         *
+         * @param {number} index
+         * @return {string} either 'true' or 'false'
+         */
+        isSuggestionSelected: function (index) {
+            var suggestionTitle = this.suggestionsList[index].title;
+            var isSelected = this.inputValue.toLowerCase() === suggestionTitle.toLowerCase();
+            return isSelected && !this.isFooterActive ? 'true' : 'false';
+        },
         /**
          * A convenience method to update those properties that should be updated when new
          * suggestions are available.
@@ -1822,11 +2863,13 @@ var DEBOUNCE_INTERVAL = 200;
         },
         onInput: function (value) {
             var _this = this;
+            this.inputValue = value;
             if (this.debounceId) {
                 // Cancel the last setTimeout callback in case it hasn't executed yet.
                 clearTimeout(this.debounceId);
             }
             this.debounceId = setTimeout(function () {
+                _this.inputValue = value;
                 var query = value.trim();
                 if (_this.request) {
                     // Cancel the last request before making a new one in case it is still
@@ -1964,12 +3007,20 @@ var DEBOUNCE_INTERVAL = 200;
         getSuggestionId: function (suggestion) {
             return "wvui-typeahead-search-suggestion-" + suggestion.id;
         },
-        onSubmit: function () {
-            var event = {
+        onSubmit: function (event) {
+            // When the user presses the enter key, we prevent form
+            // submission when the suggestion footer is active.
+            // Instead, we directly navigate to `footerUrl` to ensure
+            // the link is the same on both mouse and keyboard
+            if (this.suggestionActiveIndex === this.suggestionsList.length) {
+                event.preventDefault();
+                window.location.assign(this.footerUrl);
+            }
+            var submitEvent = {
                 index: this.suggestionActiveIndex,
                 numberOfResults: this.suggestionsList.length
             };
-            this.$emit('submit', event);
+            this.$emit('submit', submitEvent);
         }
     }
 }));
@@ -1987,7 +3038,7 @@ var DEBOUNCE_INTERVAL = 200;
 // CONCATENATED MODULE: ./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=script&lang=ts&
  /* harmony default export */ var typeahead_search_TypeaheadSearchvue_type_script_lang_ts_ = (TypeaheadSearchvue_type_script_lang_ts_); 
 // EXTERNAL MODULE: ./src/components/typeahead-search/TypeaheadSearch.vue?vue&type=style&index=0&lang=less&
-var TypeaheadSearchvue_type_style_index_0_lang_less_ = __webpack_require__(12);
+var TypeaheadSearchvue_type_style_index_0_lang_less_ = __webpack_require__(25);
 
 // CONCATENATED MODULE: ./src/components/typeahead-search/TypeaheadSearch.vue
 
@@ -2000,8 +3051,8 @@ var TypeaheadSearchvue_type_style_index_0_lang_less_ = __webpack_require__(12);
 
 var TypeaheadSearch_component = normalizeComponent(
   typeahead_search_TypeaheadSearchvue_type_script_lang_ts_,
-  TypeaheadSearchvue_type_template_id_041c4de3_render,
-  TypeaheadSearchvue_type_template_id_041c4de3_staticRenderFns,
+  TypeaheadSearchvue_type_template_id_12b7de50_render,
+  TypeaheadSearchvue_type_template_id_12b7de50_staticRenderFns,
   false,
   null,
   null,
@@ -2016,15 +3067,26 @@ var TypeaheadSearch_component = normalizeComponent(
 
 
 
+
+
+
+
+
+
 // Export version as a named export so that the default export can be
 // passed to the Vue app instance's components directly.
-var version = "0.1.0";
-
+var version = "0.4.0";
 // Export all components available in the library.
 /* harmony default export */ var wvui = __webpack_exports__["default"] = ({
     WvuiButton: Button,
+    WvuiCheckbox: Checkbox,
+    WvuiDropdown: Dropdown,
     WvuiInput: Input,
     WvuiIcon: Icon,
+    WvuiOptionsMenu: OptionsMenu,
+    WvuiProgressBar: ProgressBar,
+    WvuiRadio: Radio,
+    WvuiToggleButton: ToggleButton,
     WvuiTypeaheadSearch: TypeaheadSearch,
     WvuiTypeaheadSuggestion: TypeaheadSuggestion
 });

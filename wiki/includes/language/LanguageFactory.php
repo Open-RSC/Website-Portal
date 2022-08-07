@@ -27,9 +27,9 @@ namespace MediaWiki\Languages;
 use Language;
 use LanguageConverter;
 use LocalisationCache;
+use MapCacheLRU;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\HookContainer\HookContainer;
-use MediaWiki\MediaWikiServices;
 use MWException;
 
 /**
@@ -58,8 +58,8 @@ class LanguageFactory {
 	/** @var HookContainer */
 	private $hookContainer;
 
-	/** @var array */
-	private $langObjCache = [];
+	/** @var MapCacheLRU */
+	private $langObjCache;
 
 	/** @var array */
 	private $parentLangCache = [];
@@ -69,8 +69,10 @@ class LanguageFactory {
 	 */
 	public const CONSTRUCTOR_OPTIONS = [
 		'DummyLanguageCodes',
-		'LangObjCacheSize',
 	];
+
+	/** How many distinct Language objects to retain at most in memory (T40439). */
+	private const LANG_CACHE_SIZE = 10;
 
 	/**
 	 * @param ServiceOptions $options
@@ -96,6 +98,7 @@ class LanguageFactory {
 		$this->langFallback = $langFallback;
 		$this->langConverterFactory = $langConverterFactory;
 		$this->hookContainer = $hookContainer;
+		$this->langObjCache = new MapCacheLRU( self::LANG_CACHE_SIZE );
 	}
 
 	/**
@@ -105,36 +108,14 @@ class LanguageFactory {
 	 *  characters or characters illegal in MediaWiki titles.
 	 * @return Language
 	 */
-	public function getLanguage( $code ) : Language {
+	public function getLanguage( $code ): Language {
 		$code = $this->options->get( 'DummyLanguageCodes' )[$code] ?? $code;
-
-		// This is horrible, horrible code, but is necessary to support Language::$mLangObjCache
-		// per the deprecation policy. Kill with fire in 1.36!
-		if (
-			MediaWikiServices::hasInstance() &&
-			$this === MediaWikiServices::getInstance()->getLanguageFactory()
-		) {
-			$this->langObjCache = Language::$mLangObjCache;
-		}
-
-		// Get the language object to process
-		$langObj = $this->langObjCache[$code] ?? $this->newFromCode( $code );
-
-		// Merge the language object in to get it up front in the cache
-		$this->langObjCache = array_merge( [ $code => $langObj ], $this->langObjCache );
-		// Get rid of the oldest ones in case we have an overflow
-		$this->langObjCache =
-			array_slice( $this->langObjCache, 0, $this->options->get( 'LangObjCacheSize' ), true );
-
-		// As above, remove this in 1.36
-		if (
-			MediaWikiServices::hasInstance() &&
-			$this === MediaWikiServices::getInstance()->getLanguageFactory()
-		) {
-			Language::$mLangObjCache = $this->langObjCache;
-		}
-
-		return $langObj;
+		return $this->langObjCache->getWithSetCallback(
+			$code,
+			function () use ( $code ) {
+				return $this->newFromCode( $code );
+			}
+		);
 	}
 
 	/**
@@ -144,7 +125,7 @@ class LanguageFactory {
 	 * @throws MWException if the language code or fallback sequence is invalid
 	 * @return Language
 	 */
-	private function newFromCode( $code, $fallback = false ) : Language {
+	private function newFromCode( $code, $fallback = false ): Language {
 		if ( !$this->langNameUtils->isValidCode( $code ) ) {
 			throw new MWException( "Invalid language code \"$code\"" );
 		}
@@ -208,20 +189,19 @@ class LanguageFactory {
 	public function getParentLanguage( $code ) {
 		// We deliberately use array_key_exists() instead of isset() because we cache null.
 		if ( !array_key_exists( $code, $this->parentLangCache ) ) {
-			$codeBase = explode( '-', $code )[0];
-			if ( !in_array( $codeBase, LanguageConverter::$languagesWithVariants ) ) {
+			if ( !$this->langNameUtils->isValidBuiltInCode( $code ) ) {
 				$this->parentLangCache[$code] = null;
 				return null;
 			}
-
-			$lang = $this->getLanguage( $codeBase );
-			$converter = $this->langConverterFactory->getLanguageConverter( $lang );
-			if ( !$converter->hasVariant( $code ) ) {
-				$this->parentLangCache[$code] = null;
-				return null;
+			foreach ( LanguageConverter::$languagesWithVariants as $mainCode ) {
+				$lang = $this->getLanguage( $mainCode );
+				$converter = $this->langConverterFactory->getLanguageConverter( $lang );
+				if ( $converter->hasVariant( $code ) ) {
+					$this->parentLangCache[$code] = $lang;
+					return $lang;
+				}
 			}
-
-			$this->parentLangCache[$code] = $lang;
+			$this->parentLangCache[$code] = null;
 		}
 
 		return $this->parentLangCache[$code];

@@ -22,6 +22,7 @@
  */
 
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Session\CsrfTokenSetProvider;
 
 /**
  * Interface for objects which can provide a MediaWiki context on request
@@ -54,7 +55,7 @@ use MediaWiki\Permissions\Authority;
  *
  * @unstable for implementation, extensions should subclass ContextSource instead.
  */
-interface IContextSource extends MessageLocalizer {
+interface IContextSource extends MessageLocalizer, CsrfTokenSetProvider {
 
 	/**
 	 * @return WebRequest
@@ -86,6 +87,14 @@ interface IContextSource extends MessageLocalizer {
 	 * @return WikiPage
 	 */
 	public function getWikiPage();
+
+	/**
+	 * Get the action name for the current web request.
+	 *
+	 * @since 1.38
+	 * @return string
+	 */
+	public function getActionName(): string;
 
 	/**
 	 * @return OutputPage

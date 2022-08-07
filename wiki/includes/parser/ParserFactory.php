@@ -22,6 +22,7 @@
 use MediaWiki\BadFileLookup;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Http\HttpRequestFactory;
 use MediaWiki\Languages\LanguageConverterFactory;
 use MediaWiki\Linker\LinkRendererFactory;
 use MediaWiki\SpecialPage\SpecialPageFactory;
@@ -70,6 +71,15 @@ class ParserFactory {
 	/** @var UserFactory */
 	private $userFactory;
 
+	/** @var TitleFormatter */
+	private $titleFormatter;
+
+	/** @var HttpRequestFactory */
+	private $httpRequestFactory;
+
+	/** @var TrackingCategories */
+	private $trackingCategories;
+
 	/**
 	 * Track calls to Parser constructor to aid in deprecation of direct
 	 * Parser invocation.  This is temporary: it will be removed once the
@@ -105,6 +115,9 @@ class ParserFactory {
 	 * @param WANObjectCache $wanCache
 	 * @param UserOptionsLookup $userOptionsLookup
 	 * @param UserFactory $userFactory
+	 * @param TitleFormatter $titleFormatter
+	 * @param HttpRequestFactory $httpRequestFactory
+	 * @param TrackingCategories $trackingCategories
 	 * @since 1.32
 	 * @internal
 	 */
@@ -123,7 +136,10 @@ class ParserFactory {
 		TidyDriverBase $tidy,
 		WANObjectCache $wanCache,
 		UserOptionsLookup $userOptionsLookup,
-		UserFactory $userFactory
+		UserFactory $userFactory,
+		TitleFormatter $titleFormatter,
+		HttpRequestFactory $httpRequestFactory,
+		TrackingCategories $trackingCategories
 	) {
 		$svcOptions->assertRequiredOptions( Parser::CONSTRUCTOR_OPTIONS );
 
@@ -144,6 +160,9 @@ class ParserFactory {
 		$this->wanCache = $wanCache;
 		$this->userOptionsLookup = $userOptionsLookup;
 		$this->userFactory = $userFactory;
+		$this->titleFormatter = $titleFormatter;
+		$this->httpRequestFactory = $httpRequestFactory;
+		$this->trackingCategories = $trackingCategories;
 	}
 
 	/**
@@ -152,7 +171,7 @@ class ParserFactory {
 	 * @return Parser
 	 * @since 1.32
 	 */
-	public function create() : Parser {
+	public function create(): Parser {
 		self::$inParserFactory++;
 		try {
 			return new Parser(
@@ -171,7 +190,10 @@ class ParserFactory {
 				$this->tidy,
 				$this->wanCache,
 				$this->userOptionsLookup,
-				$this->userFactory
+				$this->userFactory,
+				$this->titleFormatter,
+				$this->httpRequestFactory,
+				$this->trackingCategories
 			);
 		} finally {
 			self::$inParserFactory--;

@@ -1,7 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Artsiom91"
+			"Artsiom91",
+			"Chadyka",
+			"No Sleep till Krupki"
 		]
 	},
 	"multimediaviewer-desc": "Пашырае эскізы ў большы памер на ўвесь экран.",
@@ -40,9 +42,7 @@
 	"multimediaviewer-restriction-trademarked": "Гэта выява змяшчае матэрыял, які можа ахоўвацца законамі аб таварным знаку.",
 	"multimediaviewer-restriction-default": "Гэта выява можа быць абмежавана прававымі палажэннямі па-за законам аб аўтарскім праве. Глядзіце старонку апісання файла для падрабязнасцей.",
 	"multimediaviewer-restriction-default-and-others": "Гэта выява можа быць дадаткова абмежавана іншымі прававымі палажэннямі па-за законам аб аўтарскім праве. Глядзіце старонку апісання файла для падрабязнасцей.",
-	"multimediaviewer-about-mmv": "Пра гэты інтэрфейс",
-	"multimediaviewer-discuss-mmv": "Абмеркаванне",
-	"multimediaviewer-help-mmv": "Даведка",
+	"multimediaviewer-about-mmv": "Пра «Праглядчык медыяфайлаў»",
 	"multimediaviewer-optout-mmv": "Адключыць «Праглядальнік медыяфайлаў»",
 	"multimediaviewer-optin-mmv": "Уключыць «Праглядчык медыяфайлаў»",
 	"multimediaviewer-optout-pending-mmv": "Адключэнне «Праглядальніка медыяфайлаў»",
@@ -62,10 +62,11 @@
 	"multimediaviewer-download-small-button-name": "Спампаваць у малым памеры",
 	"multimediaviewer-download-medium-button-name": "Спампаваць у сярэднім памеры",
 	"multimediaviewer-download-large-button-name": "Спампаваць ў большым памеры",
+	"multimediaviewer-download-xl-button-name": "Спампаваць у вельмі вялікім памеры",
 	"multimediaviewer-link-to-page": "Спасылка на старонку апісання файла",
 	"multimediaviewer-link-to-file": "Спасылка на арыгінальны файл",
 	"multimediaviewer-share-explanation": "Скапіруйце і свабодна дзяліцеся спасылкай",
-	"multimediaviewer-embed-wt": "Вікітэкст",
+	"multimediaviewer-embed-wt": "Вікі-тэкст",
 	"multimediaviewer-embed-html": "HTML",
 	"multimediaviewer-embed-explanation": "Выкарыстоўвайце гэты код для ўстаўкі файла",
 	"multimediaviewer-text-embed-credit-text-bl": "Аўтар: $1, $2, $3",
@@ -78,6 +79,7 @@
 	"multimediaviewer-embed-via": "З дапамогай $1.",
 	"multimediaviewer-default-embed-dimensions": "Памер эскізу па змоўчанні",
 	"multimediaviewer-original-embed-dimensions": "Арыгінальны файл $1",
+	"multimediaviewer-xl-embed-dimensions": "Вельмі вялікі $1",
 	"multimediaviewer-large-embed-dimensions": "Вялікі памер $1",
 	"multimediaviewer-medium-embed-dimensions": "Сярэдні памер $1",
 	"multimediaviewer-small-embed-dimensions": "Малы памер $1",

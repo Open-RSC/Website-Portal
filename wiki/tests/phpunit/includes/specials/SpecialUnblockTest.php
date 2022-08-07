@@ -1,7 +1,6 @@
 <?php
 
 use MediaWiki\Block\DatabaseBlock;
-use MediaWiki\MediaWikiServices;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -14,7 +13,7 @@ class SpecialUnblockTest extends SpecialPageTestBase {
 	 * @inheritDoc
 	 */
 	protected function newSpecialPage() {
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		return new SpecialUnblock(
 			$services->getUnblockUserFactory(),
 			$services->getBlockUtils(),
@@ -24,7 +23,7 @@ class SpecialUnblockTest extends SpecialPageTestBase {
 		);
 	}
 
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		$this->db->delete( 'ipblocks', '*', __METHOD__ );
 		parent::tearDown();
 	}
@@ -38,7 +37,7 @@ class SpecialUnblockTest extends SpecialPageTestBase {
 		$page->target = $target;
 		$page->block = new DatabaseBlock( [
 			'address' => '1.2.3.4',
-			'by' => $this->getTestSysop()->getUser()->getId(),
+			'by' => $this->getTestSysop()->getUser(),
 		] );
 
 		$fields = $page->getFields();
@@ -76,10 +75,10 @@ class SpecialUnblockTest extends SpecialPageTestBase {
 		if ( !empty( $options['block'] ) ) {
 			$block = new DatabaseBlock( [
 				'address' => $target,
-				'by' => $performer->getId(),
+				'by' => $performer,
 				'hideName' => true,
 			] );
-			MediaWikiServices::getInstance()->getDatabaseBlockStore()->insertBlock( $block );
+			$this->getServiceContainer()->getDatabaseBlockStore()->insertBlock( $block );
 		}
 
 		if ( !empty( $options['readOnly'] ) ) {
@@ -137,10 +136,10 @@ class SpecialUnblockTest extends SpecialPageTestBase {
 		// Blocker must be different user for unblock self to be disallowed
 		$blocker = $this->getTestUser()->getUser();
 		$block = new DatabaseBlock( [
-			'by' => $blocker->getId(),
+			'by' => $blocker,
 			'address' => $performer,
 		] );
-		MediaWikiServices::getInstance()->getDatabaseBlockStore()->insertBlock( $block );
+		$this->getServiceContainer()->getDatabaseBlockStore()->insertBlock( $block );
 
 		$request = new FauxRequest( [
 			'wpTarget' => $performer->getName(),

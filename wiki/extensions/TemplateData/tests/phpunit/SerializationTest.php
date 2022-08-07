@@ -1,11 +1,12 @@
 <?php
 
+use MediaWiki\Extension\TemplateData\Hooks as TemplateDataHooks;
+
 /**
  * @group TemplateData
- * @covers \TemplateDataHooks::setStatusToParserOutput
- * @covers \TemplateDataHooks::getStatusFromParserOutput
+ * @covers \MediaWiki\Extension\TemplateData\Hooks
  */
-class SerializationTest extends MediaWikiTestCase {
+class SerializationTest extends MediaWikiIntegrationTestCase {
 	public function testParserOutputPersistenceForwardCompatibility() {
 		$output = new ParserOutput();
 
@@ -16,11 +17,12 @@ class SerializationTest extends MediaWikiTestCase {
 		// Set JSONified state. Should work before we set JSON-serializable data,
 		// to be robust against old code reading new data after a rollback.
 		$output->setExtensionData( 'TemplateDataStatus',
-			TemplateDataHooks::jsonSerializeStatus( $status ) );
+			TemplateDataHooks::jsonSerializeStatus( $status )
+		);
 
 		$result = TemplateDataHooks::getStatusFromParserOutput( $output );
 		$this->assertEquals( $status->getStatusValue(), $result->getStatusValue() );
-		$this->assertEquals( $status->__toString(), $result->__toString() );
+		$this->assertSame( (string)$status, (string)$result );
 	}
 
 	public function testParserOutputPersistenceBackwardCompatibility() {
@@ -35,7 +37,7 @@ class SerializationTest extends MediaWikiTestCase {
 
 		$result = TemplateDataHooks::getStatusFromParserOutput( $output );
 		$this->assertEquals( $status->getStatusValue(), $result->getStatusValue() );
-		$this->assertEquals( $status->__toString(), $result->__toString() );
+		$this->assertSame( (string)$status, (string)$result );
 	}
 
 	public function provideStatus() {
@@ -48,26 +50,22 @@ class SerializationTest extends MediaWikiTestCase {
 
 	/**
 	 * @dataProvider provideStatus
-	 * @covers \TemplateDataHooks::setStatusToParserOutput
-	 * @covers \TemplateDataHooks::getStatusFromParserOutput
 	 */
 	public function testParserOutputPersistenceRoundTrip( Status $status ) {
 		$parserOutput = new ParserOutput();
 		TemplateDataHooks::setStatusToParserOutput( $parserOutput, $status );
 		$result = TemplateDataHooks::getStatusFromParserOutput( $parserOutput );
 		$this->assertEquals( $status->getStatusValue(), $result->getStatusValue() );
-		$this->assertEquals( $status->__toString(), $result->__toString() );
+		$this->assertSame( (string)$status, (string)$result );
 	}
 
 	/**
 	 * @dataProvider provideStatus
-	 * @covers \TemplateDataHooks::jsonSerializeStatus
-	 * @covers \TemplateDataHooks::newStatusFromJson
 	 */
 	public function testJsonRoundTrip( Status $status ) {
 		$json = TemplateDataHooks::jsonSerializeStatus( $status );
 		$result = TemplateDataHooks::newStatusFromJson( $json );
 		$this->assertEquals( $status->getStatusValue(), $result->getStatusValue() );
-		$this->assertEquals( $status->__toString(), $result->__toString() );
+		$this->assertSame( (string)$status, (string)$result );
 	}
 }

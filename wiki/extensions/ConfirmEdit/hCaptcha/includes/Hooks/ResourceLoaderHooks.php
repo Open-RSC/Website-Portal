@@ -2,7 +2,7 @@
 
 declare( strict_types=1 );
 
-namespace MediaWiki\Extensions\ConfirmEdit\hCaptcha\Hooks;
+namespace MediaWiki\Extension\ConfirmEdit\hCaptcha\Hooks;
 
 use Config;
 use MediaWiki\MediaWikiServices;
@@ -17,7 +17,7 @@ class ResourceLoaderHooks implements ResourceLoaderGetConfigVarsHook {
 	 * @param Config $config
 	 * @return void
 	 */
-	public function onResourceLoaderGetConfigVars( array &$vars, $skin, Config $config ) : void {
+	public function onResourceLoaderGetConfigVars( array &$vars, $skin, Config $config ): void {
 		$hCaptchaConfig = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'hcaptcha' );
 		if ( $hCaptchaConfig->get( 'CaptchaClass' ) === 'MediaWiki\\Extensions\\ConfirmEdit\\hCaptcha\\HCaptcha' ) {
 			$vars['wgConfirmEditConfig'] = [

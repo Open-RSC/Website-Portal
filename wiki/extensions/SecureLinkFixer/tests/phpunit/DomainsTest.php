@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2019 Kunal Mehta <legoktm@member.fsf.org>
+ * Copyright (C) 2019 Kunal Mehta <legoktm@debian.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,17 @@
 namespace MediaWiki\SecureLinkFixer\Test;
 
 use MediaWiki\SecureLinkFixer\ListFetcher;
-use MediaWikiTestCase;
+use MediaWikiIntegrationTestCase;
 
 /**
  * Integration test and sanity check for domains.php
  * @coversNothing
  */
-class DomainsTest extends MediaWikiTestCase {
+class DomainsTest extends MediaWikiIntegrationTestCase {
 
 	public function testReproducibility() {
 		$domains = file_get_contents( __DIR__ . '/../../domains.php' );
-		preg_match( '/mozilla-central@([0-9a-f]*?) \((.*?)\)/', $domains, $matches );
+		preg_match( '/mozilla\/gecko-dev@([0-9a-f]*?) \((.*?)\)/', $domains, $matches );
 		$this->assertCount( 3, $matches );
 		[ , $rev, $date ] = $matches;
 		$lf = new ListFetcher();

@@ -23,12 +23,13 @@ use Action;
 use Article;
 use Exception;
 use MediaWiki\Block\BlockErrorFormatter;
+use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\HookContainer\HookRunner;
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\Revision\RevisionLookup;
-use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\RedirectLookup;
 use MediaWiki\Session\SessionManager;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\User\UserGroupManager;
@@ -56,7 +57,7 @@ class PermissionManager {
 	/** @var string Does cheap and expensive checks possibly from a replica DB */
 	public const RIGOR_FULL = 'full';
 
-	/** @var string Does cheap and expensive checks, using the master as needed */
+	/** @var string Does cheap and expensive checks, using the primary DB as needed */
 	public const RIGOR_SECURE = 'secure';
 
 	/**
@@ -67,6 +68,7 @@ class PermissionManager {
 		'WhitelistReadRegexp',
 		'EmailConfirmToEdit',
 		'BlockDisablesLogin',
+		'EnablePartialActionBlocks',
 		'GroupPermissions',
 		'RevokePermissions',
 		'AvailableRights',
@@ -81,14 +83,14 @@ class PermissionManager {
 	/** @var SpecialPageFactory */
 	private $specialPageFactory;
 
-	/** @var RevisionLookup */
-	private $revisionLookup;
+	/** @var RedirectLookup */
+	private $redirectLookup;
 
 	/** @var NamespaceInfo */
 	private $nsInfo;
 
 	/** @var GroupPermissionsLookup */
-	private $groupPermissionLookup;
+	private $groupPermissionsLookup;
 
 	/** @var UserGroupManager */
 	private $userGroupManager;
@@ -106,7 +108,7 @@ class PermissionManager {
 	private $userCache;
 
 	/** @var string[][] Cached user rights */
-	private $usersRights = null;
+	private $usersRights = [];
 
 	/**
 	 * Temporary user rights, valid for the current request only.
@@ -210,35 +212,35 @@ class PermissionManager {
 	/**
 	 * @param ServiceOptions $options
 	 * @param SpecialPageFactory $specialPageFactory
-	 * @param RevisionLookup $revisionLookup
 	 * @param NamespaceInfo $nsInfo
-	 * @param GroupPermissionsLookup $groupPermissionLookup
+	 * @param GroupPermissionsLookup $groupPermissionsLookup
 	 * @param UserGroupManager $userGroupManager
 	 * @param BlockErrorFormatter $blockErrorFormatter
 	 * @param HookContainer $hookContainer
 	 * @param UserCache $userCache
+	 * @param RedirectLookup $redirectLookup
 	 */
 	public function __construct(
 		ServiceOptions $options,
 		SpecialPageFactory $specialPageFactory,
-		RevisionLookup $revisionLookup,
 		NamespaceInfo $nsInfo,
-		GroupPermissionsLookup $groupPermissionLookup,
+		GroupPermissionsLookup $groupPermissionsLookup,
 		UserGroupManager $userGroupManager,
 		BlockErrorFormatter $blockErrorFormatter,
 		HookContainer $hookContainer,
-		UserCache $userCache
+		UserCache $userCache,
+		RedirectLookup $redirectLookup
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 		$this->options = $options;
 		$this->specialPageFactory = $specialPageFactory;
-		$this->revisionLookup = $revisionLookup;
 		$this->nsInfo = $nsInfo;
-		$this->groupPermissionLookup = $groupPermissionLookup;
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
 		$this->userGroupManager = $userGroupManager;
 		$this->blockErrorFormatter = $blockErrorFormatter;
 		$this->hookRunner = new HookRunner( $hookContainer );
 		$this->userCache = $userCache;
+		$this->redirectLookup = $redirectLookup;
 	}
 
 	/**
@@ -254,7 +256,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 *
 	 * @return bool
 	 */
@@ -292,7 +294,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param string[] $ignoreErrors Set this to a list of message keys
 	 *   whose corresponding errors may be ignored.
 	 *
@@ -327,19 +329,22 @@ class PermissionManager {
 	 * have a block, this will return false.
 	 *
 	 * @param User $user
-	 * @param LinkTarget $page Title to check
-	 * @param bool $fromReplica Whether to check the replica DB instead of the master
+	 * @param PageIdentity|LinkTarget $page Title to check
+	 * @param bool $fromReplica Whether to check the replica DB instead of the primary DB
 	 *
 	 * @return bool
 	 */
-	public function isBlockedFrom( User $user, LinkTarget $page, $fromReplica = false ) {
+	public function isBlockedFrom( User $user, $page, $fromReplica = false ) {
 		$block = $user->getBlock( $fromReplica );
 		if ( !$block ) {
 			return false;
 		}
 
-		// TODO: remove upon further migration to LinkTarget
-		$title = Title::newFromLinkTarget( $page );
+		if ( $page instanceof PageIdentity ) {
+			$title = Title::castFromPageIdentity( $page );
+		} else {
+			$title = Title::castFromLinkTarget( $page );
+		}
 
 		$blocked = $user->isHidden();
 		if ( !$blocked ) {
@@ -353,7 +358,7 @@ class PermissionManager {
 		}
 
 		// only for the purpose of the hook. We really don't need this here.
-		$allowUsertalk = $user->isAllowUsertalk();
+		$allowUsertalk = $block->isUsertalkEditAllowed();
 
 		// Allow extensions to let a blocked user access a particular page
 		$this->hookRunner->onUserIsBlockedFrom( $user, $title, $blocked, $allowUsertalk );
@@ -372,7 +377,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Set this to true to stop after the first permission error.
 	 *
 	 * @return array[] Array of arrays of the arguments to wfMessage to explain permissions problems.
@@ -461,6 +466,8 @@ class PermissionManager {
 				break;
 			}
 		}
+		// remove duplicate errors
+		$errors = array_unique( $errors, SORT_REGULAR );
 
 		return $errors;
 	}
@@ -474,7 +481,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -550,7 +557,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -594,7 +601,8 @@ class PermissionManager {
 
 			// Check for explicit whitelisting with and without underscores
 			if ( in_array( $name, $whiteListRead, true )
-				 || in_array( $dbName, $whiteListRead, true ) ) {
+				|| in_array( $dbName, $whiteListRead, true )
+			) {
 				$allowed = true;
 			} elseif ( $title->getNamespace() === NS_MAIN ) {
 				# Old settings might have the title prefixed with
@@ -618,7 +626,8 @@ class PermissionManager {
 
 		$whitelistReadRegexp = $this->options->get( 'WhitelistReadRegexp' );
 		if ( !$allowed && is_array( $whitelistReadRegexp )
-			 && !empty( $whitelistReadRegexp ) ) {
+			&& !empty( $whitelistReadRegexp )
+		) {
 			$name = $title->getPrefixedText();
 			// Check for regex whitelisting
 			foreach ( $whitelistReadRegexp as $listItem ) {
@@ -687,7 +696,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -702,9 +711,8 @@ class PermissionManager {
 		$short,
 		LinkTarget $page
 	) {
-		// Account creation blocks handled at userlogin.
 		// Unblocking handled in SpecialUnblock
-		if ( $rigor === self::RIGOR_QUICK || in_array( $action, [ 'createaccount', 'unblock' ] ) ) {
+		if ( $rigor === self::RIGOR_QUICK || in_array( $action, [ 'unblock' ] ) ) {
 			return $errors;
 		}
 
@@ -714,14 +722,58 @@ class PermissionManager {
 		}
 
 		if ( $this->options->get( 'EmailConfirmToEdit' )
-			 && !$user->isEmailConfirmed()
-			 && $action === 'edit'
+			&& !$user->isEmailConfirmed()
+			&& $action === 'edit'
 		) {
 			$errors[] = [ 'confirmedittext' ];
 		}
 
-		$useReplica = ( $rigor !== self::RIGOR_SECURE );
-		$block = $user->getBlock( $useReplica );
+		switch ( $rigor ) {
+			case self::RIGOR_SECURE:
+				$blockInfoFreshness = Authority::READ_LATEST;
+				$useReplica = false;
+				break;
+			case self::RIGOR_FULL:
+				$blockInfoFreshness = Authority::READ_NORMAL;
+				$useReplica = true;
+				break;
+			default:
+				$useReplica = true;
+				$blockInfoFreshness = Authority::READ_NORMAL;
+		}
+
+		$block = $user->getBlock( $blockInfoFreshness );
+
+		if ( $action === 'createaccount' ) {
+			$applicableBlock = null;
+			if ( $block && $block->appliesToRight( 'createaccount' ) ) {
+				$applicableBlock = $block;
+			}
+
+			# T15611: if the IP address the user is trying to create an account from is
+			# blocked with createaccount disabled, prevent new account creation there even
+			# when the user is logged in
+			if ( !$this->userHasRight( $user, 'ipblock-exempt' ) ) {
+				$ipBlock = DatabaseBlock::newFromTarget(
+					null, $user->getRequest()->getIP()
+				);
+				if ( $ipBlock && $ipBlock->appliesToRight( 'createaccount' ) ) {
+					$applicableBlock = $ipBlock;
+				}
+			}
+			// @todo FIXME: Pass the relevant context into this function.
+			if ( $applicableBlock ) {
+				$context = RequestContext::getMain();
+				$message = $this->blockErrorFormatter->getMessage(
+					$applicableBlock,
+					$context->getUser(),
+					$context->getLanguage(),
+					$context->getRequest()->getIP()
+				);
+				$errors[] = array_merge( [ $message->getKey() ], $message->getParams() );
+				return $errors;
+			}
+		}
 
 		// If the user does not have a block, or the block they do have explicitly
 		// allows the action (like "read" or "upload").
@@ -734,32 +786,35 @@ class PermissionManager {
 		// There is no way to instantiate an action by restriction. However, this
 		// will get the action where the restriction is the same. This may result
 		// in actions being blocked that shouldn't be.
-		$actionObj = null;
-		if ( Action::exists( $action ) ) {
-			// TODO: this drags a ton of dependencies in, would be good to avoid Article
-			//  instantiation and decouple it creating an ActionPermissionChecker interface
-			// Creating an action will perform several database queries to ensure that
-			// the action has not been overridden by the content type.
-			// FIXME: avoid use of RequestContext since it drags in User and Title dependencies
-			//  probably we may use fake context object since it's unlikely that Action uses it
-			//  anyway. It would be nice if we could avoid instantiating the Action at all.
-			$title = Title::newFromLinkTarget( $page, 'clone' );
-			$context = RequestContext::getMain();
-			$actionObj = Action::factory(
-				$action,
-				Article::newFromTitle( $title, $context ),
-				$context
-			);
-			// Ensure that the retrieved action matches the restriction.
-			if ( $actionObj && $actionObj->getRestriction() !== $action ) {
-				$actionObj = null;
-			}
+		// TODO: this drags a ton of dependencies in, would be good to avoid Article
+		//  instantiation and decouple it creating an ActionPermissionChecker interface
+		// Creating an action will perform several database queries to ensure that
+		// the action has not been overridden by the content type.
+		// FIXME: avoid use of RequestContext since it drags in User and Title dependencies
+		//  probably we may use fake context object since it's unlikely that Action uses it
+		//  anyway. It would be nice if we could avoid instantiating the Action at all.
+		$title = Title::newFromLinkTarget( $page, 'clone' );
+		$context = RequestContext::getMain();
+		$actionObj = Action::factory(
+			$action,
+			Article::newFromTitle( $title, $context ),
+			$context
+		);
+		// Ensure that the retrieved action matches the restriction.
+		if ( $actionObj && $actionObj->getRestriction() !== $action ) {
+			$actionObj = null;
 		}
 
 		// If no action object is returned, assume that the action requires unblock
 		// which is the default.
 		if ( !$actionObj || $actionObj->requiresUnblock() ) {
-			if ( $this->isBlockedFrom( $user, $page, $useReplica ) ) {
+			if (
+				$this->isBlockedFrom( $user, $page, $useReplica ) ||
+				(
+					$this->options->get( 'EnablePartialActionBlocks' ) &&
+					$block->appliesToRight( $action )
+				)
+			) {
 				// @todo FIXME: Pass the relevant context into this function.
 				$context = RequestContext::getMain();
 				$message = $this->blockErrorFormatter->getMessage(
@@ -784,7 +839,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -822,20 +877,23 @@ class PermissionManager {
 			}
 		} elseif ( $action == 'move' ) {
 			if ( !$this->userHasRight( $user, 'move-rootuserpages' )
-				 && $title->getNamespace() === NS_USER && !$isSubPage ) {
+				&& $title->getNamespace() === NS_USER && !$isSubPage
+			) {
 				// Show user page-specific message only if the user can move other pages
 				$errors[] = [ 'cant-move-user-page' ];
 			}
 
 			// Check if user is allowed to move files if it's a file
 			if ( $title->getNamespace() === NS_FILE &&
-					!$this->userHasRight( $user, 'movefile' ) ) {
+				!$this->userHasRight( $user, 'movefile' )
+			) {
 				$errors[] = [ 'movenotallowedfile' ];
 			}
 
 			// Check if user is allowed to move category pages if it's a category page
 			if ( $title->getNamespace() === NS_CATEGORY &&
-					!$this->userHasRight( $user, 'move-categorypages' ) ) {
+				!$this->userHasRight( $user, 'move-categorypages' )
+			) {
 				$errors[] = [ 'cant-move-category-page' ];
 			}
 
@@ -884,7 +942,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -934,7 +992,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -991,7 +1049,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -1020,7 +1078,7 @@ class PermissionManager {
 			$title_protection = $title->getTitleProtection();
 			if ( $title_protection ) {
 				if ( $title_protection['permission'] == ''
-					 || !$this->userHasRight( $user, $title_protection['permission'] )
+					|| !$this->userHasRight( $user, $title_protection['permission'] )
 				) {
 					$errors[] = [
 						'titleprotected',
@@ -1068,6 +1126,7 @@ class PermissionManager {
 				&& !$this->userCan( 'bigdelete', $user, $title )
 				&& $title->isBigDeletion()
 			) {
+				// NOTE: This check is deprecated since 1.37, see T288759
 				$errors[] = [
 					'delete-toobig',
 					$wgLang->formatNum( $this->options->get( 'DeleteRevisionsLimit' ) )
@@ -1079,10 +1138,23 @@ class PermissionManager {
 				$errors[] = [ 'undelete-cantedit' ];
 			}
 			if ( !$title->exists()
-				 && count( $this->getPermissionErrorsInternal( 'create', $user, $title, $rigor, true ) )
+				&& count( $this->getPermissionErrorsInternal( 'create', $user, $title, $rigor, true ) )
 			) {
 				// Undeleting where nothing currently exists implies creating
 				$errors[] = [ 'undelete-cantcreate' ];
+			}
+		} elseif ( $action === 'edit' ) {
+			if ( !$title->exists() ) {
+				$errors = array_merge(
+					$errors,
+					$this->getPermissionErrorsInternal(
+						'create',
+						$user,
+						$title,
+						$rigor,
+						true
+					)
+				);
 			}
 		}
 		return $errors;
@@ -1097,7 +1169,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -1141,7 +1213,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -1197,7 +1269,7 @@ class PermissionManager {
 	 * @param string $rigor One of PermissionManager::RIGOR_ constants
 	 *   - RIGOR_QUICK  : does cheap permission checks from replica DBs (usable for GUI creation)
 	 *   - RIGOR_FULL   : does cheap and expensive checks possibly from a replica DB
-	 *   - RIGOR_SECURE : does cheap and expensive checks, using the master as needed
+	 *   - RIGOR_SECURE : does cheap and expensive checks, using the primary DB as needed
 	 * @param bool $short Short circuit on first error
 	 *
 	 * @param LinkTarget $page
@@ -1239,9 +1311,7 @@ class PermissionManager {
 				&& !$this->userHasAnyRight( $user, 'edituserjs', 'editmyuserjsredirect' )
 			) {
 				// T207750 - do not allow users to edit a redirect if they couldn't edit the target
-				$rev = $this->revisionLookup->getRevisionByTitle( $title );
-				$content = $rev ? $rev->getContent( 'main', RevisionRecord::RAW ) : null;
-				$target = $content ? $content->getUltimateRedirectTarget() : null;
+				$target = $this->redirectLookup->getRedirectTarget( $title );
 				if ( $target && (
 						!$target->inNamespace( NS_USER )
 						|| !preg_match( '/^' . preg_quote( $user->getName(), '/' ) . '\//', $target->getText() )
@@ -1340,19 +1410,20 @@ class PermissionManager {
 	 * @return string[] permission names
 	 */
 	public function getUserPermissions( UserIdentity $user ) {
-		$user = User::newFromIdentity( $user );
 		$rightsCacheKey = $this->getRightsCacheKey( $user );
 		if ( !isset( $this->usersRights[ $rightsCacheKey ] ) ) {
+			$userObj = User::newFromIdentity( $user );
 			$this->usersRights[ $rightsCacheKey ] = $this->getGroupPermissions(
 				$this->userGroupManager->getUserEffectiveGroups( $user )
 			);
-			$this->hookRunner->onUserGetRights( $user, $this->usersRights[ $rightsCacheKey ] );
+			// Hook requires a full User object
+			$this->hookRunner->onUserGetRights( $userObj, $this->usersRights[ $rightsCacheKey ] );
 
 			// Deny any rights denied by the user's session, unless this
 			// endpoint has no sessions.
 			if ( !defined( 'MW_NO_SESSION' ) ) {
-				// FIXME: $user->getRequest().. need to be replaced with something else
-				$allowedRights = $user->getRequest()->getSession()->getAllowedUserRights();
+				// FIXME: $userObj->getRequest().. need to be replaced with something else
+				$allowedRights = $userObj->getRequest()->getSession()->getAllowedUserRights();
 				if ( $allowedRights !== null ) {
 					$this->usersRights[ $rightsCacheKey ] = array_intersect(
 						$this->usersRights[ $rightsCacheKey ],
@@ -1361,17 +1432,18 @@ class PermissionManager {
 				}
 			}
 
+			// Hook requires a full User object
 			$this->hookRunner->onUserGetRightsRemove(
-				$user, $this->usersRights[ $rightsCacheKey ] );
+				$userObj, $this->usersRights[ $rightsCacheKey ] );
 			// Force reindexation of rights when a hook has unset one of them
 			$this->usersRights[ $rightsCacheKey ] = array_values(
 				array_unique( $this->usersRights[ $rightsCacheKey ] )
 			);
 
 			if (
-				$user->isRegistered() &&
+				$userObj->isRegistered() &&
 				$this->options->get( 'BlockDisablesLogin' ) &&
-				$user->getBlock()
+				$userObj->getBlock()
 			) {
 				$anon = new User;
 				$this->usersRights[ $rightsCacheKey ] = array_intersect(
@@ -1400,7 +1472,7 @@ class PermissionManager {
 			$rightsCacheKey = $this->getRightsCacheKey( $user );
 			unset( $this->usersRights[ $rightsCacheKey ] );
 		} else {
-			$this->usersRights = null;
+			$this->usersRights = [];
 		}
 	}
 
@@ -1421,7 +1493,7 @@ class PermissionManager {
 	 * from anyone.
 	 *
 	 * @since 1.34
-	 * @deprecated since 1.36 Use GroupPermissionLookup instead
+	 * @deprecated since 1.36 Use GroupPermissionsLookup instead
 	 *
 	 * @param string $group Group to check
 	 * @param string $role Role to check
@@ -1429,33 +1501,33 @@ class PermissionManager {
 	 * @return bool
 	 */
 	public function groupHasPermission( $group, $role ) {
-		return $this->groupPermissionLookup->groupHasPermission( $group, $role );
+		return $this->groupPermissionsLookup->groupHasPermission( $group, $role );
 	}
 
 	/**
 	 * Get the permissions associated with a given list of groups
 	 *
 	 * @since 1.34
-	 * @deprecated since 1.36 Use GroupPermissionLookup instead
+	 * @deprecated since 1.36 Use GroupPermissionsLookup instead
 	 *
 	 * @param string[] $groups internal group names
 	 * @return string[] permission key names for given groups combined
 	 */
 	public function getGroupPermissions( $groups ) {
-		return $this->groupPermissionLookup->getGroupPermissions( $groups );
+		return $this->groupPermissionsLookup->getGroupPermissions( $groups );
 	}
 
 	/**
 	 * Get all the groups who have a given permission
 	 *
 	 * @since 1.34
-	 * @deprecated since 1.36, use GroupPermissionLookup instead.
+	 * @deprecated since 1.36, use GroupPermissionsLookup instead.
 	 *
 	 * @param string $role Role to check
 	 * @return string[] internal group names with the given permission
 	 */
 	public function getGroupsWithPermission( $role ) {
-		return $this->groupPermissionLookup->getGroupsWithPermission( $role );
+		return $this->groupPermissionsLookup->getGroupsWithPermission( $role );
 	}
 
 	/**
@@ -1481,7 +1553,8 @@ class PermissionManager {
 		}
 
 		if ( !isset( $this->options->get( 'GroupPermissions' )['*'][$right] )
-			 || !$this->options->get( 'GroupPermissions' )['*'][$right] ) {
+			|| !$this->options->get( 'GroupPermissions' )['*'][$right]
+		) {
 			$this->cachedRights[$right] = false;
 			return false;
 		}
@@ -1556,9 +1629,9 @@ class PermissionManager {
 	 * Determine which restriction levels it makes sense to use in a namespace,
 	 * optionally filtered by a user's rights.
 	 *
-	 * @param int $index Index to check
+	 * @param int $index Namespace ID (index) to check
 	 * @param UserIdentity|null $user User to check
-	 * @return array
+	 * @return string[]
 	 */
 	public function getNamespaceRestrictionLevels( $index, UserIdentity $user = null ) {
 		if ( !isset( $this->options->get( 'NamespaceProtection' )[$index] ) ) {
@@ -1613,8 +1686,8 @@ class PermissionManager {
 			}
 
 			if ( $right != '' &&
-				 !isset( $namespaceRightGroups[$right] ) &&
-				 ( !$user || $this->userHasRight( $user, $right ) )
+				!isset( $namespaceRightGroups[$right] ) &&
+				( !$user || $this->userHasRight( $user, $right ) )
 			) {
 				// Do any of the namespace rights imply the restriction right? (see explanation above)
 				foreach ( $namespaceRightGroups as $groups ) {

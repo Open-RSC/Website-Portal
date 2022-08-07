@@ -3,7 +3,6 @@
 namespace MediaWiki\Tests\Revision;
 
 use ChangeTags;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\SimpleAuthority;
 use MediaWiki\Permissions\UltimateAuthority;
@@ -54,19 +53,19 @@ class ContributionsLookupTest extends MediaWikiIntegrationTestCase {
 
 	private const TAG_DISPLAY = 'ContributionsLookup Tag Display Text';
 
-	public function setUp() : void {
+	public function setUp(): void {
 		parent::setUp();
 
 		// Work around T256006
 		ChangeTags::$avoidReopeningTablesForTesting = true;
 
 		// MessageCache needs to be explicitly enabled to load changetag display text.
-		MediaWikiServices::getInstance()->getMessageCache()->enable();
+		$this->getServiceContainer()->getMessageCache()->enable();
 	}
 
-	public function tearDown() : void {
+	public function tearDown(): void {
 		ChangeTags::$avoidReopeningTablesForTesting = false;
-		MediaWikiServices::getInstance()->getMessageCache()->disable();
+		$this->getServiceContainer()->getMessageCache()->disable();
 
 		parent::tearDown();
 	}
@@ -149,10 +148,10 @@ class ContributionsLookupTest extends MediaWikiIntegrationTestCase {
 			$segment->getRevisions()
 		);
 
-		$this->assertEquals( $segment->getDeltaForRevision( $revIds[0] ), self::$storedDeltas[ 4 ] );
-		$this->assertEquals( $segment->getDeltaForRevision( $revIds[1] ), self::$storedDeltas[ 3 ] );
-		$this->assertEquals( $segment->getDeltaForRevision( $revIds[2] ), self::$storedDeltas[ 2 ] );
-		$this->assertEquals( $segment->getDeltaForRevision( $revIds[3] ), self::$storedDeltas[ 1 ] );
+		$this->assertEquals( self::$storedDeltas[ 4 ], $segment->getDeltaForRevision( $revIds[0] ) );
+		$this->assertEquals( self::$storedDeltas[ 3 ], $segment->getDeltaForRevision( $revIds[1] ) );
+		$this->assertEquals( self::$storedDeltas[ 2 ], $segment->getDeltaForRevision( $revIds[2] ) );
+		$this->assertEquals( self::$storedDeltas[ 1 ], $segment->getDeltaForRevision( $revIds[3] ) );
 	}
 
 	/**
@@ -368,7 +367,6 @@ class ContributionsLookupTest extends MediaWikiIntegrationTestCase {
 			__METHOD__
 		);
 
-		// sanity
 		$this->assertSame( 2, $this->db->affectedRows() );
 
 		// anons should not see suppressed contribs
@@ -400,18 +398,15 @@ class ContributionsLookupTest extends MediaWikiIntegrationTestCase {
 		ContributionsSegment $segmentObject,
 		RevisionRecord $actual
 	): void {
-		// FIXME: fails under postgres, see T195807
-		if ( $this->db->getType() !== 'postgres' ) {
-			$actualTags = $segmentObject->getTagsForRevision( $actual->getId() );
+		$actualTags = $segmentObject->getTagsForRevision( $actual->getId() );
 
-			// Tag 3 was disabled and should not be included in results
-			$this->assertArrayNotHasKey( self::TAG3, $actualTags );
-			foreach ( $actualTags as $tagName => $actualTag ) {
-				$this->assertContains( $tagName, $expectedTags );
-				$this->assertInstanceOf( Message::class, $actualTag );
-				$this->assertEquals( $actualTag->parse(), "<i>" . self::TAG_DISPLAY . "</i>" );
-				$this->assertEquals( $actualTag->text(), "''" . self::TAG_DISPLAY . "''" );
-			}
+		// Tag 3 was disabled and should not be included in results
+		$this->assertArrayNotHasKey( self::TAG3, $actualTags );
+		foreach ( $actualTags as $tagName => $actualTag ) {
+			$this->assertContains( $tagName, $expectedTags );
+			$this->assertInstanceOf( Message::class, $actualTag );
+			$this->assertEquals( "<i>" . self::TAG_DISPLAY . "</i>", $actualTag->parse() );
+			$this->assertEquals( "''" . self::TAG_DISPLAY . "''", $actualTag->text() );
 		}
 	}
 }

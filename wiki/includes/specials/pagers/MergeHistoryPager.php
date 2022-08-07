@@ -20,6 +20,7 @@
  */
 
 use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Revision\RevisionStore;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -27,6 +28,8 @@ use Wikimedia\Rdbms\ILoadBalancer;
  * @ingroup Pager
  */
 class MergeHistoryPager extends ReverseChronologicalPager {
+
+	public $mGroupByDate = true;
 
 	/** @var SpecialMergeHistory */
 	public $mForm;
@@ -48,31 +51,31 @@ class MergeHistoryPager extends ReverseChronologicalPager {
 
 	/**
 	 * @param SpecialMergeHistory $form
-	 * @param array $conds
-	 * @param Title $source
-	 * @param Title $dest
 	 * @param LinkBatchFactory $linkBatchFactory
 	 * @param ILoadBalancer $loadBalancer
 	 * @param RevisionStore $revisionStore
+	 * @param array $conds
+	 * @param PageIdentity $source
+	 * @param PageIdentity $dest
 	 */
 	public function __construct(
 		SpecialMergeHistory $form,
-		$conds,
-		Title $source,
-		Title $dest,
 		LinkBatchFactory $linkBatchFactory,
 		ILoadBalancer $loadBalancer,
-		RevisionStore $revisionStore
+		RevisionStore $revisionStore,
+		$conds,
+		PageIdentity $source,
+		PageIdentity $dest
 	) {
 		$this->mForm = $form;
 		$this->mConds = $conds;
-		$this->articleID = $source->getArticleID();
+		$this->articleID = $source->getId();
 
 		$dbr = $loadBalancer->getConnectionRef( ILoadBalancer::DB_REPLICA );
 		$maxtimestamp = $dbr->selectField(
 			'revision',
 			'MIN(rev_timestamp)',
-			[ 'rev_page' => $dest->getArticleID() ],
+			[ 'rev_page' => $dest->getId() ],
 			__METHOD__
 		);
 		$this->maxTimestamp = $maxtimestamp;
@@ -84,7 +87,7 @@ class MergeHistoryPager extends ReverseChronologicalPager {
 		$this->revisionStore = $revisionStore;
 	}
 
-	protected function getStartBody() {
+	protected function doBatchLookups() {
 		# Do a link batch query
 		$this->mResult->seek( 0 );
 		$batch = $this->linkBatchFactory->newLinkBatch();
@@ -108,8 +111,20 @@ class MergeHistoryPager extends ReverseChronologicalPager {
 
 		$batch->execute();
 		$this->mResult->seek( 0 );
+	}
 
-		return '';
+	/**
+	 * @inheritDoc
+	 */
+	protected function getStartBody() {
+		return "<section class='mw-pager-body'>\n";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function getEndBody() {
+		return "</section>\n";
 	}
 
 	public function formatRow( $row ) {

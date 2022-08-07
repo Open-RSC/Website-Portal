@@ -1,4 +1,15 @@
 <?php
+
+namespace MediaWiki\Extension\Gadgets\Api;
+
+use ApiBase;
+use ApiQuery;
+use ApiQueryBase;
+use ApiResult;
+use MediaWiki\Extension\Gadgets\Gadget;
+use MediaWiki\Extension\Gadgets\GadgetRepo;
+use Wikimedia\ParamValidator\ParamValidator;
+
 /**
  * Created on 15 April 2011
  * API for Gadgets extension
@@ -120,7 +131,7 @@ class ApiQueryGadgets extends ApiQueryBase {
 			$data[] = $row;
 		}
 
-		$result->setIndexedTagName( $data, 'gadget' );
+		ApiResult::setIndexedTagName( $data, 'gadget' );
 		$result->addValue( 'query', $this->getModuleName(), $data );
 	}
 
@@ -146,15 +157,19 @@ class ApiQueryGadgets extends ApiQueryBase {
 			'settings' => [
 				'rights' => $g->getRequiredRights(),
 				'skins' => $g->getRequiredSkins(),
+				'actions' => $g->getRequiredActions(),
 				'default' => $g->isOnByDefault(),
 				'hidden' => $g->isHidden(),
+				'package' => $g->isPackaged(),
 				'shared' => false,
 				'category' => $g->getCategory(),
 				'legacyscripts' => (bool)$g->getLegacyScripts(),
+				'supportsUrlLoad' => $g->supportsUrlLoad(),
 			],
 			'module' => [
 				'scripts' => $g->getScripts(),
 				'styles' => $g->getStyles(),
+				'datas' => $g->getJSONs(),
 				'dependencies' => $g->getDependencies(),
 				'peers' => $g->getPeers(),
 				'messages' => $g->getMessages(),
@@ -169,19 +184,20 @@ class ApiQueryGadgets extends ApiQueryBase {
 		static $tagNames = [
 			'rights' => 'right',
 			'skins' => 'skin',
+			'actions' => 'action',
 			'scripts' => 'script',
 			'styles' => 'style',
+			'datas' => 'data',
 			'dependencies' => 'dependency',
 			'peers' => 'peer',
 			'messages' => 'message',
 		];
 
-		$result = $this->getResult();
 		foreach ( $metadata as $data ) {
 			foreach ( $data as $key => $value ) {
 				if ( is_array( $value ) ) {
 					$tag = $tagNames[$key] ?? $key;
-					$result->setIndexedTagName( $value, $tag );
+					ApiResult::setIndexedTagName( $value, $tag );
 				}
 			}
 		}
@@ -190,7 +206,7 @@ class ApiQueryGadgets extends ApiQueryBase {
 	public function getAllowedParams() {
 		return [
 			'prop' => [
-				ApiBase::PARAM_DFLT => 'id|metadata',
+				ParamValidator::PARAM_DEFAULT => 'id|metadata',
 				ApiBase::PARAM_ISMULTI => true,
 				ApiBase::PARAM_TYPE => [
 					'id',

@@ -16,5 +16,6 @@
 	"monobook-cactions-label": "Действия на страницата",
 	"monobook-notifications-link": "Известия ($1)",
 	"monobook-notifications-link-none": "Известия",
-	"monobook-responsive-label": "Включване на адаптивния MonoBook дизайн"
+	"monobook-view-history": "История",
+	"monobook-action-undelete": "Възстановяване на {{PLURAL:$1|една редакция|$1 редакции}}"
 }
