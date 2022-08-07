@@ -29,7 +29,7 @@ services:
     #  dockerfile: Dockerfile
     #  args:
     #    buildno: 1
-    image: openrsc/php:latest
+    image: blackwolfmarwood/openrsc-php:latest
     container_name: php
     restart: unless-stopped
     ports:
