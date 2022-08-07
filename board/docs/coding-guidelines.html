@@ -718,18 +718,18 @@ switch ($mode)
 	<h4>Class Members</h4>
 	<p>Use the explicit visibility qualifiers <code>public</code>, <code>private</code> and <code>protected</code> for all properties instead of <code>var</code>.
 
-	<p>Place the <code>static</code> qualifier before the visibility qualifiers.</p>
+	<p>Place the <code>static</code> qualifier after the visibility qualifiers.</p>
 
 	<p class="bad">//Wrong </p>
 	<div class="codebox"><pre>
 var $x;
-private static function f()</pre>
+static private function f()</pre>
 	</div>
 
 	<p class="good">// Right </p>
 	<div class="codebox"><pre>
 public $x;
-static private function f()</pre>
+private static function f()</pre>
 	</div>
 
 	<h4>Constants</h4>
@@ -1304,6 +1304,7 @@ parent = prosilver</pre>
 </pre></div>
 
 <h4>PHP</h4>
+<p><strong class="error">The use of PHP in HTML files has been deprecated in phpBB 3.3 and will be removed in phpBB 4.0.</strong></p>
 <p>A contentious decision has seen the ability to include PHP within the template introduced. This is achieved by enclosing the PHP within relevant tags:</p>
 
 <div class="codebox"><pre>
