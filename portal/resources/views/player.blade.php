@@ -70,7 +70,7 @@
                                     <td>
                                         @if($skill == 'skill_total')
                                         @else
-                                            <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif" valign="bottom"
+                                            <img src="{{ asset('/img/skill_icons').'/'.strtolower($skill) }}.gif" valign="bottom"
                                                  width=16 height=16 alt="{{ strtolower($skill) }}"/>
                                         @endif
                                     </td>
@@ -141,6 +141,9 @@
             </span>
             <span class="hiscores-player-stat">
                 ID: {{ $players->first()->id }}
+            </span>
+            <span class="hiscores-player-stat">
+                <img src="{{ asset('/img/avatars').'/'.$db.'+'.$players->first()->id }}.png" alt="{{ $players->first()->username }}"/>
             </span>
         </div>
     @endif
