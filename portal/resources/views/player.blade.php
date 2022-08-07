@@ -143,7 +143,11 @@
                 ID: {{ $players->first()->id }}
             </span>
             <span class="hiscores-player-stat">
-                <img src="{{ asset('/img/avatars').'/'.$db.'+'.$players->first()->id }}.png" alt="{{ $players->first()->username }}"/>
+                @if ($db='preservation') <!-- Due to legacy OpenRSC database not following regular naming scheme -->
+                    <img src="{{ asset('/img/avatars').'/'.'openrsc'.'+'.$players->first()->id }}.png" alt="{{ $players->first()->username }}"/>
+                @else
+                    <img src="{{ asset('/img/avatars').'/'.$db.'+'.$players->first()->id }}.png" alt="{{ $players->first()->username }}"/>
+                @endif
             </span>
         </div>
     @endif
