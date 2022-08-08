@@ -28,6 +28,8 @@ class OnlineController extends Component
         $player_worlds = array(
             'preservation' => 'RSC Preservation',
             'cabbage' => 'RSC Cabbage',
+            'uranium' => 'RSC Uranium',
+            'coleslaw' => 'RSC Coleslaw',
             '2001scape' => '2001Scape',
             'openpk' => 'Open PK');
 
@@ -55,28 +57,28 @@ class OnlineController extends Component
         );
     }
 
-    private function getOnlineSelect($db) : Builder
+    private function getOnlineSelect($db): Builder
     {
         return DB::connection($db)->table('players as b')
-            ->leftJoin('player_cache as a', function($join) {
+            ->leftJoin('player_cache as a', function ($join) {
                 $join->on('b.id', '=', 'a.playerID');
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '8'],
+                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->leftJoin('player_cache as c', function($join) {
+            ->leftJoin('player_cache as c', function ($join) {
                 $join->on('b.id', '=', 'c.playerID');
                 $join->on('c.key', '=', DB::raw("'total_played'"));
             })
             ->where([
-                ['b.group_id', '>=', '8'],
+                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
@@ -85,7 +87,7 @@ class OnlineController extends Component
 
     /**
      * Displays a RuneScape time since string
-     * @param $timestamp - the old cummulative timestamp in seconds
+     * @param $timestamp - the old cumulative timestamp in seconds
      * @param $loginstamp - the login timestamp in seconds
      * @return string
      */
@@ -125,10 +127,10 @@ class OnlineController extends Component
 
         if ($days > 0) {
             // use days, hours
-            $formatSince = $days . ' ' . Str::plural('day', $days) . ' '. $hours . ' ' . Str::plural('hour', $hours);
+            $formatSince = $days . ' ' . Str::plural('day', $days) . ' ' . $hours . ' ' . Str::plural('hour', $hours);
         } else if ($hours > 0) {
             // use hours, mins
-            $formatSince = $hours . ' ' . Str::plural('hour', $hours) . ' '. $mins . ' ' . Str::plural('min', $mins);
+            $formatSince = $hours . ' ' . Str::plural('hour', $hours) . ' ' . $mins . ' ' . Str::plural('min', $mins);
         } else {
             // use mins
             $formatSince = $mins . ' ' . Str::plural('min', $mins);
