@@ -40,13 +40,8 @@ class OnlineController extends Component
 
         $onlineCount = $this->getOnlineSelect($db)->get()->count();
 
-        $playersLeftCol = $this->getOnlineSelect($db)
-            ->limit(ceil($onlineCount/2))
-            ->get();
-
-        $playersRightCol = $this->getOnlineSelect($db)
-            ->offset(ceil($onlineCount/2))
-            ->limit(ceil($onlineCount/2))
+        $players = $this->getOnlineSelect($db)
+            ->limit(ceil($onlineCount))
             ->get();
 
         return view(
@@ -54,8 +49,8 @@ class OnlineController extends Component
             [
                 'world' => $player_worlds[$db],
                 'onlineCount' => $onlineCount,
-                'playersLeftCol' => $playersLeftCol,
-                'playersRightCol' => $playersRightCol,
+                'players' => $players,
+                'db' => $db,
             ]
         );
     }

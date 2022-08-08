@@ -1,68 +1,68 @@
 @extends('template')
+
 @section('content')
 
-    <table cellspacing="2" cellpadding="2" bgcolor="#aaaaaa" border="0">
-        <tbody>
+    <span class="fw-bold text-center pb-2">
+        There are {{$onlineCount}} players logged in to
+        <span style="color:yellow">
+            {{$world}}
+        </span>
+    </span>
+    <table class="e hiscores-player-table" bgcolor="#000000" style="width: 450px;">
         <tr>
-            <td bgcolor="#000000">
-                <b>The following {{$onlineCount}} players are currently playing {{$world}}:</b>
-                <br>
-                <table>
-                    <tbody>
-                    <tr align="left">
-                        <th>Player name</th>
-                        <th>Playing time</th>
-                        <th>Character age</th>
-                        <th>Player name</th>
-                        <th>Playing time</th>
-                        <th>Character age</th></tr>
-                    <tr>
-                    @foreach ($playersLeftCol as $index => $playerLeft)
-                        <tr>
-                            <td>{{ $playerLeft->username }}</td>
-                            <td>
-                                @if ($playerLeft->login_date)
-                                    {{ App\Http\OnlineController::formattedTimeSince($playerLeft->login_date) }}
-                                @else
-                                    Never
-                                @endif
-                            </td>
-                            <td>
-                                @if ($playerLeft->creation_date)
-                                    {{ App\Http\OnlineController::formattedCumTime($playerLeft->value/1000, $playerLeft->login_date) }}
-                                @else
-                                    Never
-                                @endif
-                            </td>
-                            @if (count($playersRightCol) == 0 || count($playersRightCol) < $index + 1)
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            @else
-                                @if ($playerRight = $playersRightCol->get($index))
-                                    <td>{{ $playerRight->username }}</td>
-                                    <td>
-                                        @if ($playerRight->login_date)
-                                            {{ App\Http\OnlineController::formattedTimeSince($playerRight->login_date) }}
-                                        @else
-                                            Never
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($playerRight->creation_date)
-                                            {{ App\Http\OnlineController::formattedCumTime($playerRight->value/1000, $playerRight->login_date) }}
-                                        @else
-                                            Never
-                                        @endif
-                                    </td>
-                                @endif
-                            @endif
-                        </tr>
-                    @endforeach
-                </table>
-            </td>
+            <th></th>
+            <th class="fw-bold pt-3 pl-3 pr-3 text-left">Name</th>
+            <th class="fw-bold pt-3 text-left">Logged In</th>
+            <th class="fw-bold pt-3 pl-6 pr-6 text-left">Cumulative Play</th>
         </tr>
-        </tbody>
-    </table>
+        @foreach ($players as $index => $player)
+            <tr>
+                <td class="pl-3">
+                    @if($db== 'preservation')
+                        <div class="ml-3 pb-1">
+                            <div class="rounded-circle" style="
+                                height: 48px;
+                                width: 48px;
+                                overflow: hidden;
+                                ">
 
+                                <a class="c" href="/player/{{ $db }}/{{ $player->username }}">
+                                    <!-- Due to legacy OpenRSC database not following regular naming scheme -->
+                                    <img src="{{ asset('/img/avatars').'/'.'openrsc'.'+'.$player->id }}.png"
+                                         alt="({{ ucfirst($player->username) }})" onerror="this.style.display='none'"
+                                         style="
+                                        margin-top: -32px;
+                                        padding-top: 35px;
+                                        background-color: #0A0A0A;
+                                        "/>
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <a class="c" href="/player/{{ $db }}/{{ $player->username }}">
+                            <img src="{{ asset('/img/avatars').'/'.$db.'+'.$player->id }}.png"
+                                 alt="({{ ucfirst($player->username) }})" onerror="this.style.display='none'"/>
+                        </a>
+                    @endif
+                </td>
+                <td class="pl-3 pr-3 text-left">
+                    <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
+                </td>
+                <td class="text-left">
+                    @if ($player->login_date)
+                        {{ App\Http\OnlineController::formattedTimeSince($player->login_date) }}
+                    @else
+                        Never
+                    @endif
+                </td>
+                <td class="pl-6 pr-6 text-left">
+                    @if ($player->creation_date)
+                        {{ App\Http\OnlineController::formattedCumTime($player->value/1000, $player->login_date) }}
+                    @else
+                        Never
+                    @endif
+                </td>
+            </tr>
+        @endforeach
+    </table>
 @endsection
