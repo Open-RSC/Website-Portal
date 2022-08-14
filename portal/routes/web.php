@@ -75,8 +75,8 @@ Route::get('player_cache_logs', 'StaffController@player_cache_logs')->middleware
 Route::get('report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 
-Route::get('register', 'Livewire\Registration')->name('Player Registration');
-Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
+//Route::get('register', 'Livewire\Registration')->name('Player Registration');
+//Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
 Route::any('login', 'Livewire\Login')->name('Secure_Login');
 Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
