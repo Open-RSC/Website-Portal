@@ -20,7 +20,6 @@ namespace MediaWiki\Extension\OATHAuth\Key;
  */
 
 use Base32\Base32;
-use CentralIdLookup;
 use DomainException;
 use Exception;
 use jakobo\HOTP\HOTP;
@@ -144,7 +143,10 @@ class TOTPKey implements IAuthKey {
 
 		// Prevent replay attacks
 		$store = MediaWikiServices::getInstance()->getMainObjectStash();
-		$uid = CentralIdLookup::factory()->centralIdFromLocalUser( $user->getUser() );
+		$uid = MediaWikiServices::getInstance()
+			->getCentralIdLookupFactory()
+			->getLookup()
+			->centralIdFromLocalUser( $user->getUser() );
 		$key = $store->makeKey( 'oathauth-totp', 'usedtokens', $uid );
 		$lastWindow = (int)$store->get( $key );
 
@@ -167,7 +169,7 @@ class TOTPKey implements IAuthKey {
 		// Check to see if the user's given token is in the list of tokens generated
 		// for the time window.
 		foreach ( $results as $window => $result ) {
-			if ( $window > $lastWindow && $result->toHOTP( 6 ) === $token ) {
+			if ( $window > $lastWindow && hash_equals( $result->toHOTP( 6 ), $token ) ) {
 				$lastWindow = $window;
 				$retval = self::MAIN_TOKEN;
 
@@ -182,7 +184,7 @@ class TOTPKey implements IAuthKey {
 		// See if the user is using a scratch token
 		if ( !$retval ) {
 			foreach ( $this->scratchTokens as $i => $scratchToken ) {
-				if ( $token === $scratchToken ) {
+				if ( hash_equals( $token, $scratchToken ) ) {
 					// If we used a scratch token, remove it from the scratch token list.
 					// This is saved below via OATHUserRepository::persist, TOTP::getDataFromUser.
 					array_splice( $this->scratchTokens, $i, 1 );

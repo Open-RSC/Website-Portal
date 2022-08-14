@@ -373,7 +373,7 @@ abstract class AuthManagerSpecialPage extends SpecialPage {
 			case AuthManager::ACTION_LOGIN_CONTINUE:
 				return $authManager->continueAuthentication( $requests );
 			case AuthManager::ACTION_CREATE:
-				return $authManager->beginAccountCreation( $this->getUser(), $requests,
+				return $authManager->beginAccountCreation( $this->getAuthority(), $requests,
 					$returnToUrl );
 			case AuthManager::ACTION_CREATE_CONTINUE:
 				return $authManager->continueAccountCreation( $requests );
@@ -791,7 +791,7 @@ abstract class AuthManagerSpecialPage extends SpecialPage {
 	}
 
 	/**
-	 * Apply defaults to a form descriptor, without creating non-existend fields.
+	 * Apply defaults to a form descriptor, without creating non-existent fields.
 	 *
 	 * Overrides $formDescriptor fields with their $defaultFormDescriptor equivalent, but
 	 * only if the field is defined in $fieldInfo, uses the special 'basefield' property to

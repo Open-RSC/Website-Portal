@@ -16,7 +16,7 @@
  *
  */
 
-namespace MediaWiki\Extensions\ParserFunctions;
+namespace MediaWiki\Extension\ParserFunctions;
 
 use UtfNormal\Validator;
 
@@ -416,7 +416,7 @@ class ExprParser {
 				$right = array_pop( $stack );
 				$left = array_pop( $stack );
 				$stack[] = $left * $right;
-					break;
+				break;
 			case self::EXPR_DIVIDE:
 				if ( count( $stack ) < 2 ) {
 					throw new ExprError( 'missing_operand', self::NAMES[$op] );

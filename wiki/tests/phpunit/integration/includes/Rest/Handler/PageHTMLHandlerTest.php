@@ -94,11 +94,9 @@ class PageHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 			] ),
 			$this->getServiceContainer()->getRevisionLookup(),
 			$this->getServiceContainer()->getTitleFormatter(),
-			$this->getServiceContainer()->getTitleFactory(),
-
 			$parserCacheFactory,
-			$this->getServiceContainer()->getWikiPageFactory(),
-			$this->getServiceContainer()->getGlobalIdGenerator()
+			$this->getServiceContainer()->getGlobalIdGenerator(),
+			$this->getServiceContainer()->getPageStore()
 		);
 
 		if ( $parsoid !== null ) {
@@ -115,7 +113,7 @@ class PageHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		$page = $this->getExistingTestPage( 'HtmlEndpointTestPage/with/slashes' );
 		$this->assertTrue(
 			$this->editPage( $page, self::WIKITEXT )->isGood(),
-			'Sanity: edited a page'
+			'Edited a page'
 		);
 
 		$request = new RequestData(
@@ -138,7 +136,7 @@ class PageHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		$page = $this->getExistingTestPage( 'HtmlEndpointTestPage/with/slashes' );
 		$this->assertTrue(
 			$this->editPage( $page, self::WIKITEXT )->isGood(),
-			'Sanity: edited a page'
+			'Edited a page'
 		);
 
 		$request = new RequestData(
@@ -232,7 +230,7 @@ class PageHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		MWTimestamp::setFakeTime( $time );
 		$this->assertTrue(
 			$page->getTitle()->invalidateCache( MWTimestamp::convert( TS_MW, $time ) ),
-			'Sanity: can invalidate cache'
+			'Can invalidate cache'
 		);
 		DeferredUpdates::doUpdates();
 

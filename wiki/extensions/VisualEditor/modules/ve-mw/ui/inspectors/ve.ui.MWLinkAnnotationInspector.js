@@ -165,7 +165,7 @@ ve.ui.MWLinkAnnotationInspector.prototype.onLabelInputChange = function () {
 /**
  * Handle change events on the internal link widget
  *
- * @param {ve.dm.MWInternalLinkAnnotation} annotation Annotation
+ * @param {ve.dm.MWInternalLinkAnnotation} annotation
  */
 ve.ui.MWLinkAnnotationInspector.prototype.onInternalLinkChange = function () {
 	this.updateActions();
@@ -193,7 +193,7 @@ ve.ui.MWLinkAnnotationInspector.prototype.onInternalLinkSearchResultsChoose = fu
 /**
  * Handle change events on the external link widget
  *
- * @param {ve.dm.MWExternalLinkAnnotation} annotation Annotation
+ * @param {ve.dm.MWExternalLinkAnnotation} annotation
  */
 ve.ui.MWLinkAnnotationInspector.prototype.onExternalLinkChange = function () {
 	this.updateActions();
@@ -219,17 +219,16 @@ ve.ui.MWLinkAnnotationInspector.prototype.onLinkInputEnter = function () {
  * @inheritdoc
  */
 ve.ui.MWLinkAnnotationInspector.prototype.updateActions = function () {
-	var content, annotation, href, type,
-		msg = null;
+	var msg = null;
 
 	ve.ui.MWLinkAnnotationInspector.super.prototype.updateActions.call( this );
 
 	// show/hide convert action
-	content = this.fragment ? this.fragment.getText() : '';
-	annotation = this.annotationInput.getAnnotation();
-	href = annotation && annotation.getHref();
+	var content = this.fragment ? this.fragment.getText() : '';
+	var annotation = this.annotationInput.getAnnotation();
+	var href = annotation && annotation.getHref();
 	if ( href && ve.dm.MWMagicLinkNode.static.validateHref( content, href ) ) {
-		type = ve.dm.MWMagicLinkType.static.fromContent( content ).type;
+		var type = ve.dm.MWMagicLinkType.static.fromContent( content ).type;
 		msg = 'visualeditor-linkinspector-convert-link-' + type.toLowerCase();
 	}
 
@@ -375,18 +374,17 @@ ve.ui.MWLinkAnnotationInspector.prototype.getTeardownProcess = function ( data )
 			this.isActive = false;
 		}, this )
 		.next( function () {
-			var annotations, linearData,
-				selection = fragment && fragment.getSelection();
+			var selection = fragment && fragment.getSelection();
 
 			// Handle conversion to magic link.
 			if ( data && data.convert && selection instanceof ve.dm.LinearSelection ) {
-				annotations = fragment.getDocument().data
+				var annotations = fragment.getDocument().data
 					.getAnnotationsFromRange( selection.getRange() )
 					// Remove link annotations
 					.filter( function ( annotation ) {
 						return !/^link/.test( annotation.name );
 					} );
-				linearData = new ve.dm.ElementLinearData( annotations.store, [
+				var linearData = new ve.dm.ElementLinearData( annotations.store, [
 					{
 						type: 'link/mwMagic',
 						attributes: {

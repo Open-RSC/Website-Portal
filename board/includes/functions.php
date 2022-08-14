@@ -263,49 +263,68 @@ function phpbb_version_compare($version1, $version2, $operator = null)
 // functions used for building option fields
 
 /**
-* Pick a language, any language ...
-*/
-function language_select($default = '')
+ * Pick a language, any language ...
+ *
+ * @param string $default	Language ISO code to be selected by default in the dropdown list
+ * @param array $langdata	Language data in format of array(array('lang_iso' => string, lang_local_name => string), ...)
+ *
+ * @return string			HTML options for language selection dropdown list.
+ */
+function language_select($default = '', array $langdata = [])
 {
 	global $db;
 
-	$sql = 'SELECT lang_iso, lang_local_name
-		FROM ' . LANG_TABLE . '
-		ORDER BY lang_english_name';
-	$result = $db->sql_query($sql);
+	if (empty($langdata))
+	{
+		$sql = 'SELECT lang_iso, lang_local_name
+			FROM ' . LANG_TABLE . '
+			ORDER BY lang_english_name';
+		$result = $db->sql_query($sql);
+		$langdata = (array) $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+	}
 
 	$lang_options = '';
-	while ($row = $db->sql_fetchrow($result))
+	foreach ($langdata as $row)
 	{
 		$selected = ($row['lang_iso'] == $default) ? ' selected="selected"' : '';
 		$lang_options .= '<option value="' . $row['lang_iso'] . '"' . $selected . '>' . $row['lang_local_name'] . '</option>';
 	}
-	$db->sql_freeresult($result);
 
 	return $lang_options;
 }
 
 /**
-* Pick a template/theme combo,
-*/
-function style_select($default = '', $all = false)
+ * Pick a template/theme combo
+ *
+ * @param string $default	Style ID to be selected by default in the dropdown list
+ * @param bool $all			Flag indicating if all styles data including inactive ones should be fetched
+ * @param array $styledata	Style data in format of array(array('style_id' => int, style_name => string), ...)
+ *
+ * @return string			HTML options for style selection dropdown list.
+ */
+function style_select($default = '', $all = false, array $styledata = [])
 {
 	global $db;
 
-	$sql_where = (!$all) ? 'WHERE style_active = 1 ' : '';
-	$sql = 'SELECT style_id, style_name
-		FROM ' . STYLES_TABLE . "
-		$sql_where
-		ORDER BY style_name";
-	$result = $db->sql_query($sql);
+	if (empty($styledata))
+	{
+		$sql_where = (!$all) ? 'WHERE style_active = 1 ' : '';
+		$sql = 'SELECT style_id, style_name
+			FROM ' . STYLES_TABLE . "
+			$sql_where
+			ORDER BY style_name";
+		$result = $db->sql_query($sql);
+		$styledata = (array) $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+	}
 
 	$style_options = '';
-	while ($row = $db->sql_fetchrow($result))
+	foreach ($styledata as $row)
 	{
 		$selected = ($row['style_id'] == $default) ? ' selected="selected"' : '';
 		$style_options .= '<option value="' . $row['style_id'] . '"' . $selected . '>' . $row['style_name'] . '</option>';
 	}
-	$db->sql_freeresult($result);
 
 	return $style_options;
 }
@@ -1075,7 +1094,7 @@ function get_complete_topic_tracking($forum_id, $topic_ids, $global_announce_lis
 * @param string $sql_limit		Limits the size of unread topics list, 0 for unlimited query
 * @param string $sql_limit_offset  Sets the offset of the first row to search, 0 to search from the start
 *
-* @return array[int][int]		Topic ids as keys, mark_time of topic as value
+* @return int[]		Topic ids as keys, mark_time of topic as value
 */
 function get_unread_topics($user_id = false, $sql_extra = '', $sql_sort = '', $sql_limit = 1001, $sql_limit_offset = 0)
 {
@@ -1464,10 +1483,9 @@ function tracking_unserialize($string, $max_depth = 3)
 * @return string The corrected url.
 *
 * Examples:
-* <code>
-* append_sid("{$phpbb_root_path}viewtopic.$phpEx?t=1&amp;f=2");
-* append_sid("{$phpbb_root_path}viewtopic.$phpEx", 't=1&amp;f=2');
-* append_sid("{$phpbb_root_path}viewtopic.$phpEx", 't=1&f=2', false);
+* <code> append_sid("{$phpbb_root_path}viewtopic.$phpEx?t=1");
+* append_sid("{$phpbb_root_path}viewtopic.$phpEx", 't=1');
+* append_sid("{$phpbb_root_path}viewtopic.$phpEx", 't=1', false);
 * append_sid("{$phpbb_root_path}viewtopic.$phpEx", array('t' => 1, 'f' => 2));
 * </code>
 *
@@ -2996,7 +3014,7 @@ function msg_handler($errno, $msg_text, $errfile, $errline)
 
 			// Check the error reporting level and return if the error level does not match
 			// If DEBUG is defined the default level is E_ALL
-			if (($errno & ($phpbb_container->getParameter('debug.show_errors') ? E_ALL : error_reporting())) == 0)
+			if (($errno & ($phpbb_container != null && $phpbb_container->getParameter('debug.show_errors') ? E_ALL : error_reporting())) == 0)
 			{
 				return;
 			}
@@ -3856,8 +3874,9 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 		}
 	}
 
-	$forum_id = $request->variable('f', 0);
-	$topic_id = $request->variable('t', 0);
+	// Negative forum and topic IDs are not allowed
+	$forum_id = max(0, $request->variable('f', 0));
+	$topic_id = max(0, $request->variable('t', 0));
 
 	$s_feed_news = false;
 
@@ -4070,7 +4089,7 @@ function page_header($page_title = '', $display_online_list = false, $item_id = 
 
 		'T_FONT_AWESOME_LINK'	=> !empty($config['allow_cdn']) && !empty($config['load_font_awesome_url']) ? $config['load_font_awesome_url'] : "{$web_path}assets/css/font-awesome.min.css?assets_version=" . $config['assets_version'],
 
-		'T_JQUERY_LINK'			=> !empty($config['allow_cdn']) && !empty($config['load_jquery_url']) ? $config['load_jquery_url'] : "{$web_path}assets/javascript/jquery-3.5.1.min.js?assets_version=" . $config['assets_version'],
+		'T_JQUERY_LINK'			=> !empty($config['allow_cdn']) && !empty($config['load_jquery_url']) ? $config['load_jquery_url'] : "{$web_path}assets/javascript/jquery-3.6.0.min.js?assets_version=" . $config['assets_version'],
 		'S_ALLOW_CDN'			=> !empty($config['allow_cdn']),
 		'S_COOKIE_NOTICE'		=> !empty($config['cookie_notice']),
 

@@ -35,7 +35,6 @@ class ApiValidatePassword extends ApiBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
 
-		// For sanity
 		$this->requirePostedParameters( [ 'password' ] );
 
 		if ( $params['user'] !== null ) {
@@ -51,7 +50,7 @@ class ApiValidatePassword extends ApiBase {
 				);
 			}
 
-			if ( !$user->isAnon() || $this->authManager->userExists( $user->getName() ) ) {
+			if ( $user->isRegistered() || $this->authManager->userExists( $user->getName() ) ) {
 				$this->dieWithError( 'userexists' );
 			}
 

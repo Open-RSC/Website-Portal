@@ -25,16 +25,15 @@
 use MediaWiki\DAO\WikiAwareEntityTrait;
 use MediaWiki\Interwiki\InterwikiLookup;
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\ExistingPageRecord;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageStoreRecord;
 use MediaWiki\Page\ProperPageIdentity;
 use Wikimedia\Assert\Assert;
 use Wikimedia\Assert\PreconditionException;
-use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
 
 /**
@@ -46,6 +45,7 @@ use Wikimedia\Rdbms\IDatabase;
  *       and does not rely on global state or the database.
  */
 class Title implements LinkTarget, PageIdentity, IDBAccessObject {
+	use DeprecationHelper;
 	use WikiAwareEntityTrait;
 
 	/** @var MapCacheLRU|null */
@@ -60,7 +60,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/**
 	 * Used to be GAID_FOR_UPDATE define(). Used with getArticleID() and friends
-	 * to use the master DB and inject it into link cache.
+	 * to use the primary DB and inject it into link cache.
 	 * @deprecated since 1.34, use Title::READ_LATEST instead.
 	 */
 	public const GAID_FOR_UPDATE = 512;
@@ -74,6 +74,27 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 */
 	public const NEW_CLONE = 'clone';
 
+	/** @var string Text form (spaces not underscores) of the main part */
+	private $mTextform = '';
+
+	/** @var string URL-encoded form of the main part */
+	private $mUrlform = '';
+
+	/** @var string Main part with underscores */
+	private $mDbkeyform = '';
+
+	/** @var int Namespace index, i.e. one of the NS_xxxx constants */
+	private $mNamespace = NS_MAIN;
+
+	/** @var string Interwiki prefix */
+	private $mInterwiki = '';
+
+	/** @var bool Was this Title created from a string with a local interwiki prefix? */
+	private $mLocalInterwiki = false;
+
+	/** @var string Title fragment (i.e. the bit after the #) */
+	private $mFragment = '';
+
 	/***************************************************************************/
 	// region   Private member variables
 	/** @name   Private member variables
@@ -81,21 +102,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @internal
 	 * @{
 	 */
-
-	/** @var string Text form (spaces not underscores) of the main part */
-	public $mTextform = '';
-	/** @var string URL-encoded form of the main part */
-	public $mUrlform = '';
-	/** @var string Main part with underscores */
-	public $mDbkeyform = '';
-	/** @var int Namespace index, i.e. one of the NS_xxxx constants */
-	public $mNamespace = NS_MAIN;
-	/** @var string Interwiki prefix */
-	public $mInterwiki = '';
-	/** @var bool Was this Title created from a string with a local interwiki prefix? */
-	private $mLocalInterwiki = false;
-	/** @var string Title fragment (i.e. the bit after the #) */
-	public $mFragment = '';
 
 	/** @var int Article ID, fetched from the link cache on demand */
 	public $mArticleID = -1;
@@ -115,37 +121,8 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 */
 	private $mForcedContentModel = false;
 
-	/** @var int Estimated number of revisions; null of not loaded */
+	/** @var int|null Estimated number of revisions; null of not loaded */
 	private $mEstimateRevisions;
-
-	/** @var array Array of groups allowed to edit this article */
-	public $mRestrictions = [];
-
-	/**
-	 * @var string|bool Comma-separated set of permission keys
-	 * indicating who can move or edit the page from the page table, (pre 1.10) rows.
-	 * Edit and move sections are separated by a colon
-	 * Example: "edit=autoconfirmed,sysop:move=sysop"
-	 */
-	protected $mOldRestrictions = false;
-
-	/** @var bool Cascade restrictions on this page to included templates and images? */
-	public $mCascadeRestriction;
-
-	/** Caching the results of getCascadeProtectionSources */
-	public $mCascadingRestrictions;
-
-	/** @var array When do the restrictions on this page expire? */
-	protected $mRestrictionsExpiry = [];
-
-	/** @var bool Are cascading restrictions in effect on this page? */
-	protected $mHasCascadingRestrictions;
-
-	/** @var array Where are the cascading restrictions coming from on this page? */
-	public $mCascadeSources;
-
-	/** @var bool Boolean for initialisation on demand */
-	public $mRestrictionsLoaded = false;
 
 	/**
 	 * Text form including namespace/interwiki, initialised on demand
@@ -156,9 +133,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @var string|null
 	 */
 	public $prefixedText = null;
-
-	/** @var mixed Cached value for getTitleProtection (create protection) */
-	public $mTitleProtection;
 
 	/**
 	 * @var int Namespace index when there is no namespace. Don't change the
@@ -185,7 +159,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 */
 	private $mDbPageLanguage = false;
 
-	/** @var TitleValue|null A corresponding TitleValue object */
+	/** @var TitleValue|null */
 	private $mTitleValue = null;
 
 	/** @var bool|null Would deleting this page be a big deletion? */
@@ -193,6 +167,9 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/** @var bool|null Is the title known to be valid? */
 	private $mIsValid = null;
+
+	/** @var string|null The key of this instance in the internal Title instance cache */
+	private $mInstanceCacheKey = null;
 
 	// endregion -- end of private member variables
 	/** @} */
@@ -203,7 +180,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @param Language $language Language of converter
 	 * @return ILanguageConverter
 	 */
-	private function getLanguageConverter( $language ) : ILanguageConverter {
+	private function getLanguageConverter( $language ): ILanguageConverter {
 		return MediaWikiServices::getInstance()->getLanguageConverterFactory()
 			->getLanguageConverter( $language );
 	}
@@ -212,7 +189,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * Shorthand for getting a Language Converter for page's language
 	 * @return ILanguageConverter
 	 */
-	private function getPageLanguageConverter() : ILanguageConverter {
+	private function getPageLanguageConverter(): ILanguageConverter {
 		return $this->getLanguageConverter( $this->getPageLanguage() );
 	}
 
@@ -241,6 +218,15 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	private function __construct() {
+		$this->deprecatePublicProperty( 'mTextform', '1.37', __CLASS__ );
+		$this->deprecatePublicProperty( 'mUrlform', '1.37', __CLASS__ );
+		$this->deprecatePublicProperty( 'mDbkeyform', '1.37', __CLASS__ );
+		$this->deprecatePublicProperty( 'mNamespace', '1.37', __CLASS__ );
+		$this->deprecatePublicProperty( 'mInterwiki', '1.37', __CLASS__ );
+
+		// Phan is being silly about callable|string, see T297352.
+		// @phan-suppress-next-line PhanUndeclaredFunctionInCallable
+		$this->deprecatePublicPropertyFallback( 'mFragment', '1.37', 'getFragment', 'setFragment' );
 	}
 
 	/**
@@ -327,18 +313,34 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @param PageIdentity|null $pageIdentity
 	 * @return Title|null
 	 */
-	public static function castFromPageIdentity( ?PageIdentity $pageIdentity ) : ?Title {
-		if ( !$pageIdentity ) {
+	public static function castFromPageIdentity( ?PageIdentity $pageIdentity ): ?Title {
+		return self::castFromPageReference( $pageIdentity );
+	}
+
+	/**
+	 * Return a Title for a given Reference. If $pageReference is a Title,
+	 * that Title is returned unchanged. If $pageReference is null, null
+	 * is returned.
+	 * @since 1.37
+	 *
+	 * @param PageReference|null $pageReference
+	 * @return Title|null
+	 */
+	public static function castFromPageReference( ?PageReference $pageReference ): ?Title {
+		if ( !$pageReference ) {
 			return null;
 		}
 
-		if ( $pageIdentity instanceof Title ) {
-			return $pageIdentity;
+		if ( $pageReference instanceof Title ) {
+			return $pageReference;
 		}
 
-		$pageIdentity->assertWiki( self::LOCAL );
-		$title = self::makeTitle( $pageIdentity->getNamespace(), $pageIdentity->getDBkey() );
-		$title->resetArticleID( $pageIdentity->getId() );
+		$pageReference->assertWiki( self::LOCAL );
+		$title = self::makeTitle( $pageReference->getNamespace(), $pageReference->getDBkey() );
+
+		if ( $pageReference instanceof PageIdentity ) {
+			$title->mArticleID = $pageReference->getId();
+		}
 		return $title;
 	}
 
@@ -367,7 +369,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		if ( $text !== null && !is_string( $text ) && !is_int( $text ) ) {
 			throw new InvalidArgumentException( '$text must be a string.' );
 		}
-		if ( $text === null ) {
+		if ( $text === null || $text === '' ) {
 			return null;
 		}
 
@@ -402,7 +404,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			throw new MWException( '$text must be a string, given an object' );
 		} elseif ( $text === null ) {
 			// Legacy code relies on MalformedTitleException being thrown in this case
-			// (happens when URL with no title in it is parsed). TODO fix
+			//  TODO: fix(happens when URL with no title in it is parsed).
 			throw new MalformedTitleException( 'title-invalid-empty' );
 		}
 
@@ -411,7 +413,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		// Wiki pages often contain multiple links to the same page.
 		// Title normalization and parsing can become expensive on pages with many
 		// links, so we can save a little time by caching them.
-		// In theory these are value objects and won't get changed...
 		if ( $defaultNamespace === NS_MAIN ) {
 			$t = $titleCache->get( $text );
 			if ( $t ) {
@@ -427,19 +428,32 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 		$t->secureAndSplit( $dbKeyForm, (int)$defaultNamespace );
 		if ( $defaultNamespace === NS_MAIN ) {
+			$t->mInstanceCacheKey = $text;
 			$titleCache->set( $text, $t );
 		}
 		return $t;
 	}
 
 	/**
+	 * Removes this instance from the internal title cache, so it can be modified in-place
+	 * without polluting the cache (see T281337).
+	 */
+	private function uncache() {
+		if ( $this->mInstanceCacheKey !== null ) {
+			$titleCache = self::getTitleCache();
+			$titleCache->clear( $this->mInstanceCacheKey );
+			$this->mInstanceCacheKey = null;
+		}
+	}
+
+	/**
 	 * THIS IS NOT THE FUNCTION YOU WANT. Use Title::newFromText().
 	 *
 	 * Example of wrong and broken code:
-	 * $title = Title::newFromURL( $wgRequest->getVal( 'title' ) );
+	 * $title = Title::newFromURL( $request->getText( 'title' ) );
 	 *
 	 * Example of right code:
-	 * $title = Title::newFromText( $wgRequest->getVal( 'title' ) );
+	 * $title = Title::newFromText( $request->getText( 'title' ) );
 	 *
 	 * Create a new Title from URL-encoded text. Ensures that
 	 * the given title's length does not exceed the maximum.
@@ -479,7 +493,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/**
 	 * Returns a list of fields that are to be selected for initializing Title
-	 * objects or LinkCache entries.
+	 * objects.
 	 *
 	 * @deprecated since 1.36, use PageStore::newSelectQueryBuilder() instead.
 	 *
@@ -520,8 +534,11 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @param int[] $ids Array of IDs
 	 * @return Title[] Array of Titles
+	 * @deprecated since 1.38 use a PageStore QueryBuilder instead
 	 */
 	public static function newFromIDs( $ids ) {
+		wfDeprecated( __METHOD__, '1.38' );
+
 		if ( !count( $ids ) ) {
 			return [];
 		}
@@ -545,7 +562,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * Make a Title object from a DB row
 	 *
 	 * @param stdClass $row Object database row (needs at least page_title,page_namespace)
-	 * @return Title Corresponding Title
+	 * @return Title
 	 */
 	public static function newFromRow( $row ) {
 		$t = self::makeTitle( $row->page_namespace, $row->page_title );
@@ -582,7 +599,10 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 				$this->mDbPageLanguage = (string)$row->page_lang;
 			}
 			if ( isset( $row->page_restrictions ) ) {
-				$this->mOldRestrictions = $row->page_restrictions;
+				// If we have them handy, save them so we don't need to look them up later
+				MediaWikiServices::getInstance()->getRestrictionStore()
+					->registerOldRestrictions( $this, $row->page_restrictions );
+
 			}
 		} else { // page not found
 			$this->mArticleID = 0;
@@ -618,7 +638,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	public static function makeTitle( $ns, $title, $fragment = '', $interwiki = '' ) {
 		$t = new Title();
 		$t->mInterwiki = $interwiki;
-		$t->mFragment = $fragment;
+		$t->mFragment = self::normalizeFragment( $fragment );
 		$t->mNamespace = $ns = (int)$ns;
 		$t->mDbkeyform = strtr( $title, ' ', '_' );
 		$t->mArticleID = ( $ns >= 0 ) ? -1 : 0;
@@ -678,13 +698,22 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return Title
 	 */
 	public static function newMainPage( MessageLocalizer $localizer = null ) {
+		static $recursionGuard = false;
+		if ( $recursionGuard ) {
+			// Somehow parsing the message contents has fallen back to the
+			// main page (bare local interwiki), so use the hardcoded
+			// fallback (T297571).
+			return self::newFromText( 'Main Page' );
+		}
 		if ( $localizer ) {
 			$msg = $localizer->msg( 'mainpage' );
 		} else {
 			$msg = wfMessage( 'mainpage' );
 		}
 
+		$recursionGuard = true;
 		$title = self::newFromText( $msg->inContentLanguage()->text() );
+		$recursionGuard = false;
 
 		// Every page renders at least one link to the Main Page (e.g. sidebar).
 		// If the localised value is invalid, don't produce fatal errors that
@@ -694,31 +723,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			$title = self::newFromText( 'Main Page' );
 		}
 		return $title;
-	}
-
-	/**
-	 * Get the prefixed DB key associated with an ID
-	 *
-	 * @param int $id The page_id of the article
-	 * @return string|null An object representing the article, or null if no such article was found
-	 * @deprecated since 1.36, use Title::newFromID( $id )->getPrefixedDBkey() instead.
-	 */
-	public static function nameOf( $id ) {
-		wfDeprecated( __METHOD__, '1.36' );
-
-		$dbr = wfGetDB( DB_REPLICA );
-
-		$s = $dbr->selectRow(
-			'page',
-			[ 'page_namespace', 'page_title' ],
-			[ 'page_id' => $id ],
-			__METHOD__
-		);
-		if ( $s === false ) {
-			return null;
-		}
-
-		return self::makeName( $s->page_namespace, $s->page_title );
 	}
 
 	/**
@@ -799,6 +803,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 				$r0 = $d0;
 			}
 			// Do the output
+			// @phan-suppress-next-line PhanPluginRedundantAssignmentInLoop Confusing, $r1 is set later
 			if ( $x0 !== '' && $x1 === '-' && $x2 !== '' ) {
 				// Range
 				if ( $ord2 > $ord0 ) {
@@ -867,14 +872,14 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	/**
 	 * Callback for usort() to do title sorts by (namespace, title)
 	 *
-	 * @param LinkTarget $a
-	 * @param LinkTarget $b
+	 * @param LinkTarget|PageReference $a
+	 * @param LinkTarget|PageReference $b
 	 *
 	 * @return int Result of string comparison, or namespace comparison
 	 */
-	public static function compare( LinkTarget $a, LinkTarget $b ) {
+	public static function compare( $a, $b ) {
 		return $a->getNamespace() <=> $b->getNamespace()
-			?: strcmp( $a->getText(), $b->getText() );
+			?: strcmp( $a->getDBkey(), $b->getDBkey() );
 	}
 
 	/**
@@ -947,7 +952,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @return bool
 	 */
-	public function isExternal() {
+	public function isExternal(): bool {
 		return $this->mInterwiki !== '';
 	}
 
@@ -958,7 +963,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @return string Interwiki prefix
 	 */
-	public function getInterwiki() {
+	public function getInterwiki(): string {
 		return $this->mInterwiki;
 	}
 
@@ -1030,7 +1035,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @return string Main part of the title
 	 */
-	public function getText() {
+	public function getText(): string {
 		return $this->mTextform;
 	}
 
@@ -1062,6 +1067,16 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
+	 * @param int $flags
+	 *
+	 * @return bool Whether $flags indicates that the latest information should be
+	 *         read from the primary database, bypassing caches.
+	 */
+	private function shouldReadLatest( int $flags ) {
+		return ( $flags & ( self::READ_LATEST | self::GAID_FOR_UPDATE ) ) > 0;
+	}
+
+	/**
 	 * Get the page's content model id, see the CONTENT_MODEL_XXX constants.
 	 *
 	 * @todo Deprecate this in favor of SlotRecord::getModel()
@@ -1078,15 +1093,8 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			return $this->mContentModel;
 		}
 
-		if ( DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST ) ) {
-			$this->lazyFillContentModel( $this->loadFieldFromDB( 'page_content_model', $flags ) );
-		} elseif (
-			( !$this->mContentModel || $flags & self::GAID_FOR_UPDATE ) &&
-			$this->getArticleID( $flags )
-		) {
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$linkCache->addLinkObj( $this ); # in case we already had an article ID
-			$this->lazyFillContentModel( $linkCache->getGoodLinkFieldObj( $this, 'model' ) );
+		if ( $this->shouldReadLatest( $flags ) || !$this->mContentModel ) {
+			$this->lazyFillContentModel( $this->getFieldFromPageStore( 'page_content_model', $flags ) );
 		}
 
 		if ( !$this->mContentModel ) {
@@ -1116,6 +1124,9 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * ContentHandler::canBeUsedOn() should be checked before calling this
 	 * if there is any doubt regarding the applicability of the content model
 	 *
+	 * @warning This must only be used if the caller controls the further use of
+	 * this Title object, to avoid other code unexpectedly using the new value.
+	 *
 	 * @since 1.28
 	 * @param string $model CONTENT_MODEL_XXX constant
 	 */
@@ -1124,12 +1135,13 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			throw new InvalidArgumentException( "Missing CONTENT_MODEL_* constant" );
 		}
 
+		$this->uncache();
 		$this->mContentModel = $model;
 		$this->mForcedContentModel = true;
 	}
 
 	/**
-	 * If the content model field is not frozen then update it with a retreived value
+	 * If the content model field is not frozen then update it with a retrieved value
 	 *
 	 * @param string|bool $model CONTENT_MODEL_XXX constant or false
 	 */
@@ -1148,10 +1160,15 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		if ( $this->isExternal() ) {
 			// This probably shouldn't even happen, except for interwiki transclusion.
 			// If possible, use the canonical name for the foreign namespace.
-			$nsText = MediaWikiServices::getInstance()->getNamespaceInfo()->
-				getCanonicalName( $this->mNamespace );
-			if ( $nsText !== false ) {
-				return $nsText;
+			if ( $this->mNamespace === NS_MAIN ) {
+				// Optimisation
+				return '';
+			} else {
+				$nsText = MediaWikiServices::getInstance()->getNamespaceInfo()->
+					getCanonicalName( $this->mNamespace );
+				if ( $nsText !== false ) {
+					return $nsText;
+				}
 			}
 		}
 
@@ -1248,19 +1265,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
-	 * Can this title be added to a user's watchlist?
-	 *
-	 * False for relative section links (with getText() === ''),
-	 * interwiki links (with getInterwiki() !== ''), and pages in NS_SPECIAL.
-	 *
-	 * @return bool
-	 */
-	public function isWatchable() {
-		$nsInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
-		return $this->canExist() && $nsInfo->isWatchable( $this->mNamespace );
-	}
-
-	/**
 	 * Returns true if this is a special page.
 	 *
 	 * @return bool
@@ -1310,14 +1314,11 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	/**
 	 * Returns true if the title is inside the specified namespace.
 	 *
-	 * Please make use of this instead of comparing to getNamespace()
-	 * This function is much more resistant to changes we may make
-	 * to namespaces than code that makes direct comparisons.
 	 * @param int $ns The namespace
 	 * @return bool
 	 * @since 1.19
 	 */
-	public function inNamespace( $ns ) {
+	public function inNamespace( int $ns ): bool {
 		return MediaWikiServices::getInstance()->getNamespaceInfo()->
 			equals( $this->mNamespace, $ns );
 	}
@@ -1754,10 +1755,12 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/**
 	 * Get the default namespace index, for when there is no namespace
+	 * @deprecated since 1.37, no callers, should be removed.
 	 *
 	 * @return int Default namespace index
 	 */
 	public function getDefaultNamespace() {
+		wfDeprecated( __METHOD__, '1.37' );
 		return $this->mDefaultNamespace;
 	}
 
@@ -1768,7 +1771,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @return string Title fragment
 	 */
-	public function getFragment() {
+	public function getFragment(): string {
 		return $this->mFragment;
 	}
 
@@ -1778,7 +1781,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return bool
 	 * @since 1.23
 	 */
-	public function hasFragment() {
+	public function hasFragment(): bool {
 		return $this->mFragment !== '';
 	}
 
@@ -1807,15 +1810,14 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * specified fragment before setting, so it assumes you're passing it with
 	 * an initial "#".
 	 *
-	 * Deprecated for public use, use Title::makeTitle() with fragment parameter,
-	 * or Title::createFragmentTarget().
-	 * Still in active use privately.
+	 * @warning This must only be used if the caller controls the further use of
+	 * this Title object, to avoid other code unexpectedly using the new value.
 	 *
-	 * @internal
 	 * @param string $fragment Text
 	 */
 	public function setFragment( $fragment ) {
-		$this->mFragment = strtr( substr( $fragment, 1 ), '_', ' ' );
+		$this->uncache();
+		$this->mFragment = self::normalizeFragment( $fragment );
 	}
 
 	/**
@@ -1825,13 +1827,26 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @param string $fragment
 	 * @return Title
 	 */
-	public function createFragmentTarget( $fragment ) {
+	public function createFragmentTarget( string $fragment ): self {
 		return self::makeTitle(
 			$this->mNamespace,
 			$this->getText(),
 			$fragment,
 			$this->mInterwiki
 		);
+	}
+
+	/**
+	 * Normalizes fragment part of the title.
+	 *
+	 * @param string $fragment
+	 * @return string
+	 */
+	private static function normalizeFragment( $fragment ) {
+		if ( strpos( $fragment, '#' ) === 0 ) {
+			$fragment = substr( $fragment, 1 );
+		}
+		return strtr( $fragment, '_', ' ' );
 	}
 
 	/**
@@ -1987,7 +2002,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * # returns: Title{User:Foo}
 	 * @endcode
 	 *
-	 * @return Title Root title
+	 * @return Title
 	 * @since 1.20
 	 */
 	public function getRootTitle() {
@@ -2037,7 +2052,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * # returns: Title{User:Foo/Bar}
 	 * @endcode
 	 *
-	 * @return Title Base title
+	 * @return Title
 	 * @since 1.20
 	 */
 	public function getBaseTitle() {
@@ -2234,10 +2249,10 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *   The second parameter is deprecated since 1.19. Pass it as a key,value
 	 *   pair in the first parameter array instead.
 	 *
-	 * @return string String of the URL.
+	 * @return string
 	 */
 	public function getLocalURL( $query = '', $query2 = false ) {
-		global $wgArticlePath, $wgScript, $wgServer, $wgRequest, $wgMainPageIsDomainRoot;
+		global $wgArticlePath, $wgScript, $wgMainPageIsDomainRoot;
 
 		$query = self::fixUrlQueryArgs( $query, $query2 );
 
@@ -2254,7 +2269,11 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		} else {
 			$dbkey = wfUrlencode( $this->getPrefixedDBkey() );
 			if ( $query == '' ) {
-				$url = str_replace( '$1', $dbkey, $wgArticlePath );
+				if ( $wgMainPageIsDomainRoot && $this->isMainPage() ) {
+					$url = '/';
+				} else {
+					$url = str_replace( '$1', $dbkey, $wgArticlePath );
+				}
 				Hooks::runner()->onGetLocalURL__Article( $this, $url );
 			} else {
 				global $wgVariantArticlePath, $wgActionPaths;
@@ -2303,24 +2322,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 				}
 			}
 			Hooks::runner()->onGetLocalURL__Internal( $this, $url, $query );
-
-			// @todo FIXME: This causes breakage in various places when we
-			// actually expected a local URL and end up with dupe prefixes.
-			if ( $wgRequest->getVal( 'action' ) == 'render' ) {
-				LoggerFactory::getInstance( 'T263581' )
-					->debug(
-						"Title::getLocalURL called from render action",
-						[
-							'title' => $this->getPrefixedDBkey(),
-							'exception' => new Exception()
-						]
-					);
-				$url = $wgServer . $url;
-			}
-		}
-
-		if ( $wgMainPageIsDomainRoot && $this->isMainPage() && $query === '' ) {
-			return '/';
 		}
 
 		Hooks::runner()->onGetLocalURL( $this, $url, $query );
@@ -2414,207 +2415,98 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/**
 	 * Get a filtered list of all restriction types supported by this wiki.
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::listAllRestrictionTypes instead
+	 *
 	 * @param bool $exists True to get all restriction types that apply to
 	 * titles that do exist, False for all restriction types that apply to
 	 * titles that do not exist
 	 * @return array
 	 */
 	public static function getFilteredRestrictionTypes( $exists = true ) {
-		global $wgRestrictionTypes;
-		$types = $wgRestrictionTypes;
-		if ( $exists ) {
-			# Remove the create restriction for existing titles
-			$types = array_diff( $types, [ 'create' ] );
-		} else {
-			# Only the create and upload restrictions apply to non-existing titles
-			$types = array_intersect( $types, [ 'create', 'upload' ] );
-		}
-		return $types;
+		return MediaWikiServices::getInstance()
+			->getRestrictionStore()
+			->listAllRestrictionTypes( $exists );
 	}
 
 	/**
 	 * Returns restriction types for the current Title
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::listApplicableRestrictionTypes instead
+	 *
 	 * @return array Applicable restriction types
 	 */
 	public function getRestrictionTypes() {
-		if ( $this->isSpecialPage() ) {
-			return [];
-		}
-
-		$types = self::getFilteredRestrictionTypes( $this->exists() );
-
-		if ( $this->mNamespace !== NS_FILE ) {
-			# Remove the upload restriction for non-file titles
-			$types = array_diff( $types, [ 'upload' ] );
-		}
-
-		Hooks::runner()->onTitleGetRestrictionTypes( $this, $types );
-
-		wfDebug( __METHOD__ . ': applicable restrictions to [[' .
-			$this->getPrefixedText() . ']] are {' . implode( ',', $types ) . "}" );
-
-		return $types;
+		return MediaWikiServices::getInstance()
+			->getRestrictionStore()
+			->listApplicableRestrictionTypes( $this );
 	}
 
 	/**
 	 * Is this title subject to title protection?
 	 * Title protection is the one applied against creation of such title.
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::getRestrictions() instead
+	 *
 	 * @return array|bool An associative array representing any existent title
 	 *   protection, or false if there's none.
 	 */
 	public function getTitleProtection() {
-		$protection = $this->getTitleProtectionInternal();
-		if ( $protection ) {
-			if ( $protection['permission'] == 'sysop' ) {
-				$protection['permission'] = 'editprotected'; // B/C
-			}
-			if ( $protection['permission'] == 'autoconfirmed' ) {
-				$protection['permission'] = 'editsemiprotected'; // B/C
-			}
-		}
-		return $protection;
-	}
-
-	/**
-	 * Fetch title protection settings
-	 *
-	 * To work correctly, $this->loadRestrictions() needs to have access to the
-	 * actual protections in the database without munging 'sysop' =>
-	 * 'editprotected' and 'autoconfirmed' => 'editsemiprotected'. Other
-	 * callers probably want $this->getTitleProtection() instead.
-	 *
-	 * @return array|bool
-	 */
-	protected function getTitleProtectionInternal() {
-		// Can't protect pages in special namespaces
-		if ( $this->mNamespace < 0 ) {
-			return false;
-		}
-
-		// Can't protect pages that exist.
-		if ( $this->exists() ) {
-			return false;
-		}
-
-		if ( $this->mTitleProtection === null ) {
-			$dbr = wfGetDB( DB_REPLICA );
-			$commentStore = CommentStore::getStore();
-			$commentQuery = $commentStore->getJoin( 'pt_reason' );
-			$res = $dbr->select(
-				[ 'protected_titles' ] + $commentQuery['tables'],
-				[
-					'user' => 'pt_user',
-					'expiry' => 'pt_expiry',
-					'permission' => 'pt_create_perm'
-				] + $commentQuery['fields'],
-				[ 'pt_namespace' => $this->mNamespace, 'pt_title' => $this->mDbkeyform ],
-				__METHOD__,
-				[],
-				$commentQuery['joins']
-			);
-
-			// fetchRow returns false if there are no rows.
-			$row = $dbr->fetchRow( $res );
-			if ( $row ) {
-				$this->mTitleProtection = [
-					'user' => $row['user'],
-					'expiry' => $dbr->decodeExpiry( $row['expiry'] ),
-					'permission' => $row['permission'],
-					'reason' => $commentStore->getComment( 'pt_reason', $row )->text,
-				];
-			} else {
-				$this->mTitleProtection = false;
-			}
-		}
-		return $this->mTitleProtection;
+		return MediaWikiServices::getInstance()->getRestrictionStore()->getCreateProtection( $this )
+			?: false;
 	}
 
 	/**
 	 * Remove any title protection due to page existing
+	 *
+	 * @deprecated since 1.37, do not use (this is only for WikiPage::onArticleCreate)
 	 */
 	public function deleteTitleProtection() {
-		$dbw = wfGetDB( DB_MASTER );
-
-		$dbw->delete(
-			'protected_titles',
-			[ 'pt_namespace' => $this->mNamespace, 'pt_title' => $this->mDbkeyform ],
-			__METHOD__
-		);
-		$this->mTitleProtection = false;
+		MediaWikiServices::getInstance()->getRestrictionStore()->deleteCreateProtection( $this );
 	}
 
 	/**
 	 * Is this page "semi-protected" - the *only* protection levels are listed
 	 * in $wgSemiprotectedRestrictionLevels?
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::isSemiProtected instead
+	 *
 	 * @param string $action Action to check (default: edit)
 	 * @return bool
 	 */
 	public function isSemiProtected( $action = 'edit' ) {
-		global $wgSemiprotectedRestrictionLevels;
-
-		$restrictions = $this->getRestrictions( $action );
-		$semi = $wgSemiprotectedRestrictionLevels;
-		if ( !$restrictions || !$semi ) {
-			// Not protected, or all protection is full protection
-			return false;
-		}
-
-		// Remap autoconfirmed to editsemiprotected for BC
-		foreach ( array_keys( $semi, 'autoconfirmed' ) as $key ) {
-			$semi[$key] = 'editsemiprotected';
-		}
-		foreach ( array_keys( $restrictions, 'autoconfirmed' ) as $key ) {
-			$restrictions[$key] = 'editsemiprotected';
-		}
-
-		return !array_diff( $restrictions, $semi );
+		return MediaWikiServices::getInstance()->getRestrictionStore()->isSemiProtected(
+			$this, $action
+		);
 	}
 
 	/**
 	 * Does the title correspond to a protected article?
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::isProtected instead
 	 *
 	 * @param string $action The action the page is protected from,
 	 * by default checks all actions.
 	 * @return bool
 	 */
 	public function isProtected( $action = '' ) {
-		global $wgRestrictionLevels;
-
-		$restrictionTypes = $this->getRestrictionTypes();
-
-		# Special pages have inherent protection
-		if ( $this->isSpecialPage() ) {
-			return true;
-		}
-
-		# Check regular protection levels
-		foreach ( $restrictionTypes as $type ) {
-			if ( $action == $type || $action == '' ) {
-				$r = $this->getRestrictions( $type );
-				foreach ( $wgRestrictionLevels as $level ) {
-					if ( in_array( $level, $r ) && $level != '' ) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
+		return MediaWikiServices::getInstance()->getRestrictionStore()->isProtected(
+			$this, $action
+		);
 	}
 
 	/**
 	 * Determines if $user is unable to edit this page because it has been protected
 	 * by $wgNamespaceProtection.
 	 *
-	 * @deprecated since 1.34 Don't use this function in new code.
+	 * @deprecated since 1.34, hard-deprecated since 1.37
 	 * @param User $user User object to check permissions
 	 * @return bool
 	 */
 	public function isNamespaceProtected( User $user ) {
 		global $wgNamespaceProtection;
+
+		wfDeprecated( __METHOD__, '1.34' );
 
 		if ( isset( $wgNamespaceProtection[$this->mNamespace] ) ) {
 			$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
@@ -2630,131 +2522,73 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	/**
 	 * Cascading protection: Return true if cascading restrictions apply to this page, false if not.
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::isCascadeProtected instead
+	 *
 	 * @return bool If the page is subject to cascading restrictions.
 	 */
 	public function isCascadeProtected() {
-		list( $isCascadeProtected, ) = $this->getCascadeProtectionSources( false );
-		return $isCascadeProtected;
+		return MediaWikiServices::getInstance()->getRestrictionStore()->isCascadeProtected( $this );
 	}
 
 	/**
 	 * Determines whether cascading protection sources have already been loaded from
 	 * the database.
 	 *
-	 * @param bool $getPages True to check if the pages are loaded, or false to check
-	 * if the status is loaded.
-	 * @return bool Whether or not the specified information has been loaded
+	 * @deprecated since 1.37, use RestrictionStore::areCascadeProtectionSourcesLoaded instead
+	 *
+	 * @return bool
 	 * @since 1.23
 	 */
-	public function areCascadeProtectionSourcesLoaded( $getPages = true ) {
-		return $getPages ? $this->mCascadeSources !== null : $this->mHasCascadingRestrictions !== null;
+	public function areCascadeProtectionSourcesLoaded() {
+		return MediaWikiServices::getInstance()->getRestrictionStore()
+			->areCascadeProtectionSourcesLoaded( $this );
 	}
 
 	/**
 	 * Cascading protection: Get the source of any cascading restrictions on this page.
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::getCascadeProtectionSources instead
+	 *
 	 * @param bool $getPages Whether or not to retrieve the actual pages
 	 *        that the restrictions have come from and the actual restrictions
 	 *        themselves.
 	 * @return array Two elements: First is an array of Title objects of the
-	 *        pages from which cascading restrictions have come, false for
-	 *        none, or true if such restrictions exist but $getPages was not
-	 *        set. Second is an array like that returned by
-	 *        Title::getAllRestrictions(), or an empty array if $getPages is
-	 *        false.
+	 *        pages from which cascading restrictions have come if $getPages
+	 *        is true, or a bool indicating whetehr any cascading protection
+	 *        applies if $getPages was set to false.
+	 *        Second is an array like that returned by Title::getAllRestrictions(),
+	 *        or an empty array if $getPages is false.
 	 */
 	public function getCascadeProtectionSources( $getPages = true ) {
-		$pagerestrictions = [];
-
-		if ( $this->mCascadeSources !== null && $getPages ) {
-			return [ $this->mCascadeSources, $this->mCascadingRestrictions ];
-		} elseif ( $this->mHasCascadingRestrictions !== null && !$getPages ) {
-			return [ $this->mHasCascadingRestrictions, $pagerestrictions ];
+		$restrictionStore = MediaWikiServices::getInstance()->getRestrictionStore();
+		if ( !$getPages ) {
+			return [ $restrictionStore->isCascadeProtected( $this ), [] ];
 		}
 
-		$dbr = wfGetDB( DB_REPLICA );
-
-		if ( $this->mNamespace === NS_FILE ) {
-			$tables = [ 'imagelinks', 'page_restrictions' ];
-			$where_clauses = [
-				'il_to' => $this->mDbkeyform,
-				'il_from=pr_page',
-				'pr_cascade' => 1
-			];
-		} else {
-			$tables = [ 'templatelinks', 'page_restrictions' ];
-			$where_clauses = [
-				'tl_namespace' => $this->mNamespace,
-				'tl_title' => $this->mDbkeyform,
-				'tl_from=pr_page',
-				'pr_cascade' => 1
-			];
-		}
-
-		if ( $getPages ) {
-			$cols = [ 'pr_page', 'page_namespace', 'page_title',
-				'pr_expiry', 'pr_type', 'pr_level' ];
-			$where_clauses[] = 'page_id=pr_page';
-			$tables[] = 'page';
-		} else {
-			$cols = [ 'pr_expiry' ];
-		}
-
-		$res = $dbr->select( $tables, $cols, $where_clauses, __METHOD__ );
-
-		$sources = $getPages ? [] : false;
-		$now = wfTimestampNow();
-
-		foreach ( $res as $row ) {
-			$expiry = $dbr->decodeExpiry( $row->pr_expiry );
-			if ( $expiry > $now ) {
-				if ( $getPages ) {
-					$page_id = $row->pr_page;
-					$page_ns = $row->page_namespace;
-					$page_title = $row->page_title;
-					$sources[$page_id] = self::makeTitle( $page_ns, $page_title );
-					# Add groups needed for each restriction type if its not already there
-					# Make sure this restriction type still exists
-
-					if ( !isset( $pagerestrictions[$row->pr_type] ) ) {
-						$pagerestrictions[$row->pr_type] = [];
-					}
-
-					if (
-						isset( $pagerestrictions[$row->pr_type] )
-						&& !in_array( $row->pr_level, $pagerestrictions[$row->pr_type] )
-					) {
-						$pagerestrictions[$row->pr_type][] = $row->pr_level;
-					}
-				} else {
-					$sources = true;
-				}
-			}
-		}
-
-		if ( $getPages ) {
-			$this->mCascadeSources = $sources;
-			$this->mCascadingRestrictions = $pagerestrictions;
-		} else {
-			$this->mHasCascadingRestrictions = $sources;
-		}
-
-		return [ $sources, $pagerestrictions ];
+		$ret = $restrictionStore->getCascadeProtectionSources( $this );
+		$ret[0] = array_map( 'Title::castFromPageIdentity', $ret[0] );
+		return $ret;
 	}
 
 	/**
 	 * Accessor for mRestrictionsLoaded
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::areRestrictionsLoaded instead
 	 *
 	 * @return bool Whether or not the page's restrictions have already been
 	 * loaded from the database
 	 * @since 1.23
 	 */
 	public function areRestrictionsLoaded() {
-		return $this->mRestrictionsLoaded;
+		return MediaWikiServices::getInstance()
+			->getRestrictionStore()
+			->areRestrictionsLoaded( $this );
 	}
 
 	/**
 	 * Accessor/initialisation for mRestrictions
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::getRestrictions instead
 	 *
 	 * @param string $action Action that permission needs to be checked for
 	 * @return array Restriction levels needed to take the action. All levels are
@@ -2763,57 +2597,56 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *     be mapped to 'editprotected' and 'editsemiprotected' respectively.
 	 */
 	public function getRestrictions( $action ) {
-		if ( !$this->mRestrictionsLoaded ) {
-			$this->loadRestrictions();
-		}
-		return $this->mRestrictions[$action] ?? [];
+		return MediaWikiServices::getInstance()->getRestrictionStore()->getRestrictions( $this, $action );
 	}
 
 	/**
 	 * Accessor/initialisation for mRestrictions
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::getAllRestrictions instead
 	 *
 	 * @return array Keys are actions, values are arrays as returned by
 	 *     Title::getRestrictions()
 	 * @since 1.23
 	 */
 	public function getAllRestrictions() {
-		if ( !$this->mRestrictionsLoaded ) {
-			$this->loadRestrictions();
-		}
-		return $this->mRestrictions;
+		return MediaWikiServices::getInstance()->getRestrictionStore()->getAllRestrictions( $this );
 	}
 
 	/**
 	 * Get the expiry time for the restriction against a given action
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::getRestrictionExpiry instead
 	 *
 	 * @param string $action
 	 * @return string|bool 14-char timestamp, or 'infinity' if the page is protected forever
 	 *     or not protected at all, or false if the action is not recognised.
 	 */
 	public function getRestrictionExpiry( $action ) {
-		if ( !$this->mRestrictionsLoaded ) {
-			$this->loadRestrictions();
-		}
-		return $this->mRestrictionsExpiry[$action] ?? false;
+		return MediaWikiServices::getInstance()->getRestrictionStore()->getRestrictionExpiry(
+			$this, $action
+		) ?? false;
 	}
 
 	/**
 	 * Returns cascading restrictions for the current article
 	 *
+	 * @deprecated since 1.37, use RestrictionStore::areRestrictionsCascading instead
+	 *
 	 * @return bool
 	 */
 	public function areRestrictionsCascading() {
-		if ( !$this->mRestrictionsLoaded ) {
-			$this->loadRestrictions();
-		}
-
-		return $this->mCascadeRestriction;
+		return MediaWikiServices::getInstance()
+			->getRestrictionStore()
+			->areRestrictionsCascading( $this );
 	}
 
 	/**
 	 * Compiles list of active page restrictions from both page table (pre 1.10)
 	 * and page_restrictions table for this existing page.
 	 * Public for usage by LiquidThreads.
+	 *
+	 * @deprecated since 1.37, use RestrictionStore::loadRestrictionsFromRows instead
 	 *
 	 * @param stdClass[] $rows Array of db result objects
 	 * @param string|null $oldFashionedRestrictions Comma-separated set of permission keys
@@ -2822,157 +2655,36 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * Example: "edit=autoconfirmed,sysop:move=sysop"
 	 */
 	public function loadRestrictionsFromRows( $rows, $oldFashionedRestrictions = null ) {
-		// This function will only read rows from a table that we migrated away
-		// from before adding READ_LATEST support to loadRestrictions, so we
-		// don't need to support reading from DB_MASTER here.
-		$dbr = wfGetDB( DB_REPLICA );
-
-		$restrictionTypes = $this->getRestrictionTypes();
-
-		foreach ( $restrictionTypes as $type ) {
-			$this->mRestrictions[$type] = [];
-			$this->mRestrictionsExpiry[$type] = 'infinity';
-		}
-
-		$this->mCascadeRestriction = false;
-
-		# Backwards-compatibility: also load the restrictions from the page record (old format).
-		if ( $oldFashionedRestrictions !== null ) {
-			$this->mOldRestrictions = $oldFashionedRestrictions;
-		}
-
-		if ( $this->mOldRestrictions === false ) {
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$linkCache->addLinkObj( $this ); # in case we already had an article ID
-			$this->mOldRestrictions = $linkCache->getGoodLinkFieldObj( $this, 'restrictions' );
-		}
-
-		if ( $this->mOldRestrictions != '' ) {
-			foreach ( explode( ':', trim( $this->mOldRestrictions ) ) as $restrict ) {
-				$temp = explode( '=', trim( $restrict ) );
-				if ( count( $temp ) == 1 ) {
-					// old old format should be treated as edit/move restriction
-					$this->mRestrictions['edit'] = explode( ',', trim( $temp[0] ) );
-					$this->mRestrictions['move'] = explode( ',', trim( $temp[0] ) );
-				} else {
-					$restriction = trim( $temp[1] );
-					if ( $restriction != '' ) { // some old entries are empty
-						$this->mRestrictions[$temp[0]] = explode( ',', $restriction );
-					}
-				}
-			}
-		}
-
-		if ( count( $rows ) ) {
-			# Current system - load second to make them override.
-			$now = wfTimestampNow();
-
-			# Cycle through all the restrictions.
-			foreach ( $rows as $row ) {
-				// Don't take care of restrictions types that aren't allowed
-				if ( !in_array( $row->pr_type, $restrictionTypes ) ) {
-					continue;
-				}
-
-				$expiry = $dbr->decodeExpiry( $row->pr_expiry );
-
-				// Only apply the restrictions if they haven't expired!
-				if ( !$expiry || $expiry > $now ) {
-					$this->mRestrictionsExpiry[$row->pr_type] = $expiry;
-					$this->mRestrictions[$row->pr_type] = explode( ',', trim( $row->pr_level ) );
-
-					$this->mCascadeRestriction = $this->mCascadeRestriction || $row->pr_cascade;
-				}
-			}
-		}
-
-		$this->mRestrictionsLoaded = true;
+		MediaWikiServices::getInstance()->getRestrictionStore()->loadRestrictionsFromRows(
+			$this, $rows, $oldFashionedRestrictions
+		);
 	}
 
 	/**
 	 * Load restrictions from the page_restrictions table
+	 *
+	 * @deprecated since 1.37, no public replacement
 	 *
 	 * @param string|null $oldFashionedRestrictions Comma-separated set of permission keys
 	 * indicating who can move or edit the page from the page table, (pre 1.10) rows.
 	 * Edit and move sections are separated by a colon
 	 * Example: "edit=autoconfirmed,sysop:move=sysop"
 	 * @param int $flags A bit field. If self::READ_LATEST is set, skip replicas and read
-	 *  from the master DB.
+	 *  from the primary DB.
 	 */
 	public function loadRestrictions( $oldFashionedRestrictions = null, $flags = 0 ) {
-		$readLatest = DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST );
-		if ( $this->mRestrictionsLoaded && !$readLatest ) {
-			return;
-		}
-
-		$id = $this->getArticleID( $flags );
-		if ( $id ) {
-			$fname = __METHOD__;
-			$loadRestrictionsFromDb = static function ( IDatabase $dbr ) use ( $fname, $id ) {
-				return iterator_to_array(
-					$dbr->select(
-						'page_restrictions',
-						[ 'pr_type', 'pr_expiry', 'pr_level', 'pr_cascade' ],
-						[ 'pr_page' => $id ],
-						$fname
-					)
-				);
-			};
-
-			if ( $readLatest ) {
-				$dbr = wfGetDB( DB_MASTER );
-				$rows = $loadRestrictionsFromDb( $dbr );
-			} else {
-				$cache = MediaWikiServices::getInstance()->getMainWANObjectCache();
-				$rows = $cache->getWithSetCallback(
-					// Page protections always leave a new null revision
-					$cache->makeKey( 'page-restrictions', 'v1', $id, $this->getLatestRevID() ),
-					$cache::TTL_DAY,
-					static function ( $curValue, &$ttl, array &$setOpts ) use ( $loadRestrictionsFromDb ) {
-						$dbr = wfGetDB( DB_REPLICA );
-
-						$setOpts += Database::getCacheSetOptions( $dbr );
-						$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
-						if ( $lb->hasOrMadeRecentMasterChanges() ) {
-							// @TODO: cleanup Title cache and caller assumption mess in general
-							$ttl = WANObjectCache::TTL_UNCACHEABLE;
-						}
-
-						return $loadRestrictionsFromDb( $dbr );
-					}
-				);
-			}
-
-			$this->loadRestrictionsFromRows( $rows, $oldFashionedRestrictions );
-		} else {
-			$title_protection = $this->getTitleProtectionInternal();
-
-			if ( $title_protection ) {
-				$now = wfTimestampNow();
-				$expiry = wfGetDB( DB_REPLICA )->decodeExpiry( $title_protection['expiry'] );
-
-				if ( !$expiry || $expiry > $now ) {
-					// Apply the restrictions
-					$this->mRestrictionsExpiry['create'] = $expiry;
-					$this->mRestrictions['create'] =
-						explode( ',', trim( $title_protection['permission'] ) );
-				} else { // Get rid of the old restrictions
-					$this->mTitleProtection = false;
-				}
-			} else {
-				$this->mRestrictionsExpiry['create'] = 'infinity';
-			}
-			$this->mRestrictionsLoaded = true;
-		}
+		MediaWikiServices::getInstance()->getRestrictionStore()->loadRestrictions( $this, $flags,
+			$oldFashionedRestrictions );
 	}
 
 	/**
 	 * Flush the protection cache in this object and force reload from the database.
 	 * This is used when updating protection from WikiPage::doUpdateRestrictions().
+	 *
+	 * @deprecated since 1.37, now internal
 	 */
 	public function flushRestrictions() {
-		$this->mRestrictionsLoaded = false;
-		$this->mTitleProtection = null;
+		MediaWikiServices::getInstance()->getRestrictionStore()->flushRestrictions( $this );
 	}
 
 	/**
@@ -2986,7 +2698,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		}
 
 		DeferredUpdates::addUpdate( new AtomicSectionUpdate(
-			wfGetDB( DB_MASTER ),
+			wfGetDB( DB_PRIMARY ),
 			__METHOD__,
 			static function ( IDatabase $dbw, $fname ) {
 				$config = MediaWikiServices::getInstance()->getMainConfig();
@@ -3004,7 +2716,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		) );
 
 		DeferredUpdates::addUpdate( new AtomicSectionUpdate(
-			wfGetDB( DB_MASTER ),
+			wfGetDB( DB_PRIMARY ),
 			__METHOD__,
 			static function ( IDatabase $dbw, $fname ) {
 				$dbw->delete(
@@ -3035,11 +2747,8 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		# around uninitialized in every Title object; therefore we only add it
 		# if needed and don't declare it statically.
 		if ( $this->mHasSubpages === null ) {
-			$this->mHasSubpages = false;
 			$subpages = $this->getSubpages( 1 );
-			if ( $subpages instanceof TitleArray ) {
-				$this->mHasSubpages = (bool)$subpages->current();
-			}
+			$this->mHasSubpages = $subpages instanceof TitleArray && $subpages->count();
 		}
 
 		return $this->mHasSubpages;
@@ -3153,27 +2862,14 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return int The ID
 	 */
 	public function getArticleID( $flags = 0 ) {
-		if ( $this->mNamespace < 0 ) {
+		if ( $this->mArticleID === -1 && !$this->canExist() ) {
 			$this->mArticleID = 0;
 
 			return $this->mArticleID;
 		}
 
-		if ( $flags & self::GAID_FOR_UPDATE ) {
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$oldUpdate = $linkCache->forUpdate( true );
-			$linkCache->clearLink( $this );
-			$this->mArticleID = $linkCache->addLinkObj( $this );
-			$linkCache->forUpdate( $oldUpdate );
-		} elseif ( DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST ) ) {
-			// If mArticleID is >0, pageCond() will use it, making it impossible
-			// for the call below to return a different result, e.g. after a
-			// page move.
-			$this->mArticleID = -1;
-			$this->mArticleID = (int)$this->loadFieldFromDB( 'page_id', $flags );
-		} elseif ( $this->mArticleID == -1 ) {
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$this->mArticleID = $linkCache->addLinkObj( $this );
+		if ( $this->mArticleID === -1 || $this->shouldReadLatest( $flags ) ) {
+			$this->mArticleID = (int)$this->getFieldFromPageStore( 'page_id', $flags );
 		}
 
 		return $this->mArticleID;
@@ -3194,18 +2890,8 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return bool
 	 */
 	public function isRedirect( $flags = 0 ) {
-		if ( DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST ) ) {
-			$this->mRedirect = (bool)$this->loadFieldFromDB( 'page_is_redirect', $flags );
-		} elseif ( $this->mRedirect === null ) {
-			if ( $this->getArticleID( $flags ) ) {
-				$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-				$linkCache->addLinkObj( $this ); // in case we already had an article ID
-				// Note that LinkCache returns null if it thinks the page does not exist;
-				// always trust the state of LinkCache over that of this Title instance.
-				$this->mRedirect = (bool)$linkCache->getGoodLinkFieldObj( $this, 'redirect' );
-			} else {
-				$this->mRedirect = false;
-			}
+		if ( $this->shouldReadLatest( $flags ) || $this->mRedirect === null ) {
+			$this->mRedirect = (bool)$this->getFieldFromPageStore( 'page_is_redirect', $flags );
 		}
 
 		return $this->mRedirect;
@@ -3219,21 +2905,12 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return int
 	 */
 	public function getLength( $flags = 0 ) {
-		if ( DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST ) ) {
-			$this->mLength = (int)$this->loadFieldFromDB( 'page_len', $flags );
-		} else {
-			if ( $this->mLength != -1 ) {
-				return $this->mLength;
-			} elseif ( !$this->getArticleID( $flags ) ) {
-				$this->mLength = 0;
-				return $this->mLength;
-			}
+		if ( $this->shouldReadLatest( $flags ) || $this->mLength < 0 ) {
+			$this->mLength = (int)$this->getFieldFromPageStore( 'page_len', $flags );
+		}
 
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$linkCache->addLinkObj( $this ); // in case we already had an article ID
-			// Note that LinkCache returns null if it thinks the page does not exist;
-			// always trust the state of LinkCache over that of this Title instance.
-			$this->mLength = (int)$linkCache->getGoodLinkFieldObj( $this, 'length' );
+		if ( $this->mLength < 0 ) {
+			$this->mLength = 0;
 		}
 
 		return $this->mLength;
@@ -3246,22 +2923,12 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return int Int or 0 if the page doesn't exist
 	 */
 	public function getLatestRevID( $flags = 0 ) {
-		if ( DBAccessObjectUtils::hasFlags( $flags, self::READ_LATEST ) ) {
-			$this->mLatestID = (int)$this->loadFieldFromDB( 'page_latest', $flags );
-		} else {
-			if ( $this->mLatestID !== false ) {
-				return (int)$this->mLatestID;
-			} elseif ( !$this->getArticleID( $flags ) ) {
-				$this->mLatestID = 0;
+		if ( $this->shouldReadLatest( $flags ) || $this->mLatestID === false ) {
+			$this->mLatestID = (int)$this->getFieldFromPageStore( 'page_latest', $flags );
+		}
 
-				return $this->mLatestID;
-			}
-
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$linkCache->addLinkObj( $this ); // in case we already had an article ID
-			// Note that LinkCache returns null if it thinks the page does not exist;
-			// always trust the state of LinkCache over that of this Title instance.
-			$this->mLatestID = (int)$linkCache->getGoodLinkFieldObj( $this, 'revision' );
+		if ( !$this->mLatestID ) {
+			$this->mLatestID = 0;
 		}
 
 		return $this->mLatestID;
@@ -3286,9 +2953,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		} else {
 			$this->mArticleID = (int)$id;
 		}
-		$this->mRestrictionsLoaded = false;
-		$this->mRestrictions = [];
-		$this->mOldRestrictions = false;
 		$this->mRedirect = null;
 		$this->mLength = -1;
 		$this->mLatestID = false;
@@ -3300,6 +2964,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		$this->mIsBigDeletion = null;
 
 		MediaWikiServices::getInstance()->getLinkCache()->clearLink( $this );
+		MediaWikiServices::getInstance()->getRestrictionStore()->flushRestrictions( $this );
 	}
 
 	public static function clearCaches() {
@@ -3388,18 +3053,18 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @param array $options May be FOR UPDATE
 	 * @param string $table Table name
 	 * @param string $prefix Fields prefix
-	 * @return Title[] Array of Title objects linking here
+	 * @return Title[]
 	 */
 	public function getLinksTo( $options = [], $table = 'pagelinks', $prefix = 'pl' ) {
 		if ( count( $options ) > 0 ) {
-			$db = wfGetDB( DB_MASTER );
+			$db = wfGetDB( DB_PRIMARY );
 		} else {
 			$db = wfGetDB( DB_REPLICA );
 		}
 
 		$res = $db->select(
 			[ 'page', $table ],
-			self::getSelectFields(),
+			LinkCache::getSelectFields(),
 			[
 				"{$prefix}_from=page_id",
 				"{$prefix}_namespace" => $this->mNamespace,
@@ -3430,7 +3095,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * On heavily-used templates it will max out the memory.
 	 *
 	 * @param array $options Query option to Database::select()
-	 * @return Title[] Array of Title the Title objects linking here
+	 * @return Title[]
 	 */
 	public function getTemplateLinksTo( $options = [] ) {
 		return $this->getLinksTo( $options, 'templatelinks', 'tl' );
@@ -3500,7 +3165,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * On heavily-used templates it will max out the memory.
 	 *
 	 * @param array $options May be FOR UPDATE
-	 * @return Title[] Array of Title the Title objects used here
+	 * @return Title[]
 	 */
 	public function getTemplateLinksFrom( $options = [] ) {
 		return $this->getLinksFrom( $options, 'templatelinks', 'tl' );
@@ -3512,7 +3177,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @todo check if needed (used only in SpecialBrokenRedirects.php, and
 	 *   should use redirect table in this case).
-	 * @return Title[] Array of Title the Title objects
+	 * @return Title[]
 	 */
 	public function getBrokenLinksFrom() {
 		if ( $this->getArticleID() == 0 ) {
@@ -3547,8 +3212,8 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	/**
 	 * Get a list of URLs to purge from the CDN cache when this page changes.
 	 *
-	 * @deprecated 1.35 Use HtmlCacheUpdater
-	 * @return string[] Array of String the URLs
+	 * @deprecated since 1.35 Use HtmlCacheUpdater
+	 * @return string[]
 	 */
 	public function getCdnUrls() {
 		$htmlCache = MediaWikiServices::getInstance()->getHtmlCacheUpdater();
@@ -3557,7 +3222,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 
 	/**
 	 * Purge all applicable CDN URLs
-	 * @deprecated 1.35 Use HtmlCacheUpdater
+	 * @deprecated since 1.35 Use HtmlCacheUpdater
 	 */
 	public function purgeSquid() {
 		$htmlCache = MediaWikiServices::getInstance()->getHtmlCacheUpdater();
@@ -3572,7 +3237,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @return bool
 	 */
 	public function isSingleRevRedirect() {
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$dbw->startAtomic( __METHOD__ );
 
 		$row = $dbw->selectRow(
@@ -3681,95 +3346,21 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
-	 * Get next/previous revision ID relative to another revision ID
-	 * @param int $revId Revision ID. Get the revision that was before this one.
-	 * @param int $flags Bitfield of class READ_* constants
-	 * @param string $dir 'next' or 'prev'
-	 * @return int|bool New revision ID, or false if none exists
-	 */
-	private function getRelativeRevisionID( $revId, $flags, $dir ) {
-		$rl = MediaWikiServices::getInstance()->getRevisionLookup();
-		$rev = $rl->getRevisionById( $revId, $flags );
-		if ( !$rev ) {
-			return false;
-		}
-
-		$oldRev = ( $dir === 'next' )
-			? $rl->getNextRevision( $rev, $flags )
-			: $rl->getPreviousRevision( $rev, $flags );
-
-		return $oldRev ? $oldRev->getId() : false;
-	}
-
-	/**
-	 * Get the revision ID of the previous revision
+	 * Check if this is a new page.
 	 *
-	 * @deprecated since 1.34, use RevisionLookup::getPreviousRevision
-	 * @param int $revId Revision ID. Get the revision that was before this one.
-	 * @param int $flags Bitfield of class READ_* constants
-	 * @return int|bool Old revision ID, or false if none exists
-	 */
-	public function getPreviousRevisionID( $revId, $flags = 0 ) {
-		wfDeprecated( __METHOD__, '1.34' );
-		return $this->getRelativeRevisionID( $revId, $flags, 'prev' );
-	}
-
-	/**
-	 * Get the revision ID of the next revision
-	 *
-	 * @deprecated since 1.34, use RevisionLookup::getNextRevision
-	 * @param int $revId Revision ID. Get the revision that was after this one.
-	 * @param int $flags Bitfield of class READ_* constants
-	 * @return int|bool Next revision ID, or false if none exists
-	 */
-	public function getNextRevisionID( $revId, $flags = 0 ) {
-		wfDeprecated( __METHOD__, '1.34' );
-		return $this->getRelativeRevisionID( $revId, $flags, 'next' );
-	}
-
-	/**
-	 * Get the first revision of the page
-	 *
-	 * @deprecated since 1.35. Use RevisionLookup::getFirstRevision instead.
-	 * @param int $flags Bitfield of class READ_* constants
-	 * @return Revision|null If page doesn't exist
-	 */
-	public function getFirstRevision( $flags = 0 ) {
-		wfDeprecated( __METHOD__, '1.35' );
-		$flags |= ( $flags & self::GAID_FOR_UPDATE ) ? self::READ_LATEST : 0; // b/c
-		$rev = MediaWikiServices::getInstance()
-			->getRevisionLookup()
-			->getFirstRevision( $this, $flags );
-		return $rev ? new Revision( $rev ) : null;
-	}
-
-	/**
-	 * Get the oldest revision timestamp of this page
-	 *
-	 * @deprecated since 1.35. Use RevisionLookup::getFirstRevision instead.
-	 * @param int $flags Bitfield of class READ_* constants
-	 * @return string|null MW timestamp
-	 */
-	public function getEarliestRevTime( $flags = 0 ) {
-		wfDeprecated( __METHOD__, '1.35' );
-		$rev = MediaWikiServices::getInstance()
-			->getRevisionLookup()
-			->getFirstRevision( $this, $flags );
-		return $rev ? $rev->getTimestamp() : null;
-	}
-
-	/**
-	 * Check if this is a new page
+	 * @note This returns false if the page does not exist.
+	 * @param int $flags one of the READ_XXX constants.
 	 *
 	 * @return bool
 	 */
-	public function isNewPage() {
-		$dbr = wfGetDB( DB_REPLICA );
-		return (bool)$dbr->selectField( 'page', 'page_is_new', $this->pageCond(), __METHOD__ );
+	public function isNewPage( $flags = self::READ_NORMAL ) {
+		// NOTE: we rely on PHP casting "0" to false here.
+		return (bool)$this->getFieldFromPageStore( 'page_is_new', $flags );
 	}
 
 	/**
 	 * Check whether the number of revisions of this page surpasses $wgDeleteRevisionsLimit
+	 * @deprecated since 1.37 External callers shouldn't need to know about this.
 	 *
 	 * @return bool
 	 */
@@ -3817,46 +3408,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
-	 * Get the number of authors between the given revisions or revision IDs.
-	 * Used for diffs and other things that really need it.
-	 *
-	 * @deprecated since 1.35 Use RevisionStore::countAuthorsBetween instead.
-	 *
-	 * @param int|Revision $old Old revision or rev ID (first before range by default)
-	 * @param int|Revision $new New revision or rev ID (first after range by default)
-	 * @param int $limit Maximum number of authors
-	 * @param string|array $options (Optional): Single option, or an array of options:
-	 *     'include_old' Include $old in the range; $new is excluded.
-	 *     'include_new' Include $new in the range; $old is excluded.
-	 *     'include_both' Include both $old and $new in the range.
-	 *     Unknown option values are ignored.
-	 * @return int Number of revision authors in the range; zero if not both revisions exist
-	 */
-	public function countAuthorsBetween( $old, $new, $limit, $options = [] ) {
-		wfDeprecated( __METHOD__, '1.35' );
-		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
-
-		if ( !( $old instanceof Revision ) ) {
-			$old = Revision::newFromTitle( $this, (int)$old );
-		}
-		if ( !( $new instanceof Revision ) ) {
-			$new = Revision::newFromTitle( $this, (int)$new );
-		}
-		if ( !$old || !$new ) {
-			return 0; // nothing to compare
-		}
-
-		return $revisionStore->countAuthorsBetween(
-			$this->getArticleID(),
-			$old->getRevisionRecord(),
-			$new->getRevisionRecord(),
-			null,
-			$limit,
-			$options
-		);
-	}
-
-	/**
 	 * Compares with another Title.
 	 *
 	 * A Title object is considered equal to another Title if it has the same text,
@@ -3890,7 +3441,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * @param LinkTarget $other
 	 * @return bool
 	 */
-	public function isSameLinkAs( LinkTarget $other ) {
+	public function isSameLinkAs( LinkTarget $other ): bool {
 		// NOTE: keep in sync with TitleValue::isSameLinkAs()!
 		// NOTE: === is needed for number-like titles
 		return ( $other->getInterwiki() === $this->getInterwiki() )
@@ -3900,25 +3451,22 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
-	 * @see PageIdentity::isSamePageAs()
+	 * @see PageReference::isSamePageAs()
 	 * @since 1.36
 	 *
-	 * @param PageIdentity $other
+	 * @param PageReference $other
 	 * @return bool
 	 */
-	public function isSamePageAs( PageIdentity $other ) {
+	public function isSamePageAs( PageReference $other ): bool {
 		// NOTE: keep in sync with PageIdentityValue::isSamePageAs()!
 
-		if ( $other->getWikiId() !== $this->getWikiId()
-			|| $other->getId() !== $this->getId() ) {
+		if ( $other->getWikiId() !== $this->getWikiId() ) {
 			return false;
 		}
 
-		if ( $this->getId() === 0 ) {
-			if ( $other->getNamespace() !== $this->getNamespace()
-				|| $other->getDBkey() !== $this->getDBkey() ) {
-				return false;
-			}
+		if ( $other->getNamespace() !== $this->getNamespace()
+			|| $other->getDBkey() !== $this->getDBkey() ) {
+			return false;
 		}
 
 		return true;
@@ -4125,7 +3673,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		$conds = $this->pageCond();
 		DeferredUpdates::addUpdate(
 			new AutoCommitUpdate(
-				wfGetDB( DB_MASTER ),
+				wfGetDB( DB_PRIMARY ),
 				__METHOD__,
 				function ( IDatabase $dbw, $fname ) use ( $conds, $purgeTime ) {
 					$dbTimestamp = $dbw->timestamp( $purgeTime ?: time() );
@@ -4168,21 +3716,30 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			);
 		}
 
-		JobQueueGroup::singleton()->lazyPush( $jobs );
+		MediaWikiServices::getInstance()->getJobQueueGroup()->lazyPush( $jobs );
 	}
 
 	/**
 	 * Get the last touched timestamp
 	 *
-	 * @param IDatabase|null $db
+	 * @param int $flags one of the READ_XXX constants. For historical reasons, an IDatabase
+	 *        instance is also accepted here. If an IDatabase is passed, a deprecation warning
+	 *        is triggered, caches will be bypassed, and the primary database connection will be
+	 *        used. However, the IDatabase instance itself will be ignored.
 	 * @return string|false Last-touched timestamp
 	 */
-	public function getTouched( $db = null ) {
-		if ( $db === null ) {
-			$db = wfGetDB( DB_REPLICA );
+	public function getTouched( $flags = self::READ_NORMAL ) {
+		if ( is_object( $flags ) ) {
+			wfDeprecatedMsg(
+				__METHOD__ . ' was called with a ' . get_class( $flags )
+				. ' instance instead of an integer!',
+				'1.38'
+			);
+			$flags = self::READ_LATEST;
 		}
-		$touched = $db->selectField( 'page', 'page_touched', $this->pageCond(), __METHOD__ );
-		return $touched;
+
+		$touched = $this->getFieldFromPageStore( 'page_touched', $flags );
+		return $touched ? MWTimestamp::convert( TS_MW, $touched ) : false;
 	}
 
 	/**
@@ -4232,7 +3789,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * Get all extant redirects to this Title
 	 *
 	 * @param int|null $ns Single namespace to consider; null to consider all namespaces
-	 * @return Title[] Array of Title redirects to this title
+	 * @return Title[]
 	 */
 	public function getRedirectsHere( $ns = null ) {
 		$redirs = [];
@@ -4295,12 +3852,16 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	}
 
 	/**
-	 * Get a backlink cache object
+	 * Get a backlink cache object.
+	 *
+	 * @deprecated since 1.37, use BacklinkCacheFactory::getBacklinkCache()
 	 *
 	 * @return BacklinkCache
 	 */
-	public function getBacklinkCache() {
-		return BacklinkCache::get( $this );
+	public function getBacklinkCache(): BacklinkCache {
+		wfDeprecated( __METHOD__, '1.37' );
+		return MediaWikiServices::getInstance()->getBacklinkCacheFactory()
+			->getBacklinkCache( $this );
 	}
 
 	/**
@@ -4351,20 +3912,20 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * to true in LocalSettings.php, otherwise returns false. If there is no language saved in
 	 * the db, it will return NULL.
 	 *
-	 * @return string|null|bool
+	 * @param int $flags
+	 *
+	 * @return ?string
 	 */
-	private function getDbPageLanguageCode() {
+	private function getDbPageLanguageCode( int $flags = 0 ): ?string {
 		global $wgPageLanguageUseDB;
 
 		// check, if the page language could be saved in the database, and if so and
-		// the value is not requested already, lookup the page language using LinkCache
+		// the value is not requested already, lookup the page language using PageStore
 		if ( $wgPageLanguageUseDB && $this->mDbPageLanguage === false ) {
-			$linkCache = MediaWikiServices::getInstance()->getLinkCache();
-			$linkCache->addLinkObj( $this );
-			$this->mDbPageLanguage = $linkCache->getGoodLinkFieldObj( $this, 'lang' );
+			$this->mDbPageLanguage = $this->getFieldFromPageStore( 'page_lang', $flags );
 		}
 
-		return $this->mDbPageLanguage;
+		return $this->mDbPageLanguage ?: null;
 	}
 
 	/**
@@ -4373,7 +3934,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * e.g. $wgLang (such as special pages, which are in the user language).
 	 *
 	 * @since 1.18
-	 * @return Language
+	 * @return Language|StubUserLang
 	 */
 	public function getPageLanguage() {
 		global $wgLang, $wgLanguageCode;
@@ -4414,7 +3975,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * e.g. $wgLang (such as special pages, which are in the user language).
 	 *
 	 * @since 1.20
-	 * @return Language
+	 * @return Language|StubUserLang
 	 */
 	public function getPageViewLanguage() {
 		global $wgLang;
@@ -4462,14 +4023,14 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * @since 1.21
 	 * @param int $oldid Revision ID that's being edited
-	 * @return array
+	 * @return string[]
 	 */
 	public function getEditNotices( $oldid = 0 ) {
 		$notices = [];
 
 		// Optional notice for the entire namespace
 		$editnotice_ns = 'editnotice-' . $this->mNamespace;
-		$msg = wfMessage( $editnotice_ns );
+		$msg = wfMessage( $editnotice_ns )->page( $this );
 		if ( $msg->exists() ) {
 			$html = $msg->parseAsBlock();
 			// Edit notices may have complex logic, but output nothing (T91715)
@@ -4494,7 +4055,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 			$editnotice_base = $editnotice_ns;
 			foreach ( explode( '/', $this->mDbkeyform ) as $part ) {
 				$editnotice_base .= '-' . $part;
-				$msg = wfMessage( $editnotice_base );
+				$msg = wfMessage( $editnotice_base )->page( $this );
 				if ( $msg->exists() ) {
 					$html = $msg->parseAsBlock();
 					if ( trim( $html ) !== '' ) {
@@ -4513,7 +4074,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		} else {
 			// Even if there are no subpages in namespace, we still don't want "/" in MediaWiki message keys
 			$editnoticeText = $editnotice_ns . '-' . strtr( $this->mDbkeyform, '/', '-' );
-			$msg = wfMessage( $editnoticeText );
+			$msg = wfMessage( $editnoticeText )->page( $this );
 			if ( $msg->exists() ) {
 				$html = $msg->parseAsBlock();
 				if ( trim( $html ) !== '' ) {
@@ -4537,23 +4098,38 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	/**
 	 * @param string $field
 	 * @param int $flags Bitfield of class READ_* constants
-	 * @return string|bool
+	 * @return string|false
 	 */
-	private function loadFieldFromDB( $field, $flags ) {
-		if ( !in_array( $field, self::getSelectFields(), true ) ) {
-			return false; // field does not exist
+	private function getFieldFromPageStore( $field, $flags ) {
+		$flags |= ( $flags & self::GAID_FOR_UPDATE ) ? self::READ_LATEST : 0; // b/c
+
+		$pageStore = MediaWikiServices::getInstance()->getPageStore();
+
+		if ( !in_array( $field, $pageStore->getSelectFields(), true ) ) {
+			throw new InvalidArgumentException( "Unknown field: $field" );
 		}
 
-		$flags |= ( $flags & self::GAID_FOR_UPDATE ) ? self::READ_LATEST : 0; // b/c
-		list( $index, $options ) = DBAccessObjectUtils::getDBOptions( $flags );
+		if ( $flags === self::READ_NORMAL && $this->mArticleID === 0 ) {
+			// page does not exist
+			return false;
+		}
 
-		return wfGetDB( $index )->selectField(
-			'page',
-			$field,
-			$this->pageCond(),
-			__METHOD__,
-			$options
-		);
+		if ( !$this->canExist() ) {
+			return false;
+		}
+
+		$page = $pageStore->getPageByReference( $this, $flags );
+
+		if ( $page instanceof PageStoreRecord ) {
+			return $page->getField( $field );
+		} else {
+			// The page record failed to load, remember the page as non-existing.
+			// Note that this can happen even if a page ID was known before under some
+			// rare circumstances, if this method is called with the READ_LATEST bit set
+			// and the page has been deleted since the ID had initially been determined.
+			$this->mArticleID = 0;
+			return false;
+		}
 	}
 
 	/**
@@ -4576,6 +4152,10 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		$this->mTextform = strtr( $this->mDbkeyform, '_', ' ' );
 	}
 
+	public function __clone() {
+		$this->mInstanceCacheKey = null;
+	}
+
 	/**
 	 * Returns false to indicate that this Title belongs to the local wiki.
 	 *
@@ -4595,7 +4175,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 * If this ID is 0, this means the page does not exist.
 	 *
 	 * @see getArticleID()
-	 * @since 1.35
+	 * @since 1.36, since 1.35.6 as an alias of getArticleId()
 	 *
 	 * @param string|false $wikiId The wiki ID expected by the caller.
 	 *
@@ -4617,7 +4197,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *
 	 * For the purpose of the Title class, a proper page is one that can
 	 * exist in the page table. That is, a Title represents a proper page
-	 * if canExist() returns true and getFragment() returns an empty string.
+	 * if canExist() returns true.
 	 *
 	 * @see canExist()
 	 *
@@ -4627,11 +4207,6 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 		Assert::precondition(
 			$this->canExist(),
 			'This Title instance does not represent a proper page, but merely a link target.'
-		);
-
-		Assert::precondition(
-			$this->getFragment() === '',
-			'This Title instance represents a fragment link.'
 		);
 	}
 
@@ -4647,7 +4222,7 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 	 *         link, interwiki link, link to a special page, or such.
 	 * @since 1.36
 	 */
-	public function toPageIdentity() : ProperPageIdentity {
+	public function toPageIdentity(): ProperPageIdentity {
 		// TODO: replace individual member fields with a PageIdentityValue that is always present
 
 		$this->assertProperPage();
@@ -4691,10 +4266,10 @@ class Title implements LinkTarget, PageIdentity, IDBAccessObject {
 				'page_title' => $this->getDBkey(),
 				'page_wiki_id' => $this->getWikiId(),
 				'page_latest' => $this->getLatestRevID( $flags ),
-				'page_is_new' => $this->isNewPage(), // no flags?
+				'page_is_new' => $this->isNewPage( $flags ),
 				'page_is_redirect' => $this->isRedirect( $flags ),
-				'page_touched' => $this->getTouched(), // no flags?
-				'page_lang' => $this->getPageLanguage()->getCode(),
+				'page_touched' => $this->getTouched( $flags ),
+				'page_lang' => $this->getDbPageLanguageCode( $flags ),
 			],
 			PageIdentity::LOCAL
 		);

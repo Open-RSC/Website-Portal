@@ -13,7 +13,7 @@ use Wikimedia\TestingAccessWrapper;
  */
 class ApiBaseTest extends ApiTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->mergeMwGlobalArrayValue(
 			'wgGroupPermissions',
@@ -186,9 +186,6 @@ class ApiBaseTest extends ApiTestCase {
 	}
 
 	public function testGetTitleOrPageIdInvalidPageId() {
-		// FIXME: fails under postgres
-		$this->markTestSkippedIfDbType( 'postgres' );
-
 		$this->expectException( ApiUsageException::class );
 		$this->expectExceptionMessage( 'There is no page with ID 2147483648.' );
 		$mock = new MockApi();
@@ -233,7 +230,7 @@ class ApiBaseTest extends ApiTestCase {
 
 	public function testGetParameter() {
 		$mock = $this->getMockBuilder( MockApi::class )
-			->setMethods( [ 'getAllowedParams' ] )
+			->onlyMethods( [ 'getAllowedParams' ] )
 			->getMock();
 		$mock->method( 'getAllowedParams' )->willReturn( [
 			'foo' => [
@@ -1312,7 +1309,7 @@ class ApiBaseTest extends ApiTestCase {
 
 		$msg = new Message( 'mainpage' );
 
-		// Sanity check empty array
+		// Check empty array
 		$expect = Status::newGood();
 		$this->assertEquals( $expect, $mock->errorArrayToStatus( [] ) );
 
@@ -1340,14 +1337,15 @@ class ApiBaseTest extends ApiTestCase {
 		$block = new DatabaseBlock( [
 			'address' => $user->getName(),
 			'user' => $user->getId(),
-			'by' => $this->getTestSysop()->getUser()->getId(),
+			'by' => $this->getTestSysop()->getUser(),
 			'reason' => __METHOD__,
 			'expiry' => time() + 100500,
 		] );
-		MediaWikiServices::getInstance()->getDatabaseBlockStore()->insertBlock( $block );
+		$this->getServiceContainer()->getDatabaseBlockStore()->insertBlock( $block );
 
 		$mockTrait = $this->getMockForTrait( ApiBlockInfoTrait::class );
-		$mockTrait->method( 'getLanguage' )->willReturn( 'en' );
+		$language = $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' );
+		$mockTrait->method( 'getLanguage' )->willReturn( $language );
 		$userInfoTrait = TestingAccessWrapper::newFromObject( $mockTrait );
 		$blockinfo = [ 'blockinfo' => $userInfoTrait->getBlockDetails( $block ) ];
 
@@ -1375,7 +1373,7 @@ class ApiBaseTest extends ApiTestCase {
 
 		$msg = new Message( 'mainpage' );
 
-		// Sanity check empty array
+		// Check empty array
 		$expect = Status::newGood();
 		$test = Status::newGood();
 		$mock->addBlockInfoToStatus( $test );
@@ -1399,14 +1397,15 @@ class ApiBaseTest extends ApiTestCase {
 		$block = new DatabaseBlock( [
 			'address' => $user->getName(),
 			'user' => $user->getId(),
-			'by' => $this->getTestSysop()->getUser()->getId(),
+			'by' => $this->getTestSysop()->getUser(),
 			'reason' => __METHOD__,
 			'expiry' => time() + 100500,
 		] );
-		MediaWikiServices::getInstance()->getDatabaseBlockStore()->insertBlock( $block );
+		$this->getServiceContainer()->getDatabaseBlockStore()->insertBlock( $block );
 
 		$mockTrait = $this->getMockForTrait( ApiBlockInfoTrait::class );
-		$mockTrait->method( 'getLanguage' )->willReturn( 'en' );
+		$language = $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' );
+		$mockTrait->method( 'getLanguage' )->willReturn( $language );
 		$userInfoTrait = TestingAccessWrapper::newFromObject( $mockTrait );
 		$blockinfo = [ 'blockinfo' => $userInfoTrait->getBlockDetails( $block ) ];
 
@@ -1491,7 +1490,7 @@ class ApiBaseTest extends ApiTestCase {
 
 		$mock = $this->getMockBuilder( ApiBase::class )
 			->setConstructorArgs( [ $main, 'test', 'xx' ] )
-			->setMethods( [ 'getAllowedParams' ] )
+			->onlyMethods( [ 'getAllowedParams' ] )
 			->getMockForAbstractClass();
 		$mock->method( 'getAllowedParams' )->willReturn( [
 			'notexists' => null,

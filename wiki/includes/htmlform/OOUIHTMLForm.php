@@ -92,10 +92,7 @@ class OOUIHTMLForm extends HTMLForm {
 		}
 
 		if ( $this->mShowCancel ) {
-			$target = $this->mCancelTarget ?: Title::newMainPage();
-			if ( $target instanceof Title ) {
-				$target = $target->getLocalURL();
-			}
+			$target = $this->getCancelTargetURL();
 			$buttons .= new OOUI\ButtonWidget( [
 				'label' => $this->msg( 'cancel' )->text(),
 				'href' => $target,
@@ -241,12 +238,12 @@ class OOUIHTMLForm extends HTMLForm {
 		return '';
 	}
 
-	public function getHeaderText( $section = null ) {
+	public function getHeaderHtml( $section = null ) {
 		if ( $section === null ) {
 			// We handle $this->mHeader elsewhere, in getBody()
 			return '';
 		} else {
-			return parent::getHeaderText( $section );
+			return parent::getHeaderHtml( $section );
 		}
 	}
 

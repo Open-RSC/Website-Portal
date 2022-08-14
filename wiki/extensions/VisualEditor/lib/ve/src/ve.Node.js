@@ -213,6 +213,14 @@ ve.Node.prototype.isDiffedAsList = null;
 ve.Node.prototype.isDiffedAsLeaf = null;
 
 /**
+ * Check if the node behaves like a document for diffing
+ *
+ * @abstract
+ * @return {boolean} Node behaves like a document
+ */
+ve.Node.prototype.isDiffedAsDocument = null;
+
+/**
  * Check if the node has significant whitespace.
  *
  * Can only be true if canContainContent is also true.
@@ -461,8 +469,7 @@ ve.Node.prototype.isDownstreamOf = function ( upstreamNode ) {
  * @return {number[]|null} The offset path, or null if not attached to a DocumentNode
  */
 ve.Node.prototype.getOffsetPath = function () {
-	var parent,
-		node = this,
+	var node = this,
 		path = [];
 
 	while ( true ) {
@@ -470,7 +477,7 @@ ve.Node.prototype.getOffsetPath = function () {
 			// We reached the ve.dm.DocumentNode/ve.ce.DocumentNode that this node is attached to
 			return path;
 		}
-		parent = node.getParent();
+		var parent = node.getParent();
 		if ( !parent ) {
 			return null;
 		}

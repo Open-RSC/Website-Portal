@@ -23,9 +23,11 @@ use Psr\Log\LoggerInterface;
 use Wikimedia\ScopedCallback;
 
 /**
- * Arbitrary section name based PHP profiling. This custom profiler can track
- * code execution that doesn't cleanly map to a function call and thus can't be
- * handled by Xhprof or Excimer. For example, parser invocations or DB queries.
+ * Arbitrary section name based PHP profiling.
+ *
+ * This custom profiler can track code execution that doesn't cleanly map to a
+ * function call and thus can't be handled by ProfilerXhprof or ProfilerExcimer.
+ * For example, parser invocations or DB queries.
  *
  * @since 1.25
  * @ingroup Profiler
@@ -57,7 +59,12 @@ class SectionProfiler {
 	 */
 	public function __construct( array $params = [] ) {
 		$this->errorEntry = $this->getErrorEntry();
+		// collateOnly (meaning: no tracing) is true by default.
+		// Setting trace=true produces collateOnly=false
 		$this->collateOnly = empty( $params['trace'] );
+		if ( !$this->collateOnly ) {
+			wfDeprecated( __CLASS__ . ' with "trace" option', '1.38' );
+		}
 		$this->logger = LoggerFactory::getInstance( 'profiler' );
 	}
 

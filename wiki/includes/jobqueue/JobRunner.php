@@ -27,6 +27,7 @@ use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Wikimedia\Rdbms\DBConnectionError;
 use Wikimedia\Rdbms\DBError;
 use Wikimedia\Rdbms\DBReadOnlyError;
 use Wikimedia\Rdbms\ILBFactory;
@@ -124,7 +125,7 @@ class JobRunner implements LoggerAwareInterface {
 		LoggerInterface $logger = null
 	) {
 		if ( !$serviceOptions || $serviceOptions instanceof LoggerInterface ) {
-			// TODO: wfDeprecated( __METHOD__ . 'called directly. Use MediaWikiServices instead', '1.35' );
+			// TODO: wfDeprecated( __METHOD__ . ' called directly. Use MediaWikiServices instead', '1.35' );
 			$logger = $serviceOptions;
 			$serviceOptions = new ServiceOptions(
 				static::CONSTRUCTOR_OPTIONS,
@@ -134,7 +135,7 @@ class JobRunner implements LoggerAwareInterface {
 
 		$this->options = $serviceOptions;
 		$this->lbFactory = $lbFactory ?? MediaWikiServices::getInstance()->getDBLoadBalancerFactory();
-		$this->jobQueueGroup = $jobQueueGroup ?? JobQueueGroup::singleton();
+		$this->jobQueueGroup = $jobQueueGroup ?? MediaWikiServices::getInstance()->getJobQueueGroup();
 		$this->readOnlyMode = $readOnlyMode ?: MediaWikiServices::getInstance()->getReadOnlyMode();
 		$this->linkCache = $linkCache ?? MediaWikiServices::getInstance()->getLinkCache();
 		$this->stats = $statsdDataFactory ?? MediaWikiServices::getInstance()->getStatsdDataFactory();
@@ -153,7 +154,7 @@ class JobRunner implements LoggerAwareInterface {
 	 *   - backoffs : the (job/queue type => seconds) map of backoff times
 	 *   - elapsed  : the total time spent running tasks in ms
 	 *   - reached  : the reason the script finished, one of (none-ready, job-limit, time-limit,
-	 *  memory-limit)
+	 *  memory-limit, exception)
 	 *
 	 * This method outputs status information only if a debug handler was set.
 	 * Any exceptions are caught and logged, but are not reported as output.
@@ -218,17 +219,17 @@ class JobRunner implements LoggerAwareInterface {
 		do {
 			// Sync the persistent backoffs with concurrent runners
 			$backoffs = $this->syncBackoffDeltas( $backoffs, $backoffDeltas, $wait );
-			$blacklist = $throttle ? array_keys( $backoffs ) : [];
+			$backoffKeys = $throttle ? array_keys( $backoffs ) : [];
 			$wait = 'nowait'; // less important now
 
 			if ( $type === false ) {
 				// Treat the default job type queues as a single queue and pop off a job
 				$job = $this->jobQueueGroup
-					->pop( JobQueueGroup::TYPE_DEFAULT, JobQueueGroup::USE_CACHE, $blacklist );
+					->pop( JobQueueGroup::TYPE_DEFAULT, JobQueueGroup::USE_CACHE, $backoffKeys );
 			} else {
 				// Pop off a job from the specified job type queue unless the execution of
-				// that type of job is currently rate-limited by the back-off blacklist
-				$job = in_array( $type, $blacklist ) ? false : $this->jobQueueGroup->pop( $type );
+				// that type of job is currently rate-limited by the back-off list
+				$job = in_array( $type, $backoffKeys ) ? false : $this->jobQueueGroup->pop( $type );
 			}
 
 			if ( $job ) {
@@ -271,6 +272,15 @@ class JobRunner implements LoggerAwareInterface {
 					break;
 				} elseif ( $maxTime && ( microtime( true ) - $loopStartTime ) > $maxTime ) {
 					$response['reached'] = 'time-limit';
+					break;
+				}
+
+				// Stop if we caught a DBConnectionError. In theory it would be
+				// possible to explicitly reconnect, but the present behaviour
+				// is to just throw more exceptions every time something database-
+				// related is attempted.
+				if ( in_array( DBConnectionError::class, $info['caught'], true ) ) {
+					$response['reached'] = 'exception';
 					break;
 				}
 
@@ -364,20 +374,20 @@ class JobRunner implements LoggerAwareInterface {
 			$fnameTrxOwner = get_class( $job ) . '::run'; // give run() outer scope
 			// Flush any pending changes left over from an implicit transaction round
 			if ( $job->hasExecutionFlag( $job::JOB_NO_EXPLICIT_TRX_ROUND ) ) {
-				$this->lbFactory->commitMasterChanges( $fnameTrxOwner ); // new implicit round
+				$this->lbFactory->commitPrimaryChanges( $fnameTrxOwner ); // new implicit round
 			} else {
-				$this->lbFactory->beginMasterChanges( $fnameTrxOwner ); // new explicit round
+				$this->lbFactory->beginPrimaryChanges( $fnameTrxOwner ); // new explicit round
 			}
 			// Clear any stale REPEATABLE-READ snapshots from replica DB connections
 			$this->lbFactory->flushReplicaSnapshots( $fnameTrxOwner );
 			$status = $job->run();
 			$error = $job->getLastError();
 			// Commit all pending changes from this job
-			$this->commitMasterChanges( $job, $fnameTrxOwner );
+			$this->commitPrimaryChanges( $job, $fnameTrxOwner );
 			// Run any deferred update tasks; doUpdates() manages transactions itself
 			DeferredUpdates::doUpdates();
 		} catch ( Throwable $e ) {
-			MWExceptionHandler::rollbackMasterChangesAndLog( $e );
+			MWExceptionHandler::rollbackPrimaryChangesAndLog( $e );
 			$status = false;
 			$error = get_class( $e ) . ': ' . $e->getMessage();
 			$caught[] = get_class( $e );
@@ -402,7 +412,7 @@ class JobRunner implements LoggerAwareInterface {
 		// Record root job age for jobs being run
 		$rootTimestamp = $job->getRootJobParams()['rootJobTimestamp'];
 		if ( $rootTimestamp ) {
-			$age = max( 0, $jobStartTime - wfTimestamp( TS_UNIX, $rootTimestamp ) );
+			$age = max( 0, $jobStartTime - (int)wfTimestamp( TS_UNIX, $rootTimestamp ) );
 			$this->stats->timing( "jobqueue.pickup_root_age.$jType", 1000 * $age );
 		}
 		// Track the execution time for jobs
@@ -581,7 +591,7 @@ class JobRunner implements LoggerAwareInterface {
 			if ( preg_match( '!^(\d+)(k|m|g|)$!i', ini_get( 'memory_limit' ), $m ) ) {
 				list( , $num, $unit ) = $m;
 				$conv = [ 'g' => 1073741824, 'm' => 1048576, 'k' => 1024, '' => 1 ];
-				$maxBytes = $num * $conv[strtolower( $unit )];
+				$maxBytes = (int)$num * $conv[strtolower( $unit )];
 			} else {
 				$maxBytes = 0;
 			}
@@ -623,13 +633,13 @@ class JobRunner implements LoggerAwareInterface {
 	 * @param string $fnameTrxOwner
 	 * @throws DBError
 	 */
-	private function commitMasterChanges( RunnableJob $job, $fnameTrxOwner ) {
+	private function commitPrimaryChanges( RunnableJob $job, $fnameTrxOwner ) {
 		$syncThreshold = $this->options->get( 'JobSerialCommitThreshold' );
 
 		$time = false;
 		$lb = $this->lbFactory->getMainLB();
 		if ( $syncThreshold !== false && $lb->hasStreamingReplicaServers() ) {
-			// Generally, there is one master connection to the local DB
+			// Generally, there is one primary connection to the local DB
 			$dbwSerial = $lb->getAnyOpenConnection( $lb->getWriterIndex() );
 			// We need natively blocking fast locks
 			if ( $dbwSerial && $dbwSerial->namedLocksEnqueue() ) {
@@ -646,7 +656,7 @@ class JobRunner implements LoggerAwareInterface {
 		}
 
 		if ( !$dbwSerial ) {
-			$this->lbFactory->commitMasterChanges(
+			$this->lbFactory->commitPrimaryChanges(
 				$fnameTrxOwner,
 				// Abort if any transaction was too big
 				[ 'maxWriteDuration' => $this->options->get( 'MaxJobDBWriteDuration' ) ]
@@ -676,13 +686,13 @@ class JobRunner implements LoggerAwareInterface {
 		} );
 
 		// Wait for the replica DBs to catch up
-		$pos = $lb->getMasterPos();
+		$pos = $lb->getPrimaryPos();
 		if ( $pos ) {
 			$lb->waitForAll( $pos );
 		}
 
-		// Actually commit the DB master changes
-		$this->lbFactory->commitMasterChanges(
+		// Actually commit the DB primary changes
+		$this->lbFactory->commitPrimaryChanges(
 			$fnameTrxOwner,
 			// Abort if any transaction was too big
 			[ 'maxWriteDuration' => $this->options->get( 'MaxJobDBWriteDuration' ) ]

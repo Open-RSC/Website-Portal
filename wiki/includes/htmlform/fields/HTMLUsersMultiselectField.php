@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
+use MediaWiki\User\UserNameUtils;
 use MediaWiki\Widget\UsersMultiselectWidget;
 use Wikimedia\IPUtils;
 
@@ -28,8 +30,10 @@ class HTMLUsersMultiselectField extends HTMLUserTextField {
 
 		// Normalize usernames
 		$normalizedUsers = [];
+		$userNameUtils = MediaWikiServices::getInstance()->getUserNameUtils();
 		$listOfIps = [];
 		foreach ( $usersArray as $user ) {
+			$canonicalUser = false;
 			if ( IPUtils::isIPAddress( $user ) ) {
 				$parsedIPRange = IPUtils::parseRange( $user );
 				if ( !in_array( $parsedIPRange, $listOfIps ) ) {
@@ -37,9 +41,11 @@ class HTMLUsersMultiselectField extends HTMLUserTextField {
 					$listOfIps[] = $parsedIPRange;
 				}
 			} else {
-				$canonicalUser = User::getCanonicalName( $user, false );
+				$canonicalUser = $userNameUtils->getCanonical( $user, UserNameUtils::RIGOR_NONE );
 			}
-			$normalizedUsers[] = $canonicalUser;
+			if ( $canonicalUser !== false ) {
+				$normalizedUsers[] = $canonicalUser;
+			}
 		}
 		// Remove any duplicate usernames
 		$uniqueUsers = array_unique( $normalizedUsers );
@@ -127,7 +133,7 @@ class HTMLUsersMultiselectField extends HTMLUserTextField {
 
 		// Make the field auto-infusable when it's used inside a legacy HTMLForm rather than OOUIHTMLForm
 		$params['infusable'] = true;
-		$params['classes'] = [ 'mw-htmlform-field-autoinfuse' ];
+		$params['classes'] = [ 'mw-htmlform-autoinfuse' ];
 		$widget = new UsersMultiselectWidget( $params );
 		$widget->setAttributes( [ 'data-mw-modules' => implode( ',', $this->getOOUIModules() ) ] );
 

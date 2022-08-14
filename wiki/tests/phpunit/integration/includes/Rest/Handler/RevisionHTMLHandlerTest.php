@@ -107,11 +107,9 @@ class RevisionHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 			] ),
 			$this->getServiceContainer()->getRevisionLookup(),
 			$this->getServiceContainer()->getTitleFormatter(),
-			$this->getServiceContainer()->getTitleFactory(),
-
 			$parserCacheFactory,
-			$this->getServiceContainer()->getWikiPageFactory(),
-			$idGenerator
+			$idGenerator,
+			$this->getServiceContainer()->getPageStore()
 		);
 
 		if ( $parsoid !== null ) {
@@ -140,7 +138,7 @@ class RevisionHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		[ $page, $revisions ] = $this->getExistingPageWithRevisions( __METHOD__ );
 		$this->assertTrue(
 			$this->editPage( $page, self::WIKITEXT )->isGood(),
-			'Sanity: edited a page'
+			'Edited a page'
 		);
 
 		$request = new RequestData(
@@ -163,7 +161,7 @@ class RevisionHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		[ $page, $revisions ] = $this->getExistingPageWithRevisions( __METHOD__ );
 		$this->assertTrue(
 			$this->editPage( $page, self::WIKITEXT )->isGood(),
-			'Sanity: edited a page'
+			'Edited a page'
 		);
 
 		$request = new RequestData(
@@ -254,7 +252,7 @@ class RevisionHTMLHandlerTest extends MediaWikiIntegrationTestCase {
 		MWTimestamp::setFakeTime( $time + 10000 );
 		$this->assertTrue(
 			$page->getTitle()->invalidateCache( MWTimestamp::convert( TS_MW, $time ) ),
-			'Sanity: can invalidate cache'
+			'Can invalidate cache'
 		);
 		DeferredUpdates::doUpdates();
 

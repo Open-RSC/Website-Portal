@@ -32,16 +32,16 @@ use StatusValue;
  */
 interface IEditConstraint extends IEditObject {
 
-	/** @var string - Constaint passed, no error */
+	/** @var string - Constraint passed, no error */
 	public const CONSTRAINT_PASSED = 'constraint-passed';
 
-	/** @var string - Constaint failed, use getLegacyStatus to see the failure */
+	/** @var string - Constraint failed, use getLegacyStatus to see the failure */
 	public const CONSTRAINT_FAILED = 'constraint-failed';
 
 	/**
 	 * @return string whether the constraint passed, either CONSTRAINT_PASSED or CONSTRAINT_FAILED
 	 */
-	public function checkConstraint() : string;
+	public function checkConstraint(): string;
 
 	/**
 	 * Get the legacy status for failure (or success)
@@ -52,6 +52,6 @@ interface IEditConstraint extends IEditObject {
 	 *
 	 * @return StatusValue
 	 */
-	public function getLegacyStatus() : StatusValue;
+	public function getLegacyStatus(): StatusValue;
 
 }

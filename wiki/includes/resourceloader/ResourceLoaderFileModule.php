@@ -23,6 +23,7 @@
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\MediaWikiServices;
 use Wikimedia\Minify\CSSMin;
+use Wikimedia\RequestTimeout\TimeoutException;
 
 /**
  * Module based on local JavaScript/CSS files.
@@ -361,8 +362,8 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 */
 	public function getScript( ResourceLoaderContext $context ) {
 		$deprecationScript = $this->getDeprecationInformation( $context );
-		if ( $this->packageFiles !== null ) {
-			$packageFiles = $this->getPackageFiles( $context );
+		$packageFiles = $this->getPackageFiles( $context );
+		if ( $packageFiles !== null ) {
 			foreach ( $packageFiles['files'] as &$file ) {
 				if ( $file['type'] === 'script+style' ) {
 					$file['content'] = $file['content']['script'];
@@ -385,12 +386,16 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 * @return string[]
 	 */
 	public function getScriptURLsForDebug( ResourceLoaderContext $context ) {
+		$rl = $context->getResourceLoader();
+		$config = $this->getConfig();
+		$server = $config->get( 'Server' );
+
 		$urls = [];
 		foreach ( $this->getScriptFiles( $context ) as $file ) {
-			$urls[] = OutputPage::transformResourcePath(
-				$this->getConfig(),
-				$this->getRemotePath( $file )
-			);
+			$url = OutputPage::transformResourcePath( $config, $this->getRemotePath( $file ) );
+			// Expand debug URL in case we are another wiki's module source (T255367)
+			$url = $rl->expandUrl( $server, $url );
+			$urls[] = $url;
 		}
 		return $urls;
 	}
@@ -416,8 +421,8 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 			$context
 		);
 
-		if ( $this->packageFiles !== null ) {
-			$packageFiles = $this->getPackageFiles( $context );
+		$packageFiles = $this->getPackageFiles( $context );
+		if ( $packageFiles !== null ) {
 			foreach ( $packageFiles['files'] as $fileName => $file ) {
 				if ( $file['type'] === 'script+style' ) {
 					$style = $this->processStyle(
@@ -544,19 +549,9 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	private function getFileHashes( ResourceLoaderContext $context ) {
 		$files = [];
 
-		// Flatten style files into $files
-		$styles = self::collateFilePathListByOption( $this->styles, 'media', 'all' );
-		foreach ( $styles as $styleFiles ) {
-			$files = array_merge( $files, $styleFiles );
-		}
-
-		$skinFiles = self::collateFilePathListByOption(
-			self::tryForKey( $this->skinStyles, $context->getSkin(), 'default' ),
-			'media',
-			'all'
-		);
-		foreach ( $skinFiles as $styleFiles ) {
-			$files = array_merge( $files, $styleFiles );
+		$styleFiles = $this->getStyleFiles( $context );
+		foreach ( $styleFiles as $paths ) {
+			$files = array_merge( $files, $paths );
 		}
 
 		// Extract file paths for package files
@@ -616,7 +611,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 
 		$options = [];
 		foreach ( [
-			// The following properties are omitted because they don't affect the module reponse:
+			// The following properties are omitted because they don't affect the module response:
 			// - localBasePath (Per T104950; Changes when absolute directory name changes. If
 			//    this affects 'scripts' and other file paths, getFileHashes accounts for that.)
 			// - remoteBasePath (Per T104950)
@@ -801,6 +796,8 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 * @return string[] List of file paths
 	 */
 	private function getScriptFiles( ResourceLoaderContext $context ) {
+		// Execution order, as documented at $wgResourceModules:
+		// scripts, languageScripts, skinScripts, debugScripts.
 		$files = array_merge(
 			$this->scripts,
 			$this->getLanguageScripts( $context->getLanguage() ),
@@ -820,21 +817,62 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 * @param string $lang
 	 * @return string[]
 	 */
-	private function getLanguageScripts( $lang ) {
+	private function getLanguageScripts( string $lang ): array {
 		$scripts = self::tryForKey( $this->languageScripts, $lang );
 		if ( $scripts ) {
 			return $scripts;
 		}
-		$fallbacks = MediaWikiServices::getInstance()->getLanguageFallback()
-			->getAll( $lang, LanguageFallback::MESSAGES );
-		foreach ( $fallbacks as $lang ) {
-			$scripts = self::tryForKey( $this->languageScripts, $lang );
-			if ( $scripts ) {
-				return $scripts;
+
+		// Optimization: Avoid initialising and calling into language services
+		// for the majority of modules that don't use this option.
+		if ( $this->languageScripts ) {
+			$fallbacks = MediaWikiServices::getInstance()
+				->getLanguageFallback()
+				->getAll( $lang, LanguageFallback::MESSAGES );
+			foreach ( $fallbacks as $lang ) {
+				$scripts = self::tryForKey( $this->languageScripts, $lang );
+				if ( $scripts ) {
+					return $scripts;
+				}
 			}
 		}
 
 		return [];
+	}
+
+	public function setSkinStylesOverride( array $moduleSkinStyles ): void {
+		$moduleName = $this->getName();
+		foreach ( $moduleSkinStyles as $skinName => $overrides ) {
+			// If a module provides overrides for a skin, and that skin also provides overrides
+			// for the same module, then the module has precedence.
+			if ( isset( $this->skinStyles[$skinName] ) ) {
+				continue;
+			}
+
+			// If $moduleName in ResourceModuleSkinStyles is preceded with a '+', the defined style
+			// files will be added to 'default' skinStyles, otherwise 'default' will be ignored.
+			if ( isset( $overrides[$moduleName] ) ) {
+				$paths = (array)$overrides[$moduleName];
+				$styleFiles = [];
+			} elseif ( isset( $overrides['+' . $moduleName] ) ) {
+				$paths = (array)$overrides['+' . $moduleName];
+				$styleFiles = isset( $this->skinStyles['default'] ) ?
+					(array)$this->skinStyles['default'] :
+					[];
+			} else {
+				continue;
+			}
+
+			// Add new file paths, remapping them to refer to our directories and not use settings
+			// from the module we're modifying, which come from the base definition.
+			list( $localBasePath, $remoteBasePath ) = self::extractBasePaths( $overrides );
+
+			foreach ( $paths as $path ) {
+				$styleFiles[] = new ResourceLoaderFilePath( $path, $localBasePath, $remoteBasePath );
+			}
+
+			$this->skinStyles[$skinName] = $styleFiles;
+		}
 	}
 
 	/**
@@ -880,7 +918,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 		$skinFactory = MediaWikiServices::getInstance()->getSkinFactory();
 		$styleFiles = [];
 
-		$internalSkinNames = array_keys( $skinFactory->getSkinNames() );
+		$internalSkinNames = array_keys( $skinFactory->getInstalledSkins() );
 		$internalSkinNames[] = 'default';
 
 		foreach ( $internalSkinNames as $internalSkinName ) {
@@ -918,7 +956,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	/**
 	 * Get the contents of a list of JavaScript files. Helper for getScript().
 	 *
-	 * @param string[] $scripts List of file paths to scripts to read, remap and concetenate
+	 * @param string[] $scripts List of file paths to scripts to read, remap and concatenate
 	 * @return string Concatenated JavaScript data from $scripts
 	 * @throws RuntimeException
 	 */
@@ -930,7 +968,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 		foreach ( array_unique( $scripts, SORT_REGULAR ) as $fileName ) {
 			$localPath = $this->getLocalPath( $fileName );
 			$contents = $this->getFileContents( $localPath, 'script' );
-			$js .= $contents . "\n";
+			$js .= ResourceLoader::ensureNewline( $contents );
 		}
 		return $js;
 	}
@@ -1017,7 +1055,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 		// Get and register local file references
 		$localFileRefs = CSSMin::getLocalFileReferences( $style, $localDir );
 		foreach ( $localFileRefs as $file ) {
-			if ( file_exists( $file ) ) {
+			if ( is_file( $file ) ) {
 				$this->localFileRefs[] = $file;
 			} else {
 				$this->missingLocalFileRefs[] = $file;
@@ -1189,7 +1227,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 *
 	 * @param ResourceLoaderContext $context
 	 * @return array|null
-	 * @phan-return array{main:string,files:string[][]}|null
+	 * @phan-return array{main:?string,files:array[]}|null
 	 * @throws LogicException If the 'packageFiles' definition is invalid.
 	 */
 	private function expandPackageFiles( ResourceLoaderContext $context ) {
@@ -1287,8 +1325,8 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 					throw new LogicException( $msg );
 				}
 				$expandedConfig = [];
-				foreach ( $fileInfo['config'] as $key => $var ) {
-					$expandedConfig[ is_numeric( $key ) ? $var : $key ] = $this->getConfig()->get( $var );
+				foreach ( $fileInfo['config'] as $configKey => $var ) {
+					$expandedConfig[ is_numeric( $configKey ) ? $var : $configKey ] = $this->getConfig()->get( $var );
 				}
 				$expanded['content'] = $expandedConfig;
 			} elseif ( !empty( $fileInfo['main'] ) ) {
@@ -1324,9 +1362,9 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	}
 
 	/**
-	 * Resolves the package files defintion and generates the content of each package file.
+	 * Resolves the package files definition and generates the content of each package file.
 	 * @param ResourceLoaderContext $context
-	 * @return array Package files data structure, see ResourceLoaderModule::getScript()
+	 * @return array|null Package files data structure, see ResourceLoaderModule::getScript()
 	 * @throws RuntimeException If a file doesn't exist, or parsing a .vue file fails
 	 */
 	public function getPackageFiles( ResourceLoaderContext $context ) {
@@ -1379,6 +1417,8 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 						$fileInfo['content'],
 						[ 'minifyTemplate' => !$context->getDebug() ]
 					);
+				} catch ( TimeoutException $e ) {
+					throw $e;
 				} catch ( Exception $e ) {
 					$msg = "Error parsing file '$fileName' in module '{$this->getName()}': " .
 						$e->getMessage();
@@ -1420,7 +1460,7 @@ class ResourceLoaderFileModule extends ResourceLoaderModule {
 	 * We already assume UTF-8 everywhere, so this should be safe.
 	 *
 	 * @param string $input
-	 * @return string Input minus the intial BOM char
+	 * @return string Input minus the initial BOM char
 	 */
 	protected function stripBom( $input ) {
 		if ( substr_compare( "\xef\xbb\xbf", $input, 0, 3 ) === 0 ) {

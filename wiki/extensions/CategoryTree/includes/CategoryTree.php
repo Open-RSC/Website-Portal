@@ -21,8 +21,23 @@
  * @ingroup Extensions
  * @author Daniel Kinzler, brightbyte.de
  */
+
+namespace MediaWiki\Extension\CategoryTree;
+
+use Category;
+use Exception;
+use ExtensionRegistry;
+use FormatJson;
+use Html;
+use IContextSource;
+use LinkBatch;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MediaWikiServices;
+use OutputPage;
+use Parser;
+use RequestContext;
+use SpecialPage;
+use Title;
 
 /**
  * Core functions for the CategoryTree extension, an AJAX based gadget
@@ -46,16 +61,12 @@ class CategoryTree {
 		// ensure default values and order of options.
 		// Order may become important, it may influence the cache key!
 		foreach ( $wgCategoryTreeDefaultOptions as $option => $default ) {
-			if ( isset( $options[$option] ) ) {
-				$this->mOptions[$option] = $options[$option];
-			} else {
-				$this->mOptions[$option] = $default;
-			}
+			$this->mOptions[$option] = $options[$option] ?? $default;
 		}
 
 		$this->mOptions['mode'] = self::decodeMode( $this->mOptions['mode'] );
 
-		if ( $this->mOptions['mode'] == CategoryTreeMode::PARENTS ) {
+		if ( $this->mOptions['mode'] === CategoryTreeMode::PARENTS ) {
 			// namespace filter makes no sense with CategoryTreeMode::PARENTS
 			$this->mOptions['namespaces'] = false;
 		}
@@ -67,7 +78,7 @@ class CategoryTree {
 		if ( $this->mOptions['namespaces'] ) {
 			# automatically adjust mode to match namespace filter
 			if ( count( $this->mOptions['namespaces'] ) === 1
-				&& $this->mOptions['namespaces'][0] == NS_CATEGORY ) {
+				&& $this->mOptions['namespaces'][0] === NS_CATEGORY ) {
 				$this->mOptions['mode'] = CategoryTreeMode::CATEGORIES;
 			} elseif ( !in_array( NS_FILE, $this->mOptions['namespaces'] ) ) {
 				$this->mOptions['mode'] = CategoryTreeMode::PAGES;
@@ -89,7 +100,7 @@ class CategoryTree {
 	 * @return bool
 	 */
 	private function isInverse() {
-		return $this->getOption( 'mode' ) == CategoryTreeMode::PARENTS;
+		return $this->getOption( 'mode' ) === CategoryTreeMode::PARENTS;
 	}
 
 	/**
@@ -120,7 +131,7 @@ class CategoryTree {
 
 				if ( is_numeric( $n ) ) {
 					$ns = (int)$n;
-				} elseif ( $n == '-' || $n == '_' || $n == '*' || $lower == 'main' ) {
+				} elseif ( $n === '-' || $n === '_' || $n === '*' || $lower === 'main' ) {
 					$ns = NS_MAIN;
 				} else {
 					$ns = $contLang->getNsIndex( $n );
@@ -157,15 +168,15 @@ class CategoryTree {
 			return (int)$mode;
 		}
 
-		if ( $mode == 'all' ) {
+		if ( $mode === 'all' ) {
 			$mode = CategoryTreeMode::ALL;
-		} elseif ( $mode == 'pages' ) {
+		} elseif ( $mode === 'pages' ) {
 			$mode = CategoryTreeMode::PAGES;
-		} elseif ( $mode == 'categories' || $mode == 'sub' ) {
+		} elseif ( $mode === 'categories' || $mode === 'sub' ) {
 			$mode = CategoryTreeMode::CATEGORIES;
-		} elseif ( $mode == 'parents' || $mode == 'super' || $mode == 'inverse' ) {
+		} elseif ( $mode === 'parents' || $mode === 'super' || $mode === 'inverse' ) {
 			$mode = CategoryTreeMode::PARENTS;
-		} elseif ( $mode == 'default' ) {
+		} elseif ( $mode === 'default' ) {
 			$mode = $wgCategoryTreeDefaultOptions['mode'];
 		}
 
@@ -194,15 +205,15 @@ class CategoryTree {
 			return ( (int)$value > 0 );
 		}
 
-		if ( $value == 'yes' || $value == 'y'
-			|| $value == 'true' || $value == 't' || $value == 'on'
+		if ( $value === 'yes' || $value === 'y'
+			|| $value === 'true' || $value === 't' || $value === 'on'
 		) {
 			return true;
-		} elseif ( $value == 'no' || $value == 'n'
-			|| $value == 'false' || $value == 'f' || $value == 'off'
+		} elseif ( $value === 'no' || $value === 'n'
+			|| $value === 'false' || $value === 'f' || $value === 'off'
 		) {
 			return false;
-		} elseif ( $value == 'null' || $value == 'default' || $value == 'none' || $value == 'x' ) {
+		} elseif ( $value === 'null' || $value === 'default' || $value === 'none' || $value === 'x' ) {
 			return null;
 		} else {
 			return false;
@@ -231,21 +242,21 @@ class CategoryTree {
 
 		$value = trim( strtolower( $value ) );
 
-		if ( $value == 'yes' || $value == 'y'
-			|| $value == 'true' || $value == 't' || $value == 'on'
+		if ( $value === 'yes' || $value === 'y'
+			|| $value === 'true' || $value === 't' || $value === 'on'
 		) {
 			return CategoryTreeHidePrefix::ALWAYS;
-		} elseif ( $value == 'no' || $value == 'n'
-			|| $value == 'false' || $value == 'f' || $value == 'off'
+		} elseif ( $value === 'no' || $value === 'n'
+			|| $value === 'false' || $value === 'f' || $value === 'off'
 		) {
 			return CategoryTreeHidePrefix::NEVER;
-		} elseif ( $value == 'always' ) {
+		} elseif ( $value === 'always' ) {
 			return CategoryTreeHidePrefix::ALWAYS;
-		} elseif ( $value == 'never' ) {
+		} elseif ( $value === 'never' ) {
 			return CategoryTreeHidePrefix::NEVER;
-		} elseif ( $value == 'auto' ) {
+		} elseif ( $value === 'auto' ) {
 			return CategoryTreeHidePrefix::AUTO;
-		} elseif ( $value == 'categories' || $value == 'category' || $value == 'smart' ) {
+		} elseif ( $value === 'categories' || $value === 'category' || $value === 'smart' ) {
 			return CategoryTreeHidePrefix::CATEGORIES;
 		} else {
 			return $wgCategoryTreeDefaultOptions['hideprefix'];
@@ -269,9 +280,9 @@ class CategoryTree {
 	 * @throws Exception
 	 */
 	protected static function encodeOptions( array $options, $enc ) {
-		if ( $enc == 'mode' || $enc == '' ) {
+		if ( $enc === 'mode' || $enc === '' ) {
 			$opt = $options['mode'];
-		} elseif ( $enc == 'json' ) {
+		} elseif ( $enc === 'json' ) {
 			$opt = FormatJson::encode( $options );
 		} else {
 			throw new Exception( 'Unknown encoding for CategoryTree options: ' . $enc );
@@ -285,7 +296,7 @@ class CategoryTree {
 	 * @return string
 	 */
 	public function getOptionsAsCacheKey( $depth = null ) {
-		$key = "";
+		$key = '';
 
 		foreach ( $this->mOptions as $k => $v ) {
 			if ( is_array( $v ) ) {
@@ -295,7 +306,7 @@ class CategoryTree {
 		}
 
 		if ( $depth !== null ) {
-			$key .= ";depth=" . $depth;
+			$key .= ';depth=' . $depth;
 		}
 		return $key;
 	}
@@ -317,7 +328,7 @@ class CategoryTree {
 	}
 
 	/**
-	 * Custom tag implementation. This is called by CategoryTreeHooks::parserHook, which is used to
+	 * Custom tag implementation. This is called by Hooks::parserHook, which is used to
 	 * load CategoryTreeFunctions.php on demand.
 	 * @param ?Parser $parser
 	 * @param string $category
@@ -360,29 +371,21 @@ class CategoryTree {
 		$attr['data-ct-mode'] = $this->mOptions['mode'];
 		$attr['data-ct-options'] = $this->getOptionsAsJsStructure();
 
-		$html = '';
-		$html .= Html::openElement( 'div', $attr );
-
 		if ( !$allowMissing && !$title->getArticleID() ) {
-			$html .= Html::openElement( 'span', [ 'class' => 'CategoryTreeNotice' ] );
-			if ( $parser ) {
-				$html .= $parser->recursiveTagParse(
-					wfMessage( 'categorytree-not-found', $category )->plain() );
-			} else {
-				$html .= wfMessage( 'categorytree-not-found', $category )->parse();
-			}
-			$html .= Html::closeElement( 'span' );
+			$html = Html::rawElement( 'span', [ 'class' => 'CategoryTreeNotice' ],
+				wfMessage( 'categorytree-not-found' )
+					->plaintextParams( $category )
+					->parse()
+			);
 		} else {
 			if ( !$hideroot ) {
-				$html .= $this->renderNode( $title, $depth );
+				$html = $this->renderNode( $title, $depth );
 			} else {
-				$html .= $this->renderChildren( $title, $depth );
+				$html = $this->renderChildren( $title, $depth );
 			}
 		}
 
-		$html .= Xml::closeElement( 'div' );
-
-		return $html;
+		return Html::rawElement( 'div', $attr, $html );
 	}
 
 	/**
@@ -395,7 +398,7 @@ class CategoryTree {
 	public function renderChildren( Title $title, $depth = 1 ) {
 		global $wgCategoryTreeMaxChildren, $wgCategoryTreeUseCategoryTable;
 
-		if ( $title->getNamespace() != NS_CATEGORY ) {
+		if ( $title->getNamespace() !== NS_CATEGORY ) {
 			// Non-categories can't have children. :)
 			return '';
 		}
@@ -429,8 +432,8 @@ class CategoryTree {
 				// NOTE: we assume that the $namespaces array contains only integers!
 				// decodeNamepsaces makes it so.
 				$where['page_namespace'] = $namespaces;
-			} elseif ( $mode != CategoryTreeMode::ALL ) {
-				if ( $mode == CategoryTreeMode::PAGES ) {
+			} elseif ( $mode !== CategoryTreeMode::ALL ) {
+				if ( $mode === CategoryTreeMode::PAGES ) {
 					$where['cl_type'] = [ 'page', 'subcat' ];
 				} else {
 					$where['cl_type'] = 'subcat';
@@ -499,13 +502,13 @@ class CategoryTree {
 
 			$cat = null;
 
-			if ( $doCount && $row->page_namespace == NS_CATEGORY ) {
+			if ( $doCount && (int)$row->page_namespace === NS_CATEGORY ) {
 				$cat = Category::newFromRow( $row, $t );
 			}
 
 			$s = $this->renderNodeInfo( $t, $cat, $depth - 1 );
 
-			if ( $row->page_namespace == NS_CATEGORY ) {
+			if ( (int)$row->page_namespace === NS_CATEGORY ) {
 				$categories .= $s;
 			} else {
 				$other .= $s;
@@ -538,26 +541,22 @@ class CategoryTree {
 
 		$special = SpecialPage::getTitleFor( 'CategoryTree' );
 
-		$s = '';
+		$s = [];
 
 		foreach ( $res as $row ) {
 			$t = Title::makeTitle( NS_CATEGORY, $row->cl_to );
 
-			if ( $s !== '' ) {
-				$s .= wfMessage( 'pipe-separator' )->escaped();
-			}
-
-			$s .= Xml::openElement( 'span', [ 'class' => 'CategoryTreeItem' ] );
-			$s .= $this->linkRenderer->makeLink(
-				$special,
-				$t->getText(),
-				[ 'class' => 'CategoryTreeLabel' ],
-				[ 'target' => $t->getDBkey() ] + $this->mOptions
+			$s[] = Html::rawElement( 'span', [ 'class' => 'CategoryTreeItem' ],
+				$this->linkRenderer->makeLink(
+					$special,
+					$t->getText(),
+					[ 'class' => 'CategoryTreeLabel' ],
+					[ 'target' => $t->getDBkey() ] + $this->mOptions
+				)
 			);
-			$s .= Xml::closeElement( 'span' );
 		}
 
-		return $s;
+		return implode( wfMessage( 'pipe-separator' )->escaped(), $s );
 	}
 
 	/**
@@ -569,7 +568,7 @@ class CategoryTree {
 	public function renderNode( Title $title, $children = 0 ) {
 		global $wgCategoryTreeUseCategoryTable;
 
-		if ( $wgCategoryTreeUseCategoryTable && $title->getNamespace() == NS_CATEGORY
+		if ( $wgCategoryTreeUseCategoryTable && $title->getNamespace() === NS_CATEGORY
 			&& !$this->isInverse()
 		) {
 			$cat = Category::newFromTitle( $title );
@@ -596,12 +595,12 @@ class CategoryTree {
 
 		$hideprefix = $this->getOption( 'hideprefix' );
 
-		if ( $hideprefix == CategoryTreeHidePrefix::ALWAYS ) {
+		if ( $hideprefix === CategoryTreeHidePrefix::ALWAYS ) {
 			$hideprefix = true;
-		} elseif ( $hideprefix == CategoryTreeHidePrefix::AUTO ) {
-			$hideprefix = ( $mode == CategoryTreeMode::CATEGORIES );
-		} elseif ( $hideprefix == CategoryTreeHidePrefix::CATEGORIES ) {
-			$hideprefix = ( $ns == NS_CATEGORY );
+		} elseif ( $hideprefix === CategoryTreeHidePrefix::AUTO ) {
+			$hideprefix = ( $mode === CategoryTreeMode::CATEGORIES );
+		} elseif ( $hideprefix === CategoryTreeHidePrefix::CATEGORIES ) {
+			$hideprefix = ( $ns === NS_CATEGORY );
 		} else {
 			$hideprefix = true;
 		}
@@ -624,48 +623,44 @@ class CategoryTree {
 		#      Specifically, the CategoryTreeChildren div must be the first
 		#      sibling with nodeName = DIV of the grandparent of the expland link.
 
-		$s .= Xml::openElement( 'div', [ 'class' => 'CategoryTreeSection' ] );
-		$s .= Xml::openElement( 'div', [ 'class' => 'CategoryTreeItem' ] );
+		$s .= Html::openElement( 'div', [ 'class' => 'CategoryTreeSection' ] );
+		$s .= Html::openElement( 'div', [ 'class' => 'CategoryTreeItem' ] );
 
 		$attr = [ 'class' => 'CategoryTreeBullet' ];
 
-		if ( $ns == NS_CATEGORY ) {
+		if ( $ns === NS_CATEGORY ) {
 			if ( $cat ) {
-				if ( $mode == CategoryTreeMode::CATEGORIES ) {
-					$count = intval( $cat->getSubcatCount() );
-				} elseif ( $mode == CategoryTreeMode::PAGES ) {
-					$count = intval( $cat->getPageCount() ) - intval( $cat->getFileCount() );
+				if ( $mode === CategoryTreeMode::CATEGORIES ) {
+					$count = $cat->getSubcatCount();
+				} elseif ( $mode === CategoryTreeMode::PAGES ) {
+					$count = $cat->getMemberCount() - $cat->getFileCount();
 				} else {
-					$count = intval( $cat->getPageCount() );
+					$count = $cat->getMemberCount();
 				}
 			}
 			if ( $count === 0 ) {
-				$bullet = wfMessage( 'categorytree-empty-bullet' )->escaped() . ' ';
+				$bullet = '';
 				$attr['class'] = 'CategoryTreeEmptyBullet';
 			} else {
-				$linkattr = [];
+				$linkattr = [
+					'class' => 'CategoryTreeToggle',
+					'data-ct-title' => $key,
+				];
 
-				$linkattr[ 'class' ] = "CategoryTreeToggle";
-				$linkattr['data-ct-title'] = $key;
-
-				if ( $children == 0 ) {
-					// Use ->plain() to ensure identical result as JS,
-					// which does:
-					// $link.text( mw.msg( 'categorytree-expand-bullet' ) );
-					$txt = wfMessage( 'categorytree-expand-bullet' )->plain();
-					$linkattr[ 'data-ct-state' ] = 'collapsed';
+				if ( $children === 0 ) {
+					$linkattr['data-ct-state'] = 'collapsed';
 				} else {
-					$txt = wfMessage( 'categorytree-collapse-bullet' )->plain();
-					$linkattr[ 'data-ct-loaded' ] = true;
-					$linkattr[ 'data-ct-state' ] = 'expanded';
+					$linkattr['data-ct-loaded'] = true;
+					$linkattr['data-ct-state'] = 'expanded';
 				}
 
-				$bullet = Html::element( 'span', $linkattr, $txt ) . ' ';
+				$bullet = Html::element( 'span', $linkattr ) . ' ';
 			}
 		} else {
-			$bullet = wfMessage( 'categorytree-page-bullet' )->escaped();
+			$bullet = '';
+			$attr['class'] = 'CategoryTreePageBullet';
 		}
-		$s .= Xml::tags( 'span', $attr, $bullet ) . ' ';
+		$s .= Html::rawElement( 'span', $attr, $bullet ) . ' ';
 
 		$s .= $link;
 
@@ -673,35 +668,40 @@ class CategoryTree {
 			$s .= self::createCountString( RequestContext::getMain(), $cat, $count );
 		}
 
-		$s .= Xml::closeElement( 'div' );
-		$s .= Xml::openElement(
+		$s .= Html::closeElement( 'div' );
+		$s .= Html::openElement(
 			'div',
 			[
 				'class' => 'CategoryTreeChildren',
-				'style' => $children > 0 ? "display:block" : "display:none"
+				'style' => $children === 0 ? 'display:none' : null
 			]
 		);
 
-		if ( $ns == NS_CATEGORY && $children > 0 ) {
+		if ( $ns === NS_CATEGORY && $children > 0 ) {
 			$children = $this->renderChildren( $title, $children );
-			if ( $children == '' ) {
-				$s .= Xml::openElement( 'i', [ 'class' => 'CategoryTreeNotice' ] );
-				if ( $mode == CategoryTreeMode::CATEGORIES ) {
-					$s .= wfMessage( 'categorytree-no-subcategories' )->escaped();
-				} elseif ( $mode == CategoryTreeMode::PAGES ) {
-					$s .= wfMessage( 'categorytree-no-pages' )->escaped();
-				} elseif ( $mode == CategoryTreeMode::PARENTS ) {
-					$s .= wfMessage( 'categorytree-no-parent-categories' )->escaped();
-				} else {
-					$s .= wfMessage( 'categorytree-nothing-found' )->escaped();
+			if ( $children === '' ) {
+				switch ( $mode ) {
+					case CategoryTreeMode::CATEGORIES:
+						$msg = 'categorytree-no-subcategories';
+						break;
+					case CategoryTreeMode::PAGES:
+						$msg = 'categorytree-no-pages';
+						break;
+					case CategoryTreeMode::PARENTS:
+						$msg = 'categorytree-no-parent-categories';
+						break;
+					default:
+						$msg = 'categorytree-nothing-found';
+						break;
 				}
-				$s .= Xml::closeElement( 'i' );
-			} else {
-				$s .= $children;
+				$children = Html::element( 'i', [ 'class' => 'CategoryTreeNotice' ],
+					wfMessage( $msg )->text()
+				);
 			}
+			$s .= $children;
 		}
 
-		$s .= Xml::closeElement( 'div' ) . Xml::closeElement( 'div' );
+		$s .= Html::closeElement( 'div' ) . Html::closeElement( 'div' );
 
 		return $s;
 	}
@@ -716,13 +716,10 @@ class CategoryTree {
 	public static function createCountString( IContextSource $context, ?Category $cat,
 		$countMode
 	) {
-		# Get counts, with conversion to integer so === works
-		# Note: $allCount is the total number of cat members,
-		# not the count of how many members are normal pages.
-		$allCount = $cat ? intval( $cat->getPageCount() ) : 0;
-		$subcatCount = $cat ? intval( $cat->getSubcatCount() ) : 0;
-		$fileCount = $cat ? intval( $cat->getFileCount() ) : 0;
-		$pages = $allCount - $subcatCount - $fileCount;
+		$allCount = $cat ? $cat->getMemberCount() : 0;
+		$subcatCount = $cat ? $cat->getSubcatCount() : 0;
+		$fileCount = $cat ? $cat->getFileCount() : 0;
+		$pages = $cat ? $cat->getPageCount( Category::COUNT_CONTENT_PAGES ) : 0;
 
 		$attr = [
 			'title' => $context->msg( 'categorytree-member-counts' )
@@ -752,7 +749,7 @@ class CategoryTree {
 
 		# Only $5 is actually used in the default message.
 		# Other arguments can be used in a customized message.
-		$s .= Xml::tags(
+		$s .= Html::rawElement(
 			'span',
 			$attr,
 			$context->msg( 'categorytree-member-num' )
@@ -770,16 +767,16 @@ class CategoryTree {
 	 * @return null|Title
 	 */
 	public static function makeTitle( $title ) {
-		$title = trim( $title );
+		$title = trim( strval( $title ) );
 
-		if ( strval( $title ) === '' ) {
+		if ( $title === '' ) {
 			return null;
 		}
 
 		# The title must be in the category namespace
 		# Ignore a leading Category: if there is one
 		$t = Title::newFromText( $title, NS_CATEGORY );
-		if ( !$t || $t->getNamespace() != NS_CATEGORY || $t->getInterwiki() != '' ) {
+		if ( !$t || $t->getNamespace() !== NS_CATEGORY || $t->getInterwiki() !== '' ) {
 			// If we were given something like "Wikipedia:Foo" or "Template:",
 			// try it again but forced.
 			$title = "Category:$title";
@@ -790,7 +787,6 @@ class CategoryTree {
 
 	/**
 	 * Internal function to cap depth
-	 * @suppress PhanPluginDuplicateConditionalNullCoalescing until PHP7 is required
 	 * @param string $mode
 	 * @param int $depth
 	 * @return int|mixed
@@ -798,14 +794,14 @@ class CategoryTree {
 	public static function capDepth( $mode, $depth ) {
 		global $wgCategoryTreeMaxDepth;
 
-		if ( is_numeric( $depth ) ) {
-			$depth = intval( $depth );
-		} else {
+		if ( !is_numeric( $depth ) ) {
 			return 1;
 		}
 
+		$depth = intval( $depth );
+
 		if ( is_array( $wgCategoryTreeMaxDepth ) ) {
-			$max = isset( $wgCategoryTreeMaxDepth[$mode] ) ? $wgCategoryTreeMaxDepth[$mode] : 1;
+			$max = $wgCategoryTreeMaxDepth[$mode] ?? 1;
 		} elseif ( is_numeric( $wgCategoryTreeMaxDepth ) ) {
 			$max = $wgCategoryTreeMaxDepth;
 		} else {

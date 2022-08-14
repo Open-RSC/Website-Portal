@@ -16,10 +16,8 @@ use MediaWiki\User\UserIdentityValue;
  */
 class SpecialPageFatalTest extends MediaWikiIntegrationTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
-		// FIXME: Acknowledge known non-fatal query (T248191)
-		$this->setMwGlobals( 'wgDBerrorLog', false );
 		// Deprecations don't matter for what this test cares about. This made browser tests fail
 		// on many occasions already. (T236809)
 		$this->filterDeprecated( '//' );

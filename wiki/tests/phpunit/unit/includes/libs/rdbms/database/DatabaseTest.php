@@ -6,11 +6,13 @@ use Wikimedia\Rdbms\DatabaseMysqli;
 use Wikimedia\Rdbms\DatabasePostgres;
 use Wikimedia\Rdbms\DatabaseSqlite;
 use Wikimedia\Rdbms\DBReadOnlyRoleError;
+use Wikimedia\Rdbms\DBTransactionStateError;
 use Wikimedia\Rdbms\DBUnexpectedError;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\LBFactorySingle;
-use Wikimedia\Rdbms\TransactionProfiler;
+use Wikimedia\Rdbms\TransactionManager;
+use Wikimedia\RequestTimeout\CriticalSectionScope;
 use Wikimedia\TestingAccessWrapper;
 
 class DatabaseTest extends PHPUnit\Framework\TestCase {
@@ -20,7 +22,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	/** @var DatabaseTestHelper */
 	private $db;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		$this->db = new DatabaseTestHelper( __CLASS__ . '::' . $this->getName() );
 	}
 
@@ -29,7 +31,13 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	 */
 	public function testFactory() {
 		$m = Database::NEW_UNCONNECTED; // no-connect mode
-		$p = [ 'host' => 'localhost', 'user' => 'me', 'password' => 'myself', 'dbname' => 'i' ];
+		$p = [
+			'host' => 'localhost',
+			'serverName' => 'localdb',
+			'user' => 'me',
+			'password' => 'myself',
+			'dbname' => 'i'
+		];
 
 		$this->assertInstanceOf( DatabaseMysqli::class, Database::factory( 'mysqli', $p, $m ) );
 		$this->assertInstanceOf( DatabaseMysqli::class, Database::factory( 'MySqli', $p, $m ) );
@@ -41,6 +49,10 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 		$this->assertInstanceOf( DatabaseSqlite::class, Database::factory( 'sqlite', $x, $m ) );
 		$x = $p + [ 'dbDirectory' => 'some/file' ];
 		$this->assertInstanceOf( DatabaseSqlite::class, Database::factory( 'sqlite', $x, $m ) );
+
+		$conn = Database::factory( 'sqlite', $p, $m );
+		$this->assertEquals( 'localhost', $conn->getServer() );
+		$this->assertEquals( 'localdb', $conn->getServerName() );
 	}
 
 	public static function provideAddQuotes() {
@@ -226,9 +238,9 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 		$lbFactory = LBFactorySingle::newFromConnection( $db );
 		// Ask for the connection so that LB sets internal state
-		// about this connection being the master connection
+		// about this connection being the primary connection
 		$lb = $lbFactory->getMainLB();
-		$conn = $lb->openConnection( $lb->getWriterIndex() );
+		$conn = $lb->getConnection( $lb->getWriterIndex() );
 		$this->assertSame( $db, $conn, 'Same DB instance' );
 		$this->assertTrue( $db->getFlag( DBO_TRX ), 'DBO_TRX is set' );
 
@@ -245,22 +257,22 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 		$this->assertTrue( $db->getFlag( DBO_TRX ), 'DBO_TRX still default' );
 
 		$called = false;
-		$lbFactory->beginMasterChanges( __METHOD__ );
+		$lbFactory->beginPrimaryChanges( __METHOD__ );
 		$db->onTransactionCommitOrIdle( $callback, __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is active' );
 
-		$lbFactory->commitMasterChanges( __METHOD__ );
+		$lbFactory->commitPrimaryChanges( __METHOD__ );
 		$this->assertTrue( $called, 'Called when lb-transaction is committed' );
 
 		$called = false;
-		$lbFactory->beginMasterChanges( __METHOD__ );
+		$lbFactory->beginPrimaryChanges( __METHOD__ );
 		$db->onTransactionCommitOrIdle( $callback, __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is active' );
 
-		$lbFactory->rollbackMasterChanges( __METHOD__ );
+		$lbFactory->rollbackPrimaryChanges( __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is rolled back' );
 
-		$lbFactory->commitMasterChanges( __METHOD__ );
+		$lbFactory->commitPrimaryChanges( __METHOD__ );
 		$this->assertFalse( $called, 'Not called in next round commit' );
 
 		$db->setFlag( DBO_TRX );
@@ -320,12 +332,12 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 		$lbFactory = LBFactorySingle::newFromConnection( $db );
 		// Ask for the connection so that LB sets internal state
-		// about this connection being the master connection
+		// about this connection being the primary connection
 		$lb = $lbFactory->getMainLB();
-		$conn = $lb->openConnection( $lb->getWriterIndex() );
+		$conn = $lb->getConnection( $lb->getWriterIndex() );
 		$this->assertSame( $db, $conn, 'Same DB instance' );
 
-		$this->assertFalse( $lb->hasMasterChanges() );
+		$this->assertFalse( $lb->hasPrimaryChanges() );
 		$this->assertTrue( $db->getFlag( DBO_TRX ), 'DBO_TRX is set' );
 		$called = false;
 		$callback = static function ( IDatabase $db ) use ( &$called ) {
@@ -334,25 +346,25 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 		$db->onTransactionPreCommitOrIdle( $callback, __METHOD__ );
 		$this->assertTrue( $called, 'Called when idle if DBO_TRX is set' );
 		$called = false;
-		$lbFactory->commitMasterChanges();
+		$lbFactory->commitPrimaryChanges();
 		$this->assertFalse( $called );
 
 		$called = false;
-		$lbFactory->beginMasterChanges( __METHOD__ );
+		$lbFactory->beginPrimaryChanges( __METHOD__ );
 		$db->onTransactionPreCommitOrIdle( $callback, __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is active' );
-		$lbFactory->commitMasterChanges( __METHOD__ );
+		$lbFactory->commitPrimaryChanges( __METHOD__ );
 		$this->assertTrue( $called, 'Called when lb-transaction is committed' );
 
 		$called = false;
-		$lbFactory->beginMasterChanges( __METHOD__ );
+		$lbFactory->beginPrimaryChanges( __METHOD__ );
 		$db->onTransactionPreCommitOrIdle( $callback, __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is active' );
 
-		$lbFactory->rollbackMasterChanges( __METHOD__ );
+		$lbFactory->rollbackPrimaryChanges( __METHOD__ );
 		$this->assertFalse( $called, 'Not called when lb-transaction is rolled back' );
 
-		$lbFactory->commitMasterChanges( __METHOD__ );
+		$lbFactory->commitPrimaryChanges( __METHOD__ );
 		$this->assertFalse( $called, 'Not called in next round commit' );
 	}
 
@@ -392,7 +404,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	public function testTransactionListener() {
 		$db = $this->db;
 
-		$db->setTransactionListener( 'ping', static function () use ( $db, &$called ) {
+		$db->setTransactionListener( 'ping', static function () use ( &$called ) {
 			$called = true;
 		} );
 
@@ -432,29 +444,31 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 		static $abstractMethods = [
 			'fetchAffectedRowCount',
 			'closeConnection',
-			'dataSeek',
 			'doQuery',
-			'fetchObject', 'fetchRow',
-			'fieldInfo', 'fieldName',
-			'getSoftwareLink', 'getServerVersion',
+			'fetchObject',
+			'fetchRow',
+			'fieldInfo',
+			'getSoftwareLink',
+			'getServerVersion',
 			'getType',
 			'indexInfo',
 			'insertId',
-			'lastError', 'lastErrno',
-			'numFields', 'numRows',
+			'lastError',
+			'lastErrno',
+			'numRows',
 			'open',
 			'strencode',
-			'tableExists'
+			'tableExists',
+			'getServer'
 		];
 		$db = $this->getMockBuilder( Database::class )
 			->disableOriginalConstructor()
-			->setMethods( array_values( array_unique( array_merge(
+			->onlyMethods( array_values( array_unique( array_merge(
 				$abstractMethods,
 				$methods
 			) ) ) )
 			->getMock();
 		$wdb = TestingAccessWrapper::newFromObject( $db );
-		$wdb->trxProfiler = new TransactionProfiler();
 		$wdb->connLogger = new \Psr\Log\NullLogger();
 		$wdb->queryLogger = new \Psr\Log\NullLogger();
 		$wdb->replLogger = new \Psr\Log\NullLogger();
@@ -463,7 +477,9 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 		$wdb->deprecationLogger = static function ( $msg ) {
 		};
 		$wdb->currentDomain = DatabaseDomain::newUnspecified();
-		$wdb->server = 'localhost';
+
+		$db->method( 'getServer' )->willReturn( '*dummy*' );
+		$db->setTransactionManager( new TransactionManager() );
 
 		return $db;
 	}
@@ -622,7 +638,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	public function testDBOCannotSet( $flag ) {
 		$db = $this->getMockBuilder( DatabaseMysqli::class )
 			->disableOriginalConstructor()
-			->setMethods( null )
+			->onlyMethods( [] )
 			->getMock();
 
 		$this->expectException( DBUnexpectedError::class );
@@ -637,7 +653,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	public function testDBOCannotClear( $flag ) {
 		$db = $this->getMockBuilder( DatabaseMysqli::class )
 			->disableOriginalConstructor()
-			->setMethods( null )
+			->onlyMethods( [] )
 			->getMock();
 
 		$this->expectException( DBUnexpectedError::class );
@@ -765,7 +781,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 	 * Provider for testIsWriteQuery
 	 * @return array
 	 */
-	public function provideIsWriteQuery() : array {
+	public function provideIsWriteQuery(): array {
 		return [
 			[ 'SELECT foo', false ],
 			[ '  SELECT foo FROM bar', false ],
@@ -782,7 +798,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers Database::executeQuery()
-	 * @covers Database::assertIsWritableMaster()
+	 * @covers Database::assertIsWritablePrimary()
 	 */
 	public function testShouldRejectPersistentWriteQueryOnReplicaDatabaseConnection() {
 		$this->expectException( DBReadOnlyRoleError::class );
@@ -798,7 +814,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers Database::executeQuery()
-	 * @covers Database::assertIsWritableMaster()
+	 * @covers Database::assertIsWritablePrimary()
 	 */
 	public function testShouldAcceptTemporaryTableOperationsOnReplicaDatabaseConnection() {
 		$dbr = new DatabaseTestHelper(
@@ -822,7 +838,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers Database::executeQuery()
-	 * @covers Database::assertIsWritableMaster()
+	 * @covers Database::assertIsWritablePrimary()
 	 */
 	public function testShouldRejectPseudoPermanentTemporaryTableOperationsOnReplicaDatabaseConnection() {
 		$this->expectException( DBReadOnlyRoleError::class );
@@ -842,7 +858,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers Database::executeQuery()
-	 * @covers Database::assertIsWritableMaster()
+	 * @covers Database::assertIsWritablePrimary()
 	 */
 	public function testShouldAcceptWriteQueryOnPrimaryDatabaseConnection() {
 		$dbr = new DatabaseTestHelper(
@@ -857,7 +873,7 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers Database::executeQuery()
-	 * @covers Database::assertIsWritableMaster()
+	 * @covers Database::assertIsWritablePrimary()
 	 */
 	public function testShouldRejectWriteQueryOnPrimaryDatabaseConnectionWhenReplicaQueryRoleFlagIsSet() {
 		$this->expectException( DBReadOnlyRoleError::class );
@@ -873,5 +889,44 @@ class DatabaseTest extends PHPUnit\Framework\TestCase {
 			__METHOD__,
 			Database::QUERY_REPLICA_ROLE
 		);
+	}
+
+	/**
+	 * @covers Database::commenceCriticalSection()
+	 * @covers Database::completeCriticalSection()
+	 */
+	public function testCriticalSectionErrorSelect() {
+		$this->expectException( DBTransactionStateError::class );
+
+		$db = TestingAccessWrapper::newFromObject( $this->db );
+		try {
+			$this->corruptDbState( $db );
+		} catch ( RuntimeException $e ) {
+			$this->assertEquals( "Unexpected error", $e->getMessage() );
+		}
+
+		$db->query( "SELECT 1", __METHOD__ );
+	}
+
+	/**
+	 * @covers Database::commenceCriticalSection()
+	 * @covers Database::completeCriticalSection()
+	 */
+	public function testCriticalSectionErrorRollback() {
+		$db = TestingAccessWrapper::newFromObject( $this->db );
+		try {
+			$this->corruptDbState( $db );
+		} catch ( RuntimeException $e ) {
+			$this->assertEquals( "Unexpected error", $e->getMessage() );
+		}
+
+		$db->rollback( __METHOD__, IDatabase::FLUSHING_ALL_PEERS );
+		$this->assertTrue( true, "No exception on ROLLBACK" );
+	}
+
+	private function corruptDbState( $db ) {
+		$cs = $db->commenceCriticalSection( __METHOD__ );
+		$this->assertInstanceOf( CriticalSectionScope::class, $cs );
+		throw new RuntimeException( "Unexpected error" );
 	}
 }

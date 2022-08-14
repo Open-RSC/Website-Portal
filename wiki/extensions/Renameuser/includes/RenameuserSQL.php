@@ -1,7 +1,14 @@
 <?php
 
+namespace MediaWiki\Extension\Renameuser;
+
+use Job;
+use ManualLogEntry;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Session\SessionManager;
+use SpecialLog;
+use Title;
+use User;
 
 /**
  * Class which performs the actual renaming of users
@@ -141,7 +148,7 @@ class RenameuserSQL {
 		// Grab the user's edit count first, used in log entry
 		$contribs = User::newFromId( $this->uid )->getEditCount();
 
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$atomicId = $dbw->startAtomic( __METHOD__, $dbw::ATOMIC_CANCELABLE );
 
 		$this->hookRunner->onRenameUserPreRename( $this->uid, $this->old, $this->new );
@@ -204,6 +211,18 @@ class RenameuserSQL {
 			__METHOD__
 		);
 
+		$this->debug( "Updating recentchanges table for {$this->old} to {$this->new}" );
+		$dbw->update( 'recentchanges',
+			[ 'rc_title' => $newTitle->getDBkey() ],
+			[
+				'rc_type' => RC_LOG,
+				'rc_log_type' => $logTypesOnUser,
+				'rc_namespace' => NS_USER,
+				'rc_title' => $oldTitle->getDBkey()
+			],
+			__METHOD__
+		);
+
 		// Do immediate re-attribution table updates...
 		foreach ( $this->tables as $table => $fieldSet ) {
 			list( $nameCol, $userCol ) = $fieldSet;
@@ -253,15 +272,7 @@ class RenameuserSQL {
 			}
 
 			// Insert jobs into queue!
-			while ( true ) {
-				$row = $dbw->fetchObject( $res );
-				if ( !$row ) {
-					# If there are any job rows left, add it to the queue as one job
-					if ( $jobParams['count'] > 0 ) {
-						$jobs[] = Job::factory( 'renameUser', $oldTitle, $jobParams );
-					}
-					break;
-				}
+			foreach ( $res as $row ) {
 				# Since the ORDER BY is ASC, set the min timestamp with first row
 				if ( $jobParams['count'] === 0 ) {
 					$jobParams['minTimestamp'] = $row->$timestampC;
@@ -278,6 +289,10 @@ class RenameuserSQL {
 					$jobParams['maxTimestamp'] = '0';
 					$jobParams['count'] = 0;
 				}
+			}
+			# If there are any job rows left, add it to the queue as one job
+			if ( $jobParams['count'] > 0 ) {
+				$jobs[] = Job::factory( 'renameUser', $oldTitle, $jobParams );
 			}
 		}
 
@@ -302,24 +317,23 @@ class RenameuserSQL {
 		// jobs will see that the transaction was not committed and will cancel themselves.
 		$count = count( $jobs );
 		if ( $count > 0 ) {
-			JobQueueGroup::singleton()->push( $jobs );
+			MediaWikiServices::getInstance()->getJobQueueGroupFactory()->makeJobQueueGroup()->push( $jobs );
 			$this->debug( "Queued $count jobs for {$this->old} to {$this->new}" );
 		}
 
 		// Commit the transaction
 		$dbw->endAtomic( __METHOD__ );
 
-		$that = $this;
 		$fname = __METHOD__;
 		$dbw->onTransactionCommitOrIdle(
-			function () use ( $that, $dbw, $logEntry, $logid, $fname ) {
+			function () use ( $dbw, $logEntry, $logid, $fname ) {
 				$dbw->startAtomic( $fname );
 				// Clear caches and inform authentication plugins
-				$user = User::newFromId( $that->uid );
+				$user = User::newFromId( $this->uid );
 				$user->load( User::READ_LATEST );
 				// Trigger the UserSaveSettings hook
 				$user->saveSettings();
-				$this->hookRunner->onRenameUserComplete( $that->uid, $that->old, $that->new );
+				$this->hookRunner->onRenameUserComplete( $this->uid, $this->old, $this->new );
 				// Publish to RC
 				$logEntry->publish( $logid );
 				$dbw->endAtomic( $fname );
@@ -337,7 +351,7 @@ class RenameuserSQL {
 	 * @return int Returns 0 if no row was found
 	 */
 	private static function lockUserAndGetId( $name ) {
-		return (int)wfGetDB( DB_MASTER )->selectField(
+		return (int)wfGetDB( DB_PRIMARY )->selectField(
 			'user',
 			'user_id',
 			[ 'user_name' => $name ],
@@ -346,3 +360,5 @@ class RenameuserSQL {
 		);
 	}
 }
+
+class_alias( RenameuserSQL::class, 'RenameuserSQL' );

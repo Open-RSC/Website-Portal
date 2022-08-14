@@ -58,7 +58,7 @@
 	"oath-log-header": "These events track changes to users' two-factor authentication status.",
 	"logentry-oath-disable-other": "$1 {{GENDER:$2|disabled}} the two-factor authentication of $3",
 	"logentry-oath-verify": "$1 {{GENDER:$2|checked}} if $3 had two-factor authentication enabled",
-	"oauthauth-ui-no-module": "None enabled",
+	"oathauth-ui-no-module": "None enabled",
 	"oathauth-module-invalid": "The OATHAuth module that the user has registered is invalid.",
 	"oathauth-module-totp-label": "TOTP (one-time token)",
 	"oathauth-ui-manage": "Manage",
@@ -82,6 +82,13 @@
 	"oathauth-switch-method-warning": "By switching to $2 two-factor authentication method, current method ($1) will be disabled, and all the data associated with the current authentication method will be deleted",
 	"oathauth-totp-disable-warning": "You will no longer be able to use the authentication device registered with this account. All scratch-tokens associated with this account will be invalidated.",
 	"oathauth-invalidrequest": "Invalid request",
+	"notification-header-oathauth-disable": "Two-factor authentication has been disabled on {{GENDER:$2|your account}}.",
+	"notification-body-oathauth-disable": "If {{GENDER:$2|you}} did not do this, {{GENDER:$2|your account}} may have been compromised.",
+	"notification-body-oathauth-disable-other": "If {{GENDER:$2|you}} did not request this, {{GENDER:$2|you}} should contact an administrator.",
+	"oathauth-notifications-disable-help": "Help",
+	"oathauth-notifications-disable-helplink": "mw:Special:MyLanguage/Help:Two-factor authentication",
 	"oathauth-verify-enabled": "{{GENDER:$1|$1}} has two-factor authentication enabled.",
-	"oathauth-verify-disabled": "{{GENDER:$1|$1}} does not have two-factor authentication enabled."
+	"oathauth-verify-disabled": "{{GENDER:$1|$1}} does not have two-factor authentication enabled.",
+	"oathauth-prefs-disabledgroups": "Disabled {{PLURAL:$1|group|groups}}:",
+	"oathauth-prefs-disabledgroups-help": "{{GENDER:$2|Your membership}} in {{PLURAL:$1|this group|these groups}} is disabled until you enable [[Special:Manage Two-factor authentication|two-factor authentication]]."
 }

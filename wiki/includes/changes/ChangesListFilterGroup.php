@@ -88,14 +88,14 @@ abstract class ChangesListFilterGroup {
 	 * Priority integer.  Higher values means higher up in the
 	 * group list.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	protected $priority;
 
 	/**
 	 * Associative array of filters, as ChangesListFilter objects, with filter name as key
 	 *
-	 * @var array
+	 * @var ChangesListFilter[]
 	 */
 	protected $filters;
 
@@ -207,7 +207,7 @@ abstract class ChangesListFilterGroup {
 	/**
 	 * Creates a filter of the appropriate type for this group, from the definition
 	 *
-	 * @param array $filterDefinition Filter definition
+	 * @param array $filterDefinition
 	 * @return ChangesListFilter Filter
 	 */
 	abstract protected function createFilter( array $filterDefinition );
@@ -354,7 +354,7 @@ abstract class ChangesListFilterGroup {
 			);
 		}
 
-		usort( $this->filters, static function ( $a, $b ) {
+		usort( $this->filters, static function ( ChangesListFilter $a, ChangesListFilter $b ) {
 			return $b->getPriority() <=> $a->getPriority();
 		} );
 

@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * Split into separate \MediaWiki\Tests\Unit\XmlTest for unit tests
  *
@@ -9,10 +7,10 @@ use MediaWiki\MediaWikiServices;
  */
 class XmlTest extends MediaWikiIntegrationTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
-		$langObj = MediaWikiServices::getInstance()->getLanguageFactory()->getLanguage( 'en' );
+		$langObj = $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' );
 		$langObj->setNamespaces( [
 			-2 => 'Media',
 			-1 => 'Special',

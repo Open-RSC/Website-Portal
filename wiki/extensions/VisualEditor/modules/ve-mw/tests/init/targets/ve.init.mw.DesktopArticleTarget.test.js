@@ -5,11 +5,24 @@
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
-QUnit.module( 've.init.mw.DesktopArticleTarget', ve.test.utils.mwEnvironment );
+QUnit.module( 've.init.mw.DesktopArticleTarget', ve.test.utils.newMwEnvironment( {
+	config: {
+		wgVisualEditor: ve.extendObject( {}, mw.config.get( 'wgVisualEditor' ), {
+			pageLanguageCode: 'he',
+			pageLanguageDir: 'rtl'
+		} ),
+		wgVisualEditorConfig: ve.extendObject( {}, mw.config.get( 'wgVisualEditorConfig' ), {
+			// Disable welcome dialog
+			showBetaWelcome: false
+		} ),
+		wgAction: 'view',
+		wgNamespaceNumber: 0,
+		wgCanonicalNamespace: ''
+	}
+} ) );
 
-QUnit.test( 'init', function ( assert ) {
-	var
-		response = {
+QUnit.test( 'init', ( assert ) => {
+	const response = {
 			visualeditor: {
 				result: 'success',
 				notices: [
@@ -84,12 +97,10 @@ QUnit.test( 'init', function ( assert ) {
 		dataPromise = ve.createDeferred().resolve( response ).promise(),
 		done = assert.async();
 
-	target.on( 'surfaceReady', function () {
+	target.on( 'surfaceReady', () => {
 		assert.strictEqual( target.getSurface().getModel().getDocument().getLang(), 'he', 'Page language is passed through from config' );
 		assert.strictEqual( target.getSurface().getModel().getDocument().getDir(), 'rtl', 'Page direction is passed through from config' );
-		mw.config.get( 'wgVisualEditor' ).pageLanguageCode = 'en';
-		mw.config.get( 'wgVisualEditor' ).pageLanguageDir = 'ltr';
-		target.activatingDeferred.then( function () {
+		target.activatingDeferred.then( () => {
 			assert.equalDomElement(
 				target.actionsToolbar.tools.notices.noticeItems[ 0 ].$element[ 0 ],
 				$( '<div class="ve-ui-mwNoticesPopupTool-item"><b>HTML string notice</b> message</div>' )[ 0 ],
@@ -102,20 +113,16 @@ QUnit.test( 'init', function ( assert ) {
 				'Object notice message is passed through from API'
 			);
 			assert.strictEqual( target.actionsToolbar.tools.notices.noticeItems[ 1 ].type, 'object notice', 'Object notice type is passed through from API' );
-			target.destroy().then( function () {
+			target.destroy().then( () => {
 				done();
 			} );
 		} );
 	} );
-	mw.config.get( 'wgVisualEditor' ).pageLanguageCode = 'he';
-	mw.config.get( 'wgVisualEditor' ).pageLanguageDir = 'rtl';
-	mw.config.get( 'wgVisualEditorConfig' ).showBetaWelcome = false;
 	target.activate( dataPromise );
 } );
 
-QUnit.test( 'compatibility', function ( assert ) {
-	var profile, matches, compatibility,
-		cases = [
+QUnit.test( 'compatibility', ( assert ) => {
+	const cases = [
 			{
 				msg: 'Unidentified browser',
 				userAgent: 'FooBar Browser Company Version 3.141',
@@ -248,16 +255,16 @@ QUnit.test( 'compatibility', function ( assert ) {
 			}
 		];
 
-	compatibility = {
+	const compatibility = {
 		supportedList: ve.init.mw.DesktopArticleTarget.static.compatibility.supportedList,
 		// TODO: Fix this mess when we split ve.init from ve.platform
 		unsupportedList: mw.libs.ve.unsupportedList
 	};
 
-	cases.forEach( function ( caseItem ) {
-		profile = $.client.profile( { userAgent: caseItem.userAgent, platform: '' } );
-		matches = [];
-		[ 'unsupportedList', 'supportedList' ].every( function ( list ) {
+	cases.forEach( ( caseItem ) => {
+		const profile = $.client.profile( { userAgent: caseItem.userAgent, platform: '' } ),
+			matches = [];
+		[ 'unsupportedList', 'supportedList' ].every( ( list ) => {
 			if ( $.client.test( compatibility[ list ], profile, true ) ) {
 				matches.push( list );
 				// Don't check supportedList if on unsupportedList

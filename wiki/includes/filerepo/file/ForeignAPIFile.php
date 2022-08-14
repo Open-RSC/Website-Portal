@@ -20,6 +20,9 @@
  */
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Permissions\Authority;
+use MediaWiki\User\UserIdentity;
+use MediaWiki\User\UserIdentityValue;
 
 /**
  * Foreign file accessible through api.php requests.
@@ -30,7 +33,7 @@ class ForeignAPIFile extends File {
 	/** @var bool */
 	private $mExists;
 	/** @var array */
-	private $mInfo = [];
+	private $mInfo;
 
 	protected $repoClass = ForeignAPIRepo::class;
 
@@ -68,9 +71,7 @@ class ForeignAPIFile extends File {
 		$info = $repo->getImageInfo( $data );
 
 		if ( $info ) {
-			$lastRedirect = isset( $data['query']['redirects'] )
-				? count( $data['query']['redirects'] ) - 1
-				: -1;
+			$lastRedirect = count( $data['query']['redirects'] ?? [] ) - 1;
 			if ( $lastRedirect >= 0 ) {
 				// @phan-suppress-next-line PhanTypeArraySuspiciousNullable
 				$newtitle = Title::newFromText( $data['query']['redirects'][$lastRedirect]['to'] );
@@ -133,13 +134,20 @@ class ForeignAPIFile extends File {
 		$otherParams = $this->handler->makeParamString( $params );
 		$width = $params['width'] ?? -1;
 		$height = $params['height'] ?? -1;
+		$thumbUrl = false;
 
-		$thumbUrl = $this->repo->getThumbUrlFromCache(
-			$this->getName(),
-			$width,
-			$height,
-			$otherParams
-		);
+		if ( $width > 0 || $height > 0 ) {
+			// Only query the remote if there are dimensions
+			$thumbUrl = $this->repo->getThumbUrlFromCache(
+				$this->getName(),
+				$width,
+				$height,
+				$otherParams
+			);
+		} elseif ( $this->getMediaType() === MEDIATYPE_AUDIO ) {
+			// This has no dimensions, but we still need to pass a value to getTransform()
+			$thumbUrl = '/';
+		}
 		if ( $thumbUrl === false ) {
 			global $wgLang;
 
@@ -162,7 +170,7 @@ class ForeignAPIFile extends File {
 	 * @return int
 	 */
 	public function getWidth( $page = 1 ) {
-		return isset( $this->mInfo['width'] ) ? intval( $this->mInfo['width'] ) : 0;
+		return (int)( $this->mInfo['width'] ?? 0 );
 	}
 
 	/**
@@ -170,7 +178,7 @@ class ForeignAPIFile extends File {
 	 * @return int
 	 */
 	public function getHeight( $page = 1 ) {
-		return isset( $this->mInfo['height'] ) ? intval( $this->mInfo['height'] ) : 0;
+		return (int)( $this->mInfo['height'] ?? 0 );
 	}
 
 	/**
@@ -185,6 +193,17 @@ class ForeignAPIFile extends File {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getMetadataArray(): array {
+		if ( isset( $this->mInfo['metadata'] ) ) {
+			return self::parseMetadata( $this->mInfo['metadata'] );
+		}
+
+		return [];
+	}
+
+	/**
 	 * @return array|null Extended metadata (see imageinfo API for format) or
 	 *   null on error
 	 */
@@ -194,16 +213,33 @@ class ForeignAPIFile extends File {
 
 	/**
 	 * @param mixed $metadata
-	 * @return mixed
+	 * @return array
 	 */
 	public static function parseMetadata( $metadata ) {
+		if ( !is_array( $metadata ) ) {
+			return [ '_error' => $metadata ];
+		}
+		'@phan-var array[] $metadata';
+		$ret = [];
+		foreach ( $metadata as $meta ) {
+			$ret[$meta['name']] = self::parseMetadataValue( $meta['value'] );
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * @param mixed $metadata
+	 * @return mixed
+	 */
+	private static function parseMetadataValue( $metadata ) {
 		if ( !is_array( $metadata ) ) {
 			return $metadata;
 		}
 		'@phan-var array[] $metadata';
 		$ret = [];
 		foreach ( $metadata as $meta ) {
-			$ret[$meta['name']] = self::parseMetadata( $meta['value'] );
+			$ret[$meta['name']] = self::parseMetadataValue( $meta['value'] );
 		}
 
 		return $ret;
@@ -242,24 +278,21 @@ class ForeignAPIFile extends File {
 		return null;
 	}
 
-	/**
-	 * @param string $type
-	 * @return int|null|string
-	 */
-	public function getUser( $type = 'text' ) {
-		if ( $type == 'text' ) {
-			return isset( $this->mInfo['user'] ) ? strval( $this->mInfo['user'] ) : null;
-		} else {
-			return 0; // What makes sense here, for a remote user?
+	public function getUploader( int $audience = self::FOR_PUBLIC, Authority $performer = null ): ?UserIdentity {
+		if ( isset( $this->mInfo['user'] ) ) {
+			// We don't know if the foreign repo will have a real interwiki prefix,
+			// treat this user as a foreign imported user. Maybe we can do better?
+			return UserIdentityValue::newExternal( $this->getRepoName(), $this->mInfo['user'] );
 		}
+		return null;
 	}
 
 	/**
 	 * @param int $audience
-	 * @param User|null $user
+	 * @param Authority|null $performer
 	 * @return null|string
 	 */
-	public function getDescription( $audience = self::FOR_PUBLIC, User $user = null ) {
+	public function getDescription( $audience = self::FOR_PUBLIC, Authority $performer = null ) {
 		return isset( $this->mInfo['comment'] ) ? strval( $this->mInfo['comment'] ) : null;
 	}
 
@@ -288,7 +321,7 @@ class ForeignAPIFile extends File {
 	 */
 	public function getMimeType() {
 		if ( !isset( $this->mInfo['mime'] ) ) {
-			$magic = MediaWiki\MediaWikiServices::getInstance()->getMimeAnalyzer();
+			$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 			$this->mInfo['mime'] = $magic->getMimeTypeFromExtensionOrNull( $this->getExtension() );
 		}
 
@@ -302,7 +335,7 @@ class ForeignAPIFile extends File {
 		if ( isset( $this->mInfo['mediatype'] ) ) {
 			return $this->mInfo['mediatype'];
 		}
-		$magic = MediaWiki\MediaWikiServices::getInstance()->getMimeAnalyzer();
+		$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 
 		return $magic->getMediaType( null, $this->getMimeType() );
 	}
@@ -355,12 +388,10 @@ class ForeignAPIFile extends File {
 
 	private function purgeDescriptionPage() {
 		$services = MediaWikiServices::getInstance();
-		$url = $this->repo->getDescriptionRenderUrl(
-			$this->getName(),
-			$services->getContentLanguage()->getCode()
-		);
+		$langCode = $services->getContentLanguage()->getCode();
 
-		$key = $this->repo->getLocalCacheKey( 'file-remote-description', md5( $url ) );
+		// Key must match File::getDescriptionText
+		$key = $this->repo->getLocalCacheKey( 'file-remote-description', $langCode, md5( $this->getName() ) );
 		$services->getMainWANObjectCache()->delete( $key );
 	}
 

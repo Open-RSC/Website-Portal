@@ -5,9 +5,8 @@ namespace MediaWiki\HookContainer {
 	use MediaWikiUnitTestCase;
 	use Psr\Container\ContainerInterface;
 	use UnexpectedValueException;
-	use Wikimedia\ObjectFactory;
+	use Wikimedia\ObjectFactory\ObjectFactory;
 	use Wikimedia\ScopedCallback;
-	use Wikimedia\TestingAccessWrapper;
 
 	class HookContainerTest extends MediaWikiUnitTestCase {
 
@@ -105,7 +104,7 @@ namespace MediaWiki\HookContainer {
 						'name' => 'FooExtension-FooActionHandler',
 						'class' => 'FooExtension\\Hooks',
 						'services' => [] ],
-					  'deprecated' => true
+					'deprecated' => true
 					],
 					[]
 				],
@@ -475,7 +474,7 @@ namespace MediaWiki\HookContainer {
 				$count++;
 			} );
 
-			// Sanity check: all three handlers should be called initially.
+			// Check: all three handlers should be called initially.
 			$count = 0;
 			$hookContainer->run( 'Increment', [ &$count ] );
 			$this->assertSame( 3, $count );
@@ -516,7 +515,7 @@ namespace MediaWiki\HookContainer {
 				$count++;
 			} );
 
-			// Sanity check: both handlers should be called initially.
+			// Check: both handlers should be called initially.
 			$count = 0;
 			$hookContainer->run( 'Increment', [ &$count ] );
 			$this->assertSame( 3, $count );

@@ -25,6 +25,8 @@
 
 use MediaWiki\ChangeTags\Taggable;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageReference;
 use MediaWiki\User\UserIdentity;
 use Wikimedia\Assert\Assert;
 use Wikimedia\IPUtils;
@@ -154,11 +156,18 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 	/**
 	 * Set the title of the object changed.
 	 *
+	 * @param LinkTarget|PageReference $target calling with LinkTarget
+	 *   is deprecated since 1.37
 	 * @since 1.19
-	 * @param LinkTarget $target
 	 */
-	public function setTarget( LinkTarget $target ) {
-		$this->target = Title::newFromLinkTarget( $target );
+	public function setTarget( $target ) {
+		if ( $target instanceof PageReference ) {
+			$this->target = Title::castFromPageReference( $target );
+		} elseif ( $target instanceof LinkTarget ) {
+			$this->target = Title::newFromLinkTarget( $target );
+		} else {
+			throw new InvalidArgumentException( "Invalid target provided" );
+		}
 	}
 
 	/**
@@ -271,11 +280,14 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 	 * @throws MWException
 	 */
 	public function insert( IDatabase $dbw = null ) {
-		$dbw = $dbw ?: wfGetDB( DB_MASTER );
+		$dbw = $dbw ?: wfGetDB( DB_PRIMARY );
 
 		if ( $this->timestamp === null ) {
 			$this->timestamp = wfTimestampNow();
 		}
+
+		$actorId = MediaWikiServices::getInstance()->getActorStore()
+			->acquireActorId( $this->getPerformerIdentity(), $dbw );
 
 		// Trim spaces on user supplied text
 		$comment = trim( $this->getComment() );
@@ -294,6 +306,7 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 			'log_type' => $this->getType(),
 			'log_action' => $this->getSubtype(),
 			'log_timestamp' => $dbw->timestamp( $this->getTimestamp() ),
+			'log_actor' => $actorId,
 			'log_namespace' => $this->getTarget()->getNamespace(),
 			'log_title' => $this->getTarget()->getDBkey(),
 			'log_page' => $this->getTarget()->getArticleID(),
@@ -303,8 +316,6 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 			$data['log_deleted'] = $this->deleted;
 		}
 		$data += CommentStore::getStore()->insert( $dbw, 'log_comment', $comment );
-		$data += ActorMigration::newMigration()
-			->getInsertValues( $dbw, 'log_user', $this->getPerformerIdentity() );
 
 		$dbw->insert( 'logging', $data, __METHOD__ );
 		$this->id = $dbw->insertId();
@@ -428,7 +439,7 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 				}
 			},
 			DeferredUpdates::POSTSEND,
-			wfGetDB( DB_MASTER )
+			wfGetDB( DB_PRIMARY )
 		);
 	}
 
@@ -451,14 +462,6 @@ class ManualLogEntry extends LogEntryBase implements Taggable {
 	 */
 	public function getParameters() {
 		return $this->parameters;
-	}
-
-	/**
-	 * @return User
-	 */
-	public function getPerformer() {
-		wfDeprecated( __METHOD__, '1.36' );
-		return User::newFromIdentity( $this->performer );
 	}
 
 	/**

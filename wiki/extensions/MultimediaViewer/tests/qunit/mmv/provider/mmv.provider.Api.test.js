@@ -18,7 +18,7 @@
 ( function () {
 	QUnit.module( 'mmv.provider.Api', QUnit.newMwEnvironment() );
 
-	QUnit.test( 'Api constructor sanity check', function ( assert ) {
+	QUnit.test( 'Api constructor sense check', function ( assert ) {
 		var api = { get: function () {} },
 			options = {},
 			apiProvider = new mw.mmv.provider.Api( api, options ),
@@ -35,8 +35,8 @@
 
 		api.get = this.sandbox.stub();
 		apiProvider.apiGetWithMaxAge( {} );
-		assert.strictEqual( 'maxage' in api.get.getCall( 0 ).args[ 0 ], false, 'maxage is not set by default' );
-		assert.strictEqual( 'smaxage' in api.get.getCall( 0 ).args[ 0 ], false, 'smaxage is not set by default' );
+		assert.notOk( 'maxage' in api.get.getCall( 0 ).args[ 0 ], 'maxage is not set by default' );
+		assert.notOk( 'smaxage' in api.get.getCall( 0 ).args[ 0 ], 'smaxage is not set by default' );
 
 		options = { maxage: 123 };
 		apiProvider = new mw.mmv.provider.Api( api, options );
@@ -53,8 +53,8 @@
 
 		api.get = this.sandbox.stub();
 		apiProvider.apiGetWithMaxAge( {}, null, null );
-		assert.strictEqual( 'maxage' in api.get.getCall( 0 ).args[ 0 ], false, 'maxage can be overridden to unset' );
-		assert.strictEqual( 'smaxage' in api.get.getCall( 0 ).args[ 0 ], false, 'smaxage can be overridden to unset' );
+		assert.notOk( 'maxage' in api.get.getCall( 0 ).args[ 0 ], 'maxage can be overridden to unset' );
+		assert.notOk( 'smaxage' in api.get.getCall( 0 ).args[ 0 ], 'smaxage can be overridden to unset' );
 	} );
 
 	QUnit.test( 'getCachedPromise success', function ( assert ) {

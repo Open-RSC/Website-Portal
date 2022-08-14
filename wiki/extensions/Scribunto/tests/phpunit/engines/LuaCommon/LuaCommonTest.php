@@ -51,13 +51,13 @@ class Scribunto_LuaCommonTest extends Scribunto_LuaEngineTestBase {
 		'_VERSION',
 	];
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		// Register libraries for self::testPHPLibrary()
 		$this->mergeMwGlobalArrayValue( 'wgHooks', [
 			'ScribuntoExternalLibraries' => [
-				function ( $engine, &$libs ) {
+				static function ( $engine, &$libs ) {
 					$libs += [
 						'CommonTestsLib' => [
 							'class' => Scribunto_LuaCommonTestsLibrary::class,
@@ -288,7 +288,7 @@ class Scribunto_LuaCommonTest extends Scribunto_LuaEngineTestBase {
 		$loadcount = 0;
 		$interpreter->callFunction(
 			$interpreter->loadString( 'mw.markLoaded = ...', 'fortest' ),
-			$interpreter->wrapPHPFunction( function () use ( &$loadcount ) {
+			$interpreter->wrapPHPFunction( static function () use ( &$loadcount ) {
 				$loadcount++;
 			} )
 		);
@@ -626,7 +626,7 @@ class Scribunto_LuaCommonTest extends Scribunto_LuaEngineTestBase {
 		$pp = $parser->getPreprocessor();
 
 		$count = 0;
-		$parser->setHook( 'scribuntocount', function ( $str, $argv, $parser, $frame ) use ( &$count ) {
+		$parser->setHook( 'scribuntocount', static function ( $str, $argv, $parser, $frame ) use ( &$count ) {
 			$frame->setVolatile();
 			return ++$count;
 		} );
@@ -851,6 +851,6 @@ class Scribunto_LuaCommonTest extends Scribunto_LuaEngineTestBase {
 		$text = $frame->expand( $pp->preprocessToObj( ">{{#invoke:TestAddWarning|foo}}<" ) );
 		$text = $parser->getStripState()->unstripBoth( $text );
 		$this->assertSame( '>ok<', $text );
-		$this->assertSame( [ 'Don\'t panic!' ], $parser->getOutput()->getWarnings() );
+		$this->assertSame( [ 'Script warning: Don\'t panic!' ], $parser->getOutput()->getWarnings() );
 	}
 }

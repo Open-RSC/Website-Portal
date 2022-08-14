@@ -15,7 +15,7 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testBenchSimple() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output' ] )
+			->onlyMethods( [ 'execute', 'output' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 3;
@@ -23,7 +23,7 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 		$count = 0;
 		$bench->bench( [
 			'test' => static function () use ( &$count ) {
-					$count++;
+				$count++;
 			}
 		] );
 
@@ -32,7 +32,7 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testBenchSetup() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output' ] )
+			->onlyMethods( [ 'execute', 'output' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 2;
@@ -41,10 +41,10 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 		$bench->bench( [
 			'test' => [
 				'setup' => static function () use ( &$buffer ) {
-						$buffer[] = 'setup';
+					$buffer[] = 'setup';
 				},
 				'function' => static function () use ( &$buffer ) {
-						$buffer[] = 'run';
+					$buffer[] = 'run';
 				}
 			]
 		] );
@@ -54,16 +54,16 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testBenchVerbose() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output', 'hasOption', 'verboseRun' ] )
+			->onlyMethods( [ 'execute', 'output', 'hasOption', 'verboseRun' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 1;
 
 		$bench->expects( $this->exactly( 2 ) )->method( 'hasOption' )
 			->will( $this->returnValueMap( [
-					[ 'verbose', true ],
-					[ 'count', false ],
-				] ) );
+				[ 'verbose', true ],
+				[ 'count', false ],
+			] ) );
 
 		$bench->expects( $this->once() )->method( 'verboseRun' )
 			->with( 0 )
@@ -80,7 +80,7 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testBenchName_method() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output', 'addResult' ] )
+			->onlyMethods( [ 'execute', 'output', 'addResult' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 1;
@@ -97,14 +97,14 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testBenchName_string() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output', 'addResult' ] )
+			->onlyMethods( [ 'execute', 'output', 'addResult' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 1;
 
 		$bench->expects( $this->once() )->method( 'addResult' )
 			->with( $this->callback( static function ( $res ) {
-				return $res['name'] === 'strtolower(A)';
+				return $res['name'] === "strtolower('A')";
 			} ) );
 
 		$bench->bench( [ [
@@ -118,16 +118,16 @@ class BenchmarkerTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testVerboseRun() {
 		$bench = $this->getMockBuilder( Benchmarker::class )
-			->setMethods( [ 'execute', 'output', 'hasOption', 'startBench', 'addResult' ] )
+			->onlyMethods( [ 'execute', 'output', 'hasOption', 'startBench', 'addResult' ] )
 			->getMock();
 		$benchProxy = TestingAccessWrapper::newFromObject( $bench );
 		$benchProxy->defaultCount = 1;
 
 		$bench->expects( $this->exactly( 2 ) )->method( 'hasOption' )
 			->will( $this->returnValueMap( [
-					[ 'verbose', true ],
-					[ 'count', false ],
-				] ) );
+				[ 'verbose', true ],
+				[ 'count', false ],
+			] ) );
 
 		$bench->expects( $this->once() )->method( 'output' )
 			->with( $this->callback( static function ( $out ) {

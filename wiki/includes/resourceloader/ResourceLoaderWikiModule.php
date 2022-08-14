@@ -22,9 +22,9 @@
 
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
-use Wikimedia\Assert\Assert;
 use Wikimedia\Minify\CSSMin;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\IDatabase;
@@ -81,6 +81,9 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	/** @var array List of page names that contain JavaScript */
 	protected $scripts = [];
 
+	/** @var array List of page names that contain JSON */
+	protected $datas = [];
+
 	/** @var string|null Group of module */
 	protected $group;
 
@@ -97,6 +100,7 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 			switch ( $member ) {
 				case 'styles':
 				case 'scripts':
+				case 'datas':
 				case 'group':
 				case 'targets':
 					$this->{$member} = $option;
@@ -109,13 +113,14 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	 * Subclasses should return an associative array of resources in the module.
 	 * Keys should be the title of a page in the MediaWiki or User namespace.
 	 *
-	 * Values should be a nested array of options.  The supported keys are 'type' and
-	 * (CSS only) 'media'.
+	 * Values should be a nested array of options.
+	 * The supported keys are 'type' and (CSS only) 'media'.
 	 *
 	 * For scripts, 'type' should be 'script'.
-	 *
+	 * For JSON files, 'type' should be 'data'.
 	 * For stylesheets, 'type' should be 'style'.
-	 * There is an optional media key, the value of which can be the
+	 *
+	 * There is an optional 'media' key, the value of which can be the
 	 * medium ('screen', 'print', etc.) of the stylesheet.
 	 *
 	 * @param ResourceLoaderContext $context
@@ -130,6 +135,9 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 		if ( $config->get( 'UseSiteJs' ) ) {
 			foreach ( $this->scripts as $script ) {
 				$pages[$script] = [ 'type' => 'script' ];
+			}
+			foreach ( $this->datas as $data ) {
+				$pages[$data] = [ 'type' => 'data' ];
 			}
 		}
 
@@ -176,7 +184,8 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	 * @since 1.32 added the $context parameter
 	 */
 	protected function getContent( $titleText, ResourceLoaderContext $context ) {
-		$title = Title::newFromText( $titleText );
+		$pageStore = MediaWikiServices::getInstance()->getPageStore();
+		$title = $pageStore->getPageByText( $titleText );
 		if ( !$title ) {
 			return null; // Bad title
 		}
@@ -191,6 +200,8 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 			$format = CONTENT_FORMAT_CSS;
 		} elseif ( $handler->isSupportedFormat( CONTENT_FORMAT_JAVASCRIPT ) ) {
 			$format = CONTENT_FORMAT_JAVASCRIPT;
+		} elseif ( $handler->isSupportedFormat( CONTENT_FORMAT_JSON ) ) {
+			$format = CONTENT_FORMAT_JSON;
 		} else {
 			return null; // Bad content model
 		}
@@ -199,7 +210,7 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	}
 
 	/**
-	 * @param Title $title
+	 * @param PageIdentity $page
 	 * @param ResourceLoaderContext $context
 	 * @param int|null $maxRedirects Maximum number of redirects to follow. If
 	 *  null, uses $wgMaxRedirects
@@ -207,22 +218,22 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	 * @since 1.32 added the $context and $maxRedirects parameters
 	 */
 	protected function getContentObj(
-		Title $title, ResourceLoaderContext $context, $maxRedirects = null
+		PageIdentity $page, ResourceLoaderContext $context, $maxRedirects = null
 	) {
 		$overrideCallback = $context->getContentOverrideCallback();
-		$content = $overrideCallback ? call_user_func( $overrideCallback, $title ) : null;
+		$content = $overrideCallback ? call_user_func( $overrideCallback, $page ) : null;
 		if ( $content ) {
 			if ( !$content instanceof Content ) {
 				$this->getLogger()->error(
 					'Bad content override for "{title}" in ' . __METHOD__,
-					[ 'title' => $title->getPrefixedText() ]
+					[ 'title' => (string)$page ]
 				);
 				return null;
 			}
 		} else {
 			$revision = MediaWikiServices::getInstance()
 				->getRevisionLookup()
-				->getKnownCurrentRevision( $title );
+				->getKnownCurrentRevision( $page );
 			if ( !$revision ) {
 				return null;
 			}
@@ -230,8 +241,8 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 
 			if ( !$content ) {
 				$this->getLogger()->error(
-					'Failed to load content of JS/CSS page "{title}" in ' . __METHOD__,
-					[ 'title' => $title->getPrefixedText() ]
+					'Failed to load content of CSS/JS/JSON page "{title}" in ' . __METHOD__,
+					[ 'title' => (string)$page ]
 				);
 				return null;
 			}
@@ -270,21 +281,115 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 
 	/**
 	 * @param ResourceLoaderContext $context
-	 * @return string JavaScript code
+	 * @return string|array JavaScript code, or a package files array
 	 */
 	public function getScript( ResourceLoaderContext $context ) {
-		$scripts = '';
+		if ( $this->isPackaged() ) {
+			return $this->getPackageFiles( $context );
+		} else {
+			$scripts = '';
+			foreach ( $this->getPages( $context ) as $titleText => $options ) {
+				if ( $options['type'] !== 'script' ) {
+					continue;
+				}
+				$script = $this->getContent( $titleText, $context );
+				if ( strval( $script ) !== '' ) {
+					$script = $this->validateScriptFile( $titleText, $script );
+					$scripts .= ResourceLoader::makeComment( $titleText ) . $script . "\n";
+				}
+			}
+			return $scripts;
+		}
+	}
+
+	/**
+	 * Get whether this module is a packaged module.
+	 *
+	 * If false (the default), JavaScript pages are concatenated and executed as a single
+	 * script. JSON pages are not supported.
+	 *
+	 * If true, the pages are bundled such that each page gets a virtual file name, where only
+	 * the "main" script will be executed at first, and other JS or JSON pages may be be imported
+	 * in client-side code through the `require()` function.
+	 *
+	 * @stable to override
+	 * @since 1.38
+	 * @return bool
+	 */
+	protected function isPackaged(): bool {
+		// Packaged mode is disabled by default for backwards compatibility.
+		// Subclasses may opt-in to this feature.
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function supportsURLLoading() {
+		// If package files are involved, don't support URL loading
+		return !$this->isPackaged();
+	}
+
+	/**
+	 * Convert a namespace-formatted page title to a virtual package file name.
+	 *
+	 * This determines how the page may be imported in client-side code via `require()`.
+	 *
+	 * @stable to override
+	 * @since 1.38
+	 * @param string $titleText
+	 * @return string
+	 */
+	protected function getRequireKey( string $titleText ): string {
+		return $titleText;
+	}
+
+	/**
+	 * @param ResourceLoaderContext $context
+	 * @return array
+	 * @phan-return array{main:string,files:string[][]}
+	 */
+	private function getPackageFiles( ResourceLoaderContext $context ): array {
+		$main = null;
+
+		$files = [];
 		foreach ( $this->getPages( $context ) as $titleText => $options ) {
-			if ( $options['type'] !== 'script' ) {
+			if ( $options['type'] !== 'script' && $options['type'] !== 'data' ) {
 				continue;
 			}
-			$script = $this->getContent( $titleText, $context );
-			if ( strval( $script ) !== '' ) {
-				$script = $this->validateScriptFile( $titleText, $script );
-				$scripts .= ResourceLoader::makeComment( $titleText ) . $script . "\n";
+			$content = $this->getContent( $titleText, $context );
+			if ( strval( $content ) !== '' ) {
+				$fileKey = $this->getRequireKey( $titleText );
+				if ( $options['type'] === 'script' ) {
+					$script = $this->validateScriptFile( $titleText, $content );
+					$files[$fileKey] = [
+						'type' => 'script',
+						'content' => $script,
+					];
+					// First script becomes the "main" script
+					if ( $main === null ) {
+						$main = $fileKey;
+					}
+				} elseif ( $options['type'] === 'data' ) {
+					$data = FormatJson::decode( $content );
+					if ( $data == null ) {
+						// This is unlikely to happen since we only load JSON from
+						// wiki pages with a JSON content model, which are validated
+						// during edit save.
+						$data = [ 'error' => 'Invalid JSON' ];
+					}
+					$files[$fileKey] = [
+						'type' => 'data',
+						'content' => $data,
+					];
+				}
 			}
 		}
-		return $scripts;
+
+		return [
+			'main' => $main,
+			'files' => $files,
+		];
 	}
 
 	/**
@@ -361,14 +466,16 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	 * @return bool
 	 */
 	public function isKnownEmpty( ResourceLoaderContext $context ) {
-		$revisions = $this->getTitleInfo( $context );
-
 		// If a module has dependencies it cannot be empty. An empty array will be cast to false
 		if ( $this->getDependencies() ) {
 			return false;
 		}
-		// For user modules, don't needlessly load if there are no non-empty pages
-		if ( $this->getGroup() === 'user' ) {
+
+		// Optimisation: For user modules, don't needlessly load if there are no non-empty pages
+		// This is worthwhile because unlike most modules, user modules require their own
+		// separate embedded request (managed by ResourceLoaderClientHtml).
+		$revisions = $this->getTitleInfo( $context );
+		if ( $this->getGroup() === self::GROUP_USER ) {
 			foreach ( $revisions as $revision ) {
 				if ( $revision['page_len'] > 0 ) {
 					// At least one non-empty page, module should be loaded
@@ -378,9 +485,9 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 			return true;
 		}
 
-		// T70488: For other modules (i.e. ones that are called in cached html output) only check
-		// page existance. This ensures that, if some pages in a module are temporarily blanked,
-		// we don't end omit the module's script or link tag on some pages.
+		// T70488: For non-user modules (i.e. ones that are called in cached HTML output) only check
+		// page existence. This ensures that, if some pages in a module are temporarily blanked,
+		// we don't stop embedding the module's script or link tag on newly cached pages.
 		return count( $revisions ) === 0;
 	}
 
@@ -551,20 +658,18 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 	 * page change if it was a JS or CSS page
 	 *
 	 * @internal
-	 * @param Title $title
+	 * @param PageIdentity $page
 	 * @param RevisionRecord|null $old Prior page revision
 	 * @param RevisionRecord|null $new New page revision
 	 * @param string $domain Database domain ID
 	 */
 	public static function invalidateModuleCache(
-		Title $title,
+		PageIdentity $page,
 		?RevisionRecord $old,
 		?RevisionRecord $new,
-		$domain
+		string $domain
 	) {
 		static $models = [ CONTENT_MODEL_CSS, CONTENT_MODEL_JAVASCRIPT ];
-
-		Assert::parameterType( 'string', $domain, '$domain' );
 
 		$purge = false;
 		// TODO: MCR: differentiate between page functionality and content model!
@@ -584,6 +689,7 @@ class ResourceLoaderWikiModule extends ResourceLoaderModule {
 		}
 
 		if ( !$purge ) {
+			$title = Title::castFromPageIdentity( $page );
 			$purge = ( $title->isSiteConfigPage() || $title->isUserConfigPage() );
 		}
 

@@ -22,6 +22,8 @@
  */
 
 use MediaWiki\HookContainer\ProtectedHookAccessorTrait;
+use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Page\PageReference;
 
 /**
  * Object handling generic submission, CSRF protection, layout and
@@ -63,6 +65,7 @@ use MediaWiki\HookContainer\ProtectedHookAccessorTrait;
  *    'options-messages'    -- associative array mapping message keys to values.
  *                             Some field types support multi-level arrays.
  *                             Overwrites 'options' and 'options-message'.
+ *    'options-messages-parse' -- Flag to parse the messages in 'options-messages'.
  *    'options-message'     -- message key or object to be parsed to extract the list of
  *                             options (like 'ipbreason-dropdown').
  *    'label-message'       -- message key or object for a message to use as the label.
@@ -115,7 +118,13 @@ use MediaWiki\HookContainer\ProtectedHookAccessorTrait;
  *                             The expressions will be given to a JavaScript frontend
  *                             module which will continually update the field's
  *                             visibility.
- *    'section'                -- A string name for the section of the form to which the field
+ *    'disable-if'          -- expression given as an array stating when the field
+ *                             should be disabled. See 'hide-if' for supported expressions.
+ *                             The 'hide-if' logic would also disable fields, you don't need
+ *                             to set this attribute with the same condition manually.
+ *                             You can pass both 'disabled' and this attribute to omit extra
+ *                             check, but this would function only for not 'disabled' fields.
+ *    'section'             -- A string name for the section of the form to which the field
  *                             belongs. Subsections may be added using the separator '/', e.g.:
  *                               'section' => 'section1/subsection1'
  *                             More levels may be added, e.g.:
@@ -126,7 +135,7 @@ use MediaWiki\HookContainer\ProtectedHookAccessorTrait;
  * Since 1.20, you can chain mutators to ease the form generation:
  * @par Example:
  * @code
- * $form = new HTMLForm( $someFields );
+ * $form = new HTMLForm( $someFields, $this->getContext() );
  * $form->setMethod( 'get' )
  *      ->setWrapperLegendMsg( 'message-key' )
  *      ->prepareForm()
@@ -340,7 +349,7 @@ class HTMLForm extends ContextSource {
 	 *
 	 * @param array $descriptor Array of Field constructs, as described
 	 * 	in the class documentation
-	 * @param IContextSource|null $context Available since 1.18, will become compulsory in 1.18.
+	 * @param IContextSource|null $context Available since 1.18, required since 1.38.
 	 *     Obviates the need to call $form->setTitle()
 	 * @param string $messagePrefix A prefix to go in front of default messages
 	 */
@@ -352,8 +361,10 @@ class HTMLForm extends ContextSource {
 			$this->mTitle = false; // We don't need them to set a title
 			$this->mMessagePrefix = $messagePrefix;
 		} elseif ( $context === null && $messagePrefix !== '' ) {
+			wfDeprecated( __METHOD__ . ' without $context', '1.38' );
 			$this->mMessagePrefix = $messagePrefix;
 		} elseif ( is_string( $context ) && $messagePrefix === '' ) {
+			wfDeprecated( __METHOD__ . ' without $context', '1.38' );
 			// B/C since 1.18
 			// it's actually $messagePrefix
 			$this->mMessagePrefix = $context;
@@ -555,7 +566,7 @@ class HTMLForm extends ContextSource {
 	 */
 	public function prepareForm() {
 		# Check if we have the info we need
-		if ( !$this->mTitle instanceof Title && $this->mTitle !== false ) {
+		if ( !$this->mTitle instanceof PageReference && $this->mTitle !== false ) {
 			throw new MWException( 'You must call setTitle() on an HTMLForm' );
 		}
 
@@ -684,7 +695,7 @@ class HTMLForm extends ContextSource {
 			if ( !array_key_exists( $fieldname, $this->mFieldData ) ) {
 				continue;
 			}
-			if ( $field->isHidden( $this->mFieldData ) ) {
+			if ( $field->isDisabled( $this->mFieldData ) ) {
 				continue;
 			}
 			$res = $field->validate( $this->mFieldData[$fieldname], $this->mFieldData );
@@ -771,25 +782,60 @@ class HTMLForm extends ContextSource {
 	 * @param string $msg Complete text of message to display
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use setPreHtml() instead
 	 */
 	public function setIntro( $msg ) {
-		$this->setPreText( $msg );
+		return $this->setPreHtml( $msg );
+	}
+
+	/**
+	 * Set the introductory message HTML, overwriting any existing message.
+	 *
+	 * @param string $html Complete HTML of message to display
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function setPreHtml( $html ) {
+		$this->mPre = $html;
 
 		return $this;
 	}
 
 	/**
+	 * Add HTML to introductory message.
+	 *
+	 * @param string $html Complete HTML of message to display
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function addPreHtml( $html ) {
+		$this->mPre .= $html;
+
+		return $this;
+	}
+
+	/**
+	 * Get the introductory message HTML.
+	 *
+	 * @since 1.38
+	 * @return string
+	 */
+	public function getPreHtml() {
+		return $this->mPre;
+	}
+
+	/**
 	 * Set the introductory message HTML, overwriting any existing message.
-	 * @since 1.19
 	 *
 	 * @param string $msg Complete HTML of message to display
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use setPreHtml() instead
 	 */
 	public function setPreText( $msg ) {
-		$this->mPre = $msg;
-
-		return $this;
+		return $this->setPreHtml( $msg );
 	}
 
 	/**
@@ -798,22 +844,78 @@ class HTMLForm extends ContextSource {
 	 * @param string $msg Complete HTML of message to display
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use addPreHtml() instead
 	 */
 	public function addPreText( $msg ) {
-		$this->mPre .= $msg;
-
-		return $this;
+		return $this->addPreHtml( $msg );
 	}
 
 	/**
 	 * Get the introductory message HTML.
 	 *
 	 * @since 1.32
-	 *
 	 * @return string
+	 * @deprecated since 1.38, use getPreHtml() instead
 	 */
 	public function getPreText() {
-		return $this->mPre;
+		return $this->getPreHtml();
+	}
+
+	/**
+	 * Add HTML to the header, inside the form.
+	 *
+	 * @param string $html Additional HTML to display in header
+	 * @param string|null $section The section to add the header to
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function addHeaderHtml( $html, $section = null ) {
+		if ( $section === null ) {
+			$this->mHeader .= $html;
+		} else {
+			if ( !isset( $this->mSectionHeaders[$section] ) ) {
+				$this->mSectionHeaders[$section] = '';
+			}
+			$this->mSectionHeaders[$section] .= $html;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set header HTML, inside the form.
+	 *
+	 * @param string $html Complete HTML of header to display
+	 * @param string|null $section The section to add the header to
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function setHeaderHtml( $html, $section = null ) {
+		if ( $section === null ) {
+			$this->mHeader = $html;
+		} else {
+			$this->mSectionHeaders[$section] = $html;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get header HTML.
+	 * @stable to override
+	 *
+	 * @param string|null $section The section to get the header text for
+	 * @since 1.38
+	 * @return string HTML
+	 */
+	public function getHeaderHtml( $section = null ) {
+		if ( $section === null ) {
+			return $this->mHeader;
+		} else {
+			return $this->mSectionHeaders[$section] ?? '';
+		}
 	}
 
 	/**
@@ -823,37 +925,24 @@ class HTMLForm extends ContextSource {
 	 * @param string|null $section The section to add the header to
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use addHeaderHtml() instead
 	 */
 	public function addHeaderText( $msg, $section = null ) {
-		if ( $section === null ) {
-			$this->mHeader .= $msg;
-		} else {
-			if ( !isset( $this->mSectionHeaders[$section] ) ) {
-				$this->mSectionHeaders[$section] = '';
-			}
-			$this->mSectionHeaders[$section] .= $msg;
-		}
-
-		return $this;
+		return $this->addHeaderHtml( $msg, $section );
 	}
 
 	/**
 	 * Set header text, inside the form.
-	 * @since 1.19
 	 *
 	 * @param string $msg Complete HTML of header to display
 	 * @param string|null $section The section to add the header to
 	 *
+	 * @since 1.19
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use setHeaderHtml() instead
 	 */
 	public function setHeaderText( $msg, $section = null ) {
-		if ( $section === null ) {
-			$this->mHeader = $msg;
-		} else {
-			$this->mSectionHeaders[$section] = $msg;
-		}
-
-		return $this;
+		return $this->setHeaderHtml( $msg, $section );
 	}
 
 	/**
@@ -863,12 +952,65 @@ class HTMLForm extends ContextSource {
 	 * @param string|null $section The section to get the header text for
 	 * @since 1.26
 	 * @return string HTML
+	 * @deprecated since 1.38, use getHeaderHtml() instead
 	 */
 	public function getHeaderText( $section = null ) {
+		return $this->getHeaderHtml( $section );
+	}
+
+	/**
+	 * Add footer HTML, inside the form.
+	 *
+	 * @param string $html Complete text of message to display
+	 * @param string|null $section The section to add the footer text to
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function addFooterHtml( $html, $section = null ) {
 		if ( $section === null ) {
-			return $this->mHeader;
+			$this->mFooter .= $html;
 		} else {
-			return $this->mSectionHeaders[$section] ?? '';
+			if ( !isset( $this->mSectionFooters[$section] ) ) {
+				$this->mSectionFooters[$section] = '';
+			}
+			$this->mSectionFooters[$section] .= $html;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set footer HTML, inside the form.
+	 *
+	 * @param string $html Complete text of message to display
+	 * @param string|null $section The section to add the footer text to
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function setFooterHtml( $html, $section = null ) {
+		if ( $section === null ) {
+			$this->mFooter = $html;
+		} else {
+			$this->mSectionFooters[$section] = $html;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get footer HTML.
+	 *
+	 * @param string|null $section The section to get the footer text for
+	 * @since 1.38
+	 * @return string
+	 */
+	public function getFooterHtml( $section = null ) {
+		if ( $section === null ) {
+			return $this->mFooter;
+		} else {
+			return $this->mSectionFooters[$section] ?? '';
 		}
 	}
 
@@ -879,18 +1021,10 @@ class HTMLForm extends ContextSource {
 	 * @param string|null $section The section to add the footer text to
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use addFooterHtml() instead
 	 */
 	public function addFooterText( $msg, $section = null ) {
-		if ( $section === null ) {
-			$this->mFooter .= $msg;
-		} else {
-			if ( !isset( $this->mSectionFooters[$section] ) ) {
-				$this->mSectionFooters[$section] = '';
-			}
-			$this->mSectionFooters[$section] .= $msg;
-		}
-
-		return $this;
+		return $this->addFooterHtml( $msg, $section );
 	}
 
 	/**
@@ -901,15 +1035,10 @@ class HTMLForm extends ContextSource {
 	 * @param string|null $section The section to add the footer text to
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use setFooterHtml() instead
 	 */
 	public function setFooterText( $msg, $section = null ) {
-		if ( $section === null ) {
-			$this->mFooter = $msg;
-		} else {
-			$this->mSectionFooters[$section] = $msg;
-		}
-
-		return $this;
+		return $this->setFooterHtml( $msg, $section );
 	}
 
 	/**
@@ -918,13 +1047,48 @@ class HTMLForm extends ContextSource {
 	 * @param string|null $section The section to get the footer text for
 	 * @since 1.26
 	 * @return string
+	 * @deprecated since 1.38, use getFooterHtml() instead
 	 */
 	public function getFooterText( $section = null ) {
-		if ( $section === null ) {
-			return $this->mFooter;
-		} else {
-			return $this->mSectionFooters[$section] ?? '';
-		}
+		return $this->getFooterHtml( $section );
+	}
+
+	/**
+	 * Add HTML to the end of the display.
+	 *
+	 * @param string $html Complete text of message to display
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function addPostHtml( $html ) {
+		$this->mPost .= $html;
+
+		return $this;
+	}
+
+	/**
+	 * Set HTML at the end of the display.
+	 *
+	 * @param string $html Complete text of message to display
+	 *
+	 * @since 1.38
+	 * @return $this for chaining calls
+	 */
+	public function setPostHtml( $html ) {
+		$this->mPost = $html;
+
+		return $this;
+	}
+
+	/**
+	 * Get HTML at the end of the display.
+	 *
+	 * @since 1.38
+	 * @return string HTML
+	 */
+	public function getPostHtml() {
+		return $this->mPost;
 	}
 
 	/**
@@ -933,11 +1097,10 @@ class HTMLForm extends ContextSource {
 	 * @param string $msg Complete text of message to display
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use addPostHtml() instead
 	 */
 	public function addPostText( $msg ) {
-		$this->mPost .= $msg;
-
-		return $this;
+		return $this->addPostHtml( $msg );
 	}
 
 	/**
@@ -946,11 +1109,10 @@ class HTMLForm extends ContextSource {
 	 * @param string $msg Complete text of message to display
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
+	 * @deprecated since 1.38, use setPostHtml() instead
 	 */
 	public function setPostText( $msg ) {
-		$this->mPost = $msg;
-
-		return $this;
+		return $this->setPostHtml( $msg );
 	}
 
 	/**
@@ -1087,7 +1249,7 @@ class HTMLForm extends ContextSource {
 	 */
 	public function getHTML( $submitResult ) {
 		# For good measure (it is the default)
-		$this->getOutput()->preventClickjacking();
+		$this->getOutput()->setPreventClickjacking( true );
 		$this->getOutput()->addModules( 'mediawiki.htmlform' );
 		$this->getOutput()->addModuleStyles( 'mediawiki.htmlform.styles' );
 
@@ -1258,10 +1420,7 @@ class HTMLForm extends ContextSource {
 		}
 
 		if ( $this->mShowCancel ) {
-			$target = $this->mCancelTarget ?: Title::newMainPage();
-			if ( $target instanceof Title ) {
-				$target = $target->getLocalURL();
-			}
+			$target = $this->getCancelTargetURL();
 			$buttons .= Html::element(
 					'a',
 					[
@@ -1520,13 +1679,31 @@ class HTMLForm extends ContextSource {
 
 	/**
 	 * Sets the target where the user is redirected to after clicking cancel.
-	 * @param Title|string $target Target as a Title object or an URL
+	 * @param LinkTarget|PageReference|string $target Target as an object or an URL
 	 * @return HTMLForm $this for chaining calls
 	 * @since 1.27
 	 */
 	public function setCancelTarget( $target ) {
+		if ( $target instanceof PageReference ) {
+			$target = TitleValue::castPageToLinkTarget( $target );
+		}
+
 		$this->mCancelTarget = $target;
 		return $this;
+	}
+
+	/**
+	 * @since 1.37
+	 * @return string
+	 */
+	protected function getCancelTargetURL() {
+		if ( is_string( $this->mCancelTarget ) ) {
+			return $this->mCancelTarget;
+		} else {
+			// TODO: use a service to get the local URL for a LinkTarget, see T282283
+			$target = Title::castFromLinkTarget( $this->mCancelTarget ) ?: Title::newMainPage();
+			return $target->getLocalURL();
+		}
 	}
 
 	/**
@@ -1631,12 +1808,13 @@ class HTMLForm extends ContextSource {
 	/**
 	 * Set the title for form submission
 	 *
-	 * @param Title $t Title of page the form is on/should be posted to
+	 * @param PageReference $t The page the form is on/should be posted to
 	 *
 	 * @return HTMLForm $this for chaining calls (since 1.20)
 	 */
 	public function setTitle( $t ) {
-		$this->mTitle = $t;
+		// TODO: make mTitle a PageReference when we have a better way to get URLs, see T282283.
+		$this->mTitle = Title::castFromPageReference( $t );
 
 		return $this;
 	}
@@ -1645,9 +1823,7 @@ class HTMLForm extends ContextSource {
 	 * @return Title
 	 */
 	public function getTitle() {
-		return $this->mTitle === false
-			? $this->getContext()->getTitle()
-			: $this->mTitle;
+		return $this->mTitle ?: $this->getContext()->getTitle();
 	}
 
 	/**
@@ -1837,22 +2013,32 @@ class HTMLForm extends ContextSource {
 	 */
 	public function loadData() {
 		$fieldData = [];
+		$request = $this->getRequest();
 
 		foreach ( $this->mFlatFields as $fieldname => $field ) {
-			$request = $this->getRequest();
 			if ( $field->skipLoadData( $request ) ) {
 				continue;
-			} elseif ( !empty( $field->mParams['disabled'] ) ) {
+			}
+			if ( $field->mParams['disabled'] ?? false ) {
 				$fieldData[$fieldname] = $field->getDefault();
 			} else {
 				$fieldData[$fieldname] = $field->loadDataFromRequest( $request );
 			}
 		}
 
+		// Reset to default for fields that are supposed to be disabled.
+		// FIXME: Handle dependency chains, fields that a field checks on may need a reset too.
+		foreach ( $fieldData as $name => &$value ) {
+			$field = $this->mFlatFields[$name];
+			if ( $field->isDisabled( $fieldData ) ) {
+				$value = $field->getDefault();
+			}
+		}
+
 		# Filter data.
 		foreach ( $fieldData as $name => &$value ) {
 			$field = $this->mFlatFields[$name];
-			$value = $field->filter( $value, $this->mFlatFields );
+			$value = $field->filter( $value, $fieldData );
 		}
 
 		$this->mFieldData = $fieldData;
@@ -1922,7 +2108,7 @@ class HTMLForm extends ContextSource {
 	 * @return string
 	 */
 	public function getAction() {
-		// If an action is alredy provided, return it
+		// If an action is already provided, return it
 		if ( $this->mAction !== false ) {
 			return $this->mAction;
 		}

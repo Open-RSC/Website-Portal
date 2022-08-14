@@ -24,6 +24,13 @@
  * @author Niharika Kohli <niharika@wikimedia.org>
  */
 
+namespace MediaWiki\Extension\Gadgets;
+
+use Html;
+use OutputPage;
+use QueryPage;
+use Skin;
+use stdClass;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
 
@@ -36,7 +43,6 @@ class SpecialGadgetUsage extends QueryPage {
 		parent::__construct( $name );
 		$this->limit = 1000; // Show all gadgets
 		$this->shownavigation = false;
-		$this->activeUsers = $this->getConfig()->get( 'SpecialGadgetUsageActiveUsers' );
 	}
 
 	/**
@@ -48,11 +54,13 @@ class SpecialGadgetUsage extends QueryPage {
 	}
 
 	/**
-	 * Flag for holding the value of config variable SpecialGadgetUsageActiveUsers
+	 * Get value of config variable SpecialGadgetUsageActiveUsers
 	 *
-	 * @var bool
+	 * @return bool
 	 */
-	public $activeUsers;
+	private function isActiveUsersEnabled() {
+		return $this->getConfig()->get( 'SpecialGadgetUsageActiveUsers' );
+	}
 
 	public function isExpensive() {
 		return true;
@@ -79,7 +87,7 @@ class SpecialGadgetUsage extends QueryPage {
 	 */
 	public function getQueryInfo() {
 		$dbr = wfGetDB( DB_REPLICA );
-		if ( !$this->activeUsers ) {
+		if ( !$this->isActiveUsersEnabled() ) {
 			return [
 				'tables' => [ 'user_properties' ],
 				'fields' => [
@@ -94,37 +102,37 @@ class SpecialGadgetUsage extends QueryPage {
 					'GROUP BY' => [ 'up_property' ]
 				]
 			];
-		} else {
-			return [
-				'tables' => [ 'user_properties', 'user', 'querycachetwo' ],
-				'fields' => [
-					'title' => 'up_property',
-					'value' => 'SUM( up_value )',
-					// Need to pick fields existing in the querycache table so that the results are cachable
-					'namespace' => 'COUNT( qcc_title )'
+		}
+
+		return [
+			'tables' => [ 'user_properties', 'user', 'querycachetwo' ],
+			'fields' => [
+				'title' => 'up_property',
+				'value' => 'SUM( up_value )',
+				// Need to pick fields existing in the querycache table so that the results are cachable
+				'namespace' => 'COUNT( qcc_title )'
+			],
+			'conds' => [
+				'up_property' . $dbr->buildLike( 'gadget-', $dbr->anyString() )
+			],
+			'options' => [
+				'GROUP BY' => [ 'up_property' ]
+			],
+			'join_conds' => [
+				'user' => [
+					'LEFT JOIN', [
+						'up_user = user_id'
+					]
 				],
-				'conds' => [
-					'up_property' . $dbr->buildLike( 'gadget-', $dbr->anyString() )
-				],
-				'options' => [
-					'GROUP BY' => [ 'up_property' ]
-				],
-				'join_conds' => [
-					'user' => [
-						'LEFT JOIN', [
-							'up_user = user_id'
-						]
-					],
-					'querycachetwo' => [
-						'LEFT JOIN', [
-							'user_name = qcc_title',
-							'qcc_type = "activeusers"',
-							'up_value = 1'
-						]
+				'querycachetwo' => [
+					'LEFT JOIN', [
+						'user_name = qcc_title',
+						'qcc_type = "activeusers"',
+						'up_value = 1'
 					]
 				]
-			];
-		}
+			]
+		];
 	}
 
 	public function getOrderFields() {
@@ -141,11 +149,11 @@ class SpecialGadgetUsage extends QueryPage {
 		$html .= Html::openElement( 'thead', [] );
 		$html .= Html::openElement( 'tr', [] );
 		$headers = [ 'gadgetusage-gadget', 'gadgetusage-usercount' ];
-		if ( $this->activeUsers ) {
+		if ( $this->isActiveUsersEnabled() ) {
 			$headers[] = 'gadgetusage-activeusers';
 		}
 		foreach ( $headers as $h ) {
-			if ( $h == 'gadgetusage-gadget' ) {
+			if ( $h === 'gadgetusage-gadget' ) {
 				$html .= Html::element( 'th', [], $this->msg( $h )->text() );
 			} else {
 				$html .= Html::element( 'th', [ 'data-sort-type' => 'number' ],
@@ -183,7 +191,7 @@ class SpecialGadgetUsage extends QueryPage {
 			$html = Html::openElement( 'tr', [] );
 			$html .= Html::element( 'td', [], $gadgetTitle );
 			$html .= Html::element( 'td', [], $gadgetUserCount );
-			if ( $this->activeUsers == true ) {
+			if ( $this->getConfig()->get( 'SpecialGadgetUsageActiveUsers' ) ) {
 				$activeUserCount = $this->getLanguage()->formatNum( $result->namespace );
 				$html .= Html::element( 'td', [], $activeUserCount );
 			}
@@ -226,7 +234,7 @@ class SpecialGadgetUsage extends QueryPage {
 		$gadgetRepo = GadgetRepo::singleton();
 		$gadgetIds = $gadgetRepo->getGadgetIds();
 		$defaultGadgets = $this->getDefaultGadgets( $gadgetRepo, $gadgetIds );
-		if ( $this->activeUsers ) {
+		if ( $this->isActiveUsersEnabled() ) {
 			$out->addHtml(
 				$this->msg( 'gadgetusage-intro' )
 					->numParams( $this->getConfig()->get( 'ActiveUserDays' ) )->parseAsBlock()
@@ -244,7 +252,7 @@ class SpecialGadgetUsage extends QueryPage {
 				$html .= Html::element( 'td', [], $default );
 				$html .= Html::element( 'td', [ 'data-sort-value' => 'Infinity' ],
 					$this->msg( 'gadgetusage-default' )->text() );
-				if ( $this->activeUsers ) {
+				if ( $this->isActiveUsersEnabled() ) {
 					$html .= Html::element( 'td', [ 'data-sort-value' => 'Infinity' ],
 						$this->msg( 'gadgetusage-default' )->text() );
 				}
@@ -254,13 +262,13 @@ class SpecialGadgetUsage extends QueryPage {
 			foreach ( $res as $row ) {
 				// Remove the 'gadget-' part of the result string and compare if it's present
 				// in $defaultGadgets, if not we format it and add it to the output
-				if ( !in_array( substr( $row->title, 7 ), $defaultGadgets ) ) {
-					// Only pick gadgets which are in the list $gadgetIds to make sure they exist
-					if ( in_array( substr( $row->title, 7 ), $gadgetIds ) ) {
-						$line = $this->formatResult( $skin, $row );
-						if ( $line ) {
-							$out->addHTML( $line );
-						}
+				$name = substr( $row->title, 7 );
+
+				// Only pick gadgets which are in the list $gadgetIds to make sure they exist
+				if ( !in_array( $name, $defaultGadgets ) && in_array( $name, $gadgetIds ) ) {
+					$line = $this->formatResult( $skin, $row );
+					if ( $line ) {
+						$out->addHTML( $line );
 					}
 				}
 			}

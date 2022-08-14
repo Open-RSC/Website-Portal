@@ -23,9 +23,13 @@
 			this.parserDefaults = mw.jqueryMsg.getParserDefaults();
 			mw.jqueryMsg.setParserDefaults( {
 				magic: {
-					PAGENAME: '2 + 2',
-					PAGENAMEE: mw.util.wikiUrlencode( '2 + 2' ),
-					SITENAME: 'Wiki'
+					SITENAME: 'Wiki',
+					// Repeat parserDefaults.magic from mediawiki.jqueryMsg.js. The original
+					// runs before the mock config is set up.
+					PAGENAME: mw.config.get( 'wgPageName' ),
+					PAGENAMEE: mw.util.wikiUrlencode( mw.config.get( 'wgPageName' ) ),
+					SERVERNAME: mw.config.get( 'wgServerName' )
+
 				}
 			} );
 
@@ -51,6 +55,8 @@
 			mw.jqueryMsg.setParserDefaults( this.parserDefaults );
 		},
 		config: {
+			wgPageName: '2 + 2',
+			wgServerName: 'wiki.xyz',
 			wgArticlePath: '/wiki/$1',
 			wgNamespaceIds: {
 				template: 10,
@@ -324,6 +330,13 @@
 		assert.strictEqual( formatParse( 'mixed-to-sentence' ), 'This has messed up capitalization', 'To sentence case' );
 		mw.messages.set( 'all-caps-except-first', '{{lcfirst:{{uc:thIS hAS MEsSed uP CapItaliZatiON}}}}' );
 		assert.strictEqual( formatParse( 'all-caps-except-first' ), 'tHIS HAS MESSED UP CAPITALIZATION', 'To opposite sentence case' );
+
+		mw.messages.set( 'ucfirst-outside-BMP', '{{ucfirst:\uD803\uDCC0 is U+10CC0 (OLD HUNGARIAN SMALL LETTER A)}}' );
+		assert.strictEqual( formatParse( 'ucfirst-outside-BMP' ), '\uD803\uDC80 is U+10CC0 (OLD HUNGARIAN SMALL LETTER A)', 'Ucfirst outside BMP' );
+
+		mw.messages.set( 'lcfirst-outside-BMP', '{{lcfirst:\uD803\uDC80 is U+10C80 (OLD HUNGARIAN CAPITAL LETTER A)}}' );
+		assert.strictEqual( formatParse( 'lcfirst-outside-BMP' ), '\uD803\uDCC0 is U+10C80 (OLD HUNGARIAN CAPITAL LETTER A)', 'Lcfirst outside BMP' );
+
 	} );
 
 	QUnit.test( 'Grammar', function ( assert ) {
@@ -331,6 +344,17 @@
 
 		mw.messages.set( 'grammar-msg-wrong-syntax', 'Przeszukaj {{GRAMMAR:grammar_case_xyz}}' );
 		assert.strictEqual( formatParse( 'grammar-msg-wrong-syntax' ), 'Przeszukaj ', 'Grammar Test with wrong grammar template syntax' );
+	} );
+
+	QUnit.test( 'Variables', function ( assert ) {
+		mw.messages.set( 'variables-pagename', '{{PAGENAME}}' );
+		assert.strictEqual( formatParse( 'variables-pagename' ), '2 + 2', 'PAGENAME' );
+		mw.messages.set( 'variables-pagenamee', '{{PAGENAMEE}}' );
+		assert.strictEqual( formatParse( 'variables-pagenamee' ), mw.util.wikiUrlencode( '2 + 2' ), 'PAGENAMEE' );
+		mw.messages.set( 'variables-sitename', '{{SITENAME}}' );
+		assert.strictEqual( formatParse( 'variables-sitename' ), 'Wiki', 'SITENAME' );
+		mw.messages.set( 'variables-servername', '{{SERVERNAME}}' );
+		assert.strictEqual( formatParse( 'variables-servername' ), 'wiki.xyz', 'SERVERNAME' );
 	} );
 
 	QUnit.test( 'Bi-di', function ( assert ) {
@@ -1266,7 +1290,7 @@
 			mw.messages.set( 'object-double-replace', 'Foo 1: $1 2: $1' );
 			$messageArgument = $( '<div class="bar">&gt;</div>' );
 			$message = $( '<span>' ).msg( 'object-double-replace', $messageArgument );
-			assert.ok(
+			assert.true(
 				$message[ 0 ].contains( $messageArgument[ 0 ] ),
 				'The original jQuery object is actually in the DOM'
 			);
@@ -1334,26 +1358,7 @@
 				FOO: 'foo',
 				BAR: 'bar'
 			},
-			'setParserDefaults is shallow by default'
-		);
-
-		mw.jqueryMsg.setParserDefaults(
-			{
-				magic: {
-					BAZ: 'baz'
-				}
-			},
-			true
-		);
-
-		assert.deepEqual(
-			mw.jqueryMsg.getParserDefaults().magic,
-			{
-				FOO: 'foo',
-				BAR: 'bar',
-				BAZ: 'baz'
-			},
-			'setParserDefaults is deep if requested'
+			'setParserDefaults updates the parser defaults'
 		);
 	} );
 }() );

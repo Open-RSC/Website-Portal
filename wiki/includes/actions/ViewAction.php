@@ -37,6 +37,12 @@ class ViewAction extends FormlessAction {
 		return null;
 	}
 
+	public function needsReadRights() {
+		// Pages in $wgWhitelistRead can be viewed without having the 'read'
+		// right. We rely on Article::view() to properly check read access.
+		return false;
+	}
+
 	public function show() {
 		$config = $this->context->getConfig();
 
@@ -47,7 +53,7 @@ class ViewAction extends FormlessAction {
 		MediaWikiServices::getInstance()->getHookContainer()->emitDeprecationWarnings();
 
 		if (
-			$config->get( 'DebugToolbar' ) == false && // don't let this get stuck on pages
+			!$config->get( 'DebugToolbar' ) && // don't let this get stuck on pages
 			$this->getWikiPage()->checkTouched() // page exists and is not a redirect
 		) {
 			// Include any redirect in the last-modified calculation

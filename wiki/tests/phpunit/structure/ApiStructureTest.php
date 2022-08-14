@@ -116,12 +116,12 @@ class ApiStructureTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @dataProvider provideParameters
 	 */
-	public function testParameters( string $path, array $params, string $name ) : void {
+	public function testParameters( string $path, array $params, string $name ): void {
 		$main = self::getMain();
 
 		$dataName = $this->dataName();
 		$this->assertNotSame( '', $name, "$dataName: Name cannot be empty" );
-		$this->assertArrayHasKey( $name, $params, "$dataName: Sanity check" );
+		$this->assertArrayHasKey( $name, $params, "$dataName: Existence check" );
 
 		$ret = $main->getParamValidator()->checkSettings(
 			$main->getModuleFromPath( $path ), $params, $name, []
@@ -159,7 +159,7 @@ class ApiStructureTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	public static function provideParameters() : Iterator {
+	public static function provideParameters(): Iterator {
 		$main = self::getMain();
 		$paths = self::getSubModulePaths( $main->getModuleManager() );
 		array_unshift( $paths, $main->getModulePath() );

@@ -1,13 +1,12 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use Wikimedia\TestingAccessWrapper;
 
 class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 	/** @var ContentSecurityPolicy */
 	private $csp;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		global $wgUploadDirectory;
 
 		parent::setUp();
@@ -49,7 +48,7 @@ class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 		$context = RequestContext::getMain();
 		$resp = $context->getRequest()->response();
 		$conf = $context->getConfig();
-		$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
+		$hookContainer = $this->getServiceContainer()->getHookContainer();
 		$csp = new ContentSecurityPolicy( $resp, $conf, $hookContainer );
 		$this->csp = TestingAccessWrapper::newFromObject( $csp );
 		$this->csp->nonce = 'secret';
@@ -162,7 +161,6 @@ class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function providerMakeCSPDirectives() {
-		// phpcs:disable Generic.Files.LineLength
 		return [
 			[ false, '', '' ],
 			[
@@ -180,7 +178,7 @@ class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 				[],
 				"script-src 'unsafe-eval' blob: 'self' 'nonce-secret' 'unsafe-inline' sister-site.somewhere.com *.wikipedia.org; default-src * data: blob:; style-src * data: blob: 'unsafe-inline'; object-src 'none'; report-uri /w/api.php?action=cspreport&format=json",
 				"script-src 'unsafe-eval' blob: 'self' 'nonce-secret' 'unsafe-inline' sister-site.somewhere.com *.wikipedia.org; default-src * data: blob:; style-src * data: blob: 'unsafe-inline'; object-src 'none'; report-uri /w/api.php?action=cspreport&format=json&reportonly=1",
-			 ],
+			],
 			[
 				[ 'script-src' => [ 'http://example.com', 'http://something,else.com' ] ],
 				"script-src 'unsafe-eval' blob: 'self' 'nonce-secret' http://example.com http://something%2Celse.com 'unsafe-inline' sister-site.somewhere.com *.wikipedia.org; default-src * data: blob:; style-src * data: blob: 'unsafe-inline'; object-src 'none'; report-uri /w/api.php?action=cspreport&format=json",
@@ -275,8 +273,6 @@ class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 		$actual = $this->csp->makeCSPDirectives( true, ContentSecurityPolicy::FULL_MODE );
 
 		$wgAllowImageTag = $origImg;
-
-		// phpcs:ignore Generic.Files.LineLength
 		$expected = "script-src 'unsafe-eval' blob: 'self' 'nonce-secret' 'unsafe-inline' sister-site.somewhere.com *.wikipedia.org; default-src * data: blob:; style-src * data: blob: 'unsafe-inline'; object-src 'none'; report-uri /w/api.php?action=cspreport&format=json";
 		$this->assertSame( $expected, $actual );
 	}
@@ -289,7 +285,6 @@ class ContentSecurityPolicyTest extends MediaWikiIntegrationTestCase {
 			true,
 			ContentSecurityPolicy::REPORT_ONLY_MODE
 		);
-		// phpcs:ignore Generic.Files.LineLength
 		$expected = "script-src 'unsafe-eval' blob: 'self' 'nonce-secret' 'unsafe-inline' sister-site.somewhere.com *.wikipedia.org; default-src * data: blob:; style-src * data: blob: 'unsafe-inline'; object-src 'none'; report-uri /w/api.php?action=cspreport&format=json&reportonly=1";
 		$this->assertSame( $expected, $actual );
 	}

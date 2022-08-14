@@ -17,5 +17,6 @@
 	"monobook-cactions-label": "Hereketê pele",
 	"monobook-notifications-link": "Tebliğê ($1)",
 	"monobook-notifications-link-none": "Tebliği",
-	"monobook-responsive-label": "Hesas dizaynê MonoBook aktiv kerê"
+	"monobook-view-history": "Tarix",
+	"monobook-action-undelete": "{{PLURAL:$1|nê vırnayışi|$1 vırnayışa}} peyser bıyarê"
 }

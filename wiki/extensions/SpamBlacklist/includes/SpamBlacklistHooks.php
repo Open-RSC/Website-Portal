@@ -1,13 +1,23 @@
 <?php
 
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Storage\EditResult;
 use MediaWiki\User\UserIdentity;
+use Wikimedia\Assert\PreconditionException;
 
 /**
  * Hooks for the spam blacklist extension
  */
-class SpamBlacklistHooks {
+class SpamBlacklistHooks implements
+	\MediaWiki\Hook\EditFilterHook,
+	\MediaWiki\Hook\EditFilterMergedContentHook,
+	\MediaWiki\Hook\UploadVerifyUploadHook,
+	\MediaWiki\Storage\Hook\PageSaveCompleteHook,
+	\MediaWiki\Storage\Hook\ParserOutputStashForEditHook,
+	\MediaWiki\User\Hook\UserCanSendEmailHook
+{
+
 	/**
 	 * Hook function for EditFilterMergedContent
 	 *
@@ -20,7 +30,7 @@ class SpamBlacklistHooks {
 	 *
 	 * @return bool
 	 */
-	public static function filterMergedContent(
+	public function onEditFilterMergedContent(
 		IContextSource $context,
 		Content $content,
 		Status $status,
@@ -29,12 +39,34 @@ class SpamBlacklistHooks {
 		$minoredit
 	) {
 		$title = $context->getTitle();
-
-		// get the link from the not-yet-saved page content.
-		$editInfo = $context->getWikiPage()->prepareContentForEdit( $content );
-		$pout = $editInfo->output;
+		try {
+			// Try getting the update directly
+			$updater = $context->getWikiPage()->getCurrentUpdate();
+			$pout = $updater->getParserOutputForMetaData();
+		} catch ( PreconditionException | LogicException $exception ) {
+			$services = MediaWikiServices::getInstance();
+			$stashedEdit = $services->getPageEditStash()->checkCache(
+				$title,
+				$content,
+				$user
+			);
+			if ( $stashedEdit ) {
+				// Try getting the value from edit stash
+				/** @var ParserOutput $output */
+				$pout = $stashedEdit->output;
+			} else {
+				// Last resort, parse the page.
+				$contentRenderer = $services->getContentRenderer();
+				$pout = $contentRenderer->getParserOutput(
+					$content,
+					$title,
+					null,
+					null,
+					false
+				);
+			}
+		}
 		$links = array_keys( $pout->getExternalLinks() );
-
 		// HACK: treat the edit summary as a link if it contains anything
 		// that looks like it could be a URL or e-mail address.
 		if ( preg_match( '/\S(\.[^\s\d]{2,}|[\/@]\S)/', $summary ) ) {
@@ -53,18 +85,27 @@ class SpamBlacklistHooks {
 				]
 			);
 			$status->fatal( $error );
+			// @todo Remove this line after this extension do not support mediawiki version 1.36 and before
+			$status->value = EditPage::AS_HOOK_ERROR_EXPECTED;
+			return false;
 		}
 
-		// Always return true, EditPage will look at $status->isOk().
 		return true;
 	}
 
-	public static function onParserOutputStashForEdit(
-		WikiPage $page,
-		Content $content,
-		ParserOutput $output,
+	/**
+	 * @param WikiPage $page
+	 * @param Content $content
+	 * @param ParserOutput $output
+	 * @param string $summary
+	 * @param User $user
+	 */
+	public function onParserOutputStashForEdit(
+		$page,
+		$content,
+		$output,
 		$summary,
-		User $user
+		$user
 	) {
 		$links = array_keys( $output->getExternalLinks() );
 		$spamObj = BaseBlacklist::getSpamBlacklist();
@@ -74,11 +115,11 @@ class SpamBlacklistHooks {
 	/**
 	 * Verify that the user can send emails
 	 *
-	 * @param User &$user
+	 * @param User $user
 	 * @param array &$hookErr
 	 * @return bool
 	 */
-	public static function userCanSendEmail( &$user, &$hookErr ) {
+	public function onUserCanSendEmail( $user, &$hookErr ) {
 		$blacklist = BaseBlacklist::getEmailBlacklist();
 		if ( $blacklist->checkUser( $user ) ) {
 			return true;
@@ -86,6 +127,7 @@ class SpamBlacklistHooks {
 
 		$hookErr = [ 'spam-blacklisted-email', 'spam-blacklisted-email-text', null ];
 
+		// No other hook handler should run
 		return false;
 	}
 
@@ -98,9 +140,9 @@ class SpamBlacklistHooks {
 	 * @param string $text
 	 * @param string $section
 	 * @param string &$hookError
-	 * @return bool
+	 * @param string $summary
 	 */
-	public static function validate( EditPage $editPage, $text, $section, &$hookError ) {
+	public function onEditFilter( $editPage, $text, $section, &$hookError, $summary ) {
 		$title = $editPage->getTitle();
 		$thisPageName = $title->getPrefixedDBkey();
 
@@ -108,12 +150,12 @@ class SpamBlacklistHooks {
 			wfDebugLog( 'SpamBlacklist',
 				"Spam blacklist validator: [[$thisPageName]] not a local blacklist\n"
 			);
-			return true;
+			return;
 		}
 
 		$type = BaseBlacklist::getTypeFromTitle( $title );
 		if ( $type === false ) {
-			return true;
+			return;
 		}
 
 		$lines = explode( "\n", $text );
@@ -140,8 +182,6 @@ class SpamBlacklistHooks {
 				"Spam blacklist validator: [[$thisPageName]] ok or empty blacklist\n"
 			);
 		}
-
-		return true;
 	}
 
 	/**
@@ -154,19 +194,17 @@ class SpamBlacklistHooks {
 	 * @param int $flags
 	 * @param RevisionRecord $revisionRecord
 	 * @param EditResult $editResult
-	 *
-	 * @return bool
 	 */
-	public static function pageSaveContent(
-		WikiPage $wikiPage,
-		UserIdentity $userIdentity,
-		string $summary,
-		int $flags,
-		RevisionRecord $revisionRecord,
-		EditResult $editResult
+	public function onPageSaveComplete(
+		$wikiPage,
+		$userIdentity,
+		$summary,
+		$flags,
+		$revisionRecord,
+		$editResult
 	) {
 		if ( !BaseBlacklist::isLocalSource( $wikiPage->getTitle() ) ) {
-			return true;
+			return;
 		}
 
 		// This sucks because every Blacklist needs to be cleared
@@ -174,8 +212,6 @@ class SpamBlacklistHooks {
 			$blacklist = BaseBlacklist::getInstance( $type );
 			$blacklist->clearCache();
 		}
-
-		return true;
 	}
 
 	/**
@@ -184,13 +220,12 @@ class SpamBlacklistHooks {
 	 * @param array|null $props
 	 * @param string $comment
 	 * @param string $pageText
-	 * @param array|ApiMessage &$error
-	 * @return bool
+	 * @param array|MessageSpecifier &$error
 	 */
-	public static function onUploadVerifyUpload(
+	public function onUploadVerifyUpload(
 		UploadBase $upload,
 		User $user,
-		$props,
+		?array $props,
 		$comment,
 		$pageText,
 		&$error
@@ -199,8 +234,9 @@ class SpamBlacklistHooks {
 
 		// get the link from the not-yet-saved page content.
 		$content = ContentHandler::makeContent( $pageText, $title );
-		$parserOptions = ParserOptions::newCanonical( 'canonical' );
-		$output = $content->getParserOutput( $title, null, $parserOptions );
+		$parserOptions = ParserOptions::newFromAnon();
+		$contentRenderer = MediaWikiServices::getInstance()->getContentRenderer();
+		$output = $contentRenderer->getParserOutput( $content, $title, null, $parserOptions );
 		$links = array_keys( $output->getExternalLinks() );
 
 		// HACK: treat comment as a link if it contains anything
@@ -209,7 +245,7 @@ class SpamBlacklistHooks {
 			$links[] = $comment;
 		}
 		if ( !$links ) {
-			return true;
+			return;
 		}
 
 		$spamObj = BaseBlacklist::getSpamBlacklist();
@@ -224,7 +260,5 @@ class SpamBlacklistHooks {
 				]
 			);
 		}
-
-		return true;
 	}
 }

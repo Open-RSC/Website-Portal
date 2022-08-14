@@ -9,18 +9,13 @@
 	display: none;
 }
 
-.ve-ui-mwParameterPage-label {
-	display: inline-block;
-	font-weight: bold;
+.ve-ui-mwParameterPage-inlineDescription {
+	max-width: 50em;
 }
 
-.ve-ui-mwParameterPage-statusIndicator {
-	display: inline-block;
-	opacity: 0.5;
-}
-
-.ve-ui-mwParameterPage-description-required,
-.ve-ui-mwParameterPage-description-deprecated {
+.ve-ui-mwParameterPage-doc-required,
+.ve-ui-mwParameterPage-doc-deprecated,
+.ve-ui-mwParameterPage-inlineDescription .ve-ui-mwParameterPage-doc-example {
 	font-style: italic;
 	color: #54595d;
 }
@@ -38,11 +33,11 @@
 	height: 2.5em;
 }
 
-.ve-ui-mwParameterPage-more {
+.ve-ui-mwParameterPage-addUndocumented {
 	display: none;
 	margin: 1em 0 0.5em 0;
 }
 
-.ve-ui-mwParameterPage:last-child .ve-ui-mwParameterPage-more {
+.ve-ui-mwParameterPage:last-child .ve-ui-mwParameterPage-addUndocumented {
 	display: block;
 }

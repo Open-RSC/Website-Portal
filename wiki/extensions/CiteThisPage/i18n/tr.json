@@ -3,6 +3,7 @@
 		"authors": [
 			"BaRaN6161 TURK",
 			"Erkan Yilmaz",
+			"Hedda",
 			"Incelemeelemani",
 			"Joseph",
 			"MuratTheTurkish",
@@ -11,9 +12,9 @@
 			"Uğur Başak"
 		]
 	},
-	"citethispage": "Bu Sayfaya Kaynak Göster",
+	"citethispage": "Bu Sayfayı Kaynak Göster",
 	"citethispage-desc": "[[Special:CiteThisPage|Kaynak]] özel sayfası ve araç kutusu bağlantısı ekler",
-	"citethispage-link": "Bu sayfaya kaynak göster",
+	"citethispage-link": "Bu sayfayı kaynak göster",
 	"tooltip-citethispage": "Bu sayfadan nasıl kaynak göstereceği hakkında bilgi",
 	"citethispage-change-submit": "Belirt",
 	"citethispage-change-target": "Sayfa:",

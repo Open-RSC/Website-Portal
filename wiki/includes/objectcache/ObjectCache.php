@@ -182,6 +182,7 @@ class ObjectCache {
 					}
 				];
 			}
+			$params += [ 'writeBatchSize' => $conf->get( 'UpdateRowsPerQuery' ) ];
 		}
 
 		// Do b/c logic for MemcachedBagOStuff
@@ -197,7 +198,7 @@ class ObjectCache {
 	}
 
 	/**
-	 * Factory function for CACHE_ANYTHING (referenced from DefaultSettings.php)
+	 * Factory function for CACHE_ANYTHING (referenced by configuration)
 	 *
 	 * CACHE_ANYTHING means that stuff has to be cached, not caching is not an option.
 	 * If a caching method is configured for any of the main caches ($wgMainCacheType,
@@ -235,7 +236,7 @@ class ObjectCache {
 	}
 
 	/**
-	 * Factory function for CACHE_ACCEL (referenced from DefaultSettings.php)
+	 * Factory function for CACHE_ACCEL (referenced from configuration)
 	 *
 	 * This will look for any APC or APCu style server-local cache.
 	 * A fallback cache can be specified if none is found.
@@ -296,7 +297,7 @@ class ObjectCache {
 	 * @since 1.35
 	 * @return BagOStuff
 	 */
-	public static function makeLocalServerCache() : BagOStuff {
+	public static function makeLocalServerCache(): BagOStuff {
 		$params = [
 			'reportDupes' => false,
 			// Even simple caches must use a keyspace (T247562)

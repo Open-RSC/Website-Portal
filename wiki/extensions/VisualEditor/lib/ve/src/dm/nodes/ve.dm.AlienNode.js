@@ -39,19 +39,25 @@ ve.dm.AlienNode.static.enableAboutGrouping = true;
 
 ve.dm.AlienNode.static.matchRdfaTypes = [ 've:Alien' ];
 
-ve.dm.AlienNode.static.toDataElement = function ( domElements, converter ) {
-	var element, attributes,
-		isInline = this.isHybridInline( domElements, converter ),
-		type = isInline ? 'alienInline' : 'alienBlock';
+ve.dm.AlienNode.static.matchFunction = function () {
+	return true;
+};
 
-	if ( domElements.length === 1 && [ 'td', 'th' ].indexOf( domElements[ 0 ].nodeName.toLowerCase() ) !== -1 ) {
-		attributes = {};
+ve.dm.AlienNode.static.toDataElement = function ( domElements, converter ) {
+	var element;
+
+	if ( this.name !== 'alien' ) {
+		element = { type: this.name };
+	} else if ( domElements.length === 1 && [ 'td', 'th' ].indexOf( domElements[ 0 ].nodeName.toLowerCase() ) !== -1 ) {
+		var attributes = {};
 		ve.dm.TableCellableNode.static.setAttributes( attributes, domElements );
 		element = {
 			type: 'alienTableCell',
 			attributes: attributes
 		};
 	} else {
+		var isInline = this.isHybridInline( domElements, converter );
+		var type = isInline ? 'alienInline' : 'alienBlock';
 		element = { type: type };
 	}
 
@@ -66,7 +72,6 @@ ve.dm.AlienNode.static.toDomElements = function ( dataElement, doc, converter ) 
  * @inheritdoc
  */
 ve.dm.AlienNode.static.isDiffComparable = function ( element, other, elementStore, otherStore ) {
-	var elementOriginalDomElements, otherOriginalDomElements;
 	if ( element.type === other.type && element.originalDomElementsHash === other.originalDomElementsHash ) {
 		return true;
 	}
@@ -82,8 +87,8 @@ ve.dm.AlienNode.static.isDiffComparable = function ( element, other, elementStor
 	}
 
 	// Deep copy DOM nodes from store
-	elementOriginalDomElements = ve.copy( elementStore.value( element.originalDomElementsHash ) );
-	otherOriginalDomElements = ve.copy( otherStore.value( other.originalDomElementsHash ) );
+	var elementOriginalDomElements = ve.copy( elementStore.value( element.originalDomElementsHash ) );
+	var otherOriginalDomElements = ve.copy( otherStore.value( other.originalDomElementsHash ) );
 	// Remove about attributes
 	elementOriginalDomElements.forEach( removeAboutAttributes );
 	otherOriginalDomElements.forEach( removeAboutAttributes );
@@ -105,3 +110,7 @@ ve.dm.AlienNode.static.getHashObject = function ( dataElement ) {
 		alienDomElementsHash: dataElement.originalDomElementsHash
 	};
 };
+
+/* Registration */
+
+ve.dm.modelRegistry.register( ve.dm.AlienNode );

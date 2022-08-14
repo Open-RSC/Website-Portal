@@ -8,7 +8,6 @@
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Linker\LinkTarget;
-use MediaWiki\MediaWikiServices;
 
 class NamespaceInfoTest extends MediaWikiIntegrationTestCase {
 	use TestAllServiceOptionsUsed;
@@ -21,20 +20,14 @@ class NamespaceInfoTest extends MediaWikiIntegrationTestCase {
 	/** @var ScopedCallback */
 	private $scopedCallback;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
-
-		// Boo, there's still some global state in the class :(
-		global $wgHooks;
-		$hooks = $wgHooks;
-		unset( $hooks['CanonicalNamespaces'] );
-		$this->setMwGlobals( 'wgHooks', $hooks );
 
 		$this->scopedCallback =
 			ExtensionRegistry::getInstance()->setAttributeForTest( 'ExtensionNamespaces', [] );
 	}
 
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		$this->scopedCallback = null;
 
 		parent::tearDown();
@@ -66,10 +59,10 @@ class NamespaceInfoTest extends MediaWikiIntegrationTestCase {
 	 * @return HookContainer
 	 */
 	private function getHookContainer() {
-		return MediaWikiServices::getInstance()->getHookContainer();
+		return $this->getServiceContainer()->getHookContainer();
 	}
 
-	private function newObj( array $options = [] ) : NamespaceInfo {
+	private function newObj( array $options = [] ): NamespaceInfo {
 		return new NamespaceInfo(
 			new LoggedServiceOptions(
 				self::$serviceOptionsAccessLog,

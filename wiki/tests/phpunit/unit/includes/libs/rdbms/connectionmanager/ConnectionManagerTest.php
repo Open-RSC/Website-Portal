@@ -5,25 +5,33 @@ namespace Wikimedia\Tests\Rdbms;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\Rdbms\ConnectionManager;
+use Wikimedia\Rdbms\DBConnRef;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\LoadBalancer;
 
 /**
- * @covers Wikimedia\Rdbms\ConnectionManager
+ * @covers \Wikimedia\Rdbms\ConnectionManager
  *
  * @author Daniel Kinzler
  */
 class ConnectionManagerTest extends TestCase {
 	/**
-	 * @return IDatabase|MockObject
+	 * @return IDatabase&MockObject
 	 */
 	private function getIDatabaseMock() {
-		return $this->getMockBuilder( IDatabase::class )
-			->getMock();
+		return $this->createMock( IDatabase::class );
 	}
 
 	/**
-	 * @return LoadBalancer|MockObject
+	 * @return DBConnRef&MockObject
+	 */
+	private function getDBConnRefMock() {
+		return $this->createMock( DBConnRef::class );
+	}
+
+	/**
+	 * @return LoadBalancer&MockObject
 	 */
 	private function getLoadBalancerMock() {
 		return $this->createMock( LoadBalancer::class );
@@ -36,7 +44,7 @@ class ConnectionManagerTest extends TestCase {
 		$lb->expects( $this->once() )
 			->method( 'getConnection' )
 			->with( DB_REPLICA, [ 'group1' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
 		$actual = $manager->getReadConnection();
@@ -44,17 +52,17 @@ class ConnectionManagerTest extends TestCase {
 		$this->assertSame( $database, $actual );
 	}
 
-	public function testGetReadConnection_withGroups() {
+	public function testGetReadConnection_withGroupsAndFlags() {
 		$database = $this->getIDatabaseMock();
 		$lb = $this->getLoadBalancerMock();
 
 		$lb->expects( $this->once() )
 			->method( 'getConnection' )
-			->with( DB_REPLICA, [ 'group2' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->with( DB_REPLICA, [ 'group2' ], 'someDbName', ILoadBalancer::CONN_SILENCE_ERRORS )
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
-		$actual = $manager->getReadConnection( [ 'group2' ] );
+		$actual = $manager->getReadConnection( [ 'group2' ], ILoadBalancer::CONN_SILENCE_ERRORS );
 
 		$this->assertSame( $database, $actual );
 	}
@@ -65,11 +73,26 @@ class ConnectionManagerTest extends TestCase {
 
 		$lb->expects( $this->once() )
 			->method( 'getConnection' )
-			->with( DB_MASTER, [ 'group1' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->with( DB_PRIMARY, [ 'group1' ], 'someDbName' )
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
 		$actual = $manager->getWriteConnection();
+
+		$this->assertSame( $database, $actual );
+	}
+
+	public function testGetWriteConnection_withFlags() {
+		$database = $this->getIDatabaseMock();
+		$lb = $this->getLoadBalancerMock();
+
+		$lb->expects( $this->once() )
+			->method( 'getConnection' )
+			->with( DB_PRIMARY, [ 'group1' ], 'someDbName', ILoadBalancer::CONN_TRX_AUTOCOMMIT )
+			->willReturn( $database );
+
+		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
+		$actual = $manager->getWriteConnection( ILoadBalancer::CONN_TRX_AUTOCOMMIT );
 
 		$this->assertSame( $database, $actual );
 	}
@@ -81,20 +104,20 @@ class ConnectionManagerTest extends TestCase {
 		$lb->expects( $this->once() )
 			->method( 'reuseConnection' )
 			->with( $database )
-			->will( $this->returnValue( null ) );
+			->willReturn( null );
 
 		$manager = new ConnectionManager( $lb );
 		$manager->releaseConnection( $database );
 	}
 
 	public function testGetReadConnectionRef_nullGroups() {
-		$database = $this->getIDatabaseMock();
+		$database = $this->getDBConnRefMock();
 		$lb = $this->getLoadBalancerMock();
 
 		$lb->expects( $this->once() )
 			->method( 'getConnectionRef' )
 			->with( DB_REPLICA, [ 'group1' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
 		$actual = $manager->getReadConnectionRef();
@@ -103,13 +126,13 @@ class ConnectionManagerTest extends TestCase {
 	}
 
 	public function testGetReadConnectionRef_withGroups() {
-		$database = $this->getIDatabaseMock();
+		$database = $this->getDBConnRefMock();
 		$lb = $this->getLoadBalancerMock();
 
 		$lb->expects( $this->once() )
 			->method( 'getConnectionRef' )
 			->with( DB_REPLICA, [ 'group2' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
 		$actual = $manager->getReadConnectionRef( [ 'group2' ] );
@@ -117,14 +140,59 @@ class ConnectionManagerTest extends TestCase {
 		$this->assertSame( $database, $actual );
 	}
 
-	public function testGetWriteConnectionRef() {
-		$database = $this->getIDatabaseMock();
+	public function testGetLazyWriteConnectionRef() {
+		$database = $this->createMock( DBConnRef::class );
 		$lb = $this->getLoadBalancerMock();
 
 		$lb->expects( $this->once() )
 			->method( 'getConnectionRef' )
-			->with( DB_MASTER, [ 'group1' ], 'someDbName' )
-			->will( $this->returnValue( $database ) );
+			->with( DB_PRIMARY, [ 'group1' ], 'someDbName' )
+			->willReturn( $database );
+
+		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
+		$actual = $manager->getLazyWriteConnectionRef();
+
+		$this->assertSame( $database, $actual );
+	}
+
+	public function testGetLazyReadConnectionRef_nullGroups() {
+		$database = $this->createMock( DBConnRef::class );
+		$lb = $this->getLoadBalancerMock();
+
+		$lb->expects( $this->once() )
+			->method( 'getConnectionRef' )
+			->with( DB_REPLICA, [ 'group1' ], 'someDbName' )
+			->willReturn( $database );
+
+		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
+		$actual = $manager->getLazyReadConnectionRef();
+
+		$this->assertSame( $database, $actual );
+	}
+
+	public function testGetLazyReadConnectionRef_withGroups() {
+		$database = $this->createMock( DBConnRef::class );
+		$lb = $this->getLoadBalancerMock();
+
+		$lb->expects( $this->once() )
+			->method( 'getConnectionRef' )
+			->with( DB_REPLICA, [ 'group2' ], 'someDbName' )
+			->willReturn( $database );
+
+		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
+		$actual = $manager->getLazyReadConnectionRef( [ 'group2' ] );
+
+		$this->assertSame( $database, $actual );
+	}
+
+	public function testGetWriteConnectionRef() {
+		$database = $this->getDBConnRefMock();
+		$lb = $this->getLoadBalancerMock();
+
+		$lb->expects( $this->once() )
+			->method( 'getConnectionRef' )
+			->with( DB_PRIMARY, [ 'group1' ], 'someDbName' )
+			->willReturn( $database );
 
 		$manager = new ConnectionManager( $lb, 'someDbName', [ 'group1' ] );
 		$actual = $manager->getWriteConnectionRef();

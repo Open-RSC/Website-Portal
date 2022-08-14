@@ -27,7 +27,7 @@
                             {{ $player->username }}
                         </a>
                         <span
-                            class="text-white pl-1">(Combat {{ $player->combat }})</span>
+                                class="text-white pl-1">(Combat {{ $player->combat }})</span>
                     </td>
                     <td class="text-center">
                         <img class="display-glow pt-2"

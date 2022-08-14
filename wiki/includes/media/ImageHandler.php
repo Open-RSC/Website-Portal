@@ -21,6 +21,8 @@
  * @ingroup Media
  */
 
+use Wikimedia\AtEase\AtEase;
+
 /**
  * Media handler abstract base class for images
  *
@@ -53,15 +55,7 @@ abstract class ImageHandler extends MediaHandler {
 	 * @stable to override
 	 */
 	public function validateParam( $name, $value ) {
-		if ( in_array( $name, [ 'width', 'height' ] ) ) {
-			if ( $value <= 0 ) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
-		}
+		return in_array( $name, [ 'width', 'height' ] ) && $value > 0;
 	}
 
 	/**
@@ -189,7 +183,6 @@ abstract class ImageHandler extends MediaHandler {
 	private function validateThumbParams( &$width, &$height, $srcWidth, $srcHeight, $mimeType ) {
 		$width = intval( $width );
 
-		# Sanity check $width
 		if ( $width <= 0 ) {
 			wfDebug( __METHOD__ . ": Invalid destination width: $width" );
 
@@ -229,16 +222,29 @@ abstract class ImageHandler extends MediaHandler {
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 * @stable to override
-	 */
 	public function getImageSize( $image, $path ) {
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$gis = getimagesize( $path );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 
 		return $gis;
+	}
+
+	public function getSizeAndMetadata( $state, $path ) {
+		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$gis = @getimagesize( $path );
+		if ( $gis ) {
+			$info = [
+				'width' => $gis[0],
+				'height' => $gis[1],
+			];
+			if ( isset( $gis['bits'] ) ) {
+				$info['bits'] = $gis['bits'];
+			}
+		} else {
+			$info = [];
+		}
+		return $info;
 	}
 
 	/**
@@ -277,16 +283,14 @@ abstract class ImageHandler extends MediaHandler {
 	 * @return string
 	 */
 	public function getLongDesc( $file ) {
-		global $wgLang;
 		$pages = $file->pageCount();
-		$size = htmlspecialchars( $wgLang->formatSize( $file->getSize() ) );
 		if ( $pages === false || $pages <= 1 ) {
 			$msg = wfMessage( 'file-info-size' )->numParams( $file->getWidth(),
-				$file->getHeight() )->params( $size,
+				$file->getHeight() )->sizeParams( $file->getSize() )->params(
 					'<span class="mime-type">' . $file->getMimeType() . '</span>' )->parse();
 		} else {
 			$msg = wfMessage( 'file-info-size-pages' )->numParams( $file->getWidth(),
-				$file->getHeight() )->params( $size,
+				$file->getHeight() )->sizeParams( $file->getSize() )->params(
 					'<span class="mime-type">' . $file->getMimeType() . '</span>' )->numParams( $pages )->parse();
 		}
 

@@ -4,7 +4,18 @@
 			"Yupik"
 		]
 	},
+	"multimediaviewer-repository-local": "Lââʹssteâđ",
+	"multimediaviewer-datetime-created": "Rajjum: $1",
+	"multimediaviewer-multiple-authors-combine": "$1 da $2",
+	"multimediaviewer-thumbnail-error-retry": "ǩiččlõõđ oʹđđest",
+	"multimediaviewer-license-default": "Čuäʹjet liseeʹns",
+	"multimediaviewer-permission-viewmore": "Čuäʹjet lââʹzz",
+	"multimediaviewer-share-tab": "Jueʹjj",
 	"multimediaviewer-download-link": "Laadd tän teâttõõzz",
+	"multimediaviewer-download-preview-link-title": "Čuäʹjet neʹttlookkjest",
 	"multimediaviewer-download-original-button-name": "Laadd alggveärlaž teâttõõzz",
-	"multimediaviewer-html-embed-credit-link-text": "Liŋkk"
+	"multimediaviewer-link-to-file": "Liŋkk alggveärlaž teâttõʹsse",
+	"multimediaviewer-embed-wt": "Wikiteʹkstt",
+	"multimediaviewer-html-embed-credit-link-text": "Liŋkk",
+	"multimediaviewer-original-embed-dimensions": "Alggveärlaž teâttõs $1"
 }

@@ -22,6 +22,7 @@
 
 namespace MediaWiki\Block;
 
+use MediaWiki\User\UserIdentity;
 use Title;
 
 /**
@@ -110,7 +111,7 @@ class CompositeBlock extends AbstractBlock {
 	/**
 	 * @inheritDoc
 	 */
-	public function getExpiry() {
+	public function getExpiry(): string {
 		$maxExpiry = null;
 		foreach ( $this->originalBlocks as $block ) {
 			$expiry = $block->getExpiry();
@@ -118,16 +119,16 @@ class CompositeBlock extends AbstractBlock {
 				$maxExpiry = $expiry;
 			}
 		}
-		return $maxExpiry;
+		return $maxExpiry ?? '';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getIdentifier() {
+	public function getIdentifier( $wikiId = self::LOCAL ) {
 		$identifier = [];
 		foreach ( $this->originalBlocks as $block ) {
-			$identifier[] = $block->getIdentifier();
+			$identifier[] = $block->getIdentifier( $wikiId );
 		}
 		return $identifier;
 	}
@@ -196,7 +197,8 @@ class CompositeBlock extends AbstractBlock {
 	/**
 	 * @inheritDoc
 	 */
-	public function getBy() {
+	public function getBy( $wikiId = self::LOCAL ): int {
+		$this->deprecateInvalidCrossWiki( $wikiId, '1.38' );
 		return 0;
 	}
 
@@ -205,5 +207,12 @@ class CompositeBlock extends AbstractBlock {
 	 */
 	public function getByName() {
 		return '';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getBlocker(): ?UserIdentity {
+		return null;
 	}
 }

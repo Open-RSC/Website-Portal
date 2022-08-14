@@ -3,7 +3,7 @@
 use MediaWiki\Content\ContentHandlerFactory;
 use MediaWiki\HookContainer\HookContainer;
 use Psr\Log\LogLevel;
-use Wikimedia\ObjectFactory;
+use Wikimedia\ObjectFactory\ObjectFactory;
 
 /**
  * @group ContentHandlerFactory
@@ -13,7 +13,7 @@ class ContentHandlerFactoryTest extends MediaWikiUnitTestCase {
 	/** @var TestLogger */
 	private $logger;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->logger = new TestLogger( false, static function ( $message, $level ) {

@@ -27,6 +27,7 @@ use Wikimedia\Rdbms\DBReadOnlyError;
 /**
  * @internal
  * @since 1.31
+ * @phan-file-suppress PhanPluginNeverReturnMethod
  */
 class NoWriteWatchedItemStore implements WatchedItemStoreInterface {
 
@@ -38,7 +39,7 @@ class NoWriteWatchedItemStore implements WatchedItemStoreInterface {
 	private const DB_READONLY_ERROR = 'The watchlist is currently readonly.';
 
 	/**
-	 * Initialy set WatchedItemStore that will be used in cases where writing is not needed.
+	 * Initially set WatchedItemStore that will be used in cases where writing is not needed.
 	 * @param WatchedItemStoreInterface $actualStore
 	 */
 	public function __construct( WatchedItemStoreInterface $actualStore ) {
@@ -76,9 +77,9 @@ class NoWriteWatchedItemStore implements WatchedItemStoreInterface {
 	 *         of watchers was below the minimumWatchers option if passed.
 	 */
 	public function countWatchersMultiple( array $targets, array $options = [] ) {
-		return $this->actualStore->countVisitingWatchersMultiple(
+		return $this->actualStore->countWatchersMultiple(
 			$targets,
-			$options['minimumWatchers'] ?? null
+			$options
 		);
 	}
 
@@ -279,11 +280,6 @@ class NoWriteWatchedItemStore implements WatchedItemStoreInterface {
 	}
 
 	public function clearUserWatchedItemsUsingJobQueue( UserIdentity $user ) {
-		throw new DBReadOnlyError( null, self::DB_READONLY_ERROR );
-	}
-
-	public function enqueueWatchlistExpiryJob( float $watchlistPurgeRate ): void {
-		wfDeprecated( __METHOD__, '1.36' );
 		throw new DBReadOnlyError( null, self::DB_READONLY_ERROR );
 	}
 

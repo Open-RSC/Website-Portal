@@ -1,11 +1,11 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
+use MediaWiki\User\StaticUserOptionsLookup;
 use Wikimedia\TestingAccessWrapper;
 
 class ResourceLoaderTest extends ResourceLoaderTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->setMwGlobals( [
@@ -28,7 +28,7 @@ class ResourceLoaderTest extends ResourceLoaderTestCase {
 			]
 		] );
 
-		MediaWikiServices::getInstance()->getResourceLoader();
+		$this->getServiceContainer()->getResourceLoader();
 
 		$this->assertSame( 1, $ranHook, 'Hook was called' );
 	}
@@ -150,67 +150,6 @@ class ResourceLoaderTest extends ResourceLoaderTestCase {
 		);
 	}
 
-	public function provideTestIsFileModule() {
-		$fileModuleObj = $this->createMock( ResourceLoaderFileModule::class );
-		return [
-			'factory ignored' => [ false,
-				[
-					'factory' => static function () {
-						return new ResourceLoaderTestModule();
-					}
-				]
-			],
-			'factory ignored (actual FileModule)' => [ false,
-				[
-					'factory' => static function () use ( $fileModuleObj ) {
-						return $fileModuleObj;
-					}
-				]
-			],
-			'simple empty' => [ true,
-				[]
-			],
-			'simple scripts' => [ true,
-				[ 'scripts' => 'example.js' ]
-			],
-			'simple scripts with targets' => [ true, [
-				'scripts' => [ 'a.js', 'b.js' ],
-				'targets' => [ 'desktop', 'mobile' ],
-			] ],
-			'FileModule' => [ true,
-				[ 'class' => ResourceLoaderFileModule::class, 'scripts' => 'example.js' ]
-			],
-			'TestModule' => [ false,
-				[ 'class' => ResourceLoaderTestModule::class, 'scripts' => 'example.js' ]
-			],
-			'SkinModule (FileModule subclass)' => [ true,
-				[ 'class' => ResourceLoaderSkinModule::class, 'scripts' => 'example.js' ]
-			],
-			'WikiModule' => [ false, [
-				'class' => ResourceLoaderWikiModule::class,
-				'scripts' => [ 'MediaWiki:Example.js' ],
-			] ],
-		];
-	}
-
-	/**
-	 * @dataProvider provideTestIsFileModule
-	 * @covers ResourceLoader::isFileModule
-	 */
-	public function testIsFileModule( $expected, $module ) {
-		$rl = TestingAccessWrapper::newFromObject( new EmptyResourceLoader() );
-		$rl->register( 'test', $module );
-		$this->assertSame( $expected, $rl->isFileModule( 'test' ) );
-	}
-
-	/**
-	 * @covers ResourceLoader::isFileModule
-	 */
-	public function testIsFileModuleUnknown() {
-		$rl = TestingAccessWrapper::newFromObject( new EmptyResourceLoader() );
-		$this->assertSame( false, $rl->isFileModule( 'unknown' ) );
-	}
-
 	/**
 	 * @covers ResourceLoader::isModuleRegistered
 	 */
@@ -272,6 +211,17 @@ class ResourceLoaderTest extends ResourceLoaderTestCase {
 	}
 
 	/**
+	 * @covers ResourceLoader::makeHash
+	 */
+	public function testGetVersionHash_length() {
+		$hash = ResourceLoader::makeHash(
+			'Anything you do could have serious repercussions on future events.'
+		);
+		$this->assertSame( 'xhh1x', $hash, 'Hash' );
+		$this->assertSame( ResourceLoader::HASH_LENGTH, strlen( $hash ), 'Hash length' );
+	}
+
+	/**
 	 * @covers ResourceLoader::getLessCompiler
 	 */
 	public function testLessImportDirs() {
@@ -279,7 +229,7 @@ class ResourceLoaderTest extends ResourceLoaderTestCase {
 		$lc = $rl->getLessCompiler( [ 'foo'  => '2px', 'Foo' => '#eeeeee' ] );
 		$basePath = dirname( dirname( __DIR__ ) ) . '/data/less';
 		$lc->SetImportDirs( [
-			 "$basePath/common" => '',
+			"$basePath/common" => '',
 		] );
 		$css = $lc->parseFile( "$basePath/module/use-import-dir.less" )->getCss();
 		$this->assertStringEqualsFile( "$basePath/module/styles.css", $css );
@@ -319,7 +269,7 @@ class ResourceLoaderTest extends ResourceLoaderTestCase {
 		$this->setMwGlobals( $config );
 		$reset = ExtensionRegistry::getInstance()->setAttributeForTest( 'SkinLessImportPaths', $importPaths );
 		// Reset Skin::getSkinNames for ResourceLoaderContext
-		MediaWiki\MediaWikiServices::getInstance()->resetServiceForTesting( 'SkinFactory' );
+		$this->getServiceContainer()->resetServiceForTesting( 'SkinFactory' );
 
 		$context = $this->getResourceLoaderContext( [ 'skin' => $skin ] );
 		$module = new ResourceLoaderFileModule( [
@@ -468,6 +418,29 @@ mw.example();
 } );',
 			] ],
 			[ [
+				'title' => 'Implement scripts with newline at end',
+
+				'name' => 'test.example',
+				'scripts' => "mw.example();\n",
+				'styles' => [],
+
+				'expected' => 'mw.loader.implement( "test.example", function ( $, jQuery, require, module ) {
+mw.example();
+
+} );',
+			] ],
+			[ [
+				'title' => 'Implement scripts with comment at end',
+
+				'name' => 'test.example',
+				'scripts' => "mw.example();//Foo",
+				'styles' => [],
+
+				'expected' => 'mw.loader.implement( "test.example", function ( $, jQuery, require, module ) {
+mw.example();//Foo
+} );',
+			] ],
+			[ [
 				'title' => 'Implement styles',
 
 				'name' => 'test.example',
@@ -531,24 +504,38 @@ mw.example();
 						],
 						'three.js' => [
 							'type' => 'script',
-							'content' => 'mw.example( 3 );'
+							'content' => 'mw.example( 3 ); // Comment'
+						],
+						'four.js' => [
+							'type' => 'script',
+							'content' => "mw.example( 4 );\n"
+						],
+						'five.js' => [
+							'type' => 'script',
+							'content' => 'mw.example( 5 );'
 						],
 					],
-					'main' => 'three.js',
+					'main' => 'five.js',
 				],
 
 				'expected' => <<<END
 mw.loader.implement( "test.multifile", {
-    "main": "three.js",
+    "main": "five.js",
     "files": {
-    "one.js": function ( require, module ) {
+    "one.js": function ( require, module, exports ) {
 mw.example( 1 );
 },
     "two.json": {
     "n": 2
 },
-    "three.js": function ( require, module ) {
-mw.example( 3 );
+    "three.js": function ( require, module, exports ) {
+mw.example( 3 ); // Comment
+},
+    "four.js": function ( require, module, exports ) {
+mw.example( 4 );
+},
+    "five.js": function ( require, module, exports ) {
+mw.example( 5 );
 }
 }
 } );
@@ -565,7 +552,10 @@ END
 	public function testMakeLoaderImplementScript( $case ) {
 		$case += [
 			'wrap' => true,
-			'styles' => [], 'templates' => [], 'messages' => new XmlJsCode( '{}' ), 'packageFiles' => [],
+			'styles' => [],
+			'templates' => [],
+			'messages' => new XmlJsCode( '{}' ),
+			'packageFiles' => [],
 		];
 		$rl = TestingAccessWrapper::newFromClass( ResourceLoader::class );
 		$context = new ResourceLoaderContext( new EmptyResourceLoader(), new FauxRequest( [
@@ -725,7 +715,7 @@ END
 
 	protected function getFailFerryMock( $getter = 'getScript' ) {
 		$mock = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ $getter ] )
+			->onlyMethods( [ $getter ] )
 			->getMock();
 		$mock->method( $getter )->will( $this->throwException(
 			new Exception( 'Ferry not found' )
@@ -735,7 +725,7 @@ END
 
 	protected function getSimpleModuleMock( $script = '' ) {
 		$mock = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getScript' ] )
+			->onlyMethods( [ 'getScript' ] )
 			->getMock();
 		$mock->method( 'getScript' )->willReturn( $script );
 		return $mock;
@@ -743,7 +733,7 @@ END
 
 	protected function getSimpleStyleModuleMock( $styles = '' ) {
 		$mock = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getStyles' ] )
+			->onlyMethods( [ 'getStyles' ] )
 			->getMock();
 		$mock->method( 'getStyles' )->willReturn( [ '' => $styles ] );
 		return $mock;
@@ -755,7 +745,7 @@ END
 	public function testGetCombinedVersion() {
 		$rl = $this->getMockBuilder( EmptyResourceLoader::class )
 			// Disable log from outputErrorAndLog
-			->setMethods( [ 'outputErrorAndLog' ] )->getMock();
+			->onlyMethods( [ 'outputErrorAndLog' ] )->getMock();
 		$rl->register( [
 			'foo' => [ 'class' => ResourceLoaderTestModule::class ],
 			'ferry' => [
@@ -765,7 +755,7 @@ END
 			],
 			'bar' => [ 'class' => ResourceLoaderTestModule::class ],
 		] );
-		$context = $this->getResourceLoaderContext( [], $rl );
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'false' ], $rl );
 
 		$this->assertSame(
 			'',
@@ -969,7 +959,7 @@ END
 	public function testMakeModuleResponseStartupError() {
 		// This is an integration test that uses a lot of MediaWiki state,
 		// provide the full Config object here.
-		$rl = new EmptyResourceLoader( MediaWikiServices::getInstance()->getMainConfig() );
+		$rl = new EmptyResourceLoader( $this->getServiceContainer()->getMainConfig() );
 		$rl->register( [
 			'foo' => [ 'factory' => function () {
 				return $this->getSimpleModuleMock( 'foo();' );
@@ -985,6 +975,8 @@ END
 			[
 				'modules' => 'startup',
 				'only' => 'scripts',
+				// No module build for version hash in debug mode
+				'debug' => 'false',
 			],
 			$rl
 		);
@@ -1002,7 +994,7 @@ END
 		$response = $rl->makeModuleResponse( $context, $modules );
 		$errors = $rl->getErrors();
 
-		$this->assertRegExp( '/Ferry not found/', $errors[0] );
+		$this->assertRegExp( '/Ferry not found/', $errors[0] ?? '' );
 		$this->assertCount( 1, $errors );
 		$this->assertRegExp(
 			'/isCompatible.*window\.RLQ/s',
@@ -1030,9 +1022,9 @@ END
 	 */
 	public function testMakeModuleResponseExtraHeaders() {
 		$module = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getPreloadLinks' ] )->getMock();
+			->onlyMethods( [ 'getPreloadLinks' ] )->getMock();
 		$module->method( 'getPreloadLinks' )->willReturn( [
-			 'https://example.org/script.js' => [ 'as' => 'script' ],
+			'https://example.org/script.js' => [ 'as' => 'script' ],
 		] );
 
 		$rl = new EmptyResourceLoader();
@@ -1061,16 +1053,16 @@ END
 	 */
 	public function testMakeModuleResponseExtraHeadersMulti() {
 		$foo = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getPreloadLinks' ] )->getMock();
+			->onlyMethods( [ 'getPreloadLinks' ] )->getMock();
 		$foo->method( 'getPreloadLinks' )->willReturn( [
-			 'https://example.org/script.js' => [ 'as' => 'script' ],
+			'https://example.org/script.js' => [ 'as' => 'script' ],
 		] );
 
 		$bar = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getPreloadLinks' ] )->getMock();
+			->onlyMethods( [ 'getPreloadLinks' ] )->getMock();
 		$bar->method( 'getPreloadLinks' )->willReturn( [
-			 '/example.png' => [ 'as' => 'image' ],
-			 '/example.jpg' => [ 'as' => 'image' ],
+			'/example.png' => [ 'as' => 'image' ],
+			'/example.jpg' => [ 'as' => 'image' ],
 		] );
 
 		$rl = new EmptyResourceLoader();
@@ -1097,7 +1089,7 @@ END
 	 */
 	public function testRespondEmpty() {
 		$rl = $this->getMockBuilder( EmptyResourceLoader::class )
-			->setMethods( [
+			->onlyMethods( [
 				'tryRespondNotModified',
 				'sendResponseHeaders',
 				'measureResponseTime',
@@ -1117,7 +1109,7 @@ END
 	public function testRespondSimple() {
 		$module = new ResourceLoaderTestModule( [ 'script' => 'foo();' ] );
 		$rl = $this->getMockBuilder( EmptyResourceLoader::class )
-			->setMethods( [
+			->onlyMethods( [
 				'measureResponseTime',
 				'tryRespondNotModified',
 				'sendResponseHeaders',
@@ -1149,7 +1141,7 @@ END
 	 */
 	public function testRespondErrorPrivate() {
 		$rl = $this->getMockBuilder( EmptyResourceLoader::class )
-			->setMethods( [
+			->onlyMethods( [
 				'measureResponseTime',
 				'tryRespondNotModified',
 				'sendResponseHeaders',
@@ -1174,7 +1166,7 @@ END
 	public function testRespondInternalFailures() {
 		$module = new ResourceLoaderTestModule( [ 'script' => 'foo();' ] );
 		$rl = $this->getMockBuilder( EmptyResourceLoader::class )
-			->setMethods( [
+			->onlyMethods( [
 				'measureResponseTime',
 				'preloadModuleInfo',
 				'getCombinedVersion',
@@ -1210,16 +1202,37 @@ END
 	 */
 	public function testMeasureResponseTime() {
 		$stats = $this->getMockBuilder( NullStatsdDataFactory::class )
-			->setMethods( [ 'timing' ] )->getMock();
+			->onlyMethods( [ 'timing' ] )->getMock();
 		$this->setService( 'StatsdDataFactory', $stats );
 
 		$stats->expects( $this->once() )->method( 'timing' )
 			->with( 'resourceloader.responseTime', $this->anything() );
 
-		$timing = new Timing();
-		$timing->mark( 'requestShutdown' );
 		$rl = TestingAccessWrapper::newFromObject( new EmptyResourceLoader );
-		$rl->measureResponseTime( $timing );
-		DeferredUpdates::doUpdates();
+		$rl->measureResponseTime();
+	}
+
+	/**
+	 * @covers ResourceLoader::getUserDefaults
+	 */
+	public function testGetUserDefaults() {
+		$this->setService( 'UserOptionsLookup', new StaticUserOptionsLookup(
+			[],
+			[
+				'include' => 1,
+				'exclude' => 1,
+			]
+		) );
+		$ctx = $this->createStub( ResourceLoaderContext::class );
+		$this->setTemporaryHook( 'ResourceLoaderExcludeUserOptions', function (
+			array &$keysToExclude,
+			ResourceLoaderContext $context
+		) use ( $ctx ): void {
+			$this->assertSame( $ctx, $context );
+			$keysToExclude[] = 'exclude';
+		}, true );
+
+		$defaults = ResourceLoader::getUserDefaults( $ctx );
+		$this->assertSame( [ 'include' => 1 ], $defaults );
 	}
 }

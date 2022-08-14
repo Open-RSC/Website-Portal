@@ -2,7 +2,8 @@
 
 namespace MediaWiki\Extension\OATHAuth\Module;
 
-use MediaWiki\Auth\SecondaryAuthenticationProvider;
+use IContextSource;
+use MediaWiki\Auth\AbstractSecondaryAuthenticationProvider;
 use MediaWiki\Extension\OATHAuth\Auth\TOTPSecondaryAuthenticationProvider;
 use MediaWiki\Extension\OATHAuth\HTMLForm\IManageForm;
 use MediaWiki\Extension\OATHAuth\HTMLForm\TOTPDisableForm;
@@ -69,7 +70,7 @@ class TOTP implements IModule {
 	}
 
 	/**
-	 * @return SecondaryAuthenticationProvider
+	 * @return AbstractSecondaryAuthenticationProvider
 	 */
 	public function getSecondaryAuthProvider() {
 		return new TOTPSecondaryAuthenticationProvider();
@@ -106,15 +107,21 @@ class TOTP implements IModule {
 	 * @param string $action
 	 * @param OATHUser $user
 	 * @param OATHUserRepository $repo
+	 * @param IContextSource $context
 	 * @return IManageForm|null
 	 */
-	public function getManageForm( $action, OATHUser $user, OATHUserRepository $repo ) {
+	public function getManageForm(
+		$action,
+		OATHUser $user,
+		OATHUserRepository $repo,
+		IContextSource $context
+	) {
 		$isEnabledForUser = $user->getModule() instanceof self;
 		if ( $action === OATHManage::ACTION_ENABLE && !$isEnabledForUser ) {
-			return new TOTPEnableForm( $user, $repo, $this );
+			return new TOTPEnableForm( $user, $repo, $this, $context );
 		}
 		if ( $action === OATHManage::ACTION_DISABLE && $isEnabledForUser ) {
-			return new TOTPDisableForm( $user, $repo, $this );
+			return new TOTPDisableForm( $user, $repo, $this, $context );
 		}
 		return null;
 	}

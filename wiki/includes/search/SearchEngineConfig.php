@@ -62,7 +62,7 @@ class SearchEngineConfig {
 	}
 
 	/**
-	 * Make a list of searchable namespaces and their canonical names.
+	 * Make a list of searchable namespaces and their localized names.
 	 * @return string[] Namespace ID => name
 	 * @phan-return array<int,string>
 	 */
@@ -135,12 +135,12 @@ class SearchEngineConfig {
 	 *
 	 * For example to be able to use 'foobarsearch' in $wgSearchType and
 	 * $wgSearchTypeAlternatives but the PHP class for 'foobarsearch'
-	 * is 'MediaWiki\Extensions\FoobarSearch\FoobarSearch' set:
+	 * is 'MediaWiki\Extension\FoobarSearch\FoobarSearch' set:
 	 *
 	 * @par extension.json Example:
 	 * @code
 	 * "SearchMappings": {
-	 * 	"foobarsearch": { "class": "MediaWiki\\Extensions\\FoobarSearch\\FoobarSearch" }
+	 * 	"foobarsearch": { "class": "MediaWiki\\Extension\\FoobarSearch\\FoobarSearch" }
 	 * }
 	 * @endcode
 	 *

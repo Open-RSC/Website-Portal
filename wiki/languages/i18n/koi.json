@@ -3,6 +3,7 @@
 		"authors": [
 			"DannyS712",
 			"Enye Lav",
+			"Soul Train",
 			"Yufereff",
 			"아라"
 		]
@@ -93,8 +94,11 @@
 	"history_short": "Чулалöм",
 	"printableversion": "Печатайтан версия",
 	"permalink": "Пырся ыстöт",
+	"view-view": "Лыддьöтны",
 	"edit": "Веськöтны",
+	"view-edit": "Веськöтны",
 	"create": "Лöсьöтны",
+	"view-create": "Лöсьöтны",
 	"delete": "Чышкыны",
 	"protect": "Дорйыны",
 	"protect_change": "мöдкодьсьöтны",
@@ -151,6 +155,7 @@
 	"nstab-template": "Шаблон",
 	"nstab-help": "Отсасян",
 	"nstab-category": "Категория",
+	"mainpage-nstab": "Пондöтчан листбок",
 	"error": "Сорасьöм",
 	"missing-article": "Мыччöт чукöрись эз шед сiя листбок, кöда сэтчин вöлi \"$1\" $2 ним увтын. Этадз аркмывлö унажыксö сэк, кöр вешшан бы важмöм ыстöт пыр сэтшöм листбок вылö, кöда вöлi вештöм.  Абу кö сiдз, наттьö программаын мыйкö нетырви керöм. Юöрт жö сы йылiсь миянлö татчö: [[Special:ListUsers/sysop|administrator]],  сы дырни эн вунöт пасйыны URL.",
 	"missingarticle-rev": "(версия#: $1)",
@@ -172,6 +177,7 @@
 	"loginsuccesstitle": "Пырöмыт аркмис",
 	"mailmypassword": "Ыстыны виль пароль",
 	"loginlanguagelabel": "Кыв: $1",
+	"pt-createaccount": "Лöсьöт аслыт уджкерисьлiсь ним",
 	"oldpassword": "Важ пароль",
 	"newpassword": "Виль пароль",
 	"retypenew": "Мöдпöв гиж виль парольтö",
@@ -281,6 +287,8 @@
 	"newuserlogpage": "Уджкерисьö гижöтчан журнал",
 	"rightslog": "Уджкерисьлö позяннэз сьöртi журнал",
 	"action-edit": "мöдкодьсьöтны этiйö листбоксö",
+	"action-delete": "Чышкыны",
+	"action-protect": "Дорйыны",
 	"nchanges": "{{PLURAL:$1|вильмöтöм|вильмöтöм|вильмöтöм}}",
 	"recentchanges": "Медбöрья вильмöтöммез",
 	"recentchanges-legend": "Медбöрья вильмöтöммез понда лöсьöтаннэз",
@@ -366,7 +374,7 @@
 	"watchlist-options": "Синмалан нимлёз понда лöсьöтаннэз",
 	"watching": "Синмавны …",
 	"unwatching": "Дугдыны синмавны …",
-	"deletepage": "Чышкыны листбок",
+	"deletepage-submit": "Чышкыны листбок",
 	"delete-confirm": "Чышкыны \"$1\"",
 	"delete-legend": "Чышкыны",
 	"confirmdeletetext": "Тэ мöдан быдсöн чышкыны листбок (нето серпас) да  сылiсь история. Былись я тэ мöдан сiйö керны,  вежöртан я бура, мыйö этö вермас вайöтны,  и керан я этiйö [[{{MediaWiki:Policy-url}}]] туйдöттэз сьöртi",
@@ -531,5 +539,9 @@
 	"watchlisttools-edit": "Видзöтны/мöдкодьсьöтны нимлёдз",
 	"watchlisttools-raw": "Нимлёдз пöртны текстö",
 	"specialpages": "Тодильнöй листбоккез",
-	"htmlform-selectorother-other": "Мöдiк"
+	"deletepage": "Чышкыны листбок",
+	"htmlform-selectorother-other": "Мöдiк",
+	"nstab-mainpage": "Пондöтчан листбок",
+	"skin-action-protect": "Дорйыны",
+	"skin-action-delete": "Чышкыны"
 }

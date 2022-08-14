@@ -21,6 +21,8 @@
  * @ingroup SpecialPage
  */
 
+use Wikimedia\AtEase\AtEase;
+
 /**
  * A form to make the database readonly (eg for maintenance purposes).
  *
@@ -56,7 +58,6 @@ class SpecialLockdb extends FormSpecialPage {
 			'Reason' => [
 				'type' => 'textarea',
 				'rows' => 4,
-				'vertical-label' => true,
 				'label-message' => 'enterlockreason',
 			],
 			'Confirm' => [
@@ -77,9 +78,9 @@ class SpecialLockdb extends FormSpecialPage {
 			return Status::newFatal( 'locknoconfirm' );
 		}
 
-		Wikimedia\suppressWarnings();
+		AtEase::suppressWarnings();
 		$fp = fopen( $this->getConfig()->get( 'ReadOnlyFile' ), 'w' );
-		Wikimedia\restoreWarnings();
+		AtEase::restoreWarnings();
 
 		if ( $fp === false ) {
 			# This used to show a file not found error, but the likeliest reason for fopen()

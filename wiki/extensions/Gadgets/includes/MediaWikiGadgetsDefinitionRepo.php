@@ -1,18 +1,28 @@
 <?php
 
+namespace MediaWiki\Extension\Gadgets;
+
+use InvalidArgumentException;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
+use ObjectCache;
+use TextContent;
+use Title;
+use WANObjectCache;
 use Wikimedia\Rdbms\Database;
 
 /**
  * Gadgets repo powered by MediaWiki:Gadgets-definition
  */
 class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
-	private const CACHE_VERSION = 2;
+	private const CACHE_VERSION = 3;
 
 	/** @var array|false|null */
 	private $definitionCache;
+
+	/** @var string */
+	protected $titlePrefix = 'MediaWiki:Gadget-';
 
 	/**
 	 * @param string $id
@@ -33,13 +43,13 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 		$gadgets = $this->loadGadgets();
 		if ( $gadgets ) {
 			return array_keys( $gadgets );
-		} else {
-			return [];
 		}
+
+		return [];
 	}
 
 	public function handlePageUpdate( LinkTarget $target ) {
-		if ( $target->getNamespace() == NS_MEDIAWIKI && $target->getText() == 'Gadgets-definition' ) {
+		if ( $target->getNamespace() === NS_MEDIAWIKI && $target->getText() == 'Gadgets-definition' ) {
 			$this->purgeDefinitionCache();
 		}
 	}
@@ -74,7 +84,8 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 	 */
 	protected function loadGadgets() {
 		if ( $this->definitionCache !== null ) {
-			return $this->definitionCache; // process cache hit
+			// process cache hit
+			return $this->definitionCache;
 		}
 
 		// Ideally $t1Cache is APC, and $wanCache is memcached
@@ -86,31 +97,32 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 		// (a) Check the tier 1 cache
 		$value = $t1Cache->get( $key );
 		// Randomize logical APC expiry to avoid stampedes
-		// somewhere between 7.0 and 15.0 (seconds)
-		$cutoffAge = mt_rand( 7000000, 15000000 ) / 1000000;
+		// somewhere between 7 and 15 (seconds)
+		$cutoffAge = mt_rand( 7, 15 );
 		// Check if it passes a blind TTL check (avoids I/O)
 		if ( $value && ( microtime( true ) - $value['time'] ) < $cutoffAge ) {
-			$this->definitionCache = $value['gadgets']; // process cache
+			// process cache
+			$this->definitionCache = $value['gadgets'];
 			return $this->definitionCache;
 		}
 		// Cache generated after the "check" time should be up-to-date
 		$ckTime = $wanCache->getCheckKeyTime( $key ) + WANObjectCache::HOLDOFF_TTL;
 		if ( $value && $value['time'] > $ckTime ) {
-			$this->definitionCache = $value['gadgets']; // process cache
+			// process cache
+			$this->definitionCache = $value['gadgets'];
 			return $this->definitionCache;
 		}
 
 		// (b) Fetch value from WAN cache or regenerate if needed.
 		// This is hit occasionally and more so when the list changes.
-		$us = $this;
 		$value = $wanCache->getWithSetCallback(
 			$key,
 			Gadget::CACHE_TTL,
-			function ( $old, &$ttl, &$setOpts ) use ( $us ) {
+			function ( $old, &$ttl, &$setOpts ) {
 				$setOpts += Database::getCacheSetOptions( wfGetDB( DB_REPLICA ) );
 
 				$now = microtime( true );
-				$gadgets = $us->fetchStructuredList();
+				$gadgets = $this->fetchStructuredList();
 				if ( $gadgets === false ) {
 					$ttl = WANObjectCache::TTL_UNCACHEABLE;
 				}
@@ -148,17 +160,20 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 				|| !$revRecord->getContent( SlotRecord::MAIN )
 				|| $revRecord->getContent( SlotRecord::MAIN )->isEmpty()
 			) {
-				return false; // don't cache
+				// don't cache
+				return false;
 			}
 
-			$g = $revRecord->getContent( SlotRecord::MAIN )->getNativeData();
+			$content = $revRecord->getContent( SlotRecord::MAIN );
+			$g = ( $content instanceof TextContent ) ? $content->getText() : '';
 		} else {
 			$g = $forceNewText;
 		}
 
 		$gadgets = $this->listFromDefinition( $g );
 		if ( !count( $gadgets ) ) {
-			return false; // don't cache; Bug 37228
+			// don't cache; Bug 37228
+			return false;
 		}
 
 		$source = $forceNewText !== null ? 'input text' : 'MediaWiki:Gadgets-definition';
@@ -204,7 +219,7 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 	public function newFromDefinition( $definition, $category ) {
 		$m = [];
 		if ( !preg_match(
-			'/^\*+ *([a-zA-Z](?:[-_:.\w\d ]*[a-zA-Z0-9])?)(\s*\[.*?\])?\s*((\|[^|]*)+)\s*$/',
+			'/^\*+ *([a-zA-Z](?:[-_:.\w ]*[a-zA-Z0-9])?)(\s*\[.*?\])?\s*((\|[^|]*)+)\s*$/',
 			$definition,
 			$m
 		) ) {
@@ -249,11 +264,17 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 				case 'hidden':
 					$info['hidden'] = true;
 					break;
+				case 'actions':
+					$info['requiredActions'] = $params;
+					break;
 				case 'skins':
 					$info['requiredSkins'] = $params;
 					break;
 				case 'default':
 					$info['onByDefault'] = true;
+					break;
+				case 'package':
+					$info['package'] = true;
 					break;
 				case 'targets':
 					$info['targets'] = $params;
@@ -262,13 +283,19 @@ class MediaWikiGadgetsDefinitionRepo extends GadgetRepo {
 					// Single value, not a list
 					$info['type'] = $params[0] ?? '';
 					break;
+				case 'supportsUrlLoad':
+					$val = $params[0] ?? '';
+					$info['supportsUrlLoad'] = $val !== 'false';
+					break;
 			}
 		}
 
 		foreach ( preg_split( '/\s*\|\s*/', $m[3], -1, PREG_SPLIT_NO_EMPTY ) as $page ) {
-			$page = "MediaWiki:Gadget-$page";
+			$page = $this->titlePrefix . $page;
 
-			if ( preg_match( '/\.js/', $page ) ) {
+			if ( preg_match( '/\.json$/', $page ) ) {
+				$info['datas'][] = $page;
+			} elseif ( preg_match( '/\.js/', $page ) ) {
 				$info['scripts'][] = $page;
 			} elseif ( preg_match( '/\.css/', $page ) ) {
 				$info['styles'][] = $page;

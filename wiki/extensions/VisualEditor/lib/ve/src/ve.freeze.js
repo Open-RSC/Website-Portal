@@ -7,8 +7,7 @@
 /* global Set */
 
 ( function () {
-	var deepFreeze, freezeProxyHandler;
-	freezeProxyHandler = {
+	var freezeProxyHandler = {
 		set: function ( obj, name ) {
 			throw new Error( 'Object is frozen, can\'t set property: ' + name );
 		},
@@ -20,6 +19,7 @@
 	if ( !window.Proxy || !window.Set ) {
 		return;
 	}
+	var deepFreeze;
 	/**
 	 * Deep freeze an object, making it immutable
 	 *
@@ -31,15 +31,13 @@
 	 * @return {Object} Immutable deep copy of the original object
 	 */
 	ve.deepFreeze = deepFreeze = function ( object, onlyProperties, seen ) {
-		var name, value;
-
 		if ( !seen ) {
 			seen = new Set();
 			seen.add( object );
 		}
-		for ( name in object ) {
+		for ( var name in object ) {
 			if ( Object.prototype.hasOwnProperty.call( object, name ) ) {
-				value = object[ name ];
+				var value = object[ name ];
 				if (
 					// Truth check so we don't try to freeze null
 					value &&

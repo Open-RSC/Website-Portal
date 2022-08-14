@@ -14,7 +14,7 @@ class DeleteAutoPatrolLogsTest extends MaintenanceBaseTestCase {
 		return DeleteAutoPatrolLogs::class;
 	}
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->tablesUsed = [ 'logging' ];
 
@@ -23,11 +23,11 @@ class DeleteAutoPatrolLogsTest extends MaintenanceBaseTestCase {
 	}
 
 	private function cleanLoggingTable() {
-		wfGetDB( DB_MASTER )->delete( 'logging', '*' );
+		wfGetDB( DB_PRIMARY )->delete( 'logging', '*' );
 	}
 
 	private function insertLoggingData() {
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 		$logs = [];
 
 		$comment = \MediaWiki\MediaWikiServices::getInstance()->getCommentStore()
@@ -257,9 +257,6 @@ class DeleteAutoPatrolLogsTest extends MaintenanceBaseTestCase {
 	 * @dataProvider runProvider
 	 */
 	public function testRun( $expected, $args ) {
-		// FIXME: fails under postgres
-		$this->markTestSkippedIfDbType( 'postgres' );
-
 		$this->maintenance->loadWithArgv( $args );
 
 		$this->maintenance->execute();

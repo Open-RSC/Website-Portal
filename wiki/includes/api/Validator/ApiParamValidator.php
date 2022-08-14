@@ -14,7 +14,7 @@ use MediaWiki\ParamValidator\TypeDef\UserDef;
 use Message;
 use Wikimedia\Message\DataMessageValue;
 use Wikimedia\Message\MessageValue;
-use Wikimedia\ObjectFactory;
+use Wikimedia\ObjectFactory\ObjectFactory;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\EnumDef;
 use Wikimedia\ParamValidator\TypeDef\ExpiryDef;
@@ -80,7 +80,7 @@ class ApiParamValidator {
 		],
 		'user' => [
 			'class' => UserDef::class,
-			'services' => [ 'UserFactory', 'TitleFactory', 'UserNameUtils' ]
+			'services' => [ 'UserIdentityLookup', 'TitleParser', 'UserNameUtils' ]
 		],
 		'upload' => [ 'class' => UploadDef::class ],
 	];
@@ -106,7 +106,7 @@ class ApiParamValidator {
 	 * List known type names
 	 * @return string[]
 	 */
-	public function knownTypes() : array {
+	public function knownTypes(): array {
 		return $this->paramValidator->knownTypes();
 	}
 
@@ -115,7 +115,7 @@ class ApiParamValidator {
 	 * @param array $settings
 	 * @return array
 	 */
-	private function mapDeprecatedSettingsMessages( array $settings ) : array {
+	private function mapDeprecatedSettingsMessages( array $settings ): array {
 		if ( isset( $settings[EnumDef::PARAM_DEPRECATED_VALUES] ) ) {
 			foreach ( $settings[EnumDef::PARAM_DEPRECATED_VALUES] as &$v ) {
 				if ( $v === null || $v === true || $v instanceof MessageValue ) {
@@ -145,7 +145,7 @@ class ApiParamValidator {
 	 * @param array|mixed $settings
 	 * @return array
 	 */
-	public function normalizeSettings( $settings ) : array {
+	public function normalizeSettings( $settings ): array {
 		if ( is_array( $settings ) ) {
 			if ( !isset( $settings[ParamValidator::PARAM_IGNORE_UNRECOGNIZED_VALUES] ) ) {
 				$settings[ParamValidator::PARAM_IGNORE_UNRECOGNIZED_VALUES] = true;
@@ -168,7 +168,7 @@ class ApiParamValidator {
 	 * @param mixed $value
 	 * @param array &$ret
 	 */
-	private function checkSettingsMessage( ApiBase $module, string $key, $value, array &$ret ) : void {
+	private function checkSettingsMessage( ApiBase $module, string $key, $value, array &$ret ): void {
 		$msg = ApiBase::makeMessage( $value, $module );
 		if ( $msg instanceof Message ) {
 			$ret['messages'][] = $this->messageConverter->convertMessage( $msg );
@@ -187,7 +187,7 @@ class ApiParamValidator {
 	 */
 	public function checkSettings(
 		ApiBase $module, array $params, string $name, array $options
-	) : array {
+	): array {
 		$options['module'] = $module;
 		$settings = $params[$name];
 		if ( is_array( $settings ) ) {
@@ -204,11 +204,6 @@ class ApiParamValidator {
 
 		if ( !is_array( $settings ) ) {
 			$settings = [];
-		}
-
-		if ( array_key_exists( ApiBase::PARAM_VALUE_LINKS, $settings ) ) {
-			$ret['issues'][ApiBase::PARAM_VALUE_LINKS]
-				= 'PARAM_VALUE_LINKS was deprecated in MediaWiki 1.35';
 		}
 
 		if ( !is_bool( $settings[ApiBase::PARAM_RANGE_ENFORCE] ?? false ) ) {
@@ -255,7 +250,7 @@ class ApiParamValidator {
 		if ( isset( $settings[ApiBase::PARAM_HELP_MSG_PER_VALUE] ) ) {
 			if ( !is_array( $settings[ApiBase::PARAM_HELP_MSG_PER_VALUE] ) ) {
 				$ret['issues'][ApiBase::PARAM_HELP_MSG_PER_VALUE] = 'PARAM_HELP_MSG_PER_VALUE must be an array,'
-				   . ' got ' . gettype( $settings[ApiBase::PARAM_HELP_MSG_PER_VALUE] );
+					. ' got ' . gettype( $settings[ApiBase::PARAM_HELP_MSG_PER_VALUE] );
 			} elseif ( !is_array( $settings[ParamValidator::PARAM_TYPE] ?? '' ) ) {
 				$ret['issues'][ApiBase::PARAM_HELP_MSG_PER_VALUE] = 'PARAM_HELP_MSG_PER_VALUE can only be used '
 					. 'with PARAM_TYPE as an array';
@@ -274,7 +269,7 @@ class ApiParamValidator {
 		if ( isset( $settings[ApiBase::PARAM_TEMPLATE_VARS] ) ) {
 			if ( !is_array( $settings[ApiBase::PARAM_TEMPLATE_VARS] ) ) {
 				$ret['issues'][ApiBase::PARAM_TEMPLATE_VARS] = 'PARAM_TEMPLATE_VARS must be an array,'
-				   . ' got ' . gettype( $settings[ApiBase::PARAM_TEMPLATE_VARS] );
+					. ' got ' . gettype( $settings[ApiBase::PARAM_TEMPLATE_VARS] );
 			} elseif ( $settings[ApiBase::PARAM_TEMPLATE_VARS] === [] ) {
 				$ret['issues'][ApiBase::PARAM_TEMPLATE_VARS] = 'PARAM_TEMPLATE_VARS cannot be the empty array';
 			} else {
@@ -332,6 +327,7 @@ class ApiParamValidator {
 	 * @param ApiBase $module
 	 * @param ValidationException $ex
 	 * @throws ApiUsageException always
+	 * @return never
 	 */
 	private function convertValidationException( ApiBase $module, ValidationException $ex ) {
 		$mv = $ex->getFailureMessage();
@@ -367,7 +363,7 @@ class ApiParamValidator {
 	}
 
 	/**
-	 * Valiate a parameter value using a settings array
+	 * Validate a parameter value using a settings array
 	 *
 	 * @param ApiBase $module
 	 * @param string $name Parameter name, unprefixed
@@ -401,7 +397,7 @@ class ApiParamValidator {
 	 * @param array $options Options array.
 	 * @return array
 	 */
-	public function getParamInfo( ApiBase $module, string $name, $settings, array $options ) : array {
+	public function getParamInfo( ApiBase $module, string $name, $settings, array $options ): array {
 		$options['module'] = $module;
 		$name = $module->encodeParamName( $name );
 		return $this->paramValidator->getParamInfo( $name, $settings, $options );
@@ -417,7 +413,7 @@ class ApiParamValidator {
 	 * @param array $options Options array.
 	 * @return Message[]
 	 */
-	public function getHelpInfo( ApiBase $module, string $name, $settings, array $options ) : array {
+	public function getHelpInfo( ApiBase $module, string $name, $settings, array $options ): array {
 		$options['module'] = $module;
 		$name = $module->encodeParamName( $name );
 

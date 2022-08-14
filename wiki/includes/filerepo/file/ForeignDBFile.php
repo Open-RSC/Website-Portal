@@ -22,9 +22,9 @@
  */
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\User\UserIdentity;
 use Wikimedia\Rdbms\DBUnexpectedError;
 
-// @phan-file-suppress PhanTypeMissingReturn false positives
 /**
  * Foreign file with an accessible MediaWiki database
  *
@@ -51,7 +51,7 @@ class ForeignDBFile extends LocalFile {
 	}
 
 	/**
-	 * @param array $versions
+	 * @param int[] $versions
 	 * @param bool $unsuppress
 	 * @return Status
 	 * @throws MWException
@@ -62,12 +62,12 @@ class ForeignDBFile extends LocalFile {
 
 	/**
 	 * @param string $reason
-	 * @param User $user
+	 * @param UserIdentity $user
 	 * @param bool $suppress
 	 * @return Status
 	 * @throws MWException
 	 */
-	public function deleteFile( $reason, User $user, $suppress = false ) {
+	public function deleteFile( $reason, UserIdentity $user, $suppress = false ) {
 		$this->readOnlyError();
 	}
 
@@ -145,7 +145,7 @@ class ForeignDBFile extends LocalFile {
 	/**
 	 * Get short description URL for a file based on the page ID.
 	 *
-	 * @return string
+	 * @return string|null
 	 * @throws DBUnexpectedError
 	 * @since 1.27
 	 */

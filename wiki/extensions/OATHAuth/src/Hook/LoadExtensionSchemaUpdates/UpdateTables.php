@@ -7,6 +7,7 @@ use DatabaseUpdater;
 use FormatJson;
 use MediaWiki\MediaWikiServices;
 use Wikimedia;
+use Wikimedia\AtEase\AtEase;
 use Wikimedia\Rdbms\IDatabase;
 
 class UpdateTables {
@@ -41,10 +42,16 @@ class UpdateTables {
 
 	protected function execute() {
 		$type = $this->updater->getDB()->getType();
+		$typePath = "{$this->base}/sql/{$type}";
+
+		$this->updater->addExtensionTable(
+			'oathauth_users',
+			"$typePath/tables-generated.sql"
+		);
+
 		switch ( $type ) {
 			case 'mysql':
 			case 'sqlite':
-				$this->updater->addExtensionTable( 'oathauth_users', "{$this->base}/sql/mysql/tables.sql" );
 				$this->updater->addExtensionUpdate( [ [ $this, 'schemaUpdateOldUsersFromInstaller' ] ] );
 				$this->updater->dropExtensionField(
 					'oathauth_users',
@@ -55,7 +62,7 @@ class UpdateTables {
 				$this->updater->addExtensionField(
 					'oathauth_users',
 					'module',
-					"{$this->base}/sql/{$type}/patch-add_generic_fields.sql"
+					"$typePath/patch-add_generic_fields.sql"
 				);
 
 				$this->updater->addExtensionUpdate(
@@ -64,7 +71,7 @@ class UpdateTables {
 				$this->updater->dropExtensionField(
 					'oathauth_users',
 					'secret',
-					"{$this->base}/sql/{$type}/patch-remove_module_specific_fields.sql"
+					"$typePath/patch-remove_module_specific_fields.sql"
 				);
 
 				$this->updater->addExtensionUpdate(
@@ -78,7 +85,15 @@ class UpdateTables {
 				break;
 
 			case 'postgres':
-				$this->updater->addExtensionTable( 'oathauth_users', "{$this->base}/sql/postgres/tables.sql" );
+				$this->updater->modifyExtensionTable(
+					'oathauth_users',
+					"$typePath/patch-oathauth_users-drop-oathauth_users_id_seq.sql"
+				);
+				$this->updater->modifyExtensionField(
+					'oathauth_users',
+					'id',
+					"$typePath/patch-oathauth_users-drop-id-nextval.sql"
+				);
 				break;
 		}
 
@@ -94,7 +109,7 @@ class UpdateTables {
 		$database = $wgOATHAuthDatabase ?? false;
 		$lb = MediaWikiServices::getInstance()->getDBLoadBalancerFactory()
 			->getMainLB( $database );
-		return $lb->getConnectionRef( DB_MASTER, [], $database );
+		return $lb->getConnectionRef( DB_PRIMARY, [], $database );
 	}
 
 	/**
@@ -255,10 +270,16 @@ class UpdateTables {
 		foreach ( $res as $row ) {
 			$data = FormatJson::decode( $row->data, true );
 
+			$updated = false;
 			foreach ( $data['keys'] as &$k ) {
 				if ( is_string( $k['scratch_tokens'] ) ) {
 					$k['scratch_tokens'] = explode( ',', $k['scratch_tokens'] );
+					$updated = true;
 				}
+			}
+
+			if ( !$updated ) {
+				continue;
 			}
 
 			$db->update(
@@ -293,9 +314,9 @@ class UpdateTables {
 		);
 
 		foreach ( $res as $row ) {
-			Wikimedia\suppressWarnings();
+			AtEase::suppressWarnings();
 			$scratchTokens = unserialize( base64_decode( $row->scratch_tokens ) );
-			Wikimedia\restoreWarnings();
+			AtEase::restoreWarnings();
 			if ( $scratchTokens ) {
 				$db->update(
 					'oathauth_users',

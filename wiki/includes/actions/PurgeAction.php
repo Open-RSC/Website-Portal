@@ -33,10 +33,6 @@ class PurgeAction extends FormAction {
 		return 'purge';
 	}
 
-	public function requiresUnblock() {
-		return false;
-	}
-
 	public function getDescription() {
 		return '';
 	}
@@ -83,7 +79,6 @@ class PurgeAction extends FormAction {
 		return [
 			'intro' => [
 				'type' => 'info',
-				'vertical-label' => true,
 				'raw' => true,
 				'default' => $this->msg( 'confirm-purge-top' )->parse()
 			]

@@ -6,8 +6,6 @@
  * Copyright © 2013, Wikimedia Foundation Inc.
  */
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @group Preferences
  * @group Database
@@ -27,26 +25,15 @@ class SpecialPreferencesTest extends MediaWikiIntegrationTestCase {
 		// Set a low limit
 		$this->setMwGlobals( 'wgMaxSigChars', 2 );
 		$user = $this->createMock( User::class );
-		$user->expects( $this->any() )
-			->method( 'isAnon' )
-			->will( $this->returnValue( false ) );
-
-		# Yeah foreach requires an array, not NULL =(
-		$user->expects( $this->any() )
-			->method( 'getEffectiveGroups' )
-			->will( $this->returnValue( [] ) );
+		$user->method( 'isAnon' )
+			->willReturn( false );
 
 		# The mocked user has a long nickname
-		$user->expects( $this->any() )
-			->method( 'getOption' )
+		$user->method( 'getOption' )
 			->will( $this->returnValueMap( [
 				[ 'nickname', null, false, 'superlongnickname' ],
 			]
 			) );
-
-		# Needs to return something
-		$user->method( 'getOptions' )
-			->willReturn( [] );
 
 		// isAnyAllowed used to return null from the mock,
 		// thus revoke it's permissions.
@@ -58,7 +45,7 @@ class SpecialPreferencesTest extends MediaWikiIntegrationTestCase {
 		$context->setUser( $user );
 		$context->setTitle( Title::newFromText( 'Test' ) );
 
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		# Do the call, should not spurt a fatal error.
 		$special = new SpecialPreferences(
 			$services->getPreferencesFactory(),

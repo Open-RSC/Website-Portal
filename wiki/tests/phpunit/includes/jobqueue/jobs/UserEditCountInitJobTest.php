@@ -1,5 +1,4 @@
 <?php
-use MediaWiki\MediaWikiServices;
 
 /**
  * @group JobQueue
@@ -22,8 +21,8 @@ class UserEditCountInitJobTest extends MediaWikiIntegrationTestCase {
 		$user = $this->getMutableTestUser()->getUser();
 
 		if ( $startingEditCount !== false ) {
-			MediaWikiServices::getInstance()->getDbLoadBalancer()
-				->getConnectionRef( DB_MASTER )
+			$this->getServiceContainer()->getDbLoadBalancer()
+				->getConnectionRef( DB_PRIMARY )
 				->update(
 					'user',
 					[ 'user_editcount' => $startingEditCount ], // SET

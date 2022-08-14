@@ -26,6 +26,24 @@ use MediaWiki\Revision\RevisionRecord;
  * Item class for a logging table row
  */
 class RevDelLogItem extends RevDelItem {
+
+	/** @var CommentStore */
+	private $commentStore;
+
+	/**
+	 * @param RevisionListBase $list
+	 * @param stdClass $row DB result row
+	 * @param CommentStore $commentStore
+	 */
+	public function __construct(
+		RevisionListBase $list,
+		$row,
+		CommentStore $commentStore
+	) {
+		parent::__construct( $list, $row );
+		$this->commentStore = $commentStore;
+	}
+
 	public function getIdField() {
 		return 'log_id';
 	}
@@ -61,7 +79,7 @@ class RevDelLogItem extends RevDelItem {
 	}
 
 	public function setBits( $bits ) {
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 
 		$dbw->update( 'logging',
 			[ 'log_deleted' => $bits ],
@@ -111,13 +129,10 @@ class RevDelLogItem extends RevDelItem {
 		// User links and action text
 		$action = $formatter->getActionText();
 
-		$comment = MediaWikiServices::getInstance()
-			->getCommentStore()
-			->getComment( 'log_comment', $this->row )
-			->text;
-		// @phan-suppress-next-line SecurityCheck-DoubleEscaped false positive
-		$comment = $this->list->getLanguage()->getDirMark()
-			. Linker::commentBlock( $comment );
+		$commentRaw = $this->commentStore->getComment( 'log_comment', $this->row )->text;
+		$commentFormatter = MediaWikiServices::getInstance()->getCommentFormatter();
+		$dirMark = $this->list->getLanguage()->getDirMark();
+		$comment = $dirMark . $commentFormatter->formatBlock( $commentRaw );
 
 		if ( LogEventsList::isDeleted( $this->row, LogPage::DELETED_COMMENT ) ) {
 			$comment = '<span class="history-deleted">' . $comment . '</span>';
@@ -143,14 +158,13 @@ class RevDelLogItem extends RevDelItem {
 		}
 		if ( LogEventsList::userCan( $this->row, LogPage::DELETED_USER, $user ) ) {
 			$ret += [
-				'userid' => $this->row->log_user,
+				'userid' => $this->row->log_user ?? 0,
 				'user' => $this->row->log_user_text,
 			];
 		}
 		if ( LogEventsList::userCan( $this->row, LogPage::DELETED_COMMENT, $user ) ) {
 			$ret += [
-				'comment' => CommentStore::getStore()->getComment( 'log_comment', $this->row )
-					->text,
+				'comment' => $this->commentStore->getComment( 'log_comment', $this->row )->text,
 			];
 		}
 

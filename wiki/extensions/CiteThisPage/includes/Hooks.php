@@ -2,39 +2,40 @@
 
 namespace MediaWiki\Extension\CiteThisPage;
 
-use Skin;
+use Config;
 use SpecialPage;
 use Title;
 
-class Hooks {
+class Hooks implements \MediaWiki\Hook\SidebarBeforeOutputHook {
 	/**
 	 * Checks, if the "cite this page" link should be added. By default the link is added to all
 	 * pages in the main namespace, and additionally to pages, which are in one of the namespaces
-	 * named in $wgCiteThisPageAddiotionalNamespaces.
+	 * named in $wgCiteThisPageAdditionalNamespaces.
 	 *
-	 * @param Title $title
+	 * @param Title|null $title
+	 * @param Config|null $config
 	 * @return bool
 	 */
-	private static function shouldAddLink( Title $title ) {
-		global $wgCiteThisPageAdditionalNamespaces;
+	private static function shouldAddLink( ?Title $title, ?Config $config ) {
+		if ( !$title || !$config ) {
+			return false;
+		}
+
+		$additionalNamespaces = $config->get( 'CiteThisPageAdditionalNamespaces' );
 
 		return $title->isContentPage() ||
 			(
-				isset( $wgCiteThisPageAdditionalNamespaces[$title->getNamespace()] ) &&
-				$wgCiteThisPageAdditionalNamespaces[$title->getNamespace()]
+				isset( $additionalNamespaces[$title->getNamespace()] ) &&
+				$additionalNamespaces[$title->getNamespace()]
 			);
 	}
 
-	/**
-	 * @param Skin $skin
-	 * @param string[] &$sidebar
-	 * @return void
-	 */
-	public static function onSidebarBeforeOutput( Skin $skin, array &$sidebar ): void {
+	/** @inheritDoc */
+	public function onSidebarBeforeOutput( $skin, &$sidebar ): void {
 		$out = $skin->getOutput();
 		$title = $out->getTitle();
 
-		if ( !self::shouldAddLink( $title ) ) {
+		if ( !self::shouldAddLink( $title, $out->getConfig() ) ) {
 			return;
 		}
 

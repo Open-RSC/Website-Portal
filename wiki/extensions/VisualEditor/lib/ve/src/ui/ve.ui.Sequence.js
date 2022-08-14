@@ -16,25 +16,35 @@
  *         When using a RegularExpression always match the end of the sequence with a '$' so that
  *         only sequences next to the user's cursor match.
  * @param {number} [strip=0] Number of data elements to strip after execution
- *        (from the right)
- * @param {boolean} [setSelection=false] Whether to set the selection to the
- *        range matching the sequence before executing the command.
- * @param {boolean} [delayed=false] Whether to wait for the user to stop typing matching content
- *     before executing the command. When the sequence matches typed text, it will not be executed
- *     immediately, but only after more non-matching text is added afterwards or the selection is
- *     changed. This is useful for variable-length sequences (defined with RegExps).
- * @param {boolean} [checkOnPaste=false] Whether the sequence should also be matched after paste.
- * @param {boolean} [checkOnDelete=false] Whether the sequence should also be matched after delete.
+ *         (from the right)
+ * @param {Object} [config] [description]
+ * @cfg {boolean} [setSelection=false] Whether to set the selection to the
+ *       range matching the sequence before executing the command.
+ * @cfg {boolean} [delayed=false] Whether to wait for the user to stop typing matching content
+ *       before executing the command. When the sequence matches typed text, it will not be executed
+ *       immediately, but only after more non-matching text is added afterwards or the selection is
+ *       changed. This is useful for variable-length sequences (defined with RegExps).
+ * @cfg {boolean} [checkOnPaste=false] Whether the sequence should also be matched after paste.
+ * @cfg {boolean} [checkOnDelete=false] Whether the sequence should also be matched after delete.
  */
-ve.ui.Sequence = function VeUiSequence( name, commandName, data, strip, setSelection, delayed, checkOnPaste, checkOnDelete ) {
+ve.ui.Sequence = function VeUiSequence( name, commandName, data, strip, config ) {
 	this.name = name;
 	this.commandName = commandName;
 	this.data = data;
-	this.strip = strip;
-	this.setSelection = setSelection;
-	this.delayed = delayed;
-	this.checkOnPaste = checkOnPaste;
-	this.checkOnDelete = checkOnDelete;
+	this.strip = strip || 0;
+	if ( typeof config === 'object' ) {
+		// TODO: Add `config = config || {};` when variadic fallback is dropped.
+		this.setSelection = !!config.setSelection;
+		this.delayed = !!config.delayed;
+		this.checkOnPaste = !!config.checkOnPaste;
+		this.checkOnDelete = !!config.checkOnDelete;
+	} else {
+		// Backwards compatibility with variadic arguments
+		this.setSelection = !!arguments[ 4 ];
+		this.delayed = !!arguments[ 5 ];
+		this.checkOnPaste = !!arguments[ 6 ];
+		this.checkOnDelete = !!arguments[ 7 ];
+	}
 };
 
 /* Inheritance */
@@ -47,7 +57,7 @@ OO.initClass( ve.ui.Sequence );
  * Check if the sequence matches a given offset in the data
  *
  * @param {ve.dm.ElementLinearData} data String or linear data
- * @param {number} offset Offset
+ * @param {number} offset
  * @param {string} plaintext Plain text of data
  * @return {ve.Range|null} Range corresponding to the match, or else null
  */
@@ -74,26 +84,26 @@ ve.ui.Sequence.prototype.match = function ( data, offset, plaintext ) {
 /**
  * Execute the command associated with the sequence
  *
- * @param {ve.ui.Surface} surface surface
+ * @param {ve.ui.Surface} surface
  * @param {ve.Range} range Range to set
  * @return {boolean} The command executed
  */
 ve.ui.Sequence.prototype.execute = function ( surface, range ) {
-	var command, stripRange, executed, stripFragment, originalSelectionFragment, args,
-		surfaceModel = surface.getModel();
+	var surfaceModel = surface.getModel();
 
 	if ( surface.getCommands().indexOf( this.getCommandName() ) === -1 ) {
 		return false;
 	}
 
-	command = surface.commandRegistry.lookup( this.getCommandName() );
+	var command = surface.commandRegistry.lookup( this.getCommandName() );
 
 	if ( !command ) {
 		return false;
 	}
 
+	var stripFragment;
 	if ( this.strip ) {
-		stripRange = surfaceModel.getSelection().getRange();
+		var stripRange = surfaceModel.getSelection().getRange();
 		stripFragment = surfaceModel.getLinearFragment(
 			// noAutoSelect = true, excludeInsertions = true
 			new ve.Range( stripRange.end, stripRange.end - this.strip ), true, true
@@ -104,11 +114,12 @@ ve.ui.Sequence.prototype.execute = function ( surface, range ) {
 
 	// Use SurfaceFragment rather than Selection to automatically adjust the selection for any changes
 	// (additions, removals) caused by executing the command
-	originalSelectionFragment = surfaceModel.getFragment();
+	var originalSelectionFragment = surfaceModel.getFragment();
 	if ( this.setSelection ) {
 		surfaceModel.setLinearSelection( range );
 	}
 
+	var args;
 	// For sequences that trigger dialogs, pass an extra flag so the window knows
 	// to un-strip the sequence if it is closed without action. See ve.ui.WindowAction.
 	if ( command.getAction() === 'window' && command.getMethod() === 'open' ) {
@@ -123,7 +134,8 @@ ve.ui.Sequence.prototype.execute = function ( surface, range ) {
 		stripFragment.removeContent();
 	}
 
-	executed = command.execute( surface, args, 'sequence' );
+	// `args` can be passed undefined, and the defaults will be used
+	var executed = command.execute( surface, args, 'sequence' );
 
 	// Restore user's selection if:
 	// * This sequence was not executed after all
@@ -164,8 +176,8 @@ ve.ui.Sequence.prototype.getCommandName = function () {
  * Get a representation of the sequence useful for display
  *
  * What this means depends a bit on how the sequence was defined:
- * * It strips out undisplayable things like the paragraph-start marker.
- * * Regexps are just returned as a toString of the regexp.
+ * - It strips out undisplayable things like the paragraph-start marker.
+ * - Regexps are just returned as a toString of the regexp.
  *
  * @param {boolean} explode Whether to return the message split up into some
  *        reasonable sequence of inputs required to trigger the sequence (regexps

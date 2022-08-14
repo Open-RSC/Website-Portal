@@ -9,7 +9,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "media",
 	"requires": {
-		"MediaWiki": ">= 1.34.0"
+		"MediaWiki": ">= 1.37.0"
 	},
 	"config": {
 		"PdfOutputExtension": {
@@ -17,9 +17,6 @@
 		},
 		"PdfHandlerDpi": {
 			"value": 150
-		},
-		"PdfCreateThumbnailsInJobQueue": {
-			"value": false
 		},
 		"PdfPostProcessor": {
 			"value": "/usr/bin/convert"
@@ -35,6 +32,9 @@
 		},
 		"PdfInfo": {
 			"value": "/usr/bin/pdfinfo"
+		},
+		"PdfHandlerShell": {
+			"value": "/bin/sh"
 		}
 	},
 	"MessagesDirs": {
@@ -42,16 +42,15 @@
 			"i18n"
 		]
 	},
-	"Hooks": {
-		"UploadVerifyFile": [
-			"MediaWiki\\Extension\\PdfHandler\\CreatePdfThumbnailsJob::insertJobs"
-		],
-		"ResourceLoaderRegisterModules": [
-			"MediaWiki\\Extension\\PdfHandler\\PdfHandler::registerWarningModule"
-		]
-	},
-	"JobClasses": {
-		"createPdfThumbnailsJob": "MediaWiki\\Extension\\PdfHandler\\CreatePdfThumbnailsJob"
+	"ResourceModules": {
+		"pdfhandler.messages": {
+			"messages": [
+				"pdf-file-page-warning",
+				"pdf-file-page-warning-header",
+				"pdf-file-page-warning-info",
+				"pdf-file-page-warning-footer"
+			]
+		}
 	},
 	"MediaHandlers": {
 		"application/pdf": "MediaWiki\\Extension\\PdfHandler\\PdfHandler"

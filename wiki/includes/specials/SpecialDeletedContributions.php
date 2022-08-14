@@ -24,6 +24,7 @@
 use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Revision\RevisionFactory;
+use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserNamePrefixSearch;
 use MediaWiki\User\UserNameUtils;
 use Wikimedia\IPUtils;
@@ -46,14 +47,14 @@ class SpecialDeletedContributions extends SpecialPage {
 	/** @var CommentStore */
 	private $commentStore;
 
-	/** @var ActorMigration */
-	private $actorMigration;
-
 	/** @var RevisionFactory */
 	private $revisionFactory;
 
 	/** @var NamespaceInfo */
 	private $namespaceInfo;
+
+	/** @var UserFactory */
+	private $userFactory;
 
 	/** @var UserNameUtils */
 	private $userNameUtils;
@@ -65,9 +66,9 @@ class SpecialDeletedContributions extends SpecialPage {
 	 * @param PermissionManager $permissionManager
 	 * @param ILoadBalancer $loadBalancer
 	 * @param CommentStore $commentStore
-	 * @param ActorMigration $actorMigration
 	 * @param RevisionFactory $revisionFactory
 	 * @param NamespaceInfo $namespaceInfo
+	 * @param UserFactory $userFactory
 	 * @param UserNameUtils $userNameUtils
 	 * @param UserNamePrefixSearch $userNamePrefixSearch
 	 */
@@ -75,9 +76,9 @@ class SpecialDeletedContributions extends SpecialPage {
 		PermissionManager $permissionManager,
 		ILoadBalancer $loadBalancer,
 		CommentStore $commentStore,
-		ActorMigration $actorMigration,
 		RevisionFactory $revisionFactory,
 		NamespaceInfo $namespaceInfo,
+		UserFactory $userFactory,
 		UserNameUtils $userNameUtils,
 		UserNamePrefixSearch $userNamePrefixSearch
 	) {
@@ -85,9 +86,9 @@ class SpecialDeletedContributions extends SpecialPage {
 		$this->permissionManager = $permissionManager;
 		$this->loadBalancer = $loadBalancer;
 		$this->commentStore = $commentStore;
-		$this->actorMigration = $actorMigration;
 		$this->revisionFactory = $revisionFactory;
 		$this->namespaceInfo = $namespaceInfo;
+		$this->userFactory = $userFactory;
 		$this->userNameUtils = $userNameUtils;
 		$this->userNamePrefixSearch = $userNamePrefixSearch;
 	}
@@ -102,6 +103,8 @@ class SpecialDeletedContributions extends SpecialPage {
 		$this->setHeaders();
 		$this->outputHeader();
 		$this->checkPermissions();
+		$out = $this->getOutput();
+		$out->addModuleStyles( 'mediawiki.interface.helpers.styles' );
 		$this->addHelpLink( 'Help:User contributions' );
 
 		$opts = new FormOptions();
@@ -133,7 +136,7 @@ class SpecialDeletedContributions extends SpecialPage {
 			return;
 		}
 
-		$userObj = User::newFromName( $target, false );
+		$userObj = $this->userFactory->newFromName( $target, UserFactory::RIGOR_NONE );
 		if ( !$userObj ) {
 			$this->getForm();
 
@@ -143,25 +146,20 @@ class SpecialDeletedContributions extends SpecialPage {
 
 		$target = $userObj->getName();
 
-		$out = $this->getOutput();
 		$out->addSubtitle( $this->getSubTitle( $userObj ) );
-		$out->setHTMLTitle( $this->msg(
-			'pagetitle',
-			$this->msg( 'deletedcontributions-title', $target )->plain()
-		)->inContentLanguage() );
+		$out->setPageTitle( $this->msg( 'deletedcontributions-title', $target ) );
 
 		$this->getForm();
 
 		$pager = new DeletedContribsPager(
 			$this->getContext(),
-			$target,
-			$opts->getValue( 'namespace' ),
-			$this->getLinkRenderer(),
-			$this->getHookContainer(),
-			$this->loadBalancer,
 			$this->commentStore,
-			$this->actorMigration,
-			$this->revisionFactory
+			$this->getHookContainer(),
+			$this->getLinkRenderer(),
+			$this->loadBalancer,
+			$this->revisionFactory,
+			$target,
+			$opts->getValue( 'namespace' )
 		);
 		if ( !$pager->getNumRows() ) {
 			$out->addWikiMsg( 'nocontribs' );
@@ -236,7 +234,8 @@ class SpecialDeletedContributions extends SpecialPage {
 			$block = DatabaseBlock::newFromTarget( $userObj, $userObj );
 			if ( $block !== null && $block->getType() != DatabaseBlock::TYPE_AUTO ) {
 				if ( $block->getType() == DatabaseBlock::TYPE_RANGE ) {
-					$nt = $this->namespaceInfo->getCanonicalName( NS_USER ) . ':' . $block->getTarget();
+					$nt = $this->namespaceInfo->getCanonicalName( NS_USER )
+						. ':' . $block->getTargetName();
 				}
 
 				// LogEventsList::showLogExtract() wants the first parameter by ref

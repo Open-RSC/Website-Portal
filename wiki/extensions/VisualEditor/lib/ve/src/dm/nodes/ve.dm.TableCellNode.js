@@ -82,9 +82,8 @@ ve.dm.TableCellNode.static.toDomElements = function ( dataElement, doc ) {
  * @return {Array} Model data for a new table cell
  */
 ve.dm.TableCellNode.static.createData = function ( options ) {
-	var opening, content;
 	options = options || {};
-	opening = {
+	var opening = {
 		type: 'tableCell',
 		attributes: {
 			style: options.style || 'data',
@@ -92,7 +91,7 @@ ve.dm.TableCellNode.static.createData = function ( options ) {
 			colspan: options.colspan || 1
 		}
 	};
-	content = options.content || [
+	var content = options.content || [
 		{ type: 'paragraph', internal: { generated: 'wrapper' } },
 		{ type: '/paragraph' }
 	];
@@ -108,9 +107,24 @@ ve.dm.TableCellNode.static.describeChange = function ( key, change ) {
 			this.wrapText( 'del', ve.msg( 'visualeditor-table-format-' + change.from ) ),
 			this.wrapText( 'ins', ve.msg( 'visualeditor-table-format-' + change.to ) )
 		);
+	} else if ( key === 'colspan' || key === 'rowspan' ) {
+		// colspan/rowspan of '1' is the same as not setting it
+		if ( change.from === 1 ) {
+			change.from = undefined;
+		}
+		if ( change.to === 1 ) {
+			change.to = undefined;
+		}
+		// These might be the same now
+		if ( change.from === change.to ) {
+			return null;
+		}
+	} else if ( key === 'originalColspan' || key === 'originalRowspan' ) {
+		return null;
 	}
+
 	// Parent method
-	return ve.dm.TableCellNode.parent.static.describeChange.apply( this, arguments );
+	return ve.dm.TableCellNode.parent.static.describeChange.call( this, key, change );
 };
 
 /* Registration */

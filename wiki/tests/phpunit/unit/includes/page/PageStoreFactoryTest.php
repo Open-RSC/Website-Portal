@@ -1,13 +1,16 @@
 <?php
 namespace MediaWiki\Tests\Page;
 
-use LoadBalancer;
+use LinkCache;
+use Liuggio\StatsdClient\Factory\StatsdDataFactoryInterface;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Page\PageStoreFactory;
 use MediaWikiUnitTestCase;
 use NamespaceInfo;
+use TitleParser;
 use Wikimedia\Rdbms\LBFactory;
+use Wikimedia\Rdbms\LoadBalancer;
 
 /**
  * @covers \MediaWiki\Page\PageStoreFactory
@@ -25,12 +28,13 @@ class PageStoreFactoryTest extends MediaWikiUnitTestCase {
 		$lbFactory = $this->createNoOpMock( LBFactory::class, [ 'getMainLB' ] );
 		$lbFactory->method( 'getMainLB' )->willReturn( $lb );
 
-		$nsInfo = $this->createNoOpMock( NamespaceInfo::class );
-
 		$factory = new PageStoreFactory(
 			$options,
 			$lbFactory,
-			$nsInfo
+			$this->createNoOpMock( NamespaceInfo::class ),
+			$this->createNoOpMock( TitleParser::class ),
+			$this->createNoOpMock( LinkCache::class ),
+			$this->createNoOpMock( StatsdDataFactoryInterface::class )
 		);
 
 		// Just check that nothing explodes.

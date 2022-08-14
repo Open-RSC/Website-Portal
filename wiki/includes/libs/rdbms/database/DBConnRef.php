@@ -3,6 +3,7 @@
 namespace Wikimedia\Rdbms;
 
 use InvalidArgumentException;
+use stdClass;
 
 /**
  * Helper class used for automatically marking an IDatabase connection as reusable (once it no
@@ -33,7 +34,7 @@ class DBConnRef implements IDatabase {
 	private $conn;
 	/** @var array N-tuple of (server index, group, DatabaseDomain|string) */
 	private $params;
-	/** @var int One of DB_MASTER/DB_REPLICA */
+	/** @var int One of DB_PRIMARY/DB_REPLICA */
 	private $role;
 
 	private const FLD_INDEX = 0;
@@ -44,7 +45,7 @@ class DBConnRef implements IDatabase {
 	/**
 	 * @param ILoadBalancer $lb Connection manager for $conn
 	 * @param IDatabase|array $conn Database or (server index, query groups, domain, flags)
-	 * @param int $role The type of connection asked for; one of DB_MASTER/DB_REPLICA
+	 * @param int $role The type of connection asked for; one of DB_PRIMARY/DB_REPLICA
 	 * @internal This method should not be called outside of LoadBalancer
 	 */
 	public function __construct( ILoadBalancer $lb, $conn, $role ) {
@@ -69,7 +70,7 @@ class DBConnRef implements IDatabase {
 	}
 
 	/**
-	 * @return int DB_MASTER when this *requires* the master DB, otherwise DB_REPLICA
+	 * @return int DB_PRIMARY when this *requires* the primary DB, otherwise DB_REPLICA
 	 * @since 1.33
 	 */
 	public function getReferenceRole() {
@@ -80,11 +81,15 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
+	public function getTopologyBasedServerId() {
+		return $this->__call( __FUNCTION__, func_get_args() );
+	}
+
 	public function getTopologyRole() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function getTopologyRootMaster() {
+	public function getTopologyRootPrimary() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -97,10 +102,6 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function explicitTrxActive() {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function assertNoOpenTransactions() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -135,6 +136,7 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function setLBInfo( $nameOrArray, $value = null ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		// Disallow things that might confuse the LoadBalancer tracking
 		throw $this->getDomainChangeException();
 	}
@@ -155,10 +157,6 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function preCommitCallbacksPending() {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
 	public function writesOrCallbacksPending() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
@@ -168,10 +166,6 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function pendingWriteCallers() {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function pendingWriteRowsAffected() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -212,7 +206,7 @@ class DBConnRef implements IDatabase {
 	public function getType() {
 		if ( $this->conn === null ) {
 			// Avoid triggering a database connection
-			if ( $this->params[self::FLD_INDEX] === ILoadBalancer::DB_MASTER ) {
+			if ( $this->params[self::FLD_INDEX] === ILoadBalancer::DB_PRIMARY ) {
 				$index = $this->lb->getWriterIndex();
 			} else {
 				$index = $this->params[self::FLD_INDEX];
@@ -226,31 +220,37 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
+	/**
+	 * @deprecated since 1.37 use IResultWrapper::fetchObject()
+	 * @param IResultWrapper $res
+	 * @return stdClass|bool
+	 */
 	public function fetchObject( $res ) {
+		wfDeprecated( __METHOD__, '1.37' );
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
+	/**
+	 * @deprecated since 1.37 use IResultWrapper::fetchRow()
+	 * @param IResultWrapper $res
+	 * @return array|bool
+	 */
 	public function fetchRow( $res ) {
+		wfDeprecated( __METHOD__, '1.37' );
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
+	/**
+	 * @deprecated since 1.37 use IResultWrapper::numRows()
+	 * @param IResultWrapper|bool $res A SQL result
+	 * @return int
+	 */
 	public function numRows( $res ) {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function numFields( $res ) {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function fieldName( $res, $n ) {
+		wfDeprecated( __METHOD__, '1.37' );
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
 	public function insertId() {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function dataSeek( $res, $row ) {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -275,22 +275,28 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function close( $fname = __METHOD__, $owner = null ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		throw new DBUnexpectedError( $this->conn, 'Cannot close shared connection.' );
 	}
 
 	public function query( $sql, $fname = __METHOD__, $flags = 0 ) {
-		if ( $this->role !== ILoadBalancer::DB_MASTER ) {
+		if ( $this->role !== ILoadBalancer::DB_PRIMARY ) {
 			$flags |= IDatabase::QUERY_REPLICA_ROLE;
 		}
 
 		return $this->__call( __FUNCTION__, [ $sql, $fname, $flags ] );
 	}
 
+	/**
+	 * @deprecated since 1.37 Use IResultWrapper::free()
+	 * @param IResultWrapper $res A SQL result
+	 */
 	public function freeResult( $res ) {
+		wfDeprecated( __METHOD__, '1.37' );
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function newSelectQueryBuilder() {
+	public function newSelectQueryBuilder(): SelectQueryBuilder {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -302,7 +308,7 @@ class DBConnRef implements IDatabase {
 
 	public function selectFieldValues(
 		$table, $var, $cond = '', $fname = __METHOD__, $options = [], $join_conds = []
-	) {
+	): array {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -383,7 +389,7 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function aggregateValue( $valuedata, $valuename = 'value' ) {
+	public function factorConds( $condsArray ) {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -441,11 +447,13 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function selectDB( $db ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		// Disallow things that might confuse the LoadBalancer tracking
 		throw $this->getDomainChangeException();
 	}
 
 	public function selectDomain( $domain ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		// Disallow things that might confuse the LoadBalancer tracking
 		throw $this->getDomainChangeException();
 	}
@@ -461,6 +469,10 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function getServer() {
+		return $this->__call( __FUNCTION__, func_get_args() );
+	}
+
+	public function getServerName() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -542,15 +554,11 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function conditional( $cond, $trueVal, $falseVal ) {
+	public function conditional( $cond, $caseTrueExpression, $caseFalseExpression ) {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
 	public function strreplace( $orig, $old, $new ) {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function getServerUptime() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -574,7 +582,7 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function masterPosWait( DBMasterPos $pos, $timeout ) {
+	public function primaryPosWait( DBPrimaryPos $pos, $timeout ) {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -582,7 +590,7 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function getMasterPos() {
+	public function getPrimaryPos() {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
@@ -598,10 +606,6 @@ class DBConnRef implements IDatabase {
 	public function onTransactionCommitOrIdle( callable $callback, $fname = __METHOD__ ) {
 		// DB_REPLICA role: caller might want to refresh cache after a REPEATABLE-READ snapshot
 		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
-	public function onTransactionIdle( callable $callback, $fname = __METHOD__ ) {
-		return $this->onTransactionCommitOrIdle( $callback, $fname );
 	}
 
 	public function onTransactionPreCommitOrIdle( callable $callback, $fname = __METHOD__ ) {
@@ -679,10 +683,6 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function maxListLen() {
-		return $this->__call( __FUNCTION__, func_get_args() );
-	}
-
 	public function encodeBlob( $b ) {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
@@ -692,7 +692,7 @@ class DBConnRef implements IDatabase {
 	}
 
 	public function setSessionOptions( array $options ) {
-		return $this->__call( __FUNCTION__, func_get_args() );
+		$this->__call( __FUNCTION__, func_get_args() );
 	}
 
 	public function setSchemaVars( $vars ) {
@@ -705,7 +705,7 @@ class DBConnRef implements IDatabase {
 		return $this->__call( __FUNCTION__, func_get_args() );
 	}
 
-	public function lock( $lockName, $method, $timeout = 5 ) {
+	public function lock( $lockName, $method, $timeout = 5, $flags = 0 ) {
 		$this->assertRoleAllowsWrites();
 
 		return $this->__call( __FUNCTION__, func_get_args() );
@@ -764,21 +764,21 @@ class DBConnRef implements IDatabase {
 	}
 
 	/**
-	 * Error out if the role is not DB_MASTER
+	 * Error out if the role is not DB_PRIMARY
 	 *
 	 * Note that the underlying connection may or may not itself be read-only.
-	 * It could even be to a writable master (both server-side and to the application).
+	 * It could even be to a writable primary (both server-side and to the application).
 	 * This error is meant for the case when a DB_REPLICA handle was requested but a
 	 * a write was attempted on that handle regardless.
 	 *
-	 * In configurations where the master DB has some generic read load or is the only server,
-	 * DB_MASTER/DB_REPLICA will sometimes (or always) use the same connection to the master DB.
+	 * In configurations where the primary DB has some generic read load or is the only server,
+	 * DB_PRIMARY/DB_REPLICA will sometimes (or always) use the same connection to the primary DB.
 	 * This does not effect the role of DBConnRef instances.
 	 * @throws DBReadOnlyRoleError
 	 */
 	protected function assertRoleAllowsWrites() {
-		// DB_MASTER is "prima facie" writable
-		if ( $this->role !== ILoadBalancer::DB_MASTER ) {
+		// DB_PRIMARY is "prima facie" writable
+		if ( $this->role !== ILoadBalancer::DB_PRIMARY ) {
 			throw new DBReadOnlyRoleError( $this->conn, "Cannot write with role DB_REPLICA" );
 		}
 	}

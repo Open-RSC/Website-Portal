@@ -16,5 +16,6 @@
 	"monobook-cactions-label": "Lehetoimingud",
 	"monobook-notifications-link": "Teavitused ($1)",
 	"monobook-notifications-link-none": "Teavitused",
-	"monobook-responsive-label": "Luba MonoBook isereguleeruva paigutusega"
+	"monobook-view-history": "Ajalugu",
+	"monobook-action-undelete": "Taasta {{PLURAL:$1|üks muudatus|$1 muudatust}}"
 }

@@ -21,6 +21,7 @@
  * @ingroup Installer
  */
 
+use Wikimedia\AtEase\AtEase;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\DatabaseSqlite;
 use Wikimedia\Rdbms\DBConnectionError;
@@ -141,7 +142,7 @@ class SqliteInstaller extends DatabaseInstaller {
 	 * @param string $dir Path to the data directory
 	 * @return Status Return fatal Status if $dir un-writable or no permission to create a directory
 	 */
-	private static function checkDataDir( $dir ) : Status {
+	private static function checkDataDir( $dir ): Status {
 		if ( is_dir( $dir ) ) {
 			if ( !is_readable( $dir ) ) {
 				return Status::newFatal( 'config-sqlite-dir-unwritable', $dir );
@@ -171,11 +172,11 @@ class SqliteInstaller extends DatabaseInstaller {
 	 * @param string $dir Path to the data directory
 	 * @return Status Return good Status if without error
 	 */
-	private static function createDataDir( $dir ) : Status {
+	private static function createDataDir( $dir ): Status {
 		if ( !is_dir( $dir ) ) {
-			Wikimedia\suppressWarnings();
+			AtEase::suppressWarnings();
 			$ok = wfMkdirParents( $dir, 0700, __METHOD__ );
-			Wikimedia\restoreWarnings();
+			AtEase::restoreWarnings();
 			if ( !$ok ) {
 				return Status::newFatal( 'config-sqlite-mkdir-error', $dir );
 			}
@@ -224,7 +225,7 @@ class SqliteInstaller extends DatabaseInstaller {
 	public function setupDatabase() {
 		$dir = $this->getVar( 'wgSQLiteDataDir' );
 
-		# Sanity check (Only available in web installation). We checked this before but maybe someone
+		# Double check (Only available in web installation). We checked this before but maybe someone
 		# deleted the data dir between then and now
 		$dir_status = self::checkDataDir( $dir );
 		if ( $dir_status->isGood() ) {

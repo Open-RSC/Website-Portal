@@ -11,13 +11,13 @@ class JobQueueTest extends MediaWikiIntegrationTestCase {
 	protected $key;
 	protected $queueRand, $queueRandTTL, $queueFifo, $queueFifoTTL;
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		global $wgJobTypeConf;
 		parent::setUp();
 
 		$this->tablesUsed[] = 'job';
 
-		$services = MediaWikiServices::getInstance();
+		$services = $this->getServiceContainer();
 		if ( $this->getCliArg( 'use-jobqueue' ) ) {
 			$name = $this->getCliArg( 'use-jobqueue' );
 			if ( !isset( $wgJobTypeConf[$name] ) ) {
@@ -50,7 +50,7 @@ class JobQueueTest extends MediaWikiIntegrationTestCase {
 		}
 	}
 
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		foreach (
 			[
 				'queueRand', 'queueRandTTL', 'queueTimestamp', 'queueTimestampTTL',
@@ -70,11 +70,12 @@ class JobQueueTest extends MediaWikiIntegrationTestCase {
 	 * @covers JobQueue::getWiki
 	 */
 	public function testGetWiki( $queue, $recycles, $desc ) {
+		$this->hideDeprecated( 'JobQueue::getWiki' );
 		$queue = $this->$queue;
 		if ( !$queue ) {
 			$this->markTestSkipped( $desc );
 		}
-		$this->assertEquals( wfWikiID(), $queue->getWiki(), "Proper wiki ID ($desc)" );
+		$this->assertEquals( WikiMap::getCurrentWikiId(), $queue->getWiki(), "Proper wiki ID ($desc)" );
 		$this->assertEquals(
 			WikiMap::getCurrentWikiDbDomain()->getId(),
 			$queue->getDomain(),
@@ -338,6 +339,8 @@ class JobQueueTest extends MediaWikiIntegrationTestCase {
 	 * @covers JobQueue
 	 */
 	public function testQueueAggregateTable() {
+		$this->hideDeprecated( 'JobQueue::getWiki' );
+
 		$queue = $this->queueFifo;
 		if ( !$queue || !method_exists( $queue, 'getServerQueuesWithJobs' ) ) {
 			$this->markTestSkipped();

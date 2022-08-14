@@ -19,18 +19,17 @@ trait FileBackendGroupTestTrait {
 	 *     * 'tmpFileFactory'
 	 * @return FileBackendGroup
 	 */
-	abstract protected function newObj( array $options = [] ) : FileBackendGroup;
+	abstract protected function newObj( array $options = [] ): FileBackendGroup;
 
 	/**
 	 * @param string $domain Expected argument that LockManagerGroupFactory::getLockManagerGroup
 	 *   will receive
 	 * @return LockManagerGroupFactory
 	 */
-	abstract protected function getLockManagerGroupFactory( $domain )
-		: LockManagerGroupFactory;
+	abstract protected function getLockManagerGroupFactory( $domain ): LockManagerGroupFactory;
 
 	/**
-	 * @return string As from wfWikiID()
+	 * @return string As from WikiMap::getCurrentWikiId()
 	 */
 	abstract protected static function getWikiID();
 
@@ -149,13 +148,13 @@ trait FileBackendGroupTestTrait {
 				'cuz',
 				[],
 				[ 'configuredROMode' => new ConfiguredReadOnlyMode( 'cuz' ) ],
-		   ],
-		   'readOnly with readOnly set to false but string in passed object' => [
-			   'readOnly',
-			   false,
-			   [ 'readOnly' => false ],
-			   [ 'configuredROMode' => new ConfiguredReadOnlyMode( 'cuz' ) ],
-		   ],
+			],
+			'readOnly with readOnly set to false but string in passed object' => [
+				'readOnly',
+				false,
+				[ 'readOnly' => false ],
+				[ 'configuredROMode' => new ConfiguredReadOnlyMode( 'cuz' ) ],
+			],
 		];
 	}
 
@@ -251,7 +250,6 @@ trait FileBackendGroupTestTrait {
 			'class' => FSFileBackend::class,
 			'lockManager' =>
 				$this->lmgFactory->getLockManagerGroup( self::getWikiID() )->get( 'fsLockManager' ),
-			'fileJournal' => new NullFileJournal,
 		], $config );
 
 		// For config values that are objects, check object identity.
@@ -316,27 +314,6 @@ trait FileBackendGroupTestTrait {
 			],
 			'fileMode' => [ 0644, 'fileMode', 'fileMode' ],
 		];
-	}
-
-	/**
-	 * @covers ::config
-	 */
-	public function testConfig_fileJournal() {
-		$mockJournal = $this->createMock( FileJournal::class );
-		$mockJournal->expects( $this->never() )->method( $this->anything() );
-
-		$obj = $this->newObj( [ 'FileBackends' => [ [
-			'name' => 'name',
-			'class' => '',
-			'lockManager' => 'fsLockManager',
-			'fileJournal' => [ 'factory' =>
-				static function () use ( $mockJournal ) {
-					return $mockJournal;
-				}
-			],
-		] ] ] );
-
-		$this->assertSame( $mockJournal, $obj->config( 'name' )['fileJournal'] );
 	}
 
 	/**

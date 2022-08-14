@@ -1,5 +1,8 @@
 <?php
 
+use MediaWiki\Extension\Gadgets\GadgetRepo;
+use MediaWiki\Extension\Gadgets\Hooks as GadgetHooks;
+use MediaWiki\Extension\Gadgets\MediaWikiGadgetsDefinitionRepo;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -11,7 +14,7 @@ class GadgetHooksTest extends MediaWikiIntegrationTestCase {
 	 */
 	protected $user;
 
-	public function setUp() : void {
+	public function setUp(): void {
 		global $wgGroupPermissions;
 
 		parent::setUp();
@@ -22,16 +25,16 @@ class GadgetHooksTest extends MediaWikiIntegrationTestCase {
 		$this->user = $this->getTestUser( [ 'unittesters' ] )->getUser();
 	}
 
-	public function tearDown() : void {
+	public function tearDown(): void {
 		GadgetRepo::setSingleton();
 		parent::tearDown();
 	}
 
 	/**
-	 * @covers Gadget
-	 * @covers GadgetHooks::getPreferences
-	 * @covers GadgetRepo
-	 * @covers MediaWikiGadgetsDefinitionRepo
+	 * @covers \MediaWiki\Extension\Gadgets\Gadget
+	 * @covers \MediaWiki\Extension\Gadgets\Hooks::getPreferences
+	 * @covers \MediaWiki\Extension\Gadgets\GadgetRepo
+	 * @covers \MediaWiki\Extension\Gadgets\MediaWikiGadgetsDefinitionRepo
 	 */
 	public function testPreferences() {
 		$prefs = [];
@@ -52,10 +55,9 @@ class GadgetHooksTest extends MediaWikiIntegrationTestCase {
 		$repo->definitionCache = $gadgets;
 		GadgetHooks::getPreferences( $this->user, $prefs );
 
-		$options = $prefs['gadgets']['options'];
-		$this->assertArrayNotHasKey( '⧼gadget-section-remove-section⧽', $options,
-			'Must not show empty sections' );
-		$this->assertArrayHasKey( '⧼gadget-section-keep-section1⧽', $options );
-		$this->assertArrayHasKey( '⧼gadget-section-keep-section2⧽', $options );
+		$this->assertArrayHasKey( 'gadget-bar', $prefs );
+		$this->assertArrayNotHasKey( 'gadget-baz', $prefs,
+			'Must not show unavailable gadgets' );
+		$this->assertEquals( 'gadgets/gadget-section-keep-section2', $prefs['gadget-quux']['section'] );
 	}
 }

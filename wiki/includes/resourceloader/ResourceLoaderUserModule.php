@@ -20,6 +20,8 @@
  * @author Roan Kattouw
  */
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * Module for user customizations scripts.
  *
@@ -35,24 +37,26 @@ class ResourceLoaderUserModule extends ResourceLoaderWikiModule {
 	 * @return array[]
 	 */
 	protected function getPages( ResourceLoaderContext $context ) {
-		$config = $this->getConfig();
-		$user = $context->getUserObj();
-		if ( $user->isAnon() ) {
+		$user = $context->getUserIdentity();
+		if ( !$user || !$user->isRegistered() ) {
 			return [];
 		}
 
-		// Use localised/normalised variant to ensure $excludepage matches
-		$userPage = $user->getUserPage()->getPrefixedDBkey();
+		$config = $this->getConfig();
 		$pages = [];
 
 		if ( $config->get( 'AllowUserJs' ) ) {
+			$titleFormatter = MediaWikiServices::getInstance()->getTitleFormatter();
+			// Use localised/normalised variant to ensure $excludepage matches
+			$userPage = $titleFormatter->getPrefixedDBkey( new TitleValue( NS_USER, $user->getName() ) );
 			$pages["$userPage/common.js"] = [ 'type' => 'script' ];
 			$pages["$userPage/" . $context->getSkin() . '.js'] = [ 'type' => 'script' ];
 		}
 
 		// User group pages are maintained site-wide and enabled with site JS/CSS.
 		if ( $config->get( 'UseSiteJs' ) ) {
-			foreach ( $user->getEffectiveGroups() as $group ) {
+			$userGroupManager = MediaWikiServices::getInstance()->getUserGroupManager();
+			foreach ( $userGroupManager->getUserEffectiveGroups( $user ) as $group ) {
 				if ( $group == '*' ) {
 					continue;
 				}
@@ -75,6 +79,6 @@ class ResourceLoaderUserModule extends ResourceLoaderWikiModule {
 	 * @return string
 	 */
 	public function getGroup() {
-		return 'user';
+		return self::GROUP_USER;
 	}
 }

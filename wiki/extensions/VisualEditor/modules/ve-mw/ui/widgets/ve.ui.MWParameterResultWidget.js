@@ -12,7 +12,14 @@
  * @extends OO.ui.DecoratedOptionWidget
  *
  * @constructor
- * @param {Object} [config] Configuration options
+ * @param {Object} config
+ * @cfg {Object} data
+ * @cfg {string} [data.name] Parameter name
+ * @cfg {string[]} [data.aliases]
+ * @cfg {string} data.label
+ * @cfg {string} [data.description='']
+ * @cfg {boolean} [data.isUnknown=false] If the parameter is unknown, i.e. not documented via
+ *  TemplateData
  */
 ve.ui.MWParameterResultWidget = function VeUiMWParameterResultWidget( config ) {
 	// Configuration initialization
@@ -35,11 +42,11 @@ OO.inheritClass( ve.ui.MWParameterResultWidget, OO.ui.DecoratedOptionWidget );
 /**
  * Build the label element
  *
+ * @private
  * @return {jQuery}
  */
 ve.ui.MWParameterResultWidget.prototype.buildLabel = function () {
-	var i, len,
-		$label = $( '<div>' )
+	var $label = $( '<div>' )
 			.addClass( 've-ui-mwParameterResultWidget-label' )
 			.text( this.data.label ),
 		$names = $( '<div>' )
@@ -48,6 +55,11 @@ ve.ui.MWParameterResultWidget.prototype.buildLabel = function () {
 			.addClass( 've-ui-mwParameterResultWidget-description' )
 			.text( this.data.description || '' );
 
+	if ( this.data.isUnknown ) {
+		$description.addClass( 've-ui-mwParameterResultWidget-unknown' )
+			.text( ve.msg( 'visualeditor-parameter-search-unknown' ) );
+	}
+
 	if ( this.data.name && this.data.name !== this.data.label ) {
 		$names.append(
 			$( '<span>' )
@@ -55,7 +67,7 @@ ve.ui.MWParameterResultWidget.prototype.buildLabel = function () {
 				.text( this.data.name )
 		);
 	}
-	for ( i = 0, len = this.data.aliases.length; i < len; i++ ) {
+	for ( var i = 0; i < this.data.aliases.length; i++ ) {
 		if ( this.data.aliases[ i ] === this.data.label ) {
 			continue;
 		}

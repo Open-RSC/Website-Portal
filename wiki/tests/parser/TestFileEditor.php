@@ -5,9 +5,9 @@ class TestFileEditor {
 	private $numLines;
 	private $deletions;
 	private $changes;
-	private $pos;
+	private $pos = 0;
 	private $warningCallback;
-	private $result;
+	private $result = '';
 
 	public static function edit( $text, array $deletions, array $changes, $warningCallback = null ) {
 		$editor = new self( $text, $deletions, $changes, $warningCallback );
@@ -18,11 +18,9 @@ class TestFileEditor {
 	private function __construct( $text, array $deletions, array $changes, $warningCallback ) {
 		$this->lines = explode( "\n", $text );
 		$this->numLines = count( $this->lines );
-		$this->deletions = array_flip( $deletions );
+		$this->deletions = array_fill_keys( $deletions, true );
 		$this->changes = $changes;
-		$this->pos = 0;
 		$this->warningCallback = $warningCallback;
-		$this->result = '';
 	}
 
 	private function execute() {

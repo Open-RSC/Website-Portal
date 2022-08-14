@@ -82,9 +82,6 @@ class DateFormatter {
 	/** e.g. 2001-01-15 */
 	private const ISO = 4;
 
-	/** The highest ID that is a valid user preference */
-	private const LASTPREF = 4;
-
 	/** e.g. 2001, 15 January */
 	private const YDM = 5;
 
@@ -286,7 +283,7 @@ class DateFormatter {
 
 	/**
 	 * Makes an ISO month, e.g. 02, from a month name
-	 * @param string $monthName Month name
+	 * @param string $monthName
 	 * @return string|false ISO month name, or false if the input was invalid
 	 */
 	private function makeIsoMonth( $monthName ) {

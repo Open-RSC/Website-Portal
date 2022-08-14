@@ -29,7 +29,7 @@ use StatusValue;
  *   - the content has changed (to allow null edits without a summary, see T7365),
  *   - the new content is not a redirect (since redirecting a page has an informative automatic
  *       edit summary, see T9889), and
- *   - the user has not explicitely chosen to allow the automatic summary to be used
+ *   - the user has not explicitly chosen to allow the automatic summary to be used
  *
  * For most edits, the automatic summary is blank, so checking against the automatic summary means
  * checking that any summary was given.
@@ -79,7 +79,7 @@ class AutoSummaryMissingSummaryConstraint implements IEditConstraint {
 		$this->originalContent = $originalContent;
 	}
 
-	public function checkConstraint() : string {
+	public function checkConstraint(): string {
 		if (
 			!$this->allowBlankSummary &&
 			!$this->newContent->equals( $this->originalContent ) &&
@@ -94,7 +94,7 @@ class AutoSummaryMissingSummaryConstraint implements IEditConstraint {
 		return $this->result;
 	}
 
-	public function getLegacyStatus() : StatusValue {
+	public function getLegacyStatus(): StatusValue {
 		$statusValue = StatusValue::newGood();
 		if ( $this->result === self::CONSTRAINT_FAILED ) {
 			$statusValue->fatal( 'missingsummary' );

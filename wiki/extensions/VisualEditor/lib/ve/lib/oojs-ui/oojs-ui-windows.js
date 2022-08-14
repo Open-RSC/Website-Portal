@@ -1,12 +1,12 @@
 /*!
- * OOUI v0.41.3
+ * OOUI v0.43.2-pre (630d30f69c)
  * https://www.mediawiki.org/wiki/OOUI
  *
- * Copyright 2011–2021 OOUI Team and other contributors.
+ * Copyright 2011–2022 OOUI Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2021-03-12T21:47:47Z
+ * Date: 2022-03-11T22:31:30Z
  */
 ( function ( OO ) {
 
@@ -29,10 +29,10 @@
  *
  * @constructor
  * @param {Object} [config] Configuration options
- * @cfg {string} [action] Symbolic name of the action (e.g., ‘continue’ or ‘cancel’).
- * @cfg {string[]} [modes] Symbolic names of the modes (e.g., ‘edit’ or ‘read’) in which the action
- *  should be made available. See the action set's {@link OO.ui.ActionSet#setMode setMode} method
- *  for more information about setting modes.
+ * @cfg {string} [action=''] Symbolic name of the action (e.g., ‘continue’ or ‘cancel’).
+ * @cfg {string[]} [modes=[]] Symbolic names of the modes (e.g., ‘edit’ or ‘read’) in which the
+ *  action should be made available. See the action set's {@link OO.ui.ActionSet#setMode setMode}
+ *  method for more information about setting modes.
  * @cfg {boolean} [framed=false] Render the action button with a frame
  */
 OO.ui.ActionWidget = function OoUiActionWidget( config ) {
@@ -188,9 +188,6 @@ OO.ui.ActionWidget.prototype.getModes = function () {
  * @param {Object} [config] Configuration options
  */
 OO.ui.ActionSet = function OoUiActionSet( config ) {
-	// Configuration initialization
-	config = config || {};
-
 	// Mixin constructors
 	OO.EventEmitter.call( this );
 
@@ -309,8 +306,10 @@ OO.ui.ActionSet.prototype.isSpecial = function ( action ) {
  * @param {string|string[]} [filters.actions] Actions that action widgets must have
  * @param {string|string[]} [filters.flags] Flags that action widgets must have (e.g., 'safe')
  * @param {string|string[]} [filters.modes] Modes that action widgets must have
- * @param {boolean} [filters.visible] Action widgets must be visible
- * @param {boolean} [filters.disabled] Action widgets must be disabled
+ * @param {boolean} [filters.visible] Visibility that action widgets must have, omit to get both
+ *  visible and invisible
+ * @param {boolean} [filters.disabled] Disabled state that action widgets must have, omit to get
+ *  both enabled and disabled
  * @return {OO.ui.ActionWidget[]} Action widgets matching all criteria
  */
 OO.ui.ActionSet.prototype.get = function ( filters ) {
@@ -319,7 +318,7 @@ OO.ui.ActionSet.prototype.get = function ( filters ) {
 	if ( filters ) {
 		this.organize();
 
-		// Collect category candidates
+		// Collect candidates for the 3 categories "actions", "flags" and "modes"
 		matches = [];
 		for ( category in this.categorized ) {
 			list = filters[ category ];
@@ -575,24 +574,30 @@ OO.ui.ActionSet.prototype.organize = function () {
 		this.others = [];
 		for ( i = 0, iLen = this.list.length; i < iLen; i++ ) {
 			action = this.list[ i ];
-			if ( action.isVisible() ) {
-				// Populate categories
-				for ( category in this.categories ) {
-					if ( !this.categorized[ category ] ) {
-						this.categorized[ category ] = {};
-					}
-					list = action[ this.categories[ category ] ]();
-					if ( !Array.isArray( list ) ) {
-						list = [ list ];
-					}
-					for ( j = 0, jLen = list.length; j < jLen; j++ ) {
-						item = list[ j ];
-						if ( !this.categorized[ category ][ item ] ) {
-							this.categorized[ category ][ item ] = [];
-						}
-						this.categorized[ category ][ item ].push( action );
-					}
+			// Populate the 3 categories "actions", "flags" and "modes"
+			for ( category in this.categories ) {
+				if ( !this.categorized[ category ] ) {
+					this.categorized[ category ] = {};
 				}
+				/**
+				 * This calls one of these getters. All return strings or arrays of strings.
+				 * {@see OO.ui.ActionWidget.getAction}
+				 * {@see OO.ui.FlaggedElement.getFlags}
+				 * {@see OO.ui.ActionWidget.getModes}
+				 */
+				list = action[ this.categories[ category ] ]();
+				if ( !Array.isArray( list ) ) {
+					list = [ list ];
+				}
+				for ( j = 0, jLen = list.length; j < jLen; j++ ) {
+					item = list[ j ];
+					if ( !this.categorized[ category ][ item ] ) {
+						this.categorized[ category ][ item ] = [];
+					}
+					this.categorized[ category ][ item ].push( action );
+				}
+			}
+			if ( action.isVisible() ) {
 				// Populate special/others
 				special = false;
 				for ( j = 0, jLen = specialFlags.length; j < jLen; j++ ) {
@@ -1757,8 +1762,9 @@ OO.ui.WindowManager.prototype.toggleGlobalEvents = function ( on ) {
 			if ( stackDepth === 0 ) {
 				scrollWidth = window.innerWidth - document.documentElement.clientWidth;
 				bodyMargin = parseFloat( $body.css( 'margin-right' ) ) || 0;
-				$body.addClass( 'oo-ui-windowManager-modal-active' );
-				$body.css( 'margin-right', bodyMargin + scrollWidth );
+				$body
+					.addClass( 'oo-ui-windowManager-modal-active' )
+					.css( 'margin-right', bodyMargin + scrollWidth );
 			}
 			stackDepth++;
 			this.globalEvents = true;
@@ -1770,8 +1776,9 @@ OO.ui.WindowManager.prototype.toggleGlobalEvents = function ( on ) {
 		} );
 		stackDepth--;
 		if ( stackDepth === 0 ) {
-			$body.removeClass( 'oo-ui-windowManager-modal-active' );
-			$body.css( 'margin-right', '' );
+			$body
+				.removeClass( 'oo-ui-windowManager-modal-active' )
+				.css( 'margin-right', '' );
 		}
 		this.globalEvents = false;
 	}
@@ -2300,12 +2307,12 @@ OO.ui.Window.prototype.updateSize = function () {
  * To set the size of the window, use the #setSize method.
  *
  * @param {Object} dim CSS dimension properties
- * @param {string|number} [dim.width] Width
- * @param {string|number} [dim.minWidth] Minimum width
- * @param {string|number} [dim.maxWidth] Maximum width
+ * @param {string|number} [dim.width=''] Width
+ * @param {string|number} [dim.minWidth=''] Minimum width
+ * @param {string|number} [dim.maxWidth=''] Maximum width
  * @param {string|number} [dim.height] Height, omit to set based on height of contents
- * @param {string|number} [dim.minHeight] Minimum height
- * @param {string|number} [dim.maxHeight] Maximum height
+ * @param {string|number} [dim.minHeight=''] Minimum height
+ * @param {string|number} [dim.maxHeight=''] Maximum height
  * @chainable
  * @return {OO.ui.Window} The window, for chaining
  */
@@ -2765,7 +2772,7 @@ OO.ui.Dialog.prototype.getSetupProcess = function ( data ) {
 				actions = data.actions !== undefined ? data.actions : config.actions,
 				title = data.title !== undefined ? data.title : config.title;
 
-			this.title.setLabel( title ).setTitle( title );
+			this.title.setLabel( title );
 			this.actions.add( this.getActionWidgets( actions ) );
 
 			this.$element.on( 'keydown', this.onDialogKeyDownHandler );

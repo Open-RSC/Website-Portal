@@ -163,7 +163,7 @@
 	"config-admin-error-user": "Internal mistak whan makin aen admeen wi the name \"<nowiki>$1</nowiki>\".",
 	"config-admin-error-password": "Internal mistak whan settin ae passwaird fer the admeen \"<nowiki>$1</nowiki>\": <pre>$2</pre>",
 	"config-admin-error-bademail": "Ye'v entered aen onvalid wab-mail address.",
-	"config-subscribe": "Subscribe til the [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce release annooncements mailin leet].",
+	"config-subscribe": "Subscribe til the [https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ release annooncements mailin leet].",
 	"config-subscribe-help": "This is ae low-volume mailin leet uised fer release annooncements, inclæding important securitie annooncements.\nYe shid subscribe til it an update yer MediaWiki installâtion whan new versions come oot.",
 	"config-subscribe-noemail": "Ye tried tae subscribe til the release annooncements mailin let wioot giein ae wab-mail address.\nPlease gei ae wab-mail address gif ye wish tae subscribe til the mailin leet.",
 	"config-almost-done": "Ye'r awmaist dun!\nYe can nou skip the remainin confeegurâtion n install the wiki stricht awa.",
@@ -187,7 +187,7 @@
 	"config-license-help": "Monie publeec wikis pit aw contreebutions unner ae [https://freedomdefined.org/Defineetion free license].\nThis heelps tae creaut ae sense o communitie ainership n encoorages lang-term contreebution.\nIt's naw generallie necessair fer ae preevate or corporate wiki.\n\nGif ye wish tae be able tae uise tex fae Wikipædia, n ye want Wikipædia tae be able tae accept tex copied fae yer wiki, than ye shid chuise <strong>Creative Commons Attribution Shair Alike</strong>.\n\nWikipædia preeveeooslie uised the GNU Free Documentation License.\nThe GFDL is ae valid license, but it's difficult tae unnerstaunn.\nMairower, it's difficult tae reuise content licensed unner the GFDL.",
 	"config-email-settings": "Wab-mail settins",
 	"config-enable-email": "Enable ootboond wab-mail",
-	"config-enable-email-help": "Gif ye want wab-mail tae wark, [Config-dbsupport-oracle/manual/en/mail.configuration.php PHP's mail settins] need tae be confeegured jyst richt.\nGif ye dinna want oni wab-mail features, ye can disable theim here.",
+	"config-enable-email-help": "Gif ye want wab-mail tae wark, [https://www.php.net/manual/en/mail.configuration.php PHP's mail settins] need tae be confeegured jyst richt.\nGif ye dinna want oni wab-mail features, ye can disable theim here.",
 	"config-email-user": "Enable uiser-til-uiser wab-mail",
 	"config-email-user-help": "Permit aw uisers tae send each ither wab-mail gif they'v enabled it in their preferences.",
 	"config-email-usertalk": "Enable uiser tauk page notifeecâtion",
@@ -203,8 +203,6 @@
 	"config-upload-help": "File uplaids potentiallie expose yer server til securitie risks.\nFer mair information, read the [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Security securitie section] in the manual.\n\nTae enable file uplaids, chynge the mode oan the <code>eemages</code> subdirecterie unner MediaWiki's ruit directerie sae that the wab server can write til it.\nThan enable this optie.",
 	"config-upload-deleted": "Directerie fer delytit files:",
 	"config-upload-deleted-help": "Chuise ae directerie tae archive delytit files in.\nIdeally, this shidna be accessible fae the wab.",
-	"config-logo": "Logo URL:",
-	"config-logo-help": "MediaWiki's defaut skin inclædes space fer ae 135x160 pixel logo abuin the sidebaur menu.\nUplaid aen eemage o the appropriate size, n enter the URL here.\n\nYe can uise <code>$wgStylePath</code> or <code>$wgScriptPath</code> gif yer logo is relative til thae paths.\n\nGif ye dinna want ae logo, lea this kist blank.",
 	"config-instantcommons": "Enable Instant Commyns",
 	"config-instantcommons-help": "[https://www.mediawiki.org/wiki/InstantCommons Instant Commons] is a featur that allaes wikis tae uise images, soonds an ither media foond on the [https://commons.wikimedia.org/ Wikimedia Commons] steid.\nIn order tae dae this, MediaWiki requires access tae the Internet.\n\nFor mair information on this featur, includin instructions on hou tae set it up for wikis ither nir the Wikimedia Commons, consult [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:$wgForeignFileRepos the manual].",
 	"config-cc-error": "The Creative Commyns license chuiser gae naw result.\nEnter the license name manually.",
@@ -261,7 +259,7 @@
 	"config-install-updates": "Hinder the runnin o onneedit updates.",
 	"config-install-updates-failed": "<strong>Mistak:</strong> Insertin update keys intae the buirds failed wi the folleain mistak: $1",
 	"config-install-sysop": "Makin admeenistrâter uiser accoont",
-	"config-install-subscribe-fail": "Onable tae subscribe til mediawiki-announce: $1",
+	"config-install-subscribe-fail": "Onable tae subscribe til mediawiki-announce[https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ mediawiki-announce]: $1",
 	"config-install-subscribe-notpossible": "cURL isna instawed n <code>allow_url_fopen</code> is na available.",
 	"config-install-mainpage": "Cræftin main page wi defaut content",
 	"config-install-extension-tables": "Makin buirds fer enabled extensions",
@@ -273,5 +271,5 @@
 	"config-nofile": "File \"$1\" coudna be foond. Haes it been delytit?",
 	"config-extension-link": "Did ye ken that yer wiki supports [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Extensions extensions]?\n\nYe can brouse [https://www.mediawiki.org/wiki/Special:MyLanguage/Category:Extensions_by_category extensions bi categorie] or the [https://www.mediawiki.org/wiki/Extension_Matrix Extension Matrix] tae see the full leet o extensions.",
 	"mainpagetext": "<strong>MediaWiki haes been installed.</strong>",
-	"mainpagedocfooter": "Consult the [https://meta.wikimedia.org/wiki/Help:Contents/sco Uiser's Guide] fer information oan uisin the wiki saffware.\n\n== Gettin stairtit ==\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Confeeguration settins leet]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ MediaWiki FAQ]\n* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki release mailin leet]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Localisation#Translation_resources Localise MediaWiki fer yer leid]"
+	"mainpagedocfooter": "Consult the [https://meta.wikimedia.org/wiki/Help:Contents/sco Uiser's Guide] fer information oan uisin the wiki saffware.\n\n== Gettin stairtit ==\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Confeeguration settins leet]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ MediaWiki FAQ]\n* [https://lists.wikimedia.org/postorius/lists/mediawiki-announce.lists.wikimedia.org/ MediaWiki release mailin leet]\n* [https://www.mediawiki.org/wiki/Special:MyLanguage/Localisation#Translation_resources Localise MediaWiki fer yer leid]"
 }

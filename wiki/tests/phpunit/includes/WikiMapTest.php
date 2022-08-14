@@ -9,7 +9,7 @@ use Wikimedia\Rdbms\DatabaseDomain;
  */
 class WikiMapTest extends MediaWikiLangTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$conf = new SiteConfiguration();
@@ -239,9 +239,9 @@ class WikiMapTest extends MediaWikiLangTestCase {
 	public function provideGetWikiIdFromDbDomain() {
 		return [
 			[ 'db-prefix_', 'db-prefix_' ],
-			[ wfWikiID(), wfWikiID() ],
+			[ WikiMap::getCurrentWikiId(), WikiMap::getCurrentWikiId() ],
 			[ new DatabaseDomain( 'db-dash', null, 'prefix_' ), 'db-dash-prefix_' ],
-			[ wfWikiID(), wfWikiID() ],
+			[ WikiMap::getCurrentWikiId(), WikiMap::getCurrentWikiId() ],
 			[ new DatabaseDomain( 'db-dash', null, 'prefix_' ), 'db-dash-prefix_' ],
 			[ new DatabaseDomain( 'db', 'mediawiki', 'prefix_' ), 'db-prefix_' ], // schema ignored
 			[ new DatabaseDomain( 'db', 'custom', 'prefix_' ), 'db-custom-prefix_' ],

@@ -1,32 +1,13 @@
-/*!
- * This file is currently loaded as part of the 'mediawiki' module and therefore
- * concatenated to mediawiki.js and executed at the same time. This file exists
- * to help prepare for splitting up the 'mediawiki' module.
- * This effort is tracked at https://phabricator.wikimedia.org/T192623
- *
- * In short:
- *
- * - mediawiki.js will be reduced to the minimum needed to define mw.loader and
- *   mw.config, and then moved to its own private "mediawiki.loader" module that
- *   can be embedded within the StartupModule response.
- *
- * - mediawiki.base.js and other files in this directory will remain part of the
- *   "mediawiki" module, and will remain a default/implicit dependency for all
- *   regular modules, just like jquery and wikibits already are.
- */
 'use strict';
 
-var queue,
-	slice = Array.prototype.slice,
-	mwLoaderTrack = mw.track,
-	trackCallbacks = $.Callbacks( 'memory' ),
-	trackHandlers = [];
+var slice = Array.prototype.slice;
 
-// Apply site-level config
+// Apply site-level data
 mw.config.set( require( './config.json' ) );
 
 // Load other files in the package
-require( './mediawiki.errorLogger.js' );
+require( './log.js' );
+require( './errorLogger.js' );
 require( './legacy.wikibits.js' );
 
 /**
@@ -34,52 +15,41 @@ require( './legacy.wikibits.js' );
  *
  * Similar to the Message class in MediaWiki PHP.
  *
- * Format defaults to 'text'.
- *
  *     @example
  *
  *     var obj, str;
  *     mw.messages.set( {
  *         'hello': 'Hello world',
  *         'hello-user': 'Hello, $1!',
- *         'welcome-user': 'Welcome back to $2, $1! Last visit by $1: $3'
+ *         'welcome-user': 'Welcome back to $2, $1! Last visit by $1: $3',
+ *         'so-unusual': 'You will find: $1'
  *     } );
  *
- *     obj = new mw.Message( mw.messages, 'hello' );
+ *     obj = mw.message( 'hello' );
  *     mw.log( obj.text() );
  *     // Hello world
  *
- *     obj = new mw.Message( mw.messages, 'hello-user', [ 'John Doe' ] );
- *     mw.log( obj.text() );
- *     // Hello, John Doe!
- *
- *     obj = new mw.Message( mw.messages, 'welcome-user', [ 'John Doe', 'Wikipedia', '2 hours ago' ] );
- *     mw.log( obj.text() );
- *     // Welcome back to Wikipedia, John Doe! Last visit by John Doe: 2 hours ago
- *
- *     // Using mw.message shortcut
  *     obj = mw.message( 'hello-user', 'John Doe' );
  *     mw.log( obj.text() );
  *     // Hello, John Doe!
  *
- *     // Using mw.msg shortcut
+ *     obj = mw.message( 'welcome-user', 'John Doe', 'Wikipedia', '2 hours ago' );
+ *     mw.log( obj.text() );
+ *     // Welcome back to Wikipedia, John Doe! Last visit by John Doe: 2 hours ago
+ *
+ *     // Using mw.msg shortcut, always in "text' format.
  *     str = mw.msg( 'hello-user', 'John Doe' );
  *     mw.log( str );
  *     // Hello, John Doe!
  *
  *     // Different formats
- *     obj = new mw.Message( mw.messages, 'hello-user', [ 'John "Wiki" <3 Doe' ] );
+ *     obj = mw.message( 'so-unusual', 'Time "after" <time>' );
  *
- *     obj.format = 'text';
- *     str = obj.toString();
- *     // Same as:
- *     str = obj.text();
- *
- *     mw.log( str );
- *     // Hello, John "Wiki" <3 Doe!
+ *     mw.log( obj.text() );
+ *     // You will find: Time "after" <time>
  *
  *     mw.log( obj.escaped() );
- *     // Hello, John &quot;Wiki&quot; &lt;3 Doe!
+ *     // You will find: Time &quot;after&quot; &lt;time&gt;
  *
  * @class mw.Message
  *
@@ -89,11 +59,9 @@ require( './legacy.wikibits.js' );
  * @param {Array} [parameters]
  */
 function Message( map, key, parameters ) {
-	this.format = 'text';
 	this.map = map;
 	this.key = key;
-	this.parameters = parameters === undefined ? [] : parameters;
-	return this;
+	this.parameters = parameters || [];
 }
 
 Message.prototype = {
@@ -106,9 +74,11 @@ Message.prototype = {
 	 *
 	 * This function will not be called for nonexistent messages.
 	 *
+	 * @private For internal use by mediawiki.jqueryMsg only
+	 * @param {string} format
 	 * @return {string} Parsed message
 	 */
-	parser: function () {
+	parser: function ( format ) {
 		var text = this.map.get( this.key );
 		if (
 			mw.config.get( 'wgUserLanguage' ) === 'qqx' &&
@@ -117,7 +87,7 @@ Message.prototype = {
 			text = '(' + this.key + '$*)';
 		}
 		text = mw.format.apply( null, [ text ].concat( this.parameters ) );
-		if ( this.format === 'parse' ) {
+		if ( format === 'parse' ) {
 			// We don't know how to parse anything, so escape it all
 			text = mw.html.escape( text );
 		}
@@ -140,14 +110,19 @@ Message.prototype = {
 	},
 
 	/**
-	 * Convert message object to its string form based on current format.
+	 * Convert message object to a string using the "text"-format .
 	 *
-	 * @return {string} Message as a string in the current form, or `<key>` if key
+	 * This exists for implicit string type casting only.
+	 * Do not call this directly. Use mw.Message#text() instead, one of the
+	 * other format methods.
+	 *
+	 * @private
+	 * @param {string} [format="text"] Internal parameter. Uses "text" if called
+	 *  implicitly through string casting.
+	 * @return {string} Message in the given format, or `⧼key⧽` if the key
 	 *  does not exist.
 	 */
-	toString: function () {
-		var text;
-
+	toString: function ( format ) {
 		if ( !this.exists() ) {
 			// Use ⧼key⧽ as text if key does not exist
 			// Err on the side of safety, ensure that the output
@@ -160,72 +135,64 @@ Message.prototype = {
 			return '⧼' + mw.html.escape( this.key ) + '⧽';
 		}
 
-		if ( this.format === 'plain' || this.format === 'text' || this.format === 'parse' ) {
-			text = this.parser();
+		if ( !format ) {
+			format = 'text';
 		}
 
-		if ( this.format === 'escaped' ) {
-			text = this.parser();
-			text = mw.html.escape( text );
+		if ( format === 'plain' || format === 'text' || format === 'parse' ) {
+			return this.parser( format );
 		}
 
-		return text;
+		// Format: 'escaped' (including for any invalid format, default to safe escape)
+		return mw.html.escape( this.parser( 'escaped' ) );
 	},
 
 	/**
-	 * Change format to 'parse' and convert message to string
+	 * Parse message as wikitext and return HTML.
 	 *
-	 * If jqueryMsg is loaded, this parses the message text from wikitext
-	 * (where supported) to HTML
-	 *
-	 * Otherwise, it is equivalent to plain.
+	 * If jqueryMsg is loaded, this transforms text and parses a subset of supported wikitext
+	 * into HTML. Without jqueryMsg, it is equivalent to #escaped.
 	 *
 	 * @return {string} String form of parsed message
 	 */
 	parse: function () {
-		this.format = 'parse';
-		return this.toString();
+		return this.toString( 'parse' );
 	},
 
 	/**
-	 * Change format to 'plain' and convert message to string
+	 * Return message plainly.
 	 *
-	 * This substitutes parameters, but otherwise does not change the
-	 * message text.
+	 * This substitutes parameters, but otherwise does not transform the
+	 * message content.
 	 *
 	 * @return {string} String form of plain message
 	 */
 	plain: function () {
-		this.format = 'plain';
-		return this.toString();
+		return this.toString( 'plain' );
 	},
 
 	/**
-	 * Change format to 'text' and convert message to string
+	 * Format message with text transformations applied.
 	 *
-	 * If jqueryMsg is loaded, {{-transformation is done where supported
-	 * (such as {{plural:}}, {{gender:}}, {{int:}}).
-	 *
-	 * Otherwise, it is equivalent to plain
+	 * If jqueryMsg is loaded, `{{`-transformation is done for supported
+	 * magic words such as `{{plural:}}`, `{{gender:}}`, and `{{int:}}`.
+	 * Without jqueryMsg, it is equivalent to #plain.
 	 *
 	 * @return {string} String form of text message
 	 */
 	text: function () {
-		this.format = 'text';
-		return this.toString();
+		return this.toString( 'text' );
 	},
 
 	/**
-	 * Change the format to 'escaped' and convert message to string
+	 * Format message and return as escaped text in HTML.
 	 *
-	 * This is equivalent to using the 'text' format (see #text), then
-	 * HTML-escaping the output.
+	 * This is equivalent to the #text format, which is then HTML-escaped.
 	 *
 	 * @return {string} String form of html escaped message
 	 */
 	escaped: function () {
-		this.format = 'escaped';
-		return this.toString();
+		return this.toString( 'escaped' );
 	},
 
 	/**
@@ -269,7 +236,7 @@ mw.inspect = function () {
 };
 
 /**
- * Replace $* with a list of parameters for &uselang=qqx.
+ * Replace `$*` with a list of parameters for `uselang=qqx` support.
  *
  * @private
  * @since 1.33
@@ -278,15 +245,15 @@ mw.inspect = function () {
  * @return {string} Transformed format string
  */
 mw.internalDoTransformFormatForQqx = function ( formatString, parameters ) {
-	var parametersString;
+	var replacement;
 	if ( formatString.indexOf( '$*' ) !== -1 ) {
-		parametersString = '';
+		replacement = '';
 		if ( parameters.length ) {
-			parametersString = ': ' + parameters.map( function ( _, i ) {
+			replacement = ': ' + parameters.map( function ( _, i ) {
 				return '$' + ( i + 1 );
 			} ).join( ', ' );
 		}
-		return formatString.replace( '$*', parametersString );
+		return formatString.replace( '$*', replacement );
 	}
 	return formatString;
 };
@@ -339,7 +306,9 @@ mw.message = function ( key ) {
  * @return {string}
  */
 mw.msg = function () {
-	return mw.message.apply( mw, arguments ).toString();
+	// Shortcut must process text transformations by default
+	// if mediawiki.jqueryMsg is loaded. (T46459)
+	return mw.message.apply( mw, arguments ).text();
 };
 
 /**
@@ -354,6 +323,10 @@ mw.notify = function ( message, options ) {
 		return mw.notification.notify( message, options );
 	} );
 };
+
+var mwLoaderTrack = mw.track;
+var trackCallbacks = $.Callbacks( 'memory' );
+var trackHandlers = [];
 
 /**
  * Track an analytic event.
@@ -402,7 +375,6 @@ mw.trackSubscribe = function ( topic, callback ) {
 	}
 
 	trackHandlers.push( [ handler, callback ] );
-
 	trackCallbacks.add( handler );
 };
 
@@ -464,20 +436,25 @@ trackCallbacks.fire( mw.trackQueue );
  *
  * @class mw.hook
  */
-mw.hook = ( function () {
-	var lists = Object.create( null );
 
-	/**
-	 * Create an instance of mw.hook.
-	 *
-	 * @method hook
-	 * @member mw
-	 * @param {string} name Name of hook.
-	 * @return {mw.hook}
-	 */
-	return function ( name ) {
-		var list = lists[ name ] || ( lists[ name ] = $.Callbacks( 'memory' ) );
+var hooks = Object.create( null );
 
+/**
+ * Create an instance of mw.hook.
+ *
+ * @method hook
+ * @member mw
+ * @param {string} name Name of hook.
+ * @return {mw.hook}
+ */
+mw.hook = function ( name ) {
+	return hooks[ name ] || ( hooks[ name ] = ( function () {
+		var memory, fns = [];
+		function rethrow( e ) {
+			setTimeout( function () {
+				throw e;
+			} );
+		}
 		return {
 			/**
 			 * Register a hook handler
@@ -485,29 +462,57 @@ mw.hook = ( function () {
 			 * @param {...Function} handler Function to bind.
 			 * @chainable
 			 */
-			add: list.add,
-
+			add: function () {
+				var i = 0;
+				for ( ; i < arguments.length; i++ ) {
+					if ( memory ) {
+						try {
+							arguments[ i ].apply( null, memory );
+						} catch ( e ) {
+							rethrow( e );
+						}
+					}
+					fns.push( arguments[ i ] );
+				}
+				return this;
+			},
 			/**
 			 * Unregister a hook handler
 			 *
 			 * @param {...Function} handler Function to unbind.
 			 * @chainable
 			 */
-			remove: list.remove,
-
+			remove: function () {
+				var i = 0, j;
+				for ( ; i < arguments.length; i++ ) {
+					while ( ( j = fns.indexOf( arguments[ i ] ) ) !== -1 ) {
+						fns.splice( j, 1 );
+					}
+				}
+				return this;
+			},
 			/**
-			 * Run a hook.
+			 * Call hook handlers with data.
 			 *
 			 * @param {...Mixed} data
 			 * @return {mw.hook}
 			 * @chainable
 			 */
 			fire: function () {
-				return list.fireWith.call( this, null, slice.call( arguments ) );
+				var i = 0;
+				for ( ; i < fns.length; i++ ) {
+					try {
+						fns[ i ].apply( null, arguments );
+					} catch ( e ) {
+						rethrow( e );
+					}
+				}
+				memory = slice.call( arguments );
+				return this;
 			}
 		};
-	};
-}() );
+	}() ) );
+};
 
 /**
  * HTML construction helper functions
@@ -525,101 +530,109 @@ mw.hook = ( function () {
  * @class mw.html
  * @singleton
  */
-mw.html = ( function () {
-	function escapeCallback( s ) {
-		switch ( s ) {
-			case '\'':
-				return '&#039;';
-			case '"':
-				return '&quot;';
-			case '<':
-				return '&lt;';
-			case '>':
-				return '&gt;';
-			case '&':
-				return '&amp;';
-		}
+
+function escapeCallback( s ) {
+	switch ( s ) {
+		case '\'':
+			return '&#039;';
+		case '"':
+			return '&quot;';
+		case '<':
+			return '&lt;';
+		case '>':
+			return '&gt;';
+		case '&':
+			return '&amp;';
 	}
+}
+mw.html = {
+	/**
+	 * Escape a string for HTML.
+	 *
+	 * Converts special characters to HTML entities.
+	 *
+	 *     mw.html.escape( '< > \' & "' );
+	 *     // Returns &lt; &gt; &#039; &amp; &quot;
+	 *
+	 * @param {string} s The string to escape
+	 * @return {string} HTML
+	 */
+	escape: function ( s ) {
+		return s.replace( /['"<>&]/g, escapeCallback );
+	},
 
-	return {
-		/**
-		 * Escape a string for HTML.
-		 *
-		 * Converts special characters to HTML entities.
-		 *
-		 *     mw.html.escape( '< > \' & "' );
-		 *     // Returns &lt; &gt; &#039; &amp; &quot;
-		 *
-		 * @param {string} s The string to escape
-		 * @return {string} HTML
-		 */
-		escape: function ( s ) {
-			return s.replace( /['"<>&]/g, escapeCallback );
-		},
+	/**
+	 * Create an HTML element string, with safe escaping.
+	 *
+	 * @param {string} name The tag name.
+	 * @param {Object} [attrs] An object with members mapping element names to values
+	 * @param {string|mw.html.Raw|null} [contents=null] The contents of the element.
+	 *
+	 *  - string: Text to be escaped.
+	 *  - null: The element is treated as void with short closing form, e.g. `<br/>`.
+	 *  - this.Raw: The raw value is directly included.
+	 * @return {string} HTML
+	 */
+	element: function ( name, attrs, contents ) {
+		var v, attrName, s = '<' + name;
 
-		/**
-		 * Create an HTML element string, with safe escaping.
-		 *
-		 * @param {string} name The tag name.
-		 * @param {Object} [attrs] An object with members mapping element names to values
-		 * @param {string|mw.html.Raw|null} [contents=null] The contents of the element.
-		 *
-		 *  - string: Text to be escaped.
-		 *  - null: The element is treated as void with short closing form, e.g. `<br/>`.
-		 *  - this.Raw: The raw value is directly included.
-		 * @return {string} HTML
-		 */
-		element: function ( name, attrs, contents ) {
-			var v, attrName, s = '<' + name;
-
-			if ( attrs ) {
-				for ( attrName in attrs ) {
-					v = attrs[ attrName ];
-					// Convert name=true, to name=name
-					if ( v === true ) {
-						v = attrName;
-						// Skip name=false
-					} else if ( v === false ) {
-						continue;
-					}
-					s += ' ' + attrName + '="' + this.escape( String( v ) ) + '"';
+		if ( attrs ) {
+			for ( attrName in attrs ) {
+				v = attrs[ attrName ];
+				// Convert name=true, to name=name
+				if ( v === true ) {
+					v = attrName;
+					// Skip name=false
+				} else if ( v === false ) {
+					continue;
 				}
+				s += ' ' + attrName + '="' + this.escape( String( v ) ) + '"';
 			}
-			if ( contents === undefined || contents === null ) {
-				// Self close tag
-				s += '/>';
-				return s;
-			}
-			// Regular open tag
-			s += '>';
-			if ( typeof contents === 'string' ) {
-				// Escaped
-				s += this.escape( contents );
-			} else if ( typeof contents === 'number' || typeof contents === 'boolean' ) {
-				// Convert to string
-				s += String( contents );
-			} else if ( contents instanceof this.Raw ) {
-				// Raw HTML inclusion
-				s += contents.value;
-			} else {
-				throw new Error( 'Invalid content type' );
-			}
-			s += '</' + name + '>';
-			return s;
-		},
-
-		/**
-		 * Wrapper object for raw HTML passed to mw.html.element().
-		 *
-		 * @class mw.html.Raw
-		 * @constructor
-		 * @param {string} value
-		 */
-		Raw: function ( value ) {
-			this.value = value;
 		}
-	};
-}() );
+		if ( contents === undefined || contents === null ) {
+			// Self close tag
+			s += '/>';
+			return s;
+		}
+		// Regular open tag
+		s += '>';
+		if ( typeof contents === 'string' ) {
+			// Escaped
+			s += this.escape( contents );
+		} else if ( typeof contents === 'number' || typeof contents === 'boolean' ) {
+			// Convert to string
+			s += String( contents );
+		} else if ( contents instanceof this.Raw ) {
+			// Raw HTML inclusion
+			s += contents.value;
+		} else {
+			throw new Error( 'Invalid content type' );
+		}
+		s += '</' + name + '>';
+		return s;
+	},
+
+	/**
+	 * Wrapper object for raw HTML passed to mw.html.element().
+	 *
+	 * @class mw.html.Raw
+	 * @constructor
+	 * @param {string} value
+	 */
+	Raw: function ( value ) {
+		this.value = value;
+	}
+};
+
+/**
+ * Get the names of all registered ResourceLoader modules.
+ *
+ * @member mw.loader
+ * @return {string[]}
+ */
+mw.loader.getModuleNames = function () {
+	return Object.keys( mw.loader.moduleRegistry );
+};
 
 /**
  * Execute a function after one or more modules are ready.
@@ -732,12 +745,10 @@ mw.user = {
 	tokens: new mw.Map()
 };
 
-// Alias $j to jQuery for backwards compatibility
-// @deprecated since 1.23 Use $ or jQuery instead
-mw.log.deprecate( window, '$j', $, 'Use $ or jQuery instead.' );
+mw.user.options.set( require( './user.json' ) );
 
-// Process callbacks for Grade A that require modules.
-queue = window.RLQ;
+// Process callbacks for modern browsers (Grade A) that require modules.
+var queue = window.RLQ;
 // Replace temporary RLQ implementation from startup.js with the
 // final implementation that also processes callbacks that can
 // require modules. It must also support late arrivals of

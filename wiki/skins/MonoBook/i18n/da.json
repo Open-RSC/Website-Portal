@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Christian List",
+			"Jan Friberg",
 			"Peter Alberti",
 			"Saederup92"
 		]
@@ -15,8 +16,10 @@
 	"monobook-jumptonavigation": "Spring til navigation",
 	"monobook-jumptosearch": "Spring til søgning",
 	"monobook-more-actions": "Mere",
+	"cactions-mobile": "Sidehandlinger",
 	"monobook-cactions-label": "Sidehandlinger",
 	"monobook-notifications-link": "Notifikationer ($1)",
 	"monobook-notifications-link-none": "Notifikationer",
-	"monobook-responsive-label": "Aktiver responsivt MonoBook-design"
+	"monobook-view-history": "Historik",
+	"monobook-action-undelete": "Gendan {{PLURAL:$1|én redigering|$1 redigeringer}}"
 }

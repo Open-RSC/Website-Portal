@@ -97,12 +97,10 @@ class CachingSiteStoreTest extends \MediaWikiIntegrationTestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$dbSiteStore->expects( $this->any() )
-			->method( 'getSite' )
-			->will( $this->returnValue( $this->getTestSite() ) );
+		$dbSiteStore->method( 'getSite' )
+			->willReturn( $this->getTestSite() );
 
-		$dbSiteStore->expects( $this->any() )
-			->method( 'getSites' )
+		$dbSiteStore->method( 'getSites' )
 			->will( $this->returnCallback( function () {
 				$siteList = new SiteList();
 				$siteList->setSite( $this->getTestSite() );
@@ -117,8 +115,8 @@ class CachingSiteStoreTest extends \MediaWikiIntegrationTestCase {
 
 		$store->getSite( 'enwiki' )->setLanguageCode( 'en-ca' );
 
-		// sanity check: $store should have the new language code for 'enwiki'
-		$this->assertEquals( 'en-ca', $store->getSite( 'enwiki' )->getLanguageCode(), 'sanity check' );
+		// check: $store should have the new language code for 'enwiki'
+		$this->assertEquals( 'en-ca', $store->getSite( 'enwiki' )->getLanguageCode() );
 
 		// purge cache
 		$store->reset();

@@ -224,7 +224,7 @@
 
 			function among( actual, expected, message ) {
 				if ( Array.isArray( expected ) ) {
-					assert.strictEqual( expected.indexOf( actual ) !== -1, true, message + ' (got ' + actual + '; expected one of ' + expected.join( ', ' ) + ')' );
+					assert.true( expected.indexOf( actual ) !== -1, message + ' (got ' + actual + '; expected one of ' + expected.join( ', ' ) + ')' );
 				} else {
 					assert.strictEqual( actual, expected, message );
 				}

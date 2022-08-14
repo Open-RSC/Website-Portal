@@ -2,6 +2,7 @@
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use UtfNormal\Validator;
 
 class Scribunto_LuaStandaloneInterpreter extends Scribunto_LuaInterpreter {
 	/** @var int */
@@ -180,7 +181,7 @@ class Scribunto_LuaStandaloneInterpreter extends Scribunto_LuaInterpreter {
 			if ( PHP_OS == 'Linux' ) {
 				return 'Lua 5.1.5';
 			} elseif ( PHP_OS == 'Windows' || PHP_OS == 'WINNT' || PHP_OS == 'Win32' ) {
-				return 'Lua 5.1.4';
+				return 'Lua 5.1.5';
 			} elseif ( PHP_OS == 'Darwin' ) {
 				return 'Lua 5.1.5';
 			} else {
@@ -394,9 +395,11 @@ class Scribunto_LuaStandaloneInterpreter extends Scribunto_LuaInterpreter {
 	 * Converts the encoded Lua error to an appropriate exception and throws it.
 	 *
 	 * @param array $message
+	 * @return never
 	 */
 	protected function handleError( $message ) {
 		$opts = [];
+		$message['value'] = Validator::cleanUp( $message['value'] );
 		if ( preg_match( '/^(.*?):(\d+): (.*)$/', $message['value'], $m ) ) {
 			$opts['module'] = $m[1];
 			$opts['line'] = $m[2];
@@ -427,7 +430,7 @@ class Scribunto_LuaStandaloneInterpreter extends Scribunto_LuaInterpreter {
 					break;
 				case 'error':
 					$this->handleError( $msgFromLua );
-					return [];
+					// handleError prevents continuation
 				default:
 					$this->logger->error( __METHOD__ . ": invalid response op \"{$msgFromLua['op']}\"" );
 					throw $this->engine->newException( 'scribunto-luastandalone-decode-error' );

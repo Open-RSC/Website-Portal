@@ -1,6 +1,8 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\Storage\EditResult;
+use MediaWiki\User\UserIdentity;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -14,10 +16,10 @@ use Wikimedia\TestingAccessWrapper;
  */
 class EditPageTest extends MediaWikiLangTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
-		$contLang = MediaWikiServices::getInstance()->getContentLanguage();
+		$contLang = $this->getServiceContainer()->getContentLanguage();
 		$this->setContentLang( $contLang );
 
 		$this->setMwGlobals( [
@@ -40,7 +42,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 	public function testExtractSectionTitle( $section, $title ) {
 		$this->assertEquals(
 			$title,
-			 TestingAccessWrapper::newFromClass( EditPage::class )->extractSectionTitle( $section )
+			TestingAccessWrapper::newFromClass( EditPage::class )->extractSectionTitle( $section )
 		);
 	}
 
@@ -70,7 +72,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 	}
 
 	protected function forceRevisionDate( WikiPage $page, $timestamp ) {
-		$dbw = wfGetDB( DB_MASTER );
+		$dbw = wfGetDB( DB_PRIMARY );
 
 		$dbw->update( 'revision',
 			[ 'rev_timestamp' => $dbw->timestamp( $timestamp ) ],
@@ -107,7 +109,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 	 *              * editRevId: revision ID of the edit's base revision (optional)
 	 *              * wpStarttime: timestamp when the edit started (will be inserted if not provided)
 	 *              * wpSectionTitle: the section to edit
-	 *              * wpMinorEdit: mark as minor edit
+	 *              * wpMinoredit: mark as minor edit
 	 *              * wpWatchthis: whether to watch the page
 	 * @param int|null $expectedCode The expected result code (EditPage::AS_XXX constants).
 	 *                  Set to null to skip the check.
@@ -134,24 +136,26 @@ class EditPageTest extends MediaWikiLangTestCase {
 			}
 		}
 
+		if ( $user == null ) {
+			$user = $this->getTestUser()->getUser();
+		}
+
 		$page = WikiPage::factory( $title );
 
 		if ( $baseText !== null ) {
 			$content = ContentHandler::makeContent( $baseText, $title );
-			$page->doEditContent( $content, "base text for test" );
+			$page->doUserEditContent( $content, $user, "base text for test" );
 			$this->forceRevisionDate( $page, '20120101000000' );
 
-			// sanity check
 			$page->clear();
-			$currentText = ContentHandler::getContentText( $page->getContent() );
+			$content = $page->getContent();
+
+			$this->assertInstanceOf( TextContent::class, $content );
+			$currentText = $content->getText();
 
 			# EditPage rtrim() the user input, so we alter our expected text
 			# to reflect that.
 			$this->assertEditedTextEquals( $baseText, $currentText );
-		}
-
-		if ( $user == null ) {
-			$user = $this->getTestUser()->getUser();
 		}
 
 		if ( !isset( $edit['wpEditToken'] ) ) {
@@ -182,12 +186,10 @@ class EditPageTest extends MediaWikiLangTestCase {
 		$ep->setContextTitle( $title );
 		$ep->importFormData( $req );
 
-		$bot = isset( $edit['bot'] ) ? (bool)$edit['bot'] : false;
-
 		// this is where the edit happens!
 		// Note: don't want to use EditPage::AttemptSave, because it messes with $wgOut
 		// and throws exceptions like PermissionsError
-		$status = $ep->internalAttemptSave( $result, $bot );
+		$status = $ep->attemptSave( $result );
 
 		if ( $expectedCode !== null ) {
 			// check edit code
@@ -200,7 +202,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 		if ( $expectedText !== null ) {
 			// check resulting page text
 			$content = $page->getContent();
-			$text = ContentHandler::getContentText( $content );
+			$text = ( $content instanceof TextContent ) ? $content->getText() : '';
 
 			# EditPage rtrim() the user input, so we alter our expected text
 			# to reflect that.
@@ -281,25 +283,14 @@ class EditPageTest extends MediaWikiLangTestCase {
 	public function testCreatePage(
 		$desc, $pageTitle, $user, $editText, $expectedCode, $expectedText, $ignoreBlank = false
 	) {
-		$this->hideDeprecated( 'Revision::__construct' );
-		$this->hideDeprecated( 'PageContentInsertComplete hook' );
-		$this->hideDeprecated( 'PageContentSaveComplete hook' );
-
 		$checkId = null;
 
 		$this->setMwGlobals( 'wgHooks', [
-			'PageContentInsertComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision
-			) {
-				// types/refs checked
-			} ],
-			'PageContentSaveComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision,
-				Status &$status, $baseRevId
+			'PageSaveComplete' => [ static function (
+				WikiPage $page, UserIdentity $user, string $summary,
+				int $flags, RevisionRecord $revisionRecord, EditResult $editResult
 			) use ( &$checkId ) {
-				$checkId = $status->value['revision-record']->getId();
+				$checkId = $revisionRecord->getId();
 				// types/refs checked
 			} ],
 		] );
@@ -313,7 +304,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 
 		if ( $expectedCode != EditPage::AS_BLANK_ARTICLE ) {
 			$latest = $page->getLatest();
-			$page->doDeleteArticleReal( $pageTitle, $this->getTestSysop()->getUser() );
+			$this->deletePage( $page );
 
 			$this->assertGreaterThan( 0, $latest, "Page revision ID updated in object" );
 			$this->assertEquals( $latest, $checkId, "Revision in Status for hook" );
@@ -327,29 +318,18 @@ class EditPageTest extends MediaWikiLangTestCase {
 	public function testCreatePageTrx(
 		$desc, $pageTitle, $user, $editText, $expectedCode, $expectedText, $ignoreBlank = false
 	) {
-		$this->hideDeprecated( 'Revision::__construct' );
-		$this->hideDeprecated( 'PageContentInsertComplete hook' );
-		$this->hideDeprecated( 'PageContentSaveComplete hook' );
-
 		$checkIds = [];
 		$this->setMwGlobals( 'wgHooks', [
-			'PageContentInsertComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision
-			) {
-				// types/refs checked
-			} ],
-			'PageContentSaveComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision,
-				Status &$status, $baseRevId
+			'PageSaveComplete' => [ static function (
+				WikiPage $page, UserIdentity $user, string $summary,
+				int $flags, RevisionRecord $revisionRecord, EditResult $editResult
 			) use ( &$checkIds ) {
-				$checkIds[] = $status->value['revision-record']->getId();
+				$checkIds[] = $revisionRecord->getId();
 				// types/refs checked
 			} ],
 		] );
 
-		wfGetDB( DB_MASTER )->begin( __METHOD__ );
+		wfGetDB( DB_PRIMARY )->begin( __METHOD__ );
 
 		$edit = [ 'wpTextbox1' => $editText ];
 		if ( $ignoreBlank ) {
@@ -363,19 +343,19 @@ class EditPageTest extends MediaWikiLangTestCase {
 		$page2 = $this->assertEdit(
 			$pageTitle2, null, $user, $edit, $expectedCode, $expectedText, $desc );
 
-		wfGetDB( DB_MASTER )->commit( __METHOD__ );
+		wfGetDB( DB_PRIMARY )->commit( __METHOD__ );
 
 		$this->assertSame( 0, DeferredUpdates::pendingUpdatesCount(), 'No deferred updates' );
 
 		if ( $expectedCode != EditPage::AS_BLANK_ARTICLE ) {
 			$latest = $page->getLatest();
-			$page->doDeleteArticleReal( $pageTitle, $this->getTestSysop()->getUser() );
+			$this->deletePage( $page );
 
 			$this->assertGreaterThan( 0, $latest, "Page #1 revision ID updated in object" );
 			$this->assertEquals( $latest, $checkIds[0], "Revision #1 in Status for hook" );
 
 			$latest2 = $page2->getLatest();
-			$page2->doDeleteArticleReal( $pageTitle2, $this->getTestSysop()->getUser() );
+			$this->deletePage( $page2 );
 
 			$this->assertGreaterThan( 0, $latest2, "Page #2 revision ID updated in object" );
 			$this->assertEquals( $latest2, $checkIds[1], "Revision #2 in Status for hook" );
@@ -386,25 +366,13 @@ class EditPageTest extends MediaWikiLangTestCase {
 	 * @covers EditPage
 	 */
 	public function testUpdatePage() {
-		$this->hideDeprecated( 'Revision::__construct' );
-		$this->hideDeprecated( 'PageContentInsertComplete hook' );
-		$this->hideDeprecated( 'PageContentSaveComplete hook' );
-
 		$checkIds = [];
-
 		$this->setMwGlobals( 'wgHooks', [
-			'PageContentInsertComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision
-			) {
-				// types/refs checked
-			} ],
-			'PageContentSaveComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision,
-				Status &$status, $baseRevId
+			'PageSaveComplete' => [ static function (
+				WikiPage $page, UserIdentity $user, string $summary,
+				int $flags, RevisionRecord $revisionRecord, EditResult $editResult
 			) use ( &$checkIds ) {
-				$checkIds[] = $status->value['revision-record']->getId();
+				$checkIds[] = $revisionRecord->getId();
 				// types/refs checked
 			} ],
 		] );
@@ -438,10 +406,64 @@ class EditPageTest extends MediaWikiLangTestCase {
 	/**
 	 * @covers EditPage
 	 */
-	public function testUpdatePageTrx() {
-		$this->hideDeprecated( 'Revision::__construct' );
-		$this->hideDeprecated( 'PageContentSaveComplete hook' );
+	public function testUpdateNoMinor() {
+		$user = $this->getTestUser()->getUser();
+		$anon = new User(); // anon
 
+		// Test that page creation can never be minor
+		$edit = [
+			'wpTextbox1' => 'testing',
+			'wpSummary' => 'first update',
+			'wpMinoredit' => 'minor'
+		];
+
+		$page = $this->assertEdit( 'EditPageTest_testUpdateNoMinor', null, $user, $edit,
+			EditPage::AS_SUCCESS_NEW_ARTICLE, 'testing', "expected successful update" );
+
+		$this->assertFalse(
+			$page->getRevisionRecord()->isMinor(),
+			'page creation should not be minor'
+		);
+
+		// Test that anons can't make an update minor
+		$this->forceRevisionDate( $page, '20120101000000' );
+
+		$edit = [
+			'wpTextbox1' => 'testing 2',
+			'wpSummary' => 'second update',
+			'wpMinoredit' => 'minor'
+		];
+
+		$page = $this->assertEdit( 'EditPageTest_testUpdateNoMinor', null, $anon, $edit,
+			EditPage::AS_SUCCESS_UPDATE, 'testing 2', "expected successful update" );
+
+		$this->assertFalse(
+			$page->getRevisionRecord()->isMinor(),
+			'anon edit should not be minor'
+		);
+
+		// Test that users can make an update minor
+		$this->forceRevisionDate( $page, '20120102000000' );
+
+		$edit = [
+			'wpTextbox1' => 'testing 3',
+			'wpSummary' => 'third update',
+			'wpMinoredit' => 'minor'
+		];
+
+		$page = $this->assertEdit( 'EditPageTest_testUpdateNoMinor', null, $user, $edit,
+			EditPage::AS_SUCCESS_UPDATE, 'testing 3', "expected successful update" );
+
+		$this->assertTrue(
+			$page->getRevisionRecord()->isMinor(),
+			'users can make edits minor'
+		);
+	}
+
+	/**
+	 * @covers EditPage
+	 */
+	public function testUpdatePageTrx() {
 		$text = "one";
 		$edit = [
 			'wpTextbox1' => $text,
@@ -456,17 +478,16 @@ class EditPageTest extends MediaWikiLangTestCase {
 
 		$checkIds = [];
 		$this->setMwGlobals( 'wgHooks', [
-			'PageContentSaveComplete' => [ static function (
-				WikiPage &$page, User &$user, Content $content,
-				$summary, $minor, $u1, $u2, &$flags, Revision $revision,
-				Status &$status, $baseRevId
+			'PageSaveComplete' => [ static function (
+				WikiPage $page, UserIdentity $user, string $summary,
+				int $flags, RevisionRecord $revisionRecord, EditResult $editResult
 			) use ( &$checkIds ) {
-				$checkIds[] = $status->value['revision-record']->getId();
+				$checkIds[] = $revisionRecord->getId();
 				// types/refs checked
 			} ],
 		] );
 
-		wfGetDB( DB_MASTER )->begin( __METHOD__ );
+		wfGetDB( DB_PRIMARY )->begin( __METHOD__ );
 
 		$text = "two";
 		$edit = [
@@ -488,7 +509,7 @@ class EditPageTest extends MediaWikiLangTestCase {
 			EditPage::AS_SUCCESS_UPDATE, $text,
 			"expected successful update with given text" );
 
-		wfGetDB( DB_MASTER )->commit( __METHOD__ );
+		wfGetDB( DB_PRIMARY )->commit( __METHOD__ );
 
 		$this->assertGreaterThan( 0, $checkIds[0], "First event rev ID set" );
 		$this->assertGreaterThan( 0, $checkIds[1], "Second edit hook rev ID set" );
@@ -640,13 +661,11 @@ hello
 		// create page
 		$ns = $this->getDefaultWikitextNS();
 		$title = Title::newFromText( __METHOD__, $ns );
-		$page = WikiPage::factory( $title );
+		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
+		$page = $wikiPageFactory->newFromTitle( $title );
 
 		if ( $page->exists() ) {
-			$page->doDeleteArticleReal(
-				"clean slate for testing",
-				$this->getTestSysop()->getUser()
-			);
+			$this->deletePage( $page, "clean slate for testing" );
 		}
 
 		$elmosEdit['wpTextbox1'] = 'Elmo\'s text';
@@ -772,13 +791,11 @@ hello
 		// create page
 		$ns = $this->getDefaultWikitextNS();
 		$title = Title::newFromText( 'EditPageTest_testAutoMerge', $ns );
-		$page = WikiPage::factory( $title );
+		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
+		$page = $wikiPageFactory->newFromTitle( $title );
 
 		if ( $page->exists() ) {
-			$page->doDeleteArticleReal(
-				"clean slate for testing",
-				$this->getTestSysop()->getUser()
-			);
+			$this->deletePage( $page, "clean slate for testing" );
 		}
 
 		$baseEdit = [
@@ -838,7 +855,8 @@ hello
 		$this->setTemporaryHook( 'getUserPermissionsErrors',
 			static function ( Title $page, $user, $action, &$result ) {
 				if ( $action === 'editcontentmodel' &&
-					 $page->getContentModel() === CONTENT_MODEL_WIKITEXT ) {
+					$page->getContentModel() === CONTENT_MODEL_WIKITEXT
+				) {
 					$result = false;
 
 					return false;
@@ -924,7 +942,8 @@ hello
 		$article = new Article( $title );
 		$article->setContext( $context );
 		$ep = new EditPage( $article );
-		WatchAction::doWatchOrUnwatch( (bool)$existingExpiry, $title, $user, $existingExpiry );
+		$this->getServiceContainer()->getWatchlistManager()
+			->setWatch( (bool)$existingExpiry, $user, $title, $existingExpiry );
 
 		// Send the request.
 		$req = new FauxRequest( [ 'wpWatchlistExpiry' => $postVal ], true );
@@ -971,6 +990,29 @@ hello
 				'options' => array_merge( [ '2020-05-05T12:00:02Z' ], $standardOptions ),
 			],
 		];
+	}
+
+	/**
+	 * T277204
+	 * @covers EditPage
+	 */
+	public function testFalseyEditRevId() {
+		$elmosEdit['wpTextbox1'] = 'Elmo\'s text';
+		$bertasEdit['wpTextbox1'] = 'Berta\'s text';
+
+		$elmosEdit['wpSummary'] = 'Elmo\'s edit';
+		$bertasEdit['wpSummary'] = 'Bertas\'s edit';
+
+		$bertasEdit['editRevId'] = 0;
+
+		$this->assertEdit( __METHOD__,
+			null, 'Elmo', $elmosEdit,
+			EditPage::AS_SUCCESS_NEW_ARTICLE, null, 'expected successful creation' );
+
+		// A successful update would probably be OK too. The important thing is
+		// that it doesn't throw an exception.
+		$this->assertEdit( __METHOD__, null, 'Berta', $bertasEdit,
+			EditPage::AS_CONFLICT_DETECTED, null, 'expected successful update' );
 	}
 
 }

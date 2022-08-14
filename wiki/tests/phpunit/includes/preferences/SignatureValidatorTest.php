@@ -1,6 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Preferences\SignatureValidator;
 use Wikimedia\TestingAccessWrapper;
 
@@ -30,7 +29,7 @@ class SignatureValidatorTest extends MediaWikiIntegrationTestCase {
 
 	private $validator;
 
-	public function setUp() : void {
+	public function setUp(): void {
 		parent::setUp();
 		$this->validator = $this->getSignatureValidator();
 	}
@@ -40,10 +39,10 @@ class SignatureValidatorTest extends MediaWikiIntegrationTestCase {
 	 * @return SignatureValidator
 	 */
 	protected function getSignatureValidator() {
-		$lang = MediaWikiServices::getInstance()->getLanguageFactory()->getLanguage( 'en' );
-		$user = User::newFromName( 'SignatureValidatorTest' );
-
-		$validator = new SignatureValidator(
+		$services = $this->getServiceContainer();
+		$lang = $services->getLanguageFactory()->getLanguage( 'en' );
+		$user = $services->getUserFactory()->newFromName( 'SignatureValidatorTest' );
+		$validator = $services->getSignatureValidatorFactory()->newSignatureValidator(
 			$user,
 			null,
 			ParserOptions::newFromUserAndLang( $user, $lang )
@@ -99,6 +98,24 @@ class SignatureValidatorTest extends MediaWikiIntegrationTestCase {
 				[ '[[Special:Contributions/SignatureValidatorTestNot]]', false ],
 			'Link to subpage only' =>
 				[ '[[User:SignatureValidatorTest/blah|Signature]]', false ],
+		];
+	}
+
+	/**
+	 * @covers MediaWiki\Preferences\SignatureValidator::checkLineBreaks()
+	 * @dataProvider provideCheckLineBreaks
+	 */
+	public function testCheckLineBreaks( $signature, $expected ) {
+		$isValid = $this->validator->checkLineBreaks( $signature );
+		$this->assertSame( $expected, $isValid );
+	}
+
+	public function provideCheckLineBreaks() {
+		return [
+			'Perfect' =>
+				[ '[[User:SignatureValidatorTest|Signature]] ([[User talk:SignatureValidatorTest|talk]])', true ],
+			'Line break' =>
+				[ "[[User:SignatureValidatorTest|Signature]] ([[User talk:SignatureValidatorTest|talk\n]])", false ],
 		];
 	}
 

@@ -293,7 +293,8 @@ class Status extends StatusValue {
 	protected function getErrorMessage( $error, $lang = null ) {
 		if ( is_array( $error ) ) {
 			if ( isset( $error['message'] ) && $error['message'] instanceof Message ) {
-				$msg = $error['message'];
+				// Apply context from MessageLocalizer even if we have a Message object already
+				$msg = $this->msg( $error['message'] );
 			} elseif ( isset( $error['message'] ) && isset( $error['params'] ) ) {
 				$msg = $this->msg( $error['message'], array_map( static function ( $param ) {
 					return is_string( $param ) ? wfEscapeWikiText( $param ) : $param;
@@ -392,7 +393,7 @@ class Status extends StatusValue {
 	 * @param string|string[] ...$params
 	 * @return Message
 	 */
-	private function msg( $key, ...$params ) : Message {
+	private function msg( $key, ...$params ): Message {
 		if ( $this->messageLocalizer ) {
 			return $this->messageLocalizer->msg( $key, ...$params );
 		} else {
@@ -406,7 +407,7 @@ class Status extends StatusValue {
 	 * @param mixed ...$params
 	 * @return Message
 	 */
-	private function msgInLang( $key, $lang, ...$params ) : Message {
+	private function msgInLang( $key, $lang, ...$params ): Message {
 		$msg = $this->msg( $key, ...$params );
 		if ( $lang ) {
 			$msg->inLanguage( $lang );

@@ -15,8 +15,10 @@
 	"monobook-jumptonavigation": "跳至導覽",
 	"monobook-jumptosearch": "跳至搜尋",
 	"monobook-more-actions": "更多",
+	"cactions-mobile": "頁面操作",
 	"monobook-cactions-label": "頁面操作",
 	"monobook-notifications-link": "通知（$1）",
 	"monobook-notifications-link-none": "通知",
-	"monobook-responsive-label": "啟用響應式 MonoBook 設計"
+	"monobook-view-history": "歷史",
+	"monobook-action-undelete": "取消刪除 {{PLURAL:$1|1|$1}} 個編輯"
 }

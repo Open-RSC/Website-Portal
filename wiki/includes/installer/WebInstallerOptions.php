@@ -27,8 +27,6 @@ class WebInstallerOptions extends WebInstallerPage {
 	 * @return string|null
 	 */
 	public function execute() {
-		global $wgLang;
-
 		if ( $this->getVar( '_SkipOptional' ) == 'skip' ) {
 			$this->submitSkins();
 			return 'skip';
@@ -37,8 +35,71 @@ class WebInstallerOptions extends WebInstallerPage {
 			return 'continue';
 		}
 
-		$emailwrapperStyle = $this->getVar( 'wgEnableEmail' ) ? '' : 'display: none';
 		$this->startForm();
+		$this->addModeOptions();
+		$this->addEmailOptions();
+		$this->addSkinOptions();
+		$this->addExtensionOptions();
+		$this->addFileOptions();
+		$this->addPersonalizationOptions();
+		$this->addAdvancedOptions();
+		$this->endForm();
+
+		return null;
+	}
+
+	private function addPersonalizationOptions() {
+		$parent = $this->parent;
+		$this->addHTML(
+			$this->getFieldsetStart( 'config-personalization-settings' ) .
+			Html::rawElement( 'div', [
+				'class' => 'config-drag-drop'
+			], wfMessage( 'config-logo-summary' )->parse() ) .
+			Html::openElement( 'div', [
+				'class' => 'config-personalization-options'
+			] ) .
+			Html::hidden( 'config_LogoSiteName', $this->getVar( 'wgSitename' ) ) .
+			$parent->getTextBox( [
+				'var' => '_LogoIcon',
+				// Single quotes are intentional, LocalSettingsGenerator must output this unescaped.
+				'value' => '$wgResourceBasePath/resources/assets/change-your-logo.svg',
+				'label' => 'config-logo-icon',
+				'attribs' => [ 'dir' => 'ltr' ],
+				'help' => $parent->getHelpBox( 'config-logo-icon-help' )
+			] ) .
+			$parent->getTextBox( [
+				'var' => '_LogoWordmark',
+				'label' => 'config-logo-wordmark',
+				'attribs' => [ 'dir' => 'ltr' ],
+				'help' => $parent->getHelpBox( 'config-logo-wordmark-help' )
+			] ) .
+			$parent->getTextBox( [
+				'var' => '_LogoTagline',
+				'label' => 'config-logo-tagline',
+				'attribs' => [ 'dir' => 'ltr' ],
+				'help' => $parent->getHelpBox( 'config-logo-tagline-help' )
+			] ) .
+			$parent->getTextBox( [
+				'var' => '_Logo1x',
+				'label' => 'config-logo-sidebar',
+				'attribs' => [ 'dir' => 'ltr' ],
+				'help' => $parent->getHelpBox( 'config-logo-sidebar-help' )
+			] ) .
+			Html::openElement( 'div', [
+				'class' => 'logo-preview-area',
+				'data-main-page' => wfMessage( 'config-logo-preview-main' ),
+				'data-filedrop' => wfMessage( 'config-logo-filedrop' )
+			] ) .
+			Html::closeElement( 'div' ) .
+			Html::closeElement( 'div' )
+		);
+	}
+
+	/**
+	 * Wiki mode - user rights and copyright model.
+	 * @return void
+	 */
+	private function addModeOptions(): void {
 		$this->addHTML(
 			# User Rights
 			// getRadioSet() builds a set of labeled radio buttons.
@@ -66,9 +127,17 @@ class WebInstallerOptions extends WebInstallerPage {
 				'commonAttribs' => [ 'class' => 'licenseRadio' ],
 			] ) .
 			$this->getCCChooser() .
-			$this->parent->getHelpBox( 'config-license-help' ) .
+			$this->parent->getHelpBox( 'config-license-help' )
+		);
+	}
 
-			# E-mail
+	/**
+	 * User email options.
+	 * @return void
+	 */
+	private function addEmailOptions(): void {
+		$emailwrapperStyle = $this->getVar( 'wgEnableEmail' ) ? '' : 'display: none';
+		$this->addHTML(
 			$this->getFieldsetStart( 'config-email-settings' ) .
 			$this->parent->getCheckBox( [
 				'var' => 'wgEnableEmail',
@@ -105,7 +174,13 @@ class WebInstallerOptions extends WebInstallerPage {
 			"</div>" .
 			$this->getFieldsetEnd()
 		);
+	}
 
+	/**
+	 * Opt-in for bundled skins.
+	 * @return void
+	 */
+	private function addSkinOptions(): void {
 		$skins = $this->parent->findExtensions( 'skins' )->value;
 		'@phan-var array[] $skins';
 		$skinHtml = $this->getFieldsetStart( 'config-skins' );
@@ -114,7 +189,6 @@ class WebInstallerOptions extends WebInstallerPage {
 		$chosenSkinName = $this->getVar( 'wgDefaultSkin', $this->parent->getDefaultSkin( $skinNames ) );
 
 		if ( $skins ) {
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped skin names are valid
 			$radioButtons = $this->parent->getRadioElements( [
 				'var' => 'wgDefaultSkin',
 				'itemLabels' => array_fill_keys( $skinNames, 'config-skins-use-as-default' ),
@@ -124,15 +198,13 @@ class WebInstallerOptions extends WebInstallerPage {
 
 			foreach ( $skins as $skin => $info ) {
 				if ( isset( $info['screenshots'] ) ) {
-					// @phan-suppress-next-line SecurityCheck-DoubleEscaped skin names are valid
 					$screenshotText = $this->makeScreenshotsLink( $skin, $info['screenshots'] );
 				} else {
-					// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
 					$screenshotText = htmlspecialchars( $skin );
 				}
 				$skinHtml .=
 					'<div class="config-skins-item">' .
-					// @phan-suppress-next-line SecurityCheck-DoubleEscaped screenshotText is safe
+					// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 					$this->parent->getCheckBox( [
 						'var' => "skin-$skin",
 						'rawtext' => $screenshotText,
@@ -150,6 +222,14 @@ class WebInstallerOptions extends WebInstallerPage {
 		$skinHtml .= $this->parent->getHelpBox( 'config-skins-help' ) .
 			$this->getFieldsetEnd();
 		$this->addHTML( $skinHtml );
+	}
+
+	/**
+	 * Opt-in for bundled extensions.
+	 * @return void
+	 */
+	private function addExtensionOptions(): void {
+		global $wgLang;
 
 		$extensions = $this->parent->findExtensions()->value;
 		'@phan-var array[] $extensions';
@@ -179,7 +259,6 @@ class WebInstallerOptions extends WebInstallerPage {
 				foreach ( $extByType[$type] as $ext => $info ) {
 					$urlText = '';
 					if ( isset( $info['url'] ) ) {
-						// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
 						$urlText = ' ' . Html::element( 'a', [ 'href' => $info['url'] ], '(more information)' );
 					}
 					$attribs = [
@@ -202,7 +281,6 @@ class WebInstallerOptions extends WebInstallerPage {
 						// extension/skin that is required
 						if ( isset( $dependencyMap[$ext]['extensions'] ) ) {
 							foreach ( $dependencyMap[$ext]['extensions'] as $name ) {
-								// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
 								$links[] = Html::element(
 									'a',
 									[ 'href' => "#config_ext-$name" ],
@@ -211,8 +289,8 @@ class WebInstallerOptions extends WebInstallerPage {
 							}
 						}
 						if ( isset( $dependencyMap[$ext]['skins'] ) ) {
+							// @phan-suppress-next-line PhanTypeMismatchForeach Phan internal bug
 							foreach ( $dependencyMap[$ext]['skins'] as $name ) {
-								// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
 								$links[] = Html::element(
 									'a',
 									[ 'href' => "#config_skin-$name" ],
@@ -221,13 +299,14 @@ class WebInstallerOptions extends WebInstallerPage {
 							}
 						}
 
+						// @phan-suppress-next-line SecurityCheck-XSS
 						$text = wfMessage( 'config-extensions-requires' )
 							->rawParams( $ext, $wgLang->commaList( $links ) )
 							->escaped();
 					} else {
 						$text = $ext;
 					}
-					// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
+					// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 					$extHtml .= $this->parent->getCheckBox( [
 						'var' => "ext-$ext",
 						'rawtext' => $text,
@@ -242,11 +321,16 @@ class WebInstallerOptions extends WebInstallerPage {
 			$this->addHTML( $extHtml );
 			// Push the dependency map to the client side
 			$this->addHTML( Html::inlineScript(
-				// @phan-suppress-next-line SecurityCheck-DoubleEscaped False positive
 				'var extDependencyMap = ' . Xml::encodeJsVar( $dependencyMap )
 			) );
 		}
+	}
 
+	/**
+	 * Image and file upload options.
+	 * @return void
+	 */
+	private function addFileOptions(): void {
 		// Having / in paths in Windows looks funny :)
 		$this->setVar( 'wgDeletedDirectory',
 			str_replace(
@@ -259,7 +343,6 @@ class WebInstallerOptions extends WebInstallerPage {
 		$this->addHTML(
 			# Uploading
 			$this->getFieldsetStart( 'config-upload-settings' ) .
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped taint cannot track the helpbox from the rest
 			$this->parent->getCheckBox( [
 				'var' => 'wgEnableUploads',
 				'label' => 'config-upload-enable',
@@ -267,24 +350,15 @@ class WebInstallerOptions extends WebInstallerPage {
 				'help' => $this->parent->getHelpBox( 'config-upload-help' )
 			] ) .
 			'<div id="uploadwrapper" style="' . $uploadwrapperStyle . '">' .
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped taint cannot track the helpbox from the rest
 			$this->parent->getTextBox( [
 				'var' => 'wgDeletedDirectory',
 				'label' => 'config-upload-deleted',
 				'attribs' => [ 'dir' => 'ltr' ],
 				'help' => $this->parent->getHelpBox( 'config-upload-deleted-help' )
 			] ) .
-			'</div>' .
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped taint cannot track the helpbox from the rest
-			$this->parent->getTextBox( [
-				'var' => '_Logo',
-				'label' => 'config-logo',
-				'attribs' => [ 'dir' => 'ltr' ],
-				'help' => $this->parent->getHelpBox( 'config-logo-help' )
-			] )
+			'</div>'
 		);
 		$this->addHTML(
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped taint cannot track the helpbox from the rest
 			$this->parent->getCheckBox( [
 				'var' => 'wgUseInstantCommons',
 				'label' => 'config-instantcommons',
@@ -292,7 +366,13 @@ class WebInstallerOptions extends WebInstallerPage {
 			] ) .
 			$this->getFieldsetEnd()
 		);
+	}
 
+	/**
+	 * System administration related options.
+	 * @return void
+	 */
+	private function addAdvancedOptions(): void {
 		$caches = [ 'none' ];
 		$cachevalDefault = 'none';
 
@@ -328,7 +408,6 @@ class WebInstallerOptions extends WebInstallerPage {
 			] ) .
 			$this->parent->getHelpBox( 'config-cache-help' ) .
 			"<div id=\"config-memcachewrapper\" style=\"$hidden\">" .
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped taint cannot track the helpbox from the rest
 			$this->parent->getTextArea( [
 				'var' => '_MemCachedServers',
 				'label' => 'config-memcached-servers',
@@ -337,9 +416,6 @@ class WebInstallerOptions extends WebInstallerPage {
 			'</div>' .
 			$this->getFieldsetEnd()
 		);
-		$this->endForm();
-
-		return null;
 	}
 
 	/**
@@ -488,7 +564,8 @@ class WebInstallerOptions extends WebInstallerPage {
 	 */
 	public function submit() {
 		$this->parent->setVarsFromRequest( [ '_RightsProfile', '_LicenseCode',
-			'wgEnableEmail', 'wgPasswordSender', 'wgEnableUploads', '_Logo',
+			'wgEnableEmail', 'wgPasswordSender', 'wgEnableUploads',
+			'_Logo1x', '_LogoWordmark', '_LogoTagline', '_LogoIcon',
 			'wgEnableUserEmail', 'wgEnotifUserTalk', 'wgEnotifWatchlist',
 			'wgEmailAuthentication', '_MainCacheType', '_MemCachedServers',
 			'wgUseInstantCommons', 'wgDefaultSkin' ] );
@@ -498,13 +575,6 @@ class WebInstallerOptions extends WebInstallerPage {
 		if ( !array_key_exists( $this->getVar( '_RightsProfile' ), $this->parent->rightsProfiles ) ) {
 			reset( $this->parent->rightsProfiles );
 			$this->setVar( '_RightsProfile', key( $this->parent->rightsProfiles ) );
-		}
-
-		// If this is empty, either the default got lost internally
-		// or the user blanked it
-		if ( strval( $this->getVar( '_Logo' ) ) === '' ) {
-			$this->parent->showError( 'config-install-logo-blank' );
-			$retVal = false;
 		}
 
 		$code = $this->getVar( '_LicenseCode' );

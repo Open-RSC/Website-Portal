@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Beta16",
 			"Darth Kule",
 			"Sannita"
@@ -14,8 +15,10 @@
 	"monobook-jumptonavigation": "Vai alla navigazione",
 	"monobook-jumptosearch": "Vai alla ricerca",
 	"monobook-more-actions": "Altro",
+	"cactions-mobile": "Azioni sulla pagina",
 	"monobook-cactions-label": "Azioni sulla pagina",
 	"monobook-notifications-link": "Notifiche ($1)",
 	"monobook-notifications-link-none": "Notifiche",
-	"monobook-responsive-label": "Attiva il design adattabile di MonoBook"
+	"monobook-view-history": "Cronologia",
+	"monobook-action-undelete": "Recupera {{PLURAL:$1|una versione|$1 versioni}}"
 }

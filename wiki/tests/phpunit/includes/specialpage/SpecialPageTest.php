@@ -1,7 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
-
 /**
  * @covers SpecialPage
  *
@@ -11,7 +9,7 @@ use MediaWiki\MediaWikiServices;
  */
 class SpecialPageTest extends MediaWikiIntegrationTestCase {
 
-	protected function setUp() : void {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->setContentLang( 'en' );
@@ -66,7 +64,7 @@ class SpecialPageTest extends MediaWikiIntegrationTestCase {
 		$user = User::newFromId( 0 );
 		$specialPage->getContext()->setUser( $user );
 		$specialPage->getContext()->setLanguage(
-			MediaWikiServices::getInstance()->getLanguageFactory()->getLanguage( 'en' ) );
+			$this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' ) );
 
 		$this->expectException( UserNotLoggedIn::class );
 		$this->expectExceptionMessage( $expected );

@@ -122,7 +122,7 @@ class InterwikiSearchResultSetWidget implements SearchResultSetWidget {
 	 * @return string HTML
 	 */
 	protected function footerHtml( $term, $iwPrefix ) {
-		$href = Title::makeTitle( NS_SPECIAL, 'Search', null, $iwPrefix )->getLocalURL(
+		$href = Title::makeTitle( NS_SPECIAL, 'Search', '', $iwPrefix )->getLocalURL(
 			[ 'search' => $term, 'fulltext' => 1 ]
 		);
 
@@ -132,7 +132,7 @@ class InterwikiSearchResultSetWidget implements SearchResultSetWidget {
 		$caption = $this->customCaptions[$iwPrefix] ??
 			$this->specialSearch->msg( 'search-interwiki-default', $parsed['host'] )->escaped();
 
-		$searchLink = Html::rawElement( 'em', null,
+		$searchLink = Html::rawElement( 'em', [],
 			Html::rawElement( 'a', [ 'href' => $href, 'target' => '_blank' ], $caption )
 		);
 
@@ -177,9 +177,9 @@ class InterwikiSearchResultSetWidget implements SearchResultSetWidget {
 
 		$iwIcon = new OOUI\IconWidget( [
 			'icon' => 'favicon'
-		 ] );
+		] );
 
-		 $iwIcon->setAttributes( [ 'style' => "background-image:url($iwIconUrl);" ] );
+		$iwIcon->setAttributes( [ 'style' => "background-image:url($iwIconUrl);" ] );
 
 		return $iwIcon;
 	}

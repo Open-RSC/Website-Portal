@@ -19,9 +19,11 @@
  */
 
 use MediaWiki\Content\IContentHandlerFactory;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\PageEditStash;
+use MediaWiki\User\UserIdentity;
 
 /**
  * Prepare an edit in shared cache so that it can be reused on edit
@@ -30,8 +32,8 @@ use MediaWiki\Storage\PageEditStash;
  * summary box. By the time of submission, the parse may have already
  * finished, and can be immediately used on page save. Certain parser
  * functions like {{REVISIONID}} or {{CURRENTTIME}} may cause the cache
- * to not be used on edit. Template and files used are check for changes
- * since the output was generated. The cache TTL is also kept low for sanity.
+ * to not be used on edit. Template and files used are checked for changes
+ * since the output was generated. The cache TTL is also kept low.
  *
  * @ingroup API
  * @since 1.25
@@ -50,6 +52,9 @@ class ApiStashEdit extends ApiBase {
 	/** @var IBufferingStatsdDataFactory */
 	private $statsdDataFactory;
 
+	/** @var WikiPageFactory */
+	private $wikiPageFactory;
+
 	/**
 	 * @param ApiMain $main
 	 * @param string $action
@@ -57,6 +62,7 @@ class ApiStashEdit extends ApiBase {
 	 * @param PageEditStash $pageEditStash
 	 * @param RevisionLookup $revisionLookup
 	 * @param IBufferingStatsdDataFactory $statsdDataFactory
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
 	public function __construct(
 		ApiMain $main,
@@ -64,7 +70,8 @@ class ApiStashEdit extends ApiBase {
 		IContentHandlerFactory $contentHandlerFactory,
 		PageEditStash $pageEditStash,
 		RevisionLookup $revisionLookup,
-		IBufferingStatsdDataFactory $statsdDataFactory
+		IBufferingStatsdDataFactory $statsdDataFactory,
+		WikiPageFactory $wikiPageFactory
 	) {
 		parent::__construct( $main, $action );
 
@@ -72,18 +79,20 @@ class ApiStashEdit extends ApiBase {
 		$this->pageEditStash = $pageEditStash;
 		$this->revisionLookup = $revisionLookup;
 		$this->statsdDataFactory = $statsdDataFactory;
+		$this->wikiPageFactory = $wikiPageFactory;
 	}
 
 	public function execute() {
 		$user = $this->getUser();
 		$params = $this->extractRequestParams();
 
-		if ( $user->isBot() ) { // sanity
+		if ( $user->isBot() ) {
 			$this->dieWithError( 'apierror-botsnotsupported' );
 		}
 
 		$page = $this->getTitleOrPageId( $params );
 		$title = $page->getTitle();
+		$this->getErrorFormatter()->setContextTitle( $title );
 
 		if ( !$this->contentHandlerFactory
 			->getContentHandler( $params['contentmodel'] )
@@ -119,7 +128,7 @@ class ApiStashEdit extends ApiBase {
 		$textContent = ContentHandler::makeContent(
 			$text, $title, $params['contentmodel'], $params['contentformat'] );
 
-		$page = WikiPage::factory( $title );
+		$page = $this->wikiPageFactory->newFromTitle( $title );
 		if ( $page->exists() ) {
 			// Page exists: get the merged content with the proposed change
 			$baseRev = $this->revisionLookup->getRevisionByPageId(
@@ -186,7 +195,8 @@ class ApiStashEdit extends ApiBase {
 		if ( $user->pingLimiter( 'stashedit' ) ) {
 			$status = 'ratelimited';
 		} else {
-			$status = $this->pageEditStash->parseAndCache( $page, $content, $user, $params['summary'] );
+			$updater = $page->newPageUpdater( $user );
+			$status = $this->pageEditStash->parseAndCache( $updater, $content, $user, $params['summary'] );
 			$this->pageEditStash->stashInputText( $text, $textHash );
 		}
 
@@ -204,14 +214,16 @@ class ApiStashEdit extends ApiBase {
 	/**
 	 * @param WikiPage $page
 	 * @param Content $content Edit content
-	 * @param User $user
+	 * @param UserIdentity $user
 	 * @param string $summary Edit summary
 	 * @return string ApiStashEdit::ERROR_* constant
 	 * @since 1.25
-	 * @deprecated Since 1.34
+	 * @deprecated Since 1.34, hard deprecated since 1.38
 	 */
-	public function parseAndStash( WikiPage $page, Content $content, User $user, $summary ) {
-		return $this->pageEditStash->parseAndCache( $page, $content, $user, $summary ?? '' );
+	public function parseAndStash( WikiPage $page, Content $content, UserIdentity $user, $summary ) {
+		wfDeprecated( __METHOD__, '1.34' );
+		$updater = $page->newPageUpdater( $user );
+		return $this->pageEditStash->parseAndCache( $updater, $content, $user, $summary ?? '' );
 	}
 
 	public function getAllowedParams() {

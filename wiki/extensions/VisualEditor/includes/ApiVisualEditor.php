@@ -4,15 +4,20 @@
  *
  * @file
  * @ingroup Extensions
- * @copyright 2011-2020 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2021 VisualEditor Team and others; see AUTHORS.txt
  * @license MIT
  */
 
 use MediaWiki\Block\DatabaseBlock;
+use MediaWiki\Content\Transform\ContentTransformer;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\RevisionRecord;
+use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\User\UserNameUtils;
+use MediaWiki\User\UserOptionsLookup;
+use MediaWiki\Watchlist\WatchlistManager;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiVisualEditor extends ApiBase {
@@ -22,15 +27,61 @@ class ApiVisualEditor extends ApiBase {
 	/** @var UserNameUtils */
 	private $userNameUtils;
 
+	/** @var Parser */
+	private $parser;
+
+	/** @var LinkRenderer */
+	private $linkRenderer;
+
+	/** @var userOptionsLookup */
+	private $userOptionsLookup;
+
+	/** @var WatchlistManager */
+	private $watchlistManager;
+
+	/** @var ContentTransformer */
+	private $contentTransformer;
+
+	/** @var SpecialPageFactory */
+	private $specialPageFactory;
+
+	/** @var ReadOnlyMode */
+	private $readOnlyMode;
+
 	/**
 	 * @param ApiMain $main
 	 * @param string $name
 	 * @param UserNameUtils $userNameUtils
+	 * @param Parser $parser
+	 * @param LinkRenderer $linkRenderer
+	 * @param UserOptionsLookup $userOptionsLookup
+	 * @param WatchlistManager $watchlistManager
+	 * @param ContentTransformer $contentTransformer
+	 * @param SpecialPageFactory $specialPageFactory
+	 * @param ReadOnlyMode $readOnlyMode
 	 */
-	public function __construct( ApiMain $main, $name, UserNameUtils $userNameUtils ) {
+	public function __construct(
+		ApiMain $main,
+		$name,
+		UserNameUtils $userNameUtils,
+		Parser $parser,
+		LinkRenderer $linkRenderer,
+		UserOptionsLookup $userOptionsLookup,
+		WatchlistManager $watchlistManager,
+		ContentTransformer $contentTransformer,
+		SpecialPageFactory $specialPageFactory,
+		ReadOnlyMode $readOnlyMode
+	) {
 		parent::__construct( $main, $name );
 		$this->setLogger( LoggerFactory::getInstance( 'VisualEditor' ) );
 		$this->userNameUtils = $userNameUtils;
+		$this->parser = $parser;
+		$this->linkRenderer = $linkRenderer;
+		$this->userOptionsLookup = $userOptionsLookup;
+		$this->watchlistManager = $watchlistManager;
+		$this->contentTransformer = $contentTransformer;
+		$this->specialPageFactory = $specialPageFactory;
+		$this->readOnlyMode = $readOnlyMode;
 	}
 
 	/**
@@ -41,13 +92,14 @@ class ApiVisualEditor extends ApiBase {
 	 * @return string The transformed wikitext
 	 */
 	protected function pstWikitext( Title $title, $wikitext ) {
-		return ContentHandler::makeContent( $wikitext, $title, CONTENT_MODEL_WIKITEXT )
-			->preSaveTransform(
-				$title,
-				$this->getUser(),
-				WikiPage::factory( $title )->makeParserOptions( $this->getContext() )
-			)
-			->serialize( 'text/x-wiki' );
+		$content = ContentHandler::makeContent( $wikitext, $title, CONTENT_MODEL_WIKITEXT );
+		return $this->contentTransformer->preSaveTransform(
+			$content,
+			$title,
+			$this->getUser(),
+			WikiPage::factory( $title )->makeParserOptions( $this->getContext() )
+		)
+		->serialize( 'text/x-wiki' );
 	}
 
 	/**
@@ -55,12 +107,24 @@ class ApiVisualEditor extends ApiBase {
 	 *
 	 * @param string $preload The title of the page to use as the preload content
 	 * @param string[] $params The preloadTransform parameters to pass in, if any
-	 * @param Title $contextTitle The contextual page title against which to parse the preload
 	 * @return string Wikitext content
 	 */
-	protected function getPreloadContent( $preload, $params, Title $contextTitle ) {
+	protected function getPreloadContent( $preload, $params ) {
 		$content = '';
 		$preloadTitle = Title::newFromText( $preload );
+
+		// Use SpecialMyLanguage redirect so that nonexistent translated pages can
+		// fall back to the corresponding page in a suitable language
+		if ( $preloadTitle && $preloadTitle->isSpecialPage() ) {
+			[ $spName, $spParam ] = $this->specialPageFactory->resolveAlias( $preloadTitle->getText() );
+			if ( $spName ) {
+				$specialPage = $this->specialPageFactory->getPage( $spName );
+				if ( $specialPage instanceof SpecialMyLanguage ) {
+					$preloadTitle = $specialPage->getRedirect( $spParam );
+				}
+			}
+		}
+
 		// Check for existence to avoid getting MediaWiki:Noarticletext
 		if (
 			$preloadTitle instanceof Title &&
@@ -76,7 +140,8 @@ class ApiVisualEditor extends ApiBase {
 			$content = $preloadPage->getContent( RevisionRecord::RAW );
 			$parserOptions = ParserOptions::newFromUser( $this->getUser() );
 
-			$content = $content->preloadTransform(
+			$content = $this->contentTransformer->preloadTransform(
+				$content,
 				$preloadTitle,
 				$parserOptions,
 				(array)$params
@@ -102,7 +167,9 @@ class ApiVisualEditor extends ApiBase {
 		if ( !$title ) {
 			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $params['page'] ) ] );
 		}
-		'@phan-var Title $title';
+		if ( !$title->canExist() ) {
+			$this->dieWithError( 'apierror-pagecannotexist' );
+		}
 
 		$parserParams = [];
 		if ( isset( $params['oldid'] ) ) {
@@ -114,12 +181,6 @@ class ApiVisualEditor extends ApiBase {
 			case 'parse':
 			case 'wikitext':
 			case 'metadata':
-				// Dirty hack to provide the correct context for edit notices
-				// FIXME Don't write to globals! Eww.
-				global $wgTitle;
-				$wgTitle = $title;
-				RequestContext::getMain()->setTitle( $title );
-
 				$preloaded = false;
 				$restbaseHeaders = null;
 
@@ -172,12 +233,16 @@ class ApiVisualEditor extends ApiBase {
 
 						$apiParams['rvsection'] = $section;
 
-						$api = new ApiMain(
+						$context = new DerivativeContext( $this->getContext() );
+						$context->setRequest(
 							new DerivativeRequest(
-								$this->getRequest(),
+								$context->getRequest(),
 								$apiParams,
-								/* was posted? */ false
-							),
+								/* was posted? */ true
+							)
+						);
+						$api = new ApiMain(
+							$context,
 							/* enable write? */ true
 						);
 						$api->execute();
@@ -223,7 +288,7 @@ class ApiVisualEditor extends ApiBase {
 							$preloaded = true;
 						} elseif ( $content === '' && !empty( $params['preload'] ) ) {
 							$content = $this->getPreloadContent(
-								$params['preload'], $params['preloadparams'], $title
+								$params['preload'], $params['preloadparams']
 							);
 							$preloaded = true;
 						}
@@ -249,7 +314,7 @@ class ApiVisualEditor extends ApiBase {
 						$eiTitle->exists() &&
 						$permissionManager->userCan( 'read', $user, $eiTitle )
 					) {
-						$notices['editintro'] = MediaWikiServices::getInstance()->getParser()->parse(
+						$notices['editintro'] = $this->parser->parse(
 							'<div class="mw-editintro">{{:' . $eiTitle->getFullText() . '}}</div>',
 							$title,
 							new ParserOptions( $user )
@@ -268,16 +333,16 @@ class ApiVisualEditor extends ApiBase {
 						'{{fullurl:Special:UserLogin|returnto={{FULLPAGENAMEE}}}}',
 						// Sign-up link
 						'{{fullurl:Special:UserLogin/signup|returnto={{FULLPAGENAMEE}}}}'
-					)->parseAsBlock();
+					)->page( $title )->parseAsBlock();
 				}
 
 				// Old revision notice
 				if ( $restoring ) {
-					$notices['editingold'] = $this->msg( 'editingold' )->parseAsBlock();
+					$notices['editingold'] = $this->msg( 'editingold' )->page( $title )->parseAsBlock();
 				}
 
-				if ( wfReadOnly() ) {
-					$notices['readonlywarning'] = $this->msg( 'readonlywarning', wfReadOnlyReason() );
+				if ( $this->readOnlyMode->isReadOnly() ) {
+					$notices['readonlywarning'] = $this->msg( 'readonlywarning', $this->readOnlyMode->getReason() );
 				}
 
 				// Edit notices about the page being protected (only used when we're allowed to edit it;
@@ -292,12 +357,12 @@ class ApiVisualEditor extends ApiBase {
 						wfExpandUrl( Skin::makeInternalOrExternalUrl(
 							$this->msg( 'helppage' )->inContentLanguage()->text()
 						) )
-					)->parseAsBlock();
+					)->page( $title )->parseAsBlock();
 
 					// Page protected from creation
 					if ( $title->getRestrictions( 'create' ) ) {
 						$protectionNotices['titleprotectedwarning'] =
-							$this->msg( 'titleprotectedwarning' )->parseAsBlock() .
+							$this->msg( 'titleprotectedwarning' )->page( $title )->parseAsBlock() .
 							$this->getLastLogEntry( $title, 'protect' );
 					}
 
@@ -335,7 +400,7 @@ class ApiVisualEditor extends ApiBase {
 							// Then it must be protected based on static groups (regular)
 							$noticeMsg = 'protectedpagewarning';
 						}
-						$protectionNotices[$noticeMsg] = $this->msg( $noticeMsg )->parseAsBlock() .
+						$protectionNotices[$noticeMsg] = $this->msg( $noticeMsg )->page( $title )->parseAsBlock() .
 							$this->getLastLogEntry( $title, 'protect' );
 					}
 
@@ -344,12 +409,13 @@ class ApiVisualEditor extends ApiBase {
 					if ( isset( $restrictions['edit'] ) ) {
 						$protectedClasses[] = ' mw-textarea-cprotected';
 
-						$notice = $this->msg( 'cascadeprotectedwarning', count( $sources ) )->parseAsBlock() . '<ul>';
+						$notice = $this->msg( 'cascadeprotectedwarning', count( $sources ) )
+							->page( $title )->parseAsBlock() . '<ul>';
 						// Unfortunately there's no nice way to get only the pages which cause
 						// editing to be restricted
 						foreach ( $sources as $source ) {
 							$notice .= "<li>" .
-								MediaWikiServices::getInstance()->getLinkRenderer()->makeLink( $source ) .
+								$this->linkRenderer->makeLink( $source ) .
 								"</li>";
 						}
 						$notice .= '</ul>';
@@ -359,15 +425,6 @@ class ApiVisualEditor extends ApiBase {
 
 				// Simplified EditPage::getEditPermissionErrors()
 				$permErrors = $permissionManager->getPermissionErrors( 'edit', $user, $title, 'full' );
-				if ( !$title->exists() ) {
-					$permErrors = array_merge(
-						$permErrors,
-						wfArrayDiff2(
-							$permissionManager->getPermissionErrors( 'create', $user, $title, 'full' ),
-							$permErrors
-						)
-					);
-				}
 
 				if ( $permErrors ) {
 					// Show generic permission errors, including page protection, user blocks, etc.
@@ -394,7 +451,7 @@ class ApiVisualEditor extends ApiBase {
 						$targetUsername,
 						/* allow IP users*/ false
 					);
-					$block = $targetUser->getBlock();
+					$block = $targetUser ? $targetUser->getBlock() : null;
 
 					$targetUserExists = ( $targetUser && $targetUser->isRegistered() );
 					if ( $targetUserExists && $targetUser->isHidden() &&
@@ -404,16 +461,17 @@ class ApiVisualEditor extends ApiBase {
 						// users, pretend like they don't exist at all. See T120883/T270453
 						$targetUserExists = false;
 					}
-					if ( !$targetUserExists && !User::isIP( $targetUsername ) ) {
+					if ( !$targetUserExists && !$this->userNameUtils->isIP( $targetUsername ) ) {
 						// User does not exist
-						$notices['userpage-userdoesnotexist'] = "<div class=\"mw-userpage-userdoesnotexist error\">\n" .
+						$notices['userpage-userdoesnotexist'] = Html::warningBox(
 							$this->msg( 'userpage-userdoesnotexist', wfEscapeWikiText( $targetUsername ) )
-								->parse() .
-							"\n</div>";
+								->parse(),
+							'mw-userpage-userdoesnotexist'
+						);
 					} elseif (
 						$block !== null &&
 						$block->getType() != DatabaseBlock::TYPE_AUTO &&
-						( $block->isSitewide() || $targetUser->isBlockedFrom( $title ) )
+						( $block->isSitewide() || $permissionManager->isBlockedFrom( $targetUser, $title ) )
 					) {
 						// Show log extract if the user is sitewide blocked or is partially
 						// blocked and not allowed to edit their user page or user talk page
@@ -448,14 +506,14 @@ class ApiVisualEditor extends ApiBase {
 				// By reference for some reason (T54466)
 				$editPage->importFormData( $req );
 				$states = [
-					'minor' => $user->getOption( 'minordefault' ) && $title->exists(),
-					'watch' => $user->getOption( 'watchdefault' ) ||
-						( $user->getOption( 'watchcreations' ) && !$title->exists() ) ||
-						$user->isWatched( $title ),
+					'minor' => $this->userOptionsLookup->getOption( $user, 'minordefault' ) && $title->exists(),
+					'watch' => $this->userOptionsLookup->getOption( $user, 'watchdefault' ) ||
+						( $this->userOptionsLookup->getOption( $user, 'watchcreations' ) && !$title->exists() ) ||
+						$this->watchlistManager->isWatched( $user, $title ),
 				];
 				$checkboxesDef = $editPage->getCheckboxesDefinition( $states );
 				$checkboxesMessagesList = [];
-				foreach ( $checkboxesDef as $name => &$options ) {
+				foreach ( $checkboxesDef as &$options ) {
 					if ( isset( $options['tooltip'] ) ) {
 						$checkboxesMessagesList[] = "accesskey-{$options['tooltip']}";
 						$checkboxesMessagesList[] = "tooltip-{$options['tooltip']}";
@@ -490,9 +548,16 @@ class ApiVisualEditor extends ApiBase {
 				// Remove empty notices (T265798)
 				$notices = array_filter( $notices );
 
+				$copyrightWarning = EditPage::getCopyrightWarning(
+					$title,
+					'parse',
+					$this
+				);
+
 				$result = [
 					'result' => 'success',
 					'notices' => $notices,
+					'copyrightWarning' => $copyrightWarning,
 					'checkboxesDef' => $checkboxesDef,
 					'checkboxesMessages' => $checkboxesMessages,
 					'protectedClasses' => implode( ' ', $protectedClasses ),
@@ -542,6 +607,9 @@ class ApiVisualEditor extends ApiBase {
 			case 'parsedoc':
 			case 'parsefragment':
 				$wikitext = $params['wikitext'];
+				if ( $wikitext === null ) {
+					$this->dieWithError( [ 'apierror-missingparam', 'wikitext' ] );
+				}
 				$bodyOnly = ( $params['paction'] === 'parsefragment' );
 				if ( $params['pst'] ) {
 					$wikitext = $this->pstWikitext( $title, $wikitext );
@@ -566,42 +634,40 @@ class ApiVisualEditor extends ApiBase {
 	/**
 	 * Check if the configured allowed namespaces include the specified namespace
 	 *
-	 * @param Config $config Configuration object
+	 * @param Config $config
 	 * @param int $namespaceId Namespace ID
 	 * @return bool
 	 */
 	public static function isAllowedNamespace( Config $config, $namespaceId ) {
-		$availableNamespaces = self::getAvailableNamespaceIds( $config );
-		return in_array( $namespaceId, $availableNamespaces );
+		return in_array( $namespaceId, self::getAvailableNamespaceIds( $config ) );
 	}
 
 	/**
 	 * Get a list of allowed namespace IDs
 	 *
-	 * @param Config $config Configuration object
-	 * @return array
+	 * @param Config $config
+	 * @return int[]
 	 */
 	public static function getAvailableNamespaceIds( Config $config ) {
-		$availableNamespaces =
-			// Note: existing numeric keys might exist, and so array_merge cannot be used
-			(array)$config->get( 'VisualEditorAvailableNamespaces' ) +
-			(array)ExtensionRegistry::getInstance()->getAttribute( 'VisualEditorAvailableNamespaces' );
-		return array_values( array_unique( array_map( function ( $namespace ) {
+		$namespaceInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
+		$configuredNamespaces = array_replace(
+			ExtensionRegistry::getInstance()->getAttribute( 'VisualEditorAvailableNamespaces' ),
+			$config->get( 'VisualEditorAvailableNamespaces' )
+		);
+		$normalized = [];
+		foreach ( $configuredNamespaces as $id => $enabled ) {
 			// Convert canonical namespace names to IDs
-			$nsInfo = MediaWikiServices::getInstance()->getNamespaceInfo();
-			$idFromName = $nsInfo->getCanonicalIndex( strtolower( $namespace ) );
-			if ( $idFromName !== null ) {
-				return $idFromName;
-			}
-			// Allow namespaces to be specified by ID as well
-			return $nsInfo->exists( $namespace ) ? $namespace : null;
-		}, array_keys( array_filter( $availableNamespaces ) ) ) ) );
+			$id = $namespaceInfo->getCanonicalIndex( strtolower( $id ) ) ?? $id;
+			$normalized[$id] = $enabled && $namespaceInfo->exists( $id );
+		}
+		ksort( $normalized );
+		return array_keys( array_filter( $normalized ) );
 	}
 
 	/**
 	 * Check if the configured allowed content models include the specified content model
 	 *
-	 * @param Config $config Configuration object
+	 * @param Config $config
 	 * @param string $contentModel Content model ID
 	 * @return bool
 	 */
@@ -610,8 +676,7 @@ class ApiVisualEditor extends ApiBase {
 			ExtensionRegistry::getInstance()->getAttribute( 'VisualEditorAvailableContentModels' ),
 			$config->get( 'VisualEditorAvailableContentModels' )
 		);
-		return isset( $availableContentModels[$contentModel] ) &&
-			$availableContentModels[$contentModel];
+		return (bool)( $availableContentModels[$contentModel] ?? false );
 	}
 
 	/**

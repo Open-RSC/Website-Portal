@@ -26,7 +26,7 @@ ve.ce.MWInlineImageNode = function VeCeMWInlineImageNode( model, config ) {
 		$image = $( [] );
 	} else {
 		if ( model.getAttribute( 'href' ) ) {
-			this.$element = $( '<a>' ).addClass( 'image' );
+			this.$element = $( '<a>' );
 			$image = $( '<img>' ).appendTo( this.$element );
 		} else {
 			this.$element = $image = $( '<img>' );
@@ -46,11 +46,7 @@ ve.ce.MWInlineImageNode = function VeCeMWInlineImageNode( model, config ) {
 		.attr( 'width', this.model.getAttribute( 'width' ) )
 		.attr( 'height', this.model.getAttribute( 'height' ) );
 
-	if ( this.$element.css( 'direction' ) === 'rtl' ) {
-		this.showHandles( [ 'sw' ] );
-	} else {
-		this.showHandles( [ 'se' ] );
-	}
+	this.showHandles( [ this.$element.css( 'direction' ) === 'rtl' ? 'sw' : 'se' ] );
 
 	this.updateClasses();
 

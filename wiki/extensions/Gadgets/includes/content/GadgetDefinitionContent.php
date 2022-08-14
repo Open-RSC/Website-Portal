@@ -20,8 +20,20 @@
  * @file
  */
 
+namespace MediaWiki\Extension\Gadgets\Content;
+
+use FormatJson;
+use JsonContent;
+use Status;
+
 class GadgetDefinitionContent extends JsonContent {
 
+	/** @var Status|null Cached validation result */
+	private $validation;
+
+	/**
+	 * @param string $text
+	 */
 	public function __construct( $text ) {
 		parent::__construct( $text, 'GadgetDefinition' );
 	}
@@ -44,39 +56,19 @@ class GadgetDefinitionContent extends JsonContent {
 	}
 
 	/**
-	 * Register some links
-	 *
-	 * @param Title $title
-	 * @param int $revId
-	 * @param ParserOptions $options
-	 * @param bool $generateHtml
-	 * @param ParserOutput &$output
-	 */
-	protected function fillParserOutput( Title $title, $revId,
-		ParserOptions $options, $generateHtml, ParserOutput &$output
-	) {
-		parent::fillParserOutput( $title, $revId, $options, $generateHtml, $output );
-		$assoc = $this->getAssocArray();
-		foreach ( [ 'scripts', 'styles' ] as $type ) {
-			foreach ( $assoc['module'][$type] as $page ) {
-				$title = Title::makeTitleSafe( NS_GADGET, $page );
-				if ( $title ) {
-					$output->addLink( $title );
-				}
-			}
-		}
-	}
-
-	/**
 	 * @return Status
 	 */
 	public function validate() {
-		if ( !parent::isValid() ) {
-			return $this->getData();
+		// Cache the validation result to avoid re-computations
+		if ( !$this->validation ) {
+			if ( !parent::isValid() ) {
+				$this->validation = $this->getData();
+			} else {
+				$validator = new GadgetDefinitionValidator();
+				$this->validation = $validator->validate( $this->getAssocArray() );
+			}
 		}
-
-		$validator = new GadgetDefinitionValidator();
-		return $validator->validate( $this->getAssocArray() );
+		return $this->validation;
 	}
 
 	/**
@@ -96,30 +88,13 @@ class GadgetDefinitionContent extends JsonContent {
 	}
 
 	/**
-	 * @param WikiPage $page
-	 * @param ParserOutput|null $parserOutput
-	 * @return DeferrableUpdate[]
+	 * @inheritDoc
 	 */
-	public function getDeletionUpdates( WikiPage $page, ParserOutput $parserOutput = null ) {
-		return array_merge(
-			parent::getDeletionUpdates( $page, $parserOutput ),
-			[ new GadgetDefinitionDeletionUpdate( $page->getTitle() ) ]
-		);
-	}
+	protected function objectTable( $val ) {
+		if ( $val instanceof GadgetDefinitionContentArmor ) {
+			return (string)$val;
+		}
 
-	/**
-	 * @param Title $title
-	 * @param Content|null $old
-	 * @param bool $recursive
-	 * @param ParserOutput|null $parserOutput
-	 * @return DataUpdate[]
-	 */
-	public function getSecondaryDataUpdates( Title $title, Content $old = null,
-		$recursive = true, ParserOutput $parserOutput = null
-	) {
-		return array_merge(
-			parent::getSecondaryDataUpdates( $title, $old, $recursive, $parserOutput ),
-			[ new GadgetDefinitionSecondaryDataUpdate( $title ) ]
-		);
+		return parent::objectTable( $val );
 	}
 }

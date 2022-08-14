@@ -21,6 +21,8 @@
  * @ingroup JobQueue
  */
 
+use MediaWiki\Deferred\LinksUpdate\LinksDeletionUpdate;
+use MediaWiki\Deferred\LinksUpdate\LinksUpdate;
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -46,7 +48,7 @@ class DeleteLinksJob extends Job {
 		$pageId = $this->params['pageId'];
 
 		// Serialize links updates by page ID so they see each others' changes
-		$scopedLock = LinksUpdate::acquirePageLock( wfGetDB( DB_MASTER ), $pageId, 'job' );
+		$scopedLock = LinksUpdate::acquirePageLock( wfGetDB( DB_PRIMARY ), $pageId, 'job' );
 		if ( $scopedLock === null ) {
 			$this->setLastError( 'LinksUpdate already running for this page, try again later.' );
 			return false;

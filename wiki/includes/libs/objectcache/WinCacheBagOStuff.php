@@ -31,6 +31,14 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 	public function __construct( array $params = [] ) {
 		$params['segmentationSize'] = $params['segmentationSize'] ?? INF;
 		parent::__construct( $params );
+
+		if ( PHP_SAPI === 'cli' ) {
+			$this->attrMap[self::ATTR_DURABILITY] = ini_get( 'wincache.enablecli' )
+				? self::QOS_DURABILITY_SCRIPT
+				: self::QOS_DURABILITY_NONE;
+		} else {
+			$this->attrMap[self::ATTR_DURABILITY] = self::QOS_DURABILITY_SERVICE;
+		}
 	}
 
 	protected function doGet( $key, $flags = 0, &$casToken = null ) {
@@ -74,7 +82,8 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 	}
 
 	protected function doSet( $key, $value, $exptime = 0, $flags = 0 ) {
-		$result = wincache_ucache_set( $key, $this->getSerialized( $value, $key ), $exptime );
+		$ttl = $this->getExpirationAsTTL( $exptime );
+		$result = wincache_ucache_set( $key, $this->getSerialized( $value, $key ), $ttl );
 
 		// false positive, wincache_ucache_set returns an empty array
 		// in some circumstances.
@@ -87,7 +96,8 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 			return false; // avoid warnings
 		}
 
-		$result = wincache_ucache_add( $key, $this->getSerialized( $value, $key ), $exptime );
+		$ttl = $this->getExpirationAsTTL( $exptime );
+		$result = wincache_ucache_add( $key, $this->getSerialized( $value, $key ), $ttl );
 
 		// false positive, wincache_ucache_add returns an empty array
 		// in some circumstances.
@@ -129,7 +139,36 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 		return $keyspace . ':' . implode( ':', $components );
 	}
 
+	public function doIncrWithInit( $key, $exptime, $step, $init, $flags ) {
+		if ( !wincache_lock( $key ) ) { // optimize with FIFO lock
+			return false;
+		}
+
+		$curValue = $this->doGet( $key );
+		if ( $curValue === false ) {
+			$newValue = $this->doSet( $key, $init, $exptime ) ? $init : false;
+		} elseif ( $this->isInteger( $curValue ) ) {
+			$sum = max( $curValue + $step, 0 );
+			$oldTTL = wincache_ucache_info( false, $key )["ucache_entries"][1]["ttl_seconds"];
+			$newValue = $this->doSet( $key, $sum, $oldTTL ) ? $sum : false;
+		} else {
+			$newValue = false;
+		}
+
+		wincache_unlock( $key );
+
+		return $newValue;
+	}
+
 	public function incr( $key, $value = 1, $flags = 0 ) {
+		return $this->doIncr( $key, $value, $flags );
+	}
+
+	public function decr( $key, $value = 1, $flags = 0 ) {
+		return $this->doIncr( $key, -$value, $flags );
+	}
+
+	private function doIncr( $key, $value = 1, $flags = 0 ) {
 		if ( !wincache_lock( $key ) ) { // optimize with FIFO lock
 			return false;
 		}
@@ -138,7 +177,7 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 		if ( $this->isInteger( $n ) ) {
 			$n = max( $n + (int)$value, 0 );
 			$oldTTL = wincache_ucache_info( false, $key )["ucache_entries"][1]["ttl_seconds"];
-			$this->set( $key, $n, $oldTTL );
+			$this->doSet( $key, $n, $oldTTL );
 		} else {
 			$n = false;
 		}
@@ -146,9 +185,5 @@ class WinCacheBagOStuff extends MediumSpecificBagOStuff {
 		wincache_unlock( $key );
 
 		return $n;
-	}
-
-	public function decr( $key, $value = 1, $flags = 0 ) {
-		return $this->incr( $key, -$value, $flags );
 	}
 }

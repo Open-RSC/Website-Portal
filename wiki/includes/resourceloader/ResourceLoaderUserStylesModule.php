@@ -20,6 +20,8 @@
  * @author Roan Kattouw
  */
 
+use MediaWiki\MediaWikiServices;
+
 /**
  * Module for user customizations styles.
  *
@@ -36,24 +38,27 @@ class ResourceLoaderUserStylesModule extends ResourceLoaderWikiModule {
 	 * @return array[]
 	 */
 	protected function getPages( ResourceLoaderContext $context ) {
-		$config = $this->getConfig();
-		$user = $context->getUserObj();
-		if ( $user->isAnon() ) {
+		$user = $context->getUserIdentity();
+		if ( !$user || !$user->isRegistered() ) {
 			return [];
 		}
 
-		// Use localised/normalised variant to ensure $excludepage matches
-		$userPage = $user->getUserPage()->getPrefixedDBkey();
+		$config = $this->getConfig();
 		$pages = [];
 
 		if ( $config->get( 'AllowUserCss' ) ) {
+			$titleFormatter = MediaWikiServices::getInstance()->getTitleFormatter();
+			// Use localised/normalised variant to ensure $excludepage matches
+			$userPage = $titleFormatter->getPrefixedDBkey( new TitleValue( NS_USER, $user->getName() ) );
 			$pages["$userPage/common.css"] = [ 'type' => 'style' ];
 			$pages["$userPage/" . $context->getSkin() . '.css'] = [ 'type' => 'style' ];
 		}
 
 		// User group pages are maintained site-wide and enabled with site JS/CSS.
 		if ( $config->get( 'UseSiteCss' ) ) {
-			foreach ( $user->getEffectiveGroups() as $group ) {
+			$effectiveGroups = MediaWikiServices::getInstance()->getUserGroupManager()
+				->getUserEffectiveGroups( $user );
+			foreach ( $effectiveGroups as $group ) {
 				if ( $group == '*' ) {
 					continue;
 				}
@@ -83,6 +88,6 @@ class ResourceLoaderUserStylesModule extends ResourceLoaderWikiModule {
 	 * @return string
 	 */
 	public function getGroup() {
-		return 'user';
+		return self::GROUP_USER;
 	}
 }

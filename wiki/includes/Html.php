@@ -22,6 +22,7 @@
  *
  * @file
  */
+
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -47,59 +48,57 @@ use MediaWiki\MediaWikiServices;
  * @since 1.16
  */
 class Html {
-	/** @var string[] List of void elements from HTML5, section 8.1.2 as of 2016-09-19 */
+	/** @var bool[] List of void elements from HTML5, section 8.1.2 as of 2016-09-19 */
 	private static $voidElements = [
-		'area',
-		'base',
-		'br',
-		'col',
-		'embed',
-		'hr',
-		'img',
-		'input',
-		'keygen',
-		'link',
-		'meta',
-		'param',
-		'source',
-		'track',
-		'wbr',
+		'area' => true,
+		'base' => true,
+		'br' => true,
+		'col' => true,
+		'embed' => true,
+		'hr' => true,
+		'img' => true,
+		'input' => true,
+		'keygen' => true,
+		'link' => true,
+		'meta' => true,
+		'param' => true,
+		'source' => true,
+		'track' => true,
+		'wbr' => true,
 	];
 
 	/**
 	 * Boolean attributes, which may have the value omitted entirely.  Manually
 	 * collected from the HTML5 spec as of 2011-08-12.
-	 * @var string[]
+	 * @var bool[]
 	 */
 	private static $boolAttribs = [
-		'async',
-		'autofocus',
-		'autoplay',
-		'checked',
-		'controls',
-		'default',
-		'defer',
-		'disabled',
-		'formnovalidate',
-		'hidden',
-		'ismap',
-		'itemscope',
-		'loop',
-		'multiple',
-		'muted',
-		'novalidate',
-		'open',
-		'pubdate',
-		'readonly',
-		'required',
-		'reversed',
-		'scoped',
-		'seamless',
-		'selected',
-		'truespeed',
-		'typemustmatch',
-		// HTML5 Microdata
-		'itemscope',
+		'async' => true,
+		'autofocus' => true,
+		'autoplay' => true,
+		'checked' => true,
+		'controls' => true,
+		'default' => true,
+		'defer' => true,
+		'disabled' => true,
+		'formnovalidate' => true,
+		'hidden' => true,
+		'ismap' => true,
+		'itemscope' => true,
+		'loop' => true,
+		'multiple' => true,
+		'muted' => true,
+		'novalidate' => true,
+		'open' => true,
+		'pubdate' => true,
+		'readonly' => true,
+		'required' => true,
+		'reversed' => true,
+		'scoped' => true,
+		'seamless' => true,
+		'selected' => true,
+		'truespeed' => true,
+		'typemustmatch' => true,
 	];
 
 	/**
@@ -108,11 +107,12 @@ class Html {
 	 * @param array $attrs HTML attributes in an associative array
 	 * @param string[] $modifiers classes to add to the button
 	 * @see https://tools.wmflabs.org/styleguide/desktop/index.html for guidance on available modifiers
-	 * @return array $attrs A modified attribute array
+	 * @return array Modified attributes array
 	 */
 	public static function buttonAttributes( array $attrs, array $modifiers = [] ) {
-		global $wgUseMediaWikiUIEverywhere;
-		if ( $wgUseMediaWikiUIEverywhere ) {
+		$useMediaWikiUIEverywhere = MediaWikiServices::getInstance()
+			->getMainConfig()->get( 'UseMediaWikiUIEverywhere' );
+		if ( $useMediaWikiUIEverywhere ) {
 			if ( isset( $attrs['class'] ) ) {
 				if ( is_array( $attrs['class'] ) ) {
 					$attrs['class'][] = 'mw-ui-button';
@@ -135,11 +135,12 @@ class Html {
 	 * and apply a set of default attributes.
 	 * Removes size attribute when $wgUseMediaWikiUIEverywhere enabled.
 	 * @param array $attrs An attribute array.
-	 * @return array $attrs A modified attribute array
+	 * @return array Modified attributes array
 	 */
 	public static function getTextInputAttributes( array $attrs ) {
-		global $wgUseMediaWikiUIEverywhere;
-		if ( $wgUseMediaWikiUIEverywhere ) {
+		$useMediaWikiUIEverywhere = MediaWikiServices::getInstance()
+			->getMainConfig()->get( 'UseMediaWikiUIEverywhere' );
+		if ( $useMediaWikiUIEverywhere ) {
 			if ( isset( $attrs['class'] ) ) {
 				if ( is_array( $attrs['class'] ) ) {
 					$attrs['class'][] = 'mw-ui-input';
@@ -211,7 +212,7 @@ class Html {
 	 */
 	public static function rawElement( $element, $attribs = [], $contents = '' ) {
 		$start = self::openElement( $element, $attribs );
-		if ( in_array( $element, self::$voidElements ) ) {
+		if ( isset( self::$voidElements[$element] ) ) {
 			// Silly XML.
 			return substr( $start, 0, -1 ) . '/>';
 		} else {
@@ -266,33 +267,33 @@ class Html {
 		// Remove invalid input types
 		if ( $element == 'input' ) {
 			$validTypes = [
-				'hidden',
-				'text',
-				'password',
-				'checkbox',
-				'radio',
-				'file',
-				'submit',
-				'image',
-				'reset',
-				'button',
+				'hidden' => true,
+				'text' => true,
+				'password' => true,
+				'checkbox' => true,
+				'radio' => true,
+				'file' => true,
+				'submit' => true,
+				'image' => true,
+				'reset' => true,
+				'button' => true,
 
 				// HTML input types
-				'datetime',
-				'datetime-local',
-				'date',
-				'month',
-				'time',
-				'week',
-				'number',
-				'range',
-				'email',
-				'url',
-				'search',
-				'tel',
-				'color',
+				'datetime' => true,
+				'datetime-local' => true,
+				'date' => true,
+				'month' => true,
+				'time' => true,
+				'week' => true,
+				'number' => true,
+				'range' => true,
+				'email' => true,
+				'url' => true,
+				'search' => true,
+				'tel' => true,
+				'color' => true,
 			];
-			if ( isset( $attribs['type'] ) && !in_array( $attribs['type'], $validTypes ) ) {
+			if ( isset( $attribs['type'] ) && !isset( $validTypes[$attribs['type']] ) ) {
 				unset( $attribs['type'] );
 			}
 		}
@@ -371,25 +372,20 @@ class Html {
 			'textarea' => [ 'wrap' => 'soft' ],
 		];
 
-		$element = strtolower( $element );
-
 		foreach ( $attribs as $attrib => $value ) {
-			$lcattrib = strtolower( $attrib );
-			if ( is_array( $value ) ) {
-				$value = implode( ' ', $value );
-			} else {
-				$value = strval( $value );
-			}
-
-			// Simple checks using $attribDefaults
-			if ( isset( $attribDefaults[$element][$lcattrib] )
-				&& $attribDefaults[$element][$lcattrib] == $value
-			) {
-				unset( $attribs[$attrib] );
-			}
-
-			if ( $lcattrib == 'class' && $value == '' ) {
-				unset( $attribs[$attrib] );
+			if ( $attrib === 'class' ) {
+				if ( $value === '' || $value === [] || $value === [ '' ] ) {
+					unset( $attribs[$attrib] );
+				}
+			} elseif ( isset( $attribDefaults[$element][$attrib] ) ) {
+				if ( is_array( $value ) ) {
+					$value = implode( ' ', $value );
+				} else {
+					$value = strval( $value );
+				}
+				if ( $attribDefaults[$element][$attrib] == $value ) {
+					unset( $attribs[$attrib] );
+				}
 			}
 		}
 
@@ -490,7 +486,7 @@ class Html {
 
 			// For boolean attributes, support [ 'foo' ] instead of
 			// requiring [ 'foo' => 'meaningless' ].
-			if ( is_int( $key ) && in_array( strtolower( $value ), self::$boolAttribs ) ) {
+			if ( is_int( $key ) && isset( self::$boolAttribs[strtolower( $value )] ) ) {
 				$key = $value;
 			}
 
@@ -501,23 +497,23 @@ class Html {
 			// https://www.w3.org/TR/html401/index/attributes.html ("space-separated")
 			// https://www.w3.org/TR/html5/index.html#attributes-1 ("space-separated")
 			$spaceSeparatedListAttributes = [
-				'class', // html4, html5
-				'accesskey', // as of html5, multiple space-separated values allowed
+				'class' => true, // html4, html5
+				'accesskey' => true, // as of html5, multiple space-separated values allowed
 				// html4-spec doesn't document rel= as space-separated
 				// but has been used like that and is now documented as such
 				// in the html5-spec.
-				'rel',
+				'rel' => true,
 			];
 
 			// Specific features for attributes that allow a list of space-separated values
-			if ( in_array( $key, $spaceSeparatedListAttributes ) ) {
+			if ( isset( $spaceSeparatedListAttributes[$key] ) ) {
 				// Apply some normalization and remove duplicates
 
 				// Convert into correct array. Array can contain space-separated
 				// values. Implode/explode to get those into the main array as well.
 				if ( is_array( $value ) ) {
 					// If input wasn't an array, we can skip this step
-					$newValue = [];
+					$arrayValue = [];
 					foreach ( $value as $k => $v ) {
 						if ( is_string( $v ) ) {
 							// String values should be normal `[ 'foo' ]`
@@ -526,34 +522,55 @@ class Html {
 								// As a special case don't set 'foo' if a
 								// separate 'foo' => true/false exists in the array
 								// keys should be authoritative
-								$newValue[] = $v;
+								foreach ( explode( ' ', $v ) as $part ) {
+									// Normalize spacing by fixing up cases where people used
+									// more than 1 space and/or a trailing/leading space
+									if ( $part !== '' && $part !== ' ' ) {
+										$arrayValue[] = $part;
+									}
+								}
 							}
 						} elseif ( $v ) {
 							// If the value is truthy but not a string this is likely
 							// an [ 'foo' => true ], falsy values don't add strings
-							$newValue[] = $k;
+							$arrayValue[] = $k;
 						}
 					}
-					$value = implode( ' ', $newValue );
+				} else {
+					$arrayValue = explode( ' ', $value );
+					// Normalize spacing by fixing up cases where people used
+					// more than 1 space and/or a trailing/leading space
+					$arrayValue = array_diff( $arrayValue, [ '', ' ' ] );
 				}
-				$value = explode( ' ', $value );
-
-				// Normalize spacing by fixing up cases where people used
-				// more than 1 space and/or a trailing/leading space
-				$value = array_diff( $value, [ '', ' ' ] );
 
 				// Remove duplicates and create the string
-				$value = implode( ' ', array_unique( $value ) );
+				$value = implode( ' ', array_unique( $arrayValue ) );
+
+				// Optimization: Skip below boolAttribs check and jump straight
+				// to its `else` block. The current $spaceSeparatedListAttributes
+				// block is mutually exclusive with $boolAttribs.
+				// phpcs:ignore Generic.PHP.DiscourageGoto
+				goto not_bool; // NOSONAR
 			} elseif ( is_array( $value ) ) {
 				throw new MWException( "HTML attribute $key can not contain a list of values" );
 			}
 
-			$quote = '"';
-
-			if ( in_array( $key, self::$boolAttribs ) ) {
+			if ( isset( self::$boolAttribs[$key] ) ) {
 				$ret .= " $key=\"\"";
 			} else {
-				$ret .= " $key=$quote" . Sanitizer::encodeAttribute( $value ) . $quote;
+				// phpcs:ignore Generic.PHP.DiscourageGoto
+				not_bool:
+				// Inlined from Sanitizer::encodeAttribute() for improved performance
+				$encValue = htmlspecialchars( $value, ENT_QUOTES );
+				// Whitespace is normalized during attribute decoding,
+				// so if we've been passed non-spaces we must encode them
+				// ahead of time or they won't be preserved.
+				$encValue = strtr( $encValue, [
+					"\n" => '&#10;',
+					"\r" => '&#13;',
+					"\t" => '&#9;',
+				] );
+				$ret .= " $key=\"$encValue\"";
 			}
 		}
 		return $ret;
@@ -671,10 +688,22 @@ class Html {
 		$attribs['type'] = $type;
 		$attribs['value'] = $value;
 		$attribs['name'] = $name;
-		if ( in_array( $type, [ 'text', 'search', 'email', 'password', 'number' ] ) ) {
+		$textInputAttributes = [
+			'text' => true,
+			'search' => true,
+			'email' => true,
+			'password' => true,
+			'number' => true
+		];
+		if ( isset( $textInputAttributes[$type] ) ) {
 			$attribs = self::getTextInputAttributes( $attribs );
 		}
-		if ( in_array( $type, [ 'button', 'reset', 'submit' ] ) ) {
+		$buttonAttributes = [
+			'button' => true,
+			'reset' => true,
+			'submit' => true
+		];
+		if ( isset( $buttonAttributes[$type] ) ) {
 			$attribs = self::buttonAttributes( $attribs );
 		}
 		return self::element( 'input', $attribs );
@@ -715,7 +744,26 @@ class Html {
 		if ( $heading !== '' ) {
 			$html = self::element( 'h2', [], $heading ) . $html;
 		}
+		if ( is_array( $className ) ) {
+			$className[] = 'mw-message-box';
+		} else {
+			$className .= ' mw-message-box';
+		}
 		return self::rawElement( 'div', [ 'class' => $className ], $html );
+	}
+
+	/**
+	 * Return the HTML for a notice message box.
+	 * @since 1.38
+	 * @param string $html of contents of notice
+	 * @param string|array $className corresponding to notice
+	 * @return string of HTML representing the notice
+	 */
+	public static function noticeBox( $html, $className ) {
+		return self::messageBox( $html, [
+			'mw-message-box-notice',
+			$className
+		] );
 	}
 
 	/**
@@ -727,7 +775,12 @@ class Html {
 	 * @return string of HTML representing a warning box.
 	 */
 	public static function warningBox( $html, $className = '' ) {
-		return self::messageBox( $html, [ 'warningbox', $className ] );
+		return self::messageBox( $html, [
+			'mw-message-box-warning',
+			// Deprecated class kept for cached HTML. Will be removed shortly.
+			'warningbox',
+			$className
+		] );
 	}
 
 	/**
@@ -740,7 +793,12 @@ class Html {
 	 * @return string of HTML representing an error box.
 	 */
 	public static function errorBox( $html, $heading = '', $className = '' ) {
-		return self::messageBox( $html, [ 'errorbox', $className ], $heading );
+		return self::messageBox( $html, [
+			'mw-message-box-error',
+			// Deprecated class kept for cached HTML. Will be removed shortly.
+			'errorbox',
+			$className
+		], $heading );
 	}
 
 	/**
@@ -752,7 +810,12 @@ class Html {
 	 * @return string of HTML representing a success box.
 	 */
 	public static function successBox( $html, $className = '' ) {
-		return self::messageBox( $html, [ 'successbox', $className ] );
+		return self::messageBox( $html, [
+			'mw-message-box-success',
+			// Deprecated class `successbox`. Kept for gadgets/user styles.
+			'successbox',
+			$className
+		] );
 	}
 
 	/**
@@ -967,10 +1030,12 @@ class Html {
 	 */
 	public static function htmlHeader( array $attribs = [] ) {
 		$ret = '';
+		$mainConfig = MediaWikiServices::getInstance()->getMainConfig();
+		$html5Version = $mainConfig->get( 'Html5Version' );
+		$mimeType = $mainConfig->get( 'MimeType' );
+		$xhtmlNamespaces = $mainConfig->get( 'XhtmlNamespaces' );
 
-		global $wgHtml5Version, $wgMimeType, $wgXhtmlNamespaces;
-
-		$isXHTML = self::isXmlMimeType( $wgMimeType );
+		$isXHTML = self::isXmlMimeType( $mimeType );
 
 		if ( $isXHTML ) { // XHTML5
 			// XML MIME-typed markup should have an xml header.
@@ -981,15 +1046,15 @@ class Html {
 			$attribs['xmlns'] = 'http://www.w3.org/1999/xhtml';
 
 			// And support custom namespaces
-			foreach ( $wgXhtmlNamespaces as $tag => $ns ) {
+			foreach ( $xhtmlNamespaces as $tag => $ns ) {
 				$attribs["xmlns:$tag"] = $ns;
 			}
 		} else { // HTML5
 			$ret .= "<!DOCTYPE html>\n";
 		}
 
-		if ( $wgHtml5Version ) {
-			$attribs['version'] = $wgHtml5Version;
+		if ( $html5Version ) {
+			$attribs['version'] = $html5Version;
 		}
 
 		$ret .= self::openElement( 'html', $attribs );
@@ -1000,7 +1065,7 @@ class Html {
 	/**
 	 * Determines if the given MIME type is xml.
 	 *
-	 * @param string $mimetype MIME type
+	 * @param string $mimetype
 	 * @return bool
 	 */
 	public static function isXmlMimeType( $mimetype ) {
@@ -1009,44 +1074,6 @@ class Html {
 		# * application/xml
 		# * Any MIME type with a subtype ending in +xml (this implicitly includes application/xhtml+xml)
 		return (bool)preg_match( '!^(text|application)/xml$|^.+/.+\+xml$!', $mimetype );
-	}
-
-	/**
-	 * Get HTML for an information message box with an icon.
-	 *
-	 * @internal For use by the WebInstaller class only.
-	 * @deprecated since 1.36
-	 *
-	 * @param string $rawHtml HTML
-	 * @param string $icon Path to icon file (used as 'src' attribute)
-	 * @param string $alt Alternate text for the icon
-	 * @param string $class Additional class name to add to the wrapper div
-	 * @return string HTML
-	 */
-	public static function infoBox( $rawHtml, $icon, $alt, $class = '' ) {
-		wfDeprecated( __METHOD__, '1.36' );
-
-		$s = self::openElement( 'div', [ 'class' => "mw-infobox $class" ] );
-
-		$s .= self::openElement( 'div', [ 'class' => 'mw-infobox-left' ] ) .
-				self::element( 'img',
-					[
-						'src' => $icon,
-						'alt' => $alt,
-					]
-				) .
-				self::closeElement( 'div' );
-
-		$s .= self::openElement( 'div', [ 'class' => 'mw-infobox-right' ] ) .
-				$rawHtml .
-				self::closeElement( 'div' );
-		$s .= self::element( 'div', [ 'style' => 'clear: left;' ], ' ' );
-
-		$s .= self::closeElement( 'div' );
-
-		$s .= self::element( 'div', [ 'style' => 'clear: left;' ], ' ' );
-
-		return $s;
 	}
 
 	/**

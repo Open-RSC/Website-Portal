@@ -116,7 +116,7 @@ class SpecialPageLanguage extends FormSpecialPage {
 
 		// Building a language selector
 		$userLang = $this->getLanguage()->getCode();
-		$languages = $this->languageNameUtils->getLanguageNames( $userLang, 'mwfile' );
+		$languages = $this->languageNameUtils->getLanguageNames( $userLang, LanguageNameUtils::SUPPORTED );
 		$options = [];
 		foreach ( $languages as $code => $name ) {
 			$options["$code - $name"] = $code;
@@ -197,7 +197,7 @@ class SpecialPageLanguage extends FormSpecialPage {
 			$newLanguage,
 			$data['reason'] ?? '',
 			[],
-			$this->loadBalancer->getConnectionRef( ILoadBalancer::DB_MASTER )
+			$this->loadBalancer->getConnectionRef( ILoadBalancer::DB_PRIMARY )
 		);
 	}
 
@@ -228,7 +228,7 @@ class SpecialPageLanguage extends FormSpecialPage {
 		}
 
 		// Load the page language from DB
-		$dbw = $dbw ?? wfGetDB( DB_MASTER );
+		$dbw = $dbw ?? wfGetDB( DB_PRIMARY );
 		$oldLanguage = $dbw->selectField(
 			'page',
 			'page_lang',

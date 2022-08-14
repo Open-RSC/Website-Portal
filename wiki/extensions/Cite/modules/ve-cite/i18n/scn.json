@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Elitre",
 			"Elitre82",
 			"Gazeb",
@@ -12,11 +13,15 @@
 		]
 	},
 	"visualeditor-cite-tool-name-book": "Libbru",
+	"visualeditor-cite-tool-name-news": "Nutizzi",
+	"visualeditor-cite-tool-name-web": "Situ web",
+	"cite-ve-citationneeded-button": "Agghiunci na citazzioni",
 	"cite-ve-dialog-reference-options-group-label": "Usa stu gruppu",
 	"cite-ve-dialog-reference-options-name-label": "Riutilizzari cu stu nomu",
 	"cite-ve-dialog-reference-options-section": "Opzioni",
 	"cite-ve-dialog-reference-title": "Rifirenza",
 	"cite-ve-dialog-referenceslist-title": "Elencu rifirimenti",
+	"cite-ve-dialogbutton-citation-educationpopup-title": "Citazzioni",
 	"cite-ve-dialogbutton-reference-tooltip": "Sìmplici",
 	"cite-ve-dialogbutton-referenceslist-tooltip": "Elencu rifirimenti",
 	"cite-ve-reference-input-placeholder": "Cerca ntê citazzioni attuali",

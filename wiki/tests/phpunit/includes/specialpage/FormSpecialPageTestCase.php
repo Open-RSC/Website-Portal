@@ -3,6 +3,7 @@
 // phpcs:disable MediaWiki.Commenting.FunctionComment.ObjectTypeHintParam
 
 use MediaWiki\Block\DatabaseBlock;
+use MediaWiki\DAO\WikiAwareEntity;
 
 /**
  * Factory for handling the special page list and generating SpecialPage objects.
@@ -34,12 +35,13 @@ abstract class FormSpecialPageTestCase extends SpecialPageTestBase {
 		$checkExecutePermissions = $this->getMethod( $special, 'checkExecutePermissions' );
 
 		$user = $this->getMockBuilder( User::class )
-			->setMethods( [ 'getBlock' ] )
+			->onlyMethods( [ 'getBlock', 'getWikiId' ] )
 			->getMock();
+		$user->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
 		$user->method( 'getBlock' )
 			->willReturn( new DatabaseBlock( [
 				'address' => '127.0.8.1',
-				'by' => $user->getId(),
+				'by' => $user,
 				'reason' => 'sitewide block',
 				'timestamp' => time(),
 				'sitewide' => true,
@@ -58,12 +60,13 @@ abstract class FormSpecialPageTestCase extends SpecialPageTestBase {
 		$checkExecutePermissions = $this->getMethod( $special, 'checkExecutePermissions' );
 
 		$user = $this->getMockBuilder( User::class )
-			->setMethods( [ 'getBlock' ] )
+			->onlyMethods( [ 'getBlock', 'getWikiId' ] )
 			->getMock();
+		$user->method( 'getWikiId' )->willReturn( WikiAwareEntity::LOCAL );
 		$user->method( 'getBlock' )
 			->willReturn( new DatabaseBlock( [
 				'address' => '127.0.8.1',
-				'by' => $user->getId(),
+				'by' => $user,
 				'reason' => 'partial block',
 				'timestamp' => time(),
 				'sitewide' => false,

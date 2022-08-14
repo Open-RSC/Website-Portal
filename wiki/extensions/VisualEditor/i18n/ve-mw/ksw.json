@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Jaeminlovetaejoon",
 			"SawJaemin"
 		]
@@ -9,5 +10,8 @@
 	"visualeditor-ca-createsource": "တ့ထီၣ် source",
 	"visualeditor-ca-editsource": "အဲၣ်ဒံၣ်တၢ်ခီၣ်ထံး",
 	"visualeditor-ca-editsource-section": "အဲၣ်ဒံၣ်တၢ်ခီၣ်ထံး",
-	"visualeditor-descriptionpagelink": "Project:ဖ့စူလ်အဲးဒံးထၢ"
+	"visualeditor-descriptionpagelink": "Project:ဖ့စူလ်အဲးဒံးထၢ",
+	"visualeditor-dialog-media-searchselect": "ဃုထၢ",
+	"visualeditor-dialog-meta-categories-category": "အကရူၢ်",
+	"visualeditor-dialog-meta-categories-missing": "ခဲထၢၤကိးရံာ်တခါအံၤအတၢ်ၡဲပၠးတအိၣ်ဘၣ်"
 }

@@ -44,7 +44,7 @@ class AllMessagesTablePager extends TablePager {
 	protected $foreign;
 
 	/**
-	 * @var string
+	 * @var string|false
 	 */
 	protected $prefix;
 
@@ -67,20 +67,20 @@ class AllMessagesTablePager extends TablePager {
 	private $localisationCache;
 
 	/**
-	 * @param IContextSource|null $context
-	 * @param FormOptions $opts
-	 * @param LinkRenderer $linkRenderer
+	 * @param IContextSource $context
 	 * @param Language $contentLanguage
-	 * @param LocalisationCache $localisationCache
+	 * @param LinkRenderer $linkRenderer
 	 * @param ILoadBalancer $loadBalancer
+	 * @param LocalisationCache $localisationCache
+	 * @param FormOptions $opts
 	 */
 	public function __construct(
-		?IContextSource $context,
-		FormOptions $opts,
-		LinkRenderer $linkRenderer,
+		IContextSource $context,
 		Language $contentLanguage,
+		LinkRenderer $linkRenderer,
+		ILoadBalancer $loadBalancer,
 		LocalisationCache $localisationCache,
-		ILoadBalancer $loadBalancer
+		FormOptions $opts
 	) {
 		// Set database before parent constructor to avoid setting it there with wfGetDB
 		$this->mDb = $loadBalancer->getConnectionRef( ILoadBalancer::DB_REPLICA );
@@ -162,14 +162,13 @@ class AllMessagesTablePager extends TablePager {
 		// FIXME: This function should be moved to Language:: or something.
 		// Fallback to global state, if not provided
 		$dbr = $dbr ?? wfGetDB( DB_REPLICA );
-
 		$res = $dbr->select( 'page',
 			[ 'page_namespace', 'page_title' ],
 			[ 'page_namespace' => [ NS_MEDIAWIKI, NS_MEDIAWIKI_TALK ] ],
 			__METHOD__,
-			[ 'USE INDEX' => 'name_title' ]
+			[ 'USE INDEX' => 'page_name_title' ]
 		);
-		$xNames = array_flip( $messageNames );
+		$xNames = array_fill_keys( $messageNames, true );
 
 		$pageFlags = $talkFlags = [];
 
@@ -247,9 +246,8 @@ class AllMessagesTablePager extends TablePager {
 	}
 
 	protected function getStartBody() {
-		$tableClass = $this->getTableClass();
 		return Xml::openElement( 'table', [
-			'class' => "mw-datatable $tableClass",
+			'class' => $this->getTableClass(),
 			'id' => 'mw-allmessagestable'
 		] ) .
 		"\n" .
@@ -274,7 +272,7 @@ class AllMessagesTablePager extends TablePager {
 
 	/**
 	 * @param string $field
-	 * @param string $value
+	 * @param string|null $value
 	 * @return string HTML
 	 */
 	public function formatValue( $field, $value ) {

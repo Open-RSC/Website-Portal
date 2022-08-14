@@ -3,16 +3,16 @@
 use MediaWiki\Cache\LinkBatchFactory;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Revision\RevisionLookup;
 use MediaWiki\Revision\RevisionRecord;
-use MediaWiki\User\UserFactory;
-use MediaWiki\User\UserIdentity;
+use MediaWiki\Tests\Unit\DummyServicesTrait;
 use MediaWiki\User\UserIdentityValue;
 use PHPUnit\Framework\MockObject\MockObject;
-use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\DBConnRef;
+use Wikimedia\Rdbms\ILoadBalancer;
 use Wikimedia\Rdbms\LBFactory;
-use Wikimedia\Rdbms\LoadBalancer;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -22,56 +22,50 @@ use Wikimedia\TestingAccessWrapper;
  * @covers WatchedItemStore
  */
 class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
+	use DummyServicesTrait;
 	use MockTitleTrait;
 
 	/**
-	 * @return MockObject|IDatabase
+	 * @return MockObject&DBConnRef
 	 */
 	private function getMockDb() {
-		return $this->createMock( IDatabase::class );
+		return $this->createMock( DBConnRef::class );
 	}
 
 	/**
-	 * @param IDatabase $mockDb
+	 * @param DBConnRef $mockDb
 	 * @param string|null $expectedConnectionType
-	 * @return MockObject|LoadBalancer
+	 * @return MockObject&ILoadBalancer
 	 */
 	private function getMockLoadBalancer(
-		$mockDb,
+		DBConnRef $mockDb,
 		$expectedConnectionType = null
 	) {
-		$mock = $this->getMockBuilder( LoadBalancer::class )
-			->disableOriginalConstructor()
-			->getMock();
+		$mock = $this->createMock( ILoadBalancer::class );
 		if ( $expectedConnectionType !== null ) {
-			$mock->expects( $this->any() )
-				->method( 'getConnectionRef' )
+			$mock->method( 'getConnectionRef' )
 				->with( $expectedConnectionType )
-				->will( $this->returnValue( $mockDb ) );
+				->willReturn( $mockDb );
 		} else {
-			$mock->expects( $this->any() )
-				->method( 'getConnectionRef' )
-				->will( $this->returnValue( $mockDb ) );
+			$mock->method( 'getConnectionRef' )
+				->willReturn( $mockDb );
 		}
 		return $mock;
 	}
 
 	/**
-	 * @param IDatabase $mockDb
+	 * @param DBConnRef $mockDb
 	 * @param string|null $expectedConnectionType
-	 * @return MockObject|LBFactory
+	 * @return MockObject&LBFactory
 	 */
 	private function getMockLBFactory(
-		$mockDb,
+		DBConnRef $mockDb,
 		$expectedConnectionType = null
 	) {
 		$loadBalancer = $this->getMockLoadBalancer( $mockDb, $expectedConnectionType );
-		$mock = $this->getMockBuilder( LBFactory::class )
-			->disableOriginalConstructor()
-			->getMock();
-		$mock->expects( $this->any() )
-			->method( 'getMainLB' )
-			->will( $this->returnValue( $loadBalancer ) );
+		$mock = $this->createMock( LBFactory::class );
+		$mock->method( 'getMainLB' )
+			->willReturn( $loadBalancer );
 		return $mock;
 	}
 
@@ -87,20 +81,16 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	 * @return MockObject|JobQueueGroup
 	 */
 	private function getMockJobQueueGroup( $mockLazyPush = true ) {
-		$mock = $this->getMockBuilder( JobQueueGroup::class )
-			->disableOriginalConstructor()
-			->getMock();
-		$mock->expects( $this->any() )
-			->method( 'push' )
-			->will( $this->returnCallback( static function ( Job $job ) {
+		$mock = $this->createMock( JobQueueGroup::class );
+		$mock->method( 'push' )
+			->willReturnCallback( static function ( Job $job ) {
 				$job->run();
-			} ) );
+			} );
 		if ( $mockLazyPush ) {
-			$mock->expects( $this->any() )
-				->method( 'lazyPush' )
-				->will( $this->returnCallback( static function ( Job $job ) {
+			$mock->method( 'lazyPush' )
+				->willReturnCallback( static function ( Job $job ) {
 					$job->run();
-				} ) );
+				} );
 		}
 		return $mock;
 	}
@@ -111,47 +101,12 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	private function getMockCache() {
 		$mock = $this->getMockBuilder( HashBagOStuff::class )
 			->disableOriginalConstructor()
-			->setMethods( [ 'get', 'set', 'delete', 'makeKey' ] )
+			->onlyMethods( [ 'get', 'set', 'delete', 'makeKey' ] )
 			->getMock();
-		$mock->expects( $this->any() )
-			->method( 'makeKey' )
-			->will( $this->returnCallback( static function ( ...$args ) {
+		$mock->method( 'makeKey' )
+			->willReturnCallback( static function ( ...$args ) {
 				return implode( ':', $args );
-			} ) );
-		return $mock;
-	}
-
-	/**
-	 * @param bool $readOnly
-	 * @return MockObject|ReadOnlyMode
-	 */
-	private function getMockReadOnlyMode( $readOnly = false ) {
-		$mock = $this->getMockBuilder( ReadOnlyMode::class )
-			->disableOriginalConstructor()
-			->getMock();
-		$mock->expects( $this->any() )
-			->method( 'isReadOnly' )
-			->will( $this->returnValue( $readOnly ) );
-		return $mock;
-	}
-
-	/**
-	 * Assumes that only getSubjectPage and getTalkPage will ever be called, and everything passed
-	 * to them will have namespace 0.
-	 * @return NamespaceInfo
-	 */
-	private function getMockNsInfo() : NamespaceInfo {
-		$mock = $this->createMock( NamespaceInfo::class );
-		$mock->method( 'getSubjectPage' )->will( $this->returnArgument( 0 ) );
-		$mock->method( 'getTalkPage' )->will( $this->returnCallback(
-				static function ( $target ) {
-					return new TitleValue( 1, $target->getDbKey() );
-				}
-			) );
-		$mock->method( 'getSubject' )->willReturn( 0 );
-		$mock->method( 'getTalk' )->willReturn( 1 );
-		$mock->expects( $this->never() )
-			->method( $this->anythingBut( 'getSubjectPage', 'getTalkPage', 'getSubject', 'getTalk' ) );
+			} );
 		return $mock;
 	}
 
@@ -161,17 +116,18 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	 * @param array $callbacks Keys are method names, values are callbacks
 	 * @param array $counts Keys are method names, values are expected number of times to be called
 	 *   (default is any number is okay)
-	 * @return RevisionLookup
+	 * @return MockObject|RevisionLookup
 	 */
 	private function getMockRevisionLookup(
-		array $callbacks = [], array $counts = []
-	) : RevisionLookup {
+		array $callbacks = [],
+		array $counts = []
+	): RevisionLookup {
 		$mock = $this->createMock( RevisionLookup::class );
 		foreach ( $callbacks as $method => $callback ) {
 			$count = isset( $counts[$method] ) ? $this->exactly( $counts[$method] ) : $this->any();
 			$mock->expects( $count )
 				->method( $method )
-				->will( $this->returnCallback( $callbacks[$method] ) );
+				->willReturnCallback( $callbacks[$method] );
 		}
 		$mock->expects( $this->never() )
 			->method( $this->anythingBut( ...array_keys( $callbacks ) ) );
@@ -179,106 +135,18 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @param IDatabase $mockDb
-	 * @return MockObject|LinkBatchFactory
+	 * @param DBConnRef $mockDb
+	 * @return LinkBatchFactory
 	 */
-	private function getMockLinkBatchFactory( $mockDb ) {
+	private function getMockLinkBatchFactory( DBConnRef $mockDb ) {
 		return new LinkBatchFactory(
 			$this->createMock( LinkCache::class ),
 			$this->createMock( TitleFormatter::class ),
 			$this->createMock( Language::class ),
 			$this->createMock( GenderCache::class ),
-			$this->getMockLoadBalancer( $mockDb )
+			$this->getMockLoadBalancer( $mockDb ),
+			LoggerFactory::getInstance( 'LinkBatch' )
 		);
-	}
-
-	/**
-	 * @param User[] $users
-	 * @return MockObject|UserFactory
-	 */
-	private function getUserFactory( array $users = [] ) {
-		// UserFactory is only needed for newFromId. $usersById should be an array
-		// with the keys being the ids to support, and the values being User objects
-		// with the corresponding id. Used for WatchedItemStore::resetNotificationTimestamp
-		// which needs full User objects for a hook.
-		$usersById = [];
-		foreach ( $users as $user ) {
-			$usersById[ $user->getId() ] = $user;
-		}
-		$userFactory = $this->createNoOpMock( UserFactory::class, [ 'newFromId' ] );
-		$userFactory->method( 'newFromId' )
-			->willReturnCallback(
-				static function ( $userId ) use ( $usersById ) {
-					// will result in an error if the array key is not set
-					return $usersById[ $userId ];
-				}
-			);
-		return $userFactory;
-	}
-
-	/**
-	 * @param UserIdentityValue $userIdentity
-	 * @return MockObject|User
-	 */
-	private function getMockUser( UserIdentityValue $userIdentity ) {
-		// for use in the mock UserFactory. Needs to support equals() for ::resetNotificationTimestamp
-		$user = $this->createMock( User::class );
-		$user->method( 'getId' )->willReturn( $userIdentity->getId() );
-		$user->method( 'getName' )->willReturn( $userIdentity->getName() );
-		$user->method( 'equals' )->willReturnCallback(
-			static function ( UserIdentity $otherUser ) use ( $userIdentity ) {
-				// $user's name is the same as $userIdentity's
-				return $otherUser->getName() === $userIdentity->getName();
-			}
-		);
-		return $user;
-	}
-
-	/**
-	 * @param LinkTarget|PageIdentity|null $target
-	 * @param Title|null $title
-	 * @return MockObject|TitleFactory
-	 */
-	private function getTitleFactory( $target = null, $title = null ) {
-		// TitleFactory only needed for castFromLinkTarget or castFromPageIdentity - if this is
-		// called with a link target or page identity and a title, the mock expects the function
-		// invocation and returns the title, otherwise the mock expects never to be called.
-		// If no title is provided here, we create a placeholder mock that passes the ->equals()
-		// check, and thats it
-		$titleFactory = $this->createNoOpMock(
-			TitleFactory::class,
-			[
-				'castFromLinkTarget',
-				'castFromPageIdentity'
-			] );
-		if ( $target !== null ) {
-			if ( $title === null ) {
-				$title = $this->makeMockTitle(
-					$target->getDBkey(),
-					[
-						'namespace' => $target->getNamespace()
-					]
-				);
-			}
-			$title->method( 'equals' )
-				->with( $target )
-				->willReturn( true );
-			if ( $target instanceof LinkTarget ) {
-				$titleFactory->method( 'castFromLinkTarget' )
-					->with( $target )
-					->willReturn( $title );
-				$titleFactory->expects( $this->never() )->method( 'castFromPageIdentity' );
-			} else {
-				$titleFactory->method( 'castFromPageIdentity' )
-					->with( $target )
-					->willReturn( $title );
-				$titleFactory->expects( $this->never() )->method( 'castFromLinkTarget' );
-			}
-		} else {
-			$titleFactory->expects( $this->never() )->method( 'castFromLinkTarget' );
-			$titleFactory->expects( $this->never() )->method( 'castFromPageIdentity' );
-		}
-		return $titleFactory;
 	}
 
 	/**
@@ -291,14 +159,12 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	 *     * readOnlyMode
 	 *     * nsInfo
 	 *     * revisionLookup
-	 *     * userFactory
-	 *     * titleFactory
 	 *     * expiryEnabled
 	 *     * maxExpiryDuration
 	 *     * watchlistPurgeRate
 	 * @return WatchedItemStore
 	 */
-	private function newWatchedItemStore( array $mocks = [] ) : WatchedItemStore {
+	private function newWatchedItemStore( array $mocks = [] ): WatchedItemStore {
 		$options = new ServiceOptions( WatchedItemStore::CONSTRUCTOR_OPTIONS, [
 			'UpdateRowsPerQuery' => 1000,
 			'WatchlistExpiry' => $mocks['expiryEnabled'] ?? true,
@@ -307,20 +173,22 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		] );
 
 		$db = $mocks['db'] ?? $this->getMockDb();
+
+		// If we don't use a manual mock for something specific, get a full
+		// NamespaceInfo service from DummyServicesTrait::getDummyNamespaceInfo
+		$nsInfo = $mocks['nsInfo'] ?? $this->getDummyNamespaceInfo();
+
 		return new WatchedItemStore(
 			$options,
 			$mocks['lbFactory'] ??
 				$this->getMockLBFactory( $db ),
 			$mocks['queueGroup'] ?? $this->getMockJobQueueGroup(),
-			new HashBagOStuff(),
+			$mocks['stash'] ?? new HashBagOStuff(),
 			$mocks['cache'] ?? $this->getMockCache(),
-			$mocks['readOnlyMode'] ?? $this->getMockReadOnlyMode(),
-			$mocks['nsInfo'] ?? $this->getMockNsInfo(),
+			$mocks['readOnlyMode'] ?? $this->getDummyReadOnlyMode( false ),
+			$nsInfo,
 			$mocks['revisionLookup'] ?? $this->getMockRevisionLookup(),
-			$this->createHookContainer(),
-			$this->getMockLinkBatchFactory( $db ),
-			$mocks['userFactory'] ?? $this->getUserFactory(),
-			$mocks['titleFactory'] ?? $this->getTitleFactory()
+			$this->getMockLinkBatchFactory( $db )
 		);
 	}
 
@@ -338,7 +206,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 12 ) );
+			->willReturn( 12 );
 		$mockDb->expects( $this->once() )
 			->method( 'delete' )
 			->with(
@@ -357,7 +225,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'cache' => $mockCache,
-			'expiryEnabled' => false ] );
+			'expiryEnabled' => false,
+		] );
 		TestingAccessWrapper::newFromObject( $store )
 			->cacheIndex = [ 0 => [ 'F' => [ 7 => 'RM-KEY', 9 => 'KEEP-KEY' ] ] ];
 
@@ -396,7 +265,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'cache' => $mockCache,
-			'expiryEnabled' => true ] );
+			'expiryEnabled' => true,
+		] );
 		TestingAccessWrapper::newFromObject( $store )
 			->cacheIndex = [ 0 => [ 'F' => [ 7 => 'RM-KEY', 9 => 'KEEP-KEY' ] ] ];
 
@@ -417,7 +287,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 99999 ) );
+			->willReturn( 99999 );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -427,7 +297,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'cache' => $mockCache,
-			'expiryEnabled' => false ] );
+			'expiryEnabled' => false,
+		] );
 
 		$this->assertFalse( $store->clearUserWatchedItems( $user ) );
 	}
@@ -439,7 +310,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb->expects( $this->once() )
 			->method( 'addQuotes' )
 			->willReturn( '20200101000000' );
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectField' )
 			->with(
 				[ 'watchlist', 'watchlist_expiry' ],
@@ -450,7 +321,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( '12' ) );
+			->willReturn( '12' );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -463,10 +334,10 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	}
 
 	public function provideTestPageFactory() {
-		yield [ function ( $pageId, $namespace, $dbKey ) {
+		yield [ static function ( $pageId, $namespace, $dbKey ) {
 			return new TitleValue( $namespace, $dbKey );
 		} ];
-		yield [ function ( $pageId, $namespace, $dbKey ) {
+		yield [ static function ( $pageId, $namespace, $dbKey ) {
 			return new PageIdentityValue( $pageId, $namespace, $dbKey, PageIdentityValue::LOCAL );
 		} ];
 		yield [ function ( $pageId, $namespace, $dbKey ) {
@@ -487,7 +358,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb->expects( $this->once() )
 			->method( 'addQuotes' )
 			->willReturn( '20200101000000' );
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectField' )
 			->with(
 				[ 'watchlist', 'watchlist_expiry' ],
@@ -499,7 +370,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( '7' ) );
+			->willReturn( '7' );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -534,8 +405,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[ [ 'SomeDbKey' => 1, 'OtherDbKey' => 1 ], [ 'AnotherDbKey' => 1 ] ],
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
-				)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			)
+			->willReturn( 'makeWhereFrom2d return value' );
 
 		$mockDb->expects( $this->once() )
 			->method( 'addQuotes' )
@@ -555,9 +426,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'GROUP BY' => [ 'wl_namespace', 'wl_title' ],
 				]
 			)
-			->will(
-				$this->returnValue( $dbResult )
-			);
+			->willReturn( $dbResult );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -613,7 +482,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			->willReturn( 'makeWhereFrom2d return value' );
 
 		$mockDb->expects( $this->once() )
 			->method( 'addQuotes' )
@@ -634,9 +503,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'HAVING' => 'COUNT(*) >= 50',
 				]
 			)
-			->will(
-				$this->returnValue( $dbResult )
-			);
+			->willReturn( $dbResult );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -663,7 +530,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 
 		$mockDb = $this->getMockDb();
 
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectField' )
 			->with(
 				[ 'watchlist', 'watchlist_expiry' ],
@@ -676,22 +543,22 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( '7' ) );
+			->willReturn( '7' );
 
 		$mockDb->expects( $this->exactly( 2 ) )
 			->method( 'addQuotes' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				return "'$value'";
-			} ) );
+			} );
 
 		$mockDb->expects( $this->exactly( 2 ) )
 			->method( 'timestamp' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				if ( $value === 0 ) {
 					return '20200101000000';
 				}
 				return 'TS' . $value . 'TS';
-			} ) );
+			} );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -721,32 +588,31 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb = $this->getMockDb();
 		$mockDb->expects( $this->exactly( 2 * 3 + 1 ) )
 			->method( 'addQuotes' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				return "'$value'";
-			} ) );
+			} );
 
 		$mockDb->expects( $this->exactly( 4 ) )
 			->method( 'timestamp' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				if ( $value === 0 ) {
 					return '20200101000000';
 				}
 				return 'TS' . $value . 'TS';
-			} ) );
+			} );
 
-		$mockDb->expects( $this->any() )
-			->method( 'makeList' )
+		$mockDb->method( 'makeList' )
 			->with(
 				$this->isType( 'array' ),
 				$this->isType( 'int' )
 			)
-			->will( $this->returnCallback( static function ( $a, $conj ) {
+			->willReturnCallback( static function ( $a, $conj ) {
 				$sqlConj = $conj === LIST_AND ? ' AND ' : ' OR ';
 				return implode( $sqlConj, array_map( static function ( $s ) {
 					return '(' . $s . ')';
 				}, $a
 				) );
-			} ) );
+			} );
 		$mockDb->expects( $this->never() )
 			->method( 'makeWhereFrom2d' );
 
@@ -776,9 +642,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'GROUP BY' => [ 'wl_namespace', 'wl_title' ],
 				]
 			)
-			->will(
-				$this->returnValue( $dbResult )
-			);
+			->willReturn( $dbResult );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -819,27 +683,26 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb = $this->getMockDb();
 		$mockDb->expects( $this->exactly( 2 * 3 ) )
 			->method( 'addQuotes' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				return "'$value'";
-			} ) );
+			} );
 		$mockDb->expects( $this->exactly( 3 ) )
 			->method( 'timestamp' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				return 'TS' . $value . 'TS';
-			} ) );
-		$mockDb->expects( $this->any() )
-			->method( 'makeList' )
+			} );
+		$mockDb->method( 'makeList' )
 			->with(
 				$this->isType( 'array' ),
 				$this->isType( 'int' )
 			)
-			->will( $this->returnCallback( static function ( $a, $conj ) {
+			->willReturnCallback( static function ( $a, $conj ) {
 				$sqlConj = $conj === LIST_AND ? ' AND ' : ' OR ';
 				return implode( $sqlConj, array_map( static function ( $s ) {
 					return '(' . $s . ')';
 				}, $a
 				) );
-			} ) );
+			} );
 		$mockDb->expects( $this->once() )
 			->method( 'makeWhereFrom2d' )
 			->with(
@@ -847,7 +710,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			->willReturn( 'makeWhereFrom2d return value' );
 
 		$expectedCond =
 			'((wl_namespace = 0) AND (' .
@@ -874,9 +737,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'GROUP BY' => [ 'wl_namespace', 'wl_title' ],
 				]
 			)
-			->will(
-				$this->returnValue( $dbResult )
-			);
+			->willReturn( $dbResult );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -913,9 +774,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		];
 
 		$mockDb = $this->getMockDb();
-		$mockDb->expects( $this->any() )
-			->method( 'makeList' )
-			->will( $this->returnValue( 'makeList return value' ) );
+		$mockDb->method( 'makeList' )
+			->willReturn( 'makeList return value' );
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
 			->with(
@@ -928,9 +788,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'HAVING' => 'COUNT(*) >= 50',
 				]
 			)
-			->will(
-				$this->returnValue( [] )
-			);
+			->willReturn( [] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -938,10 +796,10 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
 		$store = $this->newWatchedItemStore( [
-				'db' => $mockDb,
-				'cache' => $mockCache,
-				'expiryEnabled' => false
-			] );
+			'db' => $mockDb,
+			'cache' => $mockCache,
+			'expiryEnabled' => false,
+		] );
 
 		$expected = [
 			0 => [ 'SomeDbKey' => 0, 'OtherDbKey' => 0 ],
@@ -957,7 +815,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$user = new UserIdentityValue( 1, 'MockUser' );
 
 		$mockDb = $this->getMockDb();
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectRowCount' )
 			->with(
 				'watchlist',
@@ -968,7 +826,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( '9' ) );
+			->willReturn( '9' );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -987,7 +845,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$user = new UserIdentityValue( 1, 'MockUser' );
 
 		$mockDb = $this->getMockDb();
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectRowCount' )
 			->with(
 				'watchlist',
@@ -999,7 +857,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				[ 'LIMIT' => 50 ]
 			)
-			->will( $this->returnValue( '50' ) );
+			->willReturn( '50' );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -1021,7 +879,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$user = new UserIdentityValue( 1, 'MockUser' );
 
 		$mockDb = $this->getMockDb();
-		$mockDb->expects( $this->exactly( 1 ) )
+		$mockDb->expects( $this->once() )
 			->method( 'selectRowCount' )
 			->with(
 				'watchlist',
@@ -1033,7 +891,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				[ 'LIMIT' => 50 ]
 			)
-			->will( $this->returnValue( '9' ) );
+			->willReturn( '9' );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -1066,7 +924,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[ 'FOR UPDATE' ],
 				[ 'watchlist_expiry' => [ 'LEFT JOIN', [ 'wl_id = we_item' ] ] ]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( [] ) ) );
+			->willReturn( new FakeResultWrapper( [] ) );
 
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb ] );
 
@@ -1102,7 +960,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => 'Old_Title',
 				]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( $fakeRows ) ) );
+			->willReturn( new FakeResultWrapper( $fakeRows ) );
 		$mockDb->expects( $this->at( 1 ) )
 			->method( 'replace' )
 			->with(
@@ -1156,7 +1014,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => 'Old_Title',
 				]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( [] ) ) );
+			->willReturn( new FakeResultWrapper( [] ) );
 		$mockDb->expects( $this->at( 1 ) )
 			->method( 'select' )
 			->with(
@@ -1167,7 +1025,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => 'Old_Title',
 				]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( [] ) ) );
+			->willReturn( new FakeResultWrapper( [] ) );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -1216,7 +1074,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => $oldTarget->getDBkey(),
 				]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( $fakeRows ) ) );
+			->willReturn( new FakeResultWrapper( $fakeRows ) );
 		$mockDb->expects( $this->at( 1 ) )
 			->method( 'replace' )
 			->with(
@@ -1242,7 +1100,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => $oldTarget->getDBkey(),
 				]
 			)
-			->will( $this->returnValue( new FakeResultWrapper( $fakeRows ) ) );
+			->willReturn( new FakeResultWrapper( $fakeRows ) );
 		$mockDb->expects( $this->at( 3 ) )
 			->method( 'replace' )
 			->with(
@@ -1332,7 +1190,8 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	 */
 	public function testAddWatchBatchForUser_readOnlyDBReturnsFalse( $testPageFactory ) {
 		$store = $this->newWatchedItemStore(
-			[ 'readOnlyMode' => $this->getMockReadOnlyMode( true ) ] );
+			[ 'readOnlyMode' => $this->getDummyReadOnlyMode( true ) ]
+		);
 
 		$this->assertFalse(
 			$store->addWatchBatchForUser(
@@ -1455,14 +1314,14 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101',
 					'we_expiry' => '20300101000000'
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->once() )
@@ -1494,7 +1353,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			->willReturn( '20200101000000' );
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -1582,7 +1441,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb = $this->getMockDb();
 		$mockDb->expects( $this->once() )
 			->method( 'selectFieldValues' )
-			->willReturn( null );
+			->willReturn( [] );
 		$mockDb->expects( $this->never() )
 			->method( 'delete' );
 		$mockDb->expects( $this->never() )
@@ -1653,14 +1512,14 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101',
 					'we_expiry' => '20300101000000'
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'delete' );
@@ -1669,7 +1528,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			->with(
 				'0:SomeDbKey:1'
 			)
-			->will( $this->returnValue( null ) );
+			->willReturn( null );
 		$mockCache->expects( $this->once() )
 			->method( 'set' )
 			->with(
@@ -1709,7 +1568,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			->with(
 				'0:SomeDbKey:1'
 			)
-			->will( $this->returnValue( $cachedItem ) );
+			->willReturn( $cachedItem );
 
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb, 'cache' => $mockCache ] );
 
@@ -1745,7 +1604,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -1753,7 +1612,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockCache->expects( $this->once() )
 			->method( 'get' )
 			->with( '0:SomeDbKey:1' )
-			->will( $this->returnValue( false ) );
+			->willReturn( false );
 
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb, 'cache' => $mockCache ] );
 
@@ -1800,7 +1659,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[ 'wl_namespace', 'wl_title', 'wl_notificationtimestamp', 'we_expiry' ],
 				[ 'wl_user' => 1, 'we_expiry IS NULL OR we_expiry > 20200101000000' ]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'Foo1',
@@ -1812,7 +1671,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => 'Foo2',
 					'wl_notificationtimestamp' => null,
 				],
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'delete' );
@@ -1847,7 +1706,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 	public function provideDbTypes() {
 		return [
 			[ false, DB_REPLICA ],
-			[ true, DB_MASTER ],
+			[ true, DB_PRIMARY ],
 		];
 	}
 
@@ -1872,7 +1731,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				[ 'ORDER BY' => [ 'wl_namespace ASC', 'wl_title ASC' ] ]
 			)
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$store = $this->newWatchedItemStore(
 			[ 'lbFactory' => $mockLoadBalancer, 'cache' => $mockCache ] );
@@ -1902,7 +1761,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				[ 'wl_user' => 1, 'we_expiry IS NULL OR we_expiry > 20200101000000' ]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'Foo1',
@@ -1920,7 +1779,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'wl_title' => 'Foo3',
 					'wl_notificationtimestamp' => null,
 				],
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'delete' );
@@ -1988,20 +1847,20 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101',
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'delete' );
 		$mockCache->expects( $this->once() )
 			->method( 'get' )
 			->with( '0:SomeDbKey:1' )
-			->will( $this->returnValue( false ) );
+			->willReturn( false );
 		$mockCache->expects( $this->once() )
 			->method( 'set' )
 			->with(
@@ -2041,7 +1900,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'set' );
@@ -2049,7 +1908,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockCache->expects( $this->once() )
 			->method( 'get' )
 			->with( '0:SomeDbKey:1' )
-			->will( $this->returnValue( false ) );
+			->willReturn( false );
 
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb, 'cache' => $mockCache ] );
 
@@ -2114,7 +1973,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			->willReturn( 'makeWhereFrom2d return value' );
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
 			->with(
@@ -2126,7 +1985,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( $dbResult ) );
+			->willReturn( $dbResult );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->exactly( 2 ) )
@@ -2135,7 +1994,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[ '0:SomeDbKey:1' ],
 				[ '1:AnotherDbKey:1' ]
 			)
-			->will( $this->returnValue( null ) );
+			->willReturn( null );
 		$mockCache->expects( $this->never() )->method( 'set' );
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
@@ -2168,7 +2027,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			->willReturn( 'makeWhereFrom2d return value' );
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
 			->with(
@@ -2180,13 +2039,13 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( (object)[] ) );
+			->willReturn( (object)[] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->once() )
 			->method( 'get' )
 			->with( '0:OtherDbKey:1' )
-			->will( $this->returnValue( null ) );
+			->willReturn( null );
 		$mockCache->expects( $this->never() )->method( 'set' );
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
@@ -2222,7 +2081,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				$this->isType( 'string' ),
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( 'makeWhereFrom2d return value' ) );
+			->willReturn( 'makeWhereFrom2d return value' );
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
 			->with(
@@ -2234,19 +2093,19 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				],
 				$this->isType( 'string' )
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[ 'wl_namespace' => '1', 'wl_title' => 'AnotherDbKey', 'wl_notificationtimestamp' => null, ]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->at( 1 ) )
 			->method( 'get' )
 			->with( '0:SomeDbKey:1' )
-			->will( $this->returnValue( $cachedItem ) );
+			->willReturn( $cachedItem );
 		$mockCache->expects( $this->at( 3 ) )
 			->method( 'get' )
 			->with( '1:AnotherDbKey:1' )
-			->will( $this->returnValue( null ) );
+			->willReturn( null );
 		$mockCache->expects( $this->never() )->method( 'set' );
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
@@ -2275,17 +2134,17 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			new WatchedItem( $user, $targets[0], '20151212010101' ),
 			new WatchedItem( $user, $targets[1], null ),
 		];
-		$mockDb = $this->createNoOpMock( IDatabase::class );
+		$mockDb = $this->createNoOpMock( DBConnRef::class );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->at( 1 ) )
 			->method( 'get' )
 			->with( '0:SomeDbKey:1' )
-			->will( $this->returnValue( $cachedItems[0] ) );
+			->willReturn( $cachedItems[0] );
 		$mockCache->expects( $this->at( 3 ) )
 			->method( 'get' )
 			->with( '1:AnotherDbKey:1' )
-			->will( $this->returnValue( $cachedItems[1] ) );
+			->willReturn( $cachedItems[1] );
 		$mockCache->expects( $this->never() )->method( 'set' );
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
@@ -2309,7 +2168,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			$testPageFactory( 101, 1, 'AnotherDbKey' ),
 		];
 
-		$mockDb = $this->createNoOpMock( IDatabase::class );
+		$mockDb = $this->createNoOpMock( DBConnRef::class );
 
 		$mockCache = $this->createNoOpMock( HashBagOStuff::class );
 
@@ -2371,26 +2230,20 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$mockCache = $this->getMockCache();
-		$mockCache->expects( $this->never() )->method( 'get' );
+		$mockCache->expects( $this->once() )->method( 'get' );
 		$mockCache->expects( $this->never() )->method( 'set' );
 		$mockCache->expects( $this->never() )->method( 'delete' );
 
 		$user = new UserIdentityValue( 1, 'MockUser' );
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
 
 		$title = $testPageFactory( 100, 0, 'SomeDbKey' );
-		$titleFactory = $this->getTitleFactory( $title );
 
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'cache' => $mockCache,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
 		$this->assertFalse(
@@ -2427,16 +2280,16 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101',
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
-		$mockCache->expects( $this->never() )->method( 'get' );
+		$mockCache->expects( $this->once() )->method( 'get' );
 		$mockCache->expects( $this->once() )
 			->method( 'set' )
 			->with(
@@ -2464,19 +2317,11 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			},
 		] );
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
 		$this->assertTrue(
@@ -2517,23 +2362,14 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			},
 		] );
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
+		$mockQueueGroup->method( 'lazyPush' )
 			->willReturnCallback( static function ( ActivityUpdateJob $job ) {
 				// don't run
 			} );
@@ -2612,24 +2448,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			'getNextRevision' => 1,
 		] );
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
-			->will( $this->returnCallback(
+		$mockQueueGroup->method( 'lazyPush' )
+			->willReturnCallback(
 				function ( ActivityUpdateJob $job ) use ( $title, $user ) {
 					$this->verifyCallbackJob(
 						$job,
@@ -2640,7 +2467,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 						}
 					);
 				}
-			) );
+			);
 
 		$this->assertTrue(
 			$store->resetNotificationTimestamp(
@@ -2682,13 +2509,13 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101',
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -2723,24 +2550,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			]
 		);
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
-			->will( $this->returnCallback(
+		$mockQueueGroup->method( 'lazyPush' )
+			->willReturnCallback(
 				function ( ActivityUpdateJob $job ) use ( $title, $user ) {
 					$this->verifyCallbackJob(
 						$job,
@@ -2751,7 +2569,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 						}
 					);
 				}
-			) );
+			);
 
 		$this->assertTrue(
 			$store->resetNotificationTimestamp(
@@ -2790,7 +2608,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( false ) );
+			->willReturn( false );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -2826,24 +2644,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			]
 		);
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
-			->will( $this->returnCallback(
+		$mockQueueGroup->method( 'lazyPush' )
+			->willReturnCallback(
 				function ( ActivityUpdateJob $job ) use ( $title, $user ) {
 					$this->verifyCallbackJob(
 						$job,
@@ -2854,7 +2663,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 						}
 					);
 				}
-			) );
+			);
 
 		$this->assertTrue(
 			$store->resetNotificationTimestamp(
@@ -2893,13 +2702,13 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000'
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '30151212010101',
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
 		$mockCache->expects( $this->never() )->method( 'get' );
@@ -2937,24 +2746,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			]
 		);
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
-			->will( $this->returnCallback(
+		$mockQueueGroup->method( 'lazyPush' )
+			->willReturnCallback(
 				function ( ActivityUpdateJob $job ) use ( $title, $user ) {
 					$this->verifyCallbackJob(
 						$job,
@@ -2965,7 +2765,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 						}
 					);
 				}
-			) );
+			);
 
 		$this->assertTrue(
 			$store->resetNotificationTimestamp(
@@ -3004,16 +2804,16 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000',
 				]
 			)
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '30151212010101',
 				]
-			] ) );
+			] );
 
 		$mockCache = $this->getMockCache();
-		$mockCache->expects( $this->never() )->method( 'get' );
+		$mockCache->expects( $this->once() )->method( 'get' );
 		$mockCache->expects( $this->once() )
 			->method( 'set' )
 			->with( '0:SomeDbKey:1', $this->isType( 'object' ) );
@@ -3048,24 +2848,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 			]
 		);
 
-		$userFactory = $this->getUserFactory(
-			[ $this->getMockUser( $user ) ]
-		);
-
-		$titleFactory = $this->getTitleFactory( $title );
-
 		$store = $this->newWatchedItemStore( [
 			'db' => $mockDb,
 			'queueGroup' => $mockQueueGroup,
 			'cache' => $mockCache,
 			'revisionLookup' => $mockRevisionLookup,
-			'userFactory' => $userFactory,
-			'titleFactory' => $titleFactory,
 		] );
 
-		$mockQueueGroup->expects( $this->any() )
-			->method( 'lazyPush' )
-			->will( $this->returnCallback(
+		$mockQueueGroup->method( 'lazyPush' )
+			->willReturnCallback(
 				function ( ActivityUpdateJob $job ) use ( $title, $user ) {
 					$this->verifyCallbackJob(
 						$job,
@@ -3076,7 +2867,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 						}
 					);
 				}
-			) );
+			);
 
 		$this->assertTrue(
 			$store->resetNotificationTimestamp(
@@ -3149,15 +2940,15 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[ 'wl_notificationtimestamp' => 'TS' . $timestamp . 'TS' ],
 				[ 'wl_user' => 1, 'wl_namespace' => 0, 'wl_title' => [ 'Foo', 'Bar' ] ]
 			)
-			->will( $this->returnValue( true ) );
-		$mockDb->expects( $this->exactly( 1 ) )
+			->willReturn( true );
+		$mockDb->expects( $this->once() )
 			->method( 'timestamp' )
-			->will( $this->returnCallback( static function ( $value ) {
+			->willReturnCallback( static function ( $value ) {
 				return 'TS' . $value . 'TS';
-			} ) );
+			} );
 		$mockDb->expects( $this->once() )
 			->method( 'affectedRows' )
-			->will( $this->returnValue( 2 ) );
+			->willReturn( 2 );
 
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb ] );
 
@@ -3187,7 +2978,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 					'we_expiry IS NULL OR we_expiry > 20200101000000',
 				]
 			)
-			->will( $this->returnValue( [ '2', '3' ] ) );
+			->willReturn( [ '2', '3' ] );
 		$mockDb->expects( $this->once() )
 			->method( 'update' )
 			->with(
@@ -3252,9 +3043,7 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 				[],
 				[ 'watchlist_expiry' => [ 'LEFT JOIN', 'wl_id = we_item' ] ]
 			)
-			->will(
-				$this->returnValue( [] )
-			);
+			->willReturn( [] );
 		$mockDb->expects( $this->never() )
 			->method( 'update' );
 
@@ -3283,18 +3072,16 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockDb = $this->getMockDb();
 		$mockDb->expects( $this->once() )
 			->method( 'select' )
-			->will( $this->returnValue( [
+			->willReturn( [
 				(object)[
 					'wl_namespace' => 0,
 					'wl_title' => 'SomeDbKey',
 					'wl_notificationtimestamp' => '20151212010101'
 				]
-			] ) );
+			] );
 		$mockDb->expects( $this->once() )
 			->method( 'selectFieldValues' )
-			->will(
-				$this->returnValue( [ '2', '3' ] )
-			);
+			->willReturn( [ '2', '3' ] );
 		$mockDb->expects( $this->once() )
 			->method( 'update' );
 
@@ -3399,5 +3186,115 @@ class WatchedItemStoreUnitTest extends MediaWikiUnitTestCase {
 		$mockCache = $this->getMockCache();
 		$store = $this->newWatchedItemStore( [ 'db' => $mockDb, 'cache' => $mockCache ] );
 		$store->removeExpired( 2, true );
+	}
+
+	public static function provideGetLatestNotificationTimestamp() {
+		$emptyMap = new MapCacheLRU( 300 );
+		$oldMap = new MapCacheLRU( 300 );
+		$oldMap->set( '0:Title', '20090101000000' );
+		$newMap = new MapCacheLRU( 300 );
+		$newMap->set( '0:Title', '20110101000000' );
+		$wrongKeyMap = new MapCacheLRU( 300 );
+		$wrongKeyMap->set( '0:Wrong', '20110101000000' );
+		// Arrays are used for stash values after T282105. We test forwards and
+		// backwards compatibility. The MapCacheLRU cases can be removed after
+		// deployment of T282105 has finished.
+		return [
+			'empty cache' => [
+				null,
+				true
+			],
+			'empty MapCacheLRU' => [
+				$emptyMap,
+				true
+			],
+			'empty array' => [
+				$emptyMap->toArray(),
+				true
+			],
+			'old MapCacheLRU' => [
+				$oldMap,
+				true,
+			],
+			'old array' => [
+				$oldMap->toArray(),
+				true
+			],
+			'new MapCacheLRU' => [
+				$newMap,
+				false
+			],
+			'new array' => [
+				$newMap,
+				false
+			],
+			'wrong key MapCacheLRU' => [
+				$wrongKeyMap,
+				true
+			],
+			'wrong key array' => [
+				$wrongKeyMap->toArray(),
+				true
+			],
+		];
+	}
+
+	/** @dataProvider provideGetLatestNotificationTimestamp */
+	public function testGetLatestNotificationTimestamp( $cacheValue, $expectNonNull ) {
+		$user = new UserIdentityValue( 1, 'User' );
+		$title = new TitleValue( 0, 'Title' );
+		$stash = new HashBagOStuff;
+		$stash->set(
+			$stash->makeGlobalKey(
+				'watchlist-recent-updates',
+				WikiMap::getCurrentWikiId(),
+				$user->getId()
+			),
+			$cacheValue
+		);
+		$store = $this->newWatchedItemStore( [ 'stash' => $stash ] );
+		$result = $store->getLatestNotificationTimestamp(
+			'20100101000000', $user, $title );
+		$this->assertSame( $expectNonNull, $result !== null );
+	}
+
+	/**
+	 * @dataProvider provideTestPageFactory
+	 */
+	public function testResetNotificationTimestamp_stashItemTypeCheck( $testPageFactory ) {
+		$user = new UserIdentityValue( 1, 'MockUser' );
+		$oldid = 22;
+		$title = $testPageFactory( 100, 0, 'SomeDbKey' );
+		$stash = new HashBagOStuff;
+		$mockCache = $this->getMockCache();
+		$mockRevision = $this->createNoOpMock( RevisionRecord::class );
+		$mockNextRevision = $this->createNoOpMock( RevisionRecord::class );
+		$mockRevisionLookup = $this->getMockRevisionLookup(
+			[
+				'getTimestampFromId' => static function () {
+					return '00000000000000';
+				},
+				'getRevisionByTitle' => static function () {
+					return null;
+				},
+				'getRevisionById' => static function ( $id ) use ( $mockRevision ) {
+					return $mockRevision;
+				},
+				'getNextRevision' => static function ( RevisionRecord $rev ) use ( $mockNextRevision ) {
+					return $mockNextRevision;
+				},
+			]
+		);
+		$store = $this->newWatchedItemStore( [
+			'cache' => $mockCache,
+			'revisionLookup' => $mockRevisionLookup,
+			'stash' => $stash,
+			'queueGroup' => $this->getMockJobQueueGroup( false ),
+		] );
+		$store->resetNotificationTimestamp( $user,
+			$title,
+			'force',
+			$oldid );
+		$this->assertIsArray( $stash->get( 'global:watchlist-recent-updates::1' ) );
 	}
 }

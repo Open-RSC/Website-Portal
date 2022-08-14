@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"JSantos",
 			"Joao Xavier",
 			"Malafaya"
 		]
@@ -11,6 +12,7 @@
 	"exif-orientation": "Orientizo",
 	"exif-xresolution": "Horizontala distingivo",
 	"exif-yresolution": "Vertikala distingivo",
+	"exif-stripoffsets": "Lokizo di informo pri imajo",
 	"exif-jpeginterchangeformatlength": "Bicoki* dil arkivo JPEG",
 	"exif-datetime": "Dio e horo di la modifiko dil arkivo",
 	"exif-make": "Fabrikanto di la fotografilo",
@@ -37,8 +39,10 @@
 	"exif-subjectdistance-value": "$1 metri",
 	"exif-meteringmode-0": "Nekonocata",
 	"exif-meteringmode-1": "Mez-valoro",
+	"exif-meteringmode-2": "Averajo centraligita",
 	"exif-meteringmode-3": "Punto",
 	"exif-meteringmode-4": "'Multi-Spot'",
+	"exif-meteringmode-5": "Shablono",
 	"exif-meteringmode-6": "Partala",
 	"exif-meteringmode-255": "Altra",
 	"exif-lightsource-0": "Nekonocata",
@@ -60,5 +64,7 @@
 	"exif-subjectdistancerange-0": "Nekonocata",
 	"exif-gpsspeed-k": "Kilometri per horo",
 	"exif-gpsspeed-m": "Milii per horo",
-	"exif-dc-publisher": "Publikigero"
+	"exif-dc-publisher": "Publikigero",
+	"exif-rating-rejected": "Rejektita",
+	"exif-usepanoramaviewer-true": "Yes"
 }

@@ -1,8 +1,6 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use Wikimedia\Rdbms\IMaintainableDatabase;
-use Wikimedia\ScopedCallback;
 
 /**
  * @group Database
@@ -36,10 +34,10 @@ class CommentStoreTest extends MediaWikiLangTestCase {
 	 */
 	private function makeStore( $stage ) {
 		$lang = $this->createMock( Language::class );
-		$lang->method( 'truncateForDatabase' )->willReturnCallback( function ( $str, $len ) {
+		$lang->method( 'truncateForDatabase' )->willReturnCallback( static function ( $str, $len ) {
 			return strlen( $str ) > $len ? substr( $str, 0, $len - 3 ) . '...' : $str;
 		} );
-		$lang->method( 'truncateForVisual' )->willReturnCallback( function ( $str, $len ) {
+		$lang->method( 'truncateForVisual' )->willReturnCallback( static function ( $str, $len ) {
 			return mb_strlen( $str ) > $len ? mb_substr( $str, 0, $len - 3 ) . '...' : $str;
 		} );
 		return new class( $lang, $stage ) extends CommentStore {
@@ -716,13 +714,11 @@ class CommentStoreTest extends MediaWikiLangTestCase {
 	}
 
 	public function testGetCommentErrors() {
-		Wikimedia\suppressWarnings();
-		$reset = new ScopedCallback( 'Wikimedia\restoreWarnings' );
-
 		$store = $this->makeStore( MIGRATION_OLD );
-		$res = $store->getComment( 'dummy', [ 'dummy' => 'comment' ] );
+		// Ignore: Missing dummy_text and dummy_data fields
+		$res = @$store->getComment( 'dummy', [ 'dummy' => 'comment' ] );
 		$this->assertSame( '', $res->text );
-		$res = $store->getComment( 'dummy', [ 'dummy' => 'comment' ], true );
+		$res = @$store->getComment( 'dummy', [ 'dummy' => 'comment' ], true );
 		$this->assertSame( 'comment', $res->text );
 
 		$store = $this->makeStore( MIGRATION_NEW );
@@ -732,7 +728,8 @@ class CommentStoreTest extends MediaWikiLangTestCase {
 		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( '$row does not contain fields needed for comment dummy', $ex->getMessage() );
 		}
-		$res = $store->getComment( 'dummy', [ 'dummy' => 'comment' ], true );
+		// Ignore: Using deprecated fallback handling for comment dummy
+		$res = @$store->getComment( 'dummy', [ 'dummy' => 'comment' ], true );
 		$this->assertSame( 'comment', $res->text );
 		try {
 			$store->getComment( 'dummy', [ 'dummy_id' => 1 ] );
@@ -754,7 +751,7 @@ class CommentStoreTest extends MediaWikiLangTestCase {
 				'$row does not contain fields needed for comment rev_comment', $ex->getMessage()
 			);
 		}
-		$res = $store->getComment( 'rev_comment', [ 'rev_comment' => 'comment' ], true );
+		$res = @$store->getComment( 'rev_comment', [ 'rev_comment' => 'comment' ], true );
 		$this->assertSame( 'comment', $res->text );
 		try {
 			$store->getComment( 'rev_comment', [ 'rev_comment_pk' => 1 ] );
@@ -807,7 +804,7 @@ class CommentStoreTest extends MediaWikiLangTestCase {
 	 * @param int $stage
 	 */
 	public function testInsertWithTempTableDeprecated( $stage ) {
-		$lang = MediaWikiServices::getInstance()->getContentLanguage();
+		$lang = $this->getServiceContainer()->getContentLanguage();
 		$store = new class( $lang, $stage ) extends CommentStore {
 			protected const TEMP_TABLES = [
 				'ipb_reason' => [

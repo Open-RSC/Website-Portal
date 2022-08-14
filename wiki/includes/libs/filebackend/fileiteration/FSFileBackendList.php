@@ -21,13 +21,13 @@
 
 /**
  * Wrapper around RecursiveDirectoryIterator/DirectoryIterator that
- * catches exception or does any custom behavoir that we may want.
+ * catches exception or does any custom behavior that we may want.
  * Do not use this class from places outside FSFileBackend.
  *
  * @ingroup FileBackend
  */
 abstract class FSFileBackendList implements Iterator {
-	/** @var Iterator */
+	/** @var Iterator|null */
 	protected $iter;
 	/** @var string */
 	protected $lastError;
@@ -95,7 +95,7 @@ abstract class FSFileBackendList implements Iterator {
 
 	/**
 	 * @see Iterator::current()
-	 * @return string|bool String or false
+	 * @return string|false
 	 */
 	public function current() {
 		return $this->getRelPath( $this->iter->current()->getPathname() );

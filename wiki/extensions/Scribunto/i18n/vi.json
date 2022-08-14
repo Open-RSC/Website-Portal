@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Max20091",
-			"Minh Nguyen"
+			"Minh Nguyen",
+			"Vinhtantran",
+			"NguoiDungKhongDinhDanh"
 		]
 	},
-	"scribunto-desc": "Khuôn khổ đế nhúng ngôn ngữ kịch bản vào các trang MediaWiki",
+	"scribunto-desc": "Nền tảng đế nhúng ngôn ngữ kịch bản vào các trang MediaWiki",
 	"scribunto-line": "tại dòng $1",
 	"scribunto-module-line": "trong $1 tại dòng $2",
 	"scribunto-parser-dialog-title": "Lỗi kịch bản",
@@ -14,7 +16,7 @@
 	"scribunto-doc-page-name": "Module:$1/tài liệu",
 	"scribunto-doc-page-does-not-exist": "''Có thể viết tài liệu về mô đun này tại [[$1]].''",
 	"scribunto-doc-page-header": "'''Đây là trang dành cho tài liệu về [[$1]].'''",
-	"scribunto-console-intro": "* Các giá trị được xuất khẩu từ mô đun, bao gồm các thay đổi chưa lưu, có sẵn trong biến “p”.\n* Đưa “=” vào đầu dòng để tính toán nó như một biểu thức hoặc sử dụng print(). Sử dụng mw.logObject() cho bảng.\n* Sử dụng mw.log() và mw.logObject() trong mã mô đun để đưa thông điệp vào bảng điều khiển này.",
+	"scribunto-console-intro": "* Các giá trị được xuất khẩu từ mô đun, bao gồm các thay đổi chưa lưu, có sẵn trong biến “p”.\n* Đặt “=” ở đầu dòng để tính biểu thức hoặc sử dụng print(). Dùng mw.logObject() đối với bảng.\n* Sử dụng mw.log() và mw.logObject() trong mã mô đun để đưa thông điệp vào bảng điều khiển này.",
 	"scribunto-console-title": "Bảng điều khiển gỡ lỗi",
 	"scribunto-console-too-large": "Phiên bảng điều khiển này đã dài quá. Xin vui lòng tẩy trống lịch sử bảng điều khiển hoặc giảm cỡ mô đun.",
 	"scribunto-console-current-src": "đầu vào bảng điều khiển",
@@ -52,11 +54,14 @@
 	"scribunto-limitreport-timeusage": "Thời gian sử dụng Lua",
 	"scribunto-limitreport-timeusage-value": "$1/$2 giây",
 	"scribunto-limitreport-virtmemusage": "Kích thước ảo Lua",
+	"scribunto-limitreport-virtmemusage-value": "$1/$2 {{PLURAL:$2|byte}}",
 	"scribunto-limitreport-estmemusage": "Ước lượng sử dụng bộ nhớ Lua",
+	"scribunto-limitreport-estmemusage-value": "$1 {{PLURAL:$1|byte}}",
 	"scribunto-limitreport-memusage": "Sử dụng bộ nhớ Lua",
+	"scribunto-limitreport-memusage-value": "$1/$2 {{PLURAL:$2|byte}}",
 	"scribunto-limitreport-profile": "Hồ sơ Lua",
 	"scribunto-limitreport-profile-ms": "$1 ms",
-	"scribunto-limitreport-logs": "Lời ghi Lua",
+	"scribunto-limitreport-logs": "Nhật trình Lua",
 	"nstab-module": "Mô đun",
 	"tooltip-ca-nstab-module": "Xem trang mô đun"
 }

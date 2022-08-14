@@ -24,6 +24,7 @@
 use MediaWiki\Json\JsonUnserializable;
 use MediaWiki\Json\JsonUnserializableTrait;
 use MediaWiki\Json\JsonUnserializer;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\ParserCacheMetadata;
 use Wikimedia\Reflection\GhostFieldAccessTrait;
 
@@ -46,18 +47,18 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 	 * @var string|int TS_MW timestamp when this object was generated, or -1 for not cacheable. Used
 	 * in ParserCache.
 	 */
-	public $mCacheTime = '';
+	protected $mCacheTime = '';
 
 	/**
 	 * @var int|null Seconds after which the object should expire, use 0 for not cacheable. Used in
 	 * ParserCache.
 	 */
-	public $mCacheExpiry = null;
+	protected $mCacheExpiry = null;
 
 	/**
 	 * @var int|null Revision ID that was parsed
 	 */
-	public $mCacheRevisionId = null;
+	protected $mCacheRevisionId = null;
 
 	/**
 	 * @return string|int TS_MW timestamp
@@ -116,6 +117,10 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 	 *
 	 * Avoid using 0 if at all possible. Consider JavaScript for highly dynamic content.
 	 *
+	 * NOTE: Beware that reducing the TTL for reasons that do not relate to "dynamic content",
+	 * may have the side-effect of incurring more RefreshLinksJob executions.
+	 * See also WikiPage::triggerOpportunisticLinksUpdate.
+	 *
 	 * @param int $seconds
 	 */
 	public function updateCacheExpiry( $seconds ) {
@@ -136,7 +141,7 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 	 * @return int
 	 */
 	public function getCacheExpiry(): int {
-		global $wgParserCacheExpireTime;
+		$parserCacheExpireTime = MediaWikiServices::getInstance()->getMainConfig()->get( 'ParserCacheExpireTime' );
 
 		// NOTE: keep support for undocumented used of -1 to mean "not cacheable".
 		if ( $this->mCacheTime !== '' && $this->mCacheTime < 0 ) {
@@ -146,9 +151,9 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 		$expire = $this->mCacheExpiry;
 
 		if ( $expire === null ) {
-			$expire = $wgParserCacheExpireTime;
+			$expire = $parserCacheExpireTime;
 		} else {
-			$expire = min( $expire, $wgParserCacheExpireTime );
+			$expire = min( $expire, $parserCacheExpireTime );
 		}
 
 		if ( $expire <= 0 ) {
@@ -174,13 +179,13 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 	 * @return bool
 	 */
 	public function expired( $touched ) {
-		global $wgCacheEpoch;
+		$cacheEpoch = MediaWikiServices::getInstance()->getMainConfig()->get( 'CacheEpoch' );
 
 		$expiry = MWTimestamp::convert( TS_MW, MWTimestamp::time() - $this->getCacheExpiry() );
 
 		return !$this->isCacheable() // parser says it's not cacheable
 			|| $this->getCacheTime() < $touched
-			|| $this->getCacheTime() <= $wgCacheEpoch
+			|| $this->getCacheTime() <= $cacheEpoch
 			|| $this->getCacheTime() < $expiry; // expiry period has passed
 	}
 
@@ -286,6 +291,33 @@ class CacheTime implements ParserCacheMetadata, JsonUnserializable {
 		$priorOptions = $this->getGhostFieldValue( 'mUsedOptions' );
 		if ( $priorOptions ) {
 			$this->recordOptions( $priorOptions );
+		}
+	}
+
+	public function __get( $name ) {
+		if ( property_exists( get_called_class(), $name ) ) {
+			// Direct access to a public property, deprecated.
+			wfDeprecatedMsg( "CacheTime::{$name} public read access deprecated", '1.38' );
+			return $this->$name;
+		} elseif ( property_exists( $this, $name ) ) {
+			// Dynamic property access, deprecated.
+			wfDeprecatedMsg( "CacheTime::{$name} dynamic property read access deprecated", '1.38' );
+			return $this->$name;
+		} else {
+			trigger_error( "Inaccessible property via __set(): $name" );
+			return null;
+		}
+	}
+
+	public function __set( $name, $value ) {
+		if ( property_exists( get_called_class(), $name ) ) {
+			// Direct access to a public property, deprecated.
+			wfDeprecatedMsg( "CacheTime::$name public write access deprecated", '1.38' );
+			$this->$name = $value;
+		} else {
+			// Dynamic property access, deprecated.
+			wfDeprecatedMsg( "CacheTime::$name dynamic property write access deprecated", '1.38' );
+			$this->$name = $value;
 		}
 	}
 }

@@ -8,7 +8,7 @@
 	"descriptionmsg": "nuke-desc",
 	"license-name": "GPL-2.0-or-later",
 	"requires": {
-		"MediaWiki": ">= 1.35.0"
+		"MediaWiki": ">= 1.35.6"
 	},
 	"type": "specialpage",
 	"ExtensionMessagesFiles": {
@@ -19,8 +19,13 @@
 			"i18n"
 		]
 	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\Nuke\\Hooks"
+		}
+	},
 	"Hooks": {
-		"ContributionsToolLinks": "MediaWiki\\Extension\\Nuke\\Hooks::nukeContributionsLinks"
+		"ContributionsToolLinks": "main"
 	},
 	"ResourceModules": {
 		"ext.nuke.confirm": {

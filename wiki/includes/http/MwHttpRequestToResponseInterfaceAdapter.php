@@ -3,11 +3,11 @@
 declare( strict_types = 1 );
 namespace MediaWiki\Http;
 
+use GuzzleHttp\Psr7\Utils;
 use LogicException;
 use MWHttpRequest;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * @since 1.36
@@ -31,13 +31,14 @@ class MwHttpRequestToResponseInterfaceAdapter implements ResponseInterface {
 		$this->mwHttpRequest = $mwHttpRequest;
 	}
 
-	public function getProtocolVersion(): void {
+	public function getProtocolVersion(): string {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		// This is not accessible via MWHttpRequest, but it is set in its protected `respVersion` property.
 		// If this is ever needed, it can get exposed in MWHttpRequest.
 		throw new LogicException( __METHOD__ . ' is not implemented' );
 	}
 
-	public function withProtocolVersion( $version ): void {
+	public function withProtocolVersion( $version ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
@@ -59,23 +60,23 @@ class MwHttpRequestToResponseInterfaceAdapter implements ResponseInterface {
 			: '';
 	}
 
-	public function withHeader( $name, $value ): void {
+	public function withHeader( $name, $value ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
-	public function withAddedHeader( $name, $value ): void {
+	public function withAddedHeader( $name, $value ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
-	public function withoutHeader( $name ): void {
+	public function withoutHeader( $name ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
 	public function getBody(): StreamInterface {
-		return stream_for( $this->mwHttpRequest->getContent() );
+		return Utils::streamFor( $this->mwHttpRequest->getContent() );
 	}
 
-	public function withBody( StreamInterface $body ): void {
+	public function withBody( StreamInterface $body ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
@@ -83,7 +84,7 @@ class MwHttpRequestToResponseInterfaceAdapter implements ResponseInterface {
 		return $this->mwHttpRequest->getStatus();
 	}
 
-	public function withStatus( $code, $reasonPhrase = '' ): void {
+	public function withStatus( $code, $reasonPhrase = '' ): self {
 		$this->throwExceptionForBuilderMethod( __METHOD__ );
 	}
 
@@ -91,6 +92,10 @@ class MwHttpRequestToResponseInterfaceAdapter implements ResponseInterface {
 		return ''; // not exposed through MWHttpRequest, unlikely to ever be useful
 	}
 
+	/**
+	 * @param string $method
+	 * @return never
+	 */
 	private function throwExceptionForBuilderMethod( string $method ): void {
 		throw new LogicException( "Builder method $method is not supported." );
 	}

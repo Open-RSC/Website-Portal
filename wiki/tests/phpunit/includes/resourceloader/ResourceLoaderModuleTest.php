@@ -6,7 +6,7 @@ class ResourceLoaderModuleTest extends ResourceLoaderTestCase {
 	 * @covers ResourceLoaderModule::getVersionHash
 	 */
 	public function testGetVersionHash() {
-		$context = $this->getResourceLoaderContext();
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'false' ] );
 
 		$baseParams = [
 			'scripts' => [ 'foo.js', 'bar.js' ],
@@ -67,15 +67,81 @@ class ResourceLoaderModuleTest extends ResourceLoaderTestCase {
 	/**
 	 * @covers ResourceLoaderModule::getVersionHash
 	 */
+	public function testGetVersionHash_debug() {
+		$module = new ResourceLoaderTestModule( [ 'script' => 'foo();' ] );
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'true' ] );
+		$this->assertSame( '', $module->getVersionHash( $context ) );
+	}
+
+	/**
+	 * @covers ResourceLoaderModule::getVersionHash
+	 */
+	public function testGetVersionHash_length() {
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'false' ] );
+		$module = new ResourceLoaderTestModule( [
+			'script' => 'foo();'
+		] );
+		$version = $module->getVersionHash( $context );
+		$this->assertSame( ResourceLoader::HASH_LENGTH, strlen( $version ), 'Hash length' );
+	}
+
+	/**
+	 * @covers ResourceLoaderModule::getVersionHash
+	 */
 	public function testGetVersionHash_parentDefinition() {
-		$context = $this->getResourceLoaderContext();
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'false' ] );
 		$module = $this->getMockBuilder( ResourceLoaderModule::class )
-			->setMethods( [ 'getDefinitionSummary' ] )->getMock();
+			->onlyMethods( [ 'getDefinitionSummary' ] )->getMock();
 		$module->method( 'getDefinitionSummary' )->willReturn( [ 'a' => 'summary' ] );
 
 		$this->expectException( LogicException::class );
 		$this->expectExceptionMessage( 'must call parent' );
 		$module->getVersionHash( $context );
+	}
+
+	/**
+	 * @covers ResourceLoaderModule::getScriptURLsForDebug
+	 * @covers ResourceLoader
+	 * @covers ResourceLoaderModule::getScriptURLsForDebug
+	 */
+	public function testGetURLsForDebug() {
+		$module = new ResourceLoaderTestModule( [
+			'script' => 'foo();',
+			'styles' => '.foo { color: blue; }',
+		] );
+		$context = $this->getResourceLoaderContext( [ 'debug' => 'true' ] );
+		$module->setConfig( $context->getResourceLoader()->getConfig() );
+
+		$this->assertEquals(
+			[
+				'https://example.org/w/load.php?debug=1&lang=en&modules=&only=scripts'
+			],
+			$module->getScriptURLsForDebug( $context ),
+			'script urls debug=true'
+		);
+		$this->assertEquals(
+			[ 'all' => [
+				'/w/load.php?debug=1&lang=en&modules=&only=styles'
+			] ],
+			$module->getStyleURLsForDebug( $context ),
+			'style urls debug=true'
+		);
+
+		$context = $this->getResourceLoaderContext( [ 'debug' => '2' ] );
+		$this->assertEquals(
+			[
+				'https://example.org/w/load.php?debug=2&lang=en&modules=&only=scripts'
+			],
+			$module->getScriptURLsForDebug( $context ),
+			'script urls debug=2'
+		);
+		$this->assertEquals(
+			[ 'all' => [
+				'/w/load.php?debug=2&lang=en&modules=&only=styles'
+			] ],
+			$module->getStyleURLsForDebug( $context ),
+			'style urls debug=2'
+		);
 	}
 
 	/**
@@ -90,6 +156,7 @@ class ResourceLoaderModuleTest extends ResourceLoaderTestCase {
 			'mayValidateScript' => true,
 			'script' => "var a = 'this is';\n {\ninvalid"
 		] );
+		$module->setConfig( $context->getResourceLoader()->getConfig() );
 		$this->assertEquals(
 			'mw.log.error(' .
 				'"JavaScript parse error (scripts need to be valid ECMAScript 5): ' .
@@ -207,9 +274,9 @@ class ResourceLoaderModuleTest extends ResourceLoaderTestCase {
 		$this->assertSame( [], $module->getHeaders( $context ), 'Default' );
 
 		$module = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getPreloadLinks' ] )->getMock();
+			->onlyMethods( [ 'getPreloadLinks' ] )->getMock();
 		$module->method( 'getPreloadLinks' )->willReturn( [
-			 'https://example.org/script.js' => [ 'as' => 'script' ],
+			'https://example.org/script.js' => [ 'as' => 'script' ],
 		] );
 		$this->assertSame(
 			[
@@ -220,10 +287,10 @@ class ResourceLoaderModuleTest extends ResourceLoaderTestCase {
 		);
 
 		$module = $this->getMockBuilder( ResourceLoaderTestModule::class )
-			->setMethods( [ 'getPreloadLinks' ] )->getMock();
+			->onlyMethods( [ 'getPreloadLinks' ] )->getMock();
 		$module->method( 'getPreloadLinks' )->willReturn( [
-			 'https://example.org/script.js' => [ 'as' => 'script' ],
-			 '/example.png' => [ 'as' => 'image' ],
+			'https://example.org/script.js' => [ 'as' => 'script' ],
+			'/example.png' => [ 'as' => 'image' ],
 		] );
 		$this->assertSame(
 			[

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Arifin.wijaya",
+			"Daud I.F. Argana",
 			"Iwan Novirion",
 			"Rex",
 			"William Surya Permana"
@@ -16,8 +17,10 @@
 	"monobook-jumptonavigation": "Loncat ke navigasi",
 	"monobook-jumptosearch": "Loncat ke pencarian",
 	"monobook-more-actions": "Lainnya",
+	"cactions-mobile": "Tindakan halaman",
 	"monobook-cactions-label": "Tindakan halaman",
 	"monobook-notifications-link": "Pemberitahuan ($1)",
 	"monobook-notifications-link-none": "Pemberitahuan",
-	"monobook-responsive-label": "Aktifkan desain MonoBook responsif"
+	"monobook-view-history": "Riwayat",
+	"monobook-action-undelete": "Batal hapus {{PLURAL:$1|$1 suntingan}}"
 }

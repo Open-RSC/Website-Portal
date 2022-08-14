@@ -39,7 +39,7 @@ use MediaWiki\User\UserIdentity;
  *
  * - Each watching user will be notified about the page edit time expressed in
  * his/her local time (UTC is shown additionally). To achieve this, we need to
- * find the individual timeoffset of each watching user from the preferences..
+ * find the individual timeoffset of each watching user from the preferences.
  *
  * Suggested improvement to slack down the number of sent emails: We could think
  * of sending out bulk mails (bcc:user1,user2...) for all these users having the
@@ -181,7 +181,7 @@ class EmailNotification {
 		}
 
 		if ( $sendEmail ) {
-			JobQueueGroup::singleton()->lazyPush( new EnotifNotifyJob(
+			$mwServices->getJobQueueGroup()->lazyPush( new EnotifNotifyJob(
 				$title,
 				[
 					'editor' => $editor->getUser()->getName(),
@@ -256,7 +256,7 @@ class EmailNotification {
 		$userTalkId = false;
 
 		if ( !$minorEdit ||
-			( $config->get( 'EnotifMinorEdits' ) && !$editor->isAllowed( 'nominornewtalk' )	)
+			( $config->get( 'EnotifMinorEdits' ) && !$editor->isAllowed( 'nominornewtalk' ) )
 		) {
 			if ( $config->get( 'EnotifUserTalk' )
 				&& $isUserTalkPage
@@ -294,9 +294,10 @@ class EmailNotification {
 				continue;
 			}
 			$user = User::newFromName( $name );
-			$this->compose( $user, self::ALL_CHANGES, $messageCache );
+			if ( $user instanceof User ) {
+				$this->compose( $user, self::ALL_CHANGES, $messageCache );
+			}
 		}
-
 		$this->sendMails();
 	}
 

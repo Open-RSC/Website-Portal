@@ -1,6 +1,6 @@
 <?php
 
-use MediaWiki\Interwiki\ClassicInterwikiLookup;
+use MediaWiki\Tests\Unit\DummyServicesTrait;
 
 /**
  * @group API
@@ -9,25 +9,23 @@ use MediaWiki\Interwiki\ClassicInterwikiLookup;
  * @covers ApiQuery
  */
 class ApiQueryTest extends ApiTestCase {
-	protected function setUp() : void {
+	use DummyServicesTrait;
+
+	protected function setUp(): void {
 		parent::setUp();
 
 		// Setup apiquerytestiw: as interwiki prefix
-		$this->setMwGlobals( [
-			'wgInterwikiCache' => ClassicInterwikiLookup::buildCdbHash( [
-				[
-					'iw_prefix' => 'apiquerytestiw',
-					'iw_url' => 'wikipedia',
-				],
-			] ),
+		// DummyServicesTrait::getDummyInterwikiLookup
+		$interwikiLookup = $this->getDummyInterwikiLookup( [
+			[ 'iw_prefix' => 'apiquerytestiw', 'iw_url' => 'wikipedia' ],
 		] );
+		$this->setService( 'InterwikiLookup', $interwikiLookup );
 	}
 
 	public function testTitlesGetNormalized() {
-		global $wgMetaNamespace;
-
 		$this->setMwGlobals( [
 			'wgCapitalLinks' => true,
+			'wgMetaNamespace' => 'TestWiki',
 		] );
 
 		$data = $this->doApiRequest( [
@@ -37,14 +35,11 @@ class ApiQueryTest extends ApiTestCase {
 		$this->assertArrayHasKey( 'query', $data[0] );
 		$this->assertArrayHasKey( 'normalized', $data[0]['query'] );
 
-		// Forge a normalized title
-		$to = Title::newFromText( $wgMetaNamespace . ':ArticleA' );
-
 		$this->assertEquals(
 			[
 				'fromencoded' => false,
 				'from' => 'Project:articleA',
-				'to' => $to->getPrefixedText(),
+				'to' => 'TestWiki:ArticleA',
 			],
 			$data[0]['query']['normalized'][0]
 		);
@@ -138,7 +133,7 @@ class ApiQueryTest extends ApiTestCase {
 		$api = new ApiMain(
 			new FauxRequest( [ 'action' => 'query', 'meta' => 'siteinfo' ] )
 		);
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$modules = $queryApi->getModuleManager()->getNamesWithClasses();
 
 		foreach ( $modules as $name => $class ) {
@@ -177,7 +172,7 @@ class ApiQueryTest extends ApiTestCase {
 		$api = new ApiMain(
 			new FauxRequest( [ 'action' => 'query', 'meta' => 'tokens', 'type' => 'login' ] )
 		);
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertFalse( $queryApi->isReadMode(),
 			'isReadMode() => false when meta=tokens is the only module' );
 
@@ -186,33 +181,33 @@ class ApiQueryTest extends ApiTestCase {
 			'indexpageids' => 1
 		] )
 		);
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertFalse( $queryApi->isReadMode(),
 			'rawcontinue and indexpageids are also allowed' );
 
 		$api = new ApiMain(
 			new FauxRequest( [ 'action' => 'query', 'meta' => 'tokens|siteinfo', 'type' => 'login' ] )
 		);
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertTrue( $queryApi->isReadMode(),
 			'isReadMode() => true when other meta modules are present' );
 
 		$api = new ApiMain( new FauxRequest( [
 			'action' => 'query', 'meta' => 'tokens', 'type' => 'login', 'list' => 'allpages'
 		] ) );
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertTrue( $queryApi->isReadMode(),
 			'isReadMode() => true when other modules are present' );
 
 		$api = new ApiMain( new FauxRequest( [
 			'action' => 'query', 'meta' => 'tokens', 'type' => 'login', 'titles' => 'Foo'
 		] ) );
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertTrue( $queryApi->isReadMode(),
 			'isReadMode() => true when other ApiQuery parameters are present' );
 
 		$api = new ApiMain( new FauxRequest( [ 'action' => 'query' ] ) );
-		$queryApi = new ApiQuery( $api, 'query' );
+		$queryApi = $api->getModuleManager()->getModule( 'query' );
 		$this->assertTrue( $queryApi->isReadMode(),
 			'isReadMode() => true when no modules are requested' );
 	}

@@ -21,6 +21,8 @@
  */
 
 use MediaWiki\Logger\LegacyLogger;
+use Wikimedia\WrappedString;
+use Wikimedia\WrappedStringList;
 
 /**
  * New debugger system that outputs a toolbar on page view.
@@ -34,28 +36,28 @@ class MWDebug {
 	/**
 	 * Log lines
 	 *
-	 * @var array $log
+	 * @var array
 	 */
 	protected static $log = [];
 
 	/**
 	 * Debug messages from wfDebug().
 	 *
-	 * @var array $debug
+	 * @var array
 	 */
 	protected static $debug = [];
 
 	/**
 	 * SQL statements of the database queries.
 	 *
-	 * @var array $query
+	 * @var array
 	 */
 	protected static $query = [];
 
 	/**
 	 * Is the debugger enabled?
 	 *
-	 * @var bool $enabled
+	 * @var bool
 	 */
 	protected static $enabled = false;
 
@@ -63,7 +65,7 @@ class MWDebug {
 	 * Array of functions that have already been warned, formatted
 	 * function-caller to prevent a buttload of warnings
 	 *
-	 * @var array $deprecationWarnings
+	 * @var array
 	 */
 	protected static $deprecationWarnings = [];
 
@@ -241,6 +243,7 @@ class MWDebug {
 	 * @param string $class Class declaring the deprecated method (typically __CLASS__ )
 	 * @param string $method The name of the deprecated method.
 	 * @param string|false $version Version in which the method was deprecated.
+	 *   Does not issue deprecation warnings if false.
 	 * @param string|bool $component Component to which the class belongs.
 	 *    If false, it is assumed the class is in MediaWiki core.
 	 * @param int $callerOffset How far up the callstack is the original
@@ -265,10 +268,8 @@ class MWDebug {
 		if ( $version ) {
 			$component = $component ?: 'MediaWiki';
 			$msg = "$declaringClass overrides $method which was deprecated in $component $version.";
-		} else {
-			$msg = "$declaringClass overrides $method which is deprecated.";
+			self::deprecatedMsg( $msg, $version, $component, $callerOffset + 1 );
 		}
-		self::deprecatedMsg( $msg, $version, $component, $callerOffset + 1 );
 
 		return true;
 	}
@@ -605,12 +606,12 @@ class MWDebug {
 	 *
 	 * @since 1.19
 	 * @param IContextSource $context
-	 * @return string
+	 * @return WrappedStringList
 	 */
 	public static function getDebugHTML( IContextSource $context ) {
 		global $wgDebugComments;
 
-		$html = '';
+		$html = [];
 
 		if ( self::$enabled ) {
 			self::log( 'MWDebug output complete' );
@@ -618,19 +619,21 @@ class MWDebug {
 
 			// Cannot use OutputPage::addJsConfigVars because those are already outputted
 			// by the time this method is called.
-			$html = ResourceLoader::makeInlineScript(
+			$html[] = ResourceLoader::makeInlineScript(
 				ResourceLoader::makeConfigSetScript( [ 'debugInfo' => $debugInfo ] ),
 				$context->getOutput()->getCSP()->getNonce()
 			);
 		}
 
 		if ( $wgDebugComments ) {
-			$html .= "<!-- Debug output:\n" .
-				htmlspecialchars( implode( "\n", self::$debug ), ENT_NOQUOTES ) .
-				"\n\n-->";
+			$html[] = '<!-- Debug output:';
+			foreach ( self::$debug as $line ) {
+				$html[] = htmlspecialchars( $line, ENT_NOQUOTES );
+			}
+			$html[] = '-->';
 		}
 
-		return $html;
+		return WrappedString::join( "\n", $html );
 	}
 
 	/**
@@ -639,26 +642,26 @@ class MWDebug {
 	 * If $wgShowDebug is false, an empty string is always returned.
 	 *
 	 * @since 1.20
-	 * @return string HTML fragment
+	 * @return WrappedStringList HTML fragment
 	 */
 	public static function getHTMLDebugLog() {
 		global $wgShowDebug;
 
-		if ( !$wgShowDebug ) {
-			return '';
+		$html = [];
+		if ( $wgShowDebug ) {
+			$html[] = Html::openElement( 'div', [ 'id' => 'mw-html-debug-log' ] );
+			$html[] = "<hr />\n<strong>Debug data:</strong><ul id=\"mw-debug-html\">";
+
+			foreach ( self::$debug as $line ) {
+				$display = nl2br( htmlspecialchars( trim( $line ) ) );
+
+				$html[] = "<li><code>$display</code></li>";
+			}
+
+			$html[] = '</ul>';
+			$html[] = '</div>';
 		}
-
-		$ret = "\n<hr />\n<strong>Debug data:</strong><ul id=\"mw-debug-html\">\n";
-
-		foreach ( self::$debug as $line ) {
-			$display = nl2br( htmlspecialchars( trim( $line ) ) );
-
-			$ret .= "<li><code>$display</code></li>\n";
-		}
-
-		$ret .= '</ul>' . "\n";
-
-		return Html::rawElement( 'div', [ 'id' => 'mw-html-debug-log' ], $ret );
+		return WrappedString::join( "\n", $html );
 	}
 
 	/**

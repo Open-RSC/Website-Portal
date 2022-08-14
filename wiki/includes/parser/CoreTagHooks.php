@@ -21,6 +21,7 @@
  * @ingroup Parser
  */
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -28,19 +29,32 @@ use MediaWiki\MediaWikiServices;
  * @ingroup Parser
  */
 class CoreTagHooks {
+
 	/**
 	 * @internal
-	 * @param Parser $parser
-	 * @return void
 	 */
-	public static function register( $parser ) {
-		global $wgRawHtml;
+	public const REGISTER_OPTIONS = [
+		// See documentation for the corresponding config options
+		'RawHtml',
+	];
+
+	/**
+	 * @param Parser $parser
+	 * @param ServiceOptions $options
+	 *
+	 * @return void
+	 * @throws MWException
+	 * @internal
+	 */
+	public static function register( Parser $parser, ServiceOptions $options ) {
+		$options->assertRequiredOptions( self::REGISTER_OPTIONS );
+		$rawHtml = $options->get( 'RawHtml' );
 		$parser->setHook( 'pre', [ __CLASS__, 'pre' ] );
 		$parser->setHook( 'nowiki', [ __CLASS__, 'nowiki' ] );
 		$parser->setHook( 'gallery', [ __CLASS__, 'gallery' ] );
 		$parser->setHook( 'indicator', [ __CLASS__, 'indicator' ] );
 		$parser->setHook( 'langconvert', [ __CLASS__, 'langconvert' ] );
-		if ( $wgRawHtml ) {
+		if ( $rawHtml ) {
 			$parser->setHook( 'html', [ __CLASS__, 'html' ] );
 		}
 	}
@@ -68,6 +82,7 @@ class CoreTagHooks {
 			[ '&gt;', '&lt;' ],
 			$content
 		);
+		// @phan-suppress-next-line SecurityCheck-XSS
 		return Html::rawElement( 'pre', $attribs, $content );
 	}
 
@@ -89,8 +104,8 @@ class CoreTagHooks {
 	 * @internal
 	 */
 	public static function html( ?string $content, array $attributes, Parser $parser ) {
-		global $wgRawHtml;
-		if ( $wgRawHtml ) {
+		$rawHtml = MediaWikiServices::getInstance()->getMainConfig()->get( 'RawHtml' );
+		if ( $rawHtml ) {
 			if ( $parser->getOptions()->getAllowUnsafeRawHtml() ) {
 				return [ $content ?? '', 'markerType' => 'nowiki' ];
 			} else {
@@ -157,7 +172,8 @@ class CoreTagHooks {
 	 * @return string HTML
 	 * @internal
 	 */
-	public static function gallery( ?string $content, array $attributes, Parser $parser ):string {
+	public static function gallery( ?string $content, array $attributes, Parser $parser ): string {
+		// @phan-suppress-next-line SecurityCheck-XSS
 		return $parser->renderImageGallery( $content ?? '', $attributes );
 	}
 
@@ -173,7 +189,7 @@ class CoreTagHooks {
 	 * @since 1.25
 	 * @internal
 	 */
-	public static function indicator( ?string $content, array $attributes, Parser $parser, PPFrame $frame ):string {
+	public static function indicator( ?string $content, array $attributes, Parser $parser, PPFrame $frame ): string {
 		if ( !isset( $attributes['name'] ) || trim( $attributes['name'] ) === '' ) {
 			return '<span class="error">' .
 				wfMessage( 'invalid-indicator-name' )->inContentLanguage()->parse() .
@@ -214,16 +230,17 @@ class CoreTagHooks {
 				# and the variants are valid BCP 47 codes
 				if ( $converter->hasVariants()
 					&& strcasecmp( $fromArg, LanguageCode::bcp47( $fromArg ) ) === 0
-					&& strcasecmp( $toArg, LanguageCode::bcp47( $toArg ) ) === 0 ) {
+					&& strcasecmp( $toArg, LanguageCode::bcp47( $toArg ) ) === 0
+				) {
+					$toVariant = $converter->validateVariant( $toArg );
 
-						$toVariant = $converter->validateVariant( $toArg );
-
-						if ( $toVariant ) {
-							return $converter->autoConvert(
-								$parser->recursiveTagParse( $content ?? '', $frame ),
-								$toVariant
-							);
-						}
+					if ( $toVariant ) {
+						// @phan-suppress-next-line SecurityCheck-XSS
+						return $converter->autoConvert(
+							$parser->recursiveTagParse( $content ?? '', $frame ),
+							$toVariant
+						);
+					}
 				}
 			}
 		}

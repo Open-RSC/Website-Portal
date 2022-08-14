@@ -16,8 +16,10 @@
 	"monobook-jumptonavigation": "Aller à la navigation",
 	"monobook-jumptosearch": "Aller à la recherche",
 	"monobook-more-actions": "Plus",
+	"cactions-mobile": "Actions de la page",
 	"monobook-cactions-label": "Actions de la page",
 	"monobook-notifications-link": "Notifications ($1)",
 	"monobook-notifications-link-none": "Notifications",
-	"monobook-responsive-label": "Activer le style MonoBook réactif"
+	"monobook-view-history": "Historique",
+	"monobook-action-undelete": "Restaurer {{PLURAL:$1|une modification|$1 modifications}}"
 }

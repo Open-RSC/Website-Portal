@@ -33,7 +33,7 @@
 	"templatedata-doc-param-type-unknown": "Неизвестен",
 	"templatedata-doc-param-type-url": "URL адрес",
 	"templatedata-doc-param-type-wiki-file-name": "Файл",
-	"templatedata-doc-param-type-wiki-page-name": "Страница",
+	"templatedata-doc-param-type-wiki-page-name": "Име на страница",
 	"templatedata-doc-param-type-wiki-template-name": "Шаблон",
 	"templatedata-doc-param-type-wiki-user-name": "Потребител",
 	"templatedata-doc-params": "Параметри на шаблона",
@@ -65,7 +65,7 @@
 	"templatedata-modal-json-error-replace": "Замяна",
 	"templatedata-modal-placeholder-paramkey": "Име на параметъра",
 	"templatedata-modal-table-param-actions": "Действия",
-	"templatedata-modal-table-param-aliases": "Псевдоними (разделени със запетая)",
+	"templatedata-modal-table-param-aliases": "Псевдоними",
 	"templatedata-modal-table-param-autovalue": "Автоматична стойност",
 	"templatedata-modal-table-param-deprecated": "Непрепоръчителен",
 	"templatedata-modal-table-param-description": "Описание ($1)",
@@ -81,6 +81,6 @@
 	"templatedata-modal-title-paramorder": "Ред на параметрите",
 	"templatedata-modal-title-templatedesc": "Описание на шаблона ($1)",
 	"templatedata-modal-title-templateformat": "Предложено уикитекстово форматиране",
-	"templatedata-modal-title-templateparam-details": "Описание на параметра: $1",
+	"templatedata-modal-title-templateparam-details": "Описание на параметъра: $1",
 	"templatedata-modal-title-templateparams": "Параметри на шаблона"
 }

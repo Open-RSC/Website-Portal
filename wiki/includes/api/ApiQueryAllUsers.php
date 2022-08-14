@@ -21,6 +21,9 @@
  */
 
 use MediaWiki\Block\DatabaseBlock;
+use MediaWiki\Permissions\GroupPermissionsLookup;
+use MediaWiki\User\UserFactory;
+use MediaWiki\User\UserGroupManager;
 
 /**
  * Query module to enumerate all registered users.
@@ -30,8 +33,39 @@ use MediaWiki\Block\DatabaseBlock;
 class ApiQueryAllUsers extends ApiQueryBase {
 	use ApiQueryBlockInfoTrait;
 
-	public function __construct( ApiQuery $query, $moduleName ) {
+	/** @var UserFactory */
+	private $userFactory;
+
+	/** @var UserGroupManager */
+	private $userGroupManager;
+
+	/** @var GroupPermissionsLookup */
+	private $groupPermissionsLookup;
+
+	/** @var Language */
+	private $contentLanguage;
+
+	/**
+	 * @param ApiQuery $query
+	 * @param string $moduleName
+	 * @param UserFactory $userFactory
+	 * @param UserGroupManager $userGroupManager
+	 * @param GroupPermissionsLookup $groupPermissionsLookup
+	 * @param Language $contentLanguage
+	 */
+	public function __construct(
+		ApiQuery $query,
+		$moduleName,
+		UserFactory $userFactory,
+		UserGroupManager $userGroupManager,
+		GroupPermissionsLookup $groupPermissionsLookup,
+		Language $contentLanguage
+	) {
 		parent::__construct( $query, $moduleName, 'au' );
+		$this->userFactory = $userFactory;
+		$this->userGroupManager = $userGroupManager;
+		$this->groupPermissionsLookup = $groupPermissionsLookup;
+		$this->contentLanguage = $contentLanguage;
 	}
 
 	/**
@@ -41,6 +75,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 	 * @return string
 	 */
 	private function getCanonicalUserName( $name ) {
+		$name = $this->contentLanguage->ucfirst( $name );
 		return strtr( $name, '_', ' ' );
 	}
 
@@ -52,7 +87,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 
 		$prop = $params['prop'];
 		if ( $prop !== null ) {
-			$prop = array_flip( $prop );
+			$prop = array_fill_keys( $prop, true );
 			$fld_blockinfo = isset( $prop['blockinfo'] );
 			$fld_editcount = isset( $prop['editcount'] );
 			$fld_groups = isset( $prop['groups'] );
@@ -91,8 +126,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 		if ( $params['rights'] !== null && count( $params['rights'] ) ) {
 			$groups = [];
 			foreach ( $params['rights'] as $r ) {
-				$groups = array_merge( $groups, $this->getGroupPermissionsLookup()
-					->getGroupsWithPermission( $r ) );
+				$groups = array_merge( $groups, $this->groupPermissionsLookup->getGroupsWithPermission( $r ) );
 			}
 
 			// no group with the given right(s) exists, no need for a query
@@ -224,7 +258,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 
 			if ( $lastUser === $row->user_name ) {
 				// Duplicate row due to one of the needed subtable joins.
-				// Ignore it, but count the number of them to sanely handle
+				// Ignore it, but count the number of them to sensibly handle
 				// miscalculation of $maxDuplicateRows.
 				$countDuplicates++;
 				if ( $countDuplicates == $maxDuplicateRows ) {
@@ -250,7 +284,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 				ApiBase::dieDebug( __METHOD__, 'Saw more duplicate rows than expected' );
 			}
 
-			if ( $params['activeusers'] && $row->recentactions === 0 ) {
+			if ( $params['activeusers'] && (int)$row->recentactions === 0 ) {
 				// activeusers cache was out of date
 				continue;
 			}
@@ -262,7 +296,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 
 			if ( $fld_centralids ) {
 				$data += ApiQueryUserInfo::getCentralUserInfo(
-					$this->getConfig(), User::newFromId( $row->user_id ), $params['attachedwiki']
+					$this->getConfig(), $this->userFactory->newFromId( (int)$row->user_id ), $params['attachedwiki']
 				);
 			}
 
@@ -284,7 +318,8 @@ class ApiQueryAllUsers extends ApiQueryBase {
 			}
 
 			if ( $fld_implicitgroups || $fld_groups || $fld_rights ) {
-				$implicitGroups = User::newFromId( $row->user_id )->getAutomaticGroups();
+				$implicitGroups = $this->userGroupManager
+					->getUserImplicitGroups( $this->userFactory->newFromId( (int)$row->user_id ) );
 				if ( isset( $row->groups ) && $row->groups !== '' ) {
 					$groups = array_merge( $implicitGroups, explode( '|', $row->groups ) );
 				} else {
@@ -304,7 +339,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 				}
 
 				if ( $fld_rights ) {
-					$data['rights'] = $this->getGroupPermissionsLookup()->getGroupPermissions( $groups );
+					$data['rights'] = $this->groupPermissionsLookup->getGroupPermissions( $groups );
 					ApiResult::setIndexedTagName( $data['rights'], 'r' );
 					ApiResult::setArrayType( $data['rights'], 'array' );
 				}
@@ -325,7 +360,7 @@ class ApiQueryAllUsers extends ApiQueryBase {
 	}
 
 	public function getAllowedParams( $flags = 0 ) {
-		$userGroups = User::getAllGroups();
+		$userGroups = $this->userGroupManager->listAllGroups();
 
 		if ( $flags & ApiBase::GET_VALUES_FOR_HELP ) {
 			sort( $userGroups );

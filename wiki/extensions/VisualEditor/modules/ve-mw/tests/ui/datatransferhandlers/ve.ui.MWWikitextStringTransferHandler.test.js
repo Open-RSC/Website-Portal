@@ -4,45 +4,38 @@
  * @copyright 2011-2020 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
-QUnit.module( 've.ui.MWWikitextStringTransferHandler', QUnit.newMwEnvironment( {
-	beforeEach: function () {
+QUnit.module( 've.ui.MWWikitextStringTransferHandler', ve.test.utils.newMwEnvironment( {
+	beforeEach() {
 		// Mock XHR for mw.Api()
 		this.server = this.sandbox.useFakeServer();
 		// Random number, chosen by a fair dice roll.
 		// Used to make #mwt ID deterministic
 		this.randomStub = sinon.stub( Math, 'random' ).returns( 0.04 );
-		ve.test.utils.mwEnvironment.beforeEach.call( this );
 	},
-	afterEach: function () {
+	afterEach() {
 		this.randomStub.restore();
-		ve.test.utils.mwEnvironment.afterEach.call( this );
 	}
 } ) );
 
 /* Tests */
 
-ve.test.utils.runWikitextStringHandlerTest = function ( assert, server, string, mimeType, expectedResponse, expectedData, annotations, assertDom, msg ) {
-	var handler, i, j, name,
-		done = assert.async(),
+ve.test.utils.runWikitextStringHandlerTest = ( assert, server, string, mimeType, expectedResponse, expectedData, annotations, assertDom, msg ) => {
+	const done = assert.async(),
 		item = ve.ui.DataTransferItem.static.newFromString( string, mimeType ),
 		doc = ve.dm.Document.static.newBlankDocument(),
 		mockSurface = {
-			getModel: function () {
+			getModel: () => {
 				return {
-					getDocument: function () {
-						return doc;
-					}
+					getDocument: () => doc
 				};
 			},
-			createProgress: function () {
-				return ve.createDeferred().promise();
-			}
+			createProgress: () => ve.createDeferred().promise()
 		};
 
 	// Preprocess the expectedData array
-	for ( i = 0; i < expectedData.length; i++ ) {
+	for ( let i = 0; i < expectedData.length; i++ ) {
 		if ( Array.isArray( expectedData[ i ] ) ) {
-			for ( j = 0; j < expectedData[ i ][ 1 ].length; j++ ) {
+			for ( let j = 0; j < expectedData[ i ][ 1 ].length; j++ ) {
 				if ( typeof expectedData[ i ][ 1 ][ j ] === 'number' ) {
 					expectedData[ i ][ 1 ][ j ] = annotations[ expectedData[ i ][ 1 ][ j ] ];
 				}
@@ -51,14 +44,14 @@ ve.test.utils.runWikitextStringHandlerTest = function ( assert, server, string, 
 	}
 
 	// Check we match the wikitext string handler
-	name = ve.ui.dataTransferHandlerFactory.getHandlerNameForItem( item );
+	const name = ve.ui.dataTransferHandlerFactory.getHandlerNameForItem( item );
 	assert.strictEqual( name, 'wikitextString', msg + ': triggers match function' );
 
 	// Invoke the handler
-	handler = ve.ui.dataTransferHandlerFactory.create( 'wikitextString', mockSurface, item );
+	const handler = ve.ui.dataTransferHandlerFactory.create( 'wikitextString', mockSurface, item );
 
-	handler.getInsertableData().done( function ( docOrData ) {
-		var actualData, store;
+	handler.getInsertableData().done( ( docOrData ) => {
+		let actualData, store;
 		if ( docOrData instanceof ve.dm.Document ) {
 			actualData = docOrData.getData();
 			store = docOrData.getStore();
@@ -88,8 +81,7 @@ ve.test.utils.runWikitextStringHandlerTest = function ( assert, server, string, 
 };
 
 QUnit.test( 'convert', function ( assert ) {
-	var i,
-		cases = [
+	const cases = [
 			{
 				msg: 'Simple link',
 				// Put link in the middle of text to verify that the
@@ -173,7 +165,7 @@ QUnit.test( 'convert', function ( assert ) {
 						attributes: {
 							mw: {}
 						},
-						originalDomElements: $( '<div typeof="mw:Transclusion" about="#mwt40000000">Template</div>' ).toArray()
+						originalDomElements: $.parseHTML( '<div typeof="mw:Transclusion" about="#mwt40000000">Template</div>' )
 					},
 					{ type: '/mwTransclusionBlock' },
 					{ type: 'internalList' },
@@ -188,10 +180,10 @@ QUnit.test( 'convert', function ( assert ) {
 				annotations: [],
 				assertDom: true,
 				expectedData: [
-					{ type: 'mwHeading', attributes: { level: 2 }, internal: { changesSinceLoad: 0 }, originalDomElements: $( '<h2>foo</h2>' ).toArray() },
+					{ type: 'mwHeading', attributes: { level: 2 }, originalDomElements: $.parseHTML( '<h2>foo</h2>' ) },
 					'f', 'o', 'o',
 					{ type: '/mwHeading' },
-					{ type: 'mwHeading', attributes: { level: 2 }, internal: { changesSinceLoad: 0 }, originalDomElements: $( '<h2 id="mw-meaningful-id">bar</h2>' ).toArray() },
+					{ type: 'mwHeading', attributes: { level: 2 }, originalDomElements: $.parseHTML( '<h2 id="mw-meaningful-id">bar</h2>' ) },
 					'b', 'a', 'r',
 					{ type: '/mwHeading' },
 					{ type: 'internalList' },
@@ -206,7 +198,7 @@ QUnit.test( 'convert', function ( assert ) {
 				annotations: [],
 				assertDom: true,
 				expectedData: [
-					{ type: 'mwHeading', attributes: { level: 2 }, internal: { changesSinceLoad: 0 }, originalDomElements: $( '<h2 id="Tudnivalók"> Tudnivalók </h2>' ).toArray() },
+					{ type: 'mwHeading', attributes: { level: 2 }, originalDomElements: $.parseHTML( '<h2 id="Tudnivalók"> Tudnivalók </h2>' ) },
 					'T', 'u', 'd', 'n', 'i', 'v', 'a', 'l', 'ó', 'k',
 					{ type: '/mwHeading' },
 					{ type: 'internalList' },
@@ -269,7 +261,7 @@ QUnit.test( 'convert', function ( assert ) {
 			}
 		];
 
-	for ( i = 0; i < cases.length; i++ ) {
+	for ( let i = 0; i < cases.length; i++ ) {
 		ve.test.utils.runWikitextStringHandlerTest(
 			assert, this.server, cases[ i ].pasteString, cases[ i ].pasteType, cases[ i ].parsoidResponse,
 			cases[ i ].expectedData, cases[ i ].annotations, cases[ i ].assertDom, cases[ i ].msg

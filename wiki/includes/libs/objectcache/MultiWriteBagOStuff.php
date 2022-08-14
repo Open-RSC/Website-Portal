@@ -20,7 +20,7 @@
  * @file
  * @ingroup Cache
  */
-use Wikimedia\ObjectFactory;
+use Wikimedia\ObjectFactory\ObjectFactory;
 
 /**
  * A cache class that replicates all writes to multiple child caches. Reads
@@ -82,7 +82,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 			} else {
 				if ( !isset( $cacheInfo['args'] ) ) {
 					// B/C for when $cacheInfo was for ObjectCache::newFromParams().
-					// Callers intenting this to be for ObjectFactory::getObjectFromSpec
+					// Callers intending this to be for ObjectFactory::getObjectFromSpec
 					// should have set "args" per the docs above. Doings so avoids extra
 					// (likely harmless) params (factory/class/calls) ending up in "args".
 					$cacheInfo['args'] = [ $cacheInfo ];
@@ -93,7 +93,8 @@ class MultiWriteBagOStuff extends BagOStuff {
 				$this->caches[] = ObjectFactory::getObjectFromSpec( $cacheInfo );
 			}
 		}
-		$this->mergeFlagMaps( $this->caches );
+
+		$this->attrMap = $this->mergeFlagMaps( $this->caches );
 
 		$this->asyncWrites = (
 			isset( $params['replication'] ) &&
@@ -229,7 +230,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 		);
 	}
 
-	public function lock( $key, $timeout = 6, $expiry = 6, $rclass = '' ) {
+	public function lock( $key, $timeout = 6, $exptime = 6, $rclass = '' ) {
 		// Only need to lock the first cache; also avoids deadlocks
 		return $this->callKeyMethodOnTierCache(
 			0,
@@ -254,11 +255,12 @@ class MultiWriteBagOStuff extends BagOStuff {
 	public function deleteObjectsExpiringBefore(
 		$timestamp,
 		callable $progress = null,
-		$limit = INF
+		$limit = INF,
+		string $tag = null
 	) {
 		$ret = false;
 		foreach ( $this->caches as $cache ) {
-			if ( $cache->deleteObjectsExpiringBefore( $timestamp, $progress, $limit ) ) {
+			if ( $cache->deleteObjectsExpiringBefore( $timestamp, $progress, $limit, $tag ) ) {
 				$ret = true;
 			}
 		}
@@ -334,7 +336,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 		);
 	}
 
-	public function incrWithInit( $key, $exptime, $value = 1, $init = null, $flags = 0 ) {
+	public function incrWithInit( $key, $exptime, $step = 1, $init = null, $flags = 0 ) {
 		return $this->callKeyWriteMethodOnTierCaches(
 			$this->cacheIndexes,
 			$this->useAsyncSecondaryWrites( $flags ),
@@ -343,23 +345,6 @@ class MultiWriteBagOStuff extends BagOStuff {
 			self::RES_NONKEY,
 			func_get_args()
 		);
-	}
-
-	public function getLastError() {
-		foreach ( $this->caches as $cache ) {
-			$error = $cache->getLastError();
-			if ( $error !== self::ERR_NONE ) {
-				return $error;
-			}
-		}
-
-		return self::ERR_NONE;
-	}
-
-	public function clearLastError() {
-		foreach ( $this->caches as $cache ) {
-			$cache->clearLastError();
-		}
 	}
 
 	public function makeKeyInternal( $keyspace, $components ) {
@@ -410,7 +395,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 	 * @return mixed The result of calling the given method
 	 */
 	private function callKeyMethodOnTierCache( $index, $method, $arg0Sig, $rvSig, array $args ) {
-		return $this->caches[$index]->proxyCall( $method, $arg0Sig, $rvSig, $args );
+		return $this->caches[$index]->proxyCall( $method, $arg0Sig, $rvSig, $args, $this );
 	}
 
 	/**
@@ -445,7 +430,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 
 			if ( $i == 0 || !$asyncSecondary ) {
 				// Tier 0 store or in sync mode: write synchronously and get result
-				$storeRes = $cache->proxyCall( $method, $arg0Sig, $resSig, $args );
+				$storeRes = $cache->proxyCall( $method, $arg0Sig, $resSig, $args, $this );
 				if ( $storeRes === false ) {
 					$res = false;
 				} elseif ( $res === null ) {
@@ -454,8 +439,8 @@ class MultiWriteBagOStuff extends BagOStuff {
 			} else {
 				// Secondary write in async mode: do not block this HTTP request
 				( $this->asyncHandler )(
-					static function () use ( $cache, $method, $arg0Sig, $resSig, $args ) {
-						$cache->proxyCall( $method, $arg0Sig, $resSig, $args );
+					function () use ( $cache, $method, $arg0Sig, $resSig, $args ) {
+						$cache->proxyCall( $method, $arg0Sig, $resSig, $args, $this );
 					}
 				);
 			}

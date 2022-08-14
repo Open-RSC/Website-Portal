@@ -20,12 +20,18 @@
  * @file
  */
 
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Api\ApiHookRunner;
+use MediaWiki\Cache\LinkBatchFactory;
+use MediaWiki\CommentFormatter\CommentFormatter;
+use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Revision\RevisionAccessException;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\User\UserFactory;
+use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
  * @ingroup API
@@ -38,6 +44,76 @@ class ApiFeedContributions extends ApiBase {
 	/** @var TitleParser */
 	private $titleParser;
 
+	/** @var LinkRenderer */
+	private $linkRenderer;
+
+	/** @var LinkBatchFactory */
+	private $linkBatchFactory;
+
+	/** @var HookContainer */
+	private $hookContainer;
+
+	/** @var ILoadBalancer */
+	private $loadBalancer;
+
+	/** @var NamespaceInfo */
+	private $namespaceInfo;
+
+	/** @var ActorMigration */
+	private $actorMigration;
+
+	/** @var UserFactory */
+	private $userFactory;
+
+	/** @var CommentFormatter */
+	private $commentFormatter;
+
+	/** @var ApiHookRunner */
+	private $hookRunner;
+
+	/**
+	 * @param ApiMain $main
+	 * @param string $action
+	 * @param RevisionStore $revisionStore
+	 * @param TitleParser $titleParser
+	 * @param LinkRenderer $linkRenderer
+	 * @param LinkBatchFactory $linkBatchFactory
+	 * @param HookContainer $hookContainer
+	 * @param ILoadBalancer $loadBalancer
+	 * @param NamespaceInfo $namespaceInfo
+	 * @param ActorMigration $actorMigration
+	 * @param UserFactory $userFactory
+	 * @param CommentFormatter $commentFormatter
+	 */
+	public function __construct(
+		ApiMain $main,
+		$action,
+		RevisionStore $revisionStore,
+		TitleParser $titleParser,
+		LinkRenderer $linkRenderer,
+		LinkBatchFactory $linkBatchFactory,
+		HookContainer $hookContainer,
+		ILoadBalancer $loadBalancer,
+		NamespaceInfo $namespaceInfo,
+		ActorMigration $actorMigration,
+		UserFactory $userFactory,
+		CommentFormatter $commentFormatter
+	) {
+		parent::__construct( $main, $action );
+		$this->revisionStore = $revisionStore;
+		$this->titleParser = $titleParser;
+		$this->linkRenderer = $linkRenderer;
+		$this->linkBatchFactory = $linkBatchFactory;
+		$this->hookContainer = $hookContainer;
+		$this->loadBalancer = $loadBalancer;
+		$this->namespaceInfo = $namespaceInfo;
+		$this->actorMigration = $actorMigration;
+		$this->userFactory = $userFactory;
+		$this->commentFormatter = $commentFormatter;
+
+		$this->hookRunner = new ApiHookRunner( $hookContainer );
+	}
+
 	/**
 	 * This module uses a custom feed wrapper printer.
 	 *
@@ -48,10 +124,6 @@ class ApiFeedContributions extends ApiBase {
 	}
 
 	public function execute() {
-		$services = MediaWikiServices::getInstance();
-		$this->revisionStore = $services->getRevisionStore();
-		$this->titleParser = $services->getTitleParser();
-
 		$params = $this->extractRequestParams();
 
 		$config = $this->getConfig();
@@ -91,6 +163,8 @@ class ApiFeedContributions extends ApiBase {
 		$params['end'] = '';
 		$params = ContribsPager::processDateFilter( $params );
 
+		$targetUser = $this->userFactory->newFromName( $target, UserFactory::RIGOR_NONE );
+
 		$pager = new ContribsPager(
 			$this->getContext(), [
 				'target' => $target,
@@ -104,13 +178,15 @@ class ApiFeedContributions extends ApiBase {
 				'hideMinor' => $params['hideminor'],
 				'showSizeDiff' => $params['showsizediff'],
 			],
-			$services->getLinkRenderer(),
-			$services->getLinkBatchFactory(),
-			$services->getHookContainer(),
-			$services->getDBLoadBalancer(),
-			$services->getActorMigration(),
+			$this->linkRenderer,
+			$this->linkBatchFactory,
+			$this->hookContainer,
+			$this->loadBalancer,
+			$this->actorMigration,
 			$this->revisionStore,
-			$services->getNamespaceInfo()
+			$this->namespaceInfo,
+			$targetUser,
+			$this->commentFormatter
 		);
 
 		$feedLimit = $this->getConfig()->get( 'FeedLimit' );
@@ -142,7 +218,7 @@ class ApiFeedContributions extends ApiBase {
 		// ContributionsLineEnding hook. Hook implementers may cancel
 		// the hook to signal the user is not allowed to read this item.
 		$feedItem = null;
-		$hookResult = $this->getHookRunner()->onApiFeedContributions__feedItem(
+		$hookResult = $this->hookRunner->onApiFeedContributions__feedItem(
 			$row, $this->getContext(), $feedItem );
 		// Hook returned a valid feed item
 		if ( $feedItem instanceof FeedItem ) {
@@ -198,7 +274,7 @@ class ApiFeedContributions extends ApiBase {
 
 		if ( $content instanceof TextContent ) {
 			// only textual content has a "source view".
-			$html = nl2br( htmlspecialchars( $content->getText() ) );
+			$html = nl2br( htmlspecialchars( $content->getText(), ENT_COMPAT ) );
 		} else {
 			// XXX: we could get an HTML representation of the content via getParserOutput, but that may
 			//     contain JS magic and generally may not be suitable for inclusion in a feed.

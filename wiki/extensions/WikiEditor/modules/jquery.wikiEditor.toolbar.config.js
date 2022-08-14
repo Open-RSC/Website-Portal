@@ -64,6 +64,15 @@
 					}
 				}
 			},
+			// Secondary section of the top toolbar (at right side when LTR).
+			secondary: {
+				type: 'toolbar',
+				groups: {
+					default: {
+						tools: {}
+					}
+				}
+			},
 			// Format section
 			advanced: {
 				labelMsg: 'wikieditor-toolbar-section-advanced',
@@ -411,6 +420,11 @@
 						language: 'cr',
 						layout: 'characters',
 						characters: specialCharacterGroups.canadianaboriginal
+					},
+					runes: {
+						labelMsg: 'special-characters-group-runes',
+						layout: 'characters',
+						characters: specialCharacterGroups.runes
 					}
 				}
 			},

@@ -20,7 +20,7 @@
  * @file
  */
 
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Languages\LanguageNameUtils;
 
 /**
  * A query module to list all langlinks (links to corresponding foreign language pages).
@@ -29,17 +29,31 @@ use MediaWiki\MediaWikiServices;
  */
 class ApiQueryLangLinks extends ApiQueryBase {
 
-	public function __construct( ApiQuery $query, $moduleName ) {
+	/** @var LanguageNameUtils */
+	private $languageNameUtils;
+
+	/** @var Language */
+	private $contentLanguage;
+
+	public function __construct(
+		ApiQuery $query,
+		$moduleName,
+		LanguageNameUtils $languageNameUtils,
+		Language $contentLanguage
+	) {
 		parent::__construct( $query, $moduleName, 'll' );
+		$this->languageNameUtils = $languageNameUtils;
+		$this->contentLanguage = $contentLanguage;
 	}
 
 	public function execute() {
-		if ( $this->getPageSet()->getGoodTitleCount() == 0 ) {
+		$pages = $this->getPageSet()->getGoodPages();
+		if ( $pages === [] ) {
 			return;
 		}
 
 		$params = $this->extractRequestParams();
-		$prop = array_flip( (array)$params['prop'] );
+		$prop = array_fill_keys( (array)$params['prop'], true );
 
 		if ( isset( $params['title'] ) && !isset( $params['lang'] ) ) {
 			$this->dieWithError(
@@ -65,7 +79,7 @@ class ApiQueryLangLinks extends ApiQueryBase {
 		] );
 
 		$this->addTables( 'langlinks' );
-		$this->addWhereFld( 'll_from', array_keys( $this->getPageSet()->getGoodTitles() ) );
+		$this->addWhereFld( 'll_from', array_keys( $pages ) );
 		if ( $params['continue'] !== null ) {
 			$cont = explode( '|', $params['continue'] );
 			$this->dieContinueUsageIf( count( $cont ) != 2 );
@@ -94,7 +108,7 @@ class ApiQueryLangLinks extends ApiQueryBase {
 			$this->addOption( 'ORDER BY', 'll_from' . $sort );
 		} else {
 			// Don't order by ll_from if it's constant in the WHERE clause
-			if ( count( $this->getPageSet()->getGoodTitles() ) == 1 ) {
+			if ( count( $pages ) === 1 ) {
 				$this->addOption( 'ORDER BY', 'll_lang' . $sort );
 			} else {
 				$this->addOption( 'ORDER BY', [
@@ -128,14 +142,12 @@ class ApiQueryLangLinks extends ApiQueryBase {
 				}
 			}
 
-			$languageNameUtils = MediaWikiServices::getInstance()->getLanguageNameUtils();
-
 			if ( isset( $prop['langname'] ) ) {
-				$entry['langname'] = $languageNameUtils
+				$entry['langname'] = $this->languageNameUtils
 					->getLanguageName( $displayLanguageCode, $params['inlanguagecode'] );
 			}
 			if ( isset( $prop['autonym'] ) ) {
-				$entry['autonym'] = $languageNameUtils->getLanguageName( $displayLanguageCode );
+				$entry['autonym'] = $this->languageNameUtils->getLanguageName( $displayLanguageCode );
 			}
 			ApiResult::setContentValue( $entry, 'title', $row->ll_title );
 			$fit = $this->addPageSubItem( $row->ll_from, $entry );
@@ -170,7 +182,7 @@ class ApiQueryLangLinks extends ApiQueryBase {
 					'descending'
 				]
 			],
-			'inlanguagecode' => MediaWikiServices::getInstance()->getContentLanguage()->getCode(),
+			'inlanguagecode' => $this->contentLanguage->getCode(),
 			'limit' => [
 				ApiBase::PARAM_DFLT => 10,
 				ApiBase::PARAM_TYPE => 'limit',

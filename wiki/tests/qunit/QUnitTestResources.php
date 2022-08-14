@@ -1,7 +1,5 @@
 <?php
 // These modules are only registered when $wgEnableJavaScriptTest is true
-// phpcs:disable Generic.Files.LineLength
-
 return [
 
 	'sinonjs' => [
@@ -50,7 +48,11 @@ return [
 
 	'test.MediaWiki' => [
 		'scripts' => [
-			'tests/qunit/suites/resources/startup.test.js',
+			'tests/qunit/suites/resources/startup/startup.test.js',
+			'tests/qunit/suites/resources/startup/mediawiki.test.js',
+			'tests/qunit/suites/resources/startup/mw.Map.test.js',
+			'tests/qunit/suites/resources/startup/mw.loader.test.js',
+			'tests/qunit/suites/resources/startup/mw.requestIdleCallback.test.js',
 			'tests/qunit/suites/resources/jquery/jquery.accessKeyLabel.test.js',
 			'tests/qunit/suites/resources/jquery/jquery.color.test.js',
 			'tests/qunit/suites/resources/jquery/jquery.colorUtil.test.js',
@@ -60,19 +62,19 @@ return [
 			'tests/qunit/suites/resources/jquery/jquery.tablesorter.test.js',
 			'tests/qunit/suites/resources/jquery/jquery.tablesorter.parsers.test.js',
 			'tests/qunit/suites/resources/jquery/jquery.textSelection.test.js',
-			'tests/qunit/suites/resources/mediawiki/mediawiki.requestIdleCallback.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.errorLogger.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.jqueryMsg.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.jscompat.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.messagePoster.factory.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.String.byteLength.test.js',
+			'tests/qunit/suites/resources/mediawiki/mediawiki.String.charAt.test.js',
+			'tests/qunit/suites/resources/mediawiki/mediawiki.String.lcFirst.test.js',
+			'tests/qunit/suites/resources/mediawiki/mediawiki.String.ucFirst.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.String.trimByteLength.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.storage.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.template.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.template.mustache.test.js',
-			'tests/qunit/suites/resources/mediawiki/mediawiki.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.base.test.js',
-			'tests/qunit/suites/resources/mediawiki/mediawiki.loader.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.html.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.inspect.test.js',
 			'tests/qunit/suites/resources/mediawiki/mediawiki.Title.test.js',
@@ -129,7 +131,7 @@ return [
 			'mediawiki.util',
 			'mediawiki.viewport',
 			'mediawiki.special.recentchanges',
-			'mediawiki.rcfilters.filters.dm',
+			'mediawiki.rcfilters.filters.ui',
 			'mediawiki.language',
 			'mediawiki.language.testdata',
 			'mediawiki.cldr',

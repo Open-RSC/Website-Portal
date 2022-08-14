@@ -8,7 +8,7 @@ class SampleTest extends MediaWikiLangTestCase {
 	/**
 	 * Anything that needs to happen before your tests should go here.
 	 */
-	protected function setUp() : void {
+	protected function setUp(): void {
 		// Be sure to call the parent setup and teardown functions.
 		// This makes sure that all the various cleanup and restorations
 		// happen as they should (including the restoration for setMwGlobals).
@@ -25,7 +25,7 @@ class SampleTest extends MediaWikiLangTestCase {
 	/**
 	 * Anything cleanup you need to do should go here.
 	 */
-	protected function tearDown() : void {
+	protected function tearDown(): void {
 		parent::tearDown();
 	}
 
@@ -58,10 +58,8 @@ class SampleTest extends MediaWikiLangTestCase {
 	}
 
 	/**
-	 * phpcs:disable Generic.Files.LineLength
 	 * @dataProvider provideTitles
 	 * See https://phpunit.de/manual/6.5/en/appendixes.annotations.html#appendixes.annotations.dataProvider
-	 * phpcs:enable
 	 */
 	public function testCreateBasicListOfTitles( $titleName, $ns, $text ) {
 		$title = Title::newFromText( $titleName, $ns );

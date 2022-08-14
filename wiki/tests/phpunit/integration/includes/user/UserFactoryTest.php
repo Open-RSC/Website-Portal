@@ -1,6 +1,5 @@
 <?php
 
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\UltimateAuthority;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentityValue;
@@ -15,7 +14,7 @@ use Wikimedia\IPUtils;
 class UserFactoryTest extends MediaWikiIntegrationTestCase {
 
 	private function getUserFactory() {
-		return MediaWikiServices::getInstance()->getUserFactory();
+		return $this->getServiceContainer()->getUserFactory();
 	}
 
 	public function testNewFromName() {
@@ -82,7 +81,7 @@ class UserFactoryTest extends MediaWikiIntegrationTestCase {
 		$this->assertGreaterThan(
 			0,
 			$actorId,
-			'Sanity check: valid actor id for a user'
+			'Valid actor id for a user'
 		);
 
 		$user2 = $factory->newFromActorId( $actorId );
@@ -118,13 +117,13 @@ class UserFactoryTest extends MediaWikiIntegrationTestCase {
 		$this->assertGreaterThan(
 			0,
 			$id,
-			'Sanity check: valid user'
+			'Valid user'
 		);
 		$actorId = $user1->getActorId();
 		$this->assertGreaterThan(
 			0,
 			$actorId,
-			'Sanity check: valid actor id for a user'
+			'Valid actor id for a user'
 		);
 
 		$user2 = $factory->newFromAnyId( $id, null, null );

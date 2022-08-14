@@ -2,6 +2,12 @@
 
 namespace Wikimedia\Rdbms;
 
+/**
+ * @stable to extend. Note that none of the methods in this class are stable to override.
+ * The goal of extending this class is creating specialized query builders,
+ * like {@link \MediaWiki\Page\PageSelectQueryBuilder}
+ * @package Wikimedia\Rdbms
+ */
 class SelectQueryBuilder extends JoinGroupBase {
 
 	/** @var string sort the results in ascending order */
@@ -249,7 +255,17 @@ class SelectQueryBuilder extends JoinGroupBase {
 	 */
 	public function where( $conds ) {
 		if ( is_array( $conds ) ) {
-			$this->conds = array_merge( $this->conds, $conds );
+			foreach ( $conds as $key => $cond ) {
+				if ( is_int( $key ) ) {
+					$this->conds[] = $cond;
+				} elseif ( isset( $this->conds[$key] ) ) {
+					// T288882
+					$this->conds[] = $this->db->makeList(
+						[ $key => $cond ], IDatabase::LIST_AND );
+				} else {
+					$this->conds[$key] = $cond;
+				}
+			}
 		} else {
 			$this->conds[] = $conds;
 		}
@@ -369,6 +385,17 @@ class SelectQueryBuilder extends JoinGroupBase {
 	 */
 	public function distinct() {
 		$this->options[] = 'DISTINCT';
+		return $this;
+	}
+
+	/**
+	 * Set MAX_EXECUTION_TIME for queries.
+	 *
+	 * @param int $time maximum allowed time in milliseconds
+	 * @return $this
+	 */
+	public function setMaxExecutionTime( int $time ) {
+		$this->options['MAX_EXECUTION_TIME'] = $time;
 		return $this;
 	}
 
@@ -515,11 +542,11 @@ class SelectQueryBuilder extends JoinGroupBase {
 	}
 
 	/**
-	 * Enable the STRAIGHT_JOIN option.
+	 * Enable the STRAIGHT_JOIN query option.
 	 *
 	 * @return $this
 	 */
-	public function straightJoin() {
+	public function straightJoinOption() {
 		$this->options[] = 'STRAIGHT_JOIN';
 		return $this;
 	}

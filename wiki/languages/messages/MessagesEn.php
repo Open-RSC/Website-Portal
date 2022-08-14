@@ -22,12 +22,6 @@ $fallback = false;
 $rtl = false;
 
 /**
- * Should all nouns (not just proper ones) be capitalized?
- * Enabling this property will add the capitalize-all-nouns class to the <body> tag
- */
-$capitalizeAllNouns = false;
-
-/**
  * Optional array mapping ASCII digits 0-9 to local digits.
  */
 $digitTransformTable = null;
@@ -421,6 +415,7 @@ $specialPageAliases = [
 	'CreateAccount'             => [ 'CreateAccount' ],
 	'Deadendpages'              => [ 'DeadendPages' ],
 	'DeletedContributions'      => [ 'DeletedContributions' ],
+	'DeletePage'                => [ 'DeletePage', 'Delete' ],
 	'Diff'                      => [ 'Diff' ],
 	'DoubleRedirects'           => [ 'DoubleRedirects' ],
 	'EditPage'                  => [ 'EditPage', 'Edit' ],
@@ -482,6 +477,7 @@ $specialPageAliases = [
 	'Prefixindex'               => [ 'PrefixIndex' ],
 	'Protectedpages'            => [ 'ProtectedPages' ],
 	'Protectedtitles'           => [ 'ProtectedTitles' ],
+	'ProtectPage'               => [ 'ProtectPage', 'Protect' ],
 	'Purge'                     => [ 'Purge' ],
 	'RandomInCategory'          => [ 'RandomInCategory' ],
 	'Randompage'                => [ 'Random', 'RandomPage' ],

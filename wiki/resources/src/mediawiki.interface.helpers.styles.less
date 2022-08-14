@@ -119,11 +119,14 @@
 	unicode-bidi: embed;
 }
 
-/* Comment portions of RC entries */
+/* Comment portions of RC entries, also used by Linker::commentBlock */
 span.comment {
 	font-style: italic;
 	unicode-bidi: -moz-isolate;
 	unicode-bidi: isolate;
+	word-wrap: break-word;
+	/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+	overflow-wrap: break-word;
 }
 
 /** rev_deleted stuff */
@@ -134,11 +137,21 @@ span.history-deleted {
 	font-style: italic;
 }
 
+span.mw-history-suppressed {
+	/* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+	text-decoration-style: double;
+	color: #202122;
+}
+
 /* The auto-generated edit comments */
 .autocomment,
 .autocomment a,
 .autocomment a:visited {
 	color: #72777d;
+}
+
+.mw-comment-none {
+	.mixin-screen-reader-text();
 }
 
 /* (show/hide) revision deletion links */

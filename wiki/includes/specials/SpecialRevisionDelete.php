@@ -121,7 +121,7 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 	 * @param RepoGroup $repoGroup
 	 */
 	public function __construct( PermissionManager $permissionManager, RepoGroup $repoGroup ) {
-		parent::__construct( 'Revisiondelete', 'deleterevision' );
+		parent::__construct( 'Revisiondelete' );
 
 		$this->permissionManager = $permissionManager;
 		$this->repoGroup = $repoGroup;
@@ -175,6 +175,12 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 			throw new ErrorPageError( 'revdelete-nooldid-title', 'revdelete-nooldid-text' );
 		}
 
+		$restriction = RevisionDeleter::getRestriction( $this->typeName );
+
+		if ( !$this->getAuthority()->isAllowedAny( $restriction, 'deletedhistory' ) ) {
+			throw new PermissionsError( $restriction );
+		}
+
 		# Allow the list type to adjust the passed target
 		$this->targetObj = RevisionDeleter::suggestTarget(
 			$this->typeName,
@@ -190,7 +196,14 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 		}
 
 		// Check blocks
-		if ( $this->permissionManager->isBlockedFrom( $user, $this->targetObj ) ) {
+		$checkReplica = !$this->submitClicked;
+		if (
+			$this->permissionManager->isBlockedFrom(
+				$user,
+				$this->targetObj,
+				$checkReplica
+			)
+		) {
 			throw new UserBlockedError(
 				$user->getBlock(),
 				$user,
@@ -202,8 +215,7 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 		$this->typeLabels = self::UI_LABELS[$this->typeName];
 		$list = $this->getList();
 		$list->reset();
-		$this->mIsAllowed = $this->permissionManager->userHasRight( $user,
-			RevisionDeleter::getRestriction( $this->typeName ) );
+		$this->mIsAllowed = $this->permissionManager->userHasRight( $user, $restriction );
 		$canViewSuppressedOnly = $this->permissionManager->userHasRight( $user, 'viewsuppressed' ) &&
 			!$this->permissionManager->userHasRight( $user, 'suppressrevision' );
 		$pageIsSuppressed = $list->areAnySuppressed();
@@ -570,7 +582,7 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 					$this->msg( $message )->text(),
 					$name,
 					$name,
-					$bitfield & $field
+					(bool)( $bitfield & $field )
 				);
 
 				if ( $field == RevisionRecord::DELETED_RESTRICTED ) {
@@ -600,9 +612,9 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 				} else {
 					$selected = -1; // use existing field
 				}
-				$line = '<td class="mw-revdel-checkbox">' . Xml::radio( $name, -1, $selected == -1 ) . '</td>';
-				$line .= '<td class="mw-revdel-checkbox">' . Xml::radio( $name, 0, $selected == 0 ) . '</td>';
-				$line .= '<td class="mw-revdel-checkbox">' . Xml::radio( $name, 1, $selected == 1 ) . '</td>';
+				$line = '<td class="mw-revdel-checkbox">' . Xml::radio( $name, '-1', $selected == -1 ) . '</td>';
+				$line .= '<td class="mw-revdel-checkbox">' . Xml::radio( $name, '0', $selected == 0 ) . '</td>';
+				$line .= '<td class="mw-revdel-checkbox">' . Xml::radio( $name, '1', $selected == 1 ) . '</td>';
 				$label = $this->msg( $message )->escaped();
 				if ( $field == RevisionRecord::DELETED_RESTRICTED ) {
 					$label = "<b>$label</b>";
@@ -672,7 +684,7 @@ class SpecialRevisionDelete extends UnlistedSpecialPage {
 			$this->typeLabels['success']
 		);
 		$this->wasSaved = true;
-		$this->revDelList->reloadFromMaster();
+		$this->revDelList->reloadFromPrimary();
 		$this->showForm();
 	}
 

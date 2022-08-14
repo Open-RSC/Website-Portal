@@ -178,7 +178,7 @@ class MysqlInstaller extends DatabaseInstaller {
 		if ( $conn->tableExists( "revision", __METHOD__ ) ) {
 			$revision = $this->escapeLikeInternal( $this->getVar( 'wgDBprefix' ) . 'revision', '\\' );
 			$res = $conn->query( "SHOW TABLE STATUS LIKE '$revision'", __METHOD__ );
-			$row = $conn->fetchObject( $res );
+			$row = $res->fetchObject();
 			if ( !$row ) {
 				$this->parent->showMessage( 'config-show-table-status' );
 				$existingSchema = false;
@@ -286,7 +286,7 @@ class MysqlInstaller extends DatabaseInstaller {
 		$res = $conn->select( 'INFORMATION_SCHEMA.USER_PRIVILEGES', '*',
 			[ 'GRANTEE' => $quotedUser ], __METHOD__ );
 		$insertMysql = false;
-		$grantOptions = array_flip( $this->webUserPrivs );
+		$grantOptions = array_fill_keys( $this->webUserPrivs, true );
 		foreach ( $res as $row ) {
 			if ( $row->PRIVILEGE_TYPE == 'INSERT' ) {
 				$insertMysql = true;
@@ -538,7 +538,7 @@ class MysqlInstaller extends DatabaseInstaller {
 							$grantableNames[] = $fullName;
 							break;
 						} else {
-							// If we couldn't create for some bizzare reason and the
+							// If we couldn't create for some bizarre reason and the
 							// user probably doesn't exist, skip the grant
 							$this->db->rollback( __METHOD__ );
 							$status->warning( 'config-install-user-create-failed', $dbUser, $dqe->getMessage() );
