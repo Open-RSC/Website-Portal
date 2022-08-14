@@ -8,6 +8,8 @@ import org.teavm.jso.browser.Location;
 public class mudclient extends GameConnection {
    // inauthentic boolean controlling if applet will launch
    public static boolean disableAppletHostCheck = true;
+   // inauthentic boolean allows members config to signup for new account
+   public static boolean allowMembersConfigSignups = true;
 
    // $FF: renamed from: bq boolean
    public boolean members;
@@ -2118,7 +2120,7 @@ public class mudclient extends GameConnection {
       label11: {
          this.panelLoginWelcome = new Panel(this.surface, 50);;
          var1 = 40;
-         if(!this.members) {
+         if(!this.members || allowMembersConfigSignups) {
             this.panelLoginWelcome.addText(256, 200 + var1, "Click on an option", 5, true);
             this.panelLoginWelcome.addButtonBackground(156, 240 + var1, 120, 35);
             this.panelLoginWelcome.addButtonBackground(356, 240 + var1, 120, 35);
@@ -2126,16 +2128,13 @@ public class mudclient extends GameConnection {
             this.panelLoginWelcome.addText(356, 240 + var1, "Existing User", 5, false);
             this.field_343 = this.panelLoginWelcome.addButton(156, 240 + var1, 120, 35);
             this.field_344 = this.panelLoginWelcome.addButton(356, 240 + var1, 120, 35);
-            if(GameData.field_563 == 0) {
-               break label11;
-            }
+         } else {
+            this.panelLoginWelcome.addText(256, 200 + var1, "Welcome to RuneScape", 4, true);
+            this.panelLoginWelcome.addText(256, 215 + var1, "You need a member account to use this server", 4, true);
+            this.panelLoginWelcome.addButtonBackground(256, 250 + var1, 200, 35);
+            this.panelLoginWelcome.addText(256, 250 + var1, "Click here to login", 5, false);
+            this.field_344 = this.panelLoginWelcome.addButton(256, 250 + var1, 200, 35);
          }
-
-         this.panelLoginWelcome.addText(256, 200 + var1, "Welcome to RuneScape", 4, true);
-         this.panelLoginWelcome.addText(256, 215 + var1, "You need a member account to use this server", 4, true);
-         this.panelLoginWelcome.addButtonBackground(256, 250 + var1, 200, 35);
-         this.panelLoginWelcome.addText(256, 250 + var1, "Click here to login", 5, false);
-         this.field_344 = this.panelLoginWelcome.addButton(256, 250 + var1, 200, 35);
       }
 
       this.panelLoginNewuser = new Panel(this.surface, 50);
