@@ -62,3 +62,9 @@ portal/public/phpmyadmin/tmp/
 
 !board/cache/production/.gitsave
 board/cache/production/
+
+portal/public/js/app.js.LICENSE.txt
+
+portal/public/css/all.css
+
+portal/public/css/tailwind.css
