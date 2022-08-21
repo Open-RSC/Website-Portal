@@ -19,29 +19,101 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        $preservation_online = DB::connection('preservation')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $preservation_online = DB::connection('preservation')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
-        $cabbage_online = DB::connection('cabbage')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $cabbage_online = DB::connection('cabbage')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
-        $uranium_online = DB::connection('uranium')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $uranium_online = DB::connection('uranium')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
-        $coleslaw_online = DB::connection('coleslaw')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $coleslaw_online = DB::connection('coleslaw')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
-        $retro_online = DB::connection('2001scape')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $retro_online = DB::connection('2001scape')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
-        $openpk_online = DB::connection('openpk')->table('players')
-            ->where('online', '=', '1')
-            ->count('online');
+        $openpk_online = DB::connection('openpk')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
 
         return view(
             'Home',
@@ -61,32 +133,32 @@ class HomeController extends Controller
         );
     }
 
-    public function wilderness()
+    public function wilderness(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('Wilderness_Map');
     }
 
-    public function faq()
+    public function faq(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('Frequently_Asked_Questions');
     }
 
-    public function terms()
+    public function terms(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('Frequently_Asked_Questions');
     }
 
-    public function privacy()
+    public function privacy(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('Frequently_Asked_Questions');
     }
 
-    public function rules()
+    public function rules(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('Rules_and_Security');
     }
 
-    public function worldmap($db)
+    public function worldmap($db): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $playerPositions = DB::connection($db)
             ->table('players as b')
@@ -112,7 +184,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function playnow()
+    public function playnow(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $desktopClientUrl = '/downloads/OpenRSC.jar';
         $androidClientUrl = '/downloads/openrsc.apk';
@@ -147,7 +219,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function worldlist()
+    public function worldlist(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {

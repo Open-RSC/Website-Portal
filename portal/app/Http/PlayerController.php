@@ -304,7 +304,7 @@ class PlayerController extends Controller
     /**
      * @param $db
      * @param $subpage
-     * @return Factory|View
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function bank($db, $subpage)
     {
@@ -343,7 +343,7 @@ class PlayerController extends Controller
     /**
      * @param $db
      * @param $subpage
-     * @return Factory|View
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function invitem($db, $subpage)
     {
