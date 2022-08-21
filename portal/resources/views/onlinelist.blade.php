@@ -24,7 +24,7 @@
                                 <a class="c" href="/player/{{ $db }}/{{ $player->username }}">
                                     <!-- Due to legacy OpenRSC database not following regular naming scheme -->
                                     <img src="{{ asset('/img/avatars').'/'.'openrsc'.'+'.$player->id }}.png"
-                                         alt="({{ ucfirst($player->username) }})" onerror="this.style.display='none'"
+                                         alt="({{ $player->username }})" onerror="this.style.display='none'"
                                          style="margin-top: -32px; padding-top: 35px; background-color: #0A0A0A;"/>
                                 </a>
                             </div>
@@ -34,7 +34,7 @@
                             <div class="rounded-circle" style="height: 64px; width: 64px; overflow: hidden;">
                                 <a class="c" href="/player/{{ $db }}/{{ $player->username }}">
                                     <img src="{{ asset('/img/avatars').'/'.$db.'+'.$player->id }}.png"
-                                         alt="({{ ucfirst($player->username) }})" onerror="this.style.display='none'"
+                                         alt="({{ $player->username }})" onerror="this.style.display='none'"
                                          style="margin-top: -32px; padding-top: 35px; background-color: #0A0A0A;"/>
                                 </a>
                             </div>
@@ -42,7 +42,7 @@
                     @endif
                 </td>
                 <td class="pl-6 pr-3 text-left">
-                    <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
+                    <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
                 </td>
                 <td class="text-left">
                     {{ App\Http\OnlineController::formattedTimeSince($player->login_date) }}

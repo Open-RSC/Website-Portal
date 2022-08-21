@@ -49,13 +49,13 @@ class HomeController extends Controller
                 'news_feed' => $news_feed,
                 'worlds' => [
                     /* legit worlds */
-                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "alias"=>"preservation"),
-                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "alias"=>"cabbage"),
-                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "alias"=>"2001scape"),
-                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "alias"=>"openpk"),
+                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "alias" => "preservation"),
+                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "alias" => "cabbage"),
+                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "alias" => "2001scape"),
+                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "alias" => "openpk"),
                     /* bot allowed */
-                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "alias"=>"uranium"),
-                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "alias"=>"coleslaw"),
+                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "alias" => "uranium"),
+                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "alias" => "coleslaw"),
                 ]
             ]
         );
@@ -89,14 +89,20 @@ class HomeController extends Controller
     public function worldmap($db)
     {
         $playerPositions = DB::connection($db)
-            ->table('players')
+            ->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
             ->where([
-                ['banned', '!=', '1'],
-                ['online', '=', '1'],
-                ['group_id', '>=', '8'],
-                ['y', '>=', '384'],
-                ['y', '<=', '910'],
+                ['b.group_id', '>=', '8'],
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
             ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->get();
 
         $playerPositions = $playerPositions->toArray();
@@ -106,10 +112,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function playnow() 
+    public function playnow()
     {
-        $desktopClientUrl = 'https://rsc.vet/downloads/OpenRSC.jar';
-        $androidClientUrl = 'https://rsc.vet/downloads/openrsc.apk';
+        $desktopClientUrl = '/downloads/OpenRSC.jar';
+        $androidClientUrl = '/downloads/openrsc.apk';
         $desktopClientName = 'Desktop Client';
         $androidClientName = 'Android Client';
 
@@ -122,7 +128,7 @@ class HomeController extends Controller
 
         // Detect Android client and change properties
         $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
-        if (strpos($useragent, 'android') !== false) {
+        if (str_contains($useragent, 'android')) {
             $gameClientUrl = $androidClientUrl;
             $gameClientName = $androidClientName;
             $graphicImageUrl = '/img/PlayNowGraphic-Android.png';
@@ -143,28 +149,100 @@ class HomeController extends Controller
 
     public function worldlist()
     {
-        $preservation_online = DB::connection('preservation')->table('players')
-            ->where('online', '=', '1')
+        $preservation_online = DB::connection('preservation')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
-        $cabbage_online = DB::connection('cabbage')->table('players')
-            ->where('online', '=', '1')
+        $cabbage_online = DB::connection('cabbage')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
-        $uranium_online = DB::connection('uranium')->table('players')
-            ->where('online', '=', '1')
+        $uranium_online = DB::connection('uranium')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
-        $coleslaw_online = DB::connection('coleslaw')->table('players')
-            ->where('online', '=', '1')
+        $coleslaw_online = DB::connection('coleslaw')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
-        $retro_online = DB::connection('2001scape')->table('players')
-            ->where('online', '=', '1')
+        $retro_online = DB::connection('2001scape')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
-        $openpk_online = DB::connection('openpk')->table('players')
-            ->where('online', '=', '1')
+        $openpk_online = DB::connection('openpk')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->where([
+                ['b.group_id', '>=', '0'], # was 8
+                ['b.online', '=', '1'],
+                ['b.block_private', '=', '0'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
             ->count('online');
 
         return view('worldlist',

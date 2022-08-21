@@ -13,12 +13,16 @@
             @if(!$world["dev"] && $world["type"] == "cyborgs")
                 <tr>
                     <td valign="center">
-                        <a href="/playnow"class="homepage-world-link">
+                        <a href="/playnow" class="homepage-world-link">
                             {{$world["name"]}}
                         </a>
                     </td>
                     <td align="right">
-                        {{$world["online"]}} {{$world["type"]}}
+                        <a href="/onlinelist/{{$world['alias']}}">
+                            <font color="#ffffff">
+                                {{$world["online"]}} {{$world["type"]}}
+                            </font>
+                        </a>
                     </td>
                 </tr>
             @endif
