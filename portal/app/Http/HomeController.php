@@ -167,10 +167,14 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '8'],
+                ['b.group_id', '>=', '0'],
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
+            ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
@@ -232,6 +236,10 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
+            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -247,6 +255,10 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
+            ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
@@ -264,6 +276,10 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
+            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -279,6 +295,10 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
+            ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
@@ -296,6 +316,10 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
+            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -311,6 +335,10 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
+            ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');

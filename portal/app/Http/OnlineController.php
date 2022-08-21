@@ -70,6 +70,10 @@ class OnlineController extends Component
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
+                $q->where('b.x', '>=', '335')
+                    ->orwhere('b.y', '>=', '425');
+            })
+            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
