@@ -173,7 +173,7 @@ class HomeController extends Controller
             ])
             ->where(function ($q) {
                 $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
+                    ->orwhere('b.y', '>=', '427');
             })
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -236,10 +236,6 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
-            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -255,10 +251,6 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
-            ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
@@ -276,10 +268,6 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
-            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -295,10 +283,6 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
-            ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
@@ -316,10 +300,6 @@ class HomeController extends Controller
                 ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
-            ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
@@ -335,10 +315,6 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
             ])
-            ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '425');
-            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
