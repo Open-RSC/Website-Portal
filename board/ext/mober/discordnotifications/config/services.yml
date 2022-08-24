@@ -1,0 +1,19 @@
+imports:
+    - { resource: parameters.yml }
+
+services:
+    mober.discordnotifications.notification_service:
+        class: mober\discordnotifications\notification_service
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@log'
+
+    mober.discordnotifications.listener:
+        class: mober\discordnotifications\event\notification_event_listener
+        arguments:
+            - '@language'
+            - '@mober.discordnotifications.notification_service'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
