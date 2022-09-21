@@ -66,7 +66,6 @@ class OnlineController extends Component
             })
             ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
             ->Orwhere([
-                //['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
             ])
             ->where(function ($q) {
@@ -78,7 +77,6 @@ class OnlineController extends Component
                 $join->on('c.key', '=', DB::raw("'total_played'"));
             })
             ->where([
-                //['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
                 //['b.block_private', '=', '0'],
             ])

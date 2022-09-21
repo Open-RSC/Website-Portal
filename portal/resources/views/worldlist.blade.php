@@ -1,124 +1,57 @@
 @extends('template')
 @section('content')
 
+    <div class="pt-2"></div>
+
     <span class="orsc-download-links d-block">
         Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
     </span>
 
-    <div style="text-align: center;">
-        <div style="text-align: center;">
-            <table bgcolor=black cellpadding=4 border=0 class="playable-worlds-table">
-                <tr>
-                    <td class="e">
-
-                        <div class="pt-2"></div>
-
-                        <div style="text-align: center;">
-                            <b>Everyone is a Member and can use the worlds below</b>
-                            <span class="d-block">
-                                Each world can hold up to 2000 players
+    <table bgcolor=black cellpadding=4 border=0 class="playable-worlds-table">
+        <tr>
+            <td class="e">
+                <table>
+                    <div class="pt-2"></div>
+                    <!--World list-->
+                    <div class="pt-2 d-block text-center">
+                            <span class="fw-bold">
+                                Everyone is a Member and can use the worlds below
                             </span>
+                        <span class="d-block">
+                            Each world can hold up to 2000 players
+                            </span>
+                    </div>
 
-                            <div class="pt-3"></div>
+                    <div class="pt-2 pb-2"></div>
 
-                            <table>
-                                <tr valign="top" class="pt-2">
-
-                                    <!-- Left side -->
-                                    <td align=center class="worlds-table-left-column">
-                                        <table>
-                                            <tr>
-                                                <td colspan=2>
-                                                    <img align=absmiddle src=/img/usflag.gif
-                                                         width=30 height=15 border=0>
-                                                    RSC Preservation
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td valign=center>
-                                                    <a href="http://game.openrsc.com/play/preservation/members"
-                                                       target="_parent" class=c>World 1</a>
-                                                </td>
-                                                <td align=right style="padding-left: 10px;">
-                                                    @if ($preservation_online == 1)
-                                                        {{ $preservation_online }} player
-                                                    @else
-                                                        {{ $preservation_online }} players
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">&nbsp;</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-
-                                    <!-- Center -->
-                                    <td align=center class="worlds-table-middle-column">
-                                        <table>
-                                            <tr>
-                                                <td colspan=2>
-                                                    <img align=absmiddle src=/img/usflag.gif
-                                                         width=30 height=15 border=0>
-                                                    2001Scape
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td valign=center>
-                                                    <a href="http://game.openrsc.com/play/2001scape/members"
-                                                       target="_parent" class=c>World 1</a>
-                                                </td>
-                                                <td align=right style="padding-left: 10px;">
-                                                    @if ($retro_online == 1)
-                                                        {{ $retro_online }} player
-                                                    @else
-                                                        {{ $retro_online }} players
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">&nbsp;</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-
-                                    <!-- Right side -->
-                                    <td align=center class="worlds-table-right-column">
-                                        <table>
-                                            <tr>
-                                                <td colspan=2>
-                                                    <img align=absmiddle src=/img/usflag.gif
-                                                         width=30 height=15 border=0>
-                                                    RSC Uranium
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td valign=center>
-                                                    <a href="http://game.openrsc.com/play/uranium/members"
-                                                       target="_parent" class="c">World
-                                                        1</a>
-                                                </td>
-                                                <td align=right style="padding-left: 10px;">
-                                                    @if ($uranium_online == 1)
-                                                        {{ $uranium_online }} cyborg
-                                                    @else
-                                                        {{ $uranium_online }} cyborgs
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">&nbsp;</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
+                    <div class="pr-5 pl-5">
+                        <div class="d-flex justify-content-between pb-3">
+                            @foreach($worlds as $world)
+                                @if(!$world["dev"] && $world["webclient"])
+                                    <div class="d-block">
+                                        <img src="/img/usflag.gif" width=30 height=15 alt="US">
+                                        {{$world["name"]}}
+                                        <span class="d-block">
+                                            <a class="c pr-3"
+                                               href="http://game.openrsc.com/play/{{$world['alias']}}/members"
+                                               target="_parent">
+                                                World 1
+                                            </a>
+                                            <span class="text-white">
+                                                {{$world["online"]}} {{$world["type"]}}
+                                            </span>
+                                    </span>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+                    </div>
+                    <div class="pb-1"></div>
+                </table>
+            </td>
+        </tr>
+    </table>
+
     <div class="promo-tiles-and-sword-table">
         <div class="promo-tiles-table-main">
             <div class="promo-tile-col">
@@ -134,7 +67,7 @@
             <div class="promo-tile-col">
                 <div class="promo-tile-col-inner b">
                     <a href="https://gitlab.com/open-runescape-classic/core"
-                        class="c" target="_parent">
+                       class="c" target="_parent">
                         <span style="color: #ffbb22; ">
                             <b>
                                 Contribute Fixes
@@ -158,4 +91,5 @@
             </div>
         </div>
     </div>
+
 @endsection

@@ -8,6 +8,7 @@ class HomeController extends Controller
 {
     public function home(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        // Forum news posts
         $news_feed = DB::connection('board')->table('phpbb_posts as p')
             ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
             ->where([
@@ -19,6 +20,8 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
+
+        // World online player counts
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
                 $join->on('b.id', '=', 'a.playerID');
@@ -103,19 +106,110 @@ class HomeController extends Controller
             })
             ->count('b.online');
 
+        //World logged in players over the last 48h
+        $preservation_48 = DB::connection('preservation')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
+        $cabbage_48 = DB::connection('cabbage')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
+        $uranium_48 = DB::connection('uranium')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
+        $coleslaw_48 = DB::connection('coleslaw')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
+        $retro_48 = DB::connection('2001scape')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
+        $openpk_48 = DB::connection('openpk')->table('players as b')
+            ->leftJoin('player_cache as a', function ($join) {
+                $join->on('b.id', '=', 'a.playerID');
+                $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
+            })
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                ['b.online', '=', '1'],
+            ])
+            ->where(function ($q) {
+                $q->where('a.value', '0')
+                    ->orWhereNull('a.value');
+            })
+            ->count('b.online');
+
         return view(
             'Home',
             [
                 'news_feed' => $news_feed,
                 'worlds' => [
                     /* legit worlds */
-                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "alias" => "preservation"),
-                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "alias" => "cabbage"),
-                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "alias" => "2001scape"),
-                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "alias" => "openpk"),
+                    array("name" => "RSC Preservation", "online" => $preservation_online, "last48" => $preservation_48, "dev" => false, "type" => "players", "webclient" => true, "alias" => "preservation"),
+                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "last48" => $cabbage_48, "dev" => false, "type" => "players", "webclient" => false, "alias" => "cabbage"),
+                    array("name" => "2001Scape", "online" => $retro_online, "last48" => $retro_48, "dev" => false, "type" => "players", "webclient" => true, "alias" => "2001scape"),
+                    array("name" => "Open PK", "online" => $openpk_online, "last48" => $openpk_48, "dev" => true, "type" => "players", "webclient" => false, "alias" => "openpk"),
                     /* bot allowed */
-                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "alias" => "uranium"),
-                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "alias" => "coleslaw"),
+                    array("name" => "RSC Uranium", "online" => $uranium_online, "last48" => $uranium_48, "dev" => false, "type" => "cyborgs", "webclient" => true, "alias" => "uranium"),
+                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "last48" => $coleslaw_48, "dev" => false, "type" => "cyborgs", "webclient" => false, "alias" => "coleslaw"),
                 ]
             ]
         );
@@ -213,21 +307,20 @@ class HomeController extends Controller
 
     public function worldlist(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        // World online player counts
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
                 $join->on('b.id', '=', 'a.playerID');
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
         $cabbage_online = DB::connection('cabbage')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -235,15 +328,13 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
         $uranium_online = DB::connection('uranium')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -251,15 +342,13 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
         $coleslaw_online = DB::connection('coleslaw')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -267,15 +356,13 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
         $retro_online = DB::connection('2001scape')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -283,15 +370,13 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
         $openpk_online = DB::connection('openpk')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -299,24 +384,27 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
             })
-            ->count('online');
+            ->count('b.online');
 
-        return view('worldlist',
+        return view(
+            'worldlist',
             [
-                'preservation_online' => $preservation_online,
-                'cabbage_online' => $cabbage_online,
-                'uranium_online' => $uranium_online,
-                'coleslaw_online' => $coleslaw_online,
-                'retro_online' => $retro_online,
-                'openpk_online' => $openpk_online,
+                'worlds' => [
+                    /* legit worlds */
+                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "webclient" => true, "alias" => "preservation"),
+                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "webclient" => false, "alias" => "cabbage"),
+                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "webclient" => true, "alias" => "2001scape"),
+                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "webclient" => false, "alias" => "openpk"),
+                    /* bot allowed */
+                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "webclient" => true, "alias" => "uranium"),
+                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "webclient" => false, "alias" => "coleslaw"),
+                ]
             ]
         );
     }
