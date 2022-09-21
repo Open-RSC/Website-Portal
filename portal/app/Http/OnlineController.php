@@ -64,10 +64,10 @@ class OnlineController extends Component
                 $join->on('b.id', '=', 'a.playerID');
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
-            ->where([
-                ['b.group_id', '>=', '0'], # was 8
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->Orwhere([
+                //['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -78,11 +78,11 @@ class OnlineController extends Component
                 $join->on('c.key', '=', DB::raw("'total_played'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
+                //['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
+                //['b.block_private', '=', '0'],
             ])
-            ->orderBy('b.username');
+            ->orderBy('b.login_date', 'desc');
     }
 
     /**

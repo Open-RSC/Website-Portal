@@ -25,9 +25,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -41,9 +39,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -57,9 +53,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -73,9 +67,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -89,9 +81,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -105,9 +95,7 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'], # was 8
                 ['b.online', '=', '1'],
-                ['b.block_private', '=', '0'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
