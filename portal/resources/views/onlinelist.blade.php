@@ -43,7 +43,11 @@
                     @endif
                 </td>
                 <td class="pl-3 pr-3 text-left">
-                    <a class="c" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
+                    @if ($player->online)
+                        <a class="c" style="color: #01fe00;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
+                    @else
+                        <a class="c" style="color: #ff0101;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
+                    @endif
                 </td>
                 <td class="text-left pr-3">
                     @if ($player->login_date)
