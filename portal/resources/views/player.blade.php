@@ -3,29 +3,30 @@
 @section('content')
 
     @if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username))
-        <div style="text-align: center;">
-            <table bgcolor=black cellpadding=4 border=0>
+        <div class="text-center" style="background-color: black;">
+            <table>
                 <tr>
-                    <td class=e>
-                        <div style="text-align:center;">
-                            Account <span style="color:yellow"><?= $subpage ?></span> does not exist
-                        </div>
+                    <td class="e p-5">
+                        Account <span class="rscfont" style="color:yellow">{{ ucfirst($subpage) }}</span> does not exist
                     </td>
                 </tr>
             </table>
         </div>
     @else
-        <div style="text-align: center;">
-            <table class="hiscores-player-table" bgcolor="black" cellpadding="4" border="0">
+        <div class="text-center">
+            <table class="hiscores-player-table" cellpadding="4" border="0" style="background-color: black;">
                 <tr>
                     <td class="e">
-                        <div style="text-align:center;">
+                        <div class="text-center">
                             RuneScape Hiscores for
-                            <span class="rscfont" style="color:yellow">
-                            @isset($players->first()->username)
+                            @if ($players->first()->group_id < '10')
+                                <span class="pl-1"></span>
+                                <img class="inline mb-1" src="{{ asset('img') }}/{{ $players->first()->group_id }}.svg"
+                                     alt="group {{ $players->first()->group_id }}" style="height: 11px; width: auto;"/>
+                            @endif
+                            <span class="rscfont" style="color:yellow;">
                                     {{ ucfirst($players->first()->username) }}
-                                @endif
-                        </span>
+                            </span>
                         </div>
                         <table>
                             <tr>
@@ -114,7 +115,7 @@
 
         @isset($players->first()->username)
             <div class="row e" style="background-color: black;">
-                <div class="col-4">
+                <div class="col-4 pt-2" style="width: 75px;">
                     <div class="rscfont d-block">
                         @if($db== 'preservation')
                             <!-- Due to legacy OpenRSC database not following regular naming scheme -->
@@ -126,7 +127,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-8 text-left">
+                <div class="col-8 text-left" style="width: 200px;">
                 <span class="rscfont d-block">
                     Status:
                     @if ($players->first()->online == 1)
