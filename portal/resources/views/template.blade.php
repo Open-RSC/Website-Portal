@@ -7,7 +7,7 @@
     <table class="breadcrumb-bar">
         <tbody>
         <tr>
-            <td class=e>
+            <td class="e">
                 <div class="text-center">
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
@@ -29,7 +29,7 @@
     <table class="breadcrumb-bar">
         <tbody>
         <tr>
-            <td class=e>
+            <td class="e">
                 <div class="text-center">
                     @if(Route::currentRouteName())
                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
@@ -49,7 +49,23 @@
 
 @elseif(Route::currentRouteName() == 'Play RuneScape')
     <main>
-        <script language="JavaScript">  function ConfirmMenu() {       var response=window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) window.history.back();/*parent.document.location.href='frame2.cgi?page=title.html';*/       return false;  }  function ConfirmTerms() {       var response=window.confirm("Clicking this link will exit the game and take you to our Terms+Conditions.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Terms and Conditions') }}";/*'frame2.cgi?page=terms/terms.html';*/       return false;  }  function ConfirmPrivacy() {       var response=window.confirm("Clicking this link will exit the game and take you to our Privacy Policy.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");       if (response) parent.document.location.href="{{ route('Privacy Policy') }}";/*'frame2.cgi?page=privacy/privacy.html';*/       return false;  }  </script>
+        <script>  function ConfirmMenu() {
+                const response = window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");
+                if (response) window.history.back();/*parent.document.location.href='frame2.cgi?page=title.html';*/
+                return false;
+            }
+
+            function ConfirmTerms() {
+                const response = window.confirm("Clicking this link will exit the game and take you to our Terms+Conditions.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");
+                if (response) parent.document.location.href = "{{ route('Terms and Conditions') }}";/*'frame2.cgi?page=terms/terms.html';*/
+                return false;
+            }
+
+            function ConfirmPrivacy() {
+                const response = window.confirm("Clicking this link will exit the game and take you to our Privacy Policy.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");
+                if (response) parent.document.location.href = "{{ route('Privacy Policy') }}";/*'frame2.cgi?page=privacy/privacy.html';*/
+                return false;
+            }  </script>
         <div class="pt-1"></div>
         <section class="top-border">
             <div class="top-left-border"></div>
@@ -74,7 +90,8 @@
                     To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}" onmousedown="return ConfirmTerms();">Terms+Conditions</a>
                     +
-                    <a class="c" href="{{ route('Privacy Policy') }}" onmousedown="return ConfirmPrivacy();">Privacy policy</a>
+                    <a class="c" href="{{ route('Privacy Policy') }}" onmousedown="return ConfirmPrivacy();">Privacy
+                        policy</a>
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>
@@ -126,13 +143,13 @@
                                             <div class="d-block">
                                                 <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                 <a class="c"
-                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/1">Ironman</a>
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/1">Ironman</a>
                                                 |
                                                 <a class="c"
-                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/2">Ultimate</a>
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/2">Ultimate</a>
                                                 |
                                                 <a class="c"
-                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/3">Hardcore</a>
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/3">Hardcore</a>
                                             </div>
                                         @endif
                                     @endif
@@ -152,11 +169,9 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
-                    To use our service you must agree to our
-                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
-                    +
-                    <a class="c" href="{{ route('Privacy Policy') }}">Privacy policy</a>
+                    Open RuneScape Classic is not affiliated with the original "RuneScape Classic"<br>
+                    nor JaGeX. To use our service you must agree to our
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms & Conditions</a>.
                 </div>
                 <div class="bottom-middle-border"></div>
             </div>

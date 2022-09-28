@@ -117,7 +117,7 @@
                     <table class="breadcrumb-bar">
                         <tbody>
                         <tr>
-                            <td class=e>
+                            <td class="e">
                                 <div class="text-center">
                                     @if(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>

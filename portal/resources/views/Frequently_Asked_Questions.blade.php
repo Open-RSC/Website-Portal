@@ -17,7 +17,7 @@
         managers, and more.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
-        <div class="rscfont pl-1 d-block"><span class="text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
+        <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> ~98% authentic replica of RSC based on RSC+ replay data</span>
             <span class="d-block"><i
@@ -26,7 +26,7 @@
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">RSC Cabbage</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">RSC Cabbage</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x or 5x XP rate</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 30% faster in-game speed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Auction House</span>
@@ -39,7 +39,7 @@
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">2001Scape</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">2001Scape</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
             <span class="d-block"><i
                         class="fas fa-angle-right"></i> Recreated version of RuneScape Classic from May 8 2001</span>
@@ -51,12 +51,12 @@
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">RSC Uranium</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">RSC Uranium</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">RSC Coleslaw</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">RSC Coleslaw</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 2x XP rate</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 30% faster in-game speed</span>
@@ -68,13 +68,13 @@
             <span class="d-block"><i class="fas fa-angle-right"></i> Fatigue disabled (optional to turn off XP gain using sleep)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">Open PK (Under development)</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">Open PK (Under development)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Stork-style point system and dedicated to F2P player killing</span>
             <span class="d-block"><i
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the Open RuneScape Classic framework</span>
         </div>
-        <div class="rscfont pl-1 d-block pt-2"><span class="text-primary d-block">RSC Kale (Under development)</span>
+        <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">RSC Kale (Under development)</span>
             <span class="d-block"><i
                         class="fas fa-angle-right"></i> Expansion of RuneScape Classic post May 8 2001 (wilderness, dueling, teleport spells)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Implementation of retro features (hiding, pray evil, tailoring, herblaw, etc)</span>
@@ -96,7 +96,8 @@
         and the public worlds are restarted with updates shortly after the posting of patch notes.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Is a single player edition available?</span>
-        Yes! Download a copy of the <a class="link-success underline" target="_blank" href="https://gitlab.com/open-runescape-classic/core">GitLab
+        Yes! Download a copy of the <a class="link-success underline" target="_blank"
+                                       href="https://gitlab.com/open-runescape-classic/core">GitLab
             "core" project repository</a> and start
         playing. A "Start-Windows.cmd" script is included to launch a portable version that does not require any
         additional installation nor configuration.
