@@ -44,9 +44,9 @@
                 </td>
                 <td class="pl-3 pr-3 text-left">
                     @if ($player->online)
-                        <a class="c" style="color: #01fe00;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
+                        <a class="rscfont c" style="color: #01fe00;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
                     @else
-                        <a class="c" style="color: #ff0101;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
+                        <a class="rscfont c" style="color: #ff0101;" href="/player/{{ $db }}/{{ $player->username }}">{{ $player->username }}</a>
                     @endif
                 </td>
                 <td class="text-left pr-3">
