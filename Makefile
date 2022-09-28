@@ -108,10 +108,10 @@ npm-install:
 	docker exec -i php bash -c "cd /var/www/html/portal && npm install"
 
 npm-run-dev:
-	docker exec -i php bash -c "cd /var/www/html/portal && npm run dev"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm run development"
 
 npm-run-prod:
-	docker exec -i php bash -c "cd /var/www/html/portal && npm run prod"
+	docker exec -i php bash -c "cd /var/www/html/portal && npm run production"
 
 npm-run-watch:
 	docker exec -i php bash -c "cd /var/www/html/portal && npm run watch"
