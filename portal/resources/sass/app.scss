@@ -9,6 +9,12 @@ html, body {
   border: 0;
 }
 
+@font-face {
+  font-family: "RSCBold";
+  src: url("/fonts/rscbold.woff") format('woff'),
+  url("/fonts/rscbold.ttf") format('truetype');
+}
+
 body {
   background-image: url("/img/background.jpg");
   display: flex;
@@ -32,6 +38,11 @@ BODY, P, TD {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   color: white;
+}
+
+.rscfont {
+  font-family: RSCBold, Arial, Helvetica, sans-serif;
+  font-size: 1.25em;
 }
 
 .b {
@@ -693,7 +704,6 @@ section > div.bottom-right-border {
 div.middle-content-server dl {
   display: grid;
   grid-template-columns: 70% 30%;
-  margin: 0;
   margin: 0 auto;
 }
 

@@ -30,6 +30,8 @@ mix.postCss('resources/css/tailwind.css', 'public/css', [
 
 mix.sass('resources/sass/all.scss', 'public/css').version();
 
-/*if (mix.inProduction()) {
+mix.copyDirectory('resources/assets/fonts', 'public/fonts')
+
+if (mix.inProduction()) {
     mix.version();
-}*/
+}
