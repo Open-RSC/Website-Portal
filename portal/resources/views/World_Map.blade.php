@@ -1,57 +1,62 @@
 @extends('template')
 @section('content')
-    <?php
+
+    <div>
+        <?php
         // When changing the mapWidth, don't forget to update the body-world-map class in app.scss.
         const mapWidth = 2316;
         const mapHeight = 1590;
-    ?>
-    <div class="col">
-        <!-- loads the crosshairs image to be referenced by javascript -->
-        <img src="{{ asset('img/crosshairs.svg') }}" id="crosshairs" style="display: none;" alt="crosshairs"/>
+        ?>
+
+        <img src="{{ asset('img/mapbg.png') }}" id="box" style="display: none;" alt="box"/>
 
         <div class="text-center" style="overflow: auto;">
             <script>
                 if (document) {
-                    document.addEventListener("DOMContentLoaded", function(event) {
-                        var scrollposX = sessionStorage.getItem('scrollposX');
-                        var scrollposY = sessionStorage.getItem('scrollposY');
+                    document.addEventListener("DOMContentLoaded", function (event) {
+                        const scrollposX = sessionStorage.getItem('scrollposX');
+                        const scrollposY = sessionStorage.getItem('scrollposY');
                         if (scrollposX && scrollPosY) window.scrollTo(scrollposX, scrollposY);
                     });
                 }
 
-                function showPlayerPositions(context, img, charX, charY, username, charAdderX, charMultiplier, charAdderY,
-                    crosshairWidth, crosshairHeight) {
-                    context.drawImage(img, <?= mapWidth ?> - ((charX + charAdderX) * charMultiplier), 
-                        (charY + charAdderY) * charMultiplier, crosshairWidth, crosshairHeight);
-                    context.fillText(username, 
-                        <?= mapWidth ?> - ((charX + charAdderX) * charMultiplier), 
+                function showPlayerPositions(context, box, charX, charY, username, charAdderX, charMultiplier, charAdderY,
+                                             crosshairWidth, crosshairHeight) {
+                    context.drawImage(box, <?= mapWidth ?> - ((charX + charAdderX + 5) * charMultiplier),
+                        (charY + charAdderY - 2) * charMultiplier, crosshairWidth, crosshairHeight);
+                    context.fillText(username,
+                        <?= mapWidth ?> - ((charX + charAdderX) * charMultiplier),
+                        (charY + charAdderY) * charMultiplier);
+
+                    context.fillText("+",
+                        <?= mapWidth ?> - ((charX + charAdderX + 4) * charMultiplier),
                         (charY + charAdderY) * charMultiplier);
                 }
 
-                // Automatically reload the page every 20 seconds
+                // Automatically reload the page every 15 seconds
                 function autoRefreshPage() {
                     sessionStorage.setItem('scrollposX', window.scrollX);
                     sessionStorage.setItem('scrollposY', window.scrollY);
                     location.reload();
                 }
-                
+
                 setInterval('autoRefreshPage()', 15000);
 
                 function drawPosition() {
-                    const charAdderX = 6
-                    const charAdderY = -388
+                    const charAdderX = -2
+                    const charAdderY = -380
                     const charMultiplier = 3
-                    const crosshairWidth = 38
-                    const crosshairHeight = 38
+                    const boxWidth = 100
+                    const boxHeight = 13
 
                     let canvas = document.getElementById('canvas');
                     let context = canvas.getContext('2d');
-                    let img = document.getElementById("crosshairs");
+                    let box = document.getElementById("box");
 
                     // text overlay settings
-                    context.font = '12px Arial';
+                    context.font = '1.25em RSCBold';
                     context.textBaseline = 'middle';
-                    context.fillStyle = "gold";
+                    context.fillStyle = "red";
 
                     // mouse cursor movement triggered
                     canvas.addEventListener('mousemove', function (e) {
@@ -59,37 +64,38 @@
                         // clear when mouse moves and redraw
                         context.clearRect(0, 0, canvas.width, canvas.height);
 
-                        // shows RSC coordinate overlay
-                        context.beginPath();
-                        context.arc(e.layerX, e.layerY, 3, 0, 2 * Math.PI, false);
-                        context.closePath();
-                        context.fill();
-                        let realX = Math.round((-e.offsetX / 3 + 767));
-                        let realY = Math.round(e.layerY / 3 + 433);
-                        let text = '(' + realX + ', ' + realY + ')';
-                        context.fillText(text, e.layerX + 5, e.layerY);
-
                         // show player positions after each redraw
                         @foreach ($playerPositions as $char)
-                            showPlayerPositions(context, img, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
-                                charAdderX, charMultiplier, charAdderY, crosshairWidth, crosshairHeight);
+                        // cross-hair image
+                        showPlayerPositions(context, box, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
+                            charAdderX, charMultiplier, charAdderY);
+
+                        // player name
+                        showPlayerPositions(context, box, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
+                            charAdderX, charMultiplier, charAdderY, boxWidth, boxHeight);
                         @endforeach
                     });
 
                     // draw player positions initially when the page loads
                     window.onload = function () {
                         @foreach ($playerPositions as $char)
-                            showPlayerPositions(context, img, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
-                                charAdderX, charMultiplier, charAdderY, crosshairWidth, crosshairHeight);
+                        // cross-hair image
+                        showPlayerPositions(context, box, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
+                            charAdderX, charMultiplier, charAdderY);
+
+                        // player name
+                        showPlayerPositions(context, box, {{$char->x}}, {{$char->y}}, '{{ucfirst($char->username)}}',
+                            charAdderX, charMultiplier, charAdderY, boxWidth, boxHeight);
                         @endforeach
                     };
                 }
             </script>
 
-            <canvas style="background-image: url({{ asset('img/RscVet-FullWorldMap.png') }}" id="canvas" 
-                width="<?= mapWidth ?>" height="<?= mapHeight ?>">
-                <script>drawPosition();</script>
+            <canvas style="background-image: url({{ asset('img/RscVet-FullWorldMap.png') }}" id="canvas"
+                    width="<?= mapWidth ?>" height="<?= mapHeight ?>">
             </canvas>
+            <script>drawPosition();</script>
         </div>
     </div>
+
 @endsection
