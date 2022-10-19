@@ -19,6 +19,7 @@ interface SocketCallback {
 public class Socket {
     private String host;
     private int port;
+    private boolean secure;
     private WebSocket client;
     private boolean connected = false;
     private int bytesAvailable = 0;
@@ -27,15 +28,17 @@ public class Socket {
     private int offset = 0;
     private int bytesLeft = 0;
 
-    Socket(String host, int port) {
+    Socket(String host, int port, boolean secure) {
         this.host = host;
         this.port = port;
+        this.secure = secure;
     }
 
     @Async
     public native int connect();
     public void connect(AsyncCallback<Integer> callback) {
-        this.client = WebSocket.create("ws://" + this.host + ":" + this.port, "binary");
+    	String protocol = secure ? "wss" : "ws";
+    	this.client = WebSocket.create(protocol + "://" + this.host + ":" + this.port, "binary");
         this.client.setBinaryType("arraybuffer");
 
         this.client.onClose(new EventListener<CloseEvent>(){

@@ -24,8 +24,8 @@ public class ClientStream extends Buffer {
       super(var1);
    }
 
-   public static ClientStream create(String address, int port) throws IOException {
-      Socket socket = new Socket(address, port);
+   public static ClientStream create(String address, int port, boolean secure) throws IOException {
+      Socket socket = new Socket(address, port, secure);
       socket.connect();
 
       //socket.setSoTimeout(30000);

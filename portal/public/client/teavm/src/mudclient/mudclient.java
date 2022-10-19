@@ -10,6 +10,8 @@ public class mudclient extends GameConnection {
    public static boolean disableAppletHostCheck = true;
    // inauthentic boolean allows members config to signup for new account
    public static boolean allowMembersConfigSignups = true;
+   // inauthentic boolean to not unclick if clicking inventory icon for mobile devices
+   boolean openInventory = false;
 
    // $FF: renamed from: bq boolean
    public boolean members;
@@ -814,6 +816,8 @@ public class mudclient extends GameConnection {
 		   Packet.reenableOpcodeEncryption = false;
 		}
 		// END INAUTHENTIC COMMAND LINE ARGUMENTS
+		
+		GameConnection.secure = Location.current().getProtocol().toLowerCase().contains("https");
 
       mud.startApplication(mud.gameWidth, mud.gameHeight + 11, "Runescape by Andrew Gower", false);
       mud.field_32 = 10;
@@ -848,7 +852,7 @@ public class mudclient extends GameConnection {
 
       super.offsetY = 0;
       GameConnection.maxReadTries = 1000;
-      GameConnection.clientVersion = Version.clientVer;
+      GameConnection.clientVersion = Version.clientVer; 
 
       this.loadGameConfig();
 
@@ -2129,11 +2133,11 @@ public class mudclient extends GameConnection {
             this.field_343 = this.panelLoginWelcome.addButton(156, 240 + var1, 120, 35);
             this.field_344 = this.panelLoginWelcome.addButton(356, 240 + var1, 120, 35);
          } else {
-            this.panelLoginWelcome.addText(256, 200 + var1, "Welcome to RuneScape", 4, true);
+        	this.panelLoginWelcome.addText(256, 200 + var1, "Welcome to RuneScape", 4, true);
             this.panelLoginWelcome.addText(256, 215 + var1, "You need a member account to use this server", 4, true);
             this.panelLoginWelcome.addButtonBackground(256, 250 + var1, 200, 35);
             this.panelLoginWelcome.addText(256, 250 + var1, "Click here to login", 5, false);
-            this.field_344 = this.panelLoginWelcome.addButton(256, 250 + var1, 200, 35);
+            this.field_344 = this.panelLoginWelcome.addButton(256, 250 + var1, 200, 35); 
          }
       }
 
@@ -12202,8 +12206,14 @@ public class mudclient extends GameConnection {
          }
 
          if(!this.field_218 && this.mouseButtonClick == 1 || this.field_218 && this.mouseButtonClick == 1 && this.field_225 == 1) {
+        	 if(!this.openInventory && super.mouseX >= this.surface.field_723 - 35 && super.mouseY >= 3 && super.mouseX < this.surface.field_723 - 3 && super.mouseY < 35) {
+        		 this.mouseButtonClick = 0;
+        		 this.openInventory = true;
+        		 return;
+              }
             this.method_131(this.field_235[0]);
             this.mouseButtonClick = 0;
+            this.openInventory = false;
             return;
          }
 
@@ -12615,7 +12625,7 @@ public class mudclient extends GameConnection {
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
-      Socket socket = new Socket(address, port);
+      Socket socket = new Socket(address, port, secure);
       socket.connect();
       //socket.setSoTimeout(30000);
       //socket.setTcpNoDelay(true);

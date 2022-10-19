@@ -11,6 +11,7 @@ public class GameConnection extends GameShell {
    public String serverAddress = "127.0.0.1";
    public String serverAddress2 = "64.23.60.47";
    public int port = 43594;
+   public static boolean secure;
    String username = "";
    String password = "";
    public ClientStream clientStream;
@@ -19,6 +20,8 @@ public class GameConnection extends GameShell {
    byte[] pdata = new byte[5000];
    long hd;
    long lastPing;
+   // inauthentic boolean allows sort of friend list to happen
+   public boolean allowFriendSorting = true;
    public int friendListCount;
    public long[] friendListHashes = new long[50];
    public int[] friendListOnline = new int[50];
@@ -38,7 +41,7 @@ public class GameConnection extends GameShell {
          var2 = Utility.formatAuthString(var2, 20);
          if(var1.trim().length() != 0 && var2.trim().length() != 0) {
             this.showLoginScreenStatus(loginScreenStatuses[6], loginScreenStatuses[7]);
-            this.clientStream = ClientStream.create(this.serverAddress, this.port);
+            this.clientStream = ClientStream.create(this.serverAddress, this.port, secure);
 
             this.clientStream.newPacket(0);
             this.clientStream.writeLong(Utility.username2hash(var1));
@@ -73,7 +76,7 @@ public class GameConnection extends GameShell {
 
    public void newPlayer(String var1, String var2, String var3, int var4, int var5, int var6) {
       try {
-    	  this.clientStream = ClientStream.create(this.serverAddress, this.port);
+    	  this.clientStream = ClientStream.create(this.serverAddress, this.port, secure);
 
          this.clientStream.newPacket(2);
          var1 = Utility.formatAuthString(var1, 20);
@@ -136,7 +139,7 @@ public class GameConnection extends GameShell {
             this.s(loginScreenStatuses[2], loginScreenStatuses[3]);
 
             try {
-               this.clientStream = ClientStream.create(this.serverAddress, this.port);
+               this.clientStream = ClientStream.create(this.serverAddress, this.port, secure);
 
                this.clientStream.newPacket(19);
                this.clientStream.writeLong(Utility.username2hash(var1));
@@ -290,6 +293,9 @@ public class GameConnection extends GameShell {
 
                            this.friendListOnline[var6] = var5;
                            this.psize = 0;
+                           if (this.allowFriendSorting) {
+                        	   this.sortFriends();
+                           }
                            return;
                         }
                      }
@@ -298,6 +304,9 @@ public class GameConnection extends GameShell {
                      this.friendListOnline[this.friendListCount] = var5;
                      ++this.friendListCount;
                      this.showServerMessage("@pri@" + Utility.hash2username(var3) + " has been added to your friends list");
+                     if (this.allowFriendSorting) {
+                  	   this.sortFriends();
+                     }
                   }
                }
             }
@@ -309,6 +318,24 @@ public class GameConnection extends GameShell {
          this.lostConnection();
       }
 
+   }
+   
+   public void sortFriends() {
+	   int i = 1;
+	   while (i != 0) {
+		   i = 0;
+		   for (int j = 0; j < this.friendListCount - 1; j++) {
+			   if (this.friendListOnline[j] < this.friendListOnline[(j + 1)]) {
+				   int k = this.friendListOnline[j];
+				   this.friendListOnline[j] = this.friendListOnline[(j + 1)];
+				   this.friendListOnline[(j + 1)] = k;
+				   long l = this.friendListHashes[j];
+				   this.friendListHashes[j] = this.friendListHashes[(j + 1)];
+				   this.friendListHashes[(j + 1)] = l;
+				   i = 1;
+			   }
+		   }
+	   }
    }
 
    public void ab(String var1) {
