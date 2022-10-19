@@ -33,7 +33,7 @@
                                         {{$world["name"]}}
                                         <span class="d-block">
                                             <a class="c pr-3"
-                                               href="http://game.openrsc.com/play/{{$world['alias']}}/members"
+                                               href="https://game.openrsc.com/play/{{$world['alias']}}/members"
                                                target="_parent">
                                                 World 1
                                             </a>
