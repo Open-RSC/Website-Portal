@@ -8,6 +8,7 @@ import org.teavm.jso.canvas.ImageData;
 public class mudclient extends GameConnection {
   boolean zs = false;
   int at;
+  boolean openInventory = false;
   boolean cameraAutoAngleDebug = false;
   boolean optionCameraModeAuto = true;
   boolean optionPlayerKiller = false;
@@ -302,6 +303,8 @@ public class mudclient extends GameConnection {
        mud.port = Integer.parseInt(webArgs[2]);
     }
     
+    GameConnection.secure = Location.current().getProtocol().toLowerCase().contains("https");
+    
     mud.startApplication(mud.gameWidth, mud.gameHeight + 22, "Runescape by Andrew Gower", false);
     mud.threadSleep = 10;
   }
@@ -313,6 +316,7 @@ public class mudclient extends GameConnection {
     GameConnection.vc = 500;
     GameConnection.uc = false;
     GameConnection.xc = 5;
+    
     this.loadGameConfig();
     this.spriteMedia = 2000;
     this.zy = this.spriteMedia + 100;
@@ -3998,7 +4002,7 @@ public class mudclient extends GameConnection {
         this.drawRightClickMenu();
       }
     }
-
+    
     this.mouseButtonClick = 0;
   }
 
@@ -5958,7 +5962,7 @@ public class mudclient extends GameConnection {
     }
   }
 
-  public void createTopMouseMenu() {
+  public void createTopMouseMenu() {  
     if (this.selectedSpell >= 0 || this.selectedItemInventoryIndex >= 0) {
       this.menuItemText1[this.menuItemsCount] = "Cancel";
       this.menuItemText2[this.menuItemsCount] = "";
@@ -6024,8 +6028,14 @@ public class mudclient extends GameConnection {
       }
 
       if (!this.optionMouseButtonOne && this.mouseButtonClick == 1 || this.optionMouseButtonOne && this.mouseButtonClick == 1 && this.menuItemsCount == 1) {
+          if (!this.openInventory && super.mouseX >= this.surface.width2 - 35 && super.mouseY >= 3 && super.mouseX < this.surface.width2 - 3 && super.mouseY < 35) {
+        	this.mouseButtonClick = 0;
+        	this.openInventory = true;
+          	return;
+          }
         this.menuItemClick(this.menuIndices[0]);
         this.mouseButtonClick = 0;
+        this.openInventory = false;
         return;
       }
 

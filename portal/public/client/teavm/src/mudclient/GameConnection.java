@@ -16,6 +16,7 @@ public class GameConnection extends GameShell {
    public String address;
    // $FF: renamed from: V int
    public int port;
+   public static boolean secure;
    // $FF: renamed from: W java.lang.String
    String username_;
    // $FF: renamed from: X java.lang.String
@@ -102,7 +103,7 @@ public class GameConnection extends GameShell {
                   this.showLoginResponse(loginResponses[6], loginResponses[7]);
                }
 
-            	this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
+            	this.clientStream = new ClientStream(this.connect(this.address, this.port, secure), this);
                this.clientStream.field_591 = maxReadTries;
                int sessionId = this.clientStream.readInt();
                this.sessionId = sessionId;
@@ -292,7 +293,7 @@ public class GameConnection extends GameShell {
             password = Utility.method_453(password, 20);
 					 // Please wait... Connecting to server
             this.showLoginResponse(loginResponses[6], loginResponses[7]);
-            this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
+            this.clientStream = new ClientStream(this.connect(this.address, this.port, secure), this);
             int sessionId = this.clientStream.readInt();
             this.sessionId = sessionId;
             System.out.println("Session id: " + sessionId); // authentic System.out.println
