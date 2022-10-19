@@ -295,10 +295,10 @@ public class GameShell {
                 	 int posX = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
                 	 int posY = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
                 	 if (((JSNumber)event1.getTimeStamp()).doubleValue() > time + 100) {
-                		 if (posY != my || posX != mx)
+                		 if (Math.abs(posY - my) > 5 || Math.abs(posX - mx) > 5) //Firefox event may change slightly X/Y when holding touch on one point
                 			 GameShell.clearTimeout(timerId);
                 		 if (Math.abs(posY - my) + 70 > Math.abs(posX - mx) || Math.abs(posY - my) > 20) {
-                			 if (Math.abs(posX - mx) <= 20) {
+                			 if (Math.abs(posX - mx) <= 20 && Math.abs(posY - my) > 10) { //assure on browsers user wants scroll
                 				 int clientX = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
                                  int clientY = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
                                  MouseEvent mouseEvt = mouseEvent(event1, clientX, clientY);
