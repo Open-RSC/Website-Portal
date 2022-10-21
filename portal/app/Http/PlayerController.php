@@ -36,43 +36,71 @@ class PlayerController extends Controller
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             return DB::connection($db)
                 ->table("experience as a")
-                ->join("players as b", function ($join) {
-                    $join->on("a.playerid", "=", "b.id");
-                })
-                ->join("ironman as c", function ($join) {
-                    $join->on("b.id", "=", "c.playerid");
-                })
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select(DB::raw("count(a.playerid)"))
-                ->where("a.$skill", ">", function ($query) use ($db, $subpage, $skill) {
+                ->where(DB::raw($this->cast('a', $skill)), ">", function ($query) use ($db, $subpage, $skill) {
                     $query->from("experience as a")
-                        ->join("players as b", function ($join) {
-                            $join->on("a.playerid", "=", "b.id");
-                        })
-                        ->select("a.$skill")
+                        ->join('players as b', 'a.playerID', '=', 'b.id')
+                        ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                        ->select(DB::raw($this->cast('a', $skill)))
                         ->where("b.username", "=", $subpage);
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
                 ->where("c.iron_man", "!=", 4)
-                ->count();
+                ->count()
+                +
+                DB::connection($db)
+                    ->table("experience as a")
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                    ->join('ironman as c', 'b.id', '=', 'c.playerID')
+                    ->select(DB::raw("count(a.playerid)"))
+                    ->where(DB::raw('aa.' . $skill ), "<", function ($query) use ($db, $subpage, $skill) {
+                        $query->from("experience as a")
+                            ->join('players as b', 'a.playerID', '=', 'b.id')
+                            ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                            ->select(DB::raw('aa.' . $skill))
+                            ->where("b.username", "=", $subpage);
+                    })
+                    ->whereNotIn('b.banned', [-1, 1])
+                    ->where("b.group_id", ">=", 8)
+                    ->where("c.iron_man", "!=", 4)
+                    ->count();
         } else {
             return DB::connection($db)
                 ->table("experience as a")
-                ->join("players as b", function ($join) {
-                    $join->on("a.playerid", "=", "b.id");
-                })
+                ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select(DB::raw("count(a.playerid)"))
-                ->where("a.$skill", ">", function ($query) use ($db, $subpage, $skill) {
+                ->where(DB::raw($this->coalesce('a', 'aa', $skill)), ">", function ($query) use ($db, $subpage, $skill) {
                     $query->from("experience as a")
-                        ->join("players as b", function ($join) {
-                            $join->on("a.playerid", "=", "b.id");
-                        })
-                        ->select("a.$skill")
+                        ->join('players as b', 'a.playerID', '=', 'b.id')
+                        ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                        ->select(DB::raw($this->coalesce('a', 'aa', $skill)))
                         ->where("b.username", "=", $subpage);
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where("b.group_id", ">=", 8)
-                ->count();
+                ->count()
+                +
+                DB::connection($db)
+                    ->table("experience as a")
+                    ->join('players as b', 'a.playerID', '=', 'b.id')
+                    ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                    ->select(DB::raw("count(a.playerid)"))
+                    ->where(DB::raw('aa.' . $skill ), "<", function ($query) use ($db, $subpage, $skill) {
+                        $query->from("experience as a")
+                            ->join('players as b', 'a.playerID', '=', 'b.id')
+                            ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
+                            ->select(DB::raw('aa.' . $skill))
+                            ->where("b.username", "=", $subpage);
+                    })
+                    ->whereNotIn('b.banned', [-1, 1])
+                    ->where("b.group_id", ">=", 8)
+                    ->count();
         }
     }
 
