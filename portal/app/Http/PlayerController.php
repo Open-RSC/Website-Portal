@@ -76,6 +76,14 @@ class PlayerController extends Controller
         }
     }
 
+    public function coalesce($alias1, $alias2, $subpage, $relabel = false): string {
+        if (!$relabel) {
+            return 'ifnull(' . $this->maxCast($alias2, $subpage) . ',' . $this->cast($alias1, $subpage) . ')';
+        } else {
+            return 'ifnull(' . $this->maxCast($alias2, $subpage) . ',' . $this->cast($alias1, $subpage) . ') as ' . $subpage;
+        }
+    }
+
     public function cast($alias, $subpage, $relabel = false): string {
         if (!$relabel) {
             return $alias . '.' . $subpage . '&0xFFFFFFFF';
@@ -84,9 +92,23 @@ class PlayerController extends Controller
         }
     }
 
+    public function maxCast($alias, $subpage, $relabel = false): string {
+        if (!$relabel) {
+            return $alias . '.' . $subpage . '|0xFFFFFFFF';
+        } else {
+            return '(' . $alias . '.' . $subpage . '|0xFFFFFFFF) as ' . $subpage;
+        }
+    }
+
     public function skill_cast($alias, $skill_array): array {
         return array_map(function ($skill) use ($alias) {
             return DB::raw($this->cast($alias, $skill, true));
+        }, $skill_array);
+    }
+
+    public function skill_coalesce($alias1, $alias2, $skill_array): array {
+        return array_map(function ($skill) use ($alias1, $alias2) {
+            return DB::raw($this->coalesce($alias1, $alias2, $skill, true));
         }, $skill_array);
     }
 
@@ -146,29 +168,30 @@ class PlayerController extends Controller
             $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM((' . $this->cast('a', 'attack') . ') +
-			(' . $this->cast('a', 'strength') . ') +
-			(' . $this->cast('a', 'defense') . ') +
-			(' . $this->cast('a', 'hits') . ') +
-			(' . $this->cast('a', 'ranged') . ') +
-			(' . $this->cast('a', 'prayGood') . ') +
-			(' . $this->cast('a', 'prayEvil') . ') +
-			(' . $this->cast('a', 'goodMagic') . ') +
-			(' . $this->cast('a', 'evilMagic') . ') +
-			(' . $this->cast('a', 'cooking') . ') +
-			(' . $this->cast('a', 'woodcutting') . ') +
-			(' . $this->cast('a', 'firemaking') . ') +
-			(' . $this->cast('a', 'crafting') . ') +
-			(' . $this->cast('a', 'smithing') . ') +
-			(' . $this->cast('a', 'mining') . ') +
-			(' . $this->cast('a', 'influence') . ') +
-			(' . $this->cast('a', 'thieving') . ') +
-			(' . $this->cast('a', 'tailoring') . ') +
-			(' . $this->cast('a', 'herblaw') . '))
+			(SUM((' . $this->coalesce('a', 'aa', 'attack') . ') +
+			(' . $this->coalesce('a', 'aa', 'strength') . ') +
+			(' . $this->coalesce('a', 'aa', 'defense') . ') +
+			(' . $this->coalesce('a', 'aa', 'hits') . ') +
+			(' . $this->coalesce('a', 'aa', 'ranged') . ') +
+			(' . $this->coalesce('a', 'aa', 'prayGood') . ') +
+			(' . $this->coalesce('a', 'aa', 'prayEvil') . ') +
+			(' . $this->coalesce('a', 'aa', 'goodMagic') . ') +
+			(' . $this->coalesce('a', 'aa', 'evilMagic') . ') +
+			(' . $this->coalesce('a', 'aa', 'cooking') . ') +
+			(' . $this->coalesce('a', 'aa', 'woodcutting') . ') +
+			(' . $this->coalesce('a', 'aa', 'firemaking') . ') +
+			(' . $this->coalesce('a', 'aa', 'crafting') . ') +
+			(' . $this->coalesce('a', 'aa', 'smithing') . ') +
+			(' . $this->coalesce('a', 'aa', 'mining') . ') +
+			(' . $this->coalesce('a', 'aa', 'influence') . ') +
+			(' . $this->coalesce('a', 'aa', 'thieving') . ') +
+			(' . $this->coalesce('a', 'aa', 'tailoring') . ') +
+			(' . $this->coalesce('a', 'aa', 'herblaw') . '))
 			/4.0)
 			as total_xp
-			'), ...$this->skill_cast('a', $skill_array))
+			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
                 ])
@@ -177,28 +200,29 @@ class PlayerController extends Controller
             $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
+                ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM((' . $this->cast('a', 'attack') . ') +
-			(' . $this->cast('a', 'strength') . ') +
-			(' . $this->cast('a', 'defense') . ') +
-			(' . $this->cast('a', 'hits') . ') +
-			(' . $this->cast('a', 'ranged') . ') +
-			(' . $this->cast('a', 'prayer') . ') +
-			(' . $this->cast('a', 'magic') . ') +
-			(' . $this->cast('a', 'cooking') . ') +
-			(' . $this->cast('a', 'woodcut') . ') +
-			(' . $this->cast('a', 'fletching') . ') +
-			(' . $this->cast('a', 'fishing') . ') +
-			(' . $this->cast('a', 'firemaking') . ') +
-			(' . $this->cast('a', 'crafting') . ') +
-			(' . $this->cast('a', 'smithing') . ') +
-			(' . $this->cast('a', 'mining') . ') +
-			(' . $this->cast('a', 'herblaw') . ') +
-			(' . $this->cast('a', 'agility') . ') +
-			(' . $this->cast('a', 'thieving') . '))
+			(SUM((' . $this->coalesce('a', 'aa', 'attack') . ') +
+			(' . $this->coalesce('a', 'aa', 'strength') . ') +
+			(' . $this->coalesce('a', 'aa', 'defense') . ') +
+			(' . $this->coalesce('a', 'aa', 'hits') . ') +
+			(' . $this->coalesce('a', 'aa', 'ranged') . ') +
+			(' . $this->coalesce('a', 'aa', 'prayer') . ') +
+			(' . $this->coalesce('a', 'aa', 'magic') . ') +
+			(' . $this->coalesce('a', 'aa', 'cooking') . ') +
+			(' . $this->coalesce('a', 'aa', 'woodcut') . ') +
+			(' . $this->coalesce('a', 'aa', 'fletching') . ') +
+			(' . $this->coalesce('a', 'aa', 'fishing') . ') +
+			(' . $this->coalesce('a', 'aa', 'firemaking') . ') +
+			(' . $this->coalesce('a', 'aa', 'crafting') . ') +
+			(' . $this->coalesce('a', 'aa', 'smithing') . ') +
+			(' . $this->coalesce('a', 'aa', 'mining') . ') +
+			(' . $this->coalesce('a', 'aa', 'herblaw') . ') +
+			(' . $this->coalesce('a', 'aa', 'agility') . ') +
+			(' . $this->coalesce('a', 'aa', 'thieving') . '))
 			/4.0)
 			as total_xp
-			'), ...$this->skill_cast('a', $skill_array))
+			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
                 ])

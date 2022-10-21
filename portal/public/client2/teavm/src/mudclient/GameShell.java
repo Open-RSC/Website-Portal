@@ -178,8 +178,10 @@ public class GameShell {
                         	 
                          } else if (event1.getScreenX() > mx){ //right w.r.t mouse down position
                              rotate(true);
+                             mouseUp();
                          } else {
                         	 rotate(false);
+                        	 mouseUp();
                          }
                          ny = event1.getScreenY();
                          nx = event1.getScreenX();
