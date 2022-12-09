@@ -1,5 +1,19 @@
 @extends('template')
 @section('content')
+
+<!-- RS Archive banner -->
+<table cellspacing="0" style="float:left; border:3px solid #89735B; margin:20px; width:90%; background:#D0C0A1;" class="wikipediauserbox">
+<tbody><tr>
+<th style="width:45px; height:45px; background:#EAD8B9; text-align:center; font-size:0pt; color:#D0C0A1; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;"><img 
+src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive" />
+</th>
+<td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#685746; vertical-align: middle;"><div align="center">Contribute to the 
+<a href="https://rs-archive.github.io/index.html" style="color:red">RuneScape Archive</a> with any lost RuneScape data prior to 2010 and <span style="color:#0000CC">receive any 
+obtainable item of your choice</span> as a thanks!</div>
+</td></tr></tbody></table>
+
+
+<!-- normal page content -->
     <div class="homepage-logo-container">
         <img src="{{ asset('img/logo.png') }}" alt="" class="homepage-logo" />
     </div>
