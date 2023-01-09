@@ -20,7 +20,7 @@
                 <td align="right">
                         <span class="dropdown">
                             <a class="text-white"
-                               href="/onlinelist/{{$world['alias']}}">{{$world["online"]}} {{$world["type"]}} (+)</a>
+                               href="/worldmap/{{$world['alias']}}">{{$world["online"]}} {{$world["type"]}} (+)</a>
                             <span class="dropdown-content nav-hiscores-dropdown" style="border: 1px solid grey; padding-right: 5px;">
                                 {{$world["last48"]}} in the last 48h
                             </span>
