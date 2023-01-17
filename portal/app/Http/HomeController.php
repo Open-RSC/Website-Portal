@@ -249,14 +249,12 @@ class HomeController extends Controller
                 $join->on('a.key', '=', DB::raw("'setting_hide_online'"));
             })
             ->where([
-                ['b.group_id', '>=', '0'],
+                ['b.group_id', '>=', '8'],
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
+                ['b.y', '>=', '384'],
+                ['b.y', '<=', '910']
             ])
-            ->where(function ($q) {
-                $q->where('b.x', '>=', '337')
-                    ->orwhere('b.y', '>=', '427');
-            })
             ->where(function ($q) {
                 $q->where('a.value', '0')
                     ->orWhereNull('a.value');
