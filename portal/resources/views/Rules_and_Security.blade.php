@@ -28,5 +28,8 @@
         <span class="d-block">- Do not place bots, autos, nor macros inside our games</span>
         <span class="d-block">&nbsp (except on RSC Uranium and RSC Coleslaw where it is allowed)</span>
         <span class="d-block">- Do not exploit bugs, instead, report them and help out</span>
+
+        <span class="text-danger font-weight-bold d-block pt-4">Server specific rules</span>
+        <span class="d-block">- In 2001scape, it is not allowed to create alt accounts to exploit quest rewards. The use of mules is allowed.</span>
     </div>
 @endsection
