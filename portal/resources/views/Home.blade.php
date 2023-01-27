@@ -1,21 +1,30 @@
 @extends('template')
 @section('content')
 
-<!-- RS Archive banner -->
-<table cellspacing="0" style="float:left; border:3px solid #89735B; margin:20px; width:90%; background:#D0C0A1;" class="wikipediauserbox">
-<tbody><tr>
-<th style="width:45px; height:45px; background:#EAD8B9; text-align:center; font-size:0pt; color:#D0C0A1; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;"><img 
-src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive" />
-</th>
-<td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#685746; vertical-align: middle;"><div align="center">Contribute to the 
-<a href="https://rs-archive.github.io/index.html" style="color:red">RuneScape Archive</a> with any lost RuneScape data prior to 2010 and <span style="color:#0000CC">receive any 
-obtainable item of your choice</span> as a thanks!</div>
-</td></tr></tbody></table>
+    <!-- RS Archive banner -->
+    <table cellspacing="0" style="float:left; border:3px solid #89735B; margin:20px; width:90%; background:#D0C0A1;"
+           class="wikipediauserbox">
+        <tbody>
+        <tr>
+            <th style="width:45px; height:45px; background:#EAD8B9; text-align:center; font-size:0pt; color:#D0C0A1; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;">
+                <img
+                        src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive"/>
+            </th>
+            <td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#685746; vertical-align: middle;">
+                <div align="center">Contribute to the
+                    <a href="https://rs-archive.github.io/index.html" style="color:red">RuneScape Archive</a> with any
+                    lost RuneScape data prior to 2010 and <span style="color:#0000CC">receive any
+obtainable item of your choice</span> as a thanks!
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 
-<!-- normal page content -->
+    <!-- normal page content -->
     <div class="homepage-logo-container">
-        <img src="{{ asset('img/logo.png') }}" alt="" class="homepage-logo" />
+        <img src="{{ asset('img/logo.png') }}" alt="" class="homepage-logo"/>
     </div>
 
     <!--Latest news-->
@@ -24,6 +33,28 @@ obtainable item of your choice</span> as a thanks!</div>
         <tr>
             <td>
                 <!--World list-->
+
+                <table cellspacing="0"
+                       style="float:left; border:3px solid #890000; margin:20px; width:90%; background:#D00000;"
+                       class="wikipediauserbox">
+                    <tbody>
+                    <tr>
+                        <th style="width:45px; height:45px; background:#EA0000; text-align:center; font-size:0pt; color:#D00000; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;">
+                            <img src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive"/>
+                        </th>
+                        <td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#FFF; vertical-align: middle;">
+                            <div align="center">All worlds except 2001scape and Open PK are currently offline due to a
+                                dupe bug.
+                                <br/>
+                                Read more <a href="https://rsc.vet/board/viewtopic.php?f=2&p=92"
+                                             style="color:#DDD">here</a>.
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
                 @include('partials.homepage-worlds-table')
 
                 <div class="pb-3"></div>
@@ -344,174 +375,174 @@ obtainable item of your choice</span> as a thanks!</div>
                                 <div class="pb-3"></div>
                                 <table>
                                     <tbody>
-                                        <tr>
-                                            <td colspan="5"></td>
-                                        </tr>
-                                        <tr class="align-top">
-                                            <td style="width: 100px;">
-                                                <a href="https://discord.gg/ABdFCqn" target="_blank">
-                                                    <img class="mx-auto"
-                                                        src="{{ asset('img/mm_support.jpg') }}"
-                                                        height="120" width="77" alt="">
-                                                </a>
-                                            </td>
-                                            <td style="width: 120px;">
-                                                <div style="left: 0; top: 0; position: relative;">
-                                                    <div style="left: 0; top: 0; position: absolute;">
-                                                        <a href="https://discord.gg/ABdFCqn" target="_blank">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                height="45" width="100"
-                                                                alt="">
-                                                        </a>
-                                                    </div>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                    </tr>
+                                    <tr class="align-top">
+                                        <td style="width: 100px;">
+                                            <a href="https://discord.gg/ABdFCqn" target="_blank">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_support.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="https://discord.gg/ABdFCqn" target="_blank">
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
+                                                             alt="">
+                                                    </a>
                                                 </div>
-                                                <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="b"
-                                                            background="{{ asset('img/stoneback.gif') }}"
-                                                            style="background-color: #474747;">
-                                                            <div class="text-center">
-                                                                <b>Customer Support</b>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                Questions?
-                                                <span class="d-block">
+                                            </div>
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Customer Support</b>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            Questions?
+                                            <span class="d-block">
                                                     Contact our staff
                                                 </span>
-                                                <div class="d-block">
-                                                    <a href="https://discord.gg/ABdFCqn" target="_blank" class="c">
-                                                        Click Here
+                                            <div class="d-block">
+                                                <a href="https://discord.gg/ABdFCqn" target="_blank" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mm_inbox.jpg') }}"
+                                                     height="120"
+                                                     width="77" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
+                                                    <a href="/board/ucp.php?i=pm&folder=inbox"
+                                                       class="c">
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
+                                                             alt="">
                                                     </a>
                                                 </div>
-                                            </td>
-                                            <td style="width: 10px;"></td>
-                                            <td style="width: 100px;">
-                                                <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
-                                                    <img class="mx-auto"
-                                                        src="{{ asset('img/mm_inbox.jpg') }}"
-                                                        height="120"
-                                                        width="77" alt="">
-                                                </a>
-                                            </td>
-                                            <td style="width: 120px;">
-                                                <div style="left: 0; top: 0; position: relative;">
-                                                    <div style="left: 0; top: 0; position: absolute;">
-                                                        <a href="/board/ucp.php?i=pm&folder=inbox"
-                                                        class="c">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                height="45" width="100"
-                                                                alt="">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="b"
-                                                            background="{{ asset('img/stoneback.gif') }}"
-                                                            style="background-color: #474747;">
-                                                            <div class="text-center">
-                                                                <b>Message Centre</b>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                Your messages
-                                                <span class="d-block">
+                                            </div>
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Message Centre</b>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            Your messages
+                                            <span class="d-block">
                                                     from our staff
                                                 </span>
-                                                <div class="d-block">
-                                                    <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
-                                                        Click Here
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="5"></td>
-                                        </tr>
-                                        <tr class="align-top">
-                                            <td style="width: 100px;">
-                                                <a href="/board" class="c">
-                                                    <img class="mx-auto"
-                                                        src="{{ asset('img/mms_forums.jpg') }}"
-                                                        height="120" width="77" alt="">
+                                            <div class="d-block">
+                                                <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
+                                                    Click Here
                                                 </a>
-                                            </td>
-                                            <td style="width: 120px;">
-                                                <div style="left: 0; top: 0; position: relative;">
-                                                    <div style="left: 0; top: 0; position: absolute;">
-                                                        <a href="/board" class="c">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                height="45" width="100"
-                                                                alt="">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="b"
-                                                            background="{{ asset('img/stoneback.gif') }}"
-                                                            style="background-color: #474747;">
-                                                            <div class="text-center">
-                                                                <b>Forums</b>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                Discuss the game with fellow players!
-                                                <div class="d-block">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5"></td>
+                                    </tr>
+                                    <tr class="align-top">
+                                        <td style="width: 100px;">
+                                            <a href="/board" class="c">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mms_forums.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="/board" class="c">
-                                                        Click Here
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
+                                                             alt="">
                                                     </a>
                                                 </div>
-                                            </td>
-                                            <td style="width: 10px;"></td>
-                                            <td style="width: 100px;">
-                                                <a href="/login" class="c">
-                                                    <img class="mx-auto"
-                                                        src="{{ asset('img/mms_accman.jpg') }}"
-                                                        height="120" width="77" alt="">
+                                            </div>
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Forums</b>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            Discuss the game with fellow players!
+                                            <div class="d-block">
+                                                <a href="/board" class="c">
+                                                    Click Here
                                                 </a>
-                                            </td>
-                                            <td style="width: 120px;">
-                                                <div style="left: 0; top: 0; position: relative;">
-                                                    <div style="left: 0; top: 0; position: absolute;">
-                                                        <a href="/login" class="c">
-                                                            <img src="{{ asset('img/blank.gif') }}"
-                                                                height="45" width="100"
-                                                                alt="">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="b"
-                                                            background="{{ asset('img/stoneback.gif') }}"
-                                                            style="background-color: #474747;">
-                                                            <div class="text-center">
-                                                                <b>Account Management</b>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                Manage your Password and Recovery Details
-                                                <div class="d-block">
+                                            </div>
+                                        </td>
+                                        <td style="width: 10px;"></td>
+                                        <td style="width: 100px;">
+                                            <a href="/login" class="c">
+                                                <img class="mx-auto"
+                                                     src="{{ asset('img/mms_accman.jpg') }}"
+                                                     height="120" width="77" alt="">
+                                            </a>
+                                        </td>
+                                        <td style="width: 120px;">
+                                            <div style="left: 0; top: 0; position: relative;">
+                                                <div style="left: 0; top: 0; position: absolute;">
                                                     <a href="/login" class="c">
-                                                        Click Here
+                                                        <img src="{{ asset('img/blank.gif') }}"
+                                                             height="45" width="100"
+                                                             alt="">
                                                     </a>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="b"
+                                                        background="{{ asset('img/stoneback.gif') }}"
+                                                        style="background-color: #474747;">
+                                                        <div class="text-center">
+                                                            <b>Account Management</b>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            Manage your Password and Recovery Details
+                                            <div class="d-block">
+                                                <a href="/login" class="c">
+                                                    Click Here
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
