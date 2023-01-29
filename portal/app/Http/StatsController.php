@@ -208,29 +208,29 @@ class StatsController extends Controller
         );
     }
 
-    public function stats(): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $online = DB::connection('cabbage')->table('players')
+        $online = DB::connection($db)->table('players')
             ->where('online', '=', '1')
             ->count('online');
 
-        $registrations = DB::connection('cabbage')->table('players')
+        $registrations = DB::connection($db)->table('players')
                 ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
                 ->count() ?? '0';
 
-        $logins48 = DB::connection('cabbage')->table('players')
+        $logins48 = DB::connection($db)->table('players')
             ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
             ->orderBy('login_date', 'desc')
             ->count();
 
-        $totalPlayers = DB::connection('cabbage')->table('players')
+        $totalPlayers = DB::connection($db)->table('players')
                 ->count() ?? '0';
 
-        $uniquePlayers = DB::connection('cabbage')->table('players')
+        $uniquePlayers = DB::connection($db)->table('players')
             ->distinct('creation_ip')
             ->count('creation_ip');
 
-        $createdToday = DB::connection('cabbage')->table('players')
+        $createdToday = DB::connection($db)->table('players')
             ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
             ->orderBy('login_date', 'desc')
             ->orderBy('creation_date', 'desc')
@@ -244,7 +244,7 @@ class StatsController extends Controller
 
         $current_timestamp = now()->timestamp;
 
-        $sumgold_B = DB::connection('cabbage')->table('bank as B') // bank
+        $sumgold_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -255,7 +255,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $sumgold_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $sumgold_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -267,7 +267,7 @@ class StatsController extends Controller
 
         $sumgold = $sumgold_B + $sumgold_I;
 
-        $combat30 = DB::connection('cabbage')->table('players')
+        /*$combat30 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '30'],
                 ['group_id', '=', '10'],
@@ -275,7 +275,7 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $combat50 = DB::connection('cabbage')->table('players')
+        $combat50 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '50'],
                 ['group_id', '=', '10'],
@@ -283,7 +283,7 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $combat80 = DB::connection('cabbage')->table('players')
+        $combat80 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '50'],
                 ['group_id', '=', '10'],
@@ -291,7 +291,7 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $combat90 = DB::connection('cabbage')->table('players')
+        $combat90 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '90'],
                 ['group_id', '=', '10'],
@@ -299,7 +299,7 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $combat100 = DB::connection('cabbage')->table('players')
+        $combat100 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '100'],
                 ['group_id', '=', '10'],
@@ -307,7 +307,7 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $combat123 = DB::connection('cabbage')->table('players')
+        $combat123 = DB::connection($db)->table('players')
             ->where([
                 ['combat', '>=', '123'],
                 ['group_id', '=', '10'],
@@ -315,16 +315,16 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $startedQuest = DB::connection('cabbage')->table('quests as B')
+        $startedQuest = DB::connection($db)->table('quests as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['A.group_id', '=', '10'],
                 ['A.banned', '=', 0],
             ])
             ->distinct('B.playerID')
-            ->count();
+            ->count();*/
 
-        $gold30_B = DB::connection('cabbage')->table('bank as B') // bank
+        /*$gold30_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -336,7 +336,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold30_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold30_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -349,7 +349,7 @@ class StatsController extends Controller
 
         $gold30 = $gold30_B + $gold30_I;
 
-        $gold50_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold50_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -361,7 +361,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold50_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold50_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -374,7 +374,7 @@ class StatsController extends Controller
 
         $gold50 = $gold50_B + $gold50_I;
 
-        $gold80_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold80_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -386,7 +386,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold80_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold80_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -399,7 +399,7 @@ class StatsController extends Controller
 
         $gold80 = $gold80_B + $gold80_I;
 
-        $gold120_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold120_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -411,7 +411,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold120_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold120_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -424,7 +424,7 @@ class StatsController extends Controller
 
         $gold120 = $gold120_B + $gold120_I;
 
-        $gold400_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold400_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -436,7 +436,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold400_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold400_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -447,9 +447,9 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $gold400 = $gold400_B + $gold400_I;
+        $gold400 = $gold400_B + $gold400_I;*/
 
-        $gold1m_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold1m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -459,9 +459,9 @@ class StatsController extends Controller
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
-        $gold1m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold1m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -474,7 +474,7 @@ class StatsController extends Controller
 
         $gold1m = $gold1m_B + $gold1m_I;
 
-        $gold12m_B = DB::connection('cabbage')->table('bank as B') // bank
+        /*$gold12m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -486,7 +486,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold12m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold12m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -499,7 +499,7 @@ class StatsController extends Controller
 
         $gold12m = $gold12m_B + $gold12m_I;
 
-        $gold15m_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold15m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -511,7 +511,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold15m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold15m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -524,7 +524,7 @@ class StatsController extends Controller
 
         $gold15m = $gold15m_B + $gold15m_I;
 
-        $gold2m_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold2m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -536,7 +536,7 @@ class StatsController extends Controller
             ])
             ->sum('S.amount');
 
-        $gold2m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold2m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -547,21 +547,21 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $gold2m = $gold2m_B + $gold2m_I;
+        $gold2m = $gold2m_B + $gold2m_I;*/
 
-        $gold4m_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold5m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '4000000'],
+                ['S.amount', '>=', '5000000'],
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
-        $gold4m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold5m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -572,9 +572,9 @@ class StatsController extends Controller
             ])
             ->count();
 
-        $gold4m = $gold4m_B + $gold4m_I;
+        $gold5m = $gold5m_B + $gold5m_I;
 
-        $gold10m_B = DB::connection('cabbage')->table('bank as B') // bank
+        $gold10m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
@@ -584,9 +584,9 @@ class StatsController extends Controller
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
-        $gold10m_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $gold10m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
@@ -599,35 +599,37 @@ class StatsController extends Controller
 
         $gold10m = $gold10m_B + $gold10m_I;
 
-        $pumpkin_B = DB::connection('cabbage')->table('bank as B') // bank
+        $pumpkin_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '422'],
-                ['S.amount', '>=', '1000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '422'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
 
-        $pumpkin_I = DB::connection('cabbage')->table('invitems as I') // inventory
+        $pumpkin_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '422'],
-                ['S.amount', '>=', '1000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $pumpkin_A = DB::connection('cabbage')->table('auctions as U') // auction
-        ->join('players AS A', 'U.seller_username', '=', 'A.username')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '422'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $pumpkin_A = 0;
+        if ($db === 'cabbage') {
+            $pumpkin_A = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
             ->where([
                 ['S.catalogID', '=', '422'],
-                ['S.amount', '>=', '1000000'],
+                ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
                 ['U.was_cancel', '=', '0'],
@@ -635,10 +637,297 @@ class StatsController extends Controller
                 ['U.amount_left', '>', '0'],
             ])
             ->count();
+        }
+        $pumpkin = $pumpkin_B + $pumpkin_I + $pumpkin_A;     
+        
+        $cracker_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '575'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
 
-        $pumpkin = $pumpkin_B + $pumpkin_I + $pumpkin_A;
+        $cracker_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '575'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $cracker_a = 0;
+        if ($db === 'cabbage') {
+            $cracker_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '575'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $cracker = $cracker_b + $cracker_i + $cracker_a;
+        
+        $redphat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '576'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
 
-        /*$cracker = DB::connection('cabbage')->table('bank as B')
+        $redphat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '576'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $redphat_a = 0;
+        if ($db === 'cabbage') {
+            $redphat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '576'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $redphat = $redphat_b + $redphat_i + $redphat_a;
+        
+        $yellowphat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '577'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $yellowphat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '577'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $yellowphat_a = 0;
+        if ($db === 'cabbage') {
+            $yellowphat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '577'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $yellowphat = $yellowphat_b + $yellowphat_i + $yellowphat_a;
+        
+        $bluephat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '578'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $bluephat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '578'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $bluephat_a = 0;
+        if ($db === 'cabbage') {
+            $bluephat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '578'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $bluephat = $bluephat_b + $bluephat_i + $bluephat_a;
+        
+        $greenphat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '579'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $greenphat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '579'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $greenphat_a = 0;
+        if ($db === 'cabbage') {
+            $greenphat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '579'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $greenphat = $greenphat_b + $greenphat_i + $greenphat_a;
+        
+        $pinkphat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '580'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $pinkphat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '580'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $pinkphat_a = 0;
+        if ($db === 'cabbage') {
+            $pinkphat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '580'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $pinkphat = $pinkphat_b + $pinkphat_i + $pinkphat_a;
+        
+        $whitephat_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        //->join('invitems as I', 'I.playerID', '=', 'A.id')
+        ->where([
+            ['S.catalogID', '=', '581'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $whitephat_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '581'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $whitephat_a = 0;
+        if ($db === 'cabbage') {
+            $whitephat_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '581'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $whitephat = $whitephat_b + $whitephat_i + $whitephat_a;
+
+        /*$cracker = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -647,38 +936,8 @@ class StatsController extends Controller
                 ['A.banned', '!=', '1'],
             ])
             ->sum('C.amount');
-
-        $yellowphat = DB::connection('cabbage')->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '577'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $whitephat = DB::connection('cabbage')->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '581'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $purplephat = DB::connection('cabbage')->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '580'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $redphat = DB::connection('cabbage')->table('bank as B')
+        
+       $redphat = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -688,7 +947,37 @@ class StatsController extends Controller
             ])
             ->sum('C.amount');
 
-        $bluephat = DB::connection('cabbage')->table('bank as B')
+        $yellowphat = DB::connection($db)->table('bank as B')
+            ->join('players AS A', 'A.id', '=', 'B.playerID')
+            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
+            ->where([
+                ['B.itemID', '=', '577'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+            ])
+            ->sum('C.amount');
+
+        $whitephat = DB::connection($db)->table('bank as B')
+            ->join('players AS A', 'A.id', '=', 'B.playerID')
+            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
+            ->where([
+                ['B.itemID', '=', '581'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+            ])
+            ->sum('C.amount');
+
+        $purplephat = DB::connection($db)->table('bank as B')
+            ->join('players AS A', 'A.id', '=', 'B.playerID')
+            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
+            ->where([
+                ['B.itemID', '=', '580'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+            ])
+            ->sum('C.amount');
+
+        $bluephat = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -698,7 +987,7 @@ class StatsController extends Controller
             ])
             ->sum('C.amount');
 
-        $greenphat = DB::connection('cabbage')->table('bank as B')
+        $greenphatBank = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
             ->where([
@@ -708,7 +997,7 @@ class StatsController extends Controller
             ])
             ->sum('C.amount');
 
-        $greenphatBank = DB::connection('cabbage')->table('invitems as B')
+        $greenphatInvitems = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '579'],
@@ -719,7 +1008,7 @@ class StatsController extends Controller
 
         $greenphat = $greenphatInvitems + $greenphatBank;
 
-        $eastereggInvitems = DB::connection('cabbage')->table('bank as B')
+        $eastereggInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '677'],
@@ -728,7 +1017,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $eastereggBank = DB::connection('cabbage')->table('invitems as B')
+        $eastereggBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '677'],
@@ -739,7 +1028,7 @@ class StatsController extends Controller
 
         $easteregg = $eastereggInvitems + $eastereggBank;
 
-        $redmaskInvitems = DB::connection('cabbage')->table('bank as B')
+        $redmaskInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '831'],
@@ -748,7 +1037,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $redmaskBank = DB::connection('cabbage')->table('invitems as B')
+        $redmaskBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '831'],
@@ -759,7 +1048,7 @@ class StatsController extends Controller
 
         $redmask = $redmaskInvitems + $redmaskBank;
 
-        $bluemaskInvitems = DB::connection('cabbage')->table('bank as B')
+        $bluemaskInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '832'],
@@ -768,7 +1057,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $bluemaskBank = DB::connection('cabbage')->table('invitems as B')
+        $bluemaskBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '832'],
@@ -779,7 +1068,7 @@ class StatsController extends Controller
 
         $bluemask = $bluemaskInvitems + $bluemaskBank;
 
-        $greenmaskInvitems = DB::connection('cabbage')->table('bank as B')
+        $greenmaskInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '828'],
@@ -788,7 +1077,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $greenmaskBank = DB::connection('cabbage')->table('invitems as B')
+        $greenmaskBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '828'],
@@ -799,7 +1088,7 @@ class StatsController extends Controller
 
         $greenmask = $greenmaskInvitems + $greenmaskBank;
 
-        $santahatInvitems = DB::connection('cabbage')->table('bank as B')
+        $santahatInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '971'],
@@ -808,7 +1097,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $santahatBank = DB::connection('cabbage')->table('invitems as B')
+        $santahatBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '971'],
@@ -819,7 +1108,7 @@ class StatsController extends Controller
 
         $santahat = $santahatInvitems + $santahatBank;
 
-        $bunnyearsInvitems = DB::connection('cabbage')->table('bank as B')
+        $bunnyearsInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1156'],
@@ -828,7 +1117,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $bunnyearsBank = DB::connection('cabbage')->table('invitems as B')
+        $bunnyearsBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1156'],
@@ -839,7 +1128,7 @@ class StatsController extends Controller
 
         $bunnyears = $bunnyearsInvitems + $bunnyearsBank;
 
-        $scytheInvitems = DB::connection('cabbage')->table('bank as B')
+        $scytheInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1289'],
@@ -848,7 +1137,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $scytheBank = DB::connection('cabbage')->table('invitems as B')
+        $scytheBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1289'],
@@ -859,7 +1148,7 @@ class StatsController extends Controller
 
         $scythe = $scytheInvitems + $scytheBank;
 
-        $dsqInvitems = DB::connection('cabbage')->table('bank as B')
+        $dsqInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1278'],
@@ -868,7 +1157,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $dsqBank = DB::connection('cabbage')->table('invitems as B')
+        $dsqBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '1278'],
@@ -879,7 +1168,7 @@ class StatsController extends Controller
 
         $dsq = $dsqInvitems + $dsqBank;
 
-        $dmedInvitems = DB::connection('cabbage')->table('bank as B')
+        $dmedInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '795'],
@@ -888,7 +1177,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $dmedBank = DB::connection('cabbage')->table('invitems as B')
+        $dmedBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '795'],
@@ -899,7 +1188,7 @@ class StatsController extends Controller
 
         $dmed = $dmedInvitems + $dmedBank;
 
-        $dammyInvitems = DB::connection('cabbage')->table('bank as B')
+        $dammyInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '522'],
@@ -913,7 +1202,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $dammyBank = DB::connection('cabbage')->table('invitems as B')
+        $dammyBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '522'],
@@ -929,7 +1218,7 @@ class StatsController extends Controller
 
         $dammy = $dammyInvitems + $dammyBank;
 
-        $dbattleInvitems = DB::connection('cabbage')->table('bank as B')
+        $dbattleInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '594'],
@@ -938,7 +1227,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $dbattleBank = DB::connection('cabbage')->table('invitems as B')
+        $dbattleBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '594'],
@@ -949,7 +1238,7 @@ class StatsController extends Controller
 
         $dbattle = $dbattleInvitems + $dbattleBank;
 
-        $dlongInvitems = DB::connection('cabbage')->table('bank as B')
+        $dlongInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '593'],
@@ -958,7 +1247,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $dlongBank = DB::connection('cabbage')->table('invitems as B')
+        $dlongBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '593'],
@@ -969,7 +1258,7 @@ class StatsController extends Controller
 
         $dlong = $dlongInvitems + $dlongBank;
 
-        $cabbageInvitems = DB::connection('cabbage')->table('bank as B')
+        $cabbageInvitems = DB::connection($db)->table('bank as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '18'],
@@ -983,7 +1272,7 @@ class StatsController extends Controller
             ])
             ->sum('B.amount');
 
-        $cabbageBank = DB::connection('cabbage')->table('invitems as B')
+        $cabbageBank = DB::connection($db)->table('invitems as B')
             ->join('players AS A', 'A.id', '=', 'B.playerID')
             ->where([
                 ['B.id', '=', '18'],
@@ -998,7 +1287,7 @@ class StatsController extends Controller
             ->sum('B.amount');
 
         $cabbage = $cabbageInvitems + $cabbageBank;*/
-
+        //TODO: dump queries info into a CSV (or similar) file wilth filename as: databasename_stats_date_hour with hour being the current hour when this page is viewed. This provides historical statistic information.
         return view(
             'stats',
             [
@@ -1009,33 +1298,33 @@ class StatsController extends Controller
                 'uniquePlayers' => $uniquePlayers,
                 //'totalTime' => $totalTime,
                 'createdToday' => $createdToday,
-                'combat30' => $combat30,
+                /*'combat30' => $combat30,
                 'combat50' => $combat50,
                 'combat80' => $combat80,
                 'combat90' => $combat90,
                 'combat100' => $combat100,
                 'combat123' => $combat123,
-                'startedQuest' => $startedQuest,
+                'startedQuest' => $startedQuest,*/
                 'sumgold' => $sumgold,
-                'gold30' => $gold30,
+                /*'gold30' => $gold30,
                 'gold50' => $gold50,
                 'gold80' => $gold80,
                 'gold120' => $gold120,
-                'gold400' => $gold400,
+                'gold400' => $gold400,*/
                 'gold1m' => $gold1m,
-                'gold12m' => $gold12m,
+                /*'gold12m' => $gold12m,
                 'gold15m' => $gold15m,
-                'gold2m' => $gold2m,
-                'gold4m' => $gold4m,
+                'gold2m' => $gold2m,*/
+                'gold5m' => $gold5m,
                 'gold10m' => $gold10m,
                 'pumpkin' => $pumpkin,
-                /*'cracker' => $cracker,
-                'yellowphat' => $yellowphat,
-                'whitephat' => $whitephat,
-                'purplephat' => $purplephat,
+                'cracker' => $cracker,
                 'redphat' => $redphat,
+                'yellowphat' => $yellowphat,
                 'bluephat' => $bluephat,
                 'greenphat' => $greenphat,
+                'pinkphat' => $pinkphat,
+                'whitephat' => $whitephat,/*
                 'easteregg' => $easteregg,
                 'redmask' => $redmask,
                 'bluemask' => $bluemask,
