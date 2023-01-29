@@ -236,18 +236,11 @@ class StatsController extends Controller
             ->orderBy('creation_date', 'desc')
             ->count();
 
-        /*$milliseconds = DB::connection('cabbage')->table('player_cache')
-            ->where('key', 'total_played')
-            ->sum('value');
-
-        $totalTime = HomeController::secondsToTime(round($milliseconds / 1000));*/
-
         $current_timestamp = now()->timestamp;
 
         $sumgold_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
@@ -267,192 +260,9 @@ class StatsController extends Controller
 
         $sumgold = $sumgold_B + $sumgold_I;
 
-        /*$combat30 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '30'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $combat50 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '50'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $combat80 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '50'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $combat90 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '90'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $combat100 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '100'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $combat123 = DB::connection($db)->table('players')
-            ->where([
-                ['combat', '>=', '123'],
-                ['group_id', '=', '10'],
-                ['banned', '=', 0],
-            ])
-            ->count();
-
-        $startedQuest = DB::connection($db)->table('quests as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['A.group_id', '=', '10'],
-                ['A.banned', '=', 0],
-            ])
-            ->distinct('B.playerID')
-            ->count();*/
-
-        /*$gold30_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '30000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold30_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '30000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold30 = $gold30_B + $gold30_I;
-
-        $gold50_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '50000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold50_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '50000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold50 = $gold50_B + $gold50_I;
-
-        $gold80_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '80000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold80_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '80000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold80 = $gold80_B + $gold80_I;
-
-        $gold120_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '120000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold120_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '120000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold120 = $gold120_B + $gold120_I;
-
-        $gold400_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '400000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold400_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '400000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold400 = $gold400_B + $gold400_I;*/
-
         $gold1m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
@@ -474,85 +284,9 @@ class StatsController extends Controller
 
         $gold1m = $gold1m_B + $gold1m_I;
 
-        /*$gold12m_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '12000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold12m_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '12000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold12m = $gold12m_B + $gold12m_I;
-
-        $gold15m_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '15000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold15m_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '15000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold15m = $gold15m_B + $gold15m_I;
-
-        $gold2m_B = DB::connection($db)->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '2000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('S.amount');
-
-        $gold2m_I = DB::connection($db)->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
-            ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
-            ->where([
-                ['S.catalogID', '=', '10'],
-                ['S.amount', '>=', '2000000'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->count();
-
-        $gold2m = $gold2m_B + $gold2m_I;*/
-
         $gold5m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '5000000'],
@@ -577,7 +311,6 @@ class StatsController extends Controller
         $gold10m_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
@@ -602,7 +335,6 @@ class StatsController extends Controller
         $pumpkin_B = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '422'],
             ['S.amount', '>=', '1'],
@@ -643,7 +375,6 @@ class StatsController extends Controller
         $cracker_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '575'],
             ['S.amount', '>=', '1'],
@@ -684,7 +415,6 @@ class StatsController extends Controller
         $redphat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '576'],
             ['S.amount', '>=', '1'],
@@ -725,7 +455,6 @@ class StatsController extends Controller
         $yellowphat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '577'],
             ['S.amount', '>=', '1'],
@@ -766,7 +495,6 @@ class StatsController extends Controller
         $bluephat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '578'],
             ['S.amount', '>=', '1'],
@@ -807,7 +535,6 @@ class StatsController extends Controller
         $greenphat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '579'],
             ['S.amount', '>=', '1'],
@@ -848,7 +575,6 @@ class StatsController extends Controller
         $pinkphat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '580'],
             ['S.amount', '>=', '1'],
@@ -889,7 +615,6 @@ class StatsController extends Controller
         $whitephat_b = DB::connection($db)->table('bank as B') // bank
         ->join('players AS A', 'B.playerID', '=', 'A.id')
         ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-        //->join('invitems as I', 'I.playerID', '=', 'A.id')
         ->where([
             ['S.catalogID', '=', '581'],
             ['S.amount', '>=', '1'],
@@ -927,366 +652,7 @@ class StatsController extends Controller
         }
         $whitephat = $whitephat_b + $whitephat_i + $whitephat_a;
 
-        /*$cracker = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '575'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
         
-       $redphat = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '576'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $yellowphat = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '577'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $whitephat = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '581'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $purplephat = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '580'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $bluephat = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '578'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $greenphatBank = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->join('itemstatuses AS C', 'C.itemID', '=', 'B.itemID')
-            ->where([
-                ['B.itemID', '=', '579'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('C.amount');
-
-        $greenphatInvitems = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '579'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $greenphat = $greenphatInvitems + $greenphatBank;
-
-        $eastereggInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '677'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $eastereggBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '677'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $easteregg = $eastereggInvitems + $eastereggBank;
-
-        $redmaskInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '831'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $redmaskBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '831'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $redmask = $redmaskInvitems + $redmaskBank;
-
-        $bluemaskInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '832'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $bluemaskBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '832'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $bluemask = $bluemaskInvitems + $bluemaskBank;
-
-        $greenmaskInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '828'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $greenmaskBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '828'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $greenmask = $greenmaskInvitems + $greenmaskBank;
-
-        $santahatInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '971'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $santahatBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '971'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $santahat = $santahatInvitems + $santahatBank;
-
-        $bunnyearsInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1156'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $bunnyearsBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1156'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $bunnyears = $bunnyearsInvitems + $bunnyearsBank;
-
-        $scytheInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1289'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $scytheBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1289'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $scythe = $scytheInvitems + $scytheBank;
-
-        $dsqInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1278'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dsqBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '1278'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dsq = $dsqInvitems + $dsqBank;
-
-        $dmedInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '795'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dmedBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '795'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dmed = $dmedInvitems + $dmedBank;
-
-        $dammyInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '522'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->orWhere([
-                ['B.id', '=', '597'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dammyBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '522'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->orWhere([
-                ['B.id', '=', '597'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dammy = $dammyInvitems + $dammyBank;
-
-        $dbattleInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '594'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dbattleBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '594'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dbattle = $dbattleInvitems + $dbattleBank;
-
-        $dlongInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '593'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dlongBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '593'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $dlong = $dlongInvitems + $dlongBank;
-
-        $cabbageInvitems = DB::connection($db)->table('bank as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '18'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->orWhere([
-                ['B.id', '=', '228'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $cabbageBank = DB::connection($db)->table('invitems as B')
-            ->join('players AS A', 'A.id', '=', 'B.playerID')
-            ->where([
-                ['B.id', '=', '18'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->orWhere([
-                ['B.id', '=', '228'],
-                ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
-            ])
-            ->sum('B.amount');
-
-        $cabbage = $cabbageInvitems + $cabbageBank;*/
         //TODO: dump queries info into a CSV (or similar) file wilth filename as: databasename_stats_date_hour with hour being the current hour when this page is viewed. This provides historical statistic information.
         return view(
             'stats',
@@ -1296,25 +662,9 @@ class StatsController extends Controller
                 'logins48' => $logins48,
                 'totalPlayers' => $totalPlayers,
                 'uniquePlayers' => $uniquePlayers,
-                //'totalTime' => $totalTime,
                 'createdToday' => $createdToday,
-                /*'combat30' => $combat30,
-                'combat50' => $combat50,
-                'combat80' => $combat80,
-                'combat90' => $combat90,
-                'combat100' => $combat100,
-                'combat123' => $combat123,
-                'startedQuest' => $startedQuest,*/
                 'sumgold' => $sumgold,
-                /*'gold30' => $gold30,
-                'gold50' => $gold50,
-                'gold80' => $gold80,
-                'gold120' => $gold120,
-                'gold400' => $gold400,*/
                 'gold1m' => $gold1m,
-                /*'gold12m' => $gold12m,
-                'gold15m' => $gold15m,
-                'gold2m' => $gold2m,*/
                 'gold5m' => $gold5m,
                 'gold10m' => $gold10m,
                 'pumpkin' => $pumpkin,
@@ -1324,8 +674,8 @@ class StatsController extends Controller
                 'bluephat' => $bluephat,
                 'greenphat' => $greenphat,
                 'pinkphat' => $pinkphat,
-                'whitephat' => $whitephat,/*
-                'easteregg' => $easteregg,
+                'whitephat' => $whitephat,
+                /*'easteregg' => $easteregg,
                 'redmask' => $redmask,
                 'bluemask' => $bluemask,
                 'greenmask' => $greenmask,
@@ -1336,8 +686,7 @@ class StatsController extends Controller
                 'dmed' => $dmed,
                 'dammy' => $dammy,
                 'dbattle' => $dbattle,
-                'dlong' => $dlong,
-                'cabbage' => $cabbage,*/
+                'dlong' => $dlong,*/
             ]
         );
     }
