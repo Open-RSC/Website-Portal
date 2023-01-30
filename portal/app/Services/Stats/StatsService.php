@@ -165,7 +165,7 @@ class StatsService {
         ->count();
         
         $pumpkin_A = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $pumpkin_A = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -205,7 +205,7 @@ class StatsService {
         ->count();
         
         $cracker_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $cracker_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -245,7 +245,7 @@ class StatsService {
         ->count();
         
         $redphat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $redphat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -285,7 +285,7 @@ class StatsService {
         ->count();
         
         $yellowphat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $yellowphat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -325,7 +325,7 @@ class StatsService {
         ->count();
         
         $bluephat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $bluephat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -365,7 +365,7 @@ class StatsService {
         ->count();
         
         $greenphat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $greenphat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -405,7 +405,7 @@ class StatsService {
         ->count();
         
         $pinkphat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $pinkphat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -445,7 +445,7 @@ class StatsService {
         ->count();
         
         $whitephat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $whitephat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -485,7 +485,7 @@ class StatsService {
         ->count();
         
         $easteregg_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $easteregg_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -525,7 +525,7 @@ class StatsService {
         ->count();
         
         $redmask_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $redmask_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -565,7 +565,7 @@ class StatsService {
         ->count();
         
         $bluemask_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $bluemask_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -605,7 +605,7 @@ class StatsService {
         ->count();
         
         $greenmask_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $greenmask_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -645,7 +645,7 @@ class StatsService {
         ->count();
         
         $santahat_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $santahat_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -685,7 +685,7 @@ class StatsService {
         ->count();
         
         $scythe_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $scythe_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -725,7 +725,7 @@ class StatsService {
         ->count();
         
         $dsq_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $dsq_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -765,7 +765,7 @@ class StatsService {
         ->count();
         
         $dmed_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $dmed_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -805,7 +805,7 @@ class StatsService {
         ->count();
         
         $dammy_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $dammy_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -845,7 +845,7 @@ class StatsService {
         ->count();
         
         $dbattle_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $dbattle_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -885,7 +885,7 @@ class StatsService {
         ->count();
         
         $dlong_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $dlong_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
@@ -925,7 +925,7 @@ class StatsService {
         ->count();
         
         $rune2h_a = 0;
-        if ($db === 'cabbage') {
+        if ($db === 'cabbage' || $db === 'coleslaw') {
             $rune2h_a = DB::connection($db)->table('auctions as U') // auction
             ->join('players AS A', 'U.seller_username', '=', 'A.username')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
