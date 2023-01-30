@@ -60,7 +60,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -70,7 +70,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -83,7 +83,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -94,7 +94,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -107,7 +107,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '5000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -118,7 +118,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -131,7 +131,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -142,7 +142,7 @@ class StatsService
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->count();
 
@@ -155,7 +155,7 @@ class StatsService
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -166,7 +166,7 @@ class StatsService
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -179,7 +179,7 @@ class StatsService
                     ['S.catalogID', '=', '422'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -195,7 +195,7 @@ class StatsService
                 ['S.catalogID', '=', '575'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -206,7 +206,7 @@ class StatsService
                 ['S.catalogID', '=', '575'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -219,7 +219,7 @@ class StatsService
                     ['S.catalogID', '=', '575'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -235,7 +235,7 @@ class StatsService
                 ['S.catalogID', '=', '576'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -246,7 +246,7 @@ class StatsService
                 ['S.catalogID', '=', '576'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -259,7 +259,7 @@ class StatsService
                     ['S.catalogID', '=', '576'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -275,7 +275,7 @@ class StatsService
                 ['S.catalogID', '=', '577'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -286,7 +286,7 @@ class StatsService
                 ['S.catalogID', '=', '577'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -299,7 +299,7 @@ class StatsService
                     ['S.catalogID', '=', '577'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -315,7 +315,7 @@ class StatsService
                 ['S.catalogID', '=', '578'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -326,7 +326,7 @@ class StatsService
                 ['S.catalogID', '=', '578'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -339,7 +339,7 @@ class StatsService
                     ['S.catalogID', '=', '578'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -355,7 +355,7 @@ class StatsService
                 ['S.catalogID', '=', '579'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -366,7 +366,7 @@ class StatsService
                 ['S.catalogID', '=', '579'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -379,7 +379,7 @@ class StatsService
                     ['S.catalogID', '=', '579'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -395,7 +395,7 @@ class StatsService
                 ['S.catalogID', '=', '580'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -406,7 +406,7 @@ class StatsService
                 ['S.catalogID', '=', '580'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -419,7 +419,7 @@ class StatsService
                     ['S.catalogID', '=', '580'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -435,7 +435,7 @@ class StatsService
                 ['S.catalogID', '=', '581'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -446,7 +446,7 @@ class StatsService
                 ['S.catalogID', '=', '581'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -459,7 +459,7 @@ class StatsService
                     ['S.catalogID', '=', '581'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -475,7 +475,7 @@ class StatsService
                 ['S.catalogID', '=', '677'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -486,7 +486,7 @@ class StatsService
                 ['S.catalogID', '=', '677'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -499,7 +499,7 @@ class StatsService
                     ['S.catalogID', '=', '677'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -515,7 +515,7 @@ class StatsService
                 ['S.catalogID', '=', '831'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -526,7 +526,7 @@ class StatsService
                 ['S.catalogID', '=', '831'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -539,7 +539,7 @@ class StatsService
                     ['S.catalogID', '=', '831'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -555,7 +555,7 @@ class StatsService
                 ['S.catalogID', '=', '832'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -566,7 +566,7 @@ class StatsService
                 ['S.catalogID', '=', '832'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -579,7 +579,7 @@ class StatsService
                     ['S.catalogID', '=', '832'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -595,7 +595,7 @@ class StatsService
                 ['S.catalogID', '=', '828'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -606,7 +606,7 @@ class StatsService
                 ['S.catalogID', '=', '828'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -619,7 +619,7 @@ class StatsService
                     ['S.catalogID', '=', '828'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -635,7 +635,7 @@ class StatsService
                 ['S.catalogID', '=', '971'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -646,7 +646,7 @@ class StatsService
                 ['S.catalogID', '=', '971'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -659,7 +659,7 @@ class StatsService
                     ['S.catalogID', '=', '971'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -675,7 +675,7 @@ class StatsService
                 ['S.catalogID', '=', '1289'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -686,7 +686,7 @@ class StatsService
                 ['S.catalogID', '=', '1289'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -699,7 +699,7 @@ class StatsService
                     ['S.catalogID', '=', '1289'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -715,7 +715,7 @@ class StatsService
                 ['S.catalogID', '=', '1278'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -726,7 +726,7 @@ class StatsService
                 ['S.catalogID', '=', '1278'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -739,7 +739,7 @@ class StatsService
                     ['S.catalogID', '=', '1278'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -755,7 +755,7 @@ class StatsService
                 ['S.catalogID', '=', '795'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -766,7 +766,7 @@ class StatsService
                 ['S.catalogID', '=', '795'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -779,7 +779,7 @@ class StatsService
                     ['S.catalogID', '=', '795'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -795,7 +795,7 @@ class StatsService
                 ['S.catalogID', '=', '522'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -806,7 +806,7 @@ class StatsService
                 ['S.catalogID', '=', '522'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -819,7 +819,7 @@ class StatsService
                     ['S.catalogID', '=', '522'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -835,7 +835,7 @@ class StatsService
                 ['S.catalogID', '=', '594'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -846,7 +846,7 @@ class StatsService
                 ['S.catalogID', '=', '594'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -859,7 +859,7 @@ class StatsService
                     ['S.catalogID', '=', '594'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -875,7 +875,7 @@ class StatsService
                 ['S.catalogID', '=', '593'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -886,7 +886,7 @@ class StatsService
                 ['S.catalogID', '=', '593'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -899,7 +899,7 @@ class StatsService
                     ['S.catalogID', '=', '593'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
@@ -915,7 +915,7 @@ class StatsService
                 ['S.catalogID', '=', '81'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -926,7 +926,7 @@ class StatsService
                 ['S.catalogID', '=', '81'],
                 ['S.amount', '>=', '1'],
                 ['A.group_id', '=', '10'],
-                ['A.banned', '!=', '1'],
+                ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
 
@@ -939,7 +939,7 @@ class StatsService
                     ['S.catalogID', '=', '81'],
                     ['S.amount', '>=', '1'],
                     ['A.group_id', '=', '10'],
-                    ['A.banned', '!=', '1'],
+                    ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
                     ['U.amount_left', '>', '0'],
