@@ -79,7 +79,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold1m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -90,7 +90,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold1m = $gold1m_B + $gold1m_I;
 
@@ -103,7 +103,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold5m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -114,7 +114,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold5m = $gold5m_B + $gold5m_I;
 
@@ -127,7 +127,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold10m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -138,7 +138,7 @@ class StatsService {
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->count();
+            ->sum('S.amount');
 
         $gold10m = $gold10m_B + $gold10m_I;
 
@@ -151,7 +151,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $pumpkin_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -162,7 +162,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $pumpkin_A = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -178,7 +178,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $pumpkin = $pumpkin_B + $pumpkin_I + $pumpkin_A;     
         
@@ -191,7 +191,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $cracker_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -202,7 +202,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $cracker_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -218,7 +218,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $cracker = $cracker_b + $cracker_i + $cracker_a;
         
@@ -231,7 +231,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $redphat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -242,7 +242,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $redphat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -258,7 +258,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $redphat = $redphat_b + $redphat_i + $redphat_a;
         
@@ -271,7 +271,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $yellowphat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -282,7 +282,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $yellowphat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -298,7 +298,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $yellowphat = $yellowphat_b + $yellowphat_i + $yellowphat_a;
         
@@ -311,7 +311,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $bluephat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -322,7 +322,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $bluephat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -338,7 +338,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $bluephat = $bluephat_b + $bluephat_i + $bluephat_a;
         
@@ -351,7 +351,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $greenphat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -362,7 +362,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $greenphat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -378,7 +378,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $greenphat = $greenphat_b + $greenphat_i + $greenphat_a;
         
@@ -391,7 +391,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $pinkphat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -402,7 +402,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $pinkphat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -418,7 +418,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $pinkphat = $pinkphat_b + $pinkphat_i + $pinkphat_a;
         
@@ -431,7 +431,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $whitephat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -442,7 +442,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $whitephat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -458,7 +458,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $whitephat = $whitephat_b + $whitephat_i + $whitephat_a;
         
@@ -471,7 +471,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $easteregg_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -482,7 +482,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $easteregg_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -498,7 +498,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $easteregg = $easteregg_b + $easteregg_i + $easteregg_a;
 
@@ -511,7 +511,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $redmask_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -522,7 +522,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $redmask_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -538,7 +538,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $redmask = $redmask_b + $redmask_i + $redmask_a;
 
@@ -551,7 +551,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $bluemask_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -562,7 +562,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $bluemask_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -578,7 +578,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $bluemask = $bluemask_b + $bluemask_i + $bluemask_a;
 
@@ -591,7 +591,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $greenmask_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -602,7 +602,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $greenmask_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -618,7 +618,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $greenmask = $greenmask_b + $greenmask_i + $greenmask_a;
 
@@ -631,7 +631,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $santahat_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -642,7 +642,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $santahat_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -658,7 +658,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $santahat = $santahat_b + $santahat_i + $santahat_a;
 
@@ -671,7 +671,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $scythe_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -682,7 +682,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $scythe_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -698,7 +698,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $scythe = $scythe_b + $scythe_i + $scythe_a;
 
@@ -711,7 +711,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $dsq_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -722,7 +722,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $dsq_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -738,7 +738,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $dsq = $dsq_b + $dsq_i + $dsq_a;
 
@@ -751,7 +751,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $dmed_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -762,7 +762,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $dmed_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -778,7 +778,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $dmed = $dmed_b + $dmed_i + $dmed_a;
 
@@ -791,7 +791,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $dammy_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -802,7 +802,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $dammy_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -818,7 +818,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $dammy = $dammy_b + $dammy_i + $dammy_a;
 
@@ -831,7 +831,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $dbattle_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -842,7 +842,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $dbattle_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -858,7 +858,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $dbattle = $dbattle_b + $dbattle_i + $dbattle_a;
 
@@ -871,7 +871,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $dlong_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -882,7 +882,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $dlong_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -898,7 +898,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $dlong = $dlong_b + $dlong_i + $dlong_a;
         
@@ -911,7 +911,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
 
         $rune2h_i = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -922,7 +922,7 @@ class StatsService {
             ['A.group_id', '=', '10'],
             ['A.banned', '!=', '1'],
         ])
-        ->count();
+        ->sum('S.amount');
         
         $rune2h_a = 0;
         if ($db === 'cabbage' || $db === 'coleslaw') {
@@ -938,7 +938,7 @@ class StatsService {
                 ['U.sold-out', '=', '0'],
                 ['U.amount_left', '>', '0'],
             ])
-            ->count();
+            ->sum('S.amount');
         }
         $rune2h = $rune2h_b + $rune2h_i + $rune2h_a;
         
