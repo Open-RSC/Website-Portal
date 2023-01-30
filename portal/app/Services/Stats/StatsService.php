@@ -902,6 +902,46 @@ class StatsService {
         }
         $dlong = $dlong_b + $dlong_i + $dlong_a;
         
+        $rune2h_b = DB::connection($db)->table('bank as B') // bank
+        ->join('players AS A', 'B.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
+        ->where([
+            ['S.catalogID', '=', '81'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+
+        $rune2h_i = DB::connection($db)->table('invitems as I') // inventory
+        ->join('players AS A', 'I.playerID', '=', 'A.id')
+        ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
+        ->where([
+            ['S.catalogID', '=', '81'],
+            ['S.amount', '>=', '1'],
+            ['A.group_id', '=', '10'],
+            ['A.banned', '!=', '1'],
+        ])
+        ->count();
+        
+        $rune2h_a = 0;
+        if ($db === 'cabbage') {
+            $rune2h_a = DB::connection($db)->table('auctions as U') // auction
+            ->join('players AS A', 'U.seller_username', '=', 'A.username')
+            ->join('itemstatuses AS S', 'S.itemID', '=', 'U.itemID')
+            ->where([
+                ['S.catalogID', '=', '81'],
+                ['S.amount', '>=', '1'],
+                ['A.group_id', '=', '10'],
+                ['A.banned', '!=', '1'],
+                ['U.was_cancel', '=', '0'],
+                ['U.sold-out', '=', '0'],
+                ['U.amount_left', '>', '0'],
+            ])
+            ->count();
+        }
+        $rune2h = $rune2h_b + $rune2h_i + $rune2h_a;
+        
         return [
                 'online' => $online,
                 'registrations' => $registrations,
@@ -932,6 +972,7 @@ class StatsService {
                 'dammy' => $dammy,
                 'dbattle' => $dbattle,
                 'dlong' => $dlong,
+                'rune2h' => $rune2h,
             ];
     }
     

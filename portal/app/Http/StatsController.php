@@ -248,6 +248,7 @@ class StatsController extends Controller
                 'dammy' => $stats['dammy'],
                 'dbattle' => $stats['dbattle'],
                 'dlong' => $stats['dlong'],
+                'rune2h' => $stats['rune2h']
             ]
         );
     }

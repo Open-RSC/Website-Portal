@@ -297,6 +297,19 @@
                                 <img class="mt-n2" src="{{ asset('img/items') }}/593.png"
                                      alt="Dragon Sword"/>
                             </td>
+                            <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
+                                data-href="{{ route('Item Information', '81') }}" title="Rune 2H Sword"
+                                style="border: 1px solid black; background: rgba(255,255,255,0.2);">
+                                <div style="-webkit-text-fill-color: limegreen; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; margin-top: 0; position: relative; color: white; font-size: 13px; font-weight: 900;">
+                                    @if ($rune2h)
+                                        {{ number_format($rune2h) }}
+                                    @else
+                                        0
+                                    @endif
+                                </div>
+                                <img class="mt-n2" src="{{ asset('img/items') }}/81.png"
+                                     alt="Rune 2H Sword"/>
+                            </td>
                         </tr>
                     </table>
                 </div>
