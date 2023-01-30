@@ -85,7 +85,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold1m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -96,7 +96,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold1m = $gold1m_B + $gold1m_I;
 
@@ -109,7 +109,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold5m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -120,7 +120,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold5m = $gold5m_B + $gold5m_I;
 
@@ -133,7 +133,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold10m_I = DB::connection($db)->table('invitems as I') // inventory
         ->join('players AS A', 'I.playerID', '=', 'A.id')
@@ -144,7 +144,7 @@ class StatsService
                 ['A.group_id', '=', '10'],
                 ['A.banned', '!=', '1'],
             ])
-            ->sum('S.amount');
+            ->count();
 
         $gold10m = $gold10m_B + $gold10m_I;
 
