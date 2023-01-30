@@ -158,7 +158,7 @@ class TOTPKey implements IAuthKey {
 			$wgOATHAuthWindowRadius
 		);
 
-		// Remove any whitespace from the received token, which can be an intended group seperator
+		// Remove any whitespace from the received token, which can be an intended group separator
 		// or trimmeable whitespace
 		$token = preg_replace( '/\s+/', '', $token );
 
@@ -255,7 +255,7 @@ class TOTPKey implements IAuthKey {
 		return LoggerFactory::getInstance( 'authentication' );
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		return [
 			'secret' => $this->getSecret(),
 			'scratch_tokens' => $this->getScratchTokens()

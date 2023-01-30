@@ -1,6 +1,10 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Inabat Allanova",
+			"Nurlan"
+		]
 	},
-	"inputbox-createarticle": "Bet jaratıw"
+	"inputbox-tryexact": "Anıq uyqaslıqtı sınap kóriń",
+	"inputbox-createarticle": "Maqala jaratıw"
 }

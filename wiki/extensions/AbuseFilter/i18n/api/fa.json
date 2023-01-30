@@ -3,13 +3,13 @@
 		"authors": [
 			"Ahmad252",
 			"Alirezaaa",
+			"Beginneruser",
 			"FarsiNevis",
 			"Huji",
 			"Jeeputer",
 			"Ladsgroup",
 			"Reza1615",
-			"Sunfyre",
-			"Beginneruser"
+			"Sunfyre"
 		]
 	},
 	"apihelp-abusefiltercheckmatch-description": "بررسی کنید تا ببینید پالایهٔ ویرایش با مجموعه‌ای از متغیرها، یک ویرایش، یا یک رویداد سیاههٔ پالایهٔ ویرایش کاربر مطابق است یا خیر.\n\nمتغیر، شناسهٔ تغییرات اخیر یا شناسهٔ ورود مورد نیاز است، اما فقط یکی از این سه می‌تواند استفاده شود.",
@@ -28,6 +28,7 @@
 	"apihelp-abusefilterevalexpression-description": "یک عبارت پالایهٔ ویرایش را ارزشیابی می‌کند.",
 	"apihelp-abusefilterevalexpression-summary": "یک عبارت پالایهٔ ویرایش را ارزشیابی می‌کند.",
 	"apihelp-abusefilterevalexpression-param-expression": "عبارت برای ارزشیابی.",
+	"apihelp-abusefilterevalexpression-param-prettyprint": "آیا نتیجه باید زیبا چاپ شود یا خیر.",
 	"apihelp-abusefilterevalexpression-example-1": "ارزشیابی یک عبارت ساده",
 	"apihelp-abusefilterevalexpression-example-2": "ارزیابی یک عبارت ساده برای قالب‌بندی نتیجه",
 	"apihelp-abusefilterunblockautopromote-description": "باز کردن یک کاربر از ارتقاء خودکار بر پایهٔ نتیجهٔ پالایهٔ ویرایش.",

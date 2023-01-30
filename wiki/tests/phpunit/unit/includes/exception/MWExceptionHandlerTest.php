@@ -1,6 +1,7 @@
 <?php
 
 use Wikimedia\NormalizedException\NormalizedException;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @author Antoine Musso
@@ -21,6 +22,8 @@ class MWExceptionHandlerTest extends \MediaWikiUnitTestCase {
 	}
 
 	protected function tearDown(): void {
+		TestingAccessWrapper::newFromClass( MWExceptionHandler::class )
+			->logExceptionBacktrace = true;
 		ini_set( 'zend.exception_ignore_args', $this->oldSettingValue );
 		parent::tearDown();
 	}
@@ -43,11 +46,11 @@ class MWExceptionHandlerTest extends \MediaWikiUnitTestCase {
 		$dummyFile = TestThrowerDummy::getFile();
 		$dummyClass = TestThrowerDummy::class;
 		$expected = <<<TEXT
-from ${dummyFile}(17)
-#0 ${dummyFile}(13): ${dummyClass}->getQuux()
-#1 ${dummyFile}(9): ${dummyClass}->getBar()
-#2 ${dummyFile}(5): ${dummyClass}->doFoo()
-#3 ${startFile}($startLine): ${dummyClass}->main()
+from {$dummyFile}(17)
+#0 {$dummyFile}(13): {$dummyClass}->getQuux()
+#1 {$dummyFile}(9): {$dummyClass}->getBar()
+#2 {$dummyFile}(5): {$dummyClass}->doFoo()
+#3 {$startFile}($startLine): {$dummyClass}->main()
 TEXT;
 
 		// Trim up until our call()
@@ -150,9 +153,6 @@ TEXT;
 	 * @param string $key Name of the key to validate in the serialized JSON
 	 */
 	public function testJsonserializeexceptionKeys( $expectedKeyType, $exClass, $key ) {
-		// Make sure we log a backtrace:
-		$GLOBALS['wgLogExceptionBacktrace'] = true;
-
 		$json = json_decode(
 			MWExceptionHandler::jsonSerializeException( new $exClass() )
 		);
@@ -182,7 +182,8 @@ TEXT;
 	 * @covers MWExceptionHandler::jsonSerializeException
 	 */
 	public function testJsonserializeexceptionBacktracingEnabled() {
-		$GLOBALS['wgLogExceptionBacktrace'] = true;
+		TestingAccessWrapper::newFromClass( MWExceptionHandler::class )
+			->logExceptionBacktrace = true;
 		$json = json_decode(
 			MWExceptionHandler::jsonSerializeException( new Exception() )
 		);
@@ -196,7 +197,8 @@ TEXT;
 	 * @covers MWExceptionHandler::jsonSerializeException
 	 */
 	public function testJsonserializeexceptionBacktracingDisabled() {
-		$GLOBALS['wgLogExceptionBacktrace'] = false;
+		TestingAccessWrapper::newFromClass( MWExceptionHandler::class )
+			->logExceptionBacktrace = false;
 		$json = json_decode(
 			MWExceptionHandler::jsonSerializeException( new Exception() )
 		);

@@ -20,21 +20,21 @@ class MailAddressTest extends MediaWikiIntegrationTestCase {
 			$this->markTestSkipped( 'This test only works on non-Windows platforms' );
 		}
 		$user = $this->createMock( User::class );
-		$user->expects( $this->any() )->method( 'getUser' )->will(
-			$this->returnValue( new UserIdentityValue( 42, 'UserName' ) )
-		);
-		$user->expects( $this->any() )->method( 'getEmail' )->will(
-			$this->returnValue( 'foo@bar.baz' )
-		);
-		$user->expects( $this->any() )->method( 'getRealName' )->will(
-			$this->returnValue( 'Real name' )
-		);
+		$user->method( 'getUser' )->willReturn( new UserIdentityValue( 42, 'UserName' ) );
+		$user->method( 'getEmail' )->willReturn( 'foo@bar.baz' );
+		$user->method( 'getRealName' )->willReturn( 'Real name' );
 
 		$ma = MailAddress::newFromUser( $user );
 		$this->assertInstanceOf( MailAddress::class, $ma );
-		$this->setMwGlobals( 'wgEnotifUseRealName', true );
+
+		// No setMwGlobals() in a unit test, need some manual logic
+		// Don't worry about messing with the actual value, MediaWikiUnitTestCase restores it
+		global $wgEnotifUseRealName;
+
+		$wgEnotifUseRealName = true;
 		$this->assertEquals( '"Real name" <foo@bar.baz>', $ma->toString() );
-		$this->setMwGlobals( 'wgEnotifUseRealName', false );
+
+		$wgEnotifUseRealName = false;
 		$this->assertEquals( '"UserName" <foo@bar.baz>', $ma->toString() );
 	}
 
@@ -46,7 +46,11 @@ class MailAddressTest extends MediaWikiIntegrationTestCase {
 		if ( wfIsWindows() ) {
 			$this->markTestSkipped( 'This test only works on non-Windows platforms' );
 		}
-		$this->setMwGlobals( 'wgEnotifUseRealName', $useRealName );
+		// No setMwGlobals() in a unit test, need some manual logic
+		// Don't worry about messing with the actual value, MediaWikiUnitTestCase restores it
+		global $wgEnotifUseRealName;
+		$wgEnotifUseRealName = $useRealName;
+
 		$ma = new MailAddress( $address, $name, $realName );
 		$this->assertEquals( $expected, $ma->toString() );
 	}

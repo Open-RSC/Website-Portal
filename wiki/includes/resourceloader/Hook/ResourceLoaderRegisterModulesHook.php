@@ -2,7 +2,7 @@
 
 namespace MediaWiki\ResourceLoader\Hook;
 
-use ResourceLoader;
+use MediaWiki\ResourceLoader\ResourceLoader;
 
 /**
  * This is a hook handler interface, see docs/Hooks.md.

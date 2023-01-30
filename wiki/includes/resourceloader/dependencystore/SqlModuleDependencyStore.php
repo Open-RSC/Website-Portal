@@ -22,16 +22,20 @@ namespace Wikimedia\DependencyStore;
 
 use InvalidArgumentException;
 use Wikimedia\Rdbms\DBConnRef;
-use Wikimedia\Rdbms\DBError;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 /**
- * Class for tracking per-entity dependency path lists in the module_deps table
+ * Track per-module file dependencies in the core module_deps table
  *
- * This should not be used outside of ResourceLoader and ResourceLoaderModule
+ * Wiki farms that are too big for maintenance/update.php, can clean up
+ * unneeded data for modules that no longer exist after a MW upgrade,
+ * by running maintenance/cleanupRemovedModules.php.
  *
- * @internal For use with ResourceLoader/ResourceLoaderModule only
+ * To force a rebuild and incurr a small penalty in browser cache churn,
+ * run maintenance/purgeModuleDeps.php instead.
+ *
+ * @internal For use by ResourceLoader\Module only
  * @since 1.35
  */
 class SqlModuleDependencyStore extends DependencyStore {
@@ -46,26 +50,22 @@ class SqlModuleDependencyStore extends DependencyStore {
 	}
 
 	public function retrieveMulti( $type, array $entities ) {
-		try {
-			$dbr = $this->getReplicaDb();
+		$dbr = $this->getReplicaDb();
 
-			$depsBlobByEntity = $this->fetchDependencyBlobs( $entities, $dbr );
+		$depsBlobByEntity = $this->fetchDependencyBlobs( $entities, $dbr );
 
-			$storedPathsByEntity = [];
-			foreach ( $depsBlobByEntity as $entity => $depsBlob ) {
-				$storedPathsByEntity[$entity] = json_decode( $depsBlob, true );
-			}
-
-			$results = [];
-			foreach ( $entities as $entity ) {
-				$paths = $storedPathsByEntity[$entity] ?? [];
-				$results[$entity] = $this->newEntityDependencies( $paths, null );
-			}
-
-			return $results;
-		} catch ( DBError $e ) {
-			throw new DependencyStoreException( $e->getMessage() );
+		$storedPathsByEntity = [];
+		foreach ( $depsBlobByEntity as $entity => $depsBlob ) {
+			$storedPathsByEntity[$entity] = json_decode( $depsBlob, true );
 		}
+
+		$results = [];
+		foreach ( $entities as $entity ) {
+			$paths = $storedPathsByEntity[$entity] ?? [];
+			$results[$entity] = $this->newEntityDependencies( $paths, null );
+		}
+
+		return $results;
 	}
 
 	public function storeMulti( $type, array $dataByEntity, $ttl ) {
@@ -75,48 +75,44 @@ class SqlModuleDependencyStore extends DependencyStore {
 		if ( !$dataByEntity ) {
 			return;
 		}
-		try {
-			$dbw = $this->getPrimaryDB();
 
-			$depsBlobByEntity = $this->fetchDependencyBlobs( array_keys( $dataByEntity ), $dbw );
+		$dbw = $this->getPrimaryDB();
+		$depsBlobByEntity = $this->fetchDependencyBlobs( array_keys( $dataByEntity ), $dbw );
 
-			$rows = [];
-			foreach ( $dataByEntity as $entity => $data ) {
-				list( $module, $variant ) = $this->getEntityNameComponents( $entity );
-				if ( !is_array( $data[self::KEY_PATHS] ) ) {
-					throw new InvalidArgumentException( "Invalid entry for '$entity'" );
-				}
-
-				// Normalize the list by removing duplicates and sortings
-				$paths = array_values( array_unique( $data[self::KEY_PATHS] ) );
-				sort( $paths, SORT_STRING );
-				$blob = json_encode( $paths, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-
-				$existingBlob = $depsBlobByEntity[$entity] ?? null;
-				if ( $blob !== $existingBlob ) {
-					$rows[] = [
-						'md_module' => $module,
-						'md_skin' => $variant,
-						'md_deps' => $blob
-					];
-				}
+		$rows = [];
+		foreach ( $dataByEntity as $entity => $data ) {
+			list( $module, $variant ) = $this->getEntityNameComponents( $entity );
+			if ( !is_array( $data[self::KEY_PATHS] ) ) {
+				throw new InvalidArgumentException( "Invalid entry for '$entity'" );
 			}
 
-			// @TODO: use a single query with VALUES()/aliases support in DB wrapper
-			// See https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html
-			foreach ( $rows as $row ) {
-				$dbw->upsert(
-					'module_deps',
-					$row,
-					[ [ 'md_module', 'md_skin' ] ],
-					[
-						'md_deps' => $row['md_deps'],
-					],
-					__METHOD__
-				);
+			// Normalize the list by removing duplicates and sortings
+			$paths = array_values( array_unique( $data[self::KEY_PATHS] ) );
+			sort( $paths, SORT_STRING );
+			$blob = json_encode( $paths, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+			$existingBlob = $depsBlobByEntity[$entity] ?? null;
+			if ( $blob !== $existingBlob ) {
+				$rows[] = [
+					'md_module' => $module,
+					'md_skin' => $variant,
+					'md_deps' => $blob
+				];
 			}
-		} catch ( DBError $e ) {
-			throw new DependencyStoreException( $e->getMessage() );
+		}
+
+		// @TODO: use a single query with VALUES()/aliases support in DB wrapper
+		// See https://dev.mysql.com/doc/refman/8.0/en/insert-on-duplicate.html
+		foreach ( $rows as $row ) {
+			$dbw->upsert(
+				'module_deps',
+				$row,
+				[ [ 'md_module', 'md_skin' ] ],
+				[
+					'md_deps' => $row['md_deps'],
+				],
+				__METHOD__
+			);
 		}
 	}
 
@@ -127,32 +123,24 @@ class SqlModuleDependencyStore extends DependencyStore {
 		if ( !$entities ) {
 			return;
 		}
-		try {
-			$dbw = $this->getPrimaryDB();
 
-			$disjunctionConds = [];
-			foreach ( (array)$entities as $entity ) {
-				list( $module, $variant ) = $this->getEntityNameComponents( $entity );
-				$disjunctionConds[] = $dbw->makeList(
-					[ 'md_skin' => $variant, 'md_module' => $module ],
-					$dbw::LIST_AND
-				);
-			}
-
-			if ( $disjunctionConds ) {
-				$dbw->delete(
-					'module_deps',
-					$dbw->makeList( $disjunctionConds, $dbw::LIST_OR ),
-					__METHOD__
-				);
-			}
-		} catch ( DBError $e ) {
-			throw new DependencyStoreException( $e->getMessage() );
+		$dbw = $this->getPrimaryDB();
+		$disjunctionConds = [];
+		foreach ( (array)$entities as $entity ) {
+			list( $module, $variant ) = $this->getEntityNameComponents( $entity );
+			$disjunctionConds[] = $dbw->makeList(
+				[ 'md_skin' => $variant, 'md_module' => $module ],
+				$dbw::LIST_AND
+			);
 		}
-	}
 
-	public function renew( $type, $entities, $ttl ) {
-		// no-op
+		if ( $disjunctionConds ) {
+			$dbw->delete(
+				'module_deps',
+				$dbw->makeList( $disjunctionConds, $dbw::LIST_OR ),
+				__METHOD__
+			);
+		}
 	}
 
 	/**

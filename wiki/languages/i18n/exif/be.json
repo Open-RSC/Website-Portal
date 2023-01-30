@@ -1,14 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Artsiom91",
 			"Chadyka",
 			"LexArt",
+			"Maksim L.",
 			"Mikalai Udodau",
 			"Yury Tarasievich",
 			"Хомелка",
 			"Чаховіч Уладзіслаў",
-			"Maksim L."
+			"Plaga med"
 		]
 	},
 	"exif-imagewidth": "Шырыня",
@@ -141,7 +143,7 @@
 	"exif-objectname": "Кароткая назва",
 	"exif-specialinstructions": "Асобыя ўказанні",
 	"exif-headline": "Загаловак",
-	"exif-credit": "Пастаўшчык, хто падаў малюнак",
+	"exif-credit": "Той, хто прадаставіў гэты відарыс. Можа адрознівацца ад стваральніка відарыса. Гэта ўласнасць IPTC-iim 2:110",
 	"exif-source": "Крыніца",
 	"exif-editstatus": "Рэдакцыйны статут выявы",
 	"exif-urgency": "Актуальнасць",
@@ -213,7 +215,7 @@
 	"exif-planarconfiguration-1": "чанкавы фармат",
 	"exif-planarconfiguration-2": "планарны фармат",
 	"exif-colorspace-65535": "Некалібраванае",
-	"exif-componentsconfiguration-0": "не існуе",
+	"exif-componentsconfiguration-0": "няма",
 	"exif-exposureprogram-0": "Не вызначана",
 	"exif-exposureprogram-1": "Самастойна",
 	"exif-exposureprogram-2": "Звычайная вытрымка",

@@ -1,7 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Edwingudfriend",
+			"Hussein m mmbaga",
 			"Kipala",
 			"Lloffiwr",
 			"Muddyb",
@@ -9,7 +11,7 @@
 			"Yasen igra"
 		]
 	},
-	"vector-language-button-label": "{{PLURAL:$1|lugha}}",
+	"vector-language-button-label": "{{PLURAL:$1|$1 lugha}}",
 	"vector-action-addsection": "Weka mada",
 	"vector-action-delete": "Futa",
 	"vector-action-move": "Hamisha",
@@ -22,5 +24,6 @@
 	"vector-view-view": "Soma",
 	"vector-view-viewsource": "Tazama msimbo",
 	"vector-jumptocontent": "Rukia yaliyomo",
-	"vector-more-actions": "Zaidi"
+	"vector-more-actions": "Zaidi",
+	"vector-searchsuggest-containing": "Tafuta kurasa zilizo na <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>"
 }

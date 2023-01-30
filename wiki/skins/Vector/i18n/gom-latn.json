@@ -5,6 +5,8 @@
 			"The Discoverer"
 		]
 	},
+	"vector-opt-out": "Adlea sworupant porot voch",
+	"vector-language-button-label": "{{PLURAL:$1|$1 bhas|$1 bhaso}}",
 	"vector-action-addsection": "Vixoi zodd",
 	"vector-action-delete": "Kadd",
 	"vector-action-move": "Zago bodol",

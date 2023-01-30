@@ -22,6 +22,8 @@
 
 use MediaWiki\CommentFormatter\CommentFormatter;
 use MediaWiki\Content\IContentHandlerFactory;
+use MediaWiki\MainConfigNames;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\RollbackPageFactory;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
@@ -171,12 +173,19 @@ class RollbackAction extends FormAction {
 
 		// The revision has the user suppressed, so the rollback has empty 'from',
 		// so the check above would succeed in that case.
+		// T307278 - Also check if the user has rights to view suppressed usernames
 		if ( !$revUser ) {
-			$revUser = $rev->getUser( RevisionRecord::RAW );
+			if ( $this->getAuthority()->isAllowedAny( 'suppressrevision', 'viewsuppressed' ) ) {
+				$revUser = $rev->getUser( RevisionRecord::RAW );
+			} else {
+				$userFactory = MediaWikiServices::getInstance()->getUserFactory();
+				$revUser = $userFactory->newFromName( $this->context->msg( 'rev-deleted-user' )->plain() );
+			}
 		}
 
 		$rollbackResult = $this->rollbackPageFactory
-			->newRollbackPage( $this->getWikiPage(), $this->getContext()->getAuthority(), $revUser )
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullable use of raw avoids null here
+			->newRollbackPage( $this->getWikiPage(), $this->getAuthority(), $revUser )
 			->setSummary( $request->getText( 'summary' ) )
 			->markAsBot( $request->getBool( 'bot' ) )
 			->rollbackIfAllowed();
@@ -276,7 +285,7 @@ class RollbackAction extends FormAction {
 			 * to prevent logstash.wikimedia.org from being spammed
 			 */
 			$fname = __METHOD__;
-			$trxLimits = $this->context->getConfig()->get( 'TrxProfilerLimits' );
+			$trxLimits = $this->context->getConfig()->get( MainConfigNames::TrxProfilerLimits );
 			$trxProfiler = Profiler::instance()->getTransactionProfiler();
 			$trxProfiler->redefineExpectations( $trxLimits['POST'], $fname );
 			DeferredUpdates::addCallableUpdate( static function () use ( $trxProfiler, $trxLimits, $fname

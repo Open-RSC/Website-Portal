@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"BRG (on nov.wikipedia.org)",
 			"Chrisportelli",
 			"MF-Warburg",
@@ -85,13 +86,13 @@
 	"printableversion": "Printindi versione",
 	"permalink": "Permananti linke",
 	"print": "Printa",
-	"view-view": "Lekte",
+	"skin-view-view": "Lekte",
 	"edit": "Immodifika",
-	"view-edit": "Immodifika",
+	"skin-view-edit": "Immodifika",
 	"delete": "Ekarta",
 	"protect": "Protekte",
 	"newpage": "Novi pagine",
-	"talkpagelinktext": "Diskusione",
+	"talkpagelinktext": "diskusione",
 	"specialpage": "Spesial Pagine",
 	"talk": "Diskusione",
 	"toolbox": "Utensiles",
@@ -114,7 +115,6 @@
 	"portal-url": "Project:Li komun chambre",
 	"badaccess": "Permisione erore",
 	"youhavenewmessages": "Vu have $1 ($2).",
-	"youhavenewmessagesmulti": "Vu have novi mesajes pri $1",
 	"editsection": "modifika",
 	"editold": "modifika",
 	"editlink": "modifika",

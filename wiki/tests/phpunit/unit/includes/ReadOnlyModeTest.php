@@ -10,9 +10,11 @@ class ReadOnlyModeTest extends MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
+
+		// Do not use wfTmpDir() as that depends on globals.
 		// Based on MediaWikiIntegrationTestCase::getNewTempFile()
 		$this->fileName = tempnam(
-			wfTempDir(),
+			TempFSFile::getUsableTempDirectory(),
 			'MW_PHPUnit_ReadOnlyModeTest'
 		);
 	}
@@ -124,9 +126,7 @@ class ReadOnlyModeTest extends MediaWikiUnitTestCase {
 	}
 
 	private function createLB( $params ) {
-		$lb = $this->getMockBuilder( \Wikimedia\Rdbms\LoadBalancer::class )
-			->disableOriginalConstructor()
-			->getMock();
+		$lb = $this->createMock( \Wikimedia\Rdbms\LoadBalancer::class );
 		$lb->method( 'getReadOnlyReason' )
 			->willReturn( $params['lbMessage'] );
 		return $lb;

@@ -23,6 +23,7 @@
 
 use MediaWiki\User\UserNamePrefixSearch;
 use MediaWiki\User\UserNameUtils;
+use MediaWiki\User\UserRigorOptions;
 use Wikimedia\Rdbms\ILoadBalancer;
 
 class SpecialListFiles extends IncludableSpecialPage {
@@ -80,12 +81,12 @@ class SpecialListFiles extends IncludableSpecialPage {
 			$search = '';
 			$showAll = false;
 		} else {
-			$userName = $this->getRequest()->getText( 'user', $par );
+			$userName = $this->getRequest()->getText( 'user', $par ?? '' );
 			$search = $this->getRequest()->getText( 'ilsearch', '' );
 			$showAll = $this->getRequest()->getBool( 'ilshowall', false );
 		}
 		// Sanitize usernames to avoid symbols in the title of page.
-		$sanitizedUserName = $this->userNameUtils->getCanonical( $userName, UserNameUtils::RIGOR_NONE );
+		$sanitizedUserName = $this->userNameUtils->getCanonical( $userName, UserRigorOptions::RIGOR_NONE );
 		if ( $sanitizedUserName ) {
 			$userName = $sanitizedUserName;
 		}

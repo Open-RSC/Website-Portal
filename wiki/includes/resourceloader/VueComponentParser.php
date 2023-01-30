@@ -19,6 +19,12 @@
  * @author Roan Kattouw
  */
 
+namespace MediaWiki\ResourceLoader;
+
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use Exception;
 use Wikimedia\RemexHtml\DOM\DOMBuilder;
 use Wikimedia\RemexHtml\HTMLData;
 use Wikimedia\RemexHtml\Serializer\HtmlFormatter;
@@ -34,7 +40,7 @@ use Wikimedia\RemexHtml\TreeBuilder\TreeBuilder;
  * Parser for Vue single file components (.vue files). See parse() for usage.
  *
  * @ingroup ResourceLoader
- * @internal For use within ResourceLoaderFileModule.
+ * @internal For use within FileModule.
  */
 class VueComponentParser {
 	/**
@@ -243,7 +249,8 @@ class VueComponentParser {
 						// Don't touch <pre>/<listing>/<textarea> nodes
 						$node->namespace !== HTMLData::NS_HTML ||
 						!isset( $this->prefixLfElements[ $node->name ] )
-					)
+					) &&
+					$contents !== null
 				) {
 					// Remove leading and trailing whitespace
 					$contents = preg_replace( '/(^[ \r\n\t]+)|([\r\n\t ]+$)/', '', $contents );
@@ -310,3 +317,6 @@ class VueComponentParser {
 		};
 	}
 }
+
+/** @deprecated since 1.39 */
+class_alias( VueComponentParser::class, 'VueComponentParser' );

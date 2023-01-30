@@ -152,6 +152,7 @@ class HashRing implements Serializable {
 					break; // all nodes visited
 				}
 			}
+			// @phan-suppress-next-line PhanTypeMismatchDimFetchNullable False positive
 			$nodeLocation = $ring[$currentIndex][self::KEY_LOCATION];
 			if ( !in_array( $nodeLocation, $locations, true ) ) {
 				// Ignore other nodes for the same locations already added
@@ -437,7 +438,7 @@ class HashRing implements Serializable {
 		return time();
 	}
 
-	public function serialize() {
+	public function serialize(): string {
 		return serialize( $this->__serialize() );
 	}
 
@@ -449,7 +450,7 @@ class HashRing implements Serializable {
 		];
 	}
 
-	public function unserialize( $serialized ) {
+	public function unserialize( $serialized ): void {
 		$this->__unserialize( unserialize( $serialized ) );
 	}
 

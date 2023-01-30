@@ -74,12 +74,12 @@ class SpecialRedirect extends FormSpecialPage {
 
 	/**
 	 * Set $mType and $mValue based on parsed value of $subpage.
-	 * @param string $subpage
+	 * @param string|null $subpage
 	 */
 	public function setParameter( $subpage ) {
 		// parse $subpage to pull out the parts
-		$parts = explode( '/', $subpage, 2 );
-		$this->mType = $parts[0];
+		$parts = $subpage !== null ? explode( '/', $subpage, 2 ) : [];
+		$this->mType = $parts[0] ?? null;
 		$this->mValue = $parts[1] ?? null;
 	}
 
@@ -123,6 +123,7 @@ class SpecialRedirect extends FormSpecialPage {
 		} catch ( MalformedTitleException $e ) {
 			return Status::newFatal( $e->getMessageObject() );
 		}
+		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable False positive
 		$file = $this->repoGroup->findFile( $title );
 
 		if ( !$file || !$file->exists() ) {
@@ -269,6 +270,7 @@ class SpecialRedirect extends FormSpecialPage {
 		if ( $this->mValue !== null ) {
 			$this->getOutput()->setStatusCode( 404 );
 
+			// @phan-suppress-next-line PhanTypeMismatchReturnNullable Null of $status seems unreachable
 			return $status;
 		}
 

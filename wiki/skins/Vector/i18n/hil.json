@@ -1,10 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Anjoeli9806",
+			"Kai theos en ho logos",
 			"Redhotchili23"
 		]
 	},
+	"vector-language-button-label": "{{PLURAL:$1|$1 ka pinulongan|$1 ka mga pinulongan}}",
 	"vector-action-addsection": "Magdugang sing topiko",
 	"vector-action-delete": "Panason",
 	"vector-action-move": "Saylohon",
@@ -16,5 +19,6 @@
 	"vector-view-history": "Lantawon ang nagkalatabo",
 	"vector-view-view": "Magbasa",
 	"vector-view-viewsource": "Lantawon ang ginhalinan",
-	"vector-more-actions": "Dugang Pa"
+	"vector-more-actions": "Dugang Pa",
+	"vector-searchsuggest-containing": "Mangita sang mga panid nga nagasulod sang <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>"
 }

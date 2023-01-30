@@ -1,10 +1,14 @@
 <?php
 
+namespace MediaWiki\Tests\Unit\ResourceLoader;
+
+use MediaWiki\ResourceLoader\VueComponentParser;
+
 /**
  * @group ResourceLoader
  * @covers VueComponentParser
  */
-class VueComponentParserTest extends PHPUnit\Framework\TestCase {
+class VueComponentParserTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @dataProvider provideTestParse
 	 */

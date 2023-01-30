@@ -2,11 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Akapochtli",
+			"Languaeditor",
 			"Macofe",
 			"Ricardo gs",
 			"Taresi",
-			"Teòtlalili",
-			"Languaeditor"
+			"Teòtlalili"
 		]
 	},
 	"wikieditor": "Wel senka yankuik netzòwilìxtlâtli in tlenìk moyêyèktlàlia in wikitlâkuilòlmantli",
@@ -39,7 +39,6 @@
 	"wikieditor-toolbar-tool-link-int-target-status-notexists": "Ahmo oncah tlahcuilolamatl",
 	"wikieditor-toolbar-tool-link-int-target-status-invalid": "Ahmo cualli tocaitl",
 	"wikieditor-toolbar-tool-link-int-target-status-external": "Panicatzohuiliztli",
-	"wikieditor-toolbar-tool-link-int-target-status-loading": "Motztỉka intlà kox kä in tlaìxtlapalli",
 	"wikieditor-toolbar-tool-link-int-invalid": "Âmò kualli in tòkâtli tlèn òtimîkuilwili.",
 	"wikieditor-toolbar-tool-link-lookslikeinternal": "In URL tlèn timonekiltia mîtòs kineki mochìwas ìtzòwilòka oksè wikitlaìxtlapalli.\n¿Timonekiltia mà mokuẻpa sè tlatlâtek tzòwìlli?",
 	"wikieditor-toolbar-tool-link-lookslikeinternal-int": "Tlahtectzohuiliztli",
@@ -77,7 +76,7 @@
 	"wikieditor-toolbar-tool-subscript": "Tlanitlahcuiloliztli",
 	"wikieditor-toolbar-tool-subscript-example": "Tlanitlahcuiloliztli",
 	"wikieditor-toolbar-tool-gallery": "Ixiptlayotecpantiliztli",
-	"wikieditor-toolbar-tool-newline": "Yancuic pantli",
+	"wikieditor-toolbar-tool-newline": "Yankwik pamitl",
 	"wikieditor-toolbar-tool-table-example-old": "-\n! cuaitl 1\n! cuaitl 2\n! cuaitl 3\n|-\n| pantli 1, petlacaltontli 1\n| pantli 1, petlacaltontli 2\n| pantli 1, petlacaltontli 3\n|-\n| pantli 2, petlacaltontli 1\n| pantli 2, petlacaltontli 2\n| pantli 2, petlacaltontli 3",
 	"wikieditor-toolbar-tool-table-example-cell-text": "Petlacaltontli itlahcuiloliz",
 	"wikieditor-toolbar-tool-table-example-header": "Cuaitl tlahcuiloliztli",

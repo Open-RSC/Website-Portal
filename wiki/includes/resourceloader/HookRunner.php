@@ -3,11 +3,10 @@
 namespace MediaWiki\ResourceLoader;
 
 use MediaWiki\HookContainer\HookContainer;
-use ResourceLoader;
-use ResourceLoaderContext;
 
 /**
  * @internal
+ * @codeCoverageIgnore
  * @ingroup ResourceLoader
  */
 class HookRunner implements
@@ -25,7 +24,7 @@ class HookRunner implements
 		$this->container = $container;
 	}
 
-	public function onResourceLoaderExcludeUserOptions( array &$keysToExclude, ResourceLoaderContext $context ): void {
+	public function onResourceLoaderExcludeUserOptions( array &$keysToExclude, Context $context ): void {
 		$this->container->run(
 			'ResourceLoaderExcludeUserOptions',
 			[ &$keysToExclude, $context ],

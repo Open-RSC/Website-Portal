@@ -8,6 +8,7 @@
 			"Guherto"
 		]
 	},
+	"abuselog": "Fîltreyên qeydên bedkariyê",
 	"abusefilter-log-search-user": "Bikarhêner:",
 	"abusefilter-log-search-title": "Sernav:",
 	"abusefilter-log-search-wiki": "Wîkî:",
@@ -16,6 +17,7 @@
 	"abusefilter-log-detailslink": "detayan",
 	"abusefilter-log-diff": "cudahî",
 	"abusefilter-log-noactions": "tine",
+	"abusefilter-log-linkonhistory": "qeydên bedkariyê bibîne",
 	"abusefilter-log-hide-reason": "Sedem:",
 	"log-action-filter-abusefilter": "Cureyê guhartina parzûnê:",
 	"abusefilter-list": "Hemû fîltreyan",
@@ -41,6 +43,7 @@
 	"abusefilter-edit-new": "Fîltreya nû",
 	"abusefilter-edit-save": "Fîltreyê qeyd bike",
 	"abusefilter-edit-id": "IDya Fîltreyê:",
+	"abusefilter-edit-switch-editor": "Edîtorê biguhêre",
 	"abusefilter-edit-description": "Daxuyanî:\n:''(ji aliye her kesî dikare were dîtin)''",
 	"abusefilter-edit-field-description": "danasîn",
 	"abusefilter-edit-group": "Komê parzûnê:",
@@ -53,7 +56,7 @@
 	"abusefilter-edit-notes": "Not:",
 	"abusefilter-edit-warn-other": "Peyama din",
 	"abusefilter-edit-warn-actions": "Çalakî:",
-	"abusefilter-edit-warn-preview": "Pêşdîtina peyama bijartî nîşan bide/biveşêre",
+	"abusefilter-edit-warn-preview": "Pêşdîtina peyama bijartî nîşan bide/veşêre",
 	"abusefilter-edit-history": "Dîrok:",
 	"abusefilter-edit-tools": "Amûr:",
 	"abusefilter-edit-builder-op-bool-not": "Na (!)",
@@ -81,7 +84,7 @@
 	"abusefilter-revert-reasonfield": "Sedem:",
 	"abusefilter-test-submit": "Test",
 	"abusefilter-test-load": "Bar bike",
-	"abusefilter-examine-legend": "Guhertinan bibijêre",
+	"abusefilter-examine-legend": "Guhartinan bibijêre",
 	"abusefilter-examine-submit": "Lêgerîn",
 	"abusefilter-topnav-home": "Mal",
 	"abusefilter-topnav-recentchanges": "Guhartinên parzûnan yên dawî"

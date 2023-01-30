@@ -24,6 +24,7 @@
  */
 
 use MediaWiki\MediaWikiServices;
+use Wikimedia\IPUtils;
 
 require_once __DIR__ . '/Maintenance.php';
 
@@ -76,7 +77,6 @@ class ReassignEdits extends Maintenance {
 	 * @return int Number of entries changed, or that would be changed
 	 */
 	private function doReassignEdits( &$from, &$to, $updateRC = false, $report = false ) {
-		$actorTableSchemaMigrationStage = $this->getConfig()->get( 'ActorTableSchemaMigrationStage' );
 		$dbw = $this->getDB( DB_PRIMARY );
 		$this->beginTransaction( $dbw, __METHOD__ );
 		$actorNormalization = MediaWikiServices::getInstance()->getActorNormalization();
@@ -127,22 +127,12 @@ class ReassignEdits extends Maintenance {
 			if ( $revisionRows ) {
 				# Reassign edits
 				$this->output( "Reassigning current edits..." );
-				if ( $actorTableSchemaMigrationStage & SCHEMA_COMPAT_WRITE_TEMP ) {
-					$dbw->update(
-						'revision_actor_temp',
-						[ 'revactor_actor' => $toActorId ],
-						[ 'revactor_actor' => $fromActorId ],
-						__METHOD__
-					);
-				}
-				if ( $actorTableSchemaMigrationStage & SCHEMA_COMPAT_WRITE_NEW ) {
-					$dbw->update(
-						'revision',
-						[ 'rev_actor' => $toActorId ],
-						[ 'rev_actor' => $fromActorId ],
-						__METHOD__
-					);
-				}
+				$dbw->update(
+					'revision',
+					[ 'rev_actor' => $toActorId ],
+					[ 'rev_actor' => $fromActorId ],
+					__METHOD__
+				);
 				$this->output( "done.\n" );
 			}
 
@@ -161,6 +151,20 @@ class ReassignEdits extends Maintenance {
 				$dbw->update( 'recentchanges',
 					[ 'rc_actor' => $toActorId ],
 					[ 'rc_actor' => $fromActorId ],
+					__METHOD__
+				);
+				$this->output( "done.\n" );
+			}
+
+			# If $from is an IP, delete any relevant rows from the
+			# ip_changes. No update needed, as $to cannot be an IP.
+			if ( !$from->isRegistered() ) {
+				$this->output( "Deleting ip_changes..." );
+				$dbw->delete(
+					'ip_changes',
+					[
+						'ipc_hex' => IPUtils::toHex( $from->getName() )
+					],
 					__METHOD__
 				);
 				$this->output( "done.\n" );

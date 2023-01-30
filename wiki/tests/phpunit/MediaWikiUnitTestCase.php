@@ -20,6 +20,7 @@
  */
 
 use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\Logger\NullSpi;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Wikimedia\ObjectFactory\ObjectFactory;
@@ -73,7 +74,7 @@ abstract class MediaWikiUnitTestCase extends TestCase {
 	final public static function mediaWikiSetUpBeforeClass(): void {
 		$reflection = new ReflectionClass( static::class );
 		$dirSeparator = DIRECTORY_SEPARATOR;
-		if ( stripos( $reflection->getFileName(), "${dirSeparator}unit${dirSeparator}" ) === false ) {
+		if ( stripos( $reflection->getFileName(), "{$dirSeparator}unit{$dirSeparator}" ) === false ) {
 			self::fail( 'This unit test needs to be in "tests/phpunit/unit"!' );
 		}
 
@@ -108,6 +109,10 @@ abstract class MediaWikiUnitTestCase extends TestCase {
 	 */
 	protected function runTest() {
 		try {
+			// Don't let LoggerFactory::getProvider() access globals or other things we don't want.
+			LoggerFactory::registerProvider( ObjectFactory::getObjectFromSpec( [
+				'class' => NullSpi::class
+			] ) );
 			return parent::runTest();
 		} catch ( ConfigException $exception ) {
 			throw new Exception(
@@ -117,11 +122,6 @@ abstract class MediaWikiUnitTestCase extends TestCase {
 				$exception
 			);
 		}
-
-		// Don't let LoggerFactory::getProvider() access globals or other things we don't want.
-		LoggerFactory::registerProvider( ObjectFactory::getObjectFromSpec( [
-			'class' => \MediaWiki\Logger\NullSpi::class
-		] ) );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\ResourceLoader\Hook;
 
-use ResourceLoaderContext;
+use MediaWiki\ResourceLoader\Context;
 
 /**
  * This is a hook handler interface, see docs/Hooks.md.
@@ -30,8 +30,8 @@ interface ResourceLoaderExcludeUserOptionsHook {
 	 *
 	 * @since 1.38
 	 * @param array &$keysToExclude
-	 * @param ResourceLoaderContext $context
+	 * @param Context $context
 	 * @return void
 	 */
-	public function onResourceLoaderExcludeUserOptions( array &$keysToExclude, ResourceLoaderContext $context ): void;
+	public function onResourceLoaderExcludeUserOptions( array &$keysToExclude, Context $context ): void;
 }

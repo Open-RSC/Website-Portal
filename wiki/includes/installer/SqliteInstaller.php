@@ -21,6 +21,7 @@
  * @ingroup Installer
  */
 
+use MediaWiki\MediaWikiServices;
 use Wikimedia\AtEase\AtEase;
 use Wikimedia\Rdbms\Database;
 use Wikimedia\Rdbms\DatabaseSqlite;
@@ -194,8 +195,9 @@ class SqliteInstaller extends DatabaseInstaller {
 		$dir = $this->getVar( 'wgSQLiteDataDir' );
 		$dbName = $this->getVar( 'wgDBname' );
 		try {
-			# @todo FIXME: Need more sensible constructor parameters, e.g. single associative array
-			$db = Database::factory( 'sqlite', [ 'dbname' => $dbName, 'dbDirectory' => $dir ] );
+			$db = MediaWikiServices::getInstance()->getDatabaseFactory()->create(
+				'sqlite', [ 'dbname' => $dbName, 'dbDirectory' => $dir ]
+			);
 			$status->value = $db;
 		} catch ( DBConnectionError $e ) {
 			$status->fatal( 'config-sqlite-connection-error', $e->getMessage() );
@@ -320,13 +322,20 @@ EOT;
 	 */
 	protected function makeStubDBFile( $dir, $db ) {
 		$file = DatabaseSqlite::generateFileName( $dir, $db );
+
 		if ( file_exists( $file ) ) {
 			if ( !is_writable( $file ) ) {
 				return Status::newFatal( 'config-sqlite-readonly', $file );
 			}
-		} elseif ( file_put_contents( $file, '' ) === false ) {
+			return Status::newGood();
+		}
+
+		$oldMask = umask( 0177 );
+		if ( file_put_contents( $file, '' ) === false ) {
+			umask( $oldMask );
 			return Status::newFatal( 'config-sqlite-cant-create-db', $file );
 		}
+		umask( $oldMask );
 
 		return Status::newGood();
 	}
@@ -397,6 +406,10 @@ EOT;
 		'flags' => 0
 	]
 ];
+\$wgObjectCaches['db-replicated'] = [
+	'factory' => 'Wikimedia\ObjectFactory\ObjectFactory::getObjectFromSpec',
+	'args' => [ [ 'factory' => 'ObjectCache::getInstance', 'args' => [ CACHE_DB ] ] ]
+];
 \$wgLocalisationCacheConf['storeServer'] = [
 	'type' => 'sqlite',
 	'dbname' => \"{\$wgDBname}_l10n_cache\",
@@ -418,6 +431,7 @@ EOT;
 		'trxMode' => 'IMMEDIATE',
 		'flags' => 0
 	]
-];";
+];
+\$wgResourceLoaderUseObjectCacheForDeps = true;";
 	}
 }
