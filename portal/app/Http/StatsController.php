@@ -211,6 +211,9 @@ class StatsController extends Controller
 
     public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        if (!config('openrsc.stats_page_enabled')) {
+            return abort(404);
+        }
         $statsService = new StatsService($db);
         $stats = $statsService->execute();
         if (config('openrsc.stats_page_generates_csv')) {
@@ -251,6 +254,10 @@ class StatsController extends Controller
                 'rune2h' => $stats['rune2h']
             ]
         );
+    }
+    
+    public function redirectToStats() {
+        return redirect('/stats/cabbage');
     }
 
     public function onlinelookup()
