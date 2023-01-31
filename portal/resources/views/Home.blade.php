@@ -34,27 +34,6 @@ obtainable item of your choice</span> as a thanks!
             <td>
                 <!--World list-->
 
-                <table cellspacing="0"
-                       style="float:left; border:3px solid #890000; margin:20px; width:90%; background:#D00000;"
-                       class="wikipediauserbox">
-                    <tbody>
-                    <tr>
-                        <th style="width:45px; height:45px; background:#EA0000; text-align:center; font-size:0pt; color:#D00000; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;">
-                            <img src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive"/>
-                        </th>
-                        <td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#FFF; vertical-align: middle;">
-                            <div align="center">All worlds except 2001scape and Open PK are currently offline due to a
-                                dupe bug.
-                                <br/>
-                                Read more <a href="https://rsc.vet/board/viewtopic.php?f=2&p=92"
-                                             style="color:#DDD">here</a>.
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-
                 @include('partials.homepage-worlds-table')
 
                 <div class="pb-3"></div>
