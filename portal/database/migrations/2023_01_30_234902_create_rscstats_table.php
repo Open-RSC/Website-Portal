@@ -18,6 +18,7 @@ class CreateRscstatsTable extends Migration
             $table->string('server');
             $table->string('key'); //The key will be servername_stats_date_hour like cabbage_stats_2023-01-31_11PM to prevent re-creating the hourly stats.
             $table->integer('online');
+            $table->integer('registrations');
             $table->integer('createdToday');
             $table->integer('logins48');
             $table->integer('uniquePlayers');
