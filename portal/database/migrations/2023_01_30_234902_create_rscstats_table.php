@@ -22,7 +22,7 @@ class CreateRscstatsTable extends Migration
             $table->integer('logins48');
             $table->integer('uniquePlayers');
             $table->integer('totalPlayers');
-            $table->unsignedBigInteger('sumGold');
+            $table->unsignedBigInteger('sumgold');
             $table->integer('gold1m');
             $table->integer('gold5m');
             $table->integer('gold10m');
