@@ -35,8 +35,8 @@ class Kernel extends ConsoleKernel
                     ->cron('6 */1 * * *');
             $schedule->command('stats:generate-csv cabbage')
                     ->cron('7 */1 * * *');
-            $schedule->command('stats:generate-csv 2001scape')
-                    ->cron('8 */1 * * *');
+            //$schedule->command('stats:generate-csv 2001scape')
+            //        ->cron('8 */1 * * *'); //I do not think 2001scape has all the items that we check.
             $schedule->command('stats:generate-csv uranium')
                     ->cron('9 */1 * * *');
             $schedule->command('stats:generate-csv coleslaw')
