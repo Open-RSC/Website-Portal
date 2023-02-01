@@ -19,7 +19,13 @@ class StatsService
 
     public function execute(): array
     {
-        $this->stats = $this->generateData($this->db);
+        if (DB::table('rscstats')->where('key', '=', $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA"))->exists()) {
+            $this->stats = (array) DB::table('rscstats')->where('key', '=', $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA"))->get()->toArray()[0];
+        } else {
+            $this->stats = $this->generateData($this->db);
+            $this->saveData();
+        }
+        
 
         return $this->stats;
     }
@@ -980,6 +986,46 @@ class StatsService
             'dlong' => $dlong,
             'rune2h' => $rune2h,
         ];
+    }
+    
+    public function saveData() {
+        $key = $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA");
+        DB::table('rscstats')->insert([
+            'server' => $this->db,
+            'key' => $key,
+            'online' => $this->stats['online'],
+            'registrations' => $this->stats['registrations'],
+            'logins48' => $this->stats['logins48'],
+            'totalPlayers' => $this->stats['totalPlayers'],
+            'uniquePlayers' => $this->stats['uniquePlayers'],
+            'createdToday' => $this->stats['createdToday'],
+            'sumgold' => $this->stats['sumgold'],
+            'gold1m' => $this->stats['gold1m'],
+            'gold5m' => $this->stats['gold5m'],
+            'gold10m' => $this->stats['gold10m'],
+            'pumpkin' => $this->stats['pumpkin'],
+            'cracker' => $this->stats['cracker'],
+            'redphat' => $this->stats['redphat'],
+            'yellowphat' => $this->stats['yellowphat'],
+            'bluephat' => $this->stats['bluephat'],
+            'greenphat' => $this->stats['greenphat'],
+            'pinkphat' => $this->stats['pinkphat'],
+            'whitephat' => $this->stats['whitephat'],
+            'easteregg' => $this->stats['easteregg'],
+            'redmask' => $this->stats['redmask'],
+            'bluemask' => $this->stats['bluemask'],
+            'greenmask' => $this->stats['greenmask'],
+            'santahat' => $this->stats['santahat'],
+            'scythe' => $this->stats['scythe'],
+            'dsq' => $this->stats['dsq'],
+            'dmed' => $this->stats['dmed'],
+            'dammy' => $this->stats['dammy'],
+            'dbattle' => $this->stats['dbattle'],
+            'dlong' => $this->stats['dlong'],
+            'rune2h' => $this->stats['rune2h'],
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     public function makeCsv($path = 'csv/stats/'): bool
