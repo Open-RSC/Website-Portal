@@ -3,9 +3,13 @@
 namespace App\Http;
 
 use App\Services\Stats\StatsService;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class StatsController extends Controller
 {
@@ -209,11 +213,20 @@ class StatsController extends Controller
         );
     }
 
-    public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|\Illuminate\Http\RedirectResponse
     {
         if (!config('openrsc.stats_page_enabled')) {
-            return abort(404);
+            abort(404);
         }
+        
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        
+        if (!Gate::allows('admin')) {
+            abort(404);
+        }
+        
         $statsService = new StatsService($db);
         $stats = $statsService->execute();
         if (config('openrsc.stats_page_generates_csv')) {
