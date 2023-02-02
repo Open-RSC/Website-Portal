@@ -49,7 +49,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::authenticateUsing(function (Request $request) {
-            //TODO: maybe add game-specific auth here instead of generic Laravel auth?
+            //TODO: maybe add game-specific auth here instead of/in addition to generic Laravel auth possibly using dropdown for world (database name) on login form?
             $user = User::where('username', $request->username)->first();
 
             if ($user && ($user->isAdmin() || $user->isModerator()) && Hash::check($request->password, $user->password)) {
