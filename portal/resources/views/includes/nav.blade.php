@@ -72,22 +72,22 @@
             <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black; width:150px;">
-                    <a class="c text-left" href="{{ route('chat_logs') }}">Chat Logs</a>
-                    <a class="c text-left" href="{{ route('pm_logs') }}">PM Logs</a>
-                    <a class="c text-left" href="{{ route('trade_logs') }}">Trade Logs</a>
-                    <a class="c text-left" href="{{ route('generic_logs') }}">Generic Logs</a>
-                    <a class="c text-left" href="{{ route('shop_logs') }}">Shop Logs</a>
+                    <!--<a class="c text-left" href="{-- route('chat_logs') --}">Chat Logs</a>-->
+                    <!--<a class="c text-left" href="{-- route('pm_logs') --}"PM Logs</a>-->
+                    <!--<a class="c text-left" href="{-- route('trade_logs') --}">Trade Logs</a>-->
+                    <!--<a class="c text-left" href="{-- route('generic_logs') --}">Generic Logs</a>-->
+                    <!--<a class="c text-left" href="{-- route('shop_logs') --}">Shop Logs</a>-->
                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
-                        <a class="c text-left" href="{{ route('auction_logs') }}">Auction Logs</a>
+                        <!--<a class="c text-left" href="{-- route('auction_logs') --}">Auction Logs</a>-->
                         @endif
-                    <a class="c text-left" href="{{ route('live_feed_logs') }}">Live Feed Logs</a>
-                    <a class="c text-left" href="{{ route('player_cache_logs') }}">Player Cache Logs</a>
-                    <a class="c text-left" href="{{ route('report_logs') }}">Report Logs</a>
-                    <a class="c text-left" href="{{ route('staff_logs') }}">Staff Logs</a>
+                    <!--<a class="c text-left" href="{-- route('live_feed_logs') --}">Live Feed Logs</a>
+                    <a class="c text-left" href="{-- route('player_cache_logs') --}">Player Cache Logs</a>
+                    <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>
+                    <a class="c text-left" href="{-- route('staff_logs') --}">Staff Logs</a>-->
                     <input type="checkbox" id="drop-5" style="display: none !important;"/>
-                    <a class="c text-left" href="{{ route('Logout') }}"
+                    <a class="c text-left" href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                    <form id="logout-form" action="{{ route('Logout') }}" method="POST"
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
                           style="display: none;">
                         @csrf
                     </form>

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'uranium',
+        'guard' => 'web',
         'passwords' => 'user',
     ],
 
@@ -96,11 +96,17 @@ return [
     */
 
     'providers' => [
-        'user' => [
+        
+        /*'user' => [
             'driver' => 'eloquent',
             'model' => App\Models\players::class,
+        ],*/
+        
+        'user' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
-
+        
         'preservation' => [
             'driver' => 'eloquent',
             'model' => App\Models\preservation::class,

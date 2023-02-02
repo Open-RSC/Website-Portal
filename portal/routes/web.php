@@ -15,14 +15,15 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', 'HomeController@home')->name('Home');
+Route::get('/home', 'HomeController@home');
 Route::get('worldmap/{db}', 'HomeController@worldmap')->name('World Map');
 Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness Map');
 Route::get('rules', 'HomeController@rules')->name('Rules and Security');
 Route::get('online', 'StatsController@online')->name('Online list');
 Route::get('createdtoday', 'StatsController@createdtoday')->name('Players Created Today');
 Route::get('logins48', 'StatsController@logins48')->name('Logins in the last 48 hours');
-Route::get('stats/{db}', 'StatsController@stats')->name('Statistics');
-Route::get('stats', 'StatsController@redirectToStats')->name('StatisticsRedirect');
+Route::get('stats/{db}', 'StatsController@stats')->name('Statistics')->middleware('auth');
+Route::get('stats', 'StatsController@redirectToStats')->name('StatisticsRedirect')->middleware('auth');
 Route::get('faq', 'HomeController@faq')->name('Frequently Asked Questions');
 Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');

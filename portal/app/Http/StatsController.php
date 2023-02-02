@@ -223,7 +223,7 @@ class StatsController extends Controller
             return redirect("/login");
         }
         
-        if (!Gate::allows('admin')) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         
