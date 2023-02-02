@@ -100,7 +100,7 @@
                 <a href="#">{{ Auth::user()->username }}</a>
                 <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 <ul>
-                    <li><a href="{/{ route('logout') }}"
+                    <li><a href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                     </li>
                 </ul>
