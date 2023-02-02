@@ -48,6 +48,7 @@ class CreateUserCommand extends Command
         // Prepare input for the fortify user creation action
         $input = [
             'name' => $name,
+            'username' => $name,
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password_confirmation
