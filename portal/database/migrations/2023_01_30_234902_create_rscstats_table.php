@@ -13,6 +13,9 @@ class CreateRscstatsTable extends Migration
      */
     public function up()
     {
+        //As the scale of this table grows, we may want to add an index each for some columns,
+        //likely timestamp fields. We could order by indexed columns like ID for best performance,
+        //especially since primary key ID is automatically indexed.
         Schema::create('rscstats', function (Blueprint $table) {
             $table->id();
             $table->string('server');
