@@ -329,7 +329,7 @@ class StatsController extends Controller
     }
     
     public function redirectToStats() {
-        return redirect(route('Statistics', 'cabbage'));
+        return redirect(route('StatisticsOverview', 'cabbage'));
     }
     public function redirectToStatsList() {
         return redirect(route('StatisticsList', 'cabbage'));
