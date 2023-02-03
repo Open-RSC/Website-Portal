@@ -27,17 +27,21 @@
                 ajax: {
                     url: '{{ route('StatisticsData', $db)  }}',
                 },
-                order: [[0, 'desc']],
+                order: [[6, 'desc']],
                 processing: true,
                 serverSide: true,
                 columns: [
-                    {title: "Id", data: 'id',},
-                    {title: "Gold", data: 'sumgold'},
-                    {title: "Pumpkin", data: 'pumpkin'},
-                    {title: "Crackers", data: 'cracker'},
+                    {title: "Gold", data: 'sumgold', render: function(data, type, row) {
+                        var intData = data / 1000;
+                        return (intData/1000).toFixed(0) + 'M'
+                    }},
+                    {title: "Crackers", data: 'cracker', width: "1%"},
                     {title: "Red Hat", data: 'redphat'},
+                    {title: "Santa", data: 'santahat'},
+                    {title: "Dragon Sword", data: 'dlong'},
+                    {title: "Dragon Med", data: 'dmed'},
                     {title: "Date", data: 'created_at'},
-                    {title: "View", searchable: false, orederable: false, data: function(data, type, row){
+                    {title: "View", searchable: false, orderable: false, data: function(data, type, row){
                         return "<a href='/stats/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";    
                     }},
                 ]
