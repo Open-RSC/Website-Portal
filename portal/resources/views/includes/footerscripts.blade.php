@@ -1,7 +1,7 @@
 @livewireScripts
 
 <script src="{{ mix('js/app.js') }}"></script>
-
+@yield('scripts')
 <script>
     $(document).ready(function ($) {
         $(".clickable-row").click(function () {

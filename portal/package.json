@@ -32,6 +32,10 @@
     "sass": "^1.49.8",
     "sass-loader": "^10.2.1",
     "source-map-resolve": "^0.6.0",
-    "tailwindcss": "^2.2.19"
+    "tailwindcss": "^2.2.19",
+    "datatables.net": "^1.11.5",
+    "datatables.net-bs4": "^1.11.5",
+    "datatables.net-responsive": "^2.2.9",
+    "datatables.net-responsive-bs4": "^2.2.9"
   }
 }

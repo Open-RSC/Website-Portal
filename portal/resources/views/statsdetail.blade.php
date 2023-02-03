@@ -3,12 +3,15 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
-            Statistics
+            Statistics for {{ $db }} on {{ $date }}
         </h2>
-
+        
         <div class="row justify-content-center">
-            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
-                <div class="">
+            <div class="col-md-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
+                <a href="{{ route('StatisticsList', $db) }}">Return to list</a>
+                <a href="{{ route('StatisticsOverview', $db) }}">Return to overview</a>
+                <div>
+                    <div class="">
                     <h4 class="pt-4 text-danger">Accounts</h4>
                     <span class="d-block">
 						<a class="text-primary" href="{{ route('Online list') }}">{{ $online }}</a> players currently logged in.
@@ -312,6 +315,7 @@
                             </td>
                         </tr>
                     </table>
+                </div>
                 </div>
             </div>
         </div>
