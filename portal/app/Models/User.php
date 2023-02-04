@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-
-class User extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;   
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -19,6 +19,9 @@ class User extends Model
         'name',
         'email',
         'password',
+        'username',
+        'admin',
+        'moderator'
     ];
 
     /**
@@ -39,4 +42,12 @@ class User extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function isAdmin() {
+        return $this->admin === 1;
+    }
+    
+    public function isModerator() {
+        return $this->moderator === 1;
+    }
 }

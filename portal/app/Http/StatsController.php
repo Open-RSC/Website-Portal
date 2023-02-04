@@ -3,9 +3,15 @@
 namespace App\Http;
 
 use App\Services\Stats\StatsService;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Yajra\DataTables\Facades\DataTables;
 
 class StatsController extends Controller
 {
@@ -209,19 +215,29 @@ class StatsController extends Controller
         );
     }
 
-    public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function stats($db = "cabbage"): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|\Illuminate\Http\RedirectResponse
     {
         if (!config('openrsc.stats_page_enabled')) {
-            return abort(404);
+            abort(404);
         }
+        
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        
         $statsService = new StatsService($db);
         $stats = $statsService->execute();
         if (config('openrsc.stats_page_generates_csv')) {
             $statsService->makeCsv();
         }
         return view(
-            'stats',
+            'statsoverview',
             [
+                'db' => $db,
                 'online' => $stats['online'],
                 'registrations' => $stats['registrations'],
                 'logins48' => $stats['logins48'],
@@ -256,8 +272,67 @@ class StatsController extends Controller
         );
     }
     
+    public function statsList($db = "cabbage") {
+        return view(
+        'statslist',
+            [
+                'db' => $db
+            ]
+        );
+    }
+    
+    public function statsDetail($id) {
+        $stats = (array) DB::table('rscstats')->where('id', '=', $id)->get()->toArray()[0];
+        return view(
+            'statsdetail',
+            [
+                'db' => $stats['server'],
+                'date' => $stats['created_at'],
+                'online' => $stats['online'],
+                'registrations' => $stats['registrations'],
+                'logins48' => $stats['logins48'],
+                'totalPlayers' => $stats['totalPlayers'],
+                'uniquePlayers' => $stats['uniquePlayers'],
+                'createdToday' => $stats['createdToday'],
+                'sumgold' => $stats['sumgold'],
+                'gold1m' => $stats['gold1m'],
+                'gold5m' => $stats['gold5m'],
+                'gold10m' => $stats['gold10m'],
+                'pumpkin' => $stats['pumpkin'],
+                'cracker' => $stats['cracker'],
+                'redphat' => $stats['redphat'],
+                'yellowphat' => $stats['yellowphat'],
+                'bluephat' => $stats['bluephat'],
+                'greenphat' => $stats['greenphat'],
+                'pinkphat' => $stats['pinkphat'],
+                'whitephat' => $stats['whitephat'],
+                'easteregg' => $stats['easteregg'],
+                'redmask' => $stats['redmask'],
+                'bluemask' => $stats['bluemask'],
+                'greenmask' => $stats['greenmask'],
+                'santahat' => $stats['santahat'],
+                'scythe' => $stats['scythe'],
+                'dsq' => $stats['dsq'],
+                'dmed' => $stats['dmed'],
+                'dammy' => $stats['dammy'],
+                'dbattle' => $stats['dbattle'],
+                'dlong' => $stats['dlong'],
+                'rune2h' => $stats['rune2h']
+            ]
+        );
+    }
+    
+    public function statsData($db = "cabbage") {
+        return DataTables::of(DB::table('rscstats')->where('server', '=', $db)->get()->toArray())
+                ->smart(true)
+                ->make();
+    }
+    
     public function redirectToStats() {
-        return redirect('/stats/cabbage');
+        return redirect(route('StatisticsOverview', 'cabbage'));
+    }
+    public function redirectToStatsList() {
+        return redirect(route('StatisticsList', 'cabbage'));
     }
 
     public function onlinelookup()

@@ -18,6 +18,7 @@
 	<!-- CSS -->
 	<link type="text/css" rel="stylesheet" href="{{ mix('css/tailwind.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ mix('css/all.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     @livewireStyles
 </head>

@@ -44,7 +44,7 @@ class Login extends Component
         }
     }
 
-    public function authenticate(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    /*public function authenticate(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         $this->validate([
             'game' => 'required',
@@ -97,6 +97,6 @@ class Login extends Component
     public function logout(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         Auth::logout();
-        return redirect(route('Secure_Login'));
-    }
+        return route('login');
+    }*/
 }
