@@ -50,7 +50,7 @@ class RouteServiceProvider extends ServiceProvider
         
         if (config('openrsc.force_https', false)) {
             resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
-        }        
+        }
     }
 
     /**
