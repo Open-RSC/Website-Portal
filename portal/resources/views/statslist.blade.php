@@ -35,7 +35,7 @@
                         var intData = data / 1000;
                         return (intData/1000).toFixed(0) + 'M'
                     }},
-                    {title: "Crackers", data: 'cracker', width: "1%"},
+                    {title: "Crackers", data: 'cracker'},
                     {title: "Red Hat", data: 'redphat'},
                     {title: "Santa", data: 'santahat'},
                     {title: "Dragon Sword", data: 'dlong'},
