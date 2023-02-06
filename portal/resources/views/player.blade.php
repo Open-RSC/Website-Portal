@@ -28,84 +28,127 @@
                                     {{ ucfirst($players->first()->username) }}
                             </span>
                         </div>
-                        <table>
-                            <tr>
-                                <td colspan="3" width="120" align="left">
-                                    <b>Skill</b>
-                                </td>
-                                <td width="80" align="right">
-                                    <b>Rank</b>
-                                </td>
-                                <td width="80" align="right">
-                                    <b>Level</b>
-                                </td>
-                                <td width="80" align="right">
-                                    <b>XP</b>
-                                </td>
-                            </tr>
-                            @foreach ($players as $key=>$player)
+                        @if ($db === "openpk")
+                         <table>
                                 <tr>
-                                    <td>&nbsp;
+                                    <td colspan="3" align="left">
+                                        <b>Rank</b>
                                     </td>
-                                    <td>&nbsp;
+                                    <td width="80" align="right">
+                                        <b>Kills</b>
                                     </td>
-                                    <td align="left">
-                                        <a class="c" href="/hiscores/{{ $db }}">
-                                            Overall
-                                        </a>
+                                    <td width="80" align="right">
+                                        <b>Deaths</b>
                                     </td>
-                                    <td align="right">
-                                        {{ number_format($rank_overall->first()->rank+1) }}
-                                    </td>
-                                    <td align="right">
-                                        {{ number_format($player->skill_total) }}
-                                    </td>
-                                    <td align="right">
-                                        {{ number_format($player->total_xp) }}
+                                    <td width="80" align="right">
+                                        <b>KDR</b>
                                     </td>
                                 </tr>
-                                @foreach ($skill_array as $skill)
+                                @foreach ($players as $key=>$player)
                                     <tr>
-                                        <td>
-                                            @if($skill == 'skill_total')
-                                            @else
-                                                <img src="{{ asset('/img/skill_icons').'/'.strtolower($skill) }}.gif"
-                                                     valign="bottom"
-                                                     width=16 height=16 alt="{{ strtolower($skill) }}"/>
-                                            @endif
+                                        <td colspan="3" align="left">
+                                            {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                        </td>
+                                        <td align="right">
+                                            {{ number_format($player->kills) }}
+                                        </td>
+                                        <td align="right">
+                                            {{ number_format($player->deaths) }}
+                                        </td>
+                                        <td align="right">
+                                            @if ($player->deaths > 0) 
+                                                {{ number_format($player->kills / $player->deaths) }}
+                                            @else 
+                                                @if ($player->kills > 0) 
+                                                    {{ $player->kills }}
+                                                @else
+                                                    0
+                                                @endif    
+                                            @endif    
+                                        </td>
+                                    </tr>
+                                @endforeach    
+                         </table>
+                        @else     
+                            <table>
+                                <tr>
+                                    <td colspan="3" width="120" align="left">
+                                        <b>Skill</b>
+                                    </td>
+                                    <td width="80" align="right">
+                                        <b>Rank</b>
+                                    </td>
+                                    <td width="80" align="right">
+                                        <b>Level</b>
+                                    </td>
+                                    <td width="80" align="right">
+                                        <b>XP</b>
+                                    </td>
+                                </tr>
+                                @foreach ($players as $key=>$player)
+                                    <tr>
+                                        <td>&nbsp;
                                         </td>
                                         <td>&nbsp;
                                         </td>
                                         <td align="left">
-                                            <a class="c" href="/hiscores/{{ $db }}/{{ $skill }}">
-                                                @if($skill == 'skill_total')
-                                                    Overall
-                                                @elseif($skill =='hits')
-                                                    Fighting
-                                                @elseif($skill == 'woodcut')
-                                                    Woodcutting
-                                                @elseif($skill == 'herblaw')
-                                                    Herblore
-                                                @elseif($skill == 'runecraft')
-                                                    Runecrafting
-                                                @else
-                                                    {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
-                                                @endif
+                                            <a class="c" href="/hiscores/{{ $db }}">
+                                                Overall
                                             </a>
                                         </td>
                                         <td align="right">
-                                            {{  (new App\Http\PlayerController)->rank($db, $subpage, $skill)+1 }}
+                                            {{ number_format($rank_overall->first()->rank+1) }}
                                         </td>
                                         <td align="right">
-                                            {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
+                                            {{ number_format($player->skill_total) }}
                                         </td>
                                         <td align="right">
-                                            {{ number_format($player->$skill/4.0) }}
+                                            {{ number_format($player->total_xp) }}
                                         </td>
                                     </tr>
+                                    @foreach ($skill_array as $skill)
+                                        <tr>
+                                            <td>
+                                                @if($skill == 'skill_total')
+                                                @else
+                                                    <img src="{{ asset('/img/skill_icons').'/'.strtolower($skill) }}.gif"
+                                                         valign="bottom"
+                                                         width=16 height=16 alt="{{ strtolower($skill) }}"/>
+                                                @endif
+                                            </td>
+                                            <td>&nbsp;
+                                            </td>
+                                            <td align="left">
+                                                <a class="c" href="/hiscores/{{ $db }}/{{ $skill }}">
+                                                    @if($skill == 'skill_total')
+                                                        Overall
+                                                    @elseif($skill =='hits')
+                                                        Fighting
+                                                    @elseif($skill == 'woodcut')
+                                                        Woodcutting
+                                                    @elseif($skill == 'herblaw')
+                                                        Herblore
+                                                    @elseif($skill == 'runecraft')
+                                                        Runecrafting
+                                                    @else
+                                                        {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                                    @endif
+                                                </a>
+                                            </td>
+                                            <td align="right">
+                                                {{  (new App\Http\PlayerController)->rank($db, $subpage, $skill)+1 }}
+                                            </td>
+                                            <td align="right">
+                                                {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
+                                            </td>
+                                            <td align="right">
+                                                {{ number_format($player->$skill/4.0) }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
-                            @endforeach
-                        </table>
+                            </table>
+                        @endif
                     </td>
                 </tr>
             </table>

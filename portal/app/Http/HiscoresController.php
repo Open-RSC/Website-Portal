@@ -87,7 +87,18 @@ class HiscoresController extends Component
          * @var $hiscores
          * Fetches the table row of the player experience in view and paginates the results
          */
-        if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+        if (value($db) == 'openpk') { // openpk
+            $hiscores = DB::connection($db)
+                ->table('players as b')
+                ->select('b.*')
+                ->groupBy('b.username')
+                ->orderBy('b.kills', 'desc')
+                ->where([
+                    ['b.group_id', '>=', '8'],
+                    //['b.kills', '>', '0']
+                ])
+                ->paginate(21);
+        } else if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $hiscores = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
@@ -469,7 +480,18 @@ class HiscoresController extends Component
             ])
                 ->with(compact('hiscores'));
         } else {
-            if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
+            if (value($db) == 'openpk') { // openpk
+                $hiscores = DB::connection($db)
+                    ->table('players as b')
+                    ->select('b.*')
+                    ->groupBy('b.username')
+                    ->orderBy('b.kills desc')
+                    ->where([
+                        ['b.group_id', '>=', '8'],
+                        //['b.kills', '>', '0'] //We could make kills > 0 required
+                    ])
+                    ->paginate(21);
+            } else if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
                 $hiscores = DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
