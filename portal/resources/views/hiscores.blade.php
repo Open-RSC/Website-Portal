@@ -50,8 +50,11 @@
                     <div class="d-flex">
                         <div class="text-right" style="width:40px;"><b>Rank</b></div>
                         <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
-                        <div class="text-right" style="width:30px;"><b>Level</b></div>
-                        <div class="text-right" style="width:100px;"><b>XP</b></div>
+                        <div class="text-right" style="width:30px;"><b>@if ($db === "openpk") Kills @else Level @endif</b></div>
+                        <div class="text-right" style="width:100px;"><b>@if ($db === "openpk") Deaths @else XP @endif</b></div>
+                        @if ($db === "openpk")
+                            <div class="text-right" style="margin-left: 10px; width:30px;"><b>KDR</b></div>
+                        @endif
                     </div>
                     @foreach ($hiscores as $key=>$player)
                         <div class="d-flex">
@@ -66,12 +69,25 @@
                             </div>
                             <!--Total Level-->
                             <div class="text-right" style="padding-right:15px; width:30px;">
-                                {{ number_format($player->skill_total) }}
+                                {{ $db === "openpk" ? number_format($player->kills) : number_format($player->skill_total) }}
                             </div>
                             <!--Total XP-->
                             <div class="text-right" style="padding-left:10px; width:100px;">
-                                {{ number_format($player->total_xp) }}
+                                {{ $db === "openpk" ? number_format($player->deaths) : number_format($player->total_xp) }}
                             </div>
+                            @if ($db === "openpk")
+                                <div class="text-right" style="margin-left: 10px; width:30px;">
+                                    @if ($player->deaths > 0) 
+                                        {{ number_format($player->kills / $player->deaths, 2) }}
+                                    @else 
+                                        @if ($player->kills > 0) 
+                                            {{ number_format($player->kills, 2) }}
+                                        @else
+                                            0.00
+                                        @endif    
+                                    @endif    
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                     {{ $hiscores->links('pagination::tailwind') }}

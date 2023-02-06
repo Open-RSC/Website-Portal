@@ -311,13 +311,26 @@ class PlayerController extends Controller
                 ])
                 ->get();
         }
-
+        $hiscores = [];
+        if ($db === 'openpk') {
+            $hiscores = DB::connection($db)
+                ->table('players as b')
+                ->select('b.*')
+                ->groupBy('b.username')
+                ->orderBy('b.kills', 'desc')
+                ->where([
+                    ['b.group_id', '>=', '8'],
+                    //['b.kills', '>', '0'] //We could make kills > 0 required
+                ])
+                ->paginate(21);
+        }
         return view('player', [
             'subpage' => $subpage,
             'players' => $players,
             'rank_overall' => $rank_overall,
             'skill_array' => $skill_array,
             'db' => $db,
+            'hiscores' => $hiscores
         ])
             ->with(compact('players'));
     }
