@@ -57,12 +57,12 @@
                                         </td>
                                         <td align="right">
                                             @if ($player->deaths > 0) 
-                                                {{ number_format($player->kills / $player->deaths) }}
+                                                {{ number_format($player->kills / $player->deaths, 2) }}
                                             @else 
                                                 @if ($player->kills > 0) 
-                                                    {{ $player->kills }}
+                                                    {{ number_format($player->kills, 2) }}
                                                 @else
-                                                    0
+                                                    0.00
                                                 @endif    
                                             @endif    
                                         </td>
