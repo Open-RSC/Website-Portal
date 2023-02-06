@@ -318,6 +318,7 @@ class PlayerController extends Controller
                 ->select('b.*')
                 ->groupBy('b.username')
                 ->orderBy('b.kills', 'desc')
+                ->orderBy('b.deaths', 'asc')
                 ->where([
                     ['b.group_id', '>=', '8'],
                     //['b.kills', '>', '0'] //We could make kills > 0 required
