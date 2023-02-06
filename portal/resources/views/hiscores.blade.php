@@ -2,7 +2,8 @@
 @section('content')
     <div class="hiscores-page">
         <div class="hiscores-list-container">
-            <div class="hiscores-skill-list">
+            @if ($db !== "openpk")
+                <div class="hiscores-skill-list">
                 <div class="hiscores-list-label">
                     <b>Select hiscore table</b>
                 </div>
@@ -41,7 +42,7 @@
                     @endforeach
                 </div>
             </div>
-
+            @endif
             <div class="hiscores-player-list">
                 <div class="hiscores-list-label">
                     <b>Overall Hiscores</b>
