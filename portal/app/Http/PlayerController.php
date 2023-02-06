@@ -321,7 +321,7 @@ class PlayerController extends Controller
                 ->orderBy('b.deaths', 'asc')
                 ->where([
                     ['b.group_id', '>=', '8'],
-                    //['b.kills', '>', '0'] //We could make kills > 0 required
+                    ['b.kills', '>', '0']
                 ])
                 ->paginate(21);
         }
