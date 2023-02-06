@@ -77,7 +77,7 @@
                     <a class="c text-left" href="{{ route('StatisticsOverview', 'cabbage') }}">RSC Cabbage Stats</a>
                     <a class="c text-left" href="{{ route('StatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
                     <a class="c text-left" href="{{ route('StatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
-                    <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">RSC Open PK Stats</a>
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">OpenPK Stats</a>
                     <!--<a class="c text-left" href="{-- route('chat_logs') --}">Chat Logs</a>-->
                     <!--<a class="c text-left" href="{-- route('pm_logs') --}"PM Logs</a>-->
                     <!--<a class="c text-left" href="{-- route('trade_logs') --}">Trade Logs</a>-->
