@@ -26,8 +26,8 @@ Route::get('stats/{db}/overview', 'StatsController@stats')->name('StatisticsOver
 Route::get('stats/{id}/detail', 'StatsController@statsDetail')->name('StatisticsDetail')->middleware('auth');
 Route::get('stats', 'StatsController@redirectToStats')->name('StatisticsRedirect')->middleware('auth');
 Route::get('stats/list', 'StatsController@redirectToStatsList')->name('StatisticsListRedirect')->middleware('auth');
-Route::get('stats/{db}/list/', 'StatsController@statsList')->name('StatisticsList')->middleware('auth');
-Route::get('stats/{db}/data/', 'StatsController@statsData')->name('StatisticsData')->middleware('auth');
+Route::get('stats/{db}/list', 'StatsController@statsList')->name('StatisticsList')->middleware('auth');
+Route::get('stats/{db}/data', 'StatsController@statsData')->name('StatisticsData')->middleware('auth');
 Route::get('faq', 'HomeController@faq')->name('Frequently Asked Questions');
 Route::get('terms', 'HomeController@faq')->name('Terms and Conditions');
 Route::get('privacy', 'HomeController@faq')->name('Privacy Policy');

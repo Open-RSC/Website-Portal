@@ -7,6 +7,9 @@
 		  content="rsc preservation,openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,authentic runescape classic,vanilla rsc, rs1">
 	<meta name="author" content="Open RuneScape Classic">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+	@if (config('openrsc.force_https', false))
+		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
+	@endif
 
 	<!-- Favicons -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/favicons/apple-touch-icon.png') }}">

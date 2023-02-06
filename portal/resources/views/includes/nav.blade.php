@@ -54,24 +54,30 @@
         <span class="flex-auto p-2">
             <a href="https://gitlab.com/open-runescape-classic/core/-/issues" target="_blank" class="c">Bug Reports</a>
         </span>
+        <span class="flex-auto p-2 dropdown">
+            <a class="c" href="#">Live Maps <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:150px;">
+                    <a class="c text-left" href="/worldmap/preservation"><i
+                                class="fas fa-map"></i> RSC Preservation</a>
+                    <a class="c text-left" href="/worldmap/cabbage"><i
+                                class="fas fa-map"></i> RSC Cabbage</a>
+                    <a class="c text-left" href="/worldmap/uranium"><i
+                                class="fas fa-map"></i> RSC Uranium</a>
+                    <a class="c text-left" href="/worldmap/coleslaw"><i
+                                class="fas fa-map"></i> RSC Coleslaw</a>
+                </span>
+        </span>
         @guest
-            <span class="flex-auto p-2 dropdown">
-                <a class="c" href="#">Live Maps <i class="fas fa-caret-down"></i></a>
-                    <span class="p-2 dropdown-content" style="background:black; width:150px;">
-                        <a class="c text-left" href="/worldmap/preservation"><i
-                                    class="fas fa-map"></i> RSC Preservation</a>
-                        <a class="c text-left" href="/worldmap/cabbage"><i
-                                    class="fas fa-map"></i> RSC Cabbage</a>
-                        <a class="c text-left" href="/worldmap/uranium"><i
-                                    class="fas fa-map"></i> RSC Uranium</a>
-                        <a class="c text-left" href="/worldmap/coleslaw"><i
-                                    class="fas fa-map"></i> RSC Coleslaw</a>
-                    </span>
-            </span>
+            {{-- There's currently nothing guest-specific that staff also shouldn't access. --}}
         @else
             <span class="flex-auto p-2 dropdown">
-            <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
-                <span class="p-2 dropdown-content" style="background:black; width:150px;">
+                <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'preservation') }}">RSC Preservation Stats</a>
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'cabbage') }}">RSC Cabbage Stats</a>
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
+                    <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">OpenPK Stats</a>
                     <!--<a class="c text-left" href="{-- route('chat_logs') --}">Chat Logs</a>-->
                     <!--<a class="c text-left" href="{-- route('pm_logs') --}"PM Logs</a>-->
                     <!--<a class="c text-left" href="{-- route('trade_logs') --}">Trade Logs</a>-->
@@ -85,30 +91,20 @@
                     <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>
                     <a class="c text-left" href="{-- route('staff_logs') --}">Staff Logs</a>-->
                     <input type="checkbox" id="drop-5" style="display: none !important;"/>
-                    <a class="c text-left" href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                </span>
+            </span>
+
+            <span class="flex-auto p-2 dropdown">
+                <a class="c" href="#">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black;">
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                           style="display: none;">
                         @csrf
                     </form>
                 </span>
             </span>
-
-            <li>
-                <label for="drop-5" class="toggle">{{ Auth::user()->username }} <i
-                            class="fas fa-caret-down"></i></label>
-                <a href="#">{{ Auth::user()->username }}</a>
-                <input type="checkbox" id="drop-5" style="display: none !important;"/>
-                <ul>
-                    <li><a href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                    </li>
-                </ul>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                      style="display: none;">
-                    @csrf
-                </form>
-            </li>
         @endguest
     </div>
 </div>
