@@ -29,6 +29,17 @@
                         @csrf
                         
                         <div>
+                            <label>{{ __('Game') }}</label>
+                            <select class="form-control mb-1" name="db" id="db" required>
+                                <option value="preservation">RSC Preservation</option>
+                                <option value="cabbage">RSC Cabbage</option>
+                                <option value="uranium">RSC Uranium</option>
+                                <option value="coleslaw">RSC Coleslaw</option>
+                                <option value="openpk">OpenPK</option>
+                            </select>
+                        </div>
+                        
+                        <div>
                             <label>{{ __('Username') }}</label>
                             <input class="form-control mb-1" type="text" name="username" value="{{ old('username') }}" required autofocus />
                         </div>

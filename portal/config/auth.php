@@ -104,7 +104,7 @@ return [
         
         'user' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\players::class,
         ],
         
         'preservation' => [

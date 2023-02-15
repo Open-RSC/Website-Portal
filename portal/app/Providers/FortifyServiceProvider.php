@@ -6,13 +6,18 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\players;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use function App\Helpers\add_characters;
+use function App\Helpers\passwd_compat_hasher;
+use function App\Helpers\password_needs_rehashing;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -49,12 +54,34 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::authenticateUsing(function (Request $request) {
-            //TODO: maybe add game-specific auth here instead of/in addition to generic Laravel auth possibly using dropdown for world (database name) on login form?
-            $user = User::where('username', $request->username)->first();
-
-            if ($user && ($user->isAdmin() || $user->isModerator()) && Hash::check($request->password, $user->password)) {
+            $db = $request->input('db');
+            $username = $request->input('username');
+            $password = add_characters($request->input('password'), 20);
+            $user = players::on($db)->where('username', "=", $username)->first();
+            if ($user === null) {
+                return false;
+            }
+            $user->setConnection($db);
+            if ($user->salt) {
+                $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
+            } else {
+                $trimmed_pass = trim($password);
+            }
+            //If we're still using SHA512 for the password, do a simple comparison.
+            if (password_needs_rehashing($user->pass)) {
+                if ($trimmed_pass !== $user->pass) {
+                    return false;
+                }
+            } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+                return false;
+            }
+            if ($user && ($user->hasAdmin() || $user->hasModerator())) {
                 return $user;
             }
+            return false;
+            /*if ($user && ($user->isAdmin() || $user->isModerator()) && Hash::check($request->password, $user->password)) {
+                return $user;
+            }*/
         });
     }
 }

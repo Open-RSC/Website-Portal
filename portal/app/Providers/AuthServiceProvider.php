@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\players;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -15,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\User' => 'App\Models\players'
     ];
 
     /**
@@ -26,11 +28,19 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         
-        Gate::define('admin', function (User $user) {
+        Gate::define('website-admin', function (User $user) {
             return $user->isAdmin();
         });
         
-        Gate::define('moderator', function (User $user) {
+        Gate::define('admin', function (players $user) {
+            return $user->hasAdmin();
+        });
+        
+        Gate::define('moderator', function (players $user) {
+            return $user->hasModerator();
+        });
+        
+        Gate::define('website-moderator', function (User $user) {
             return $user->isModerator();
         });
     }
