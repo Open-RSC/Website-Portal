@@ -43,5 +43,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('website-moderator', function (User $user) {
             return $user->isModerator();
         });
+        
+        Gate::define('player-moderator', function (players $user) {
+            return $user->hasPlayerModerator();
+        });
     }
 }

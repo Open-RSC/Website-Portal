@@ -52,7 +52,7 @@
                         <div>
                             <!-- <label>{-- __('Remember me') --}</label> -->
                             <!-- We don't have remember_token in players table -->
-                            <!--<input class="mt-1" type="checkbox" name="remember">-->
+                            <!-- <input class="mt-1" type="checkbox" name="remember"> -->
                         </div>
                 
                         <div>

@@ -98,7 +98,7 @@ class players extends Authenticatable
         return $this->group_id == config('group.owner');
     }
     public function isAdmin() {
-        return $this->group_id == config('group.owner');
+        return $this->group_id == config('group.admin');
     }
     public function isSuperModerator() {
         return $this->group_id == config('group.super_moderator');
