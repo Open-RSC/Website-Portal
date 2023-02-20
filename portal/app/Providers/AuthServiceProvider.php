@@ -32,16 +32,16 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin();
         });
         
+        Gate::define('website-moderator', function (User $user) {
+            return $user->isModerator();
+        });
+        
         Gate::define('admin', function (players $user) {
             return $user->hasAdmin();
         });
         
         Gate::define('moderator', function (players $user) {
             return $user->hasModerator();
-        });
-        
-        Gate::define('website-moderator', function (User $user) {
-            return $user->isModerator();
         });
         
         Gate::define('player-moderator', function (players $user) {
