@@ -71,7 +71,7 @@
             {{-- There's currently nothing guest-specific that staff also shouldn't access. --}}
         @else
             <span class="flex-auto p-2 dropdown">
-                <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
+                <a class="c" href="#">Server Item Stats <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black; width:160px;">
                     <a class="c text-left" href="{{ route('StatisticsOverview', 'preservation') }}">RSC Preservation Stats</a>
                     <a class="c text-left" href="{{ route('StatisticsOverview', 'cabbage') }}">RSC Cabbage Stats</a>
@@ -90,6 +90,45 @@
                     <a class="c text-left" href="{-- route('player_cache_logs') --}">Player Cache Logs</a>
                     <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>
                     <a class="c text-left" href="{-- route('staff_logs') --}">Staff Logs</a>-->
+                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                </span>
+            </span>
+        
+            <span class="flex-auto p-2 dropdown">
+                <a class="c" href="#">Chat Logs <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                    <a class="c text-left" href="{{ route('chat_logs', 'preservation') }}">RSC Preservation Chat Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs', 'cabbage') }}">RSC Cabbage Chat Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs', '2001scape') }}">2001scape Chat Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs', 'uranium') }}">RSC Uranium Chat Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs', 'coleslaw') }}">RSC Coleslaw Chat Logs</a>
+                    <a class="c text-left" href="{{ route('chat_logs', 'openpk') }}">OpenPK Chat Logs</a>
+                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                </span>
+            </span>
+        
+            <span class="flex-auto p-2 dropdown">
+                <a class="c" href="#">PM Logs <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                    <a class="c text-left" href="{{ route('pm_logs', 'preservation') }}">RSC Preservation PM Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs', 'cabbage') }}">RSC Cabbage PM Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs', '2001scape') }}">2001scape PM Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs', 'uranium') }}">RSC Uranium PM Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs', 'coleslaw') }}">RSC Coleslaw PM Logs</a>
+                    <a class="c text-left" href="{{ route('pm_logs', 'openpk') }}">OpenPK PM Logs</a>
+                    <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                </span>
+            </span>
+        
+            <span class="flex-auto p-2 dropdown">
+                <a class="c" href="#">Trade Logs <i class="fas fa-caret-down"></i></a>
+                <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                    <a class="c text-left" href="{{ route('trade_logs', 'preservation') }}">RSC Preservation Trade Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs', 'cabbage') }}">RSC Cabbage Trade Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs', '2001scape') }}">2001scape Trade Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs', 'uranium') }}">RSC Uranium Trade Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs', 'coleslaw') }}">RSC Coleslaw Trade Logs</a>
+                    <a class="c text-left" href="{{ route('trade_logs', 'openpk') }}">OpenPK Trade Logs</a>
                     <input type="checkbox" id="drop-5" style="display: none !important;"/>
                 </span>
             </span>
