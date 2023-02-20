@@ -73,7 +73,9 @@ Route::any('toplist/{db}', 'HiscoresController@toplist')->name('RuneScape Hiscor
 Route::get('staff/{db}/chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
 Route::get('staff/{db}/chat_logs/data', 'StaffController@chatLogsData')->middleware('auth')->name('ChatLogsData');
 Route::get('staff/{db}/pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
+Route::get('staff/{db}/pm_logs/data', 'StaffController@pmLogsData')->middleware('auth')->name('PmLogsData');
 Route::get('staff/{db}/trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
+Route::get('staff/{db}/trade_logs/data', 'StaffController@tradeLogsData')->middleware('auth')->name('TradeLogsData');
 Route::get('staff/{db}/generic_logs', 'StaffController@generic_logs')->middleware('auth')->name('generic_logs');
 Route::get('staff/{db}/shop_logs', 'StaffController@shop_logs')->middleware('auth')->name('shop_logs');
 Route::get('staff/{db}/auction_logs', 'StaffController@auction_logs')->middleware('auth')->name('auction_logs');

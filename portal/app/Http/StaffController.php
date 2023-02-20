@@ -41,7 +41,8 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return DataTables::of(DB::connection($db)->table('chat_logs')->limit(20000)->get()->toArray())
+        //Here we hardcode orderBy time because we only want the latest chat logs.
+        return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
                     return Carbon::parse($data->time)->format("Y-m-d H:i:s");
                 })
@@ -57,7 +58,31 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('pm_logs');
+        //Here we hardcode orderBy time because we only want the latest logs.
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "pm_logs",
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        return view('pm_logs', compact('db'));
+    }
+    
+    public function pmLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::parse($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
     }
 
     public function trade_logs(Request $request, $db)
@@ -68,7 +93,34 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('trade_logs');
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "trade_logs",
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        return view('trade_logs', compact('db'));
+    }
+    
+    public function tradeLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::parse($data->time)->format("Y-m-d H:i:s");
+                })->editColumn('player1_items', function($data) {
+                    return str_replace(",", ",\n", $data->player1_items);
+                })->editColumn('player2_items', function($data) {
+                    return str_replace(",", ",\n", $data->player2_items);
+                })
+                ->smart(true)
+                ->make();
     }
 
     public function generic_logs(Request $request, $db)
@@ -79,7 +131,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('generic_logs');
+        return view('generic_logs', compact('db'));
     }
 
     public function shop_logs(Request $request, $db)
@@ -90,7 +142,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('shop_logs');
+        return view('shop_logs', compact('db'));
     }
 
     public function auction_logs(Request $request, $db)
@@ -101,7 +153,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('auction_logs');
+        return view('auction_logs', compact('db'));
     }
 
     public function live_feed_logs(Request $request, $db)
@@ -112,7 +164,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('live_feed_logs');
+        return view('live_feed_logs', compact('db'));
     }
 
     public function player_cache_logs(Request $request, $db)
@@ -123,7 +175,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('player_cache_logs');
+        return view('player_cache_logs', compact('db'));
     }
 
     public function report_logs(Request $request, $db)
@@ -134,7 +186,7 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('report_logs');
+        return view('report_logs', compact('db'));
     }
 
     public function staff_logs(Request $request, $db)
@@ -142,9 +194,9 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        return view('staff_logs');
+        return view('staff_logs', compact('db'));
     }
 }
