@@ -26,7 +26,7 @@ class StaffController extends Controller
         }
         DB::connection("laravel")->table("viewlogs")->insert([
             'username' => Auth::user()->username,
-            'page' => $request->getUri(),
+            'page' => "chat_logs",
             'ip' => $request->getClientIp(),
             'created_at' => now(),
             'updated_at' => now()
