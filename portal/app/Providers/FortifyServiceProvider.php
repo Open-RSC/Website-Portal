@@ -75,7 +75,7 @@ class FortifyServiceProvider extends ServiceProvider
             } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
                 return false;
             }
-            if ($user && ($user->hasAdmin() || $user->hasModerator())) {
+            if ($user) {
                 return $user;
             }
             return false;
