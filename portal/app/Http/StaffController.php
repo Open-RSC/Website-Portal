@@ -169,7 +169,7 @@ class StaffController extends Controller
             abort(404);
         }
         //Here we hardcode orderBy time because we only want the latest logs.
-        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('buyer_info', '!=', '')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
                     return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })->editColumn('buyer_info', function($data) {
