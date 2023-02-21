@@ -77,12 +77,14 @@ Route::get('staff/{db}/pm_logs/data', 'StaffController@pmLogsData')->middleware(
 Route::get('staff/{db}/trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
 Route::get('staff/{db}/trade_logs/data', 'StaffController@tradeLogsData')->middleware('auth')->name('TradeLogsData');
 Route::get('staff/{db}/generic_logs', 'StaffController@generic_logs')->middleware('auth')->name('generic_logs');
-Route::get('staff/{db}/shop_logs', 'StaffController@shop_logs')->middleware('auth')->name('shop_logs');
+Route::get('staff/{db}/generic_logs/data', 'StaffController@genericLogsData')->middleware('auth')->name('GenericLogsData');
 Route::get('staff/{db}/auction_logs', 'StaffController@auction_logs')->middleware('auth')->name('auction_logs');
+Route::get('staff/{db}/auction_logs/data', 'StaffController@auctionLogsData')->middleware('auth')->name('AuctionLogsData');
 Route::get('staff/{db}/live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth')->name('live_feed_logs');
 Route::get('staff/{db}/player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
 Route::get('staff/{db}/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
 Route::get('staff/{db}/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
+Route::get('staff/{db}/staff_logs/data', 'StaffController@staffLogsData')->middleware('auth')->name('StaffLogsData');
 
 //Route::get('register', 'Livewire\Registration')->name('Player Registration');
 //Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);

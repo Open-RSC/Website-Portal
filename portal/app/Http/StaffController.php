@@ -44,7 +44,7 @@ class StaffController extends Controller
         //Here we hardcode orderBy time because we only want the latest chat logs.
         return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
-                    return Carbon::parse($data->time)->format("Y-m-d H:i:s");
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })
                 ->smart(true)
                 ->make();
@@ -79,7 +79,7 @@ class StaffController extends Controller
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
-                    return Carbon::parse($data->time)->format("Y-m-d H:i:s");
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })
                 ->smart(true)
                 ->make();
@@ -113,7 +113,7 @@ class StaffController extends Controller
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
-                    return Carbon::parse($data->time)->format("Y-m-d H:i:s");
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })->editColumn('player1_items', function($data) {
                     return str_replace(",", ",\n", $data->player1_items);
                 })->editColumn('player2_items', function($data) {
@@ -133,16 +133,21 @@ class StaffController extends Controller
         }
         return view('generic_logs', compact('db'));
     }
-
-    public function shop_logs(Request $request, $db)
-    {
+    
+    public function genericLogsData(Request $request, $db) {
         if (Auth::user() === null) {
             return redirect("/login");
         }
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        return view('shop_logs', compact('db'));
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
     }
 
     public function auction_logs(Request $request, $db)
@@ -154,6 +159,24 @@ class StaffController extends Controller
             abort(404);
         }
         return view('auction_logs', compact('db'));
+    }
+    
+    public function auctionLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('buyer_info', '!=', '')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })->editColumn('buyer_info', function($data) {
+                    return str_replace(",", ",\n", $data->buyer_info);
+                })
+                ->smart(true)
+                ->make();
     }
 
     public function live_feed_logs(Request $request, $db)
@@ -198,5 +221,21 @@ class StaffController extends Controller
             abort(404);
         }
         return view('staff_logs', compact('db'));
+    }
+    
+    public function staffLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
     }
 }

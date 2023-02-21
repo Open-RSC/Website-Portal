@@ -79,18 +79,12 @@
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">OpenPK Stats</a>
-                        <!--<a class="c text-left" href="{-- route('chat_logs') --}">Chat Logs</a>-->
-                        <!--<a class="c text-left" href="{-- route('pm_logs') --}"PM Logs</a>-->
-                        <!--<a class="c text-left" href="{-- route('trade_logs') --}">Trade Logs</a>-->
-                        <!--<a class="c text-left" href="{-- route('generic_logs') --}">Generic Logs</a>-->
-                        <!--<a class="c text-left" href="{-- route('shop_logs') --}">Shop Logs</a>-->
                         @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
                             <!--<a class="c text-left" href="{-- route('auction_logs') --}">Auction Logs</a>-->
                             @endif
                         <!--<a class="c text-left" href="{-- route('live_feed_logs') --}">Live Feed Logs</a>
                         <a class="c text-left" href="{-- route('player_cache_logs') --}">Player Cache Logs</a>
-                        <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>
-                        <a class="c text-left" href="{-- route('staff_logs') --}">Staff Logs</a>-->
+                        <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>-->
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
@@ -130,6 +124,42 @@
                         <a class="c text-left" href="{{ route('trade_logs', 'uranium') }}">RSC Uranium Trade Logs</a>
                         <a class="c text-left" href="{{ route('trade_logs', 'coleslaw') }}">RSC Coleslaw Trade Logs</a>
                         <a class="c text-left" href="{{ route('trade_logs', 'openpk') }}">OpenPK Trade Logs</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
+            
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Auction Logs <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('auction_logs', 'cabbage') }}">RSC Cabbage Auction Logs</a>
+                        <a class="c text-left" href="{{ route('auction_logs', 'coleslaw') }}">RSC Auction Logs</a>
+                        <a class="c text-left" href="{{ route('auction_logs', 'openpk') }}">OpenPK Shop Logs</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
+                
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Generic Logs <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('generic_logs', 'preservation') }}">RSC Preservation Generic Logs</a>
+                        <a class="c text-left" href="{{ route('generic_logs', 'cabbage') }}">RSC Cabbage Generic Logs</a>
+                        <a class="c text-left" href="{{ route('generic_logs', '2001scape') }}">2001scape Generic Logs</a>
+                        <a class="c text-left" href="{{ route('generic_logs', 'uranium') }}">RSC Uranium Generic Logs</a>
+                        <a class="c text-left" href="{{ route('generic_logs', 'coleslaw') }}">RSC Coleslaw Generic Logs</a>
+                        <a class="c text-left" href="{{ route('generic_logs', 'openpk') }}">OpenPK Generic Logs</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
+            
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Staff Logs <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('staff_logs', 'preservation') }}">RSC Preservation Staff Logs</a>
+                        <a class="c text-left" href="{{ route('staff_logs', 'cabbage') }}">RSC Cabbage Staff Logs</a>
+                        <a class="c text-left" href="{{ route('staff_logs', '2001scape') }}">2001scape Staff Logs</a>
+                        <a class="c text-left" href="{{ route('staff_logs', 'uranium') }}">RSC Uranium Staff Logs</a>
+                        <a class="c text-left" href="{{ route('staff_logs', 'coleslaw') }}">RSC Coleslaw Staff Logs</a>
+                        <a class="c text-left" href="{{ route('staff_logs', 'openpk') }}">OpenPK Staff Logs</a>
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
