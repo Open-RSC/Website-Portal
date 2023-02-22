@@ -19,22 +19,6 @@ if (!function_exists('passwd_compat_hasher')) {
     }
 }
 
-if (!function_exists('add_characters')) {
-    function add_characters($s, $i)
-    {
-        $s1 = "";
-        for ($j = 0; $j < $i; $j++) {
-            if ($j >= strlen($s)) {
-                $s1 .= " ";
-            } else {
-                $c = $s[$j];
-                $s1 .= ctype_alnum($c) ? $c : "_";
-            }
-        }
-        return $s1;
-    }
-}
-
 if (!function_exists('password_needs_rehashing')) {
     /**
      * @param $passwordHashed string The password hash
