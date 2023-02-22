@@ -151,7 +151,7 @@
                     </span>
                 </span>
             @endif
-            @if(Gate::allows('player-moderator', Auth::user()))
+            @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Staff Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
