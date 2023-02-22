@@ -17,40 +17,11 @@ if (!function_exists('passwd_compat_hasher')) {
         return hash('sha512', ($salt . md5($credential)));
 
     }
-<<<<<<< portal/app/helpers.php
-
-
-    if (!function_exists('add_characters')) {
-        function add_characters($s, $i)
-        {
-            $s1 = "";
-            for ($j = 0; $j < $i; $j++) {
-                if ($j >= strlen($s)) {
-                    $s1 .= " ";
-                } else {
-                    $c = $s[$j];
-                    $s1 .= ctype_alnum($c) ? $c : "_";
-                }
-            }
-            return $s1;
-        }
-    }
-
-    if (!function_exists('password_needs_rehashing')) {
-        /**
-         * @param $passwordHashed string The password hash
-         * @return bool
-         */
-        function password_needs_rehashing(string $passwordHashed): bool
-        {
-            return !str_starts_with($passwordHashed, "$2y$10$");
-        }
-
-=======
 }
 
 if (!function_exists('add_characters')) {
-    function add_characters($s, $i) {
+    function add_characters($s, $i)
+    {
         $s1 = "";
         for ($j = 0; $j < $i; $j++) {
             if ($j >= strlen($s)) {
@@ -61,6 +32,34 @@ if (!function_exists('add_characters')) {
             }
         }
         return $s1;
->>>>>>> portal/app/helpers.php
+    }
+}
+
+if (!function_exists('password_needs_rehashing')) {
+    /**
+     * @param $passwordHashed string The password hash
+     * @return bool
+     */
+    function password_needs_rehashing(string $passwordHashed): bool
+    {
+        return !str_starts_with($passwordHashed, "$2y$10$");
+    }
+
+
+}
+
+if (!function_exists('add_characters')) {
+    function add_characters($s, $i)
+    {
+        $s1 = "";
+        for ($j = 0; $j < $i; $j++) {
+            if ($j >= strlen($s)) {
+                $s1 .= " ";
+            } else {
+                $c = $s[$j];
+                $s1 .= ctype_alnum($c) ? $c : "_";
+            }
+        }
+        return $s1;
     }
 }
