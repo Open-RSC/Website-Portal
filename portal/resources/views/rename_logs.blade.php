@@ -26,8 +26,8 @@
                 processing: true,
                 serverSide: true,
                 columns: [
-                    {title: "Current Name", data: 'currentName'},
                     {title: "Former Name", data: 'formerName'},
+                    {title: "Current Name", data: 'currentName'},
                     {title: "Changed By", data: 'whoChanged'},
                     {title: "Change Type", data: 'changeType', render: function(data, type, row) {
                         let changeTypes = ["Voluntary", "Inappropriate", "Capitalization", "Released", "Invalid", "Remove Former Name"];
