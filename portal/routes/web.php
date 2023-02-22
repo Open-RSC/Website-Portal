@@ -83,6 +83,8 @@ Route::get('staff/{db}/auction_logs/data', 'StaffController@auctionLogsData')->m
 Route::get('staff/{db}/live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth')->name('live_feed_logs');
 Route::get('staff/{db}/player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
 Route::get('staff/{db}/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
+Route::get('staff/{db}/rename_logs', 'StaffController@rename_logs')->middleware('auth')->name('rename_logs');
+Route::get('staff/{db}/rename_logs/data', 'StaffController@renameLogsData')->middleware('auth')->name('RenameLogsData');
 Route::get('staff/{db}/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
 Route::get('staff/{db}/staff_logs/data', 'StaffController@staffLogsData')->middleware('auth')->name('StaffLogsData');
 

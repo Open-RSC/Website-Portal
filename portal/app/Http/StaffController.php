@@ -211,6 +211,33 @@ class StaffController extends Controller
         }
         return view('report_logs', compact('db'));
     }
+    
+    public function rename_logs(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        return view('rename_logs', compact('db'));
+    }
+    
+    public function renameLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        //Here we hardcode orderBy time because we only want the latest logs.
+        return DataTables::of(DB::connection($db)->table('former_names')->select(["*", "players.username AS currentName"])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
+    }
 
     public function staff_logs(Request $request, $db)
     {

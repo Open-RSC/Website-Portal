@@ -150,6 +150,19 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
+                
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Rename Logs <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('rename_logs', 'preservation') }}">RSC Preservation Rename Logs</a>
+                        <a class="c text-left" href="{{ route('rename_logs', 'cabbage') }}">RSC Cabbage Rename Logs</a>
+                        <a class="c text-left" href="{{ route('rename_logs', '2001scape') }}">2001scape Rename Logs</a>
+                        <a class="c text-left" href="{{ route('rename_logs', 'uranium') }}">RSC Uranium Rename Logs</a>
+                        <a class="c text-left" href="{{ route('rename_logs', 'coleslaw') }}">RSC Coleslaw Rename Logs</a>
+                        <a class="c text-left" href="{{ route('rename_logs', 'openpk') }}">OpenPK Rename Logs</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
             @endif
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
