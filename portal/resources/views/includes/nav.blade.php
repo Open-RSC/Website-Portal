@@ -61,6 +61,8 @@
                                 class="fas fa-map"></i> RSC Preservation</a>
                     <a class="c text-left" href="/worldmap/cabbage"><i
                                 class="fas fa-map"></i> RSC Cabbage</a>
+                    <a class="c text-left" href="/worldmap/2001scape"><i
+                                class="fas fa-map"></i> 2001scape</a>
                     <a class="c text-left" href="/worldmap/uranium"><i
                                 class="fas fa-map"></i> RSC Uranium</a>
                     <a class="c text-left" href="/worldmap/coleslaw"><i
