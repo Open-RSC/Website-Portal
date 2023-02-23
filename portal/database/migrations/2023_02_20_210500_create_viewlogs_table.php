@@ -17,7 +17,9 @@ class CreateViewlogsTable extends Migration
             $table->id();
             $table->string("username");
             $table->string("page");
-            $table->string("info");
+            $table->string("game")->nullable();
+            $table->text("url");
+            $table->string("search_terms")->nullable();
             $table->string("ip");
             $table->timestamps();
         });

@@ -24,13 +24,6 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        DB::connection("laravel")->table("viewlogs")->insert([
-            'username' => Auth::user()->username,
-            'page' => "chat_logs",
-            'ip' => $request->getClientIp(),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
         return view('chat_logs', compact('db'));
     }
     
@@ -41,6 +34,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "chat_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest chat logs.
         return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -59,13 +62,6 @@ class StaffController extends Controller
             abort(404);
         }
         //Here we hardcode orderBy time because we only want the latest logs.
-        DB::connection("laravel")->table("viewlogs")->insert([
-            'username' => Auth::user()->username,
-            'page' => "pm_logs",
-            'ip' => $request->getClientIp(),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
         return view('pm_logs', compact('db'));
     }
     
@@ -76,6 +72,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "pm_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -93,13 +99,6 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
-        DB::connection("laravel")->table("viewlogs")->insert([
-            'username' => Auth::user()->username,
-            'page' => "trade_logs",
-            'ip' => $request->getClientIp(),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
         return view('trade_logs', compact('db'));
     }
     
@@ -110,6 +109,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "trade_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -141,6 +150,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "generic_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -168,6 +187,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "auction_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -230,6 +259,16 @@ class StaffController extends Controller
         if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "rename_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('former_names')->select(["*", "players.username AS currentName"])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
@@ -257,6 +296,16 @@ class StaffController extends Controller
         if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "staff_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => $request->getClientIp(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         //Here we hardcode orderBy time because we only want the latest logs.
         return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
