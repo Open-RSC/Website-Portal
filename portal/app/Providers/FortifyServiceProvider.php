@@ -54,14 +54,12 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::authenticateUsing(function (Request $request) {
-            $db = $request->input('db');
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
-            $user = players::on($db)->where('username', "=", $username)->first();
+            $user = players::on('preservation')->where('username', "=", $username)->first();
             if ($user === null) {
                 return false;
             }
-            $user->setConnection($db);
             if ($user->salt) {
                 $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
             } else {
