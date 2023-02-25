@@ -51,7 +51,7 @@ class GeneratePlayerExportCommand extends Command
             $this->error($e->getMessage());
             return;
         }
-        $this->info("Player export for $username on $db created successfully!");
+        $this->info("Player export for $username on $db created successfully! You can find it at: storage/app/" . $playerExport->getBasePath() . $playerExport->getExtraPath() . $playerExport->getFileName());
         return true;
     }
 }

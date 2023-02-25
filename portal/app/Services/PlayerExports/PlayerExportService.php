@@ -24,11 +24,16 @@ class PlayerExportService {
     private string $fileName;
     
     private string $fileData;
+    
+    private string $basePath;
+    
+    private string $extraPath;
 
-    public function __construct($username, $db = 'preservation')
+    public function __construct($username, $db = 'preservation', $basePath = 'playerexports/')
     {
         $this->db = $db;
         $this->username = $username;
+        $this->basePath = $basePath;
     }
 
 
@@ -40,6 +45,7 @@ class PlayerExportService {
     public function execute() : string {
         $this->sqlString = $this->generateSql($this->db);
         $this->dateString = Carbon::now()->format("Y-m-d_h-i-s");
+        $this->extraPath = $this->db . "-" . $this->username . "-" . $this->dateString . "/";
         return $this->sqlString;
     }
 
@@ -49,17 +55,15 @@ class PlayerExportService {
      * @throws FileNotFoundException
      */
     public function generateFile() : string {
-        $basepath = "playerexports/";
-        $extrapath = $this->db . "-" . $this->username . "-" . $this->dateString . "/";
         $basename = $this->db . "-" . $this->username . "-" . $this->dateString;
-        $sqlfile =  $basepath . $extrapath . "playerdata.sql";
-        $zipfile = $basepath . $extrapath . $basename . '.zip';
-        $tempzipfile = $basepath . $extrapath . 'data.zip';
-        $gpgfile = $basepath . $extrapath . 'data.zip.gpg';
-        $sqlitefile = $basepath . $extrapath . 'playerdata.db';
-        $txtfile = $basepath . $extrapath . 'metadata.txt';
+        $sqlfile =  $this->basePath . $this->extraPath . "playerdata.sql";
+        $zipfile = $this->basePath . $this->extraPath . $basename . '.zip';
+        $tempzipfile = $this->basePath . $this->extraPath . 'data.zip';
+        $gpgfile = $this->basePath . $this->extraPath . 'data.zip.gpg';
+        $sqlitefile = $this->basePath . $this->extraPath . 'playerdata.db';
+        $txtfile = $this->basePath . $this->extraPath . 'metadata.txt';
         Storage::disk('local')->put($sqlfile, $this->sqlString);
-        Storage::disk('local')->put($basepath . $extrapath . "playerdata.db", Storage::disk('sqlite')->get($this->db . ".db"));
+        Storage::disk('local')->put($this->basePath . $this->extraPath . "playerdata.db", Storage::disk('sqlite')->get($this->db . ".db"));
         Config::set("database.connections.$basename", [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
@@ -107,7 +111,7 @@ class PlayerExportService {
         Storage::disk('local')->delete($gpgfile);
         $this->fileName = $this->db . "-" . $this->username . "-" . $this->dateString . ".zip";
         $this->generateFileExportLog();
-        $this->fileData = file_get_contents(storage_path("app/" . $basepath . $extrapath . $this->fileName));
+        $this->fileData = file_get_contents(storage_path("app/" . $this->basePath . $this->extraPath . $this->fileName));
         return $this->fileData;
     }
     
@@ -354,5 +358,21 @@ class PlayerExportService {
     public function getFileData(): string
     {
         return $this->fileData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePath(): string
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraPath(): string
+    {
+        return $this->extraPath;
     }
 }
