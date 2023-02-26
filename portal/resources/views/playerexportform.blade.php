@@ -10,7 +10,7 @@
                 <div>
                     @if ($errors->any())
                         <div class="alert alert-danger">
-                            <div>{{ __('Whoops! Something went wrong.') }}</div>
+                            <div>{{ __('Something went wrong.') }}</div>
                             <ul style="list-style:initial">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>

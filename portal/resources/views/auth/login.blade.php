@@ -16,7 +16,7 @@
                 
                     @if ($errors->any())
                         <div>
-                            <div>{{ __('Whoops! Something went wrong.') }}</div>
+                            <div>{{ __('Something went wrong.') }}</div>
                             <ul style="list-style:initial">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
