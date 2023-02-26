@@ -494,7 +494,7 @@ class PlayerController extends Controller
         try {
             $validated = $this->validate($request, [
                 'db' => 'required',
-                'username' => ['bail', 'required', 'min:2', 'max:12'],
+                'username' => ['bail', 'alpha_dash:ascii', 'required', 'min:2', 'max:12'],
                 'password' => 'required|min:4|max:20',
             ]);
         } catch (ValidationException $e) {
