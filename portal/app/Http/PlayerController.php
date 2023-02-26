@@ -543,7 +543,7 @@ class PlayerController extends Controller
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
-                \Log::error("Could not generate player export for username $username DB $db at " . $playerExportService->getDateString()) . " with error: " . $e->getMessage();
+                \Log::error("Could not generate player export for username $username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
                 return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
             }
         }
