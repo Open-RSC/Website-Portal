@@ -73,7 +73,7 @@ class PlayerExportService {
         $text .= "Muted: " . $this->player[0]->muted . "\n";
         $text .= "Banned: " . $this->player[0]->banned . "\n";
         $text .= "Offences: " . $this->player[0]->offences . "\n";
-        $text .= "GPG Link: https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key";
+        $text .= "GPG Link: https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key" . "\n";
         $text .= "GPG Archive Link: https://web.archive.org/web/20230224020441/https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key";
         Storage::disk('local')->put($txtfile, $text);
         $zip = new Zip();
