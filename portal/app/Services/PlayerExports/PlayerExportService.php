@@ -202,6 +202,12 @@ class PlayerExportService {
             ->where('playerID', '=', $player_id)
             ->get();
         $this->sqlString .= $this->buildInsert("player_recovery", $player_recovery) . "\n";
+        $player_change_recovery = DB::connection($db)
+            ->table('player_change_recovery')
+            ->select('*')
+            ->where('playerID', '=', $player_id)
+            ->get();
+        $this->sqlString .= $this->buildInsert("player_change_recovery", $player_change_recovery) . "\n";
         $player_contact_details = DB::connection($db)
             ->table('player_contact_details')
             ->select('*')
