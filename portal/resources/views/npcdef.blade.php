@@ -123,7 +123,7 @@
                                     data-href="{{ route('Items', $npc_drop->itemID) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
-                                            style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                            style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $npc_drop->dropAmount }}
                                     </div>
                                     <img class="mt-n2" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"

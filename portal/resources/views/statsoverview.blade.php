@@ -46,7 +46,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '422') }}" title="Pumpkin"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($pumpkin)
                                         {{ number_format($pumpkin) }}
                                     @else
@@ -59,7 +59,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '575') }}" title="Christmas Cracker"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($cracker)
                                         {{ number_format($cracker) }}
                                     @else
@@ -72,7 +72,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '576') }}" title="Red Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($redphat)
                                         {{ number_format($redphat) }}
                                     @else
@@ -85,7 +85,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '577') }}" title="Yellow Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($yellowphat)
                                         {{ number_format($yellowphat) }}
                                     @else
@@ -100,7 +100,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '578') }}" title="Blue Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($bluephat)
                                         {{ number_format($bluephat) }}
                                     @else
@@ -113,7 +113,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '579') }}" title="Green Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($greenphat)
                                         {{ number_format($greenphat) }}
                                     @else
@@ -126,7 +126,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '580') }}" title="Pink Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($pinkphat)
                                         {{ number_format($pinkphat) }}
                                     @else
@@ -139,7 +139,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '581') }}" title="White Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($whitephat)
                                         {{ number_format($whitephat) }}
                                     @else
@@ -154,7 +154,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '677') }}" title="Easter Egg"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($easteregg)
                                         {{ number_format($easteregg) }}
                                     @else
@@ -167,7 +167,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '831') }}" title="Red Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($redmask)
                                         {{ number_format($redmask) }}
                                     @else
@@ -180,7 +180,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '832') }}" title="Blue Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($bluemask)
                                         {{ number_format($bluemask) }}
                                     @else
@@ -193,7 +193,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '828') }}" title="Green Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($greenmask)
                                         {{ number_format($greenmask) }}
                                     @else
@@ -208,7 +208,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '971') }}" title="Santa Hat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($santahat)
                                         {{ number_format($santahat) }}
                                     @else
@@ -221,7 +221,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '1289') }}" title="Scythe"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($scythe)
                                         {{ number_format($scythe) }}
                                     @else
@@ -234,7 +234,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '1278') }}" title="Dragon Sq Shield"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dsq)
                                         {{ number_format($dsq) }}
                                     @else
@@ -247,7 +247,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '795') }}" title="Dragon Med Helm"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dmed)
                                         {{ number_format($dmed) }}
                                     @else
@@ -262,7 +262,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '522') }}" title="Dragonstone Amulet"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dammy)
                                         {{ number_format($dammy) }}
                                     @else
@@ -275,7 +275,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '594') }}" title="Dragon Axe"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dbattle)
                                         {{ number_format($dbattle) }}
                                     @else
@@ -288,7 +288,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '593') }}" title="Dragon Sword"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dlong)
                                         {{ number_format($dlong) }}
                                     @else
@@ -301,7 +301,7 @@
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
                                 data-href="{{ route('Item Information', '81') }}" title="Rune 2H Sword"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
-                                <div style="-webkit-text-stroke-width: 1px; margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
+                                <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($rune2h)
                                         {{ number_format($rune2h) }}
                                     @else
