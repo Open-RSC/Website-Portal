@@ -333,7 +333,7 @@ class PlayerExportService {
                 $table_value_array[$key] = addslashes($record_column);
             }
             
-            $data .= "('" . implode("','", $table_value_array) . "'),";
+            $data .= "('" . implode("','", str_replace("\n", "", $table_value_array)) . "'),";
         }
         $data = rtrim($data, ",");
         $data .= ";";
