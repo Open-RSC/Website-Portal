@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Response;
@@ -493,7 +494,7 @@ class PlayerController extends Controller
         }
         try {
             $validated = $this->validate($request, [
-                'db' => 'required',
+                'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
                 'username' => ['bail', 'alpha_dash:ascii', 'required', 'min:2', 'max:12'],
                 'password' => 'required|min:4|max:20',
             ]);
