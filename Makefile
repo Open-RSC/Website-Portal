@@ -66,10 +66,12 @@ truncate:
 # Installs any missing pieces for Laravel and updates everything needed to operate
 update-laravel:
 	docker exec -i php bash -c "cd /var/www/html/portal && composer install && composer update && composer dump-autoload && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix"
+	docker exec -i php bash -c "mkdir /opt/gpg"; docker cp /opt/gpg/openrsc-gpg-public-key-2023-02-16.key php:/opt/gpg/openrsc-gpg-public-key-2023-02-16.key; docker cp /opt/gpg/openrsc-gpg-private-key-2023-02-16.key php:/opt/gpg/openrsc-gpg-private-key-2023-02-16.key; docker exec -i php bash -c "mkdir /var/www/.gnupg; chown -R www-data:www-data /var/www/.gnupg"; 
 
 # Alias of update-laravel	
 upgrade-laravel:
 	docker exec -i php bash -c "cd /var/www/html/portal && composer install && composer update && composer dump-autoload && php artisan key:generate && php artisan optimize && npm install && npm update && npm audit fix"
+	docker exec -i php bash -c "mkdir /opt/gpg"; docker cp /opt/gpg/openrsc-gpg-public-key-2023-02-16.key php:/opt/gpg/openrsc-gpg-public-key-2023-02-16.key; docker cp /opt/gpg/openrsc-gpg-private-key-2023-02-16.key php:/opt/gpg/openrsc-gpg-private-key-2023-02-16.key; docker exec -i php bash -c "mkdir /var/www/.gnupg; chown -R www-data:www-data /var/www/.gnupg"; 
 
 # Clears the cache and routes used by Laravel
 clear-all-laravel:
