@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Fortify;
 use function App\Helpers\add_characters;
 use function App\Helpers\passwd_compat_hasher;
@@ -54,6 +56,15 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::authenticateUsing(function (Request $request) {
+            try {
+                $validated = $request->validate([
+                    'username' => ['bail', 'alpha_dash:ascii', 'required', 'min:2', 'max:12'],
+                    'password' => 'required|min:4|max:20',
+                ]);
+            } catch (ValidationException $e) {
+               return false;
+            }
+
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
             $user = players::on('preservation')->where('username', "=", $username)->first();
@@ -77,9 +88,6 @@ class FortifyServiceProvider extends ServiceProvider
                 return $user;
             }
             return false;
-            /*if ($user && ($user->isAdmin() || $user->isModerator()) && Hash::check($request->password, $user->password)) {
-                return $user;
-            }*/
         });
     }
 }
