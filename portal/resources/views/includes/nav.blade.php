@@ -81,13 +81,6 @@
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
                         <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">OpenPK Stats</a>
-                        @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw')) <!-- fix this later -->
-                            <!--<a class="c text-left" href="{-- route('auction_logs') --}">Auction Logs</a>-->
-                            @endif
-                        <!--<a class="c text-left" href="{-- route('live_feed_logs') --}">Live Feed Logs</a>
-                        <a class="c text-left" href="{-- route('player_cache_logs') --}">Player Cache Logs</a>
-                        <a class="c text-left" href="{-- route('report_logs') --}">Report Logs</a>-->
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
