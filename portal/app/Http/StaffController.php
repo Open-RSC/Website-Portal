@@ -21,7 +21,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('chat_logs', compact('db'));
@@ -31,7 +31,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -58,7 +58,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         //Here we hardcode orderBy time because we only want the latest logs.
@@ -69,7 +69,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -96,7 +96,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('trade_logs', compact('db'));
@@ -106,7 +106,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -137,7 +137,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('generic_logs', compact('db'));
@@ -147,7 +147,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -174,7 +174,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('auction_logs', compact('db'));
@@ -184,7 +184,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -213,7 +213,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('live_feed_logs', compact('db'));
@@ -224,7 +224,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('player_cache_logs', compact('db'));
@@ -235,7 +235,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('report_logs', compact('db'));
