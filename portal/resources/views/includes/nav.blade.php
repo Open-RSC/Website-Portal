@@ -72,7 +72,7 @@
         @guest
             {{-- There's currently nothing guest-specific that staff also shouldn't access. --}}
         @else
-            @if(Gate::allows('player-moderator', Auth::user()))
+            @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Server Item Stats <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -90,7 +90,9 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
-            
+            @endif
+        
+            @if(Gate::allows('moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Chat Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -152,7 +154,9 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
-                
+            @endif
+            
+            @if(Gate::allows('player-moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Rename Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -166,6 +170,7 @@
                     </span>
                 </span>
             @endif
+            
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Staff Logs <i class="fas fa-caret-down"></i></a>
@@ -180,6 +185,7 @@
                     </span>
                 </span>
             @endif
+            
             <span class="flex-auto p-2 dropdown">
                 <a class="c" href="#">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black;">
