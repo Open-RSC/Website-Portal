@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Response;
@@ -493,8 +494,8 @@ class PlayerController extends Controller
         }
         try {
             $validated = $this->validate($request, [
-                'db' => 'required',
                 'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+                'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
                 'password' => 'required|min:4|max:20',
             ]);
         } catch (ValidationException $e) {
@@ -546,8 +547,13 @@ class PlayerController extends Controller
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
+<<<<<<< portal/app/Http/PlayerController.php
                 \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString()) . " with error: " . $e->getMessage();
                 abort(404);
+=======
+                \Log::error("Could not generate player export for username $username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
+                return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
+>>>>>>> portal/app/Http/PlayerController.php
             }
         }
         return view('playerexportform', [

@@ -71,7 +71,11 @@ class PlayerExportService {
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', false),
         ]);
-        DB::connection($basename)->statement($this->sqlString);
+        $sqlArray = explode("\n", $this->sqlString);
+        foreach ($sqlArray as $statement) {
+            if (empty($statement)) continue;
+            DB::connection($basename)->statement($statement);
+        }        
         $text = "Server: $this->db \n";
         $text .= "Timestamp: " . floor(microtime(true) * 1000) . "\n";
         $text .= "Muted: " . $this->player[0]->muted . "\n";
@@ -202,6 +206,12 @@ class PlayerExportService {
             ->where('playerID', '=', $player_id)
             ->get();
         $this->sqlString .= $this->buildInsert("player_recovery", $player_recovery) . "\n";
+        $player_change_recovery = DB::connection($db)
+            ->table('player_change_recovery')
+            ->select('*')
+            ->where('playerID', '=', $player_id)
+            ->get();
+        $this->sqlString .= $this->buildInsert("player_change_recovery", $player_change_recovery) . "\n";
         $player_contact_details = DB::connection($db)
             ->table('player_contact_details')
             ->select('*')
@@ -316,14 +326,14 @@ class PlayerExportService {
         
         $data .= "\nINSERT INTO $table (";
 
-        $data .= "" . implode(", ", $table_column_array) . ") VALUES \n";
+        $data .= "" . implode(", ", $table_column_array) . ") VALUES ";
         foreach ($newRecords as $record) {
             $table_value_array = array_values((array)$record);
             foreach($table_value_array as $key => $record_column) {
                 $table_value_array[$key] = addslashes($record_column);
             }
             
-            $data .= "('" . implode("','", $table_value_array) . "'),";
+            $data .= "('" . implode("','", str_replace("\n", "", $table_value_array)) . "'),";
         }
         $data = rtrim($data, ",");
         $data .= ";";
