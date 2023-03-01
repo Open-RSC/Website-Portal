@@ -58,7 +58,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             try {
                 $validated = $request->validate([
-                    'username' => ['bail', 'alpha_dash:ascii', 'required', 'min:2', 'max:12'],
+                    'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                     'password' => 'required|min:4|max:20',
                 ]);
             } catch (ValidationException $e) {
