@@ -67,7 +67,8 @@ class FortifyServiceProvider extends ServiceProvider
 
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
-            $user = players::on('preservation')->where('username', "=", $username)->first();
+            $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
+            $user = players::on('preservation')->where('username', "=", $trimmed_username)->first();
             if ($user === null) {
                 return false;
             }
