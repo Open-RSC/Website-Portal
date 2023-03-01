@@ -511,6 +511,10 @@ class PlayerController extends Controller
             ->select('*')
             ->where('username', $trimmed_username)
             ->first();
+        
+        if ($user === null) {
+            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+        }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
             $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
@@ -520,10 +524,10 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return redirect(route('PlayerExportView'))->withErrors("incorrect password");
+                return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
             }
         } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return redirect(route('PlayerExportView'))->withErrors("incorrect password");
+            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
         }
         $data = "";
   
