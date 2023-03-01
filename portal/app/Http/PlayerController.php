@@ -494,8 +494,8 @@ class PlayerController extends Controller
         }
         try {
             $validated = $this->validate($request, [
+                'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                 'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
-                'username' => ['bail', 'alpha_dash:ascii', 'required', 'min:2', 'max:12'],
                 'password' => 'required|min:4|max:20',
             ]);
         } catch (ValidationException $e) {
@@ -512,6 +512,10 @@ class PlayerController extends Controller
             ->select('*')
             ->where('username', $trimmed_username)
             ->first();
+        
+        if ($user === null) {
+            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+        }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
             $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
@@ -521,14 +525,14 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return redirect(route('PlayerExportView'))->withErrors("incorrect password");
+                return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
             }
         } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return redirect(route('PlayerExportView'))->withErrors("incorrect password");
+            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
         }
         $data = "";
   
-        $playerExportService = new PlayerExportService($username, $db);
+        $playerExportService = new PlayerExportService($trimmed_username, $db);
         $data = $playerExportService->execute();
         
         if ($this->debugPlayerExports) {
@@ -543,7 +547,7 @@ class PlayerController extends Controller
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
-                \Log::error("Could not generate player export for username $username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
+                \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
                 return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
             }
         }
