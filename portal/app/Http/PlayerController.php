@@ -531,7 +531,7 @@ class PlayerController extends Controller
         }
         $data = "";
   
-        $playerExportService = new PlayerExportService($username, $db);
+        $playerExportService = new PlayerExportService($trimmed_username, $db);
         $data = $playerExportService->execute();
         
         if ($this->debugPlayerExports) {
@@ -546,7 +546,7 @@ class PlayerController extends Controller
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
-                \Log::error("Could not generate player export for username $username DB $db at " . $playerExportService->getDateString()) . " with error: " . $e->getMessage();
+                \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString()) . " with error: " . $e->getMessage();
                 abort(404);
             }
         }
