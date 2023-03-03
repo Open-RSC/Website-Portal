@@ -28,7 +28,10 @@
                 columns: [
                     {title: "Staff Username", data: 'staff_username'},
                     {title: "Affected Player", data: 'affected_player'},
-                    {title: "Action", data: 'action'}, //We could probably map actions to action types somehow, not really necessary for now.
+                    {title: "Action", data: 'action', render: function(data, type, row){
+                        let actionTypes = ["Mute", "Unmuted", "Summon", "Goto", "Take", "Put", "kick", "update", "stopevent", "setevent", "blink", "tban", "putfatigue 100%", "say", "invisible", "teleport", "send", "town", "check", "unban", "ban (permanent)", "globaldrop", "wipeitems"];
+                        return actionTypes[data];
+                    }},
                     {title: "Extra Info", data: 'extra'},
                     {title: "Date", data: 'time'},
                 ]
