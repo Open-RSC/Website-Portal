@@ -3,8 +3,8 @@
 return [
     "owner" => 0,
     "admin" => 1,
-    "super_mod" => 2,
-    "mod" => 3,
+    "super_moderator" => 2,
+    "moderator" => 3,
     "dev" => 5,
     "event" => 7,
     "player_moderator" => 8,
