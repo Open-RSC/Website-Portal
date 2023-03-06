@@ -10,4 +10,6 @@ return [
     "gpg_public_key_file" => env("GPG_PUBLIC_KEY_FILE", ""),
     "player_exports_enabled" => env("PLAYER_EXPORTS_ENABLED", false),
     "player_exports_admin_only" => env("PLAYER_EXPORTS_ADMIN_ONLY", false),
+    "login_enabled" => env("LOGIN_ENABLED", true),
+    "login_admin_only" => env("LOGIN_ADMIN_ONLY", false)
 ];

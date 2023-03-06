@@ -56,6 +56,9 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::authenticateUsing(function (Request $request) {
+            if (!config("openrsc.login_enabled")) {
+                return false;
+            }
             try {
                 $validated = $request->validate([
                     'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
@@ -86,6 +89,9 @@ class FortifyServiceProvider extends ServiceProvider
                 return false;
             }
             if ($user) {
+                if (config("openrsc.login_admin_only") && !$user->hasAdmin()) {
+                    return false;
+                }
                 return $user;
             }
             return false;
