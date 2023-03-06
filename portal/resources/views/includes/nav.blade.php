@@ -98,7 +98,9 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
+            @endif
             
+            @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">PM Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -111,7 +113,9 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
+            @endif
             
+            @if(Gate::allows('moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Trade Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
