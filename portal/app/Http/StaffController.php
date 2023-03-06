@@ -58,7 +58,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         //Here we hardcode orderBy time because we only want the latest logs.
@@ -69,7 +69,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
