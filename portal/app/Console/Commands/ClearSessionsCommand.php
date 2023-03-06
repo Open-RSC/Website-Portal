@@ -48,6 +48,7 @@ class ClearSessionsCommand extends Command
                 File::delete(storage_path('framework/sessions/'.$file->getFilename())); 
             }
         }
+        $this->info("Successfully cleared sessions at " . Carbon::now()->format("Y-m-d h:iA"));
         return true;
     }
 }
