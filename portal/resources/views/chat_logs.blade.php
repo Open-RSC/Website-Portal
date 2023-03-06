@@ -18,7 +18,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#logs').DataTable({
+            let dataTable = $('#logs').DataTable({
                 ajax: {
                     url: '{{ route('ChatLogsData', $db)  }}',
                 },
@@ -31,6 +31,12 @@
                     {title: "Date", data: 'time'},
                 ]
             });
+            yadcf.init(dataTable, [
+                {
+                    column_number: 0,
+                    filter_type: "text"
+                }, 
+            ]);
         });
     </script>
 @endsection
