@@ -323,6 +323,9 @@ class StatsController extends Controller
     }
     
     public function statsData($db = "cabbage") {
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
         return DataTables::of(DB::table('rscstats')->where('server', '=', $db)->get()->toArray())
                 ->smart(true)
                 ->make();

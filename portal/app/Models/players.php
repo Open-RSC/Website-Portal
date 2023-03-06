@@ -92,6 +92,47 @@ class players extends Authenticatable
     {
         $this->connection = $connection;
     }
+    
+    
+    public function isOwner() {
+        return $this->group_id == config('group.owner');
+    }
+    public function isAdmin() {
+        return $this->group_id == config('group.admin');
+    }
+    public function isSuperModerator() {
+        return $this->group_id == config('group.super_moderator');
+    }
+    public function isModerator() {
+        return $this->group_id == config('group.moderator');
+    }
+    
+    public function isTester() {
+        return $this->group == config('group.tester');
+    }
+    
+    public function isEvent() {
+        return $this->group == config('group.event');
+    }
+    
+    public function isPlayerModerator() {
+        return $this->group == config('group.player_moderator');
+    }
+    
+    public function isUser() {
+        return $this->group_id = $this->group_id == config('group.user');
+    }
+    
+    public function hasAdmin() {
+        return $this->group_id == config('group.admin') || $this->isOwner();
+    }
+    
+    public function hasModerator() {
+        return $this->group_id == config('group.super_moderator') || $this->group_id == config('group.moderator') || $this->isOwner() || $this->isAdmin();
+    }
+    public function hasPlayerModerator() {
+        return $this->group_id == config('group.player_moderator') || $this->isModerator() || $this->isOwner() || $this->isAdmin();
+    }
 
-    //public $connection = 'cabbage';
+    public $connection = 'preservation'; //Default to preservation, used for auth.php login authentication.
 }

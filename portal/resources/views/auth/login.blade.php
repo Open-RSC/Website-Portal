@@ -3,7 +3,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
-            Login
+            RSC Preservation Login
         </h2>
 
         <div class="row justify-content-center">
@@ -16,7 +16,7 @@
                 
                     @if ($errors->any())
                         <div>
-                            <div>{{ __('Whoops! Something went wrong.') }}</div>
+                            <div>{{ __('Something went wrong.') }}</div>
                             <ul style="list-style:initial">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -39,8 +39,9 @@
                         </div>
                 
                         <div>
-                            <label>{{ __('Remember me') }}</label>
-                            <input class="mt-1" type="checkbox" name="remember">
+                            <!-- <label>{-- __('Remember me') --}</label> -->
+                            <!-- We don't have remember_token in players table -->
+                            <!-- <input class="mt-1" type="checkbox" name="remember"> -->
                         </div>
                 
                         <div>

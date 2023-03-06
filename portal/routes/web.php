@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', 'HomeController@home')->name('Home');
-Route::get('/home', 'HomeController@home');
+Route::get('/home', 'HomeController@home')->name('Home Page');
 Route::get('worldmap/{db}', 'HomeController@worldmap')->name('World Map');
 Route::get('wilderness', 'HomeController@wilderness')->name('Wilderness Map');
 Route::get('rules', 'HomeController@rules')->name('Rules and Security');
@@ -72,16 +72,23 @@ Route::any('toplist/{db}', 'HiscoresController@toplist')->name('RuneScape Hiscor
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
 // Afman staff zone
-/*Route::get('chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
-Route::get('pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
-Route::get('trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
-Route::get('generic_logs', 'StaffController@generic_logs')->middleware('auth')->name('generic_logs');
-Route::get('shop_logs', 'StaffController@shop_logs')->middleware('auth')->name('shop_logs');
-Route::get('auction_logs', 'StaffController@auction_logs')->middleware('auth')->name('auction_logs');
-Route::get('live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth')->name('live_feed_logs');
-Route::get('player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
-Route::get('report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
-Route::get('staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');*/
+Route::get('staff/{db}/chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
+Route::get('staff/{db}/chat_logs/data', 'StaffController@chatLogsData')->middleware('auth')->name('ChatLogsData');
+Route::get('staff/{db}/pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
+Route::get('staff/{db}/pm_logs/data', 'StaffController@pmLogsData')->middleware('auth')->name('PmLogsData');
+Route::get('staff/{db}/trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
+Route::get('staff/{db}/trade_logs/data', 'StaffController@tradeLogsData')->middleware('auth')->name('TradeLogsData');
+Route::get('staff/{db}/generic_logs', 'StaffController@generic_logs')->middleware('auth')->name('generic_logs');
+Route::get('staff/{db}/generic_logs/data', 'StaffController@genericLogsData')->middleware('auth')->name('GenericLogsData');
+Route::get('staff/{db}/auction_logs', 'StaffController@auction_logs')->middleware('auth')->name('auction_logs');
+Route::get('staff/{db}/auction_logs/data', 'StaffController@auctionLogsData')->middleware('auth')->name('AuctionLogsData');
+Route::get('staff/{db}/live_feed_logs', 'StaffController@live_feed_logs')->middleware('auth')->name('live_feed_logs');
+Route::get('staff/{db}/player_cache_logs', 'StaffController@player_cache_logs')->middleware('auth')->name('player_cache_logs');
+Route::get('staff/{db}/report_logs', 'StaffController@report_logs')->middleware('auth')->name('report_logs');
+Route::get('staff/{db}/rename_logs', 'StaffController@rename_logs')->middleware('auth')->name('rename_logs');
+Route::get('staff/{db}/rename_logs/data', 'StaffController@renameLogsData')->middleware('auth')->name('RenameLogsData');
+Route::get('staff/{db}/staff_logs', 'StaffController@staff_logs')->middleware('auth')->name('staff_logs');
+Route::get('staff/{db}/staff_logs/data', 'StaffController@staffLogsData')->middleware('auth')->name('StaffLogsData');
 
 //Route::get('register', 'Livewire\Registration')->name('Player Registration');
 //Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
