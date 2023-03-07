@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use function App\Helpers\get_client_ip_address;
 
 class StaffController extends Controller
 {
@@ -40,7 +41,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -78,7 +79,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -115,7 +116,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -156,7 +157,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -193,7 +194,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -265,7 +266,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -302,7 +303,7 @@ class StaffController extends Controller
             'game' => $db,
             'url' => $request->fullUrlWithQuery($request->query->all()),
             'search_terms' => $request->query('search')['value'],
-            'ip' => $request->getClientIp(),
+            'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now()
         ]);
