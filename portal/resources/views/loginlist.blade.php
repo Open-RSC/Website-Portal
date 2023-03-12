@@ -22,13 +22,17 @@
                 ajax: {
                     url: '{{ route('LoginListData', $db)  }}',
                 },
-                order: [[2, 'desc']],
+                order: [[3, 'desc']],
                 processing: true,
                 serverSide: true,
                 columns: [
                     {title: "Player", data: 'username'},
+                    {title: "Player", data: 'former_name'},
                     {title: "IP Address", data: 'ip'},
                     {title: "Date", data: 'time'},
+                    {title: "View", searchable: false, orderable: false, data: function(data, type, row){
+                        return "<a href='/staff/{{$db}}/player/" + data.playerID + "/detail'><i class='fa fa-eye'></i></a>";    
+                    }},
                 ]
             });
             yadcf.init(dataTable, [

@@ -46,7 +46,7 @@ class StaffController extends Controller
             'updated_at' => now()
         ]);
         //Here we hardcode orderBy time because we only want the latest chat logs.
-        return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username', 'players.id as playerID')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
                     return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })
