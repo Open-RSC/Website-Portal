@@ -181,6 +181,32 @@
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
+
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Players <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('player_list', 'preservation') }}">RSC Preservation Players</a>
+                        <a class="c text-left" href="{{ route('player_list', 'cabbage') }}">RSC Cabbage Players</a>
+                        <a class="c text-left" href="{{ route('player_list', '2001scape') }}">2001scape Players</a>
+                        <a class="c text-left" href="{{ route('player_list', 'uranium') }}">RSC Uranium Players</a>
+                        <a class="c text-left" href="{{ route('player_list', 'coleslaw') }}">RSC Coleslaw Players</a>
+                        <a class="c text-left" href="{{ route('player_list', 'openpk') }}">OpenPK Players</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
+
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Logins <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('login_list', 'preservation') }}">RSC Preservation Logins</a>
+                        <a class="c text-left" href="{{ route('login_list', 'cabbage') }}">RSC Cabbage Logins</a>
+                        <a class="c text-left" href="{{ route('login_list', '2001scape') }}">2001scape Logins</a>
+                        <a class="c text-left" href="{{ route('login_list', 'uranium') }}">RSC Uranium Logins</a>
+                        <a class="c text-left" href="{{ route('login_list', 'coleslaw') }}">RSC Coleslaw Logins</a>
+                        <a class="c text-left" href="{{ route('login_list', 'openpk') }}">OpenPK Logins</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
             @endif
             
             <span class="flex-auto p-2 dropdown">
