@@ -88,7 +88,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now()
         ]);
-        return view('playerview', compact('db'));
+        return view('playerview', compact('db', 'player'));
     }
     
     public function playerListData(Request $request, $db) {
