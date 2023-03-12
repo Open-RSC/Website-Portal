@@ -313,7 +313,7 @@ div.top-left-border-wide {
 
   @media (min-width: $mobile-breakpoint) {
     display: block;
-    width: 303px;
+    width: 350px;
     height: 43px;
     background-image: url("/img/edge_a.jpg");
   }
@@ -324,7 +324,7 @@ div.top-middle-border {
   background-image: url("/img/edge_c.jpg");
 
   @media (min-width: $mobile-breakpoint) {
-    width: 400px;
+    width: 450px;
   }
 }
 
@@ -333,7 +333,7 @@ div.top-middle-border-wide {
   background-image: url("/img/edge_c.jpg");
 
   @media (min-width: $mobile-breakpoint) {
-    width: 600px;
+    width: 420px;
   }
 }
 
@@ -364,7 +364,7 @@ div.top-right-border-wide {
 
   @media (min-width: $mobile-breakpoint) {
     display: block;
-    width: 200px;
+    width: 330px;
     height: 43px;
     background-image: url("/img/edge_d.jpg");
   }
