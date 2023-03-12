@@ -7,7 +7,6 @@
         </h2>
         <div class="row justify-content-center">
             <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
-            
                 <div>
                     <table id="logs" width="100%"></table>
                 </div>
