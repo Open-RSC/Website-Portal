@@ -16,6 +16,57 @@ class StaffController extends Controller
     {
         $this->middleware('auth');
     }
+    
+    public function player_list(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('playerlist', compact('db'));
+    }
+    
+    public function player_view(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('playerview', compact('db'));
+    }
+    
+    public function playerListData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "player_list",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        //Here we hardcode orderBy time because we only want the latest chat logs.
+        return DataTables::of(DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('creation_date', function($data) {
+                    return Carbon::createFromTimestamp($data->creation_date)->format("Y-m-d H:i:s");
+                })
+                ->editColumn('login_date', function($data) {
+                    return Carbon::createFromTimestamp($data->login_date)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
+    }
 
     public function chat_logs(Request $request, $db)
     {
