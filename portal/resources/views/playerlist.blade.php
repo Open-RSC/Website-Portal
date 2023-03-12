@@ -31,6 +31,8 @@
                     {title: "Login Date", data: 'login_date'},
                     {title: "Login IP", data: 'login_ip'},
                     {title: "Creation IP", data: 'creation_ip'},
+                    {title: "Banned", data: 'banned'},
+                    {title: "Muted", data: 'muted'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
                         return "<a href='/staff/{{$db}}/player/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";    
                     }},
