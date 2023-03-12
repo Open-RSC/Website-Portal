@@ -272,7 +272,7 @@ main {
 
 main.main-wide {
   @media (min-width: $mobile-breakpoint) {
-    width: 1000px;
+    width: 1100px;
     height: 613px;
     flex: 1;
   }
@@ -292,7 +292,7 @@ section.top-border-wide {
 
   @media (min-width: $mobile-breakpoint) {
     display: flex;
-    width: 1005px;
+    width: 1105px;
     height: 43px;
   }
 }
@@ -333,7 +333,7 @@ div.top-middle-border-wide {
   background-image: url("/img/edge_c.jpg");
 
   @media (min-width: $mobile-breakpoint) {
-    width: 495px;
+    width: 600px;
   }
 }
 
@@ -423,7 +423,7 @@ section.middle {
 
 section.middle-wide {
   @media (min-width: $mobile-breakpoint) {
-    width: 1000px;
+    width: 1100px;
     display: flex;
   }
 }
@@ -466,7 +466,7 @@ div.middle-content-wide, div.middle-play-wide,
 div.middle-content-server-wide {
   @media (min-width: $mobile-breakpoint) {
     background-image: url("/img/background.jpg");
-    width: 940px;
+    width: 1040px;
     min-height: 488px;
     display: flex;
     flex-direction: column;
@@ -651,7 +651,7 @@ section.bottom-border {
 }
 section.bottom-border-wide {
   @media (min-width: $mobile-breakpoint) {
-    width: 1005px;
+    width: 1105px;
     height: 43px;
     display: flex;
   }
@@ -721,7 +721,7 @@ section > div.bottom-middle-wide {
   flex-direction: column;
 
   @media (min-width: $mobile-breakpoint) {
-    width: 800px;
+    width: 900px;
     height: 82px;
   }
 }
@@ -735,7 +735,7 @@ section > div.bottom-middle-wide > div.copyright-wide {
   font-family: system-ui;
 
   @media (min-width: $mobile-breakpoint) {
-    width: 800px;
+    width: 900px;
   }
 }
 
@@ -744,7 +744,7 @@ section > div.bottom-middle-wide > div.bottom-middle-border-wide {
  
   @media (min-width: $mobile-breakpoint) {
     display: block;
-    width: 800px;
+    width: 900px;
     height: 43px;
     background-image: url("/img/edge_c.jpg");
   }
