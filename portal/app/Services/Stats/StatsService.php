@@ -65,7 +65,7 @@ class StatsService
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             ->where([
                 ['S.catalogID', '=', '10'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -75,7 +75,7 @@ class StatsService
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
                 ['S.catalogID', '=', '10'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -88,7 +88,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -99,7 +99,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '1000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -112,7 +112,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '5000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -123,7 +123,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '4000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -136,7 +136,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -147,7 +147,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['S.amount', '>=', '10000000'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->count();
@@ -160,7 +160,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -171,7 +171,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '422'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -184,7 +184,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '422'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -200,7 +200,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '575'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -211,7 +211,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '575'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -224,7 +224,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '575'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -240,7 +240,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '576'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -251,7 +251,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '576'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -264,7 +264,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '576'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -280,7 +280,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '577'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -291,7 +291,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '577'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -304,7 +304,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '577'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -320,7 +320,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '578'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -331,7 +331,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '578'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -344,7 +344,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '578'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -360,7 +360,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '579'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -371,7 +371,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '579'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -384,7 +384,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '579'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -400,7 +400,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '580'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -411,7 +411,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '580'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -424,7 +424,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '580'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -440,7 +440,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '581'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -451,7 +451,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '581'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -464,7 +464,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '581'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -480,7 +480,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '677'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -491,7 +491,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '677'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -504,7 +504,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '677'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -520,7 +520,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '831'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -531,7 +531,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '831'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -544,7 +544,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '831'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -560,7 +560,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '832'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -571,7 +571,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '832'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -584,7 +584,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '832'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -600,7 +600,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '828'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -611,7 +611,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '828'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -624,7 +624,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '828'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -640,7 +640,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '971'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -651,7 +651,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '971'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -664,7 +664,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '971'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -680,7 +680,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '1289'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -691,7 +691,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '1289'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -704,7 +704,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '1289'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -720,7 +720,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '1278'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -731,7 +731,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '1278'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -744,7 +744,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '1278'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -760,7 +760,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '795'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -771,7 +771,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '795'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -784,7 +784,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '795'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -800,7 +800,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '522'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -811,7 +811,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '522'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -824,7 +824,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '522'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -840,7 +840,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '594'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -851,7 +851,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '594'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -864,7 +864,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '594'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -880,7 +880,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '593'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -891,7 +891,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '593'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -904,7 +904,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '593'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
@@ -920,7 +920,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '81'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -931,7 +931,7 @@ class StatsService
             ->where([
                 ['S.catalogID', '=', '81'],
                 ['S.amount', '>=', '1'],
-                ['A.group_id', '=', '10'],
+                ['A.group_id', '>=', '8'],
                 ['A.banned', '!=', '-1'],
             ])
             ->sum('S.amount');
@@ -944,7 +944,7 @@ class StatsService
                 ->where([
                     ['S.catalogID', '=', '81'],
                     ['S.amount', '>=', '1'],
-                    ['A.group_id', '=', '10'],
+                    ['A.group_id', '>=', '8'],
                     ['A.banned', '!=', '-1'],
                     ['U.was_cancel', '=', '0'],
                     ['U.sold-out', '=', '0'],
