@@ -36,6 +36,10 @@
                     column_number: 0,
                     filter_type: "text"
                 }, 
+                {
+                    column_number: 1,
+                    filter_type: "text"
+                }, 
             ]);
         });
     </script>
