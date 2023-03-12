@@ -137,7 +137,7 @@ class PlayerExportService {
             ->where('username', '=', $this->username)
             ->get();
         $player_id = $this->player[0]->id;
-        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"]) . "\n";
+        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"], ["lastRecoveryTryId"]) . "\n";
         $inv_items = DB::connection($db)
             ->table('invitems')
             ->select('*')
@@ -229,7 +229,7 @@ class PlayerExportService {
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert("capped_experience", $capped_experience) . "\n";
+        $this->sqlString .= $this->buildInsert("capped_experience", $capped_experience, [], [], [ "attack", "defense", "strength", "hits", "ranged", "prayer", "magic", "cooking", "woodcut", "fletching", "fishing", "firemaking", "crafting", "smithing", "mining", "herblaw", "agility", "thieving"]) . "\n";
         $friends = DB::connection($db)
             ->table('friends')
             ->select('*')
@@ -295,7 +295,7 @@ class PlayerExportService {
         ];
     }
     
-    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = []) {
+    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = []) {
         $data = "";
         foreach ($records as $record) {
             $record = (array)$record;
@@ -307,6 +307,11 @@ class PlayerExportService {
             foreach ($resetColumns as $resetColumn) {
                 if (isset($record[$resetColumn]) && $record[$resetColumn] !== 0) {
                     $record[$resetColumn] = 0;
+                }
+            }
+            foreach ($record as $key => $value) {
+                if (((string) $value) === "" && in_array($key, $unsetIfEmptyColumns, true)) {
+                    unset($record[$key]);
                 }
             }
             if (isset($record['whoChanged']) && ($record['whoChanged'] === "Marwolf" || $record['whoChanged'] === "Kenix" || str_starts_with($record['whoChanged'], "Mod "))) {
@@ -332,7 +337,6 @@ class PlayerExportService {
             foreach($table_value_array as $key => $record_column) {
                 $table_value_array[$key] = addslashes($record_column);
             }
-            
             $data .= "('" . implode("','", str_replace("\n", "", $table_value_array)) . "'),";
         }
         $data = rtrim($data, ",");
