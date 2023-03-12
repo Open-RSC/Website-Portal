@@ -116,7 +116,7 @@
                         <tr>
                             <td class=e>
                                 <div class="text-center">
-                                    @if(str_contains(url()->current(), '/player'))
+                                    @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
                                         <b>RuneScape Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
@@ -126,7 +126,7 @@
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
                                     <div class="d-block">
-                                        @if(str_contains(url()->current(), '/player'))
+                                        @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
                                             <a class="c" href="/">
                                                 Main menu
                                             </a> -
