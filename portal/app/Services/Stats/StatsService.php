@@ -25,8 +25,6 @@ class StatsService
             $this->stats = $this->generateData($this->db);
             $this->saveData();
         }
-        
-
         return $this->stats;
     }
 
