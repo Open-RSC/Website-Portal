@@ -294,7 +294,16 @@ class PlayerExportService {
             'Content-Length' => strlen($this->getFileData())
         ];
     }
-    
+
+    /**
+     * This lovely function generates our insert statements for player exports.
+     * @param $table string The database table to build the insert statement for.
+     * @param $records array The records we will be inserting into the database table.
+     * @param $ignoredColumns array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
+     * @param $resetColumns array The columns we will be resetting to value 0.
+     * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value. This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept null.
+     * @return string
+     */
     private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = []) {
         $data = "";
         foreach ($records as $record) {
