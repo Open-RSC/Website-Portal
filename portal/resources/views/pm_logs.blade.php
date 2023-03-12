@@ -38,6 +38,10 @@
                     filter_type: "text"
                 }, 
                 {
+                    column_number: 1,
+                    filter_type: "text"
+                }, 
+                {
                     column_number: 2,
                     filter_type: "text"
                 }, 

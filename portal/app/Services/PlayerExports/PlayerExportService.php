@@ -137,7 +137,7 @@ class PlayerExportService {
             ->where('username', '=', $this->username)
             ->get();
         $player_id = $this->player[0]->id;
-        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"]) . "\n";
+        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"], ["lastRecoveryTryId"]) . "\n";
         $inv_items = DB::connection($db)
             ->table('invitems')
             ->select('*')
@@ -229,7 +229,7 @@ class PlayerExportService {
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert("capped_experience", $capped_experience) . "\n";
+        $this->sqlString .= $this->buildInsert("capped_experience", $capped_experience, [], [], [ "attack", "defense", "strength", "hits", "ranged", "prayer", "magic", "cooking", "woodcut", "fletching", "fishing", "firemaking", "crafting", "smithing", "mining", "herblaw", "agility", "thieving"]) . "\n";
         $friends = DB::connection($db)
             ->table('friends')
             ->select('*')
@@ -294,8 +294,17 @@ class PlayerExportService {
             'Content-Length' => strlen($this->getFileData())
         ];
     }
-    
-    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = []) {
+
+    /**
+     * This lovely function generates our insert statements for player exports.
+     * @param $table string The database table to build the insert statement for.
+     * @param $records array The records we will be inserting into the database table.
+     * @param $ignoredColumns array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
+     * @param $resetColumns array The columns we will be resetting to value 0.
+     * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
+     * @return string
+     */
+    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = []) {
         $data = "";
         foreach ($records as $record) {
             $record = (array)$record;
@@ -307,6 +316,11 @@ class PlayerExportService {
             foreach ($resetColumns as $resetColumn) {
                 if (isset($record[$resetColumn]) && $record[$resetColumn] !== 0) {
                     $record[$resetColumn] = 0;
+                }
+            }
+            foreach ($record as $key => $value) {
+                if (((string) $value) === "" && in_array($key, $unsetIfEmptyColumns, true)) {
+                    unset($record[$key]);
                 }
             }
             if (isset($record['whoChanged']) && ($record['whoChanged'] === "Marwolf" || $record['whoChanged'] === "Kenix" || str_starts_with($record['whoChanged'], "Mod "))) {
@@ -332,7 +346,6 @@ class PlayerExportService {
             foreach($table_value_array as $key => $record_column) {
                 $table_value_array[$key] = addslashes($record_column);
             }
-            
             $data .= "('" . implode("','", str_replace("\n", "", $table_value_array)) . "'),";
         }
         $data = rtrim($data, ",");

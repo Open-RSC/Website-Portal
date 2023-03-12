@@ -474,6 +474,9 @@ class PlayerController extends Controller
         if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+            abort(404);
+        }
         $data = false;
         if ($this->debugPlayerExports) {
             $data = $request->input('data') ?? "";
@@ -490,6 +493,9 @@ class PlayerController extends Controller
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         try {
