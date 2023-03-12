@@ -27,7 +27,7 @@
                 serverSide: true,
                 columns: [
                     {title: "Player", data: 'username'},
-                    {title: "Player", data: 'former_name'},
+                    {title: "Former Name", data: 'former_name'},
                     {title: "IP Address", data: 'ip'},
                     {title: "Date", data: 'time'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
