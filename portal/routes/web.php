@@ -72,6 +72,8 @@ Route::any('toplist/{db}', 'HiscoresController@toplist')->name('RuneScape Hiscor
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
 // Afman staff zone
+Route::get('staff/{db}/login_list', 'StaffController@login_list')->middleware('auth')->name('login_list');
+Route::get('staff/{db}/login_list/data', 'StaffController@loginListData')->middleware('auth')->name('LoginListData');
 Route::get('staff/{db}/player_list', 'StaffController@player_list')->middleware('auth')->name('player_list');
 Route::get('staff/{db}/player_list/data', 'StaffController@playerListData')->middleware('auth')->name('PlayerListData');
 Route::get('staff/{db}/player/{id}/detail', 'StaffController@player_view')->middleware('auth')->name('player_view');
