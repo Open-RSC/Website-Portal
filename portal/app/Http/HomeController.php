@@ -8,19 +8,21 @@ class HomeController extends Controller
 {
     public function home(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Forum news posts
-        $news_feed = DB::connection('board')->table('phpbb_posts as p')
-            ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
-            ->where([
-                ['t.forum_id', '=', '2'], // forum ID for the news (/viewforum.php?f=18)
-                ['t.topic_status', '=', '0'], // topic not locked or deleted
-                ['p.post_visibility', '=', '1'], // post not deleted and is visible
-            ])
-            ->orderBy('t.topic_time', 'desc')
-            ->limit(5)
-            ->get();
-
-
+        $news_feed = [];
+        if (config('openrsc.board_enabled')) {
+            // Forum news posts
+            $news_feed = DB::connection('board')->table('phpbb_posts as p')
+                ->join('phpbb_topics AS t', 't.topic_first_post_id', '=', 'p.post_id')
+                ->where([
+                    ['t.forum_id', '=', '2'], // forum ID for the news (/viewforum.php?f=18)
+                    ['t.topic_status', '=', '0'], // topic not locked or deleted
+                    ['p.post_visibility', '=', '1'], // post not deleted and is visible
+                ])
+                ->orderBy('t.topic_time', 'desc')
+                ->limit(5)
+                ->get();
+        }
+        
         // World online player counts
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {

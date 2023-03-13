@@ -16,6 +16,109 @@ class StaffController extends Controller
     {
         $this->middleware('auth');
     }
+    
+    public function login_list(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('loginlist', compact('db'));
+    }
+    
+    public function loginListData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "login_list",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        //Here we hardcode orderBy time because we only want the latest chat logs.
+        return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username', 'players.id as playerID')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
+    }
+    
+    public function player_list(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('playerlist', compact('db'));
+    }
+    
+    public function player_view(Request $request, $db, $id)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $player = DB::connection($db)->table('players')->where('id', '=', $id)->first();
+        
+        if ($player === null) {
+            abort(404);
+        }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "player_view",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => '',
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        return view('playerview', compact('db', 'player'));
+    }
+    
+    public function playerListData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "player_list",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        //Here we hardcode orderBy time because we only want the latest chat logs.
+        return DataTables::of(DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get()->toArray())
+                ->editColumn('creation_date', function($data) {
+                    return Carbon::createFromTimestamp($data->creation_date)->format("Y-m-d H:i:s");
+                })
+                ->editColumn('login_date', function($data) {
+                    return Carbon::createFromTimestamp($data->login_date)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
+    }
 
     public function chat_logs(Request $request, $db)
     {

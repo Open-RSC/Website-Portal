@@ -98,7 +98,85 @@
             <div class="bottom-right-border"></div>
         </section>
     </main>
+@elseif (Route::currentRouteName() == 'player_list')
+    @include('includes.nav')
+    <main class="main-wide">
+        <section class="top-border-wide">
+            <div class="top-left-border-wide"></div>
+            <div class="top-middle-border-wide"></div>
+            <div class="top-right-border-wide"></div>
+        </section>
 
+        <section class="middle-wide">
+            <div class="mid-left-border"></div>
+            <div class="middle-content-wide">
+                @if(Route::currentRouteName() != 'Home')
+                    <table class="breadcrumb-bar">
+                        <tbody>
+                        <tr>
+                            <td class=e>
+                                <div class="text-center">
+                                    @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
+                                        <b>RuneScape Hiscores</b>
+                                    @elseif(Route::currentRouteName())
+                                        <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
+                                    @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
+                                        <b>RuneScape Hiscores</b>
+                                    @else
+                                        <b>{{ ucfirst($subpage ?? '') }}</b>
+                                    @endif
+                                    <div class="d-block">
+                                        @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
+                                            <a class="c" href="/">
+                                                Main menu
+                                            </a> -
+                                            <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">
+                                                All Hiscores
+                                            </a>
+                                        @else
+                                            <a class="c" href="/">Main menu</a>
+                                        @endif
+                                    </div>
+                                    @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
+                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
+                                            <div class="d-block">
+                                                <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
+                                                <a class="c"
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/1">Ironman</a>
+                                                |
+                                                <a class="c"
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/2">Ultimate</a>
+                                                |
+                                                <a class="c"
+                                                   href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/3">Hardcore</a>
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="pt-3"></div>
+                @endif
+                @yield('content')
+            </div>
+            <div class="pt-2"></div>
+            <div class="mid-right-border"></div>
+        </section>
+        <section class="bottom-border-wide">
+            <div class="bottom-left-border-wide"></div>
+            <div class="bottom-middle-wide">
+                <div class="copyright-wide pt-2">
+                    Open RuneScape Classic is not affiliated with the original "RuneScape Classic"<br>
+                    nor JaGeX. To use our service you must agree to our
+                    <a class="c" href="{{ route('Terms and Conditions') }}">Terms & Conditions</a>.
+                </div>
+                <div class="bottom-middle-border-wide"></div>
+            </div>
+            <div class="bottom-right-border-wide"></div>
+        </section>
+    </main>
 @else
     @include('includes.nav')
     <main>
@@ -117,7 +195,7 @@
                         <tr>
                             <td class=e>
                                 <div class="text-center">
-                                    @if(str_contains(url()->current(), '/player'))
+                                    @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
                                         <b>RuneScape Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
@@ -127,7 +205,7 @@
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
                                     <div class="d-block">
-                                        @if(str_contains(url()->current(), '/player'))
+                                        @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
                                             <a class="c" href="/">
                                                 Main menu
                                             </a> -

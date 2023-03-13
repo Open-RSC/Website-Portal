@@ -12,5 +12,6 @@ return [
     "player_exports_admin_only" => env("PLAYER_EXPORTS_ADMIN_ONLY", false),
     "player_exports_moderator_only" => env("PLAYER_EXPORTS_MODERATOR_ONLY", false),
     "login_enabled" => env("LOGIN_ENABLED", true),
-    "login_admin_only" => env("LOGIN_ADMIN_ONLY", false)
+    "login_admin_only" => env("LOGIN_ADMIN_ONLY", false),
+    "board_enabled" => env("BOARD_ENABLED", true)
 ];

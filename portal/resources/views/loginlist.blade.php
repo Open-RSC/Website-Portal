@@ -3,7 +3,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
-            Chat logs for {{ $db }}
+            Logins for {{ $db }}
         </h2>
         <div class="row justify-content-center">
             <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
@@ -19,15 +19,19 @@
         $(document).ready(function() {
             let dataTable = $('#logs').DataTable({
                 ajax: {
-                    url: '{{ route('ChatLogsData', $db)  }}',
+                    url: '{{ route('LoginListData', $db)  }}',
                 },
-                order: [[2, 'desc']],
+                order: [[3, 'desc']],
                 processing: true,
                 serverSide: true,
                 columns: [
-                    {title: "Sender", data: 'sender'},
-                    {title: "Message", data: 'message'},
+                    {title: "Player", data: 'username'},
+                    {title: "Former Name", data: 'former_name'},
+                    {title: "IP Address", data: 'ip'},
                     {title: "Date", data: 'time'},
+                    {title: "View", searchable: false, orderable: false, data: function(data, type, row){
+                        return "<a href='/staff/{{$db}}/player/" + data.playerID + "/detail'><i class='fa fa-eye'></i></a>";    
+                    }},
                 ]
             });
             yadcf.init(dataTable, [
