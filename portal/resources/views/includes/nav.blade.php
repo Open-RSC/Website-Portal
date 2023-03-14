@@ -21,6 +21,9 @@
                 <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
                     <i class="fab fa-gitlab"></i>&nbsp; Source Code
                 </a>
+                <a class="c text-left" target="_blank" href="https://rsc.vet/playerexport">
+                    <i class="fab fa-download"></i>&nbsp; Player Exports
+                </a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
