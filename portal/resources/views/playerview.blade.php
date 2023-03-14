@@ -31,7 +31,7 @@
                 </p>
                 <p>Player ID: {{ $player->id }}</p>
                 <p>Username: {{ $player->username }}</p>
-                <p>Email: {{ $player->email ?? "None" }}</p>
+                @if(Gate::allows('admin', Auth::user())) <p>Email: {{ $player->email ?? "None" }}</p> @endif
                 <p>Creation Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->creation_date)->format("Y-m-d H:i:s") }}</p>
                 <p>Login Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->login_date)->format("Y-m-d H:i:s") }}</p>
                 <p>    
@@ -42,8 +42,8 @@
                         Never
                     @endif
                 </p>
-                <p>Creation IP: {{ $player->creation_ip }}</p>
-                <p>Login IP: {{ $player->login_ip }}</p>
+                @if(Gate::allows('admin', Auth::user())) <p>Creation IP: {{ $player->creation_ip }}</p> @endif
+                @if(Gate::allows('admin', Auth::user())) <p>Login IP: {{ $player->login_ip }}</p> @endif
                 <p>Combat Level: {{ $player->combat }} </p>
                 <p>Total Level: {{ $player->skill_total }} </p>
                 <p>Quest Points: {{ $player->quest_points }} </p>

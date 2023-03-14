@@ -59,7 +59,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         return view('playerlist', compact('db'));
@@ -70,7 +70,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $player = DB::connection($db)->table('players')->where('id', '=', $id)->first();
@@ -95,7 +95,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect("/login");
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection("laravel")->table("viewlogs")->insert([
@@ -109,7 +109,10 @@ class StaffController extends Controller
             'updated_at' => now()
         ]);
         //Here we hardcode orderBy time because we only want the latest chat logs.
-        return DataTables::of(DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get()->toArray())
+        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get();
+        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn($item) => (object)(collect($item)->except(['email', 'salt', 'lastRecoveryTryId', 'pass', 'creation_ip', 'login_ip']))->all())->toArray();
+        
+        return DataTables::of($data)
                 ->editColumn('creation_date', function($data) {
                     return Carbon::createFromTimestamp($data->creation_date)->format("Y-m-d H:i:s");
                 })
