@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\DB;
+
 if (!function_exists('passwd_compat_hasher')) {
     /**
      * Returns the sha512 hash for a legacy password
@@ -66,5 +68,16 @@ if (!function_exists('get_client_ip_address')) {
             $clientIp = $remote;
         }
         return $clientIp;
+    }
+}
+
+if (!function_exists('player_is_online')) {
+    function player_is_online($db, $username) {
+        $player = DB::connection($db)
+            ->table('players')
+            ->select('*')
+            ->where('username', '=', $username)
+            ->first();
+        return $player !== null && ((int) $player->online) === 1;
     }
 }

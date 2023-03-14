@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Response;
 
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\add_characters;
+use function App\Helpers\player_is_online;
 
 class PlayerController extends Controller
 {
@@ -521,6 +522,9 @@ class PlayerController extends Controller
         
         if ($user === null) {
             return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+        }
+        if (player_is_online($db, $trimmed_username)) {
+            return redirect(route('PlayerExportView'))->withErrors("You must be logged out to create a player export");
         }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
