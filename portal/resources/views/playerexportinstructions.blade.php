@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="col container">
-         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">How to use Open RSC player exports!</h2>
+        <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">How to use Open RSC player exports!</h2>
 
         <h2>To export</h2>
-        <p>Player accounts may be exported from <a href="https://rsc.vet/playerexport">https://rsc.vet/playerexport</a>. You will need to know the username and password for the account being exported. Banned accounts may be exported as well.</p>
+        <p>Player accounts may be exported from <a href="/playerexport">https://rsc.vet/playerexport</a>. You will need to know the username and password for the account being exported. Banned accounts may be exported as well.</p>
         <p>The page looks like this:</p>
         <img src="img/player.export.page.png"/>
         

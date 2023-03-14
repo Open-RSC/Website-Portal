@@ -64,8 +64,7 @@
                 </div>
             </div>
         </div>
-        
-        <p>Click <a href="/playerexportinstructions">here</a> for instructions on how to use player exports.</p>
+        <p class="text-center"><a href="/playerexportinstructions">Click here for full instructions</a></p>
     </div>
 @endsection
 @section('scripts')
