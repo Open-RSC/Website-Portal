@@ -46,7 +46,7 @@ Route::get('player/{db}/{subpage}', 'PlayerController@index')->name('Player');
 Route::get('player/{db}/{subpage}/bank', 'PlayerController@bank')->middleware('auth:api')->name('Bank');
 Route::get('player/{db}/{subpage}/inventory', 'PlayerController@invitem')->middleware('auth:api')->name('Inventory Items');
 Route::get('playerexport/', 'PlayerController@exportView')->name('PlayerExportView');
-Route::post('playerexport/export/', 'PlayerController@exportSubmit')->middleware(['throttle:5,15'])->name('PlayerExportSubmit');
+Route::post('playerexport/export/', 'PlayerController@exportSubmit')->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
 
 // Item lookup
 Route::any('items', 'ItemController@index')->name('Items');
