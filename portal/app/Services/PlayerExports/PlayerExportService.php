@@ -76,7 +76,7 @@ class PlayerExportService {
             if (empty($statement)) continue;
             DB::connection($basename)->statement($statement);
         }        
-        $text = "Server: $this->db\n";
+        $text = "Server: $this->db" . "\n";
         $text .= "Timestamp: " . floor(microtime(true) * 1000) . "\n";
         $text .= "Muted: " . $this->player[0]->muted . "\n";
         $text .= "Banned: " . $this->player[0]->banned . "\n";
@@ -216,13 +216,13 @@ class PlayerExportService {
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert("player_recovery", $player_recovery) . "\n";
+        $this->sqlString .= $this->buildInsert("player_recovery", $player_recovery, [], [], [], ["question1", "question2", "question3", "question4", "question5"], ["question1", "question2", "question3", "question4", "question5"]) . "\n";
         $player_change_recovery = DB::connection($db)
             ->table('player_change_recovery')
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert("player_change_recovery", $player_change_recovery) . "\n";
+        $this->sqlString .= $this->buildInsert("player_change_recovery", $player_change_recovery, [], [], [], ["question1", "question2", "question3", "question4", "question5"], ["question1", "question2", "question3", "question4", "question5"]) . "\n";
         $player_contact_details = DB::connection($db)
             ->table('player_contact_details')
             ->select('*')
@@ -342,11 +342,8 @@ class PlayerExportService {
         
         foreach ($table_column_array as $key => $name) {
             $table_column_array[$key] = '`' . $table_column_array[$key] . '`';
-        }
-
-        
+        }        
         $data .= "\nINSERT INTO $table (";
-
         $data .= "" . implode(", ", $table_column_array) . ") VALUES ";
         foreach ($newRecords as $record) {
             $table_value_array = array_values((array)$record);
