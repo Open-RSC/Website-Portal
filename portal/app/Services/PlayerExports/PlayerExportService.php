@@ -94,7 +94,7 @@ class PlayerExportService {
             $zip->add(storage_path("app/" . $sqlfile));
             $zip->add(storage_path("app/" . $txtfile));
             $zip->close();
-            $gpgdata = $gpg->encrypt(file_get_contents(storage_path("app/" . $tempzipfile)), $private->results[0]['fingerprint'], $private->results[0]['fingerprint'], null, true);
+            $gpgdata = $gpg->signFile(storage_path("app/" . $tempzipfile), $private->results[0]['fingerprint'], null, null, false, true);
             Storage::disk('local')->put($gpgfile, $gpgdata->data);                    
         } catch (\Exception $e) {
             \Log::error("Player Export GPG exception: " . $e->getMessage());
@@ -150,12 +150,6 @@ class PlayerExportService {
             ->where('playerID', '=', $player_id)
             ->get();
         $this->sqlString .= $this->buildInsert("bank", $bank_items) . "\n";
-        $equipped = DB::connection($db)
-            ->table('equipped')
-            ->select('*')
-            ->where('playerID', '=', $player_id)
-            ->get();
-        $this->sqlString .= $this->buildInsert("equipped", $equipped) . "\n";
         $item_status_ids = [];
         foreach($inv_items as $inv_item) {
             $item_status_ids[] = $inv_item->itemID;
@@ -164,6 +158,12 @@ class PlayerExportService {
             $item_status_ids[] = $bank_item->itemID;
         }
         if ($db === "cabbage" || $db === "coleslaw") {
+            $equipped = DB::connection($db)
+            ->table('equipped')
+            ->select('*')
+            ->where('playerID', '=', $player_id)
+            ->get();
+            $this->sqlString .= $this->buildInsert("equipped", $equipped) . "\n";
             foreach($equipped as $equip_item) {
                 $item_status_ids[] = $equip_item->itemID;
             }
