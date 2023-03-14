@@ -29,8 +29,8 @@
                     {title: "Former Username", data: 'former_name'},
                     {title: "Creation Date", data: 'creation_date'},
                     {title: "Login Date", data: 'login_date'},
-                    {title: "Login IP", data: 'login_ip'},
-                    {title: "Creation IP", data: 'creation_ip'},
+                    @if(Gate::allows('admin', Auth::user())) {title: "Login IP", data: 'login_ip'}, @endif
+                    @if(Gate::allows('admin', Auth::user())) {title: "Creation IP", data: 'creation_ip'}, @endif
                     {title: "Banned", data: 'banned'},
                     {title: "Muted", data: 'muted'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
@@ -48,11 +48,11 @@
                     filter_type: "text"
                 }, 
                 {
-                    column_number: 6,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 4 @endif,
                     filter_type: "text"
                 }, 
                 {
-                    column_number: 7,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 5 @endif,
                     filter_type: "text"
                 }, 
             ]);
