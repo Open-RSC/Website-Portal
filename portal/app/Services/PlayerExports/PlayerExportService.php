@@ -76,7 +76,7 @@ class PlayerExportService {
             if (empty($statement)) continue;
             DB::connection($basename)->statement($statement);
         }        
-        $text = "Server: $this->db \n";
+        $text = "Server: $this->db\n";
         $text .= "Timestamp: " . floor(microtime(true) * 1000) . "\n";
         $text .= "Muted: " . $this->player[0]->muted . "\n";
         $text .= "Banned: " . $this->player[0]->banned . "\n";
