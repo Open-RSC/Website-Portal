@@ -150,12 +150,23 @@ class PlayerExportService {
             ->where('playerID', '=', $player_id)
             ->get();
         $this->sqlString .= $this->buildInsert("bank", $bank_items) . "\n";
+        $equipped = DB::connection($db)
+            ->table('equipped')
+            ->select('*')
+            ->where('playerID', '=', $player_id)
+            ->get();
+        $this->sqlString .= $this->buildInsert("equipped", $equipped) . "\n";
         $item_status_ids = [];
         foreach($inv_items as $inv_item) {
             $item_status_ids[] = $inv_item->itemID;
         }
         foreach($bank_items as $bank_item) {
             $item_status_ids[] = $bank_item->itemID;
+        }
+        if ($db === "cabbage" || $db === "coleslaw") {
+            foreach($equipped as $equip_item) {
+                $item_status_ids[] = $equip_item->itemID;
+            }
         }
         $item_statuses = DB::connection($db)
             ->table('itemstatuses')
@@ -267,12 +278,6 @@ class PlayerExportService {
             ->where('playerID', '=', $player_id)
             ->get();
             $this->sqlString .= $this->buildInsert("bankpresets", $bankpresets) . "\n";
-            $equipped = DB::connection($db)
-            ->table('equipped')
-            ->select('*')
-            ->where('playerID', '=', $player_id)
-            ->get();
-             $this->sqlString .= $this->buildInsert("equipped", $equipped) . "\n";
         }
         return $this->sqlString;
     }
@@ -298,7 +303,7 @@ class PlayerExportService {
     /**
      * This lovely function generates our insert statements for player exports.
      * @param $table string The database table to build the insert statement for.
-     * @param $records array The records we will be inserting into the database table.
+     * @param $records array || \Illuminate\Support\Collection The records we will be inserting into the database table.
      * @param $ignoredColumns array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
      * @param $resetColumns array The columns we will be resetting to value 0.
      * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
