@@ -487,6 +487,20 @@ class PlayerController extends Controller
             'data' => $data
         ]);
     }
+    
+    public function exportInstructions(Request $request)
+    {
+        if (!config('openrsc.player_exports_enabled')) {
+            abort(404);
+        }
+        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+            abort(404);
+        }
+        return view('playerexportinstructions', []);
+    }
 
     public function exportSubmit(Request $request)
     {
