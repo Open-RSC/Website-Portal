@@ -42,16 +42,17 @@ class GeneratePlayerExportCommand extends Command
     {
         $db = $this->argument('db');
         $username = $this->argument('username');
-        $playerExport = new PlayerExportService($username, $db);
+        $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
+        $playerExport = new PlayerExportService($trimmed_username, $db);
         $playerExport->execute();
         try {
             $playerExport->generateFile();
         } catch (FileNotFoundException $e) {
-            $this->error("Player export for $username on $db could not be created!");
+            $this->error("Player export for $trimmed_username on $db could not be created!");
             $this->error($e->getMessage());
             return;
         }
-        $this->info("Player export for $username on $db created successfully! You can find it at: storage/app/" . $playerExport->getBasePath() . $playerExport->getExtraPath() . $playerExport->getFileName());
+        $this->info("Player export for $trimmed_username on $db created successfully! You can find it at: storage/app/" . $playerExport->getBasePath() . $playerExport->getExtraPath() . $playerExport->getFileName());
         return true;
     }
 }
