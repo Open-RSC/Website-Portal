@@ -110,7 +110,7 @@ class StaffController extends Controller
         ]);
         //Here we hardcode orderBy time because we only want the latest chat logs.
         $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get();
-        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn($item) => (object)(collect($item)->except(['email', 'salt', 'lastRecoveryTryId', 'pass', 'creation_ip', 'login_ip']))->all())->toArray();
+        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn($item) => (object)(collect($item)->except(['email', 'salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
         
         return DataTables::of($data)
                 ->editColumn('creation_date', function($data) {
