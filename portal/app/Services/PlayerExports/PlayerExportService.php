@@ -137,7 +137,7 @@ class PlayerExportService {
             ->where('username', '=', $this->username)
             ->get();
         $player_id = $this->player[0]->id;
-        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"], ["lastRecoveryTryId"], ["salt", "pass"]) . "\n";
+        $this->sqlString = $this->buildInsert("players", $this->player, ["petfatigue", "pets", "transfer"], ["banned", "muted", "offences"], ["lastRecoveryTryId"], ["salt", "pass"], ["salt", "pass"]) . "\n";
         $inv_items = DB::connection($db)
             ->table('invitems')
             ->select('*')
@@ -303,9 +303,10 @@ class PlayerExportService {
      * @param $resetColumns array The columns we will be resetting to value 0.
      * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
      * @param $skipSlashColumns array The columns we will not be replacing quotes with backslashes. A good example of this would be salt or pass hashes because they may contain a quotation mark that we would want to preserve.
+     * @param $replaceQuoteColumns array The columns that we will replace individual quotes with two individual quotes, this is so that the columns can preserve the individual quotes. An example of this would be a salt or pass hashes that may contain a quotation mark we would want to preserve.
      * @return string
      */
-    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = []) {
+    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = []) {
         $data = "";
         foreach ($records as $record) {
             $record = (array)$record;
@@ -348,6 +349,9 @@ class PlayerExportService {
                 $table_value_array[$key] = addslashes($record_column);
                 if (in_array(str_replace("`", "", $table_column_array[$key]), $skipSlashColumns, true)) {
                     $table_value_array[$key] = $record_column;
+                    if (in_array(str_replace("`", "", $table_column_array[$key]), $replaceQuoteColumns, true)) {
+                        $table_value_array[$key] = str_replace("'", "''", $record_column);
+                    }
                 }
             }
             $data .= "('" . implode("','", str_replace("\n", "", $table_value_array)) . "'),";
