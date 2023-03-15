@@ -27,11 +27,11 @@ $wgMetaNamespace = "Open_RSC_Wiki";
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "/wiki";
+$wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
 ## $wgServer = "https://rsc.vet/wiki";
-$wgServer = "http://localhost";
+$wgServer = "http://localhost:9090";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
