@@ -33,7 +33,7 @@
                         </div>
                     @endif       
                     <form method="POST" action="{{ route('PlayerExportSubmit') }}">
-                        @csrf
+                        <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" />
                         <div>
                             <label>{{ __('Game') }}</label>
                             <select class="form-control mb-1" name="db" id="db" required>
