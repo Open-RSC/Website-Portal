@@ -581,8 +581,8 @@ class PlayerController extends Controller
     
     public function exportSubmitApi(Request $request)
     {
-        //Only enable API when public use is allowed.
-        if (!config('openrsc.player_exports_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        //Only enable API when public use is allowed and when the API itself is enabled.
+        if (!config('openrsc.player_exports_enabled') || !config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
         
@@ -608,10 +608,10 @@ class PlayerController extends Controller
             ->first();
         
         if ($user === null) {
-            return json_encode(["Invalid credentials"]);
+            return Response::json("Invalid credentials", 401);
         }
         if (player_is_online($db, $trimmed_username)) {
-            return json_encode(["You must be logged out to create a player export"]);
+            return Response::json("You must be logged out to create a player export", 401);
         }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
@@ -622,10 +622,10 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return json_encode(["Invalid credentials"]);
+                return Response::json("Invalid credentials", 401);
             }
         } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return json_encode(["Invalid credentials"]);
+            return Response::json("Invalid credentials", 401);
         }
         $data = "";
         $playerExportService = new PlayerExportService($trimmed_username, $db);
@@ -640,7 +640,7 @@ class PlayerController extends Controller
                 return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
             }
         }
-        return json_encode(["Could not generate player export"]);
+        return Response::json("Could not generate player export", 401);
     }
     
     public function passwordNeedsRehash($passwordHashed) {
