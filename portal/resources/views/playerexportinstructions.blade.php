@@ -7,7 +7,7 @@
         <h2>To export</h2>
         <p>Player accounts may be exported from <a href="/playerexport">https://rsc.vet/playerexport</a>. You will need to know the username and password for the account being exported. Banned accounts may be exported as well.</p>
         <p>The page looks like this:</p>
-        <img src="img/player.export.page.png"/>
+        <img src="/img/player.export.page.png"/>
         
         <h2>For single-player, or with your friends</h2>
         <p>For single-player, you will want to use the <strong><code>playerdata.db</code></strong> file. This is a fully contained sqlite database file compatible with the Open RSC server. Information on how to run an Open RSC server is not covered here, but suffice to say that once the server is pointed correctly at this file, and your client is pointed correctly at your server, you will be able to log in to your account as normal, with all account data intact. If you were banned or muted previously, you are unbanned and unmuted in your player export.</p>
