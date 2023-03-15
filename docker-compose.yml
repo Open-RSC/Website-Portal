@@ -29,10 +29,6 @@ services:
       - "./etc/nginx/conf.d:/etc/nginx/conf.d:ro" # Nginx server config directory
       - "./etc/nginx/log:/var/log/nginx" # Error log
       - "./etc/nginx/ssl:/etc/nginx/ssl" # Nginx SSL cert path
-      - "./wiki:/var/www/html/portal/public/wiki" # MediaWiki
-      #- "./wiki/images:/var/www/html/portal/public/wiki/images" # Persistent image storage
-      #- "./wiki/skins:/var/www/html/portal/public/skins" # Persistent theme storage
-      - "./etc/wiki/LocalSettings.php:/var/www/html/portal/public/wiki/LocalSettings.php:ro" # MediaWiki config
 
   php:
     #build:
@@ -50,8 +46,18 @@ services:
       - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini:ro" # PHP config
       - "./portal:/var/www/html/portal" # Laravel
       - "./board:/var/www/html/portal/public/board" # PhpBB forum
-      - "./wiki:/var/www/html/portal/public/wiki" # MediaWiki
-      - "./etc/wiki/LocalSettings.php:/var/www/html/portal/public/wiki/LocalSettings.php:ro" # MediaWiki config
+
+  mediawiki:
+    image: mediawiki
+    container_name: mediawiki
+    restart: unless-stopped
+    ports:
+      - 9090:80
+    volumes:
+      - "./wiki/images:/var/www/html/images"
+      - "./wiki/skins:/var/www/html/skins"
+      - "./wiki/extensions:/var/www/html/extensions"
+      - "./etc/wiki/LocalSettings.php:/var/www/html/LocalSettings.php"
 
 networks: # MariaDB SQL server shared with the game server(s)
   default:
