@@ -18,10 +18,6 @@
     @else
         <iframe src="https://rsc.vet/client/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
                 height="352px" width="513px"></iframe>
-        <p class="pt-3">
-            <a href="/rsc-c_gl/index.html#{{ $members }},76.253.184.95,{{ $port }}">Try the resizable enhanced game
-                client!</a>
-        </p>
     @endif
 
     @if ($members != 'members')
