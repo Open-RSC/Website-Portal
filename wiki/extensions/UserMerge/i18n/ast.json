@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Xuacu"
+		]
+	},
+	"usermerge": "Fusionar y desaniciar usuarios",
+	"usermerge-desc": "[[Special:UserMerge|Fusiona les referencies d'un usuariu n'otru usuariu]] na base de datos de la wiki (tamién desaniciará l'usuariu antiguu darréu de la fusión). Requier permisos d'''usermerge''",
+	"usermerge-badnewuser": "Nome d'usuariu nuevu inválidu",
+	"usermerge-nonewuser": "Nome d'usuariu nuevu baleru. Asumese la fusión en \"{{GENDER:$1|$1}}\".<br />\nCalque \"{{int:usermerge-submit}}\" p'aceutar.",
+	"usermerge-noolduser": "Nome d'usuariu antiguu baleru",
+	"usermerge-same-old-and-new-user": "Los nomes d'usuariu antiguu y nuevu tienen de ser distintos.",
+	"usermerge-fieldset": "Nomes d'usuariu a fusionar",
+	"usermerge-olduser": "Usuariu antiguu (fusionar dende):",
+	"usermerge-newuser": "Usuariu nuevu (fusionar en):",
+	"usermerge-deleteolduser": "Desaniciar l'usuariu antiguu",
+	"usermerge-submit": "Fusionar usuariu",
+	"usermerge-badtoken": "Pase d'edición inválidu",
+	"usermerge-userdeleted": "$1 ($2) desanicióse.",
+	"usermerge-success": "La fusión dende $1 ($2) a $3 ($4) ta completa.",
+	"usermerge-logpage": "Rexistru de fusión d'usuarios",
+	"usermerge-logpagetext": "Esti ye un rexistru d'aiciones de fusión d'usuarios.",
+	"usermerge-noselfdelete": "¡Nun pues desaniciate o fusionate dende {{GENDER:$1|tu mesmu}}!",
+	"usermerge-protectedgroup": "Nun puede fusionase dende {{GENDER:$1|l'usuariu|la usuaria}}: ta nun grupu protexíu.",
+	"right-usermerge": "Fusionar usuarios",
+	"action-usermerge": "fusionar usuarios",
+	"usermerge-autopagedelete": "Páxina desaniciada automáticamente al fusionar usuarios",
+	"usermerge-page-unmoved": "La páxina $1 nun pudo treslladase a $2.",
+	"usermerge-move-log": "Treslladóse la páxina automáticamente al fusionar la cuenta «$1» en «[[User:$2|$2]]»",
+	"logentry-usermerge-mergeuser": "$1 {{GENDER:$2|fusionó}} la cuenta d'usuariu «$4» ($5) en {{GENDER:$8|$6}} ($7)",
+	"logentry-usermerge-deleteuser": "$1 {{GENDER:$2|desanició}} la cuenta d'usuariu «$4» ($5)",
+	"log-action-filter-usermerge": "Tipu d'aición:",
+	"log-action-filter-usermerge-mergeuser": "Fusiones de cuentes d'usuariu",
+	"log-action-filter-usermerge-deleteuser": "Desaniciu de cuentes d'usuariu"
+}

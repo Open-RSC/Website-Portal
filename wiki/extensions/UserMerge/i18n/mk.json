@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06",
+			"Brest"
+		]
+	},
+	"usermerge": "Спојување и бришење корисници",
+	"usermerge-desc": "[[Special:UserMerge|Спојува наводи од еден корисник во друг]] во вики базата на податици - ги брише и старите корисници по спојувањето. Бара ''usermerge'' привилегии",
+	"usermerge-badnewuser": "Погрешно ново корисничко име",
+	"usermerge-nonewuser": "Празно ново корисничко име. Се подразбира спојување со „{{GENDER:$1|$1}}“.<br />\nСтиснете на „{{int:usermerge-submit}}“ за да прифатите.",
+	"usermerge-noolduser": "Празно старо корисничко име",
+	"usermerge-same-old-and-new-user": "Старото и новото корисничко име треба да се разликуваат.",
+	"usermerge-fieldset": "Кориснички имиња за спојување",
+	"usermerge-olduser": "Стар корисник (за спојување од):",
+	"usermerge-newuser": "Нов корисник (за спојување со):",
+	"usermerge-deleteolduser": "Избриши стар корисник",
+	"usermerge-submit": "Спој го корисникот",
+	"usermerge-badtoken": "Погрешна шифра за уредување",
+	"usermerge-userdeleted": "$1 ($2) е избришан.",
+	"usermerge-success": "Спојувањето на $1 ($2) во $3 ($4) е готово.",
+	"usermerge-logpage": "Дневник на спојувања на кориснички сметки",
+	"usermerge-logpagetext": "Ова е дневник на спојувања на кориснички имиња.",
+	"usermerge-noselfdelete": "Не можете да се избришете или споите {{GENDER:$1|самите себеси}}!",
+	"usermerge-protectedgroup": "Не можам да ги спојам {{GENDER:$1|корисниците}}: корисникот е во заштитена група.",
+	"right-usermerge": "Спојување на корисници",
+	"action-usermerge": "спојување на корисници",
+	"usermerge-autopagedelete": "Автоматски избришана страница при спојување на корисници",
+	"usermerge-page-unmoved": "Не можев да ја преместам страницата $1 на $2.",
+	"usermerge-move-log": "Автоматски преместена страница при спојувањето на сметката „$1“ во „[[User:$2|$2]]“",
+	"logentry-usermerge-mergeuser": "$1 {{GENDER:$2|ја спои}} корисничката сметка „$4“ ($5) во {{GENDER:$8|$6}} ($7)",
+	"logentry-usermerge-deleteuser": "$1 {{GENDER:$2|ја избриша}} корисничката сметка „$4“ ($5)",
+	"log-action-filter-usermerge": "Вид дејство:",
+	"log-action-filter-usermerge-mergeuser": "Спојување на корисничка сметка",
+	"log-action-filter-usermerge-deleteuser": "Бришење на корисничка сметка"
+}

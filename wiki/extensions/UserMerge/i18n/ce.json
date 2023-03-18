@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
+	"usermerge": "Декъашхойн дӀайаздарш вовшахтохар а, дӀадаха а",
+	"usermerge-desc": "[[Special:UserMerge|Декъашхочун тӀера кхечун тӀе]] викин базан чохь, шира декъашхой дӀабохар бу. Оьшу бакъо ''usermerge''",
+	"usermerge-badnewuser": "Нийса йоцу декъашхочун керла цӀе",
+	"usermerge-nonewuser": "Декъашхочун керла цӀе йаьсса йу — вовшахтухучу хенахь «{{GENDER:$1|$1}}».<br />\nТӀетаӀае «{{int:usermerge-submit}}», дешдерг кхочушдан.",
+	"usermerge-noolduser": "Декъашхочун шира цӀе йаьсса йу",
+	"usermerge-same-old-and-new-user": "Шира а керла цӀе башха хела йеза.",
+	"usermerge-fieldset": "Вовшахтухуш долу декъашхойн дӀяздарш",
+	"usermerge-olduser": "Шира аккаунт (вовшахтоха):",
+	"usermerge-newuser": "Керла аккаунт (вовшахтоха):",
+	"usermerge-deleteolduser": "ДӀайаккха шира аккаунт",
+	"usermerge-submit": "декъашхой вовшахтохар",
+	"usermerge-badtoken": "Нисдаран билгало нийса йац",
+	"usermerge-userdeleted": "$1 ($2) {{GENDER:$1|дӀаяьккхина хилла}}.",
+	"usermerge-success": "Вовшахтохар {{GENDER:$1|$1}} ($2) {{GENDER:$3|$3}} ($4) чекхдели.",
+	"usermerge-logpage": "Декъашхой вовшахтохаран тептар",
+	"usermerge-logpagetext": "ХӀара декъашхой вовшахтохаран тептар ду.",
+	"usermerge-noselfdelete": "{{GENDER:$1|Хьан аккаунт}} дӀайаккха йа вовшахтоха хьа таро йац!",
+	"usermerge-protectedgroup": "{{GENDER:$1|Декъашхой}} вовшахтоха цало — декъашхо Ӏалашйина тобан йукъахь хилар бахьнехь.",
+	"right-usermerge": "декъашхой вовшахтохар",
+	"action-usermerge": "декъашхой цхьаьнатохар",
+	"usermerge-autopagedelete": "Декъашхой вовшахтоьхча авто. дӀайохуш йу",
+	"usermerge-page-unmoved": "АгӀонан $1 цӀе → $2 хуьйцийла йац.",
+	"usermerge-move-log": "Авто цӀе хийцина агӀо, «[[User:$1|$1]]» → «[[User:$2|$2]]» аккаунташ вовшахтухучу хенахь"
+}

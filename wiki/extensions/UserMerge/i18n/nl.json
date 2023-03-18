@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"HanV",
+			"Mainframe98",
+			"McDutchie",
+			"Nemo bis",
+			"SPQRobin",
+			"Siebrand",
+			"Sjoerddebruin",
+			"Southparkfan"
+		]
+	},
+	"usermerge": "Gebruikers samenvoegen en verwijderen",
+	"usermerge-desc": "Voegt een [[Special:UserMerge|speciale pagina]] toe om gebruikers samen te voegen en de oude gebruiker(s) te verwijderen. Hiervoor is het recht ''usermerge'' nodig.",
+	"usermerge-badnewuser": "Ongeldige nieuwe gebruiker",
+	"usermerge-nonewuser": "De nieuwe gebruikersnaam is niet opgegeven.\nEr wordt aangenomen dat er samengevoegd moet worden naar \"{{GENDER:$1|$1}}\".<br />\nKlik \"{{int:usermerge-submit}}\" om de handeling uit te voeren.",
+	"usermerge-noolduser": "De oude gebruiker is niet opgegeven.",
+	"usermerge-same-old-and-new-user": "De oude en nieuwe gebruikersnamen moeten verschillend zijn.",
+	"usermerge-fieldset": "Samen te voegen gebruikersnamen",
+	"usermerge-olduser": "Oude gebruiker (samenvoegen van):",
+	"usermerge-newuser": "Nieuwe gebruiker (samenvoegen naar):",
+	"usermerge-deleteolduser": "Oude gebruiker verwijderen",
+	"usermerge-submit": "Gebruiker samenvoegen",
+	"usermerge-badtoken": "Ongeldig bewerkingstoken",
+	"usermerge-userdeleted": "$1 ($2) is verwijderd.",
+	"usermerge-success": "Samenvoegen van $1 ($2) naar $3 ($4) is afgerond.",
+	"usermerge-logpage": "Logboek gebruikerssamenvoegingen",
+	"usermerge-logpagetext": "Dit is het logboek van gebruikerssamenvoegingen.",
+	"usermerge-noselfdelete": "U kunt niet verwijderen of samenvoegen van {{GENDER:$1|uzelf}}!",
+	"usermerge-protectedgroup": "Het is niet mogelijk de {{GENDER:$1|gebruiker}} samen te voegen. De gebruiker zit in een beschermde groep.",
+	"right-usermerge": "Gebruikers samenvoegen",
+	"action-usermerge": "gebruikers samen te voegen",
+	"usermerge-autopagedelete": "Automatisch verwijderd bij het samenvoegen van gebruikers",
+	"usermerge-page-unmoved": "De pagina $1 kon niet hernoemd worden naar $2.",
+	"usermerge-move-log": "Pagina automatisch hernoemd bij het samenvoegen van gebruiker \"$1\" naar \"[[User:$2|$2]]\"",
+	"logentry-usermerge-mergeuser": "$1 {{GENDER:$2|heeft}} het gebruikersaccount \"$4\" ($5) in {{GENDER:$8|$6}} samengevoegd ($7)",
+	"logentry-usermerge-deleteuser": "$1 {{GENDER:$2|verwijderde}} het gebruikersaccount \"$4\" ($5)",
+	"log-action-filter-usermerge": "Soort handeling:",
+	"log-action-filter-usermerge-mergeuser": "Samenvoegen van een account",
+	"log-action-filter-usermerge-deleteuser": "Verwijderen van een account"
+}

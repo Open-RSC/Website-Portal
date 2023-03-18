@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ibrahim",
+			"Vashgird"
+		]
+	},
+	"usermerge": "Идгом ва ҳафзи корбар",
+	"usermerge-badnewuser": "Номи корбарии ҷадидӣ номӯътабар",
+	"usermerge-noolduser": "Номи корбарии куҳнаи холӣ.",
+	"usermerge-olduser": "Корбари куҳна (идғом аз)",
+	"usermerge-newuser": "Корбари ҷадид (идғом ба)",
+	"usermerge-deleteolduser": "Ҳазфи корбари куҳна",
+	"usermerge-submit": "Идғоми корбар",
+	"usermerge-logpage": "Гузориши идғоми корбар",
+	"usermerge-logpagetext": "Ин гузориши амалҳои идғоми корбар аст."
+}

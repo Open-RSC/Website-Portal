@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"DCLXVI",
+			"StanProg",
+			"Termininja",
+			"Vlad5250"
+		]
+	},
+	"usermerge": "Сливане и изтриване на потребители",
+	"usermerge-desc": "[[Special:UserMerge|Сливане на приносите от един потребител в друг]] в базата от данни - след сливането изтрива стария потребител. Изисква права ''usermerge''",
+	"usermerge-badnewuser": "Невалидно ново потребителско име.",
+	"usermerge-noolduser": "Изчистване на старото потребителско име.",
+	"usermerge-fieldset": "Потребителски имена за сливане",
+	"usermerge-olduser": "Стар потребител (за сливане от):",
+	"usermerge-newuser": "Нов потребител (за сливане в):",
+	"usermerge-deleteolduser": "Изтриване на стария потребител",
+	"usermerge-submit": "Сливане",
+	"usermerge-userdeleted": "$1 ($2) беше изтрит.",
+	"usermerge-success": "Сливането от $1 ($2) към $3 ($4) приключи.",
+	"usermerge-logpage": "Дневник на сливанията на потребители",
+	"usermerge-logpagetext": "Тази страница съдържа дневник на потребителските сливания.",
+	"usermerge-noselfdelete": "Не е възможно да изтривате или сливате от {{GENDER:$1|себе си}}!",
+	"usermerge-protectedgroup": "Невъзможно е да се извърши сливане от {{GENDER:$1|потребител}}: потребителят е в защитена група.",
+	"right-usermerge": "Сливане на потребители",
+	"action-usermerge": "сливане на потребителски сметки",
+	"log-action-filter-usermerge": "Вид на действието:",
+	"log-action-filter-usermerge-mergeuser": "Сливане на потребителска сметка",
+	"log-action-filter-usermerge-deleteuser": "Изтриване на потребителска сметка"
+}

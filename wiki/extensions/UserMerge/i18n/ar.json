@@ -1,0 +1,39 @@
+{
+	"@metadata": {
+		"authors": [
+			"Meno25",
+			"OsamaK",
+			"ديفيد",
+			"روخو",
+			"محمد أحمد عبد الفتاح"
+		]
+	},
+	"usermerge": "دمج وحذف المستخدمين",
+	"usermerge-desc": "[[Special:UserMerge|يدمج المراجع من مستخدم إلى آخر]] في قاعدة بيانات الويكي - سيحذف أيضا المستخدمين القدامى بعد الدمج. يتطلب صلاحيات ''usermerge''",
+	"usermerge-badnewuser": "اسم المستخدم الجديد غير صحيح",
+	"usermerge-nonewuser": "اسم مستخدم جديد فارغ - افتراض الدمج إلى \"$1\".<br />\nاضغط \"{{int:usermerge-submit}}\" للقبول.",
+	"usermerge-noolduser": "اسم المستخدم القديم فارغ",
+	"usermerge-same-old-and-new-user": "يجب أن تكون أسماء المستخدمين القديمة والجديدة مميزة.",
+	"usermerge-fieldset": "أسماء المستخدمين للدمج",
+	"usermerge-olduser": "مستخدم قديم (دمج من):",
+	"usermerge-newuser": "مستخدم جديد (دمج إلى):",
+	"usermerge-deleteolduser": "حذف المستخدم القديم",
+	"usermerge-submit": "دمج المستخدم",
+	"usermerge-badtoken": "نص تعديل غير صحيح",
+	"usermerge-userdeleted": "$1 ($2) تم حذفه.",
+	"usermerge-success": "الدمج من $1 ($2) إلى $3 ($4) اكتمل.",
+	"usermerge-logpage": "سجل دمج المستخدمين",
+	"usermerge-logpagetext": "هذا سجل بأفعال دمج المستخدمين.",
+	"usermerge-noselfdelete": "لا يمكنك حذف أو دمج {{GENDER:$1|نفسك}}!",
+	"usermerge-protectedgroup": "غير قادر على دمج {{GENDER:$1|المستخدم}}; المستخدم في مجموعة محمية.",
+	"right-usermerge": "دمج المستخدمين",
+	"action-usermerge": "دمج المستخدمين",
+	"usermerge-autopagedelete": "تم حذف الصفحة تلقائيا أثناء دمج المستخدمين",
+	"usermerge-page-unmoved": "تعذر نقل الصفحة $1 إلى $2.",
+	"usermerge-move-log": "تم نقل الصفحة تلقائيا عند دمج الحساب \"$1\" إلى \"[[User:$2|$2]]\"",
+	"logentry-usermerge-mergeuser": "$1 {{GENDER:$2|دمج|دمجت}} حساب المستخدم \"$4\" ($5) إلى {{GENDER:$8|$6}} ($7)",
+	"logentry-usermerge-deleteuser": "$1 {{GENDER:$2|حذف|حذفت}} حساب المستخدم \"$4\" ($5)",
+	"log-action-filter-usermerge": "نوع الفعل:",
+	"log-action-filter-usermerge-mergeuser": "دمج حساب المستخدم",
+	"log-action-filter-usermerge-deleteuser": "حذف حساب المستخدم"
+}

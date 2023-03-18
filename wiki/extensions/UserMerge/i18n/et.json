@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Pikne"
+		]
+	},
+	"usermerge-desc": "[[Special:UserMerge|Ühendab vikiandmebaasis kasutaja nimetamised teise kasutajaga]]. Ühendamise järel kustutab vanad kasutajad. Nõuab õigust \"usermerge\".",
+	"usermerge-badnewuser": "Vigane uus kasutajanimi",
+	"usermerge-userdeleted": "$1 ($2) on kustutatud.",
+	"usermerge-logpage": "Kasutajate ühendamislogi",
+	"usermerge-logpagetext": "See on kasutajaühendamistoimingute logi."
+}

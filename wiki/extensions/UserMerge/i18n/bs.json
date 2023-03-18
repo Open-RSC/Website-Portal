@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"CERminator",
+			"Srdjan m",
+			"Srđan"
+		]
+	},
+	"usermerge": "Spajanje i brisanje korisnika",
+	"usermerge-desc": "[[Special:UserMerge|Spaja doprinose jednog korisnika na drugog]] u bazi podataka wikija – obrisat će i stare korisnike po spajanju. Zahtijeva pravo ''usermerge''",
+	"usermerge-badnewuser": "Nevaljano novo korisničko ime",
+	"usermerge-nonewuser": "Upišite novo korisničko ime. Pretpostavljam da se spaja na \"{{GENDER:$1|$1}}\".<br />\nKliknite na \"{{int:usermerge-submit}}\" za prihvatanje.",
+	"usermerge-noolduser": "Prazno staro korisničko ime",
+	"usermerge-fieldset": "Korisnička imena za spajanje",
+	"usermerge-olduser": "Stari korisnik (spajanje sa):",
+	"usermerge-newuser": "Novi korisnik (spajanje na):",
+	"usermerge-deleteolduser": "Obriši starog korisnika",
+	"usermerge-submit": "Spoji korisnika",
+	"usermerge-badtoken": "Nevaljan token izmjene",
+	"usermerge-userdeleted": "{{GENDER:$1|Korisnik|Korisnica}} $1 ($2) {{GENDER:$1|izbrisan|izbrisana}} je.",
+	"usermerge-success": "Spajanje sa {{GENDER:$1|$1}} ($2) na {{GENDER:$3|$3}} ($4) je završeno.",
+	"usermerge-logpage": "Zapisnik spajanja korisnika",
+	"usermerge-logpagetext": "Ovo je zapisnik akcija spajanja korisnika.",
+	"usermerge-noselfdelete": "Ne možete se obrisati niti spojiti {{GENDER:$1|sami sa sobom}}!",
+	"usermerge-protectedgroup": "Ne mogu spojiti {{GENDER:$1|korisnika|korisnicu}} jer je u zaštićenoj grupi.",
+	"right-usermerge": "Spajanje korisnika"
+}

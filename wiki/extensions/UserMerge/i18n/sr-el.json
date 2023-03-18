@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Michaello",
+			"Milicevic01",
+			"Rancher"
+		]
+	},
+	"usermerge": "Objedinjavanje i brisanje naloga",
+	"usermerge-desc": "[[Special:UserMerge|Objedinjava doprinose jednog korisnika na drugog]] u bazi podataka vikija — biće izbrisani i stari korisnici. Potrebno je pravo ''usermerge''.",
+	"usermerge-badnewuser": "Nevažeće novo korisničko ime.",
+	"usermerge-nonewuser": "Novo korisničko ime je prazno. Pretpostavlja se da se objedinjava na „{{GENDER:$1|$1}}”.<br />\nKliknite na „{{int:usermerge-submit}}” da biste prihvatili.",
+	"usermerge-noolduser": "Staro korisničko ime je prazno.",
+	"usermerge-same-old-and-new-user": "Novo ime naloga se mora razlikovati od starog.",
+	"usermerge-fieldset": "Nalozi za objedinjavanje",
+	"usermerge-olduser": "Stari nalog:",
+	"usermerge-newuser": "Novi nalog:",
+	"usermerge-deleteolduser": "Izbriši stari nalog",
+	"usermerge-submit": "Objedini naloge",
+	"usermerge-badtoken": "Nevažeći token izmene.",
+	"usermerge-userdeleted": "$1 ($2) je {{GENDER:$1|izbrisan|izbrisana}}.",
+	"usermerge-success": "Objedinjavanje korisnika $1 ($2) i $3 ($4) je završeno.",
+	"usermerge-logpage": "Dnevnik objedinjavanja naloga",
+	"usermerge-logpagetext": "Ovo je dnevnik radnja objedinjavanja naloga.",
+	"usermerge-noselfdelete": "Ne možete izbrisati ili objediniti {{GENDER:$1|sami sebe}}!",
+	"usermerge-protectedgroup": "Ne mogu da objedinim naloge {{GENDER:$1|korisnika|korisnice}}: Korisnik je u zaštićenoj grupi.",
+	"right-usermerge": "objedinjavanje naloga",
+	"action-usermerge": "objedinjavanje naloga",
+	"usermerge-autopagedelete": "Automatski se briše pri objedinjavanju naloga.",
+	"usermerge-page-unmoved": "Ne mogu da premestim stranicu $1 u $2.",
+	"usermerge-move-log": "Automatski premešteno pri objedinjavanju naloga „$1“ i „[[User:$2|$2]]“.",
+	"logentry-usermerge-mergeuser": "$1 {{GENDER:$2|objedinio|objedinila}} je korisnički nalog „$4” ($5) u {{GENDER:$8|$6}} ($7)",
+	"logentry-usermerge-deleteuser": "$1 je {{GENDER:$2|izbrisao|izbrisala}} korisnički nalog „$4” ($5)",
+	"log-action-filter-usermerge": "Vrsta radnje:",
+	"log-action-filter-usermerge-mergeuser": "Objedinjavanje korisničkog naloga",
+	"log-action-filter-usermerge-deleteuser": "Brisanje korisničkog naloga"
+}

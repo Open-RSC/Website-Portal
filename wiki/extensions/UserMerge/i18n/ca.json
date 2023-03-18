@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Paucabot",
+			"SMP",
+			"Solde"
+		]
+	},
+	"usermerge-badnewuser": "Nom d'usuari nou no vàlid",
+	"usermerge-noolduser": "Nom d'usuari antic sense especificar",
+	"usermerge-olduser": "Antic usuari (barreja des de):",
+	"usermerge-newuser": "Nou usuari (barreja a):",
+	"usermerge-deleteolduser": "Elimina l'antic usuari",
+	"usermerge-submit": "Combina els usuaris",
+	"usermerge-logpage": "Registre de fusions d'usuaris",
+	"right-usermerge": "Fusionar usuaris"
+}
