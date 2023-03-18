@@ -3,73 +3,56 @@ server {
     listen                      80;
     listen                      [::]:80;
     server_name					rsc.vet game.openrsc.com;
+
     root 						/var/www/html/portal/public;
     index    					index.html index.htm index.php;
     #access_log 				/var/log/nginx/access.log;
     error_log 					/var/log/nginx/error.log;
-    rewrite                     ^/index.php/(.) /$1 permanent;
-    gzip              			on;
-    gzip_http_version 			1.0;
-    gzip_vary         			on;
-    gzip_comp_level   			9;
-    gzip_types        			text/xml text/css application/xhtml+xml application/xml application/rss+xml application/atom_xml application/x-javascript application/x-httpd-php;
-    access_log 					off;
-    error_page 					404 /index.php;
-    add_header                  Content-Security-Policy "default-src 'self' wss: http: https: data: blob: 'unsafe-inline'" always;
-    add_header 					X-Frame-Options "SAMEORIGIN";
-    add_header 					X-XSS-Protection "1; mode=block";
-    add_header 					X-Content-Type-Options "nosniff";
-    client_max_body_size        25m;
-    proxy_connect_timeout       600;
-    proxy_send_timeout          600;
-    proxy_read_timeout          600;
-    send_timeout                600;
-    server_tokens 				off;
 
     # PHP proxy
-        location ~ \.php$ {
-                    # Check that the PHP script exists before passing it
-                    try_files      $fastcgi_script_name =404;
-                    # regex to split $uri to $fastcgi_script_name and $fastcgi_path
-                    fastcgi_split_path_info           ^(.+\.php)(/.+)$;
-                    fastcgi_pass   php:9000;
-                    fastcgi_index  index.php;
-                    set            $path_info         $fastcgi_path_info;
-                    fastcgi_param  PATH_INFO          $path_info;
-                    include                           fastcgi_params;
-                    fastcgi_intercept_errors          on;
-                    fastcgi_read_timeout              600;
-                    fastcgi_buffering                 off;
-                    fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
-                    fastcgi_param  QUERY_STRING       $query_string;
-                    fastcgi_param  REQUEST_METHOD     $request_method;
-                    fastcgi_param  CONTENT_TYPE       $content_type;
-                    fastcgi_param  CONTENT_LENGTH     $content_length;
-                    fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
-                    fastcgi_param  REQUEST_URI        $request_uri;
-                    fastcgi_param  DOCUMENT_URI       $document_uri;
-                    fastcgi_param  DOCUMENT_ROOT      $document_root;
-                    fastcgi_param  SERVER_PROTOCOL    $server_protocol;
-                    fastcgi_param  REQUEST_SCHEME     $scheme;
-                    fastcgi_param  HTTPS              $https if_not_empty;
-                    fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
-                    fastcgi_param  SERVER_SOFTWARE    nginx;
-                    fastcgi_param  REMOTE_ADDR        $remote_addr;
-                    fastcgi_param  REMOTE_PORT        $remote_port;
-                    fastcgi_param  SERVER_ADDR        $server_addr;
-                    fastcgi_param  SERVER_PORT        $server_port;
-                    fastcgi_param  SERVER_NAME        $server_name;
-                    # PHP only, required if PHP was built with --enable-force-cgi-redirect
-                    fastcgi_param  REDIRECT_STATUS    200;
+    location ~ \.php$ {
+                try_files                         $fastcgi_script_name =404;
+                fastcgi_split_path_info           ^(.+\.php)(/.+)$;
+                fastcgi_pass                      php:9000;
+                fastcgi_index                     index.php;
+                set            $path_info         $fastcgi_path_info;
+                fastcgi_param  PATH_INFO          $path_info;
+                include                           fastcgi_params;
+                fastcgi_intercept_errors          on;
+                fastcgi_read_timeout              600;
+                fastcgi_buffering                 off;
+                fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+                fastcgi_param  QUERY_STRING       $query_string;
+                fastcgi_param  REQUEST_METHOD     $request_method;
+                fastcgi_param  CONTENT_TYPE       $content_type;
+                fastcgi_param  CONTENT_LENGTH     $content_length;
+                fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+                fastcgi_param  REQUEST_URI        $request_uri;
+                fastcgi_param  DOCUMENT_URI       $document_uri;
+                fastcgi_param  DOCUMENT_ROOT      $document_root;
+                fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+                fastcgi_param  REQUEST_SCHEME     $scheme;
+                fastcgi_param  HTTPS              $https if_not_empty;
+                fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+                fastcgi_param  SERVER_SOFTWARE    nginx;
+                fastcgi_param  REMOTE_ADDR        $remote_addr;
+                fastcgi_param  REMOTE_PORT        $remote_port;
+                fastcgi_param  SERVER_ADDR        $server_addr;
+                fastcgi_param  SERVER_PORT        $server_port;
+                fastcgi_param  SERVER_NAME        $server_name;
+                fastcgi_param  REDIRECT_STATUS    200;
     }
-
     # General
     location / {
         try_files               $uri $uri/ /index.php?$query_string;
     }
     # Wiki proxy
     location /wiki {
-        try_files               $uri $uri/ @rewriteapp @extensionless-php;
+            proxy_pass                                 http://mediawiki:9090;
+            proxy_set_header                           X-Real-IP $remote_addr;
+            proxy_set_header                           X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header                           X-Forwarded-Proto $scheme;
+            proxy_cache_bypass                         $http_upgrade;
     }
     # PHPBB
     location /board {
@@ -117,6 +100,7 @@ server {
         access_log 				off;
         log_not_found 			off;
     }
+    # Deny odd HTTP requests
     if ($request_method !~ ^(GET|HEAD|POST)$ ) {
         return 444; }
 }
@@ -124,59 +108,62 @@ server {
 # HTTPS
 server {
     listen                      443 ssl;
-    ssl_certificate              /etc/nginx/ssl/cloudflare.pem;
-    ssl_certificate_key          /etc/nginx/ssl/cloudflare.key;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
-    add_header Content-Security-Policy "default-src 'self' wss: http: https: data: blob: 'unsafe-inline'" always;
-    add_header X-XSS-Protection "1; mode=block";
     server_name					rsc.vet game.openrsc.com;
+
+    ssl_certificate             /etc/nginx/ssl/cloudflare.pem;
+    ssl_certificate_key         /etc/nginx/ssl/cloudflare.key;
+    ssl_protocols               TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers   on;
+
     root 						/var/www/html/portal/public;
     index    					index.html index.htm index.php;
-    #access_log 					/var/log/nginx/access.log;
+    #access_log 				/var/log/nginx/access.log;
     error_log 					/var/log/nginx/error.log;
-    rewrite                     ^/index.php/(.) /$1 permanent;
-    gzip              			on;
-    gzip_http_version 			1.0;
-    gzip_vary         			on;
-    gzip_comp_level   			9;
-    gzip_types        			text/xml text/css application/xhtml+xml application/xml application/rss+xml application/atom_xml application/x-javascript application/x-httpd-php;
-    access_log 					off;
-    error_page 					404 /index.php;
-    add_header 					X-Frame-Options "SAMEORIGIN";
-    add_header 					X-XSS-Protection "1; mode=block";
-    add_header 					X-Content-Type-Options "nosniff";
-    client_max_body_size        25m;
-    proxy_connect_timeout       600;
-    proxy_send_timeout          600;
-    proxy_read_timeout          600;
-    send_timeout                600;
-    server_tokens 				off;
 
     # PHP proxy
     location ~ \.php$ {
-        try_files               $uri =404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass            php:9000;
-        fastcgi_index           index.php;
-        fastcgi_param           SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-        include                 fastcgi_params;
+                try_files                         $fastcgi_script_name =404;
+                fastcgi_split_path_info           ^(.+\.php)(/.+)$;
+                fastcgi_pass                      php:9000;
+                fastcgi_index                     index.php;
+                set            $path_info         $fastcgi_path_info;
+                fastcgi_param  PATH_INFO          $path_info;
+                include                           fastcgi_params;
+                fastcgi_intercept_errors          on;
+                fastcgi_read_timeout              600;
+                fastcgi_buffering                 off;
+                fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+                fastcgi_param  QUERY_STRING       $query_string;
+                fastcgi_param  REQUEST_METHOD     $request_method;
+                fastcgi_param  CONTENT_TYPE       $content_type;
+                fastcgi_param  CONTENT_LENGTH     $content_length;
+                fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+                fastcgi_param  REQUEST_URI        $request_uri;
+                fastcgi_param  DOCUMENT_URI       $document_uri;
+                fastcgi_param  DOCUMENT_ROOT      $document_root;
+                fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+                fastcgi_param  REQUEST_SCHEME     $scheme;
+                fastcgi_param  HTTPS              $https if_not_empty;
+                fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+                fastcgi_param  SERVER_SOFTWARE    nginx;
+                fastcgi_param  REMOTE_ADDR        $remote_addr;
+                fastcgi_param  REMOTE_PORT        $remote_port;
+                fastcgi_param  SERVER_ADDR        $server_addr;
+                fastcgi_param  SERVER_PORT        $server_port;
+                fastcgi_param  SERVER_NAME        $server_name;
+                fastcgi_param  REDIRECT_STATUS    200;
     }
-
-	# phpmyadmin proxy
-    location /phpmyadmin {
-        proxy_pass http://phpmyadmin:8080;
-	}
-
     # General
     location / {
         try_files               $uri $uri/ /index.php?$query_string;
     }
     # Wiki proxy
     location /wiki {
-        try_files               $uri $uri/ @rewriteapp @extensionless-php;
+            proxy_pass                                 http://mediawiki:9090;
+            proxy_set_header                           X-Real-IP $remote_addr;
+            proxy_set_header                           X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header                           X-Forwarded-Proto $scheme;
+            proxy_cache_bypass                         $http_upgrade;
     }
     # PHPBB
     location /board {
@@ -224,6 +211,7 @@ server {
         access_log 				off;
         log_not_found 			off;
     }
+    # Deny odd HTTP requests
     if ($request_method !~ ^(GET|HEAD|POST)$ ) {
-            return 444; }
+        return 444; }
 }
