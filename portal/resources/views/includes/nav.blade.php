@@ -100,7 +100,7 @@
                         <a class="c text-left" href="{{ route('chat_logs', 'openpk') }}">OpenPK Chat Logs</a>
                     </span>
                 </span>
-                    <span class="flex-auto p-2 dropdown">
+                <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Global Chat Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
                         <a class="c text-left" href="{{ route('globalchat_logs', 'preservation') }}">RSC Preservation Global Chat Logs</a>
