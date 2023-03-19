@@ -159,6 +159,43 @@ class StaffController extends Controller
                 ->smart(true)
                 ->make();
     }
+    
+    public function globalchat_logs(Request $request, $db)
+    {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('moderator', Auth::user())) {
+            abort(404);
+        }
+        return view('globalchat_logs', compact('db'));
+    }
+    
+    public function globalChatLogsData(Request $request, $db) {
+        if (Auth::user() === null) {
+            return redirect("/login");
+        }
+        if (!Gate::allows('moderator', Auth::user())) {
+            abort(404);
+        }
+        DB::connection("laravel")->table("viewlogs")->insert([
+            'username' => Auth::user()->username,
+            'page' => "globalchat_logs",
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        //Here we hardcode orderBy time because we only want the latest chat logs.
+        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where("reciever", "=", "Global$" )->limit(20000)->get()->toArray())
+                ->editColumn('time', function($data) {
+                    return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
+                })
+                ->smart(true)
+                ->make();
+    }
 
     public function pm_logs(Request $request, $db)
     {
@@ -190,7 +227,7 @@ class StaffController extends Controller
             'updated_at' => now()
         ]);
         //Here we hardcode orderBy time because we only want the latest logs.
-        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where("reciever", "!=", "Global$" )->limit(20000)->get()->toArray())
                 ->editColumn('time', function($data) {
                     return Carbon::createFromTimestamp($data->time)->format("Y-m-d H:i:s");
                 })

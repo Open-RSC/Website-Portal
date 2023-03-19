@@ -99,6 +99,13 @@
                         <a class="c text-left" href="{{ route('chat_logs', 'coleslaw') }}">RSC Coleslaw Chat Logs</a>
                         <a class="c text-left" href="{{ route('chat_logs', 'openpk') }}">OpenPK Chat Logs</a>
                         <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                        <a class="c text-left" href="{{ route('globalchat_logs', 'preservation') }}">RSC Preservation Global Chat Logs</a>
+                        <a class="c text-left" href="{{ route('globalchat_logs', 'cabbage') }}">RSC Cabbage Global Chat Logs</a>
+                        <a class="c text-left" href="{{ route('globalchat_logs', '2001scape') }}">2001scape Global Chat Logs</a>
+                        <a class="c text-left" href="{{ route('globalchat_logs', 'uranium') }}">RSC Uranium Global Chat Logs</a>
+                        <a class="c text-left" href="{{ route('globalchat_logs', 'coleslaw') }}">RSC Coleslaw Global Chat Logs</a>
+                        <a class="c text-left" href="{{ route('globalchat_logs', 'openpk') }}">OpenPK Global Chat Logs</a>
+                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
