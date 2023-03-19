@@ -98,14 +98,17 @@
                         <a class="c text-left" href="{{ route('chat_logs', 'uranium') }}">RSC Uranium Chat Logs</a>
                         <a class="c text-left" href="{{ route('chat_logs', 'coleslaw') }}">RSC Coleslaw Chat Logs</a>
                         <a class="c text-left" href="{{ route('chat_logs', 'openpk') }}">OpenPK Chat Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
+                    </span>
+                </span>
+                    <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Global Chat Logs <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
                         <a class="c text-left" href="{{ route('globalchat_logs', 'preservation') }}">RSC Preservation Global Chat Logs</a>
                         <a class="c text-left" href="{{ route('globalchat_logs', 'cabbage') }}">RSC Cabbage Global Chat Logs</a>
                         <a class="c text-left" href="{{ route('globalchat_logs', '2001scape') }}">2001scape Global Chat Logs</a>
                         <a class="c text-left" href="{{ route('globalchat_logs', 'uranium') }}">RSC Uranium Global Chat Logs</a>
                         <a class="c text-left" href="{{ route('globalchat_logs', 'coleslaw') }}">RSC Coleslaw Global Chat Logs</a>
                         <a class="c text-left" href="{{ route('globalchat_logs', 'openpk') }}">OpenPK Global Chat Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
@@ -120,7 +123,6 @@
                         <a class="c text-left" href="{{ route('pm_logs', 'uranium') }}">RSC Uranium PM Logs</a>
                         <a class="c text-left" href="{{ route('pm_logs', 'coleslaw') }}">RSC Coleslaw PM Logs</a>
                         <a class="c text-left" href="{{ route('pm_logs', 'openpk') }}">OpenPK PM Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
@@ -135,7 +137,6 @@
                         <a class="c text-left" href="{{ route('trade_logs', 'uranium') }}">RSC Uranium Trade Logs</a>
                         <a class="c text-left" href="{{ route('trade_logs', 'coleslaw') }}">RSC Coleslaw Trade Logs</a>
                         <a class="c text-left" href="{{ route('trade_logs', 'openpk') }}">OpenPK Trade Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             
@@ -145,7 +146,6 @@
                         <a class="c text-left" href="{{ route('auction_logs', 'cabbage') }}">RSC Cabbage Auction Logs</a>
                         <a class="c text-left" href="{{ route('auction_logs', 'coleslaw') }}">RSC Auction Logs</a>
                         <a class="c text-left" href="{{ route('auction_logs', 'openpk') }}">OpenPK Shop Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
                 
@@ -158,7 +158,6 @@
                         <a class="c text-left" href="{{ route('generic_logs', 'uranium') }}">RSC Uranium Generic Logs</a>
                         <a class="c text-left" href="{{ route('generic_logs', 'coleslaw') }}">RSC Coleslaw Generic Logs</a>
                         <a class="c text-left" href="{{ route('generic_logs', 'openpk') }}">OpenPK Generic Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
@@ -173,7 +172,6 @@
                         <a class="c text-left" href="{{ route('rename_logs', 'uranium') }}">RSC Uranium Rename Logs</a>
                         <a class="c text-left" href="{{ route('rename_logs', 'coleslaw') }}">RSC Coleslaw Rename Logs</a>
                         <a class="c text-left" href="{{ route('rename_logs', 'openpk') }}">OpenPK Rename Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
@@ -188,7 +186,6 @@
                         <a class="c text-left" href="{{ route('staff_logs', 'uranium') }}">RSC Uranium Staff Logs</a>
                         <a class="c text-left" href="{{ route('staff_logs', 'coleslaw') }}">RSC Coleslaw Staff Logs</a>
                         <a class="c text-left" href="{{ route('staff_logs', 'openpk') }}">OpenPK Staff Logs</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
@@ -202,7 +199,6 @@
                         <a class="c text-left" href="{{ route('player_list', 'uranium') }}">RSC Uranium Players</a>
                         <a class="c text-left" href="{{ route('player_list', 'coleslaw') }}">RSC Coleslaw Players</a>
                         <a class="c text-left" href="{{ route('player_list', 'openpk') }}">OpenPK Players</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif    
@@ -216,7 +212,6 @@
                         <a class="c text-left" href="{{ route('login_list', 'uranium') }}">RSC Uranium Logins</a>
                         <a class="c text-left" href="{{ route('login_list', 'coleslaw') }}">RSC Coleslaw Logins</a>
                         <a class="c text-left" href="{{ route('login_list', 'openpk') }}">OpenPK Logins</a>
-                        <input type="checkbox" id="drop-5" style="display: none !important;"/>
                     </span>
                 </span>
             @endif
