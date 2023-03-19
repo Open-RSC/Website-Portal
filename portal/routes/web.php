@@ -80,6 +80,8 @@ Route::get('staff/{db}/player_list/data', 'StaffController@playerListData')->mid
 Route::get('staff/{db}/player/{id}/detail', 'StaffController@player_view')->middleware('auth')->name('player_view');
 Route::get('staff/{db}/chat_logs', 'StaffController@chat_logs')->middleware('auth')->name('chat_logs');
 Route::get('staff/{db}/chat_logs/data', 'StaffController@chatLogsData')->middleware('auth')->name('ChatLogsData');
+Route::get('staff/{db}/globalchat_logs', 'StaffController@globalchat_logs')->middleware('auth')->name('globalchat_logs');
+Route::get('staff/{db}/globalchat_logs/data', 'StaffController@globalChatLogsData')->middleware('auth')->name('GlobalChatLogsData');
 Route::get('staff/{db}/pm_logs', 'StaffController@pm_logs')->middleware('auth')->name('pm_logs');
 Route::get('staff/{db}/pm_logs/data', 'StaffController@pmLogsData')->middleware('auth')->name('PmLogsData');
 Route::get('staff/{db}/trade_logs', 'StaffController@trade_logs')->middleware('auth')->name('trade_logs');
