@@ -1,69 +1,113 @@
 @extends('template')
+
 @section('content')
-    <div class="hiscores-page">
-        <div class="hiscores-list-container">
-            <div class="hiscores-skill-list">
-                <div class="hiscores-list-label">
-                    <b>Select hiscore table</b>
-                </div>
-                <div class="e bg-black p-2" style="outline: black;">
-                    @foreach ($npcs as $npcId => $npcName)
-                        <div class="d-flex" style="padding-left:20px; padding-bottom:2px;">
-                            <div style="width:24px;">
-                            </div>
-                            <div style="width:40px;">
-                                    <a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
-                                        {{ $npcName }}
-                                    </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="hiscores-player-list">
-                <div class="hiscores-list-label">
-                    <b>{{ $npc_name }} Hiscores</b>
-                </div>
-                <div class="e bg-black p-2" style="outline: black;">
-                    <div class="d-flex">
-                        <div class="text-right" style="width:40px;"><b>Rank</b></div>
-                        <div class="text-left" style="padding-left:10px; width:130px;"><b>NPC Name</b></div>
-                        <div class="text-right" style="width:30px;"><b>Kills</b></div>
-                    </div>
-                    @foreach ($hiscores as $key=>$player)
-                        <div class="d-flex">
-                            <!--Rank-->
-                            <div class="text-right" style="width:40px;">
-                                {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
-                            </div>
-                            <!--NPC-->
-                            <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c"
-                                   href="/npchiscores/{{ $db }}/{{ $player->npcId }}">{{ ucfirst($player->npcName) }}</a>
-                            </div>
-                            <!--Kills-->
-                            <div class="text-right" style="padding-right:15px; width:30px;">
-                                {{ number_format($player->npcKills) }}
-                            </div>
-                        </div>
-                    @endforeach
-                    {{ $hiscores->links('pagination::tailwind') }}
-                </div>
-            </div>
+
+    @if (!$players->first() || !isset($players->first()->id) || !isset($players->first()->username))
+        <div class="text-center" style="background-color: black;">
+            <table>
+                <tr>
+                    <td class="e p-5">
+                        Account <span class="rscfont" style="color:yellow">{{ ucfirst($subpage) }}</span> does not exist
+                    </td>
+                </tr>
+            </table>
         </div>
+    @else
+        <div class="text-center">
+            <table class="hiscores-player-table" cellpadding="4" border="0" style="background-color: black;">
+                <tr>
+                    <td class="e">
+                        <div class="text-center">
+                            RuneScape NPC Hiscores for
+                            @if ($players->first()->group_id < '10')
+                                <span class="pl-1"></span>
+                                <img class="inline mb-1" src="{{ asset('img') }}/{{ $players->first()->group_id }}.svg"
+                                     alt="group {{ $players->first()->group_id }}" style="height: 11px; width: auto;"/>
+                            @endif
+                            <span class="rscfont" style="color:yellow;">
+                                    {{ ucfirst($players->first()->username) }}
+                            </span>
+                        </div>
+                        
+                         <table>
+                                <tr>
+                                    <td colspan="3" align="left">
+                                        <b>Rank</b>
+                                    </td>
+                                    <td width="80" align="right">
+                                        <b>NPC Name</b>
+                                    </td>
+                                    <td width="80" align="right">
+                                        <b>Kills</b>
+                                    </td>
+                                </tr>
+                                @foreach ($players as $key=>$player)
+                                    <tr>
+                                        <td colspan="3" align="left">
+                                            {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                        </td>
+                                        <td align="right">
+                                            {{ number_format($player->npcName) }}
+                                        </td>
+                                        <td align="right">
+                                            {{ number_format($player->npcKills) }}
+                                        </td>
+                                    </tr>
+                                @endforeach    
+                         </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div class="p-2"></div>
-        <div class="d-flex hiscores-search-bar">
-            <div class="b search-box search-rank"
-                style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search" action="{{url('searchNpcHiscoresByName')}}">
-                    @csrf <!-- {{ csrf_field() }} -->
-                    <input type="hidden" name="db" value="{{$db}}">
-                    <label for="name">Search by Player name</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;"
-                        class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
-                </form>
+
+        @isset($players->first()->username)
+            <div class="row e" style="background-color: black;">
+                <div class="col-4 pt-2" style="width: 75px;">
+                    <div class="rscfont d-block">
+                        @if($db== 'preservation')
+                            <!-- Due to legacy OpenRSC database not following regular naming scheme -->
+                            <img src="{{ asset('/img/avatars').'/'.'openrsc'.'+'.$players->first()->id }}.png"
+                                 alt="({{ $players->first()->username }})"/>
+                        @else
+                            <img src="{{ asset('/img/avatars').'/'.$db.'+'.$players->first()->id }}.png"
+                                 alt="({{ $players->first()->username }})"/>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-8 text-left" style="width: 200px;">
+                <span class="rscfont d-block">
+                    Status:
+                    @if ($players->first()->online == 1)
+                        <span style="color: #01fe00;">
+                            Online
+                        </span>
+                    @else
+                        <span style="color: #ff0101;">
+                            Offline
+                        </span>
+                    @endif
+                </span>
+                    <span class="rscfont d-block">
+                    Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
+                </span>
+                    <span class="rscfont d-block">
+                        Last Online:
+                        @if ($players->first()->login_date)
+                            {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
+                        @else
+                            Never
+                        @endif
+                    </span>
+                    <span class="rscfont d-block">
+                    Player ID: {{ $players->first()->id }}
+                </span>
+                </div>
             </div>
-        </div>
-    </div>
+        @endif
+
+        <div class="p-1"></div>
+    @endif
+
 @endsection
