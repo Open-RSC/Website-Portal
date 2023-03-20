@@ -37,7 +37,7 @@
                     {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
                         return "<a href='/staff/{{$db}}/player/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";    
                     }},
-                ],
+                ]
             });
             yadcf.init(dataTable, [
                 {
