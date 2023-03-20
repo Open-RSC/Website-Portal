@@ -547,7 +547,7 @@ class HiscoresController extends Component
                 ->with(compact('hiscores'));
         }
     }
-
+    
     /**
      * @function searchByName()
      * @param $request
@@ -562,7 +562,71 @@ class HiscoresController extends Component
 
         return redirect()->to($urlToRedirectTo);
     }
+    
+    /**
+     * @function searchByName()
+     * @param $request
+     * @return void
+     * Redirects user to a player's NPC hiscores page (to look up player by name).
+     */
+    public function searchNpcHiscoresByName(Request $request)
+    {
+        $name = $request->name;
+        $db = $request->db;
+        $urlToRedirectTo = "/npchiscores/$db/player/$name";
 
+        return redirect()->to($urlToRedirectTo);
+    }
+
+    public function npcIndex($db, $npc_id)
+    {
+        $npcIDs = [];
+        if (!in_array($npc_id, $npcIDs)) {
+            abort(404);
+        }
+        $hiscores = DB::connection($db)
+            ->table('npckills as n')
+            ->join('players as p', 'p.id', '=', 'n.playerID')
+            ->select(['b.*', 'p.username as username'])
+            ->orderBy('n.kills desc')
+            ->where([
+                ['n.npc_id', '=', $npc_id],
+                ['n.kills', '>', '0']
+            ])
+            ->paginate(21);
+        dd($hiscores);
+        return view('npchiscores', [
+            'db' => $db,
+        ])
+            ->with(compact('hiscores'));
+    }
+    
+    public function npcPlayerIndex($db, $player_name)
+    {
+        $player = DB::connection($db)->table('players')->where('username', '=', $player_name)->first();
+        if(!$player) {
+            abort(404);
+        }
+        $player_id = $player->id;
+        $npcIDs = [];
+        $hiscores = DB::connection($db)
+            ->table('npckills as n')
+            ->join('players as p', 'p.id', '=', 'n.playerID')
+            ->select(['b.*', 'p.username as username'])
+            ->orderBy('n.kills desc')
+            ->where([
+                ['n.playerID', '=', $player_id],
+                ['n.kills', '>', '0']
+            ])
+            ->whereIn('n.npcID', $npcIDs)
+            ->paginate(21);
+        dd($hiscores);
+        return view('npchiscores', [
+            'db' => $db,
+        ])
+            ->with(compact('hiscores'));
+    }
+    
     /**
      * Fetches the toplist view
      * @param $db
