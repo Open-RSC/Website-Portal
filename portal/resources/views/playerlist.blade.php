@@ -24,16 +24,17 @@
                 order: [[2, 'desc']],
                 processing: true,
                 serverSide: true,
+                responsive: true,
                 columns: [
-                    {title: "Username", data: 'username'},
-                    {title: "Former Username", data: 'former_name'},
+                    {title: "Username", data: 'username', responsivePriority: 1},
+                    {title: "Former Username", data: 'former_name', responsivePriority: 2},
                     {title: "Creation Date", data: 'creation_date'},
-                    {title: "Login Date", data: 'login_date'},
+                    {title: "Login Date", data: 'login_date', responsivePriority: 7},
                     @if(Gate::allows('admin', Auth::user())) {title: "Login IP", data: 'login_ip'}, @endif
                     @if(Gate::allows('admin', Auth::user())) {title: "Creation IP", data: 'creation_ip'}, @endif
-                    {title: "Banned", data: 'banned'},
-                    {title: "Muted", data: 'muted'},
-                    {title: "View", searchable: false, orderable: false, data: function(data, type, row){
+                    {title: "Banned", data: 'banned', responsivePriority: 3},
+                    {title: "Muted", data: 'muted', responsivePriority: 4},
+                    {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
                         return "<a href='/staff/{{$db}}/player/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";    
                     }},
                 ]
