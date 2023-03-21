@@ -577,11 +577,16 @@ class HiscoresController extends Component
 
         return redirect()->to($urlToRedirectTo);
     }
-
+    
+    public function npcHiscoresRedirect($db)
+    {
+        //Redirect to Preservation KBD.
+        return redirect()->to('/npchiscores/preservation/477');
+    }
     public function npcIndex($db, $npc_id)
     {
-        $npcIDs = [477];
-        $npcs = [477 => "King Black Dragon"];
+        $npcIDs = [291, 477];
+        $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
         if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
@@ -614,7 +619,8 @@ class HiscoresController extends Component
             abort(404);
         }
         $player_id = $player->id;
-        $npcIDs = [477];
+        $npcIDs = [291, 477];
+        $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
         $hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
@@ -624,11 +630,13 @@ class HiscoresController extends Component
                 ['npckills.playerID', '=', $player_id],
                 ['npckills.killCount', '>', '0']
             ])
-            ->whereIn('n.npcID', $npcIDs)
+            ->whereIn('npckills.npcID', $npcIDs)
             ->paginate(21);
-        dd($hiscores);
+        //dd($hiscores);
         return view('npchiscoresplayer', [
             'db' => $db,
+            'player' => $player,
+            'npcs' => $npcs
         ])
             ->with(compact('hiscores'));
     }

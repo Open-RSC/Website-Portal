@@ -12,7 +12,7 @@
                             <div style="width:24px;">
                             </div>
                             <div style="width:40px;">
-                                <ul style="padding-left: 0">
+                                <ul style="padding-left: 0; margin-bottom: 0">
                                     <li style="list-style: disc"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
                                         {{ $npcName }}
                                     </a></li>
