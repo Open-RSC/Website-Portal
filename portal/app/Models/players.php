@@ -108,15 +108,15 @@ class players extends Authenticatable
     }
     
     public function isTester() {
-        return $this->group == config('group.tester');
+        return $this->group_id == config('group.tester');
     }
     
     public function isEvent() {
-        return $this->group == config('group.event');
+        return $this->group_id == config('group.event');
     }
     
     public function isPlayerModerator() {
-        return $this->group == config('group.player_moderator');
+        return $this->group_id == config('group.player_moderator');
     }
     
     public function isUser() {
