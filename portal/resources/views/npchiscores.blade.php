@@ -41,7 +41,7 @@
                             <!--Player-->
                             <div class="text-left" style="padding-left:10px; width:130px;">
                                 <a class="c"
-                                   href="/npchiscores/{{ $db }}/player/{{ $npc_id }}}">{{ ucfirst($player->username) }}</a>
+                                   href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Kills-->
                             <div class="text-right" style="padding-right:15px; width:30px;">
