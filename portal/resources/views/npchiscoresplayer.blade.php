@@ -50,7 +50,7 @@
                                             {{ number_format($player->npcName) }}
                                         </td>
                                         <td align="right">
-                                            {{ number_format($player->npcKills) }}
+                                            {{ number_format($player->killCount) }}
                                         </td>
                                     </tr>
                                 @endforeach    

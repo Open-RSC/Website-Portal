@@ -580,23 +580,29 @@ class HiscoresController extends Component
 
     public function npcIndex($db, $npc_id)
     {
-        $npcIDs = [];
+        $npcIDs = [477];
+        $npcs = [477 => "King Black Dragon"];
         if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
         $hiscores = DB::connection($db)
-            ->table('npckills as n')
-            ->join('players as p', 'p.id', '=', 'n.playerID')
-            ->select(['b.*', 'p.username as username'])
-            ->orderBy('n.kills desc')
+            ->table('npckills')
+            ->join('players', 'players.id', '=', 'npckills.playerID')
+            ->select(['npckills.*', 'players.username as username'])
+            ->orderBy('npckills.killCount', 'desc')
             ->where([
-                ['n.npc_id', '=', $npc_id],
-                ['n.kills', '>', '0']
+                ['npckills.npcID', '=', $npc_id],
+                ['npckills.killCount', '>', '0'],
+                ['players.banned', '!=', '-1'],
+                ['players.group_id', '>=', config('group.player_moderator')],
             ])
             ->paginate(21);
-        dd($hiscores);
+        //dd($hiscores);
         return view('npchiscores', [
             'db' => $db,
+            'npcs' => $npcs,
+            'npc_name' => $npcs[$npc_id],
+            'npc_id' => $npc_id
         ])
             ->with(compact('hiscores'));
     }
@@ -608,20 +614,20 @@ class HiscoresController extends Component
             abort(404);
         }
         $player_id = $player->id;
-        $npcIDs = [];
+        $npcIDs = [477];
         $hiscores = DB::connection($db)
-            ->table('npckills as n')
-            ->join('players as p', 'p.id', '=', 'n.playerID')
-            ->select(['b.*', 'p.username as username'])
-            ->orderBy('n.kills desc')
+            ->table('npckills')
+            ->join('players', 'players.id', '=', 'npckills.playerID')
+            ->select(['npckills.*', 'players.username as username'])
+            ->orderBy('npckills.killCount', 'desc')
             ->where([
-                ['n.playerID', '=', $player_id],
-                ['n.kills', '>', '0']
+                ['npckills.playerID', '=', $player_id],
+                ['npckills.killCount', '>', '0']
             ])
             ->whereIn('n.npcID', $npcIDs)
             ->paginate(21);
         dd($hiscores);
-        return view('npchiscores', [
+        return view('npchiscoresplayer', [
             'db' => $db,
         ])
             ->with(compact('hiscores'));

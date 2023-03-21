@@ -12,9 +12,11 @@
                             <div style="width:24px;">
                             </div>
                             <div style="width:40px;">
-                                    <a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
+                                <ul style="padding-left: 0">
+                                    <li style="list-style: disc"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
                                         {{ $npcName }}
-                                    </a>
+                                    </a></li>
+                                </ul>
                             </div>
                         </div>
                     @endforeach
@@ -43,7 +45,7 @@
                             </div>
                             <!--Kills-->
                             <div class="text-right" style="padding-right:15px; width:30px;">
-                                {{ number_format($player->npcKills) }}
+                                {{ number_format($player->killCount) }}
                             </div>
                         </div>
                     @endforeach
