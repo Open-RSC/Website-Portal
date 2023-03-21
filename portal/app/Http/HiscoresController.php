@@ -621,6 +621,7 @@ class HiscoresController extends Component
         $player_id = $player->id;
         $npcIDs = [291, 477];
         $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
+        //TODO: maybe instead of whereIn npcIDs, just loop through the npcIDs and query each one individually also storing the rank of the player. Or possibly have separate queries using MySQL RANK to rank the players.
         $hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
