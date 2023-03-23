@@ -20,8 +20,9 @@ You will need:
 - In your local MySQL/MariaDB server, create an empty database named `laravel`. This allows `php artisan` commands to work later on. If there is a more correct way of getting the `laravel` database, update this readme.
 - In a terminal, `cd` into the `portal` directory.
 - Run `cp .env.example .env`. This creates your `.env` file for the `portal` app.
-- In your `portal/.env` file, change the `DB_HOST` to `127.0.0.1` and then run `php artisan config:clear` in a terminal.
+- In your `portal/.env` file, change the `DB_HOST` to `127.0.0.1`
 - Run `composer install`.
+- Run `php artisan config:clear`.
 - Run `php artisan key:generate`.
 - Run `php artisan migrate`.
 - Run `php artisan db:seed`.
