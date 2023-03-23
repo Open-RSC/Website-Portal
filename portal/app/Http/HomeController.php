@@ -265,8 +265,17 @@ class HomeController extends Controller
 
         $playerPositions = $playerPositions->toArray();
 
+        // NB: Currently assuming all map images are a fixed size of 2316x1590
+        // Additional changes to the World_Map blade are required to support differently sized maps
+        $mapImagePath = 'img/RscVet-FullWorldMap.png';
+
+        if ($db == '2001scape') {
+            $mapImagePath = 'img/RscVet-2001scape-FullWorldMap.png';
+        }
+
         return view('World_Map', [
             'playerPositions' => $playerPositions,
+            'mapImagePath' => $mapImagePath
         ]);
     }
 
