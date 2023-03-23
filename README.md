@@ -6,6 +6,7 @@ Website portal that links to the various games running the Open RSC framework
 You will need:
 - PHP 8.x
 - Composer 2+ (use latest version)
+- Node
 - phpBB3 (if you do not need to work on the Latest News module, this is optional due to a known workaround)
 
 ## Instructions
@@ -20,11 +21,14 @@ You will need:
 - In your local MySQL/MariaDB server, create an empty database named `laravel`. This allows `php artisan` commands to work later on. If there is a more correct way of getting the `laravel` database, update this readme.
 - In a terminal, `cd` into the `portal` directory.
 - Run `cp .env.example .env`. This creates your `.env` file for the `portal` app.
-- In your `portal/.env` file, change the `DB_HOST` to `127.0.0.1` and then run `php artisan config:clear` in a terminal.
+- In your `portal/.env` file, change the `DB_HOST` to `127.0.0.1`
 - Run `composer install`.
+- Run `php artisan config:clear`.
 - Run `php artisan key:generate`.
 - Run `php artisan migrate`.
 - Run `php artisan db:seed`.
+- Run `npm i`
+- Run `npm dev`
 - Finally, run `php artisan serve`. The site should now be accessible at http://127.0.0.1:8000.
 
 ## Making CSS Changes - Do's & Don't's

@@ -91,7 +91,7 @@
                 }
             </script>
 
-            <canvas style="background-image: url({{ asset('img/RscVet-FullWorldMap.png') }}" id="canvas"
+            <canvas style="background-image: url({{ asset($mapImagePath) }}" id="canvas"
                     width="<?= mapWidth ?>" height="<?= mapHeight ?>">
             </canvas>
             <script>drawPosition();</script>
