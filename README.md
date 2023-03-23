@@ -6,6 +6,7 @@ Website portal that links to the various games running the Open RSC framework
 You will need:
 - PHP 8.x
 - Composer 2+ (use latest version)
+- Node
 - phpBB3 (if you do not need to work on the Latest News module, this is optional due to a known workaround)
 
 ## Instructions
@@ -26,6 +27,8 @@ You will need:
 - Run `php artisan key:generate`.
 - Run `php artisan migrate`.
 - Run `php artisan db:seed`.
+- Run `npm i`
+- Run `npm dev`
 - Finally, run `php artisan serve`. The site should now be accessible at http://127.0.0.1:8000.
 
 ## Making CSS Changes - Do's & Don't's
