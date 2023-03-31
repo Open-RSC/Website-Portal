@@ -11,6 +11,11 @@
         <div class="mb-3"></div>
         <img src="/img/banners/hbar.gif" alt="">
     @endif
+    
+    <span id="webregistermessage" class="d block">
+    We have temporarily disabled webclient registration. Please register new player accounts using the regular PC launcher or using RSC+. We plan to enable website-based registration in the near future.
+    </span>
+    <span id="webregisterclose" class="d block col-sm-12">(X)</span>
 
     @if ($retro)
         <iframe src="https://rsc.vet/client2/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
@@ -19,7 +24,12 @@
         <iframe src="https://rsc.vet/client/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
                 height="352px" width="513px"></iframe>
     @endif
-
+    <script>
+        document.getElementById("webregisterclose").addEventListener("click", function() {
+            document.getElementById("webregistermessage").style.display = "none";
+            document.getElementById("webregisterclose").style.display = "none";
+        });
+    </script>
     @if ($members != 'members')
         <div class="d-flex">
             <div>
