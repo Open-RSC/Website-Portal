@@ -45,7 +45,7 @@
                                     <tr>
                                         <td colspan="3" align="left">
                                             {{-- TODO: fix player rank somehow... --}}
-                                            {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                            {{ $player->rank }}
                                         </td>
                                         <td align="right">
                                             {{ $npcs[$player->npcID] }}
