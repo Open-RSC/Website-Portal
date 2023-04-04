@@ -623,30 +623,20 @@ class HiscoresController extends Component
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [291, 477];
         $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
-        DB::connection($db)->statement("
-            CREATE TEMPORARY TABLE temp_table AS (
-                SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank 
-                FROM npckills 
-                WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= 8 AND banned != -1)
-            )
-        ");
-        
         $hiscores = DB::connection($db)
-                    ->table('npckills AS a')
-                    ->join('players', 'players.id', '=', 'a.playerID')
-                    ->whereIn('a.npcID', $npcIDs)
-                    ->where('a.killCount', '>', '0')
-                    ->where('a.playerID', '=', $player_id)
-                    ->orderBy('a.npcID', 'asc')
-                    ->orderBy('a.killCount', 'desc')
-                    ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
-                    ->join(DB::raw('temp_table AS b'), function ($join) {
-                        $join->on('a.npcID', '=', 'b.npcID')
-                             ->on('a.playerID', '=', 'b.playerID');
-                    })
-                    ->paginate(21);
-        
-        DB::connection($db)->statement("DROP TEMPORARY TABLE IF EXISTS temp_table");
+            ->table('npckills AS a')
+            ->join('players', 'players.id', '=', 'a.playerID')
+            ->whereIn('a.npcID', $npcIDs)
+            ->where('a.killCount', '>', '0')
+            ->where('a.playerID', '=', $player_id)
+            ->orderBy('a.npcID', 'asc')
+            ->orderBy('a.killCount', 'desc')
+            ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
+            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= 8 AND banned != -1)) AS b'), function ($join) {
+                $join->on('a.npcID', '=', 'b.npcID')
+                     ->on('a.playerID', '=', 'b.playerID');
+            })
+            ->paginate(21);
 
 
         //dd($hiscores);
