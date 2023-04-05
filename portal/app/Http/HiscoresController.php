@@ -586,8 +586,8 @@ class HiscoresController extends Component
     public function npcIndex($db, $npc_id)
     {
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [291, 477];
-        $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
+        $npcIDs = [158, 135, 184, 344, 202, 201, 291, 477];
+        $npcs = [158 => "Ice Warrior", 135 => "Ice Giant", 184 => "Greater Demon", 344 => "Fire Giant", 202 => "Blue Dragon", 201 => "Red Dragon", 291 => "Black Dragon", 477 => "King Black Dragon"];
         if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
@@ -621,8 +621,8 @@ class HiscoresController extends Component
         }
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [291, 477];
-        $npcs = [291 => "Black Dragon", 477 => "King Black Dragon"];
+        $npcIDs = [158, 135, 184, 344, 202, 201, 291, 477];
+        $npcs = [158 => "Ice Warrior", 135 => "Ice Giant", 184 => "Greater Demon", 344 => "Fire Giant", 202 => "Blue Dragon", 201 => "Red Dragon", 291 => "Black Dragon", 477 => "King Black Dragon"];
         $hiscores = DB::connection($db)
             ->table('npckills AS a')
             ->join('players', 'players.id', '=', 'a.playerID')
@@ -632,7 +632,7 @@ class HiscoresController extends Component
             ->orderBy('a.npcID', 'asc')
             ->orderBy('a.killCount', 'desc')
             ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
-            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= 8 AND banned != -1)) AS b'), function ($join) {
+            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= ' . config('group.player_moderator') . ' AND banned != -1)) AS b'), function ($join) {
                 $join->on('a.npcID', '=', 'b.npcID')
                      ->on('a.playerID', '=', 'b.playerID');
             })
