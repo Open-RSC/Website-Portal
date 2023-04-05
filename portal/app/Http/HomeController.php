@@ -265,17 +265,31 @@ class HomeController extends Controller
 
         $playerPositions = $playerPositions->toArray();
 
-        // NB: Currently assuming all map images are a fixed size of 2316x1590
-        // Additional changes to the World_Map blade are required to support differently sized maps
         $mapImagePath = 'img/RscVet-FullWorldMap.png';
+
+        // Specify the dimensions of the provided map image
+        $mapWidth = 2316;
+        $mapHeight = 1590;
+
+        // Specify player location plotting offsets
+        $xOffset = -2;
+        $yOffset = -380;
 
         if ($db == '2001scape') {
             $mapImagePath = 'img/RscVet-2001scape-FullWorldMap.png';
+            $mapWidth = 1008;
+            $mapHeight = 864;
+            $xOffset = -50;
+            $yOffset = -430;
         }
 
         return view('World_Map', [
             'playerPositions' => $playerPositions,
-            'mapImagePath' => $mapImagePath
+            'mapImagePath' => $mapImagePath,
+            'mapWidth' => $mapWidth,
+            'mapHeight' => $mapHeight,
+            'xOffset' => $xOffset,
+            'yOffset' => $yOffset
         ]);
     }
 
