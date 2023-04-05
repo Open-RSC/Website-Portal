@@ -5,12 +5,12 @@
         <h2 class="h2 text-center pt-5 pb-3 text-capitalize display-3">
             <a href="{{ route('Monster Database') }}">{{ $npcdef->name }}</a>
         </h2>
-
         <div class="row align-items-center pb-3">
             <div class="col d-inline-block text-center" style="width:150px; padding-left:30px;">
                 <img class="display-glow pb-3 align-self-center" src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png"
                      alt="{{ $npcdef->name }}"/>
                 <span class="col d-inline-block">{{ ucfirst($npcdef->description) }}</span>
+                <span class="col d-inline-block">Combat Level: {{ $npcdef->combatlvl ?? "N/A" }}</span>
             </div>
 
             <div class="col-md d-inline-block text-center">
