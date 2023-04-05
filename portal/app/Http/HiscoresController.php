@@ -585,6 +585,9 @@ class HiscoresController extends Component
     }
     public function npcIndex($db, $npc_id)
     {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [158, 135, 184, 344, 202, 201, 291, 477];
         $npcs = [158 => "Ice Warrior", 135 => "Ice Giant", 184 => "Greater Demon", 344 => "Fire Giant", 202 => "Blue Dragon", 201 => "Red Dragon", 291 => "Black Dragon", 477 => "King Black Dragon"];
@@ -615,6 +618,9 @@ class HiscoresController extends Component
     
     public function npcPlayerIndex($db, $player_name)
     {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
         $player = DB::connection($db)->table('players')->where('username', '=', $player_name)->first();
         if(!$player) {
             abort(404);

@@ -13,5 +13,6 @@ return [
     "player_exports_moderator_only" => env("PLAYER_EXPORTS_MODERATOR_ONLY", false),
     "login_enabled" => env("LOGIN_ENABLED", true),
     "login_admin_only" => env("LOGIN_ADMIN_ONLY", false),
-    "board_enabled" => env("BOARD_ENABLED", true)
+    "board_enabled" => env("BOARD_ENABLED", true),
+    "npc_hiscores_enabled" => env("NPC_HISCORES_ENABLED", false)
 ];
