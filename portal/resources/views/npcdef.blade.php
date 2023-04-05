@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="e bg-black p-2" style="outline: black; width: 480px;">
+        <a class="c" href="/npcs">
+            Back to NPCs
+        </a>
         <h2 class="h2 text-center pt-5 pb-3 text-capitalize display-3">
             <a href="{{ route('Monster Database') }}">{{ $npcdef->name }}</a>
         </h2>
