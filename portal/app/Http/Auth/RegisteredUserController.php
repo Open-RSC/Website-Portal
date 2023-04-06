@@ -33,12 +33,12 @@ class RegisteredUserController
             if (DB::connection($request->input('db'))->table('players')->where('email', '=', $request->input('email'))->exists()) {
                 throw ValidationException::withMessages([
                 'email' => [trans('The email address is already in use.')],
-                ], $validator);
+                ]);
             }
             if (DB::connection($request->input('db'))->table('players')->where('username', '=', $trimmed_username)->exists()) {
                 throw ValidationException::withMessages([
                 'email' => [trans('The username is already in use.')],
-                ], $validator);
+                ]);
             }
         event(new Registered($user = $creator->create($request->all())));
         return app(RegisterResponse::class);
