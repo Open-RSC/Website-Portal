@@ -40,6 +40,10 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
         
+        Fortify::registerView(function () {
+            return view('auth.register');
+        });
+        
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
@@ -49,6 +53,10 @@ class FortifyServiceProvider extends ServiceProvider
             $username = (string) $request->username;
 
             return Limit::perMinute(5)->by($username.$request->ip());
+        });
+        
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinutes(10, 5)->by($request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

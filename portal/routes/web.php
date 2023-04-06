@@ -104,3 +104,5 @@ Route::get('staff/{db}/staff_logs/data', 'StaffController@staffLogsData')->middl
 /*Route::any('login', 'Livewire\Login')->name('Secure_Login');
 Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
 Route::post('logout', 'Livewire\Login@logout')->name('Logout');*/
+
+Route::post('/register', 'Auth\RegisteredUserController@store');
