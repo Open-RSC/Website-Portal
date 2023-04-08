@@ -31,14 +31,14 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): bool | RedirectResponse |  null
     {
         $this->validateCreateUserInput($input);
-        $password = $input['password'];
+        $password = add_characters($input['password'], 20);
         $player = new players();
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
         $player = $player->setDbConnection($input['db'])->create([
             'username' => $trimmed_username,
             'group_id' => 10,
             'email' => $input['email'],
-            'pass' => Hash::make($password),
+            'pass' => Hash::make(trim($password)),
             'creation_date' => time(),
             'creation_ip' => get_client_ip_address()
         ]);
