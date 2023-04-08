@@ -8,6 +8,7 @@ use App\Traits\CreateUserValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -16,6 +17,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use function App\Helpers\add_characters;
+use function App\Helpers\get_client_ip_address;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -34,8 +36,11 @@ class CreateNewUser implements CreatesNewUsers
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
         $playerCreated = $player->setDbConnection($input['db'])->create([
             'username' => $trimmed_username,
+            'group_id' => 10,
             'email' => $input['email'],
-            'password' => Hash::make($password)
+            'pass' => Hash::make($password),
+            'creation_date' => Date::now(),
+            'creation_ip' => get_client_ip_address()
         ])->save();
         DB::connection($input['db'])->table('maxstats')->insert(['playerID' => $player->id]);
         DB::connection($input['db'])->table('curstats')->insert(['playerID' => $player->id]);
