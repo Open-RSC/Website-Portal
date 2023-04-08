@@ -31,7 +31,7 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input): bool | RedirectResponse |  null
     {
         $this->validateCreateUserInput($input);
-        $password = add_characters($input['password'], 20);
+        $password = $input['password'];
         $player = new players();
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
         $player = $player->setDbConnection($input['db'])->create([
