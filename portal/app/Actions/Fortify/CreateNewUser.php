@@ -117,7 +117,9 @@ class CreateNewUser implements CreatesNewUsers
             ->where('playerID', $player->id)
             ->update([$key => $value]);
         }
-        
+        if ($playerCreated) {
+            session()->flash('success', 'Your account has been created!');
+        }
         return $playerCreated;
     }
 
