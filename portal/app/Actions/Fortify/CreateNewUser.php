@@ -40,7 +40,8 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'pass' => Hash::make(trim($password)),
             'creation_date' => time(),
-            'creation_ip' => get_client_ip_address()
+            'creation_ip' => get_client_ip_address(),
+            'quest_points' => 0
         ]);
         $playerCreated = $player->save();
         DB::connection($input['db'])->table('maxstats')->insert(['playerID' => $player->id]);
