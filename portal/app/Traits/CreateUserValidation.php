@@ -2,11 +2,13 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use function App\Helpers\get_client_ip_address;
 
 trait CreateUserValidation
 {
@@ -37,5 +39,17 @@ trait CreateUserValidation
                 'email' => [trans('The username is already in use.')],
             ]);
         }
+        
+        $recentAccounts = DB::connection($input['db'])->table('players')
+        ->where('creation_ip', '=', get_client_ip_address())
+        ->where('creation_date', '>=', time() - 86400)
+        ->count();
+        
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
+            throw ValidationException::withMessages([
+                'email' => [trans('You have created too many accounts in the past 24 hours.')],
+            ]);
+        }
+        
     }
 }

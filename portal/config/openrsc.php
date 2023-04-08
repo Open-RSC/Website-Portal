@@ -13,5 +13,6 @@ return [
     "player_exports_moderator_only" => env("PLAYER_EXPORTS_MODERATOR_ONLY", false),
     "login_enabled" => env("LOGIN_ENABLED", true),
     "login_admin_only" => env("LOGIN_ADMIN_ONLY", false),
-    "board_enabled" => env("BOARD_ENABLED", true)
+    "board_enabled" => env("BOARD_ENABLED", true),
+    "max_new_accounts_per_24_hours" => env("MAX_NEW_ACCOUNTS_PER_24_HOURS", 3)
 ];
