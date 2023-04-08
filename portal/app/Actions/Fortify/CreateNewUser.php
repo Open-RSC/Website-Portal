@@ -34,14 +34,15 @@ class CreateNewUser implements CreatesNewUsers
         $password = add_characters($input['password'], 20);
         $player = new players();
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
-        $playerCreated = $player->setDbConnection($input['db'])->create([
+        $player = $player->setDbConnection($input['db'])->create([
             'username' => $trimmed_username,
             'group_id' => 10,
             'email' => $input['email'],
             'pass' => Hash::make($password),
-            'creation_date' => Date::now(),
+            'creation_date' => time(),
             'creation_ip' => get_client_ip_address()
-        ])->save();
+        ]);
+        $playerCreated = $player->save();
         DB::connection($input['db'])->table('maxstats')->insert(['playerID' => $player->id]);
         DB::connection($input['db'])->table('curstats')->insert(['playerID' => $player->id]);
         DB::connection($input['db'])->table('experience')->insert(['playerID' => $player->id]);
@@ -63,7 +64,7 @@ class CreateNewUser implements CreatesNewUsers
             $minLevels["evilmagic"] = 1;
             $minLevels["cooking"] = 1;
             $minLevels["tailoring"] = 1;
-            $minLevels["woodcutting"] = 1;
+            $minLevels["woodcut"] = 1;
             $minLevels["firemaking"] = 1;
             $minLevels["crafting"] = 1;
             $minLevels["smithing"] = 1;
@@ -78,7 +79,7 @@ class CreateNewUser implements CreatesNewUsers
             $minLevels["prayer"] = 1;
             $minLevels["magic"] = 1;
             $minLevels["cooking"] = 1;
-            $minLevels["woodcutting"] = 1;
+            $minLevels["woodcut"] = 1;
             $minLevels["fletching"] = 1;
             $minLevels["fishing"] = 1;
             $minLevels["firemaking"] = 1;
