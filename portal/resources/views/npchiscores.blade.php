@@ -30,7 +30,7 @@
                     <div class="d-flex">
                         <div class="text-right" style="width:40px;"><b>Rank</b></div>
                         <div class="text-left" style="padding-left:10px; width:130px;"><b>Player Name</b></div>
-                        <div class="text-right" style="width:30px;"><b>Kills</b></div>
+                        <div class="text-right" style="width:70px;"><b>Kills</b></div>
                     </div>
                     @foreach ($hiscores as $key=>$player)
                         <div class="d-flex">
@@ -44,7 +44,7 @@
                                    href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Kills-->
-                            <div class="text-right" style="padding-right:15px; width:30px;">
+                            <div class="text-right" style="padding-right:15px; width:100px;">
                                 {{ number_format($player->killCount) }}
                             </div>
                         </div>
