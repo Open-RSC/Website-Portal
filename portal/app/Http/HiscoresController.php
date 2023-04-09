@@ -580,8 +580,8 @@ class HiscoresController extends Component
     
     public function npcHiscoresRedirect($db = "preservation")
     {
-        //Redirect to Preservation KBD.
-        return redirect()->to('/npchiscores/preservation/477');
+        //Redirect to KBD.
+        return redirect()->to("/npchiscores/$db/477");
     }
     public function npcIndex($db, $npc_id)
     {
