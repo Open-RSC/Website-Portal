@@ -48,7 +48,7 @@
                                             {{ $player->rank }}
                                         </td>
                                         <td align="right">
-                                            {{ $npcs[$player->npcID] }}
+                                            <a class="c" href="/npchiscores/{{$db}}/{{$player->npcID}}">{{ $npcs[$player->npcID] }}</a>
                                         </td>
                                         <td align="right">
                                             {{ number_format($player->killCount) }}
