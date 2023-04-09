@@ -2,18 +2,18 @@
 @section('content')
     <div class="hiscores-page">
         <div class="hiscores-list-container">
-            <div class="hiscores-skill-list">
+            <div class="hiscores-skill-list" style="width:200px">
                 <div class="hiscores-list-label">
                     <b>Select hiscore table</b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
                     @foreach ($npcs as $npcId => $npcName)
                         <div class="d-flex" style="padding-left:20px; padding-bottom:2px;">
-                            <div style="width:24px;">
+                            <div style="width:10px;">
                             </div>
                             <div style="width:40px;">
                                 <ul style="padding-left: 0; margin-bottom: 0">
-                                    <li style="list-style: disc"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
+                                    <li style="list-style: disc; width: 120px;"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
                                         {{ $npcName }}
                                     </a></li>
                                 </ul>
