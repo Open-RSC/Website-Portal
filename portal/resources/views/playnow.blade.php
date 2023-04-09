@@ -12,4 +12,7 @@
         You can also play on <span class="play-now-other-client-name">{{ $otherOSName }}</span> with the 
         <a href="{{ $otherClientUrl }}" class="play-now-other-client-link">{{ $otherClientName }}</a>.
     </p>
+    <span class="d-block text-center">
+        <p>Need an account? Click <a href="/register">here</a> to register an account</p>
+    </span>
 @endsection

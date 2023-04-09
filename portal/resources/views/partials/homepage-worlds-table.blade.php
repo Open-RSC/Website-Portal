@@ -26,7 +26,11 @@
                                     Check <a href="/faq" class="homepage-world-differences-link">here</a> 
                                     for world differences
                                 </p>
-
+                                
+                                <span class="d-block text-center mb-2">
+                                    <b>Click <a href="/register">here</a> to register an account</b>
+                                </span>
+                                
                                 <!-- World online counts -->
                                 <div class="homepage-online-worlds-flex-container">
                                     <!-- Regular worlds -->

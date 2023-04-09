@@ -6,6 +6,10 @@
     <span class="orsc-download-links d-block">
         Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
     </span>
+    
+    <span class="d-block text-center mb-2">
+        <b>Click <a href="/register">here</a> to register an account</b>
+    </span>
 
     <table bgcolor=black cellpadding=4 border=0 class="playable-worlds-table">
         <tr>
