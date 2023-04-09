@@ -547,7 +547,11 @@ class HiscoresController extends Component
                 ->with(compact('hiscores'));
         }
     }
-    
+    public function playerHiscoresRedirect($db = "preservation")
+    {
+        //Redirect to player hiscores.
+        return redirect()->to("/hiscores/$db/");
+    }
     /**
      * @function searchByName()
      * @param $request

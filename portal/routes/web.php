@@ -61,10 +61,11 @@ Route::any('npcdef/{id}', 'NpcController@show')->name('Monster Details');
 Route::get('onlinelookup', 'StatsController@onlinelookup');
 
 // Hiscores
-Route::any('npchiscores/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores');
-Route::any('npchiscores/{db}/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores');
+Route::any('npchiscores/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores Redirect');
+Route::any('npchiscores/{db}/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores DB Redirect');
 Route::any('npchiscores/{db}/{npc_id}', 'HiscoresController@npcIndex')->name('RuneScape NPC Hiscores');
 Route::any('npchiscores/{db}/player/{player_name}', 'HiscoresController@npcPlayerIndex')->name('RuneScape Player NPC Hiscores');
+Route::any('hiscores/', 'HiscoresController@playerHiscoresRedirect')->name('RuneScape Hiscores Redirect');
 Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
 Route::any('hiscores/{db}/skill_total', 'HiscoresController@index')->name('RuneScape Hiscores '); // purposely left with a space to deconflict
 Route::any('hiscores/{db}/{subpage}', 'HiscoresController@show');
