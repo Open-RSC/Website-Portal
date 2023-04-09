@@ -18,7 +18,7 @@
                 <tr>
                     <td class="e">
                         <div class="text-center">
-                            RuneScape NPC Hiscores for
+                            {{ ucwords($db) ?? "preservation" }} NPC Hiscores for
                             @if ($player->group_id < '10')
                                 <span class="pl-1"></span>
                                 <img class="inline mb-1" src="{{ asset('img') }}/{{ $player->group_id }}.svg"
