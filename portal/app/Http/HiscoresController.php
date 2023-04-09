@@ -589,8 +589,8 @@ class HiscoresController extends Component
             abort(404);
         }
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 158, 584, 555, 61, 199, 270, 86, 76];
-        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian"];
+        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 787, 158, 584, 555, 61, 199, 270, 86, 76];
+        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 787 => "Shadow Warrior", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian"];
         if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
@@ -627,8 +627,8 @@ class HiscoresController extends Component
         }
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 158, 584, 555, 61, 199, 270, 86, 76];
-        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian"];
+        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 787, 158, 584, 555, 61, 199, 270, 86, 76];
+        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 787 => "Shadow Warrior", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian"];
         $hiscores = DB::connection($db)
             ->table('npckills AS a')
             ->join('players', 'players.id', '=', 'a.playerID')
