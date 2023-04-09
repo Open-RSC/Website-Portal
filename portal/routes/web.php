@@ -62,6 +62,7 @@ Route::get('onlinelookup', 'StatsController@onlinelookup');
 
 // Hiscores
 Route::any('npchiscores/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores');
+Route::any('npchiscores/{db}/', 'HiscoresController@npcHiscoresRedirect')->name('RuneScape NPC Hiscores');
 Route::any('npchiscores/{db}/{npc_id}', 'HiscoresController@npcIndex')->name('RuneScape NPC Hiscores');
 Route::any('npchiscores/{db}/player/{player_name}', 'HiscoresController@npcPlayerIndex')->name('RuneScape Player NPC Hiscores');
 Route::any('hiscores/{db}', 'HiscoresController@index')->name('RuneScape Hiscores');
