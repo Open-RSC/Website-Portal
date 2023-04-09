@@ -34,7 +34,7 @@
                                     <td colspan="3" align="left">
                                         <b>Rank</b>
                                     </td>
-                                    <td width="80" align="right">
+                                    <td width="130" align="right">
                                         <b>NPC Name</b>
                                     </td>
                                     <td width="80" align="right">
