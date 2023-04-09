@@ -616,7 +616,6 @@ class HiscoresController extends Component
                 ['players.group_id', '>=', config('group.player_moderator')],
             ])
             ->paginate(21);
-        //dd($hiscores);
         return view('npchiscores', [
             'db' => $db,
             'npcs' => $npcs,
@@ -652,9 +651,6 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->paginate(21);
-
-
-        //dd($hiscores);
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
