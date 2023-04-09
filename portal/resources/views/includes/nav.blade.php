@@ -28,13 +28,21 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content nav-hiscores-dropdown">
+            <span class="p-2 dropdown-content nav-hiscores-dropdown" @if (config('openrsc.npc_hiscores_enabled')) style="width: 160px" @endif>
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
                 <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
                 <a class="c text-left" href="/hiscores/2001scape">2001Scape</a>
-                <!--<a class="c text-left" href="/hiscores/openpk">Open PK</a>-->
+                <a class="c text-left" href="/hiscores/openpk">Open PK</a>
                 <a class="c text-left" href="/hiscores/uranium">RSC Uranium</a>
                 <a class="c text-left" href="/hiscores/coleslaw">RSC Coleslaw</a>
+                @if (config('openrsc.npc_hiscores_enabled'))
+                    <a class="c text-left" style="border-top: 1px dotted #90c040;" href="/npchiscores/preservation">RSC Preservation NPCs</a>
+                    <a class="c text-left" href="/npchiscores/cabbage">RSC Cabbage NPCs</a>
+                    <!--<a class="c text-left" href="/npchiscores/2001scape">2001Scape NPCs</a>-->
+                    <a class="c text-left" href="/npchiscores/openpk">Open PK NPCs</a>
+                    <a class="c text-left" href="/npchiscores/uranium">RSC Uranium NPCs</a>
+                    <a class="c text-left" href="/npchiscores/coleslaw">RSC Coleslaw NPCs</a>
+                @endif    
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">

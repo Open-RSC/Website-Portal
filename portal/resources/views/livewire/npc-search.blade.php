@@ -1,6 +1,6 @@
 <div class="col">
     <div class="d-flex justify-content-left pb-1">
-        <input class="e pl-1 text-white click" onfocus="this.value=''" wire:model="searchTerm" type="text"
+        <input class="e pl-1 text-white click" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
                style="width:150px; background:black;">
     </div>
 

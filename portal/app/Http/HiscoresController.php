@@ -547,7 +547,11 @@ class HiscoresController extends Component
                 ->with(compact('hiscores'));
         }
     }
-
+    public function playerHiscoresRedirect($db = "preservation")
+    {
+        //Redirect to player hiscores.
+        return redirect()->to("/hiscores/$db/");
+    }
     /**
      * @function searchByName()
      * @param $request
@@ -562,7 +566,99 @@ class HiscoresController extends Component
 
         return redirect()->to($urlToRedirectTo);
     }
+    
+    /**
+     * @function searchByName()
+     * @param $request
+     * @return void
+     * Redirects user to a player's NPC hiscores page (to look up player by name).
+     */
+    public function searchNpcHiscoresByName(Request $request)
+    {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
+        $name = $request->name;
+        $db = $request->db;
+        $urlToRedirectTo = "/npchiscores/$db/player/$name";
 
+        return redirect()->to($urlToRedirectTo);
+    }
+    
+    public function npcHiscoresRedirect($db = "preservation")
+    {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
+        //Redirect to KBD.
+        return redirect()->to("/npchiscores/$db/477");
+    }
+    public function npcIndex($db, $npc_id)
+    {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
+        //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
+        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 787, 158, 584, 555, 61, 407, 199, 270, 86, 76, 409];
+        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 787 => "Shadow Warrior", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 407 => "Khazard Troop", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian", 409 => "Gnome Troop"];
+        if (!in_array($npc_id, $npcIDs)) {
+            abort(404);
+        }
+        $hiscores = DB::connection($db)
+            ->table('npckills')
+            ->join('players', 'players.id', '=', 'npckills.playerID')
+            ->select(['npckills.*', 'players.username as username'])
+            ->orderBy('npckills.killCount', 'desc')
+            ->where([
+                ['npckills.npcID', '=', $npc_id],
+                ['npckills.killCount', '>', '0'],
+                ['players.banned', '!=', '-1'],
+                ['players.group_id', '>=', config('group.player_moderator')],
+            ])
+            ->paginate(21);
+        return view('npchiscores', [
+            'db' => $db,
+            'npcs' => $npcs,
+            'npc_name' => $npcs[$npc_id],
+            'npc_id' => $npc_id
+        ])
+            ->with(compact('hiscores'));
+    }
+    
+    public function npcPlayerIndex($db, $player_name)
+    {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
+        $player = DB::connection($db)->table('players')->where('username', '=', $player_name)->first();
+        if(!$player) {
+            abort(404);
+        }
+        $player_id = $player->id;
+        //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
+        $npcIDs = [477, 291, 201, 202, 344, 184, 135, 787, 158, 584, 555, 61, 407, 199, 270, 86, 76, 409];
+        $npcs = [477 => "King Black Dragon", 291 => "Black Dragon", 201 => "Red Dragon", 202 => "Blue Dragon", 344 => "Fire Giant", 184 => "Greater Demon", 135 => "Ice Giant", 787 => "Shadow Warrior", 158 => "Ice Warrior", 584 => "Earth Warrior", 555 => "Chaos Druid Warrior", 61 => "Giant", 407 => "Khazard Troop", 199 => "Dark Warrior", 270 => "Chaos Druid", 86 => "Warrior", 76 => "Barbarian", 409 => "Gnome Troop"];
+        $hiscores = DB::connection($db)
+            ->table('npckills AS a')
+            ->join('players', 'players.id', '=', 'a.playerID')
+            ->whereIn('a.npcID', $npcIDs)
+            ->where('a.killCount', '>', '0')
+            ->where('a.playerID', '=', $player_id)
+            ->orderByRaw(DB::raw("FIELD(a.npcID, " . implode(",", $npcIDs) . ")"))
+            ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
+            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= ' . config('group.player_moderator') . ' AND banned != -1)) AS b'), function ($join) {
+                $join->on('a.npcID', '=', 'b.npcID')
+                     ->on('a.playerID', '=', 'b.playerID');
+            })
+            ->paginate(21);
+        return view('npchiscoresplayer', [
+            'db' => $db,
+            'player' => $player,
+            'npcs' => $npcs
+        ])
+            ->with(compact('hiscores'));
+    }
+    
     /**
      * Fetches the toplist view
      * @param $db

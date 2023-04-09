@@ -212,6 +212,12 @@
                                             <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">
                                                 All Hiscores
                                             </a>
+                                            @if(str_contains(url()->current(), '/npchiscores/') && !str_contains(url()->current(), '/hiscores/'))
+                                                 -
+                                            <a class="c" href="/npchiscores/{{ $db ?? 'preservation' }}/">
+                                                NPC Hiscores
+                                            </a>
+                                            @endif
                                         @else
                                             <a class="c" href="/">Main menu</a>
                                         @endif

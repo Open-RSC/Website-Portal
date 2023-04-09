@@ -11,7 +11,7 @@ class NpcSearch extends Component
 {
     use WithPagination;
 
-    public string $searchTerm = 'Type a name';
+    public string $searchTerm = '';
     public int $currentPage = 1;
 
     public function render()
