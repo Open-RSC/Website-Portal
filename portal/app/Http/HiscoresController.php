@@ -575,6 +575,9 @@ class HiscoresController extends Component
      */
     public function searchNpcHiscoresByName(Request $request)
     {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
         $name = $request->name;
         $db = $request->db;
         $urlToRedirectTo = "/npchiscores/$db/player/$name";
@@ -584,6 +587,9 @@ class HiscoresController extends Component
     
     public function npcHiscoresRedirect($db = "preservation")
     {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
         //Redirect to KBD.
         return redirect()->to("/npchiscores/$db/477");
     }
