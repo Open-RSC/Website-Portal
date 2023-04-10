@@ -41,6 +41,9 @@ class FortifyServiceProvider extends ServiceProvider
         });
         
         Fortify::registerView(function () {
+            if (!config("openrsc.web_registration_enabled")) {
+                abort(404);
+            }
             return view('auth.register');
         });
         
