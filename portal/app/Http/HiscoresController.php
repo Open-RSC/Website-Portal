@@ -650,7 +650,7 @@ class HiscoresController extends Component
                 $join->on('a.npcID', '=', 'b.npcID')
                      ->on('a.playerID', '=', 'b.playerID');
             })
-            ->paginate(21);
+            ->get();
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
