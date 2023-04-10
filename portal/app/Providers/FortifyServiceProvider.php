@@ -37,6 +37,9 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(function () {
+            if (!config("openrsc.login_enabled")) {
+                abort(404);
+            }
             return view('auth.login');
         });
         
