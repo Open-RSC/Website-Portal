@@ -36,7 +36,7 @@
         @endforeach
         {{ $npcResults->onEachSide(1)->links('livewire::tailwind') }}
     </div>
-    <div class="e bg-black p-2 mt-4" style="width: 500px; height: 100px; overflow: auto">
+    <div class="e bg-black p-2 mt-4" style="width: 500px; height: 300px; overflow: auto">
         0: Unicorn<br>
         1: Bob<br>
         2: Sheep<br>

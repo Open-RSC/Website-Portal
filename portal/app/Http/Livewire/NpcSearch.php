@@ -17,6 +17,10 @@ class NpcSearch extends Component
 
     public function render()
     {
+        //We don't have to load all NPCs yet.
+        if ($this->searchTerm === "") {
+            $this->searchTerm = 'Type a name'; 
+        }
         $searchTerm = '%' . $this->searchTerm . '%';
         return view('livewire.npc-search', [
             'npcResults' => npcdef::where('name', 'like', $searchTerm)->orderBy('combatlvl', 'asc')->paginate(6)
