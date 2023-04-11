@@ -61,10 +61,11 @@
             </table>
         </div>
 
-        <div class="p-2"><a class="c" href="/npchiscores/{{$db}}/477">
-                                                Back to NPC hiscores
-                                            </a></div>
-
+        <div class="p-2">
+            <a class="c" href="/npchiscores/{{$db}}/{{ $db === "2001scape" ? 137 : 477 }}">
+                Back to NPC hiscores
+            </a>
+        </div>
         <div class="p-1"></div>
     @endif
 
