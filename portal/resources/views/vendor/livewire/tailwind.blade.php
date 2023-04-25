@@ -98,6 +98,6 @@
                     </span>
                 </div>
             </div>
-        </nav>
+        </div>
     @endif
 </div>
