@@ -28,7 +28,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input): bool | RedirectResponse |  null
+    public function create(array $input): bool | RedirectResponse | null
     {
         $this->validateCreateUserInput($input);
         $password = add_characters($input['password'], 20);
