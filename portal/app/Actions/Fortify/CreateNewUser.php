@@ -118,7 +118,7 @@ class CreateNewUser implements CreatesNewUsers
             ->update([$key => $value]);
         }
         if ($playerCreated) {
-            session()->flash('success', 'Your account has been created!');
+            session()->flash('success', "Your account '$trimmed_username' has been created!");
         }
         return $playerCreated;
     }
