@@ -52,6 +52,11 @@
                             <label>{{ __('Password') }}</label>
                             <input class="form-control mb-1" type="password" name="password" required autocomplete="current-password" />
                         </div>
+                        
+                        <div>
+                            <label>{{ __('Confirm Password') }}</label>
+                            <input class="form-control mb-1" type="password" name="password_confirmation" required autocomplete="new-password" />
+                        </div>
                 
                         <div>
                             <!-- <label>{-- __('Remember me') --}</label> -->
