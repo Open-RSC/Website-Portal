@@ -65,7 +65,7 @@ class CreateNewUser implements CreatesNewUsers
             $minLevels["evilmagic"] = 1;
             $minLevels["cooking"] = 1;
             $minLevels["tailoring"] = 1;
-            $minLevels["woodcut"] = 1;
+            $minLevels["woodcutting"] = 1;
             $minLevels["firemaking"] = 1;
             $minLevels["crafting"] = 1;
             $minLevels["smithing"] = 1;
