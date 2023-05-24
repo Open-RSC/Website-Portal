@@ -535,7 +535,7 @@ class PlayerController extends Controller
             ->first();
         
         if ($user === null) {
-            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+            return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
         }
         if (player_is_online($db, $trimmed_username)) {
             return redirect(route('PlayerExportView'))->withErrors("You must be logged out to create a player export");
@@ -549,10 +549,10 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+                return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
             }
         } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
+            return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
         }
         $data = "";
   
