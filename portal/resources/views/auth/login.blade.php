@@ -49,6 +49,10 @@
                                {{ __('Login') }}
                             </button>
                         </div>
+                        
+                        <div class="d-block text-center mt-3">
+                            <p>Need an account? Click <a href="/register">here</a> to register an account.</p>
+                        </div>
                     </form>
             </div>
         </div>
