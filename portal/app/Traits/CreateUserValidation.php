@@ -29,7 +29,7 @@ trait CreateUserValidation
                 'max:255',
             ],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
-            'password' => 'regex:/^([a-zA-Z0-9_])+$/i', 'required', 'min:4', 'max:20', 'confirmed', //Here we enforce regex for passwords, since we don't want users to create passwords with disallowed characters. However, for existing accounts, they may have already been created with disallowed characters, so we only regex passwords on create and not on login.
+            'password' => 'regex:/^([a-zA-Z0-9_-~])+$/i', 'required', 'min:4', 'max:20', 'confirmed', //Here we enforce regex for passwords, since we don't want users to create passwords with disallowed characters. However, for existing accounts, they may have already been created with disallowed characters, so we only regex passwords on create and not on login.
         ])->validate();
         
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
