@@ -91,6 +91,7 @@ class players extends Authenticatable
     public function setDbConnection(string $connection)
     {
         $this->connection = $connection;
+        return $this;
     }
     
     

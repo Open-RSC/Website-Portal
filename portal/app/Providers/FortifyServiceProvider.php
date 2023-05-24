@@ -37,7 +37,17 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(function () {
+            if (!config("openrsc.login_enabled")) {
+                abort(404);
+            }
             return view('auth.login');
+        });
+        
+        Fortify::registerView(function () {
+            if (!config("openrsc.web_registration_enabled")) {
+                abort(404);
+            }
+            return view('auth.register');
         });
         
         Fortify::createUsersUsing(CreateNewUser::class);
@@ -49,6 +59,10 @@ class FortifyServiceProvider extends ServiceProvider
             $username = (string) $request->username;
 
             return Limit::perMinute(5)->by($username.$request->ip());
+        });
+        
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinutes(10, 5)->by($request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

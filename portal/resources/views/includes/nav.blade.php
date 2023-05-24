@@ -4,7 +4,13 @@
             <a class="c" href="/">Home</a>
         </span>
         <span class="flex-auto p-2 dropdown">
-            <a class="c" href="/playnow">Play Now</a>
+            <a class="c" href="/playnow">Play Now <i class="fas fa-caret-down"></i></a>
+            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+                <a class="c text-left" href="/playnow"><i class="fa fa-gamepad"></i> Play Now </a>
+                <a class="c text-left" href="/register">
+                    <i class="fa fa-pen"></i> Register
+                </a>
+            </span>
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
