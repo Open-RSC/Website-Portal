@@ -515,9 +515,9 @@ class PlayerController extends Controller
         }
         try {
             $validated = $this->validate($request, [
-                'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+                'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                 'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
-                'password' => 'required|min:4|max:20',
+                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
             ]);
         } catch (ValidationException $e) {
             return redirect(route('PlayerExportView'))->withErrors("Validation failed");
@@ -555,7 +555,6 @@ class PlayerController extends Controller
             return redirect(route('PlayerExportView'))->withErrors("invalid credentials");
         }
         $data = "";
-  
         $playerExportService = new PlayerExportService($trimmed_username, $db);
         $data = $playerExportService->execute();
         
@@ -580,9 +579,75 @@ class PlayerController extends Controller
         ]);
     }
     
+    public function exportSubmitApi(Request $request)
+    {
+        //Only enable API when public use is allowed and when the API itself is enabled.
+        if (!config('openrsc.player_exports_enabled') || !config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+            abort(404);
+        }
+        
+        try {
+            $validated = $this->validate($request, [
+                'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+                'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
+                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $e->validator->errors(),
+            ], 422);
+        }
+
+        $db = $request->input('db');
+        $username = $request->input('username');
+        $password = add_characters($request->input('password'), 20);
+        $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
+        
+        $user = DB::connection($db)
+            ->table('players')
+            ->select('*')
+            ->where('username', $trimmed_username)
+            ->first();
+        
+        if ($user === null) {
+            return Response::json("Invalid credentials", 401);
+        }
+        if (player_is_online($db, $trimmed_username)) {
+            return Response::json("You must be logged out to create a player export", 401);
+        }
+        //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
+        if ($user->salt) {
+            $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
+        } else {
+            $trimmed_pass = trim($password);
+        }
+        //If we're still using SHA512 for the password, do a simple comparison.
+        if ($this->passwordNeedsRehash($user->pass)) {
+            if ($trimmed_pass !== $user->pass) {
+                return Response::json("Invalid credentials", 401);
+            }
+        } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+            return Response::json("Invalid credentials", 401);
+        }
+        $data = "";
+        $playerExportService = new PlayerExportService($trimmed_username, $db);
+        $data = $playerExportService->execute();
+
+        if ($data) {
+            $success = "Player export generated successfully.";
+            try {
+                return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
+            } catch (\Exception $e) {
+                \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
+                return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
+            }
+        }
+        return Response::json("Could not generate player export", 401);
+    }
+    
     public function passwordNeedsRehash($passwordHashed) {
 		return !str_starts_with($passwordHashed, "$2y$10$");
 	}
-    
     
 }
