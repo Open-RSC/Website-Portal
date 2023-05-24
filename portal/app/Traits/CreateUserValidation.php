@@ -29,7 +29,7 @@ trait CreateUserValidation
                 'max:255',
             ],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
-            'password' => 'regex:/^([a-zA-Z0-9_-~])+$/i', 'required', 'min:4', 'max:20', 'confirmed', 
+            'password' => ['regex:/^([a-zA-Z0-9_-~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'], 
         ])->validate();
         
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
