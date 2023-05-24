@@ -34,7 +34,7 @@ trait CreateUserValidation
         
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
         
-        if (DB::connection($input['db'])->table('players')->where('username', '=', $trimmed_username)->exists()) {
+        if (DB::connection($input['db'])->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
             throw ValidationException::withMessages([
                 'email' => [trans('The username is already in use.')],
             ]);
