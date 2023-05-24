@@ -13,7 +13,7 @@
     @endif
     
     <span id="webregistermessage" class="d block">
-    We have temporarily disabled webclient registration. Please register new player accounts using the regular PC launcher or using RSC+. We plan to enable website-based registration in the near future.
+    <a href="/register">We have temporarily disabled webclient registration. Please register new player accounts using the website here.</a>
     </span>
     <span id="webregisterclose" class="d block col-sm-12">(X)</span>
 
