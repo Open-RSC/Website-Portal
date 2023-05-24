@@ -36,7 +36,5 @@
         <span class="d-block">6.2 Other RSC-based private game servers or websites is forbidden (closed source and for-profit private servers)</span>
         <span class="d-block">6.3 Any form of unwanted DM/PM advertising is forbidden</span>
 
-        <span class="text-danger font-weight-bold d-block pt-4">*️⃣ Members who violate any part of rule 1 will be muted, and if muted 3 times, removed from the discord.</span>
-
     </div>
 @endsection
