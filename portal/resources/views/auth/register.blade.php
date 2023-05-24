@@ -66,7 +66,7 @@
                 
                         <div>
                             <button class="btn btn-success mt-1" type="submit">
-                               {{ __('Login') }}
+                               {{ __('Register') }}
                             </button>
                         </div>
                     </form>
