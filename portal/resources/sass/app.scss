@@ -1212,3 +1212,10 @@ li > a:only-child:after {
 .dataTables_info {
   margin-top: 50px;
 }
+
+.dropdown-arrow {
+  height: 39px !important;
+  appearance: auto !important;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+}

@@ -36,7 +36,7 @@
                         <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" />
                         <div>
                             <label>{{ __('Game') }}</label>
-                            <select class="form-control mb-1" name="db" id="db" required>
+                            <select class="form-control mb-1 dropdown-arrow" name="db" id="db" required>
                                 <option value="preservation">RSC Preservation</option>
                                 <option value="cabbage">RSC Cabbage</option>
                                 <option value="uranium">RSC Uranium</option>
