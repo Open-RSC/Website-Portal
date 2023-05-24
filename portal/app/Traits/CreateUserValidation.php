@@ -21,7 +21,7 @@ trait CreateUserValidation
     protected function validateCreateUserInput(array $input)
     {
         Validator::make($input, [
-            'username' => ['bail', 'regex:/^([-a-z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
             'email' => [
                 'required',
                 'string',
