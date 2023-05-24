@@ -36,7 +36,7 @@ trait CreateUserValidation
         
         if (DB::connection($input['db'])->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
             throw ValidationException::withMessages([
-                'email' => [trans('The username is already in use.')],
+                'username' => [trans('The username is already in use.')],
             ]);
         }
         
@@ -47,7 +47,7 @@ trait CreateUserValidation
         
         if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
             throw ValidationException::withMessages([
-                'email' => [trans('You have created too many accounts in the past 24 hours.')],
+                'throttle' => [trans('You have created too many accounts in the past 24 hours.')],
             ]);
         }
         
