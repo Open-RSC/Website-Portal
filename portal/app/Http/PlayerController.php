@@ -590,10 +590,13 @@ class PlayerController extends Controller
             $validated = $this->validate($request, [
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                 'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
-                'password' => ['regex:/^([a-zA-Z0-9_-~])+$/i', 'required', 'min:4', 'max:20'],
+                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
             ]);
         } catch (ValidationException $e) {
-            return json_encode($e->getMessage());
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $e->validator->errors(),
+            ], 422);
         }
 
         $db = $request->input('db');
