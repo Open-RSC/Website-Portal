@@ -25,7 +25,7 @@
         "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "kitloong/laravel-migrations-generator": "^6.8",
-        "krlove/eloquent-model-generator": "^2.0",
+        "krlove/eloquent-model-generator": "dev-l10-compatibility",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
@@ -74,5 +74,11 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laravel-shift/eloquent-model-generator.git"
+        }
+    ]
 }
