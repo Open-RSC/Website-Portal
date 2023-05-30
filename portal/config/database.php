@@ -44,7 +44,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        # Laravel database
+        // Laravel database
         'laravel' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -65,7 +65,7 @@ return [
             ]) : [],
         ],
 
-        # RSC Preservation database
+        // RSC Preservation database
         'preservation' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -86,7 +86,7 @@ return [
             ]) : [],
         ],
 
-        # RSC Cabbage database
+        // RSC Cabbage database
         'cabbage' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -107,7 +107,7 @@ return [
             ]) : [],
         ],
 
-        # RSC Uranium database
+        // RSC Uranium database
         'uranium' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -128,7 +128,7 @@ return [
             ]) : [],
         ],
 
-        # RSC Coleslaw database
+        // RSC Coleslaw database
         'coleslaw' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -149,7 +149,7 @@ return [
             ]) : [],
         ],
 
-        # OpenPK database
+        // OpenPK database
         'openpk' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -170,7 +170,7 @@ return [
             ]) : [],
         ],
 
-        # 2001scape database
+        // 2001scape database
         '2001scape' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -191,7 +191,7 @@ return [
             ]) : [],
         ],
 
-        # Board database
+        // Board database
         'board' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),

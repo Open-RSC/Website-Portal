@@ -2,149 +2,138 @@
 
 namespace App\Http;
 
-use App\Models\players;
+use function App\Helpers\add_characters;
+use function App\Helpers\passwd_compat_hasher;
+use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
-use App\Services\Stats\StatsService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Response;
-
-use function App\Helpers\passwd_compat_hasher;
-use function App\Helpers\add_characters;
-use function App\Helpers\player_is_online;
 
 class PlayerController extends Controller
 {
-    
     protected bool $debugPlayerExports = false; //If we want to display the generated SQL on the page, set this to true.
-    
-    /**
-     * @param $n
-     * @return string
-     */
+
     public function bd_nice_number($n): string
     {
-        if ($n > 1000000000000) return round(($n / 1000000000000), 1) . ' trillion';
-        else if ($n > 1000000000) return round(($n / 1000000000), 1) . ' billion';
-        else if ($n > 1000000) return round(($n / 1000000), 1) . ' million';
-        else if ($n > 1000) return round(($n / 1000), 1) . ' thousand';
+        if ($n > 1000000000000) {
+            return round(($n / 1000000000000), 1).' trillion';
+        } elseif ($n > 1000000000) {
+            return round(($n / 1000000000), 1).' billion';
+        } elseif ($n > 1000000) {
+            return round(($n / 1000000), 1).' million';
+        } elseif ($n > 1000) {
+            return round(($n / 1000), 1).' thousand';
+        }
+
         return number_format($n);
     }
 
-    /**
-     * @param $db
-     * @param $subpage
-     * @param $skill
-     * @return int
-     */
     public function rank($db, $subpage, $skill): int
     {
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             return DB::connection($db)
-                    ->table("experience as a")
+                    ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                    ->select(DB::raw("count(a.playerid)"))
-                    ->where(DB::raw($this->cast('a', $skill)), ">", function ($query) use ($db, $subpage, $skill) {
-                        $query->from("experience as a")
+                    ->select(DB::raw('count(a.playerid)'))
+                    ->where(DB::raw($this->cast('a', $skill)), '>', function ($query) use ($subpage, $skill) {
+                        $query->from('experience as a')
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw($this->cast('a', $skill)))
-                            ->where("b.username", "=", $subpage);
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
-                    ->where("b.group_id", ">=", 8)
-                    ->where("c.iron_man", "!=", 4)
+                    ->where('b.group_id', '>=', 8)
+                    ->where('c.iron_man', '!=', 4)
                     ->count()
                 +
                 DB::connection($db)
-                    ->table("experience as a")
+                    ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                    ->select(DB::raw("count(a.playerid)"))
-                    ->where(DB::raw('aa.' . $skill), "<", function ($query) use ($db, $subpage, $skill) {
-                        $query->from("experience as a")
+                    ->select(DB::raw('count(a.playerid)'))
+                    ->where(DB::raw('aa.'.$skill), '<', function ($query) use ($subpage, $skill) {
+                        $query->from('experience as a')
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
-                            ->select(DB::raw('aa.' . $skill))
-                            ->where("b.username", "=", $subpage);
+                            ->select(DB::raw('aa.'.$skill))
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
-                    ->where("b.group_id", ">=", 8)
-                    ->where("c.iron_man", "!=", 4)
+                    ->where('b.group_id', '>=', 8)
+                    ->where('c.iron_man', '!=', 4)
                     ->count();
         } else {
             return DB::connection($db)
-                    ->table("experience as a")
+                    ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
-                    ->select(DB::raw("count(a.playerid)"))
-                    ->where(DB::raw($this->coalesce('a', 'aa', $skill)), ">", function ($query) use ($db, $subpage, $skill) {
-                        $query->from("experience as a")
+                    ->select(DB::raw('count(a.playerid)'))
+                    ->where(DB::raw($this->coalesce('a', 'aa', $skill)), '>', function ($query) use ($subpage, $skill) {
+                        $query->from('experience as a')
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw($this->coalesce('a', 'aa', $skill)))
-                            ->where("b.username", "=", $subpage);
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
-                    ->where("b.group_id", ">=", 8)
+                    ->where('b.group_id', '>=', 8)
                     ->count()
                 +
                 DB::connection($db)
-                    ->table("experience as a")
+                    ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
-                    ->select(DB::raw("count(a.playerid)"))
-                    ->where(DB::raw('aa.' . $skill), "<", function ($query) use ($db, $subpage, $skill) {
-                        $query->from("experience as a")
+                    ->select(DB::raw('count(a.playerid)'))
+                    ->where(DB::raw('aa.'.$skill), '<', function ($query) use ($subpage, $skill) {
+                        $query->from('experience as a')
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
-                            ->select(DB::raw('aa.' . $skill))
-                            ->where("b.username", "=", $subpage);
+                            ->select(DB::raw('aa.'.$skill))
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
-                    ->where("b.group_id", ">=", 8)
+                    ->where('b.group_id', '>=', 8)
                     ->count();
         }
     }
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
-            return 'ifnull(' . $this->maxCast($alias2, $subpage) . ',' . $this->cast($alias1, $subpage) . ')';
+        if (! $relabel) {
+            return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
-            return 'ifnull(' . $this->maxCast($alias2, $subpage) . ',' . $this->cast($alias1, $subpage) . ') as ' . $subpage;
+            return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
         }
     }
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
-            return $alias . '.' . $subpage . '&0xFFFFFFFF';
+        if (! $relabel) {
+            return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
-            return '(' . $alias . '.' . $subpage . '&0xFFFFFFFF) as ' . $subpage;
+            return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
         }
     }
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
-            return $alias . '.' . $subpage . '|0xFFFFFFFF';
+        if (! $relabel) {
+            return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
-            return '(' . $alias . '.' . $subpage . '|0xFFFFFFFF) as ' . $subpage;
+            return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
         }
     }
 
@@ -162,19 +151,14 @@ class PlayerController extends Controller
         }, $skill_array);
     }
 
-    /**
-     * @param $db
-     * @param $subpage
-     * @return Application|Factory|\Illuminate\Contracts\View\View
-     */
     public function index($db, $subpage): \Illuminate\Contracts\View\View|Factory|Application
     {
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting');
-        } else if (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
-            $skill_array = array('hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining');
+            $skill_array = ['hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting'];
+        } elseif (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
+            $skill_array = ['hits', 'ranged', 'prayGood', 'prayEvil', 'goodMagic', 'evilMagic', 'cooking', 'woodcutting', 'firemaking', 'crafting', 'smithing', 'mining'];
         } else { // modern authentic
-            $skill_array = array('hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving');
+            $skill_array = ['hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving'];
         }
 
         /**
@@ -187,26 +171,26 @@ class PlayerController extends Controller
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw('
-			(SUM((' . $this->cast('a', 'attack') . ') +
-			(' . $this->cast('a', 'strength') . ') +
-			(' . $this->cast('a', 'defense') . ') +
-			(' . $this->cast('a', 'hits') . ') +
-			(' . $this->cast('a', 'ranged') . ') +
-			(' . $this->cast('a', 'prayer') . ') +
-			(' . $this->cast('a', 'magic') . ') +
-			(' . $this->cast('a', 'cooking') . ') +
-			(' . $this->cast('a', 'woodcut') . ') +
-			(' . $this->cast('a', 'fletching') . ') +
-			(' . $this->cast('a', 'fishing') . ') +
-			(' . $this->cast('a', 'firemaking') . ') +
-			(' . $this->cast('a', 'crafting') . ') +
-			(' . $this->cast('a', 'smithing') . ') +
-			(' . $this->cast('a', 'mining') . ') +
-			(' . $this->cast('a', 'herblaw') . ') +
-			(' . $this->cast('a', 'agility') . ') +
-			(' . $this->cast('a', 'thieving') . ') +
-			(' . $this->cast('a', 'runecraft') . ') +
-			(' . $this->cast('a', 'harvesting') . '))
+			(SUM(('.$this->cast('a', 'attack').') +
+			('.$this->cast('a', 'strength').') +
+			('.$this->cast('a', 'defense').') +
+			('.$this->cast('a', 'hits').') +
+			('.$this->cast('a', 'ranged').') +
+			('.$this->cast('a', 'prayer').') +
+			('.$this->cast('a', 'magic').') +
+			('.$this->cast('a', 'cooking').') +
+			('.$this->cast('a', 'woodcut').') +
+			('.$this->cast('a', 'fletching').') +
+			('.$this->cast('a', 'fishing').') +
+			('.$this->cast('a', 'firemaking').') +
+			('.$this->cast('a', 'crafting').') +
+			('.$this->cast('a', 'smithing').') +
+			('.$this->cast('a', 'mining').') +
+			('.$this->cast('a', 'herblaw').') +
+			('.$this->cast('a', 'agility').') +
+			('.$this->cast('a', 'thieving').') +
+			('.$this->cast('a', 'runecraft').') +
+			('.$this->cast('a', 'harvesting').'))
 			/4.0)
 			as total_xp
 			'), ...$this->skill_cast('a', $skill_array))
@@ -214,31 +198,31 @@ class PlayerController extends Controller
                     ['b.username', '=', $subpage],
                 ])
                 ->get();
-        } else if (value($db) == '2001scape') { // retro authentic
+        } elseif (value($db) == '2001scape') { // retro authentic
             $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM((' . $this->coalesce('a', 'aa', 'attack') . ') +
-			(' . $this->coalesce('a', 'aa', 'strength') . ') +
-			(' . $this->coalesce('a', 'aa', 'defense') . ') +
-			(' . $this->coalesce('a', 'aa', 'hits') . ') +
-			(' . $this->coalesce('a', 'aa', 'ranged') . ') +
-			(' . $this->coalesce('a', 'aa', 'prayGood') . ') +
-			(' . $this->coalesce('a', 'aa', 'prayEvil') . ') +
-			(' . $this->coalesce('a', 'aa', 'goodMagic') . ') +
-			(' . $this->coalesce('a', 'aa', 'evilMagic') . ') +
-			(' . $this->coalesce('a', 'aa', 'cooking') . ') +
-			(' . $this->coalesce('a', 'aa', 'woodcutting') . ') +
-			(' . $this->coalesce('a', 'aa', 'firemaking') . ') +
-			(' . $this->coalesce('a', 'aa', 'crafting') . ') +
-			(' . $this->coalesce('a', 'aa', 'smithing') . ') +
-			(' . $this->coalesce('a', 'aa', 'mining') . ') +
-			(' . $this->coalesce('a', 'aa', 'influence') . ') +
-			(' . $this->coalesce('a', 'aa', 'thieving') . ') +
-			(' . $this->coalesce('a', 'aa', 'tailoring') . ') +
-			(' . $this->coalesce('a', 'aa', 'herblaw') . '))
+			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+			('.$this->coalesce('a', 'aa', 'strength').') +
+			('.$this->coalesce('a', 'aa', 'defense').') +
+			('.$this->coalesce('a', 'aa', 'hits').') +
+			('.$this->coalesce('a', 'aa', 'ranged').') +
+			('.$this->coalesce('a', 'aa', 'prayGood').') +
+			('.$this->coalesce('a', 'aa', 'prayEvil').') +
+			('.$this->coalesce('a', 'aa', 'goodMagic').') +
+			('.$this->coalesce('a', 'aa', 'evilMagic').') +
+			('.$this->coalesce('a', 'aa', 'cooking').') +
+			('.$this->coalesce('a', 'aa', 'woodcutting').') +
+			('.$this->coalesce('a', 'aa', 'firemaking').') +
+			('.$this->coalesce('a', 'aa', 'crafting').') +
+			('.$this->coalesce('a', 'aa', 'smithing').') +
+			('.$this->coalesce('a', 'aa', 'mining').') +
+			('.$this->coalesce('a', 'aa', 'influence').') +
+			('.$this->coalesce('a', 'aa', 'thieving').') +
+			('.$this->coalesce('a', 'aa', 'tailoring').') +
+			('.$this->coalesce('a', 'aa', 'herblaw').'))
 			/4.0)
 			as total_xp
 			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
@@ -252,24 +236,24 @@ class PlayerController extends Controller
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM((' . $this->coalesce('a', 'aa', 'attack') . ') +
-			(' . $this->coalesce('a', 'aa', 'strength') . ') +
-			(' . $this->coalesce('a', 'aa', 'defense') . ') +
-			(' . $this->coalesce('a', 'aa', 'hits') . ') +
-			(' . $this->coalesce('a', 'aa', 'ranged') . ') +
-			(' . $this->coalesce('a', 'aa', 'prayer') . ') +
-			(' . $this->coalesce('a', 'aa', 'magic') . ') +
-			(' . $this->coalesce('a', 'aa', 'cooking') . ') +
-			(' . $this->coalesce('a', 'aa', 'woodcut') . ') +
-			(' . $this->coalesce('a', 'aa', 'fletching') . ') +
-			(' . $this->coalesce('a', 'aa', 'fishing') . ') +
-			(' . $this->coalesce('a', 'aa', 'firemaking') . ') +
-			(' . $this->coalesce('a', 'aa', 'crafting') . ') +
-			(' . $this->coalesce('a', 'aa', 'smithing') . ') +
-			(' . $this->coalesce('a', 'aa', 'mining') . ') +
-			(' . $this->coalesce('a', 'aa', 'herblaw') . ') +
-			(' . $this->coalesce('a', 'aa', 'agility') . ') +
-			(' . $this->coalesce('a', 'aa', 'thieving') . '))
+			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+			('.$this->coalesce('a', 'aa', 'strength').') +
+			('.$this->coalesce('a', 'aa', 'defense').') +
+			('.$this->coalesce('a', 'aa', 'hits').') +
+			('.$this->coalesce('a', 'aa', 'ranged').') +
+			('.$this->coalesce('a', 'aa', 'prayer').') +
+			('.$this->coalesce('a', 'aa', 'magic').') +
+			('.$this->coalesce('a', 'aa', 'cooking').') +
+			('.$this->coalesce('a', 'aa', 'woodcut').') +
+			('.$this->coalesce('a', 'aa', 'fletching').') +
+			('.$this->coalesce('a', 'aa', 'fishing').') +
+			('.$this->coalesce('a', 'aa', 'firemaking').') +
+			('.$this->coalesce('a', 'aa', 'crafting').') +
+			('.$this->coalesce('a', 'aa', 'smithing').') +
+			('.$this->coalesce('a', 'aa', 'mining').') +
+			('.$this->coalesce('a', 'aa', 'herblaw').') +
+			('.$this->coalesce('a', 'aa', 'agility').') +
+			('.$this->coalesce('a', 'aa', 'thieving').'))
 			/4.0)
 			as total_xp
 			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
@@ -279,57 +263,57 @@ class PlayerController extends Controller
                 ->get();
         }
 
-        if (!$players) {
+        if (! $players) {
             abort(404);
         }
 
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $rank_overall = DB::connection($db)
-                ->table("experience as a")
-                ->join("players as b", function ($join) {
-                    $join->on("a.playerid", "=", "b.id");
+                ->table('experience as a')
+                ->join('players as b', function ($join) {
+                    $join->on('a.playerid', '=', 'b.id');
                 })
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
-                ->select(DB::raw("COUNT(b.skill_total) as rank"))
+                ->select(DB::raw('COUNT(b.skill_total) as rank'))
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
-                    ["b.skill_total", ">", function ($query) use ($subpage) {
+                    ['b.skill_total', '>', function ($query) use ($subpage) {
                         $query
-                            ->select(DB::raw("b.skill_total"))
-                            ->from("players AS b")
+                            ->select(DB::raw('b.skill_total'))
+                            ->from('players AS b')
                             ->orderBy('b.skill_total', 'desc')
                             ->whereNotIn('b.banned', [-1, 1])
                             ->where([
                                 ['b.group_id', '>=', '8'],
-                                ["b.username", '=', $subpage],
+                                ['b.username', '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
                             ]);
-                    }]
+                    }],
                 ])
                 ->get();
         } else { // authentic
             $rank_overall = DB::connection($db)
-                ->table("experience as a")
-                ->join("players as b", function ($join) {
-                    $join->on("a.playerid", "=", "b.id");
+                ->table('experience as a')
+                ->join('players as b', function ($join) {
+                    $join->on('a.playerid', '=', 'b.id');
                 })
-                ->select(DB::raw("COUNT(b.skill_total) as rank"))
+                ->select(DB::raw('COUNT(b.skill_total) as rank'))
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
-                    ["b.skill_total", ">", function ($query) use ($subpage) {
+                    ['b.skill_total', '>', function ($query) use ($subpage) {
                         $query
-                            ->select(DB::raw("b.skill_total"))
-                            ->from("players AS b")
+                            ->select(DB::raw('b.skill_total'))
+                            ->from('players AS b')
                             ->orderBy('b.skill_total', 'desc')
                             ->whereNotIn('b.banned', [-1, 1])
                             ->where([
                                 ['b.group_id', '>=', '8'],
-                                ["b.username", '=', $subpage],
+                                ['b.username', '=', $subpage],
                             ]);
-                    }]
+                    }],
                 ])
                 ->get();
         }
@@ -343,25 +327,22 @@ class PlayerController extends Controller
                 ->orderBy('b.deaths', 'asc')
                 ->where([
                     ['b.group_id', '>=', '8'],
-                    ['b.kills', '>', '0']
+                    ['b.kills', '>', '0'],
                 ])
                 ->paginate(21);
         }
+
         return view('player', [
             'subpage' => $subpage,
             'players' => $players,
             'rank_overall' => $rank_overall,
             'skill_array' => $skill_array,
             'db' => $db,
-            'hiscores' => $hiscores
+            'hiscores' => $hiscores,
         ])
             ->with(compact('players'));
     }
 
-    /**
-     * @param $db
-     * @return Factory|View
-     */
     public function shar($db): Factory|View
     {
         /**
@@ -379,7 +360,7 @@ class PlayerController extends Controller
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$banks) {
+        if (! $banks) {
             abort(404);
         }
 
@@ -390,8 +371,6 @@ class PlayerController extends Controller
     }
 
     /**
-     * @param $db
-     * @param $subpage
      * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function bank($db, $subpage)
@@ -412,11 +391,11 @@ class PlayerController extends Controller
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$banks) {
+        if (! $banks) {
             abort(404);
         }
 
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect('home');
         }
 
@@ -429,8 +408,6 @@ class PlayerController extends Controller
     }
 
     /**
-     * @param $db
-     * @param $subpage
      * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function invitem($db, $subpage)
@@ -451,11 +428,11 @@ class PlayerController extends Controller
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$invitems) {
+        if (! $invitems) {
             abort(404);
         }
 
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect('home');
         }
 
@@ -469,76 +446,78 @@ class PlayerController extends Controller
 
     public function exportView(Request $request)
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $data = false;
         if ($this->debugPlayerExports) {
-            $data = $request->input('data') ?? "";
+            $data = $request->input('data') ?? '';
         }
+
         return view('playerexportform', [
             'success' => '',
-            'data' => $data
+            'data' => $data,
         ]);
     }
-    
+
     public function exportInstructions(Request $request)
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
+
         return view('playerexportinstructions', []);
     }
 
     public function exportSubmit(Request $request)
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         try {
             $validated = $this->validate($request, [
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
-                'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
+                'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
                 'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
             ]);
         } catch (ValidationException $e) {
-            return redirect(route('PlayerExportView'))->withErrors("Validation failed");
+            return redirect(route('PlayerExportView'))->withErrors('Validation failed');
         }
 
         $db = $request->input('db');
         $username = $request->input('username');
         $password = add_characters($request->input('password'), 20);
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
-        
+
         $user = DB::connection($db)
             ->table('players')
             ->select('*')
             ->where('username', $trimmed_username)
             ->first();
-        
+
         if ($user === null) {
-            return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
+            return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
         if (player_is_online($db, $trimmed_username)) {
-            return redirect(route('PlayerExportView'))->withErrors("You must be logged out to create a player export");
+            return redirect(route('PlayerExportView'))->withErrors('You must be logged out to create a player export');
         }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
@@ -549,47 +528,49 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
+                return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
             }
-        } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return redirect(route('PlayerExportView'))->withErrors("Invalid credentials");
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+            return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
-        $data = "";
+        $data = '';
         $playerExportService = new PlayerExportService($trimmed_username, $db);
         $data = $playerExportService->execute();
-        
+
         if ($this->debugPlayerExports) {
             return view('playerexportform', [
                 'success' => true,
-                'data' => $data
+                'data' => $data,
             ]);
         }
-        $success = "";
+        $success = '';
         if ($data) {
-            $success = "Player export generated successfully.";
+            $success = 'Player export generated successfully.';
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
-                \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
-                return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
+                \Log::error("Could not generate player export for username $trimmed_username DB $db at ".$playerExportService->getDateString().' with error: '.$e->getMessage());
+
+                return redirect(route('PlayerExportView'))->withErrors('Could not generate export, please try again later.');
             }
         }
+
         return view('playerexportform', [
-            'success' => $success
+            'success' => $success,
         ]);
     }
-    
+
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
-        if (!config('openrsc.player_exports_enabled') || !config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        if (! config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
-        
+
         try {
             $validated = $this->validate($request, [
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
-                'db' => ['required', Rule::in(['preservation','cabbage','2001scape','coleslaw','uranium','openpk'])],
+                'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
                 'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
             ]);
         } catch (ValidationException $e) {
@@ -603,18 +584,18 @@ class PlayerController extends Controller
         $username = $request->input('username');
         $password = add_characters($request->input('password'), 20);
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
-        
+
         $user = DB::connection($db)
             ->table('players')
             ->select('*')
             ->where('username', $trimmed_username)
             ->first();
-        
+
         if ($user === null) {
-            return Response::json("Invalid credentials", 401);
+            return Response::json('Invalid credentials', 401);
         }
         if (player_is_online($db, $trimmed_username)) {
-            return Response::json("You must be logged out to create a player export", 401);
+            return Response::json('You must be logged out to create a player export', 401);
         }
         //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
@@ -625,29 +606,31 @@ class PlayerController extends Controller
         //If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
-                return Response::json("Invalid credentials", 401);
+                return Response::json('Invalid credentials', 401);
             }
-        } else if (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
-            return Response::json("Invalid credentials", 401);
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+            return Response::json('Invalid credentials', 401);
         }
-        $data = "";
+        $data = '';
         $playerExportService = new PlayerExportService($trimmed_username, $db);
         $data = $playerExportService->execute();
 
         if ($data) {
-            $success = "Player export generated successfully.";
+            $success = 'Player export generated successfully.';
             try {
                 return Response::make($playerExportService->generateFile(), 200, $playerExportService->generateAttachmentHeaders());
             } catch (\Exception $e) {
-                \Log::error("Could not generate player export for username $trimmed_username DB $db at " . $playerExportService->getDateString() . " with error: " . $e->getMessage());
-                return redirect(route('PlayerExportView'))->withErrors("Could not generate export, please try again later.");
+                \Log::error("Could not generate player export for username $trimmed_username DB $db at ".$playerExportService->getDateString().' with error: '.$e->getMessage());
+
+                return redirect(route('PlayerExportView'))->withErrors('Could not generate export, please try again later.');
             }
         }
-        return Response::json("Could not generate player export", 401);
+
+        return Response::json('Could not generate player export', 401);
     }
-    
-    public function passwordNeedsRehash($passwordHashed) {
-		return !str_starts_with($passwordHashed, "$2y$10$");
-	}
-    
+
+    public function passwordNeedsRehash($passwordHashed)
+    {
+        return ! str_starts_with($passwordHashed, '$2y$10$');
+    }
 }

@@ -17,8 +17,9 @@ class RegisterResponse implements RegisterResponseContract
     public function toResponse($request)
     {
         if ($request->has('errors')) {
-            return back()->withErrors($request->input('errors'));            
+            return back()->withErrors($request->input('errors'));
         }
+
         return $request->wantsJson()
                     ? new JsonResponse('', 201)
                     : redirect()->intended(Fortify::redirects('register'));

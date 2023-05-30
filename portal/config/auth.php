@@ -96,17 +96,17 @@ return [
     */
 
     'providers' => [
-        
+
         /*'user' => [
             'driver' => 'eloquent',
             'model' => App\Models\players::class,
         ],*/
-        
+
         'user' => [
             'driver' => 'eloquent',
             'model' => App\Models\players::class,
         ],
-        
+
         'preservation' => [
             'driver' => 'eloquent',
             'model' => App\Models\preservation::class,

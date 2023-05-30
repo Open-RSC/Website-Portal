@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $iron_man
  * @property int $iron_man_restriction
  * @property int $hc_ironman_death
+ *
  * @method static where(int $iron_man)
  */
 class ironman extends Model
@@ -24,5 +25,4 @@ class ironman extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'iron_man', 'iron_man_restriction', 'hc_ironman_death'];
-
 }

@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  * @property string $command
- * @property boolean $isFemaleOnly
- * @property boolean $isMembersOnly
- * @property boolean $isStackable
- * @property boolean $isUntradable
- * @property boolean $isWearable
+ * @property bool $isFemaleOnly
+ * @property bool $isMembersOnly
+ * @property bool $isStackable
+ * @property bool $isUntradable
+ * @property bool $isWearable
  * @property int $appearanceID
  * @property int $wearableID
  * @property int $wearSlot
@@ -25,20 +25,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $magicBonus
  * @property int $prayerBonus
  * @property int $basePrice
- * @property boolean $isNoteable
+ * @property bool $isNoteable
  */
 class itemdef extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'itemdef';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -47,5 +47,4 @@ class itemdef extends Model
      * @var array
      */
     protected $fillable = ['name', 'description', 'command', 'isFemaleOnly', 'isMembersOnly', 'isStackable', 'isUntradable', 'isWearable', 'appearanceID', 'wearableID', 'wearSlot', 'requiredLevel', 'requiredSkillID', 'armourBonus', 'weaponAimBonus', 'weaponPowerBonus', 'magicBonus', 'prayerBonus', 'basePrice', 'isNoteable'];
-
 }

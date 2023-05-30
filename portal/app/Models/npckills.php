@@ -14,7 +14,7 @@ class npckills extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'ID';
@@ -23,5 +23,4 @@ class npckills extends Model
      * @var array
      */
     protected $fillable = ['npcID', 'playerID', 'killCount'];
-
 }

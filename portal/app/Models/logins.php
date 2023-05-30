@@ -15,7 +15,7 @@ class logins extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -24,5 +24,4 @@ class logins extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'time', 'ip', 'clientVersion'];
-
 }

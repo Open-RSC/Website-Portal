@@ -22,7 +22,7 @@ class HomeController extends Controller
                 ->limit(5)
                 ->get();
         }
-        
+
         // World online player counts
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -205,14 +205,14 @@ class HomeController extends Controller
                 'news_feed' => $news_feed,
                 'worlds' => [
                     /* legit worlds */
-                    array("name" => "RSC Preservation", "online" => $preservation_online, "last48" => $preservation_48, "dev" => false, "type" => "players", "webclient" => true, "alias" => "preservation"),
-                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "last48" => $cabbage_48, "dev" => false, "type" => "players", "webclient" => false, "alias" => "cabbage"),
-                    array("name" => "2001Scape", "online" => $retro_online, "last48" => $retro_48, "dev" => false, "type" => "players", "webclient" => true, "alias" => "2001scape"),
-                    array("name" => "Open PK", "online" => $openpk_online, "last48" => $openpk_48, "dev" => true, "type" => "players", "webclient" => false, "alias" => "openpk"),
+                    ['name' => 'RSC Preservation', 'online' => $preservation_online, 'last48' => $preservation_48, 'dev' => false, 'type' => 'players', 'webclient' => true, 'alias' => 'preservation'],
+                    ['name' => 'RSC Cabbage', 'online' => $cabbage_online, 'last48' => $cabbage_48, 'dev' => false, 'type' => 'players', 'webclient' => false, 'alias' => 'cabbage'],
+                    ['name' => '2001Scape', 'online' => $retro_online, 'last48' => $retro_48, 'dev' => false, 'type' => 'players', 'webclient' => true, 'alias' => '2001scape'],
+                    ['name' => 'Open PK', 'online' => $openpk_online, 'last48' => $openpk_48, 'dev' => true, 'type' => 'players', 'webclient' => false, 'alias' => 'openpk'],
                     /* bot allowed */
-                    array("name" => "RSC Uranium", "online" => $uranium_online, "last48" => $uranium_48, "dev" => false, "type" => "cyborgs", "webclient" => true, "alias" => "uranium"),
-                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "last48" => $coleslaw_48, "dev" => false, "type" => "cyborgs", "webclient" => false, "alias" => "coleslaw"),
-                ]
+                    ['name' => 'RSC Uranium', 'online' => $uranium_online, 'last48' => $uranium_48, 'dev' => false, 'type' => 'cyborgs', 'webclient' => true, 'alias' => 'uranium'],
+                    ['name' => 'RSC Coleslaw', 'online' => $coleslaw_online, 'last48' => $coleslaw_48, 'dev' => false, 'type' => 'cyborgs', 'webclient' => false, 'alias' => 'coleslaw'],
+                ],
             ]
         );
     }
@@ -255,7 +255,7 @@ class HomeController extends Controller
                 ['b.online', '=', '1'],
                 ['b.block_private', '=', '0'],
                 ['b.y', '>=', '384'],
-                ['b.y', '<=', '910']
+                ['b.y', '<=', '910'],
             ])
             ->where(function ($q) {
                 $q->where('a.value', '0')
@@ -289,7 +289,7 @@ class HomeController extends Controller
             'mapWidth' => $mapWidth,
             'mapHeight' => $mapHeight,
             'xOffset' => $xOffset,
-            'yOffset' => $yOffset
+            'yOffset' => $yOffset,
         ]);
     }
 
@@ -324,7 +324,7 @@ class HomeController extends Controller
             'graphicImageUrl' => $graphicImageUrl,
             'otherOSName' => $otherOSName,
             'otherClientUrl' => $otherClientUrl,
-            'otherClientName' => $otherClientName
+            'otherClientName' => $otherClientName,
         ]);
     }
 
@@ -420,14 +420,14 @@ class HomeController extends Controller
             [
                 'worlds' => [
                     /* legit worlds */
-                    array("name" => "RSC Preservation", "online" => $preservation_online, "dev" => false, "type" => "players", "webclient" => true, "alias" => "preservation"),
-                    array("name" => "RSC Cabbage", "online" => $cabbage_online, "dev" => false, "type" => "players", "webclient" => false, "alias" => "cabbage"),
-                    array("name" => "2001Scape", "online" => $retro_online, "dev" => false, "type" => "players", "webclient" => true, "alias" => "2001scape"),
-                    array("name" => "Open PK", "online" => $openpk_online, "dev" => true, "type" => "players", "webclient" => false, "alias" => "openpk"),
+                    ['name' => 'RSC Preservation', 'online' => $preservation_online, 'dev' => false, 'type' => 'players', 'webclient' => true, 'alias' => 'preservation'],
+                    ['name' => 'RSC Cabbage', 'online' => $cabbage_online, 'dev' => false, 'type' => 'players', 'webclient' => false, 'alias' => 'cabbage'],
+                    ['name' => '2001Scape', 'online' => $retro_online, 'dev' => false, 'type' => 'players', 'webclient' => true, 'alias' => '2001scape'],
+                    ['name' => 'Open PK', 'online' => $openpk_online, 'dev' => true, 'type' => 'players', 'webclient' => false, 'alias' => 'openpk'],
                     /* bot allowed */
-                    array("name" => "RSC Uranium", "online" => $uranium_online, "dev" => false, "type" => "cyborgs", "webclient" => true, "alias" => "uranium"),
-                    array("name" => "RSC Coleslaw", "online" => $coleslaw_online, "dev" => false, "type" => "cyborgs", "webclient" => false, "alias" => "coleslaw"),
-                ]
+                    ['name' => 'RSC Uranium', 'online' => $uranium_online, 'dev' => false, 'type' => 'cyborgs', 'webclient' => true, 'alias' => 'uranium'],
+                    ['name' => 'RSC Coleslaw', 'online' => $coleslaw_online, 'dev' => false, 'type' => 'cyborgs', 'webclient' => false, 'alias' => 'coleslaw'],
+                ],
             ]
         );
     }
@@ -438,8 +438,8 @@ class HomeController extends Controller
          * @var $subpage
          * Replaces spaces with underlines
          */
-        $game = preg_replace("/[^A-Za-z0-9 ]/", "_", $game);
-        $members = preg_replace("/[^A-Za-z0-9 ]/", "_", $members);
+        $game = preg_replace('/[^A-Za-z0-9 ]/', '_', $game);
+        $members = preg_replace('/[^A-Za-z0-9 ]/', '_', $members);
         $retro = false;
 
         if (value($game) == 'uranium') {

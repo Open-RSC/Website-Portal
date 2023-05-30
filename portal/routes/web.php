@@ -74,7 +74,6 @@ Route::post('searchByName', 'HiscoresController@searchByName');
 Route::post('searchNpcHiscoresByName', 'HiscoresController@searchNpcHiscoresByName');
 Route::any('toplist/{db}', 'HiscoresController@toplist')->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
 
-
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 

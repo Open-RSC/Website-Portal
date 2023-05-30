@@ -12,21 +12,21 @@ class equipped extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'equipped';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'itemID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -35,5 +35,4 @@ class equipped extends Model
      * @var array
      */
     protected $fillable = ['playerID'];
-
 }

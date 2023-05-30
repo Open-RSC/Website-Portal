@@ -16,5 +16,4 @@ class live_feeds extends Model
      * @var array
      */
     protected $fillable = ['username', 'message', 'time'];
-
 }

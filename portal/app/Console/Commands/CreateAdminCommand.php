@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Actions\Fortify\CreateNewUser;
+use Illuminate\Console\Command;
 
 class CreateAdminCommand extends Command
 {
@@ -52,21 +52,21 @@ class CreateAdminCommand extends Command
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password_confirmation,
-            'admin' => 1
+            'admin' => 1,
         ];
 
         try {
             // Use fortify to create a new user.
             $new_user_action = new CreateNewUser();
             $user = $new_user_action->create($input);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return;
         }
 
         // Success message
         $this->info('Admin User created successfully!');
-        $this->info('New user id: ' . $user->id);
+        $this->info('New user id: '.$user->id);
     }
 }

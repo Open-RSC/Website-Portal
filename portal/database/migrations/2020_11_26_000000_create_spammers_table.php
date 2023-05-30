@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSpammersTable extends Migration
 {
-
     public function up()
     {
         Schema::create(
@@ -19,5 +18,4 @@ class CreateSpammersTable extends Migration
             }
         );
     }
-
 }

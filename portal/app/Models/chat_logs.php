@@ -12,9 +12,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class chat_logs extends Model
 {
-    /**
-     * @var array
-     */
     protected array $fillable = ['sender', 'message', 'time'];
-
 }

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Storage;
 
 class StatsService
 {
-
     private array $stats;
+
     private string $db;
 
     public function __construct($db = 'cabbage')
@@ -19,12 +19,13 @@ class StatsService
 
     public function execute(): array
     {
-        if (DB::table('rscstats')->where('key', '=', $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA"))->exists()) {
-            $this->stats = (array) DB::table('rscstats')->where('key', '=', $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA"))->get()->toArray()[0];
+        if (DB::table('rscstats')->where('key', '=', $this->db.'_stats_'.Carbon::now()->format('Y-m-d').'_'.Carbon::now()->format('hA'))->exists()) {
+            $this->stats = (array) DB::table('rscstats')->where('key', '=', $this->db.'_stats_'.Carbon::now()->format('Y-m-d').'_'.Carbon::now()->format('hA'))->get()->toArray()[0];
         } else {
             $this->stats = $this->generateData($this->db);
             $this->saveData();
         }
+
         return $this->stats;
     }
 
@@ -985,9 +986,10 @@ class StatsService
             'rune2h' => $rune2h,
         ];
     }
-    
-    public function saveData() {
-        $key = $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA");
+
+    public function saveData()
+    {
+        $key = $this->db.'_stats_'.Carbon::now()->format('Y-m-d').'_'.Carbon::now()->format('hA');
         DB::table('rscstats')->insert([
             'server' => $this->db,
             'key' => $key,
@@ -1022,17 +1024,17 @@ class StatsService
             'dlong' => $this->stats['dlong'],
             'rune2h' => $this->stats['rune2h'],
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 
     public function makeCsv($path = 'csv/stats/'): bool
     {
-        $data = "Statistics for " . $this->db . ": " . Carbon::now()->format("Y-m-d_h:i A") . "\n";
+        $data = 'Statistics for '.$this->db.': '.Carbon::now()->format('Y-m-d_h:i A')."\n";
         foreach ($this->stats as $key => $value) {
             $data .= "$key, $value\n";
         }
-        return Storage::disk('local')->put($path . Carbon::now()->format("Y") . "/" . $this->db . "_stats_" . Carbon::now()->format("Y-m-d") . "_" . Carbon::now()->format("hA") . ".csv", $data);
-    }
 
+        return Storage::disk('local')->put($path.Carbon::now()->format('Y').'/'.$this->db.'_stats_'.Carbon::now()->format('Y-m-d').'_'.Carbon::now()->format('hA').'.csv', $data);
+    }
 }

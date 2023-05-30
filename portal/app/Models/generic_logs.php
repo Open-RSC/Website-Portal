@@ -15,5 +15,4 @@ class generic_logs extends Model
      * @var array
      */
     protected $fillable = ['message', 'time'];
-
 }

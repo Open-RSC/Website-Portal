@@ -34,7 +34,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-        
+
         'sqlite' => [
             'driver' => 'local',
             'root' => base_path('sqlite'),

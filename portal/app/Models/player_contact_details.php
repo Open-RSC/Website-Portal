@@ -18,14 +18,14 @@ class player_contact_details extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'playerID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -34,5 +34,4 @@ class player_contact_details extends Model
      * @var array
      */
     protected $fillable = ['username', 'fullname', 'zipCode', 'country', 'email', 'date_modified', 'ip'];
-
 }

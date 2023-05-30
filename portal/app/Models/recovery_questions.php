@@ -12,14 +12,14 @@ class recovery_questions extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'questionID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -28,5 +28,4 @@ class recovery_questions extends Model
      * @var array
      */
     protected $fillable = ['question'];
-
 }

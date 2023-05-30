@@ -19,21 +19,21 @@ use Illuminate\Notifications\Notifiable;
  * @property int $y
  * @property int $fatigue
  * @property int $petfatigue
- * @property boolean $combatstyle
- * @property boolean $block_chat
- * @property boolean $block_private
- * @property boolean $block_trade
- * @property boolean $block_duel
- * @property boolean $cameraauto
- * @property boolean $onemouse
- * @property boolean $soundoff
+ * @property bool $combatstyle
+ * @property bool $block_chat
+ * @property bool $block_private
+ * @property bool $block_trade
+ * @property bool $block_duel
+ * @property bool $cameraauto
+ * @property bool $onemouse
+ * @property bool $soundoff
  * @property int $haircolour
  * @property int $topcolour
  * @property int $trousercolour
  * @property int $skincolour
  * @property int $headsprite
  * @property int $bodysprite
- * @property boolean $male
+ * @property bool $male
  * @property int $creation_date
  * @property string $creation_ip
  * @property int $login_date
@@ -45,10 +45,10 @@ use Illuminate\Notifications\Notifiable;
  * @property int $npc_kills
  * @property int $pets
  * @property int $deaths
- * @property boolean $iron_man
- * @property boolean $iron_man_restriction
- * @property boolean $hc_ironman_death
- * @property boolean $online
+ * @property bool $iron_man
+ * @property bool $iron_man_restriction
+ * @property bool $hc_ironman_death
+ * @property bool $online
  * @property int $quest_points
  * @property int $bank_size
  * @property int $lastRecoveryTryId
@@ -59,12 +59,15 @@ class players extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'players';
+
     public $primaryKey = 'id';
 
     public $timestamps = false;
+
     // the below don't work in laravel since type expected should be
     // timestamp and we have as int(10)
     const CREATED_AT = 'creation_date';
+
     const UPDATED_AT = 'login_date';
 
     /**
@@ -91,47 +94,62 @@ class players extends Authenticatable
     public function setDbConnection(string $connection)
     {
         $this->connection = $connection;
+
         return $this;
     }
-    
-    
-    public function isOwner() {
+
+    public function isOwner()
+    {
         return $this->group_id == config('group.owner');
     }
-    public function isAdmin() {
+
+    public function isAdmin()
+    {
         return $this->group_id == config('group.admin');
     }
-    public function isSuperModerator() {
+
+    public function isSuperModerator()
+    {
         return $this->group_id == config('group.super_moderator');
     }
-    public function isModerator() {
+
+    public function isModerator()
+    {
         return $this->group_id == config('group.moderator');
     }
-    
-    public function isTester() {
+
+    public function isTester()
+    {
         return $this->group_id == config('group.tester');
     }
-    
-    public function isEvent() {
+
+    public function isEvent()
+    {
         return $this->group_id == config('group.event');
     }
-    
-    public function isPlayerModerator() {
+
+    public function isPlayerModerator()
+    {
         return $this->group_id == config('group.player_moderator');
     }
-    
-    public function isUser() {
+
+    public function isUser()
+    {
         return $this->group_id = $this->group_id == config('group.user');
     }
-    
-    public function hasAdmin() {
+
+    public function hasAdmin()
+    {
         return $this->group_id == config('group.admin') || $this->isOwner();
     }
-    
-    public function hasModerator() {
+
+    public function hasModerator()
+    {
         return $this->group_id == config('group.super_moderator') || $this->group_id == config('group.moderator') || $this->isOwner() || $this->isAdmin();
     }
-    public function hasPlayerModerator() {
+
+    public function hasPlayerModerator()
+    {
         return $this->group_id == config('group.player_moderator') || $this->isModerator() || $this->isOwner() || $this->isAdmin();
     }
 

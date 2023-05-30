@@ -17,5 +17,4 @@ class private_message_logs extends Model
      * @var array
      */
     protected $fillable = ['sender', 'message', 'reciever', 'time'];
-
 }

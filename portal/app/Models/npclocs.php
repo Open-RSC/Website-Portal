@@ -18,7 +18,7 @@ class npclocs extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -27,5 +27,4 @@ class npclocs extends Model
      * @var array
      */
     protected $fillable = ['id', 'startX', 'minX', 'maxX', 'startY', 'minY', 'maxY'];
-
 }

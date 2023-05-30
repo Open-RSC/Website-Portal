@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property string $staff_username
- * @property boolean $action
+ * @property bool $action
  * @property string $affected_player
  * @property int $time
  * @property int $staff_x
@@ -24,5 +24,4 @@ class staff_logs extends Model
      * @var array
      */
     protected $fillable = ['staff_username', 'action', 'affected_player', 'time', 'staff_x', 'staff_y', 'affected_x', 'affected_y', 'staff_ip', 'affected_ip', 'extra'];
-
 }

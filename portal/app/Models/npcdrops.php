@@ -15,7 +15,7 @@ class npcdrops extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'db_index';

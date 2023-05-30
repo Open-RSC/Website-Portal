@@ -17,5 +17,4 @@ class bankpresets extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'slot', 'inventory', 'equipment'];
-
 }

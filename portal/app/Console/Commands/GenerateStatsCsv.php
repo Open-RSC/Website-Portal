@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\HiscoresController;
 use App\Services\Stats\StatsService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -35,6 +34,7 @@ class GenerateStatsCsv extends Command
 
     /**
      * Execute the console command.
+     *
      * @return bool
      */
     public function handle()
@@ -43,10 +43,12 @@ class GenerateStatsCsv extends Command
         $statsService = new StatsService($db);
         $statsService->execute();
         if ($statsService->makeCsv()) {
-            $this->info("Successfully generated stats CSV for $db at " . Carbon::now()->format("Y-m-d_h:i A"));
+            $this->info("Successfully generated stats CSV for $db at ".Carbon::now()->format('Y-m-d_h:i A'));
+
             return true;
         }
-        $this->error("Failed to generate stats CSV for $db at " . Carbon::now()->format("Y-m-d_h:i A"));
+        $this->error("Failed to generate stats CSV for $db at ".Carbon::now()->format('Y-m-d_h:i A'));
+
         return false;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +13,7 @@ class OnlineController extends Component
 {
     /**
      * @function index()
+     *
      * @return Factory|View
      * Used to show the main onlinelist page
      */
@@ -21,22 +21,22 @@ class OnlineController extends Component
     {
         /**
          * @return Factory|View
+         *
          * @var $players
          * Fetches the table row of online players in view and paginates the results
          */
-
-        $player_worlds = array(
+        $player_worlds = [
             'preservation' => 'RSC Preservation',
             'cabbage' => 'RSC Cabbage',
             'uranium' => 'RSC Uranium',
             'coleslaw' => 'RSC Coleslaw',
             '2001scape' => '2001Scape',
-            'openpk' => 'Open PK');
+            'openpk' => 'Open PK'];
 
         /**
          * Only allow showing of page for player worlds
          */
-        if (!in_array($db, array_keys($player_worlds))) {
+        if (! in_array($db, array_keys($player_worlds))) {
             abort(404);
         }
 
@@ -85,9 +85,9 @@ class OnlineController extends Component
 
     /**
      * Displays a RuneScape time since string
+     *
      * @param $timestamp - the old cumulative timestamp in seconds
      * @param $loginstamp - the login timestamp in seconds
-     * @return string
      */
     public static function formattedCumTime($timestamp, $loginstamp): string
     {
@@ -99,8 +99,8 @@ class OnlineController extends Component
 
     /**
      * Displays a RuneScape time since string
+     *
      * @param $timestamp - the timestamp in seconds
-     * @return string
      */
     public static function formattedTimeSince($timestamp): string
     {
@@ -112,12 +112,11 @@ class OnlineController extends Component
 
     /**
      * Displays a RuneScape time since string
+     *
      * @param $timestamp - the timestamp in seconds
-     * @return string
      */
     public static function formattedTime($timestamp): string
     {
-
         $days = floor($timestamp / (3600 * 24));
         $hours = floor($timestamp % (3600 * 24) / 3600);
         $mins = floor($timestamp % 3600 / 60);
@@ -125,13 +124,13 @@ class OnlineController extends Component
 
         if ($days > 0) {
             // use days, hours
-            $formatSince = $days . ' ' . Str::plural('day', $days) . ' ' . $hours . ' ' . Str::plural('hour', $hours);
-        } else if ($hours > 0) {
+            $formatSince = $days.' '.Str::plural('day', $days).' '.$hours.' '.Str::plural('hour', $hours);
+        } elseif ($hours > 0) {
             // use hours, mins
-            $formatSince = $hours . ' ' . Str::plural('hour', $hours) . ' ' . $mins . ' ' . Str::plural('min', $mins);
+            $formatSince = $hours.' '.Str::plural('hour', $hours).' '.$mins.' '.Str::plural('min', $mins);
         } else {
             // use mins
-            $formatSince = $mins . ' ' . Str::plural('min', $mins);
+            $formatSince = $mins.' '.Str::plural('min', $mins);
         }
 
         return $formatSince;

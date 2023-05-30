@@ -38,7 +38,7 @@ class TopList extends Command
      */
     public function handle()
     {
-        $dbs = ["2001scape"];
+        $dbs = ['2001scape'];
         foreach ($dbs as $db) {
             HiscoresController::createTopList($db, HiscoresController::getTopListFileName($db));
         }

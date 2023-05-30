@@ -16,7 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-        'App\Models\User' => 'App\Models\players'
+        'App\Models\User' => 'App\Models\players',
     ];
 
     /**
@@ -27,23 +27,23 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        
+
         Gate::define('website-admin', function (User $user) {
             return $user->isAdmin();
         });
-        
+
         Gate::define('website-moderator', function (User $user) {
             return $user->isModerator();
         });
-        
+
         Gate::define('admin', function (players $user) {
             return $user->hasAdmin();
         });
-        
+
         Gate::define('moderator', function (players $user) {
             return $user->hasModerator();
         });
-        
+
         Gate::define('player-moderator', function (players $user) {
             return $user->hasPlayerModerator();
         });

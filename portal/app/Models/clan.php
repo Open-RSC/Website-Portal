@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $tag
  * @property string $leader
- * @property boolean $kick_setting
- * @property boolean $invite_setting
- * @property boolean $allow_search_join
+ * @property bool $kick_setting
+ * @property bool $invite_setting
+ * @property bool $allow_search_join
  * @property int $matches_won
  * @property int $matches_lost
  * @property int $clan_points
@@ -21,7 +21,7 @@ class clan extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'clan';
@@ -30,5 +30,4 @@ class clan extends Model
      * @var array
      */
     protected $fillable = ['name', 'tag', 'leader', 'kick_setting', 'invite_setting', 'allow_search_join', 'matches_won', 'matches_lost', 'clan_points', 'bank_size'];
-
 }

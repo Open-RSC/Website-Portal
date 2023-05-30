@@ -16,7 +16,7 @@ class objects extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'd_id';
@@ -25,5 +25,4 @@ class objects extends Model
      * @var array
      */
     protected $fillable = ['x', 'y', 'id', 'direction', 'type'];
-
 }

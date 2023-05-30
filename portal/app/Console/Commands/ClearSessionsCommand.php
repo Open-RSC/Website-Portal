@@ -2,13 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Http\HiscoresController;
-use App\Services\Stats\StatsService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class ClearSessionsCommand extends Command
 {
@@ -38,17 +34,19 @@ class ClearSessionsCommand extends Command
 
     /**
      * Execute the console command.
+     *
      * @return bool
      */
     public function handle()
     {
         $files = File::allFiles(storage_path('framework/sessions/'));
-        foreach($files as $file){
-            if ($file->getFilename() !== ".gitignore") {
-                File::delete(storage_path('framework/sessions/'.$file->getFilename())); 
+        foreach ($files as $file) {
+            if ($file->getFilename() !== '.gitignore') {
+                File::delete(storage_path('framework/sessions/'.$file->getFilename()));
             }
         }
-        $this->info("Successfully cleared sessions at " . Carbon::now()->format("Y-m-d h:iA"));
+        $this->info('Successfully cleared sessions at '.Carbon::now()->format('Y-m-d h:iA'));
+
         return true;
     }
 }

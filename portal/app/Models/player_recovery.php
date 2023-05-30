@@ -26,21 +26,21 @@ class player_recovery extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'player_recovery';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'playerID';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -49,5 +49,4 @@ class player_recovery extends Model
      * @var array
      */
     protected $fillable = ['username', 'question1', 'answer1', 'question2', 'answer2', 'question3', 'answer3', 'question4', 'answer4', 'question5', 'answer5', 'date_set', 'ip_set', 'previous_pass', 'earlier_pass'];
-
 }
