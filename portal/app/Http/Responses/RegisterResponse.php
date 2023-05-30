@@ -2,11 +2,11 @@
 
 namespace Laravel\Fortify\Http\Responses;
 
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Fortify;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegisterResponse implements RegisterResponseContract
 {

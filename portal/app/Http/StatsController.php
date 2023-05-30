@@ -2,15 +2,15 @@
 
 namespace App\Http;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Services\Stats\StatsService;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class StatsController extends Controller
@@ -217,7 +217,7 @@ class StatsController extends Controller
         );
     }
 
-    public function stats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|\Illuminate\Http\RedirectResponse
+    public function stats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
         if (! config('openrsc.stats_page_enabled')) {
             abort(404);
