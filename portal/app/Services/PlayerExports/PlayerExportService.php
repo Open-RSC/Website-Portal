@@ -322,7 +322,7 @@ class PlayerExportService
      * @param $replaceQuoteColumns array The columns that we will replace individual quotes with two individual quotes, this is so that the columns can preserve the individual quotes. An example of this would be a salt or pass hashes that may contain a quotation mark we would want to preserve. Also, $replaceQuoteColumns requires a matching column in $skipSlashColumns.
      * @return string
      */
-    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = [])
+    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = []): string
     {
         $data = '';
         foreach ($records as $record) {

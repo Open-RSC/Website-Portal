@@ -24,7 +24,7 @@ class not_contains implements Rule
      * @return bool
      */
     #[Pure]
- public function passes($attribute, mixed $value)
+ public function passes(string $attribute, mixed $value): bool
  {
      // Banned words
      $words = ['ass', 'fuck', 'shit', 'suck', 'penis', 'vagina', 'pussy', 'whore', 'slut', 'penis', 'dick',
@@ -43,7 +43,7 @@ class not_contains implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'That word is not allowed.';
     }

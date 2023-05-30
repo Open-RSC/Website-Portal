@@ -444,7 +444,7 @@ class PlayerController extends Controller
             ->with(compact('invitems'));
     }
 
-    public function exportView(Request $request)
+    public function exportView(Request $request): View
     {
         if (! config('openrsc.player_exports_enabled')) {
             abort(404);
@@ -466,7 +466,7 @@ class PlayerController extends Controller
         ]);
     }
 
-    public function exportInstructions(Request $request)
+    public function exportInstructions(Request $request): View
     {
         if (! config('openrsc.player_exports_enabled')) {
             abort(404);
