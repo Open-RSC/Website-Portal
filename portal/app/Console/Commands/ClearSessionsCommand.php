@@ -34,10 +34,8 @@ class ClearSessionsCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return bool
      */
-    public function handle()
+    public function handle(): int
     {
         $files = File::allFiles(storage_path('framework/sessions/'));
         foreach ($files as $file) {

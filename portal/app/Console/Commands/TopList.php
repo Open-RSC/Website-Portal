@@ -33,10 +33,8 @@ class TopList extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $dbs = ['2001scape'];
         foreach ($dbs as $db) {

@@ -19,12 +19,9 @@ class not_contains implements Rule
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @return bool
      */
     #[Pure]
- public function passes($attribute, mixed $value)
+ public function passes(string $attribute, mixed $value): bool
  {
      // Banned words
      $words = ['ass', 'fuck', 'shit', 'suck', 'penis', 'vagina', 'pussy', 'whore', 'slut', 'penis', 'dick',
@@ -40,10 +37,8 @@ class not_contains implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'That word is not allowed.';
     }

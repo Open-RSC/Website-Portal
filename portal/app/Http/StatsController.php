@@ -5,10 +5,12 @@ namespace App\Http;
 use App\Services\Stats\StatsService;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class StatsController extends Controller
@@ -157,7 +159,7 @@ class StatsController extends Controller
         return implode(', ', $timeParts);
     }
 
-    public function online()
+    public function online(): View
     {
         $players = DB::connection('cabbage')->table('players as B')
             ->join('player_cache AS A', 'A.playerID', '=', 'B.id')
@@ -215,7 +217,7 @@ class StatsController extends Controller
         );
     }
 
-    public function stats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|\Illuminate\Http\RedirectResponse
+    public function stats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
         if (! config('openrsc.stats_page_enabled')) {
             abort(404);
@@ -273,7 +275,7 @@ class StatsController extends Controller
         );
     }
 
-    public function statsList($db = 'cabbage')
+    public function statsList($db = 'cabbage'): View
     {
         return view(
             'statslist',
@@ -283,7 +285,7 @@ class StatsController extends Controller
         );
     }
 
-    public function statsDetail($id)
+    public function statsDetail($id): View
     {
         $stats = (array) DB::table('rscstats')->where('id', '=', $id)->get()->toArray()[0];
 
@@ -337,17 +339,17 @@ class StatsController extends Controller
                 ->make();
     }
 
-    public function redirectToStats()
+    public function redirectToStats(): RedirectResponse
     {
         return redirect(route('StatisticsOverview', 'cabbage'));
     }
 
-    public function redirectToStatsList()
+    public function redirectToStatsList(): RedirectResponse
     {
         return redirect(route('StatisticsList', 'cabbage'));
     }
 
-    public function onlinelookup()
+    public function onlinelookup(): View
     {
         $preservation_online = DB::connection('preservation')->table('players')
             ->where('online', '=', '1')

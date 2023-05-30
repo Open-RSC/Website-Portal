@@ -34,10 +34,8 @@ class GenerateStatsCsv extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return bool
      */
-    public function handle()
+    public function handle(): int
     {
         $db = $this->argument('db');
         $statsService = new StatsService($db);

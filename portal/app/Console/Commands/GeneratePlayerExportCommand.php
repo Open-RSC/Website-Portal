@@ -35,10 +35,8 @@ class GeneratePlayerExportCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return bool
      */
-    public function handle()
+    public function handle(): int
     {
         $db = $this->argument('db');
         $username = $this->argument('username');

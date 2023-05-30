@@ -320,9 +320,8 @@ class PlayerExportService
      * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
      * @param $skipSlashColumns array The columns we will not be replacing quotes with backslashes. A good example of this would be salt or pass hashes because they may contain a quotation mark that we would want to preserve.
      * @param $replaceQuoteColumns array The columns that we will replace individual quotes with two individual quotes, this is so that the columns can preserve the individual quotes. An example of this would be a salt or pass hashes that may contain a quotation mark we would want to preserve. Also, $replaceQuoteColumns requires a matching column in $skipSlashColumns.
-     * @return string
      */
-    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = [])
+    private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = []): string
     {
         $data = '';
         foreach ($records as $record) {

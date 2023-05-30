@@ -14,7 +14,7 @@ class ItemController extends Controller
     /**
      * @return Factory|View
      */
-    public function index()
+    public function index(): View
     {
         /**
          * @return Factory|View
@@ -46,7 +46,7 @@ class ItemController extends Controller
      *
      * @return Factory|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\View
      */
-    public function autocomplete(Request $request)
+    public function autocomplete(Request $request): View
     {
         if (Config::get('app.authentic') == true) {
             $items = DB::connection('preservation')
@@ -70,7 +70,7 @@ class ItemController extends Controller
     /**
      * @return Factory|View
      */
-    public function show($id)
+    public function show($id): View
     {
         /**
          * @var

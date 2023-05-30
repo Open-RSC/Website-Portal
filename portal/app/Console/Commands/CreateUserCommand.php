@@ -24,10 +24,8 @@ class CreateUserCommand extends Command
     /**
      * Execute the console command.
      * https://laravel.com/docs/9.x/artisan
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Enter username, if not present via command line option
         $name = $this->option('username');

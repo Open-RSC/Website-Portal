@@ -555,7 +555,7 @@ class HiscoresController extends Component
      * @return void
      * Redirects user to a player's hiscores page (to look up player by name).
      */
-    public function searchByName(Request $request)
+    public function searchByName(Request $request): void
     {
         $name = $request->name;
         $db = $request->db;
@@ -570,7 +570,7 @@ class HiscoresController extends Component
      * @return void
      * Redirects user to a player's NPC hiscores page (to look up player by name).
      */
-    public function searchNpcHiscoresByName(Request $request)
+    public function searchNpcHiscoresByName(Request $request): void
     {
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);

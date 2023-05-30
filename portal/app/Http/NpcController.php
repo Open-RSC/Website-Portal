@@ -12,7 +12,7 @@ class NpcController extends Controller
     /**
      * @return Factory|View
      */
-    public function index()
+    public function index(): View
     {
         /**
          * @return Factory|View
@@ -40,7 +40,7 @@ class NpcController extends Controller
     /**
      * @return Factory|View
      */
-    public function show($id)
+    public function show($id): View
     {
         /**
          * @var
