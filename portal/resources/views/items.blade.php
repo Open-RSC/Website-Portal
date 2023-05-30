@@ -2,7 +2,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3 ">Item Database</h2>
-        <div class="text-center">
+        <div class="text-center" style="color:grey">
             <label for="inputBox"></label>
             <input type="text" class="pl-2 pt-1 mb-4 w-25 text-center" id="inputBox" onkeyup="search()"
                    placeholder="Search this page">
