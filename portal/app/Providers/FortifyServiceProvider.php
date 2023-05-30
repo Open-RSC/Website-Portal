@@ -76,9 +76,10 @@ class FortifyServiceProvider extends ServiceProvider
             try {
                 $validated = $request->validate([
                     'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
-                    'password' => ['regex:/^([a-zA-Z0-9_-~])+$/i', 'required', 'min:4', 'max:20'],
+                    'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
                 ]);
             } catch (ValidationException $e) {
+               //\Log::info($e->validator->errors());
                return false;
             }
 
