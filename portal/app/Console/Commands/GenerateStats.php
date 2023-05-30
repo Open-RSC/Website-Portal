@@ -33,8 +33,6 @@ class GenerateStats extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return bool
      */
     public function handle(): int
     {

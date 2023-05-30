@@ -19,9 +19,6 @@ class not_contains implements Rule
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @return bool
      */
     #[Pure]
  public function passes(string $attribute, mixed $value): bool
@@ -40,8 +37,6 @@ class not_contains implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

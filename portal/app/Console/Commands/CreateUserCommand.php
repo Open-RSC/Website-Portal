@@ -24,8 +24,6 @@ class CreateUserCommand extends Command
     /**
      * Execute the console command.
      * https://laravel.com/docs/9.x/artisan
-     *
-     * @return int
      */
     public function handle(): int
     {
