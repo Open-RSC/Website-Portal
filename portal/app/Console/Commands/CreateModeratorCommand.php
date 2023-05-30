@@ -59,12 +59,12 @@ class CreateModeratorCommand extends Command
             $user = $new_user_action->create($input);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
-
-            return;
+            return 1;
         }
 
         // Success message
         $this->info('Moderator User created successfully!');
         $this->info('New user id: '.$user->id);
+        return 0;
     }
 }
