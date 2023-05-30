@@ -97,7 +97,7 @@ class PlayerExportService
             $zip->add(storage_path('app/'.$sqlfile));
             $zip->add(storage_path('app/'.$txtfile));
             $zip->close();
-            $gpgdata = $gpg->signFile(storage_path('app/'.$tempzipfile), $private->results[0]['fingerprint'], null, null, false, true);
+            $gpgdata = $gpg->signFile(storage_path('app/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
             Storage::disk('local')->put($gpgfile, $gpgdata->data);
         } catch (\Exception $e) {
             \Log::error('Player Export GPG exception: '.$e->getMessage());

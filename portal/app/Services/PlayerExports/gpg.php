@@ -1053,7 +1053,7 @@ class GnuPG
      * @param  string  $passphrase key password, used when secret = true
      * @param  bool  $binary Armored format if false
      */
-    public function exportKeys($keys, string $secret = false, string $passphrase = false, bool $binary = false): GpgExportResult
+    public function exportKeys($keys, string $secret = "", string $passphrase = "", bool $binary = false): GpgExportResult
     {
         $args = $binary ? [] : ['--armor'];
         $args = array_merge($args, $secret ? ['--batch', '--export-secret-keys'] : ['--export']);
@@ -1235,7 +1235,7 @@ class GnuPG
      * @param  string  $symmetric Encrypt with symmetric cipher only
      */
     public function encrypt(string $data, $recipients, string $signKey = null, string $passphrase = null,
-            string $alwaysTrust = false, string $outputFilename = null, string $binary = false, string $symmetric = false): GpgEncryptResult
+            string $alwaysTrust = "", string $outputFilename = null, string $binary = "", string $symmetric = ""): GpgEncryptResult
     {
         if (! is_array($recipients)) {
             $recipients = [$recipients];
@@ -1282,7 +1282,7 @@ class GnuPG
      * @param  string  $symmetric Encrypt with symmetric cipher only
      */
     public function encryptFile($filename, $recipients, string $signKey = null, string $passphrase = null,
-            string $alwaysTrust = false, string $outputFilename = null, string $binary = false, string $symmetric = false): GpgEncryptResult
+            string $alwaysTrust = "", string $outputFilename = null, string $binary = "", string $symmetric = ""): GpgEncryptResult
     {
         return $this->encrypt(
             file_get_contents($filename),
@@ -1300,7 +1300,7 @@ class GnuPG
      * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
      * @param  string  $outputFilename If not null, decrypted data will be written to file
      */
-    public function decrypt(string $data, string $passphrase, string $sender = null, string $alwaysTrust = false, string $outputFilename = null): GpgEncryptResult
+    public function decrypt(string $data, string $passphrase, string $sender = null, string $alwaysTrust = "", string $outputFilename = null): GpgEncryptResult
     {
         $args = ['--decrypt'];
         if ($outputFilename) {
@@ -1330,7 +1330,7 @@ class GnuPG
      * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
      * @param  string  $outputFilename If not null, decrypted data will be written to file
      */
-    public function decryptFile(string $filename, string $passphrase, string $sender = null, string $alwaysTrust = false, string $outputFilename = null): GpgEncryptResult
+    public function decryptFile(string $filename, string $passphrase, string $sender = null, string $alwaysTrust = "", string $outputFilename = null): GpgEncryptResult
     {
         return $this->decrypt(
             file_get_contents($filename),
