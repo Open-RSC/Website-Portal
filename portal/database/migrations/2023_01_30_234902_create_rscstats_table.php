@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         //We should order by indexed columns like ID for best performance,
         //especially since primary key ID is automatically indexed.
@@ -60,7 +60,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('rscstats');
     }
