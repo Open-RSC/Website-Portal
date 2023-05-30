@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Rules\NoBadWordsRule;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ trait CreateUserValidation
     protected function validateCreateUserInput(array $input)
     {
         Validator::make($input, [
-            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
             'email' => [
                 'required',
                 'string',
