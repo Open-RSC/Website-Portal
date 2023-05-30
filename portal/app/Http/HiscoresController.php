@@ -552,10 +552,10 @@ class HiscoresController extends Component
     /**
      * @function searchByName()
      *
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse
      * Redirects user to a player's hiscores page (to look up player by name).
      */
-    public function searchByName(Request $request): void
+    public function searchByName(Request $request): \Illuminate\Http\RedirectResponse
     {
         $name = $request->name;
         $db = $request->db;
@@ -567,10 +567,10 @@ class HiscoresController extends Component
     /**
      * @function searchByName()
      *
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse
      * Redirects user to a player's NPC hiscores page (to look up player by name).
      */
-    public function searchNpcHiscoresByName(Request $request): void
+    public function searchNpcHiscoresByName(Request $request): \Illuminate\Http\RedirectResponse
     {
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
@@ -656,7 +656,7 @@ class HiscoresController extends Component
             ->whereIn('a.npcID', $npcIDs)
             ->where('a.killCount', '>', '0')
             ->where('a.playerID', '=', $player_id)
-            ->orderByRaw(DB::raw('FIELD(a.npcID, '.implode(',', $npcIDs).')'))
+            ->orderByRaw('FIELD(a.npcID, '.implode(',', $npcIDs).')')
             ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
             ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1)) AS b'), function ($join) {
                 $join->on('a.npcID', '=', 'b.npcID')
