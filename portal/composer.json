@@ -9,29 +9,28 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "fideloper/proxy": "^4.4",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "^7.2",
         "hisorange/browser-detect": "^4.4",
         "laravel/fortify": "^1.16",
-        "laravel/framework": "^8.12",
-        "laravel/tinker": "^2.5",
-        "livewire/livewire": "^2.3",
-        "lukeraymonddowning/honey": "^0.3.1",
+        "laravel/framework": "^9.52",
+        "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.10",
+        "lukeraymonddowning/honey": "^0.4",
         "twbs/bootstrap": "4.1.3",
-        "yajra/laravel-datatables-oracle": "^9",
+        "yajra/laravel-datatables-oracle": "^9.19",
         "zanysoft/laravel-zip": "^2.0",
         "league/flysystem-aws-s3-v3": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
-        "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
-        "kitloong/laravel-migrations-generator": "^4.4",
-        "krlove/eloquent-model-generator": "^1.3",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
+        "kitloong/laravel-migrations-generator": "^5.2",
+        "krlove/eloquent-model-generator": "^2.0",
+        "laravel/sail": "^1.15",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.3",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.4"
     },
     "config": {
         "optimize-autoloader": true,
@@ -71,6 +70,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ]
     }
 }
