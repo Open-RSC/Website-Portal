@@ -158,8 +158,8 @@
                     <a class="c" href="#">Auction Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
                         <a class="c text-left" href="{{ route('auction_logs', 'cabbage') }}">RSC Cabbage Auction Logs</a>
-                        <a class="c text-left" href="{{ route('auction_logs', 'coleslaw') }}">RSC Auction Logs</a>
-                        <a class="c text-left" href="{{ route('auction_logs', 'openpk') }}">OpenPK Shop Logs</a>
+                        <a class="c text-left" href="{{ route('auction_logs', 'coleslaw') }}">RSC Coleslaw Auction Logs</a>
+                        <a class="c text-left" href="{{ route('auction_logs', 'openpk') }}">OpenPK Auction Logs</a>
                     </span>
                 </span>
                 
