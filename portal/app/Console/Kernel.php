@@ -19,17 +19,14 @@ class Kernel extends ConsoleKernel
 
     /**
      * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
 
         $schedule->command('toplist:bi-monthly')
             ->twiceMonthly(1, 16, '12:00');
-        
+
         //TODO: We should probably add clean-up at some point,
         //even though it's less than 1kb per CSV file so 20MB per year.
         if (config('openrsc.stats_hourly_csv_job_enabled')) {
@@ -45,7 +42,7 @@ class Kernel extends ConsoleKernel
                     ->cron('10 */1 * * *');
             $schedule->command('stats:generate-csv openpk')
                     ->cron('11 */1 * * *');
-        } else if (config('openrsc.stats_hourly_job_enabled')) {
+        } elseif (config('openrsc.stats_hourly_job_enabled')) {
             $schedule->command('stats:generate preservation')
                     ->cron('6 */1 * * *');
             $schedule->command('stats:generate cabbage')
@@ -59,15 +56,12 @@ class Kernel extends ConsoleKernel
             $schedule->command('stats:generate openpk')
                     ->cron('11 */1 * * *');
         }
-        
     }
 
     /**
      * Register the commands for the application.
-     *
-     * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
 

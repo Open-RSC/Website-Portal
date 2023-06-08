@@ -16,7 +16,7 @@ class droplogs extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'ID';
@@ -25,5 +25,4 @@ class droplogs extends Model
      * @var array
      */
     protected $fillable = ['itemID', 'playerID', 'dropAmount', 'npcId', 'ts'];
-
 }

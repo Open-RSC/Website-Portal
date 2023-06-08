@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $dbid
  * @property int $playerID
- * @property integer $ignore
+ * @property int $ignore
  */
 class ignores extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -22,5 +22,4 @@ class ignores extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'ignore'];
-
 }

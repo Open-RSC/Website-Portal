@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $reporter_y
  * @property int $reported_x
  * @property int $reported_y
- * @property boolean $suggests_or_mutes
- * @property boolean $tried_apply_action
+ * @property bool $suggests_or_mutes
+ * @property bool $tried_apply_action
  */
 class game_reports extends Model
 {
@@ -24,5 +24,4 @@ class game_reports extends Model
      * @var array
      */
     protected $fillable = ['reporter', 'reported', 'time', 'reason', 'chatlog', 'reporter_x', 'reporter_y', 'reported_x', 'reported_y', 'suggests_or_mutes', 'tried_apply_action'];
-
 }

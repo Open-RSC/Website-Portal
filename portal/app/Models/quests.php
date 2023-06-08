@@ -14,7 +14,7 @@ class quests extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -23,5 +23,4 @@ class quests extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'id', 'stage'];
-
 }

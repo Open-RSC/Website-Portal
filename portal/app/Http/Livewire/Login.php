@@ -2,20 +2,24 @@
 
 namespace App\Http\Livewire;
 
+use function App\Helpers\passwd_compat_hasher;
 use App\Models\cabbage;
 use App\Models\players;
 use App\Models\preservation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
-use function App\Helpers\passwd_compat_hasher;
 
 class Login extends Component
 {
     public string $game = '';
+
     public string $username = '';
+
     public string $password = '';
+
     public string $honeyPasses = '';
+
     public string $honeyInputs = '';
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application

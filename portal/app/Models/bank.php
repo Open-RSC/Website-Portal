@@ -13,7 +13,7 @@ class bank extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'bank';
@@ -22,5 +22,4 @@ class bank extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'itemID', 'slot'];
-
 }

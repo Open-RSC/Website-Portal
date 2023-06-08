@@ -16,9 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $defense
  * @property int $ranged
  * @property int $combatlvl
- * @property boolean $isMembers
- * @property boolean $attackable
- * @property boolean $aggressive
+ * @property bool $isMembers
+ * @property bool $attackable
+ * @property bool $aggressive
  * @property int $respawnTime
  * @property int $sprites1
  * @property int $sprites2
@@ -41,8 +41,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $walkModel
  * @property int $combatModel
  * @property int $combatSprite
- * @property boolean $canEdit
- * @property boolean $roundMode
+ * @property bool $canEdit
+ * @property bool $roundMode
+ *
  * @method static where(string $string, string $string1, string $searchTerm)
  */
 class npcdef extends Model

@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $item_amount
  * @property string $time
  * @property string $claim_time
- * @property boolean $claimed
+ * @property bool $claimed
  * @property string $explanation
  */
 class expired_auctions extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'claim_id';
@@ -27,5 +27,4 @@ class expired_auctions extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'item_id', 'item_amount', 'time', 'claim_time', 'claimed', 'explanation'];
-
 }

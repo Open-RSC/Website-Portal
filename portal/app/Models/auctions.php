@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property integer $auctionID
+ * @property int $auctionID
  * @property int $itemID
  * @property int $amount
  * @property int $amount_left
@@ -13,22 +13,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $seller
  * @property string $seller_username
  * @property string $buyer_info
- * @property boolean $sold-out
+ * @property bool $sold-out
  * @property string $time
- * @property boolean $was_cancel
+ * @property bool $was_cancel
  */
 class auctions extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'auctionID';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -37,5 +37,4 @@ class auctions extends Model
      * @var array
      */
     protected $fillable = ['itemID', 'amount', 'amount_left', 'price', 'seller', 'seller_username', 'buyer_info', 'sold-out', 'time', 'was_cancel'];
-
 }

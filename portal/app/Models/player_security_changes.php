@@ -18,5 +18,4 @@ class player_security_changes extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'eventAlias', 'date', 'ip', 'message'];
-
 }

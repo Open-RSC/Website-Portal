@@ -3,10 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSpammersTable extends Migration
+return new class extends Migration
 {
-
-    public function up()
+    public function up(): void
     {
         Schema::create(
             config('honey.spammer_blocking.table_name', 'spammers'),
@@ -19,5 +18,4 @@ class CreateSpammersTable extends Migration
             }
         );
     }
-
-}
+};

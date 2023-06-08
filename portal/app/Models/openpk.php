@@ -19,21 +19,21 @@ use Illuminate\Notifications\Notifiable;
  * @property int $y
  * @property int $fatigue
  * @property int $petfatigue
- * @property boolean $combatstyle
- * @property boolean $block_chat
- * @property boolean $block_private
- * @property boolean $block_trade
- * @property boolean $block_duel
- * @property boolean $cameraauto
- * @property boolean $onemouse
- * @property boolean $soundoff
+ * @property bool $combatstyle
+ * @property bool $block_chat
+ * @property bool $block_private
+ * @property bool $block_trade
+ * @property bool $block_duel
+ * @property bool $cameraauto
+ * @property bool $onemouse
+ * @property bool $soundoff
  * @property int $haircolour
  * @property int $topcolour
  * @property int $trousercolour
  * @property int $skincolour
  * @property int $headsprite
  * @property int $bodysprite
- * @property boolean $male
+ * @property bool $male
  * @property int $creation_date
  * @property string $creation_ip
  * @property int $login_date
@@ -45,10 +45,10 @@ use Illuminate\Notifications\Notifiable;
  * @property int $npc_kills
  * @property int $pets
  * @property int $deaths
- * @property boolean $iron_man
- * @property boolean $iron_man_restriction
- * @property boolean $hc_ironman_death
- * @property boolean $online
+ * @property bool $iron_man
+ * @property bool $iron_man_restriction
+ * @property bool $hc_ironman_death
+ * @property bool $online
  * @property int $quest_points
  * @property int $bank_size
  * @property int $lastRecoveryTryId
@@ -61,12 +61,15 @@ class openpk extends Authenticatable
     protected $guard = 'openpk';
 
     protected $table = 'players';
+
     public $primaryKey = 'id';
 
     public $timestamps = false;
+
     // the below don't work in laravel since type expected should be
     // timestamp and we have as int(10)
     const CREATED_AT = 'creation_date';
+
     const UPDATED_AT = 'login_date';
 
     /**

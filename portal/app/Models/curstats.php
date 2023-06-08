@@ -6,42 +6,43 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $playerID
- * @property boolean $attack
- * @property boolean $defense
- * @property boolean $strength
- * @property boolean $hits
- * @property boolean $ranged
- * @property boolean $prayer
- * @property boolean $magic
- * @property boolean $cooking
- * @property boolean $woodcut
- * @property boolean $fletching
- * @property boolean $fishing
- * @property boolean $firemaking
- * @property boolean $crafting
- * @property boolean $smithing
- * @property boolean $mining
- * @property boolean $herblaw
- * @property boolean $agility
- * @property boolean $thieving
- * @property boolean $runecraft
- * @property boolean $harvesting
+ * @property bool $attack
+ * @property bool $defense
+ * @property bool $strength
+ * @property bool $hits
+ * @property bool $ranged
+ * @property bool $prayer
+ * @property bool $magic
+ * @property bool $cooking
+ * @property bool $woodcut
+ * @property bool $fletching
+ * @property bool $fishing
+ * @property bool $firemaking
+ * @property bool $crafting
+ * @property bool $smithing
+ * @property bool $mining
+ * @property bool $herblaw
+ * @property bool $agility
+ * @property bool $thieving
+ * @property bool $runecraft
+ * @property bool $harvesting
  */
 class curstats extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'playerID';
 
     const CREATED_AT = '';
+
     const UPDATED_AT = '';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;

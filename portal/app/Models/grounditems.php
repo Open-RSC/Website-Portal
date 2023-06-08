@@ -16,7 +16,7 @@ class grounditems extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'idx';
@@ -25,5 +25,4 @@ class grounditems extends Model
      * @var array
      */
     protected $fillable = ['id', 'x', 'y', 'amount', 'respawn'];
-
 }

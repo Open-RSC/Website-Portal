@@ -20,5 +20,4 @@ class trade_logs extends Model
      * @var array
      */
     protected $fillable = ['player1', 'player2', 'player1_items', 'player2_items', 'player1_ip', 'player2_ip', 'time'];
-
 }

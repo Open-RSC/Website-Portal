@@ -12,12 +12,19 @@ use Livewire\Component;
 class Registration extends Component
 {
     public $game = '';
+
     public $username = '';
+
     public $email = '';
+
     public $password = '';
+
     public $passwordConfirmation = '';
+
     public $terms = '';
+
     public $honeyPasses = '';
+
     public $honeyInputs = '';
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
@@ -53,9 +60,9 @@ class Registration extends Component
 
     public function getClientIPaddress()
     {
-        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-            $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
+            $_SERVER['HTTP_CLIENT_IP'] = $_SERVER['HTTP_CF_CONNECTING_IP'];
         }
         $client = @$_SERVER['HTTP_CLIENT_IP'];
         $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -67,6 +74,7 @@ class Registration extends Component
         } else {
             $clientIp = $remote;
         }
+
         return $clientIp;
     }
 
@@ -74,7 +82,7 @@ class Registration extends Component
     {
         $v = $this->validate([
             'game' => 'required',
-            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:' . $this->game . '.players'],
+            'username' => ['bail', 'required', 'min:2', 'max:12', new not_contains, 'unique:'.$this->game.'.players'],
             'password' => 'required|min:4|max:20|same:passwordConfirmation',
             'email' => ['required', 'email', new not_contains],
             'terms' => 'accepted',
@@ -94,12 +102,12 @@ class Registration extends Component
 
         curstats::on($this->game)->create([
             'playerID' => $user->id,
-            'hits' => 10
+            'hits' => 10,
         ]);
 
         experience::on($this->game)->create([
             'playerID' => $user->id,
-            'hits' => 4000
+            'hits' => 4000,
         ]);
 
         session()->flash('success', 'The player was successfully registered.');

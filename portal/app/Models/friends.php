@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $dbid
  * @property int $playerID
- * @property integer $friend
+ * @property int $friend
  * @property string $friendName
  */
 class friends extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -23,5 +23,4 @@ class friends extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'friend', 'friendName'];
-
 }

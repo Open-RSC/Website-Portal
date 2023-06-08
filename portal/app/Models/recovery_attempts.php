@@ -15,7 +15,7 @@ class recovery_attempts extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'dbid';
@@ -24,5 +24,4 @@ class recovery_attempts extends Model
      * @var array
      */
     protected $fillable = ['playerID', 'username', 'time', 'ip'];
-
 }

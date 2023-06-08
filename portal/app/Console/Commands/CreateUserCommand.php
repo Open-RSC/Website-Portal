@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Actions\Fortify\CreateNewUser;
+use Illuminate\Console\Command;
 
 class CreateUserCommand extends Command
 {
@@ -24,10 +24,8 @@ class CreateUserCommand extends Command
     /**
      * Execute the console command.
      * https://laravel.com/docs/9.x/artisan
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Enter username, if not present via command line option
         $name = $this->option('username');
@@ -51,21 +49,21 @@ class CreateUserCommand extends Command
             'username' => $name,
             'email' => $email,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ];
 
         try {
             // Use fortify to create a new user.
             $new_user_action = new CreateNewUser();
             $user = $new_user_action->create($input);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error($e->getMessage());
-            return;
+            return 1;
         }
 
         // Success message
         $this->info('User created successfully!');
-        $this->info('New user id: ' . $user->id);
+        $this->info('New user id: '.$user->id);
+        return 0;
     }
 }

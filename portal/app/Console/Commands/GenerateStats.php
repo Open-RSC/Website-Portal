@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\HiscoresController;
 use App\Services\Stats\StatsService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 
 class GenerateStats extends Command
 {
@@ -35,13 +33,13 @@ class GenerateStats extends Command
 
     /**
      * Execute the console command.
-     * @return bool
      */
-    public function handle()
+    public function handle(): int
     {
         $db = $this->argument('db');
         $statsService = new StatsService($db);
         $statsService->execute();
+
         return true;
     }
 }

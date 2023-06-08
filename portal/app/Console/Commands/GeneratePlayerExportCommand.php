@@ -2,12 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Http\HiscoresController;
+use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Carbon;
-use function App\Helpers\player_is_online;
 
 class GeneratePlayerExportCommand extends Command
 {
@@ -37,15 +35,15 @@ class GeneratePlayerExportCommand extends Command
 
     /**
      * Execute the console command.
-     * @return bool
      */
-    public function handle()
+    public function handle(): int
     {
         $db = $this->argument('db');
         $username = $this->argument('username');
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
         if (player_is_online($db, $trimmed_username)) {
             $this->error("Player export for $trimmed_username on $db could not be created because player is online!");
+
             return false;
         }
         $playerExport = new PlayerExportService($trimmed_username, $db);
@@ -55,9 +53,11 @@ class GeneratePlayerExportCommand extends Command
         } catch (FileNotFoundException $e) {
             $this->error("Player export for $trimmed_username on $db could not be created!");
             $this->error($e->getMessage());
+
             return false;
         }
-        $this->info("Player export for $trimmed_username on $db created successfully! You can find it at: storage/app/" . $playerExport->getBasePath() . $playerExport->getExtraPath() . $playerExport->getFileName());
+        $this->info("Player export for $trimmed_username on $db created successfully! You can find it at: storage/app/".$playerExport->getBasePath().$playerExport->getExtraPath().$playerExport->getFileName());
+
         return true;
     }
 }
