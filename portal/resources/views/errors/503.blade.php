@@ -10,7 +10,7 @@
             flex-direction: column;
             height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #111;
+            background-color: #000;
             color: #fff;
         }
         h1 {
