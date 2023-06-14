@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Site Under Maintenance</title>
+    <title>Website Under Maintenance</title>
     <style>
         body {
             display: flex;
