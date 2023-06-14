@@ -120,3 +120,10 @@ Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha'])
 Route::post('logout', 'Livewire\Login@logout')->name('Logout');*/
 
 Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
+
+Route::get('/discord', function() {
+    if (!empty(config('openrsc.discord_url'))) {
+        return redirect(config('openrsc.discord_url')); 
+    }
+    return redirect('/');
+});

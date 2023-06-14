@@ -18,7 +18,7 @@
                 <a class="c text-left" href="/board">
                     <i class="far fa-comment-alt"></i> Forums
                 </a>
-                <a class="c text-left" href="https://discord.gg/ABdFCqn" target="_blank">
+                <a class="c text-left" href="{{ config('openrsc.discord_url') }}" target="_blank">
                     <i class="fab fa-discord"></i> Discord
                 </a>
                 <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank">
