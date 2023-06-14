@@ -123,7 +123,7 @@ Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middl
 
 Route::get('/discord', function() {
     if (!empty(config('openrsc.discord_url'))) {
-        redirect(config('openrsc.discord_url')); 
+        return redirect(config('openrsc.discord_url')); 
     }
-    redirect('/');
+    return redirect('/');
 });
