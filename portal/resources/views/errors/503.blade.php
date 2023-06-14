@@ -10,8 +10,8 @@
             flex-direction: column;
             height: 100vh;
             font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            color: #333;
+            background-color: #111;
+            color: #fff;
         }
         h1 {
             font-size: 2em;
