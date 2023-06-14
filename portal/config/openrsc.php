@@ -18,4 +18,6 @@ return [
     'web_registration_enabled' => env('WEB_REGISTRATION_ENABLED', false),
     'max_new_accounts_per_24_hours' => env('MAX_NEW_ACCOUNTS_PER_24_HOURS', 3),
     'npc_hiscores_enabled' => env('NPC_HISCORES_ENABLED', false),
+    'discord_url' => env('DISCORD_URL', 'https://discord.gg/ABdFCqn'),
+    'discord_url_on_maintenance_page' => env('DISCORD_URL_ON_MAINTENANCE_PAGE', false)
 ];

@@ -365,7 +365,7 @@ obtainable item of your choice</span> as a thanks!
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://discord.gg/ABdFCqn" target="_blank">
+                                            <a href="{{ config('openrsc.discord_url') }}" target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_support.jpg') }}"
                                                      height="120" width="77" alt="">
@@ -374,7 +374,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://discord.gg/ABdFCqn" target="_blank">
+                                                    <a href="{{ config('openrsc.discord_url') }}" target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -399,7 +399,7 @@ obtainable item of your choice</span> as a thanks!
                                                     Contact our staff
                                                 </span>
                                             <div class="d-block">
-                                                <a href="https://discord.gg/ABdFCqn" target="_blank" class="c">
+                                                <a href="{{ config('openrsc.discord_url') }}" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
