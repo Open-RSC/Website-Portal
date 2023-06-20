@@ -33,7 +33,7 @@ RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
 # Install the PHP mcrypt extention (from PECL, mcrypt has been removed from PHP 7.2)
-RUN pecl install mcrypt-1.0.5
+RUN pecl install mcrypt-1.0.6
 RUN docker-php-ext-enable mcrypt
 
 RUN apt-get -y install libmagickwand-dev

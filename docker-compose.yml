@@ -31,12 +31,12 @@ services:
       - "./etc/nginx/ssl:/etc/nginx/ssl" # Nginx SSL cert path
 
   php:
-    #build:
-    #  context: "./etc/php"
-    #  dockerfile: Dockerfile
-    #  args:
-    #    buildno: 1
-    image: blackwolfmarwood/openrsc-php:latest
+    build:
+      context: "./etc/php"
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    #image: blackwolfmarwood/openrsc-php:latest # This is used for testing purposes
     container_name: php
     restart: unless-stopped
     ports:
