@@ -68,3 +68,5 @@ portal/public/js/app.js.LICENSE.txt
 portal/public/css/all.css
 
 portal/public/css/tailwind.css
+
+etc/nginx/ssl/cloudflare.pem
