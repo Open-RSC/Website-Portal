@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('playerexport/export/', [PlayerController::class, 'exportSubmitApi'])->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
+Route::post('playerexport/export/', [PlayerController::class, 'exportSubmitApi'])->middleware(['throttle:15,20'])->name('PlayerExportSubmitApi');
