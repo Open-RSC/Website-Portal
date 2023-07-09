@@ -55,6 +55,7 @@ public class GameShell {
    private HTMLInputElement switchInput;
    private boolean ignoreInterlace = false;
    private boolean notRotate = false;
+   private boolean notScroll = false;
    public boolean interlace = false;
    public String inputTextCurrent = "";
    public String inputTextFinal = "";
@@ -307,8 +308,12 @@ public class GameShell {
             	ignoreInterlace = true;
             }
             
-            if ((charCode == 37 || charCode == 39) && (charCode != (char) code)) {
-            	notRotate = true;
+            if ((charCode == 37 || charCode == 39)) {
+            	notRotate = charCode != (char) code;
+            }
+            
+            if ((charCode == 38 || charCode == 40)) {
+            	notScroll = charCode != (char) code;
             }
 
             if (code == 8 || code == 13 || code == 10 || code == 9) {       
@@ -480,6 +485,8 @@ public class GameShell {
          this.keyRightDown = true;
       } else if (key == KeyEvent.VK_F1 && !ignoreInterlace) {
     	  // avoid inputing "p" if interlace wanted
+      } else if ((key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) && !notScroll) {
+    	  // avoid inputing the &/( when up or down is pressed
       } else {
     	// quick hack for now to prevent those keys from inputting into the chat box
     	  this.handleKeyPress(key);

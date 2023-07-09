@@ -1536,7 +1536,7 @@ public class mudclient extends GameConnection {
                      }
 
                      if(var7 == var4 - 1 && var6 && this.combatTimeout == 0 && this.logoutTimeout == 0) {
-                    	// this.sendLogout(); // TODO: re-enable some day
+                    	this.sendLogout();
                         return;
                      }
 
@@ -2807,7 +2807,7 @@ public class mudclient extends GameConnection {
 
       if(super.lastMouseAction > 4500 && this.combatTimeout == 0 && this.logoutTimeout == 0) {
          super.lastMouseAction -= 500;
-         //this.sendLogout(); // TODO: re-enable some day.
+         this.sendLogout();
       } else {
          if(this.localPlayer.animationCurrent == 8 || this.localPlayer.animationCurrent == 9) {
             this.combatTimeout = 500;

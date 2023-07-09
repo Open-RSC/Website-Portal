@@ -131,6 +131,7 @@ public class Panel {
    }
 
    public void keyPress(int var1) {
+	   
 	   if (var1 == 0) {
 		      return;
 		    }
@@ -155,19 +156,18 @@ public class Panel {
 		        }
 		      }
 		      this.te[this.mf] = true;
-		      if (var1 == 9)
-		      {
-		        for (;;)
-		        {
-		          this.mf = ((this.mf + 1) % this.ne);
-		          if (this.bf[this.mf] != 5) {
-		            if (this.bf[this.mf] == 6) {
-		              break;
-		            }
-		          }
-		        }
-		        this.te[this.mf] = true;
-		      }
+		      if(var1 == 9) {
+	               while(true) {
+	                  this.mf = (this.mf + 1) % this.ne;
+	                  if(this.bf[this.mf] == 5) {
+	                     break;
+	                  }
+
+	                  if(this.bf[this.mf] == 6) {
+	                     return;
+	                  }
+	               }
+	            }
 		    }
    }
 

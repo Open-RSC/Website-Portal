@@ -251,6 +251,9 @@ public class GameConnection extends GameShell {
                      this.friendListHashes[var8] = Utility.hash2username(this.pdata, 2 + var8 * 9);
                      this.friendListOnline[var8] = Utility.getUnsignedByte(this.pdata[10 + var8 * 9]);
                   }
+                  if (this.allowFriendSorting) {
+               	   this.sortFriends();
+                  }
                } else {
                   long var3;
                   if(this.opcode != 24) {
