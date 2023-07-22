@@ -702,7 +702,7 @@ class PlayerController extends Controller
                 'password_confirmation' => $password_confirmation,
             ]);
         } catch (\Exception $e) {
-            \Log::info($e->getMessage());
+            \Log::info("There was an error with API registration for $username: " . $e->getMessage());
             return response()->json(['message' => 'Error creating user.'], 500);
         }
 
