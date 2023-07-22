@@ -562,6 +562,11 @@ class PlayerController extends Controller
         ]);
     }
 
+    /**
+     * This method exports user's characters via an API endpoint.
+     * @param Request $request
+     * @return Application|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|null
+     */
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
@@ -630,12 +635,22 @@ class PlayerController extends Controller
 
         return Response::json('Could not generate player export', 401);
     }
-    
+
+    /**
+     * This method creates user's new characters via an API endpoint.
+     * Some duplicated validation here is necessary for JSON
+     * error messages, since it is technically handled at a 
+     * higher up level outside Fortify, since we have our own
+     * custom API handled right here.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function registerUserApi(Request $request)
     {
-        if (!config('openrsc.api_registration_enabled')) {
+        if (!config('openrsc.api_registration_enabled') ||  (config('app.env') === 'production' && url('/') !== config('app.url'))) {
             abort(404);
         }
+        
         try {
             $validated = $this->validate($request, [
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
