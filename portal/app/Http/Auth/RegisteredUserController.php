@@ -14,7 +14,7 @@ class RegisteredUserController extends \Laravel\Fortify\Http\Controllers\Registe
 
     public function store(Request $request, CreatesNewUsers $creator): RegisterResponse
     {
-        if (! config('openrsc.web_registration_enabled')) {
+        if (!config('openrsc.web_registration_enabled') || (config('app.env') === 'production' && url('/') !== config('app.url'))) {
             return app(RegisterResponse::class);
         }
         $this->validateCreateUserRequest($request);
