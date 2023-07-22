@@ -647,7 +647,7 @@ class PlayerController extends Controller
      */
     public function registerUserApi(Request $request)
     {
-        if (!config('openrsc.api_registration_enabled') ||  (config('app.env') === 'production' && url('/') !== config('app.url'))) {
+        if (!config('openrsc.api_registration_enabled') || (config('app.env') === 'production' && url('/') !== config('app.url'))) {
             abort(404);
         }
         
