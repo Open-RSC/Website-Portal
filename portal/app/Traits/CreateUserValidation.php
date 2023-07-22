@@ -22,12 +22,7 @@ trait CreateUserValidation
     {
         Validator::make($input, [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-            ],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
             'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
         ])->validate();

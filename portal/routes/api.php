@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmitApi'])->middleware(['throttle:15,20'])->name('PlayerExportSubmitApi');
+
+Route::post('/register/', [PlayerController::class, 'registerUserApi'])->middleware(['throttle:15,20'])->name('RegisterUserApi');

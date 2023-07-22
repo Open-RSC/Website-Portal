@@ -2,7 +2,10 @@
 
 namespace App\Http;
 
+use App\Actions\Fortify\CreateNewUser;
 use function App\Helpers\add_characters;
+use function App\Helpers\get_client_ip_address;
+use function App\Helpers\is_incorrect_production_url;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
@@ -560,6 +563,11 @@ class PlayerController extends Controller
         ]);
     }
 
+    /**
+     * This method exports user's characters via an API endpoint.
+     * @param Request $request
+     * @return Application|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|null
+     */
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
@@ -627,6 +635,78 @@ class PlayerController extends Controller
         }
 
         return Response::json('Could not generate player export', 401);
+    }
+
+    /**
+     * This method creates user's new characters via an API endpoint.
+     * Some duplicated validation here is necessary for JSON
+     * error messages, since it is technically handled at a 
+     * higher up level outside Fortify, since we have our own
+     * custom API handled right here.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function registerUserApi(Request $request)
+    {
+        if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
+            abort(404);
+        }
+        
+        try {
+            $validated = $this->validate($request, [
+                'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+                'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $e->validator->errors(),
+            ], 422);
+        }
+
+        $db = $request->input('db');
+        $username = $request->input('username');
+        $password = add_characters($request->input('password'), 20);
+        $password_confirmation = add_characters($request->input('password_confirmation'), 20);
+        $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
+
+        // Check if the user already exists
+        if (DB::connection($db)->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
+            return response()->json(['message' => 'The username is already in use.'], 409); // Conflict status code
+        }
+        
+        // Check if the user already has too many accounts
+        $recentAccounts = DB::connection($db)->table('players')
+        ->where('creation_ip', '=', get_client_ip_address())
+        ->where('creation_date', '>=', time() - 86400)
+        ->count();
+
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
+            return response()->json([
+                'message' => 'You have created too many accounts in the past 24 hours.',
+                'status' => 429
+            ], 429);
+        }
+
+        // Create the user using Fortify's logic
+        try {
+            $new_user_action = new CreateNewUser();
+            $user = $new_user_action->create([
+                'db' => $db,
+                'name' => $username,
+                'username' => $username,
+                'email' => $request->input('email') ?? "",
+                'password' => $password,
+                'password_confirmation' => $password_confirmation,
+            ]);
+        } catch (\Exception $e) {
+            \Log::info($e->getMessage());
+            return response()->json(['message' => 'Error creating user.'], 500);
+        }
+
+        return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 200);
     }
 
     public function passwordNeedsRehash($passwordHashed)

@@ -39,11 +39,11 @@ class CreateAdminCommand extends Command
             $email = $this->ask('Please enter your E-Mail.');
         }
 
-        // Always enter password from userinput for more security.
+        // Always enter password from user input for more security.
         $password = $this->secret('Please enter a new password.');
         $password_confirmation = $this->secret('Please confirm the password');
 
-        // Prepare input for the fortify user creation action
+        // Prepare input for the Fortify user creation action
         $input = [
             'name' => $name,
             'username' => $name,
@@ -54,7 +54,7 @@ class CreateAdminCommand extends Command
         ];
 
         try {
-            // Use fortify to create a new user.
+            // Use Fortify to create a new user.
             $new_user_action = new CreateNewUser();
             $user = $new_user_action->create($input);
         } catch (\Exception $e) {
