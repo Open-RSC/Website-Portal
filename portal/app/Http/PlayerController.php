@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Actions\Fortify\CreateNewUser;
 use function App\Helpers\add_characters;
 use function App\Helpers\get_client_ip_address;
+use function App\Helpers\is_incorrect_production_url;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
@@ -647,7 +648,7 @@ class PlayerController extends Controller
      */
     public function registerUserApi(Request $request)
     {
-        if (!config('openrsc.api_registration_enabled') || (config('app.env') === 'production' && url('/') !== config('app.url'))) {
+        if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
             abort(404);
         }
         

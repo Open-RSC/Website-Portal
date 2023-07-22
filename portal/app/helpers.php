@@ -79,3 +79,10 @@ if (! function_exists('player_is_online')) {
         return $player !== null && ((int) $player->online) === 1;
     }
 }
+
+if (! function_exists('is_incorrect_production_url')) {
+    function is_incorrect_production_url()
+    {
+        return (config('app.env') === 'production' && url('/') !== config('app.url'));
+    }
+}
