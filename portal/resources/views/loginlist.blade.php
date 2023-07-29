@@ -29,6 +29,7 @@
                     {title: "Former Name", data: 'former_name'},
                     {title: "IP Address", data: 'ip'},
                     {title: "Date", data: 'time'},
+                    {title: "Version", data: 'clientVersion'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
                         return "<a href='/staff/{{$db}}/player/" + data.playerID + "/detail'><i class='fa fa-eye'></i></a>";    
                     }},
