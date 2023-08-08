@@ -195,7 +195,7 @@
                 </span>
                 </div>
             </div>
-        @endif
+        @endisset
 
         <div class="p-1"></div>
     @endif
