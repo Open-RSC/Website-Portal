@@ -158,18 +158,14 @@
 
         @isset($players->first()->username)
             <div class="row e" style="background-color: black;">
-                <div class="col-4 pt-2" style="width: 75px;">
-                    <div class="rscfont d-block">
-                        @if($db== 'preservation')
-                            <!-- Due to legacy OpenRSC database not following regular naming scheme -->
-                            <img src="{{ asset('/img/avatars').'/'.'openrsc'.'+'.$players->first()->id }}.png"
-                                 alt="({{ $players->first()->username }})"/>
-                        @else
-                            <img src="{{ asset('/img/avatars').'/'.$db.'+'.$players->first()->id }}.png"
-                                 alt="({{ $players->first()->username }})"/>
-                        @endif
+                @if (File::exists(public_path('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $players->first()->id . '.png')))
+                    <div class="col-4 pt-2" style="width: 75px;">
+                        <div class="rscfont d-block">
+                            <!-- Due to legacy OpenRSC database not following regular naming scheme, we hardcode the db name openrsc -->
+                            <img src="{{ asset('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $players->first()->id . '.png') }}" alt="({{ $players->first()->username }})"/>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="col-8 text-left" style="width: 200px;">
                 <span class="rscfont d-block">
                     Status:
@@ -199,7 +195,7 @@
                 </span>
                 </div>
             </div>
-        @endif
+        @endisset
 
         <div class="p-1"></div>
     @endif
