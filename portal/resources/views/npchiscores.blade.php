@@ -24,7 +24,7 @@
             </div>
             <div class="hiscores-player-list">
                 <div class="hiscores-list-label">
-                    <b>{{ ucwords($db) ?? "preservation" }} {{ $npc_name }} Hiscores</b>
+                    <b>{{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} {{ $npc_name }} Hiscores</b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">

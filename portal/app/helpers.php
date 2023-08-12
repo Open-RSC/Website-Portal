@@ -86,3 +86,12 @@ if (! function_exists('is_incorrect_production_url')) {
         return (config('app.env') === 'production' && url('/') !== config('app.url'));
     }
 }
+
+if (! function_exists('ucworlds')) {
+    function uc_worlds($db) {
+        if ($db === "openpk") {
+            return "OpenPK";
+        }
+        return ucwords($db);
+    }
+}

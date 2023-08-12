@@ -46,7 +46,22 @@
             @endif
             <div class="hiscores-player-list">
                 <div class="hiscores-list-label">
-                    <b>Overall Hiscores</b>
+                     <b> {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} 
+                        @if(!empty($ironman_mode))
+                            @switch($ironman_mode)
+                                @case(1)
+                                    Ironman
+                                    @break
+                                @case(2)
+                                    Ultimate
+                                    @break
+                                @case(3)
+                                    Hardcore
+                                    @break
+                            @endswitch
+                        @endif
+                        @if ($db == "openpk") Kill @else Overall @endif Hiscores
+                    </b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">
