@@ -44,6 +44,7 @@
 
             <div class="hiscores-player-list">
                 <div class="hiscores-list-label">
+                    <b>{{ \App\Helpers\uc_worlds($db) ?? "Preservation" }}</b>
                     @if($subpage == null)
                         <b>Overall Hiscores</b>
                     @elseif($subpage == 'hits')
