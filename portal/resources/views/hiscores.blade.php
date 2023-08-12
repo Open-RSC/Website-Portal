@@ -66,7 +66,7 @@
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">
                         <div class="text-right" style="width:40px;"><b>Rank</b></div>
-                        <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
+                        <div class="text-left" style="padding-left:10px; width:160px;"><b>Name</b></div>
                         <div class="text-right" style="width:30px;"><b>@if ($db === "openpk")
                                     Kills
                                 @else
@@ -88,8 +88,8 @@
                                 {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
                             </div>
                             <!--Player-->
-                            <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c"
+                            <div class="text-left" style="padding-left:10px; width:160px;">
+                                {{ $player->iron_man ?? "" }} <a class="c"
                                    href="/player/{{ $db }}/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Total Level-->

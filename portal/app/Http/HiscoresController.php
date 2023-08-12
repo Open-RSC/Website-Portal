@@ -614,7 +614,8 @@ class HiscoresController extends Component
         $hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
-            ->select(['npckills.*', 'players.username as username'])
+            ->join('ironman', 'players.id', '=', 'ironman.playerID')
+            ->select(['npckills.*', 'ironman.iron_man', 'players.username as username'])
             ->orderBy('npckills.killCount', 'desc')
             ->where([
                 ['npckills.npcID', '=', $npc_id],
@@ -638,7 +639,7 @@ class HiscoresController extends Component
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $player = DB::connection($db)->table('players')->where('username', '=', $player_name)->first();
+        $player = DB::connection($db)->table('players')->join('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
         if (! $player) {
             abort(404);
         }
