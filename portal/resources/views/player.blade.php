@@ -18,7 +18,7 @@
                 <tr>
                     <td class="e">
                         <div class="text-center">
-                            RuneScape Hiscores for
+                            RuneScape Hiscores for {{ $player->iron_man ?? "" }}
                             @if ($players->first()->group_id < '10')
                                 <span class="pl-1"></span>
                                 <img class="inline mb-1" src="{{ asset('img') }}/{{ $players->first()->group_id }}.svg"
