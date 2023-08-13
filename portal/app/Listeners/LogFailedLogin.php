@@ -22,7 +22,7 @@ class LogFailedLogin
      */
     public function handle(Failed $event): void
     {
-        if (config('openrsc.logging_logging_enabled')) {
+        if (config('openrsc.login_logging_enabled')) {
             $credentials = $event->credentials;
             \DB::table('failed_login_logs')->insert([
                 'username' => $credentials['username'], 

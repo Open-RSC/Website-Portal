@@ -22,7 +22,7 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event): void
     {
-        if (config('openrsc.logging_logging_enabled')) {
+        if (config('openrsc.login_logging_enabled')) {
             $user = $event->user;
             \DB::table('loginlogs')->insert([
                 'username' => $user->username,
