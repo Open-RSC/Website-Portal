@@ -14,6 +14,7 @@ return [
     'player_exports_moderator_only' => env('PLAYER_EXPORTS_MODERATOR_ONLY', false),
     'login_enabled' => env('LOGIN_ENABLED', true),
     'login_admin_only' => env('LOGIN_ADMIN_ONLY', false),
+    'login_logging_enabled' => env('LOGIN_LOGGING_ENABLED', false),
     'board_enabled' => env('BOARD_ENABLED', true),
     'web_registration_enabled' => env('WEB_REGISTRATION_ENABLED', false),
     'api_registration_enabled' => env('API_REGISTRATION_ENABLED', false),
