@@ -24,7 +24,7 @@ class LogSuccessfulLogin
     {
         if (config('openrsc.login_logging_enabled')) {
             $user = $event->user;
-            \DB::table('loginlogs')->insert([
+            \DB::table('successful_login_logs')->insert([
                 'username' => $user->username,
                 'ip' => get_client_ip_address(),
                 'created_at' => now(),
