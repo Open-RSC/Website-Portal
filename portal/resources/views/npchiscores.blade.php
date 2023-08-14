@@ -44,7 +44,7 @@
                                     <img src="{{ asset('img/iron.png') }}" alt="Ironman">
                                 @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == 2)
                                     <img src="{{ asset('img/uim.png') }}" alt="Ultimate Ironman">
-                                @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == -1)
+                                @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == 3)
                                     <img src="{{ asset('img/hcim.png') }}" alt="Hardcore Ironman">
                                 @endif
                                 &nbsp;<a class="c" href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>

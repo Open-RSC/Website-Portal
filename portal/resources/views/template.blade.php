@@ -224,15 +224,15 @@
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
                                         @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
-                                            <div class="d-block">
-                                                <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
-                                                <a class="c"
+                                            <div class="d-flex align-items-center" style="width:255px">
+                                                <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> &nbsp;|&nbsp;
+                                                <img src="{{ asset('img/iron.png') }}" alt="Ironman">&nbsp;<a class="c"
                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/1">Ironman</a>
-                                                |
-                                                <a class="c"
+                                                &nbsp;|&nbsp;
+                                                <img src="{{ asset('img/uim.png') }}" alt="Ultimate Ironman">&nbsp;<a class="c"
                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/2">Ultimate</a>
-                                                |
-                                                <a class="c"
+                                                &nbsp;|&nbsp;
+                                                <img src="{{ asset('img/hcim.png') }}" alt="Hardcore Ironman">&nbsp;<a class="c"
                                                    href="/hiscores/{{ $db ?? 'preservation' }}/{{ $subpage ?? 'skill_total' }}/3">Hardcore</a>
                                             </div>
                                         @endif
