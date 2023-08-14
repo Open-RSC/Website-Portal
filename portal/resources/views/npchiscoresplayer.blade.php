@@ -17,15 +17,22 @@
             <table class="hiscores-player-table" cellpadding="4" border="0" style="background-color: black;">
                 <tr>
                     <td class="e">
-                        <div class="text-center">
-                            {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} NPC Hiscores for
+                        <div class="text-center d-flex align-items-center">
+                            {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} NPC Hiscores {!! (($db === "cabbage" || $db === "coleslaw") && ($player->iron_man === 1 || $player->iron_man === 2 || $player->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!} 
+                            @if(($db === "cabbage" || $db === "coleslaw") && $player->iron_man === 1)
+                                <img src="{{ asset('img/iron.png') }}" alt="Ironman">
+                            @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man === 2)
+                                <img src="{{ asset('img/uim.png') }}" alt="Ultimate Ironman">
+                            @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man === -1)
+                                <img src="{{ asset('img/hcim.png') }}" alt="Hardcore Ironman">
+                            @endif
                             @if ($player->group_id < '10')
                                 <span class="pl-1"></span>
                                 <img class="inline mb-1" src="{{ asset('img') }}/{{ $player->group_id }}.svg"
                                      alt="group {{ $player->group_id }}" style="height: 11px; width: auto;"/>
                             @endif
                             <span class="rscfont" style="color:yellow;">
-                                    {{ ucfirst($player->username) }}
+                                <span class="ml-1"></span>{{ ucfirst($player->username) }}
                             </span>
                         </div>
                         

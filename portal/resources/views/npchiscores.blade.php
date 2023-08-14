@@ -29,8 +29,8 @@
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">
                         <div class="text-right" style="width:40px;"><b>Rank</b></div>
-                        <div class="text-left" style="padding-left:10px; width:130px;"><b>Player Name</b></div>
-                        <div class="text-right" style="width:70px;"><b>Kills</b></div>
+                        <div class="text-left" style="padding-left:10px; width:160px;"><b>Player Name</b></div>
+                        <div class="text-right" style="width:40px;"><b>Kills</b></div>
                     </div>
                     @foreach ($hiscores as $key=>$player)
                         <div class="d-flex">
@@ -39,9 +39,15 @@
                                 {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
                             </div>
                             <!--Player-->
-                            <div class="text-left" style="padding-left:10px; width:130px;">
-                                <a class="c"
-                                   href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
+                            <div class="text-left d-flex align-items-center" style="padding-left:10px; width:160px;">
+                                @if(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == 1)
+                                    <img src="{{ asset('img/iron.png') }}" alt="Ironman">
+                                @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == 2)
+                                    <img src="{{ asset('img/uim.png') }}" alt="Ultimate Ironman">
+                                @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man == -1)
+                                    <img src="{{ asset('img/hcim.png') }}" alt="Hardcore Ironman">
+                                @endif
+                                &nbsp;<a class="c" href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Kills-->
                             <div class="text-right" style="padding-right:15px; width:100px;">
