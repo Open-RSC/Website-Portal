@@ -29,8 +29,6 @@
                                                         Fighting
                                                     @elseif($skill == 'woodcut')
                                                         Woodcutting
-                                                    @elseif($skill == 'herblaw')
-                                                        Herblore
                                                     @elseif($skill == 'runecraft')
                                                         Runecrafting
                                                     @else
