@@ -614,7 +614,7 @@ class HiscoresController extends Component
         $hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
-            ->join('ironman', 'players.id', '=', 'ironman.playerID')
+            ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
             ->select(['npckills.*', 'ironman.iron_man', 'players.username as username'])
             ->orderBy('npckills.killCount', 'desc')
             ->where([
@@ -639,7 +639,7 @@ class HiscoresController extends Component
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $player = DB::connection($db)->table('players')->join('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
+        $player = DB::connection($db)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
         if (! $player) {
             abort(404);
         }
@@ -654,6 +654,7 @@ class HiscoresController extends Component
         $hiscores = DB::connection($db)
             ->table('npckills AS a')
             ->join('players', 'players.id', '=', 'a.playerID')
+            ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
             ->whereIn('a.npcID', $npcIDs)
             ->where('a.killCount', '>', '0')
             ->where('a.playerID', '=', $player_id)
