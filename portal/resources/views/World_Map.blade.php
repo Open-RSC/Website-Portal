@@ -31,29 +31,38 @@
                     const boxHeight = 13;
                     const crosshairOffsetX = 4;
                     const charMultiplier = 3;
+                    
+                    if (username.length > 0) {
+                        // draw box around player name
+                        context.drawImage(box, {{$mapWidth}} - ((charX + charAdderX + boxOffsetX) * charMultiplier),
+                            (charY + charAdderY + boxOffsetY) * charMultiplier, boxWidth, boxHeight);
+    
+                        // draw player name
+                        context.fillText(username, {{$mapWidth}} - ((charX + charAdderX) * charMultiplier),
+                            (charY + charAdderY) * charMultiplier);
+                        
+                        // draw crosshairs
+                        context.fillText("+", {{$mapWidth}} - ((charX + charAdderX + crosshairOffsetX) * charMultiplier),
+                            (charY + charAdderY) * charMultiplier);
+                    
+                    } else {
+                        // draw smiley
+                        context.fillText("🙂", {{$mapWidth}} - ((charX + charAdderX + crosshairOffsetX) * charMultiplier),
+                            (charY + charAdderY) * charMultiplier);
+                    }
 
-                    // draw box around player name
-                    context.drawImage(box, {{$mapWidth}} - ((charX + charAdderX + boxOffsetX) * charMultiplier),
-                        (charY + charAdderY + boxOffsetY) * charMultiplier, boxWidth, boxHeight);
-
-                    // draw player name
-                    context.fillText(username, {{$mapWidth}} - ((charX + charAdderX) * charMultiplier),
-                        (charY + charAdderY) * charMultiplier);
-
-                    // draw crosshairs
-                    context.fillText("+", {{$mapWidth}} - ((charX + charAdderX + crosshairOffsetX) * charMultiplier),
-                        (charY + charAdderY) * charMultiplier);
+                    
                 }
 
                 function drawPosition() {
                     let canvas = document.getElementById('canvas');
                     let context = canvas.getContext('2d');
                     let box = document.getElementById("box");
-
+                    let usernamesHidden = @json($usernamesHidden);
                     // text overlay settings
-                    context.font = '1.25em RSCBold';
+                    context.font = usernamesHidden ? '2.0em RSCBold' : '1.25em RSCBold';
                     context.textBaseline = 'middle';
-                    context.fillStyle = "red";
+                    context.fillStyle = "#fcce48";
 
                     function drawPlayers() {
                         @foreach ($playerPositions as $char)
