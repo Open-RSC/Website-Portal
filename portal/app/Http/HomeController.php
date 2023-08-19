@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -262,9 +263,14 @@ class HomeController extends Controller
                     ->orWhereNull('a.value');
             })
             ->get();
-
-        $playerPositions = $playerPositions->toArray();
-
+        
+        $playerPositions = $playerPositions->map(function ($player) {
+            if (Auth::user() === null || !Auth::user()->hasPlayerModerator()) {
+                $player->username = ""; 
+            }
+            return $player;
+        })->toArray();
+        
         $mapImagePath = 'img/RscVet-FullWorldMap.png';
 
         // Specify the dimensions of the provided map image
@@ -290,6 +296,7 @@ class HomeController extends Controller
             'mapHeight' => $mapHeight,
             'xOffset' => $xOffset,
             'yOffset' => $yOffset,
+            'usernamesHidden' => Auth::user() === null || !Auth::user()->hasPlayerModerator()
         ]);
     }
 
