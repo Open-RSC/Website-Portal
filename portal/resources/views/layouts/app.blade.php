@@ -127,8 +127,6 @@
                                         <b>Hitpoints Hiscores</b>
                                     @elseif($subpage == 'woodcut')
                                         <b>Woodcutting Hiscores</b>
-                                    @elseif($subpage == 'herblaw')
-                                        <b>Herblore Hiscores</b>
                                     @elseif($subpage == 'runecraft')
                                         <b>Runecrafting Hiscores</b>
                                     @else
