@@ -3,9 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Throwable;
+use function App\Helpers\get_client_ip_address;
 
 class Handler extends ExceptionHandler
 {
@@ -52,14 +54,19 @@ class Handler extends ExceptionHandler
      */
     public function logMessageToDatabase(string $message, string $context = "")
     {
-        $currentRequest = request();
-        $url = $currentRequest->fullUrl() ?? "";
         if (Schema::hasTable('error_logs')) {
+            $currentRequest = request();
+            $url = $currentRequest->fullUrl() ?? "";
+            $user = Auth::user();
+            $username = $user ? $user->username : 'Guest';
+            $ipAddress = get_client_ip_address() ?? "";
             DB::table('error_logs')->insert([
                 'message' => $message,
                 'level' => 'error',
                 'context' => $context,
                 'url' => $url,
+                'username' => $username, 
+                'ip' => $ipAddress, 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -72,15 +79,20 @@ class Handler extends ExceptionHandler
      * @return void
      */
     private function logToDatabase(Throwable $exception) {
-        $currentRequest = request();
-        $url = $currentRequest->fullUrl() ?? "";
         if (Schema::hasTable('error_logs')) {
+            $currentRequest = request();
+            $url = $currentRequest->fullUrl() ?? "";
+            $user = Auth::user();
+            $username = $user ? $user->username : 'Guest';
+            $ipAddress = get_client_ip_address() ?? "";
             DB::table('error_logs')->insert([
                 'message' => $exception->getMessage(),
                 'level' => 'error',
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
                 'url' => $url,
+                'username' => $username, 
+                'ip' => $ipAddress, 
                 'context' => json_encode($exception->getTrace()),
                 'created_at' => now(),
                 'updated_at' => now(),
