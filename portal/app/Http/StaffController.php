@@ -457,9 +457,6 @@ class StaffController extends Controller
 
     public function staffLogsData(Request $request, $db)
     {
-        
-        $object = null;
-        $object->getObject();
         if (Auth::user() === null) {
             return redirect('/login');
         }
