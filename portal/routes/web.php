@@ -111,6 +111,9 @@ Route::get('staff/{db}/rename_logs', [StaffController::class, 'rename_logs'])->m
 Route::get('staff/{db}/rename_logs/data', [StaffController::class, 'renameLogsData'])->middleware('auth')->name('RenameLogsData');
 Route::get('staff/{db}/staff_logs', [StaffController::class, 'staff_logs'])->middleware('auth')->name('staff_logs');
 Route::get('staff/{db}/staff_logs/data', [StaffController::class, 'staffLogsData'])->middleware('auth')->name('StaffLogsData');
+Route::get('staff/error_logs', [StaffController::class, 'errorLogsList'])->middleware('auth')->name('ErrorLogsList');
+Route::get('staff/error_logs/data', [StaffController::class, 'errorLogsData'])->middleware('auth')->name('ErrorLogsData');
+Route::get('staff/error_logs/{id}', [StaffController::class, 'errorLogsView'])->middleware('auth')->name('ErrorLogsDetail');
 
 //Route::get('register', 'Livewire\Registration')->name('Player Registration');
 //Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
