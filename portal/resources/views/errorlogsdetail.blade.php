@@ -4,8 +4,11 @@
     <div class="container">
         <h2>Error Log Detail</h2>
         <p><a href="{{ route('ErrorLogsList') }}">Return to list</a></p>
+        <p><strong>Created At:</strong> {{ $errorLog->created_at }}</p>
+        <p><strong>Updated At:</strong> {{ $errorLog->updated_at }}</p>
         <p><strong>Message:</strong> {{ $errorLog->message }}</p>
-        <p><strong>Level:</strong> {{ $errorLog->level }}</p>
+        <p><strong>File:</strong> {{ $errorLog->file }}</p>
+        <p><strong>Line:</strong> {{ $errorLog->line }}</p>
         <p><strong>Context:</strong></p>
         @if(\App\Helpers\is_json($errorLog->context)) 
           <ul>
@@ -22,9 +25,6 @@
         @else
           <p>{{ $errorLog->context }}</p>
         @endif
-        <p><strong>File:</strong> {{ $errorLog->file }}</p>
-        <p><strong>Line:</strong> {{ $errorLog->line }}</p>
-        <p><strong>Created At:</strong> {{ $errorLog->created_at }}</p>
-        <p><strong>Updated At:</strong> {{ $errorLog->updated_at }}</p>
+        <p><strong>Level:</strong> {{ $errorLog->level }}</p>
     </div>
 @endsection
