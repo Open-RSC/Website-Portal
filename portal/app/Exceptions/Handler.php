@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Throwable;
@@ -52,11 +53,14 @@ class Handler extends ExceptionHandler
      */
     public function logMessageToDatabase(string $message, string $context = "")
     {
+        $currentRequest = request();
+        $url = $currentRequest->fullUrl() ?? "";
         if (Schema::hasTable('error_logs')) {
             DB::table('error_logs')->insert([
                 'message' => $message,
                 'level' => 'error',
                 'context' => $context,
+                'url' => $url,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -69,12 +73,15 @@ class Handler extends ExceptionHandler
      * @return void
      */
     private function logToDatabase(Throwable $exception) {
+        $currentRequest = request();
+        $url = $currentRequest->fullUrl() ?? "";
         if (Schema::hasTable('error_logs')) {
             DB::table('error_logs')->insert([
                 'message' => $exception->getMessage(),
                 'level' => 'error',
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
+                'url' => $url,
                 'context' => json_encode($exception->getTrace()),
                 'created_at' => now(),
                 'updated_at' => now(),
