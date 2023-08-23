@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('context')->nullable();
             $table->string('file')->nullable();
             $table->integer('line')->nullable();
+            $table->string('url')->nullable();
             $table->timestamps();
         });
     }
