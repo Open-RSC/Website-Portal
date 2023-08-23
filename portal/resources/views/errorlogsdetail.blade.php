@@ -6,6 +6,8 @@
         <p><a href="{{ route('ErrorLogsList') }}">Return to list</a></p>
         <p><strong>Created At:</strong> {{ $errorLog->created_at }}</p>
         <p><strong>Updated At:</strong> {{ $errorLog->updated_at }}</p>
+        <p><strong>Username:</strong> {{ $errorLog->username ?? "" }}</p>
+        <p><strong>IP:</strong> {{ $errorLog->ip ?? "" }}</p>
         <p><strong>Message:</strong> {{ $errorLog->message }}</p>
         <p><strong>Level:</strong> {{ $errorLog->level ?? "" }}</p>
         <p><strong>File:</strong> {{ $errorLog->file ?? "" }}</p>
