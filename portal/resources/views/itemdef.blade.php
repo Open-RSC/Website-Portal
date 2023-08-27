@@ -3,7 +3,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center pt-5 pb-3 text-capitalize display-3">
-            <a href="{{ route('items') }}">{{ $itemdef->name }}</a>
+            <a href="{{ route('Items') }}">{{ $itemdef->name }}</a>
         </h2>
 
         <div class="row align-items-center">
@@ -125,14 +125,6 @@
                 <div class="d-block">
                     <span class="">High Alch Price: </span>
                     <span class=" text-primary">{{ number_format($itemdef->basePrice * 0.6) }}gp</span>
-                </div>
-                <div class="d-block">
-                    <span class="">Total Player Held: </span>
-                    <span class=" text-primary">{{ number_format($totalPlayerHeld) }}</span>
-                </div>
-                <div class="d-block">
-                    <span class="">Online Last 90d Held: </span>
-                    <span class=" text-primary">{{ number_format($last3moPlayerHeld) }}</span>
                 </div>
             </div>
         </div>

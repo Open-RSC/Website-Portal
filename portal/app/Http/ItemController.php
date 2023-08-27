@@ -99,16 +99,17 @@ class ItemController extends Controller
          */
         $totalPlayerHeld_bank = DB::connection('preservation')
             ->table('bank')
-            ->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned')
+            ->select('itemstatuses.amount', 'bank.playerID', 'players.id', 'players.group_id', 'players.banned')
+			->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('bank.playerID', '=', 'players.id')
                     ->where([
-                        ['bank.id', '=', $id],
+						['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                     ]);
             })
-            ->sum('amount');
+            ->sum('itemstatuses.amount');
 
         /**
          * @var
@@ -116,16 +117,17 @@ class ItemController extends Controller
          */
         $totalPlayerHeld_invitems = DB::connection('preservation')
             ->table('invitems')
-            ->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned')
+            ->select('itemstatuses.amount', 'invitems.playerID', 'players.id', 'players.group_id', 'players.banned')
+			->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('invitems.playerID', '=', 'players.id')
                     ->where([
-                        ['invitems.id', '=', $id],
+						['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                     ]);
             })
-            ->sum('amount');
+            ->sum('itemstatuses.amount');
 
         /**
          * @var
@@ -139,11 +141,12 @@ class ItemController extends Controller
          */
         $last3moPlayerHeld_bank = DB::connection('preservation')
             ->table('bank')
-            ->select('bank.id', 'bank.playerID', 'bank.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
+            ->select('itemstatuses.amount', 'bank.playerID', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
+			->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('bank.playerID', '=', 'players.id')
                     ->where([
-                        ['bank.id', '=', $id],
+                        ['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                         ['players.login_date', '>=', Carbon::now()
@@ -159,12 +162,13 @@ class ItemController extends Controller
          */
         $last3moPlayerHeld_invitems = DB::connection('preservation')
             ->table('invitems')
-            ->select('invitems.id', 'invitems.playerID', 'invitems.amount', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
+            ->select('itemstatuses.amount', 'invitems.playerID', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
+			->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
             ->join('players', function ($join) use ($id) {
                 $join
                     ->on('invitems.playerID', '=', 'players.id')
                     ->where([
-                        ['invitems.id', '=', $id],
+                        ['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                         ['players.login_date', '>=', Carbon::now()
