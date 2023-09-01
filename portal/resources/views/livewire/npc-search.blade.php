@@ -1,7 +1,7 @@
 <div class="col">
     <div class="d-flex justify-content-start pb-1">
-        <input class="e pl-1 text-white click" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
-               style="max-width:150px; background:black; width: 100%;">
+        <input class="e pl-1 text-white click responsive-input" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
+               style="background:black;">
     </div>
 
     <div class="e bg-black p-2" style="outline:black; max-width: 100%;">
@@ -834,3 +834,14 @@
         793: Lundail
     </div>
 </div>
+<style>
+  .responsive-input {
+    width: 500px;
+  }
+
+  @media (max-width: 768px) {
+    .responsive-input {
+      width: 100%;
+    }
+  }
+</style>
