@@ -1,42 +1,43 @@
 <div class="col">
-    <div class="d-flex justify-content-left pb-1">
+    <div class="d-flex justify-content-start pb-1">
         <input class="e pl-1 text-white click" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
-               style="width:150px; background:black;">
+               style="max-width:150px; background:black; width: 100%;">
     </div>
 
-    <div class="e bg-black p-2" style="outline:black; width:500px;">
-        <div class="d-flex">
-            <div class="text-center" style="width:80px;"><b>Image</b></div>
-            <div class="text-left" style="padding-left:10px; width:130px;"><b>Name</b></div>
-            <div class="text-left" style="width:40px;"><b>Level</b></div>
-            <div class="text-left" style="padding-left:10px; width:230px;"><b>Description</b></div>
+    <div class="e bg-black p-2" style="outline:black; max-width: 100%;">
+        <div class="d-flex flex-wrap">
+            <div class="text-center flex-fill"><b>Image</b></div>
+            <div class="text-left flex-fill"><b>Name</b></div>
+            <div class="text-left flex-fill"><b>Level</b></div>
+            <div class="text-left flex-fill"><b>Description</b></div>
         </div>
+
         @foreach($npcResults as $key=>$npcdef)
-            <div class="d-flex pt-3">
+            <div class="d-flex flex-wrap pt-3">
                 <!--Image-->
-                <div class="img-fluid pt-1 pb-1 mx-auto" style="max-width:80px;">
+                <div class="img-fluid pt-1 pb-1 mx-auto flex-fill" style="max-width: 80px;">
                     <img src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png" alt="{{ $npcdef->name }}"
                          style="max-height: 62px; max-width: 75px;"/>
                 </div>
                 <!--Name-->
-                <div class="text-left pt-1 pb-1" style="padding-left:10px; width:130px;">
+                <div class="text-left pt-1 pb-1 flex-fill" style="padding-left:10px;">
                     <a class="c" href="/npcdef/{{ $npcdef->id }}">{{ ucfirst($npcdef->name) }}</a>
                 </div>
                 <!--Level-->
-                <div class="text-left pt-1 pb-1" style="width:40px;">
+                <div class="text-left pt-1 pb-1 flex-fill">
                     {{ number_format($npcdef->combatlvl) }}
                 </div>
                 <!--Description-->
-                <div class="text-left pt-1  pb-1 text-gray-400" style="padding-left:10px; width:230px;">
+                <div class="text-left pt-1 pb-1 text-gray-400 flex-fill" style="padding-left:10px;">
                     {{ ucfirst($npcdef->description) }}
                 </div>
             </div>
-            @if ($key % 6 == 5)
-            @endif
         @endforeach
+
         {{ $npcResults->onEachSide(1)->links('livewire::tailwind') }}
     </div>
-    <div class="e bg-black p-2 mt-4" style="width: 500px; height: 300px; overflow: auto">
+
+    <div class="e bg-black p-2 mt-4" style="max-width: 100%; height: 300px; overflow: auto">
         0: Unicorn<br>
         1: Bob<br>
         2: Sheep<br>
