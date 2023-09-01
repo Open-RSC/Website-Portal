@@ -1,7 +1,7 @@
 @extends('template')
 
 @section('content')
-    <div class="e bg-black p-2" style="outline: black; width: 480px;">
+    <div class="e bg-black p-2" style="outline: black; width: 100%;">
         <a class="c" href="/npcs">
             Back to NPCs
         </a>
@@ -16,7 +16,7 @@
                 <span class="col d-inline-block">Combat Level: {{ $npcdef->combatlvl ?? "N/A" }}</span>
             </div>
 
-            <div class="col-md d-inline-block text-center">
+            <div class="col-md d-flex text-center justify-content-around">
                 @if ($npcdef->attack > 0)
                     <div class="d-block">
                         <img class="mb-1" src="{{ asset('img/skill_icons/attack.svg') }}" alt="attack" height="16px"
@@ -55,22 +55,22 @@
             </div>
 
             <div class="col-md d-inline-block text-center">
-                @if ($npcdef->attackable = 1)
+                @if ($npcdef->attackable == 1)
                     <div class="d-block">
                         <span class="">Attackable</span>
                     </div>
                 @endif
-                @if ($npcdef->attackable = 0)
+                @if ($npcdef->attackable == 0)
                     <div class="d-block">
                         <span class="">Not Attackable</span>
                     </div>
                 @endif
-                @if ($npcdef->aggressive = 1)
+                @if ($npcdef->aggressive == 1)
                     <div class="d-block">
                         <span class="">Aggressive</span>
                     </div>
                 @endif
-                @if ($npcdef->aggressive = 0)
+                @if ($npcdef->aggressive == 0)
                     <div class="d-block">
                         <span class="">Passive</span>
                     </div>
