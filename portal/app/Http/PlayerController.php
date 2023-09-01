@@ -292,7 +292,8 @@ class PlayerController extends Controller
                                 ['b.group_id', '>=', '8'],
                                 ['b.username', '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
-                            ]);
+                            ])
+                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors randomly.
                     }],
                 ])
                 ->get();
@@ -315,7 +316,8 @@ class PlayerController extends Controller
                             ->where([
                                 ['b.group_id', '>=', '8'],
                                 ['b.username', '=', $subpage],
-                            ]);
+                            ])
+                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors randomly.
                     }],
                 ])
                 ->get();
