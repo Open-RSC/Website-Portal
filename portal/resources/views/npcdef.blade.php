@@ -16,7 +16,7 @@
                 <span class="col d-inline-block">Combat Level: {{ $npcdef->combatlvl ?? "N/A" }}</span>
             </div>
 
-            <div class="col-md d-inline-block text-center">
+            <div class="col-md d-flex text-center justify-content-around">
                 @if ($npcdef->attack > 0)
                     <div class="d-block">
                         <img class="mb-1" src="{{ asset('img/skill_icons/attack.svg') }}" alt="attack" height="16px"
