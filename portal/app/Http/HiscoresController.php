@@ -617,6 +617,7 @@ class HiscoresController extends Component
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
             ->select(['npckills.*', 'ironman.iron_man', 'players.username as username'])
             ->orderBy('npckills.killCount', 'desc')
+            ->orderBy('npckills.ID', 'asc')
             ->where([
                 ['npckills.npcID', '=', $npc_id],
                 ['npckills.killCount', '>', '0'],
@@ -660,7 +661,7 @@ class HiscoresController extends Component
             ->where('a.playerID', '=', $player_id)
             ->orderByRaw('FIELD(a.npcID, '.implode(',', $npcIDs).')')
             ->selectRaw('a.npcID, players.username, a.killCount, b.rank')
-            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1)) AS b'), function ($join) {
+            ->join(DB::raw('(SELECT npcID, playerID, killCount, RANK() OVER (PARTITION BY npcID ORDER BY killCount DESC, ID ASC) AS rank FROM npckills WHERE killCount > 0 AND playerID IN (SELECT id FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1)) AS b'), function ($join) {
                 $join->on('a.npcID', '=', 'b.npcID')
                      ->on('a.playerID', '=', 'b.playerID');
             })
