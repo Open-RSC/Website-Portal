@@ -613,18 +613,15 @@ class HiscoresController extends Component
         }
 		if ($npc_id == 0) {
 			$hiscores = DB::connection($db)
-			->table('npckills')
-			->join('players', 'players.id', '=', 'npckills.playerID')
+			->table('players')
 			->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
-			->selectRaw('npckills.playerID, SUM(npckills.killCount) as killCount, ironman.iron_man, players.username as username')
-			->groupBy('npckills.playerID')
-			->orderBy('killCount', 'desc')
-			->orderBy('npckills.ID', 'asc')
+			->select('players.id as playerID', 'players.npc_kills as killCount', 'ironman.iron_man', 'players.username as username')
 			->where([
-				['npckills.killCount', '>', '0'],
+				['players.npc_kills', '>', '0'],
 				['players.banned', '!=', '-1'],
 				['players.group_id', '>=', config('group.player_moderator')],
 			])
+			->orderBy('killCount', 'desc')
 			->paginate(21);
 		} else {
 			$hiscores = DB::connection($db)
@@ -685,13 +682,13 @@ class HiscoresController extends Component
             })
             ->get();
 		$totalKillsAndRank = DB::connection($db)
-		->table(DB::raw('(SELECT playerID, SUM(killCount) as totalKillCount, RANK() OVER (ORDER BY SUM(killCount) DESC) as rank FROM npckills WHERE playerID IN (SELECT id FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) GROUP BY playerID) AS a'))
-		->where('playerID', '=', $player_id)
+		->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
+		->where('id', '=', $player_id)
 		->first();
 		$overallObject = (object)[
 			'npcID' => 0,
 			'username' => $player->username,
-			'killCount' => $totalKillsAndRank->totalKillCount ?? 0,
+			'killCount' => $totalKillsAndRank->npc_kills ?? 0,
 			'rank' => $totalKillsAndRank->rank ?? null
 		];
 		$hiscoresArray = $hiscores->toArray();
