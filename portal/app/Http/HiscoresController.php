@@ -587,11 +587,7 @@ class HiscoresController extends Component
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        //Redirect to KBD or similar on 2001scape.
-        $npcID = 477;
-        if ($db === '2001scape') {
-            $npcID = 135;
-        }
+        $npcID = 0;
 
         return redirect()->to("/npchiscores/$db/$npcID");
     }
