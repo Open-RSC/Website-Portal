@@ -602,16 +602,32 @@ class HiscoresController extends Component
             abort(404);
         }
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
-        $npcs = [477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcIDs = [0, 477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
+        $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
-            $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
-            $npcs = [135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
+            $npcIDs = [0, 135, 61, 137, 70, 86, 76, 21, 114, 3];
+            $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
-        if (! in_array($npc_id, $npcIDs)) {
+        if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
-        $hiscores = DB::connection($db)
+		if ($npc_id == 0) {
+			$hiscores = DB::connection($db)
+			->table('npckills')
+			->join('players', 'players.id', '=', 'npckills.playerID')
+			->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
+			->selectRaw('npckills.playerID, SUM(npckills.killCount) as killCount, ironman.iron_man, players.username as username')
+			->groupBy('npckills.playerID')
+			->orderBy('killCount', 'desc')
+			->orderBy('npckills.ID', 'asc')
+			->where([
+				['npckills.killCount', '>', '0'],
+				['players.banned', '!=', '-1'],
+				['players.group_id', '>=', config('group.player_moderator')],
+			])
+			->paginate(21);
+		} else {
+			$hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
@@ -625,6 +641,8 @@ class HiscoresController extends Component
                 ['players.group_id', '>=', config('group.player_moderator')],
             ])
             ->paginate(21);
+		}
+
 
         return view('npchiscores', [
             'db' => $db,
@@ -647,10 +665,10 @@ class HiscoresController extends Component
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
-        $npcs = [477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
-            $npcs = [135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
+            $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         $hiscores = DB::connection($db)
             ->table('npckills AS a')
@@ -666,7 +684,19 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->get();
-
+		$totalKillsAndRank = DB::connection($db)
+		->table(DB::raw('(SELECT playerID, SUM(killCount) as totalKillCount, RANK() OVER (ORDER BY SUM(killCount) DESC) as rank FROM npckills WHERE playerID IN (SELECT id FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) GROUP BY playerID) AS a'))
+		->where('playerID', '=', $player_id)
+		->first();
+		$overallObject = (object)[
+			'npcID' => 0,
+			'username' => $player->username,
+			'killCount' => $totalKillsAndRank->totalKillCount ?? 0,
+			'rank' => $totalKillsAndRank->rank ?? null
+		];
+		$hiscoresArray = $hiscores->toArray();
+		array_unshift($hiscoresArray, $overallObject);
+		$hiscores = collect($hiscoresArray);
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
