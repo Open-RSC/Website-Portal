@@ -112,28 +112,28 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw('
-			(SUM(('.$this->cast('a', 'attack').') +
-			('.$this->cast('a', 'strength').') +
-			('.$this->cast('a', 'defense').') +
-			('.$this->cast('a', 'hits').') +
-			('.$this->cast('a', 'ranged').') +
-			('.$this->cast('a', 'prayer').') +
-			('.$this->cast('a', 'magic').') +
-			('.$this->cast('a', 'cooking').') +
-			('.$this->cast('a', 'woodcut').') +
-			('.$this->cast('a', 'fletching').') +
-			('.$this->cast('a', 'fishing').') +
-			('.$this->cast('a', 'firemaking').') +
-			('.$this->cast('a', 'crafting').') +
-			('.$this->cast('a', 'smithing').') +
-			('.$this->cast('a', 'mining').') +
-			('.$this->cast('a', 'herblaw').') +
-			('.$this->cast('a', 'agility').') +
-			('.$this->cast('a', 'thieving').') +
-			('.$this->cast('a', 'runecraft').') +
-			('.$this->cast('a', 'harvesting').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->cast('a', 'attack').') +
+            ('.$this->cast('a', 'strength').') +
+            ('.$this->cast('a', 'defense').') +
+            ('.$this->cast('a', 'hits').') +
+            ('.$this->cast('a', 'ranged').') +
+            ('.$this->cast('a', 'prayer').') +
+            ('.$this->cast('a', 'magic').') +
+            ('.$this->cast('a', 'cooking').') +
+            ('.$this->cast('a', 'woodcut').') +
+            ('.$this->cast('a', 'fletching').') +
+            ('.$this->cast('a', 'fishing').') +
+            ('.$this->cast('a', 'firemaking').') +
+            ('.$this->cast('a', 'crafting').') +
+            ('.$this->cast('a', 'smithing').') +
+            ('.$this->cast('a', 'mining').') +
+            ('.$this->cast('a', 'herblaw').') +
+            ('.$this->cast('a', 'agility').') +
+            ('.$this->cast('a', 'thieving').') +
+            ('.$this->cast('a', 'runecraft').') +
+            ('.$this->cast('a', 'harvesting').'))
+            /4.0)
+            as total_xp'))
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
@@ -149,27 +149,27 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayGood').') +
-			('.$this->coalesce('a', 'aa', 'prayEvil').') +
-			('.$this->coalesce('a', 'aa', 'goodMagic').') +
-			('.$this->coalesce('a', 'aa', 'evilMagic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcutting').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'influence').') +
-			('.$this->coalesce('a', 'aa', 'thieving').') +
-			('.$this->coalesce('a', 'aa', 'tailoring').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+            ('.$this->coalesce('a', 'aa', 'strength').') +
+            ('.$this->coalesce('a', 'aa', 'defense').') +
+            ('.$this->coalesce('a', 'aa', 'hits').') +
+            ('.$this->coalesce('a', 'aa', 'ranged').') +
+            ('.$this->coalesce('a', 'aa', 'prayGood').') +
+            ('.$this->coalesce('a', 'aa', 'prayEvil').') +
+            ('.$this->coalesce('a', 'aa', 'goodMagic').') +
+            ('.$this->coalesce('a', 'aa', 'evilMagic').') +
+            ('.$this->coalesce('a', 'aa', 'cooking').') +
+            ('.$this->coalesce('a', 'aa', 'woodcutting').') +
+            ('.$this->coalesce('a', 'aa', 'firemaking').') +
+            ('.$this->coalesce('a', 'aa', 'crafting').') +
+            ('.$this->coalesce('a', 'aa', 'smithing').') +
+            ('.$this->coalesce('a', 'aa', 'mining').') +
+            ('.$this->coalesce('a', 'aa', 'influence').') +
+            ('.$this->coalesce('a', 'aa', 'thieving').') +
+            ('.$this->coalesce('a', 'aa', 'tailoring').') +
+            ('.$this->coalesce('a', 'aa', 'herblaw').'))
+            /4.0)
+            as total_xp'))
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
@@ -184,26 +184,26 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayer').') +
-			('.$this->coalesce('a', 'aa', 'magic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcut').') +
-			('.$this->coalesce('a', 'aa', 'fletching').') +
-			('.$this->coalesce('a', 'aa', 'fishing').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').') +
-			('.$this->coalesce('a', 'aa', 'agility').') +
-			('.$this->coalesce('a', 'aa', 'thieving').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+            ('.$this->coalesce('a', 'aa', 'strength').') +
+            ('.$this->coalesce('a', 'aa', 'defense').') +
+            ('.$this->coalesce('a', 'aa', 'hits').') +
+            ('.$this->coalesce('a', 'aa', 'ranged').') +
+            ('.$this->coalesce('a', 'aa', 'prayer').') +
+            ('.$this->coalesce('a', 'aa', 'magic').') +
+            ('.$this->coalesce('a', 'aa', 'cooking').') +
+            ('.$this->coalesce('a', 'aa', 'woodcut').') +
+            ('.$this->coalesce('a', 'aa', 'fletching').') +
+            ('.$this->coalesce('a', 'aa', 'fishing').') +
+            ('.$this->coalesce('a', 'aa', 'firemaking').') +
+            ('.$this->coalesce('a', 'aa', 'crafting').') +
+            ('.$this->coalesce('a', 'aa', 'smithing').') +
+            ('.$this->coalesce('a', 'aa', 'mining').') +
+            ('.$this->coalesce('a', 'aa', 'herblaw').') +
+            ('.$this->coalesce('a', 'aa', 'agility').') +
+            ('.$this->coalesce('a', 'aa', 'thieving').'))
+            /4.0)
+            as total_xp'))
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
@@ -362,28 +362,28 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
                     ->select('b.*', 'c.*', DB::raw('
-			(SUM(('.$this->cast('a', 'attack').') +
-			('.$this->cast('a', 'strength').') +
-			('.$this->cast('a', 'defense').') +
-			('.$this->cast('a', 'hits').') +
-			('.$this->cast('a', 'ranged').') +
-			('.$this->cast('a', 'prayer').') +
-			('.$this->cast('a', 'magic').') +
-			('.$this->cast('a', 'cooking').') +
-			('.$this->cast('a', 'woodcut').') +
-			('.$this->cast('a', 'fletching').') +
-			('.$this->cast('a', 'fishing').') +
-			('.$this->cast('a', 'firemaking').') +
-			('.$this->cast('a', 'crafting').') +
-			('.$this->cast('a', 'smithing').') +
-			('.$this->cast('a', 'mining').') +
-			('.$this->cast('a', 'herblaw').') +
-			('.$this->cast('a', 'agility').') +
-			('.$this->cast('a', 'thieving').') +
-			('.$this->cast('a', 'runecraft').') +
-			('.$this->cast('a', 'harvesting').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->cast('a', 'attack').') +
+            ('.$this->cast('a', 'strength').') +
+            ('.$this->cast('a', 'defense').') +
+            ('.$this->cast('a', 'hits').') +
+            ('.$this->cast('a', 'ranged').') +
+            ('.$this->cast('a', 'prayer').') +
+            ('.$this->cast('a', 'magic').') +
+            ('.$this->cast('a', 'cooking').') +
+            ('.$this->cast('a', 'woodcut').') +
+            ('.$this->cast('a', 'fletching').') +
+            ('.$this->cast('a', 'fishing').') +
+            ('.$this->cast('a', 'firemaking').') +
+            ('.$this->cast('a', 'crafting').') +
+            ('.$this->cast('a', 'smithing').') +
+            ('.$this->cast('a', 'mining').') +
+            ('.$this->cast('a', 'herblaw').') +
+            ('.$this->cast('a', 'agility').') +
+            ('.$this->cast('a', 'thieving').') +
+            ('.$this->cast('a', 'runecraft').') +
+            ('.$this->cast('a', 'harvesting').'))
+            /4.0)
+            as total_xp'))
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
                         ['b.group_id', '>=', '8'],
@@ -400,27 +400,27 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->select('b.*', 'c.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayGood').') +
-			('.$this->coalesce('a', 'aa', 'prayEvil').') +
-			('.$this->coalesce('a', 'aa', 'goodMagic').') +
-			('.$this->coalesce('a', 'aa', 'evilMagic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcutting').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'influence').') +
-			('.$this->coalesce('a', 'aa', 'thieving').') +
-			('.$this->coalesce('a', 'aa', 'tailoring').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+            ('.$this->coalesce('a', 'aa', 'strength').') +
+            ('.$this->coalesce('a', 'aa', 'defense').') +
+            ('.$this->coalesce('a', 'aa', 'hits').') +
+            ('.$this->coalesce('a', 'aa', 'ranged').') +
+            ('.$this->coalesce('a', 'aa', 'prayGood').') +
+            ('.$this->coalesce('a', 'aa', 'prayEvil').') +
+            ('.$this->coalesce('a', 'aa', 'goodMagic').') +
+            ('.$this->coalesce('a', 'aa', 'evilMagic').') +
+            ('.$this->coalesce('a', 'aa', 'cooking').') +
+            ('.$this->coalesce('a', 'aa', 'woodcutting').') +
+            ('.$this->coalesce('a', 'aa', 'firemaking').') +
+            ('.$this->coalesce('a', 'aa', 'crafting').') +
+            ('.$this->coalesce('a', 'aa', 'smithing').') +
+            ('.$this->coalesce('a', 'aa', 'mining').') +
+            ('.$this->coalesce('a', 'aa', 'influence').') +
+            ('.$this->coalesce('a', 'aa', 'thieving').') +
+            ('.$this->coalesce('a', 'aa', 'tailoring').') +
+            ('.$this->coalesce('a', 'aa', 'herblaw').'))
+            /4.0)
+            as total_xp'))
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
                         ['b.group_id', '>=', '8'],
@@ -435,26 +435,26 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->select('b.*', 'c.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayer').') +
-			('.$this->coalesce('a', 'aa', 'magic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcut').') +
-			('.$this->coalesce('a', 'aa', 'fletching').') +
-			('.$this->coalesce('a', 'aa', 'fishing').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').') +
-			('.$this->coalesce('a', 'aa', 'agility').') +
-			('.$this->coalesce('a', 'aa', 'thieving').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->coalesce('a', 'aa', 'attack').') +
+            ('.$this->coalesce('a', 'aa', 'strength').') +
+            ('.$this->coalesce('a', 'aa', 'defense').') +
+            ('.$this->coalesce('a', 'aa', 'hits').') +
+            ('.$this->coalesce('a', 'aa', 'ranged').') +
+            ('.$this->coalesce('a', 'aa', 'prayer').') +
+            ('.$this->coalesce('a', 'aa', 'magic').') +
+            ('.$this->coalesce('a', 'aa', 'cooking').') +
+            ('.$this->coalesce('a', 'aa', 'woodcut').') +
+            ('.$this->coalesce('a', 'aa', 'fletching').') +
+            ('.$this->coalesce('a', 'aa', 'fishing').') +
+            ('.$this->coalesce('a', 'aa', 'firemaking').') +
+            ('.$this->coalesce('a', 'aa', 'crafting').') +
+            ('.$this->coalesce('a', 'aa', 'smithing').') +
+            ('.$this->coalesce('a', 'aa', 'mining').') +
+            ('.$this->coalesce('a', 'aa', 'herblaw').') +
+            ('.$this->coalesce('a', 'aa', 'agility').') +
+            ('.$this->coalesce('a', 'aa', 'thieving').'))
+            /4.0)
+            as total_xp'))
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
                         ['b.group_id', '>=', '8'],
@@ -611,20 +611,20 @@ class HiscoresController extends Component
         if (!in_array($npc_id, $npcIDs)) {
             abort(404);
         }
-		if ($npc_id == 0) {
-			$hiscores = DB::connection($db)
-			->table('players')
-			->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
-			->select('players.id as playerID', 'players.npc_kills as killCount', 'ironman.iron_man', 'players.username as username')
-			->where([
-				['players.npc_kills', '>', '0'],
-				['players.banned', '!=', '-1'],
-				['players.group_id', '>=', config('group.player_moderator')],
-			])
-			->orderBy('killCount', 'desc')
-			->paginate(21);
-		} else {
-			$hiscores = DB::connection($db)
+        if ($npc_id == 0) {
+            $hiscores = DB::connection($db)
+            ->table('players')
+            ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
+            ->select('players.id as playerID', 'players.npc_kills as killCount', 'ironman.iron_man', 'players.username as username')
+            ->where([
+                ['players.npc_kills', '>', '0'],
+                ['players.banned', '!=', '-1'],
+                ['players.group_id', '>=', config('group.player_moderator')],
+            ])
+            ->orderBy('killCount', 'desc')
+            ->paginate(21);
+        } else {
+            $hiscores = DB::connection($db)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
@@ -638,7 +638,7 @@ class HiscoresController extends Component
                 ['players.group_id', '>=', config('group.player_moderator')],
             ])
             ->paginate(21);
-		}
+        }
 
 
         return view('npchiscores', [
@@ -681,19 +681,19 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->get();
-		$totalKillsAndRank = DB::connection($db)
-		->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
-		->where('id', '=', $player_id)
-		->first();
-		$overallObject = (object)[
-			'npcID' => 0,
-			'username' => $player->username,
-			'killCount' => $totalKillsAndRank->npc_kills ?? 0,
-			'rank' => $totalKillsAndRank->rank ?? null
-		];
-		$hiscoresArray = $hiscores->toArray();
-		array_unshift($hiscoresArray, $overallObject);
-		$hiscores = collect($hiscoresArray);
+        $totalKillsAndRank = DB::connection($db)
+        ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
+        ->where('id', '=', $player_id)
+        ->first();
+        $overallObject = (object)[
+            'npcID' => 0,
+            'username' => $player->username,
+            'killCount' => $totalKillsAndRank->npc_kills ?? 0,
+            'rank' => $totalKillsAndRank->rank ?? null
+        ];
+        $hiscoresArray = $hiscores->toArray();
+        array_unshift($hiscoresArray, $overallObject);
+        $hiscores = collect($hiscoresArray);
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
@@ -806,27 +806,27 @@ class HiscoresController extends Component
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('maxstats as d', 'a.playerID', '=', 'd.playerID')
             ->select('a.*', 'b.*', 'd.*', DB::raw('
-			(SUM(('.$this->cast('a', 'attack').') +
-			('.$this->cast('a', 'strength').') +
-			('.$this->cast('a', 'defense').') +
-			('.$this->cast('a', 'hits').') +
-			('.$this->cast('a', 'ranged').') +
-			('.$this->cast('a', 'prayGood').') +
-			('.$this->cast('a', 'prayEvil').') +
-			('.$this->cast('a', 'goodMagic').') +
-			('.$this->cast('a', 'evilMagic').') +
-			('.$this->cast('a', 'cooking').') +
-			('.$this->cast('a', 'woodcutting').') +
-			('.$this->cast('a', 'firemaking').') +
-			('.$this->cast('a', 'crafting').') +
-			('.$this->cast('a', 'smithing').') +
-			('.$this->cast('a', 'mining').') +
-			('.$this->cast('a', 'influence').') +
-			('.$this->cast('a', 'thieving').') +
-			('.$this->cast('a', 'tailoring').') +
-			('.$this->cast('a', 'herblaw').'))
-			/4.0)
-			as total_xp'))
+            (SUM(('.$this->cast('a', 'attack').') +
+            ('.$this->cast('a', 'strength').') +
+            ('.$this->cast('a', 'defense').') +
+            ('.$this->cast('a', 'hits').') +
+            ('.$this->cast('a', 'ranged').') +
+            ('.$this->cast('a', 'prayGood').') +
+            ('.$this->cast('a', 'prayEvil').') +
+            ('.$this->cast('a', 'goodMagic').') +
+            ('.$this->cast('a', 'evilMagic').') +
+            ('.$this->cast('a', 'cooking').') +
+            ('.$this->cast('a', 'woodcutting').') +
+            ('.$this->cast('a', 'firemaking').') +
+            ('.$this->cast('a', 'crafting').') +
+            ('.$this->cast('a', 'smithing').') +
+            ('.$this->cast('a', 'mining').') +
+            ('.$this->cast('a', 'influence').') +
+            ('.$this->cast('a', 'thieving').') +
+            ('.$this->cast('a', 'tailoring').') +
+            ('.$this->cast('a', 'herblaw').'))
+            /4.0)
+            as total_xp'))
             ->whereNotIn('b.banned', [-1, 1])
             ->where([
                 ['b.group_id', '>=', '8'],
