@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Models\npcdef;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -597,15 +598,9 @@ class HiscoresController extends Component
         if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
-        $npcIDs = [0, 477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
         $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
-            $npcIDs = [0, 135, 61, 137, 70, 86, 76, 21, 114, 3];
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
-        }
-        if (!in_array($npc_id, $npcIDs)) {
-            abort(404);
         }
         if ($npc_id == 0) {
             $hiscores = DB::connection($db)
@@ -641,7 +636,7 @@ class HiscoresController extends Component
         return view('npchiscores', [
             'db' => $db,
             'npcs' => $npcs,
-            'npc_name' => $npcs[$npc_id],
+            'npc_name' => $npcs[$npc_id] ?? npcdef::where("id", "=", $npc_id)->first()->name ?? " NPC " . $npc_id,
             'npc_id' => $npc_id,
         ])
             ->with(compact('hiscores'));
@@ -653,7 +648,7 @@ class HiscoresController extends Component
             abort(404);
         }
         $player = DB::connection($db)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
-        if (! $player) {
+        if (!$player) {
             abort(404);
         }
         $player_id = $player->id;
