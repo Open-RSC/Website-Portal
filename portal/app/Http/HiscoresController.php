@@ -618,6 +618,7 @@ class HiscoresController extends Component
                 ['players.group_id', '>=', config('group.player_moderator')],
             ])
             ->orderBy('killCount', 'desc')
+            ->orderBy('playerID', 'asc')
             ->paginate(21);
         } else {
             $hiscores = DB::connection($db)
@@ -678,7 +679,7 @@ class HiscoresController extends Component
             })
             ->get();
         $totalKillsAndRank = DB::connection($db)
-        ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
+        ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
         ->where('id', '=', $player_id)
         ->first();
         $overallObject = (object)[
