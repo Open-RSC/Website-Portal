@@ -1,6 +1,6 @@
 <div class="col">
     <div class="d-flex justify-content-start pb-1">
-        <input class="e pl-1 text-white click responsive-input" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
+        <input id="search-box" class="e pl-1 text-white click responsive-input" placeholder="Type a name" onfocus="this.value=''" wire:model="searchTerm" type="text"
                style="background:black;">
     </div>
 
@@ -846,3 +846,15 @@
     }
   }
 </style>
+<script>
+    const npcNames = document.querySelectorAll('.npc-name');
+
+    const inputField = document.querySelector('#search-box');
+
+    npcNames.forEach(npc => {
+        npc.onclick = function() {
+            inputField.value = this.getAttribute('data-name');
+            inputField.dispatchEvent(new Event('input'));
+        };
+    });
+</script>
