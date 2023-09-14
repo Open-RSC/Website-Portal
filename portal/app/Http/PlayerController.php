@@ -89,7 +89,8 @@ class PlayerController extends Controller
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw($this->coalesce('a', 'aa', $skill)))
-                            ->where('b.username', '=', $subpage);
+                            ->where('b.username', '=', $subpage)
+                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where('b.group_id', '>=', 8)
@@ -105,7 +106,8 @@ class PlayerController extends Controller
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw('aa.'.$skill))
-                            ->where('b.username', '=', $subpage);
+                            ->where('b.username', '=', $subpage)
+                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where('b.group_id', '>=', 8)
@@ -293,7 +295,7 @@ class PlayerController extends Controller
                                 ['b.username', '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
                             ])
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors randomly.
+                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
                     }],
                 ])
                 ->get();
