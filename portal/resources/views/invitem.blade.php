@@ -8,10 +8,16 @@
 
         <div class="row align-items-center pb-3">
             <div class="pb-0 stats row justify-content-center text-primary">
-                <img class="pl-5" src="{{ asset('img/avatars').'/'.$invitems->first()->playerID }}.png"
-                     style="height: 125px;" alt="{{ $invitems->first()->username }}">
+                @if (File::exists(public_path('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $invitems->first()->playerID . '.png')))
+                    <div class="col-4 pt-2" style="width: 75px;">
+                        <div class="rscfont d-block">
+                            <!-- Due to legacy OpenRSC database not following regular naming scheme, we hardcode the db name openrsc -->
+                            <img src="{{ asset('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $invitems->first()->playerID . '.png') }}" alt="({{ $invitems->first()->username }})"/>
+                        </div>
+                    </div>
+                @endif
                 <div class="pl-5 col-6">
-					<span class="sm-stats text-info pt-3">
+					<div class="sm-stats text-info pt-3">
 						Status:
 						@if ($invitems->first()->online == 1)
                             <span style="color: lime">
@@ -22,25 +28,23 @@
 								<strong>Offline</strong>
 							</span>
                         @endif
-					</span>
-                    <span class="sm-stats text-info">
+					</div>
+                    <div class="sm-stats text-info">
 						Created: {{ Carbon\Carbon::parse($invitems->first()->creation_date)->diffForHumans() }}
-					</span>
-                    <span class="sm-stats text-info">
+					</div>
+                    <div class="sm-stats text-info">
 						Last Online:
 						@if ($invitems->first()->login_date)
                             {{ Carbon\Carbon::parse($invitems->first()->login_date)->diffForHumans() }}
                         @else
                             Never
                         @endif
-					</span>
+					</div>
                     @if ($invitems->first()->username == 'shar')
-                        <span class="sm-stats pt-2">
-						Shar accepts player item donations for drop parties.
-					</span>
-                        <span class="sm-stats">
-						To donate in-game items to Shar, contact a staff member.
-					</span>
+                        <div class="sm-stats pt-2">
+                            Shar accepts player item donations for drop parties.
+                            To donate in-game items to Shar, contact a staff member.
+                        </div>
                     @endif
                 </div>
             </div>
@@ -54,17 +58,17 @@
                         <tr>
                             @foreach ($invitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->id) }}"
-                                    title="{{ ucfirst($player->name) }}"
+                                    data-href="{{ route('Item Information', $player->catalogID) }}"
+                                    title="{{ ucfirst($player->username) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $player->number }}
                                     </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->id }}.png"
-                                         alt="{{ $player->id }}"/>
+                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->catalogID }}.png"
+                                         alt="{{ $player->catalogID }}"/>
                                 </td>
-                                @if ($key % 18 == 17)
+                                @if ($key % 10 == 9)
                         </tr>
                     @endif
                     @endforeach
@@ -83,17 +87,17 @@
                         <tr>
                             @foreach ($invitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->id) }}"
-                                    title="{{ ucfirst($player->name) }}"
+                                    data-href="{{ route('Item Information', $player->catalogID) }}"
+                                    title="{{ ucfirst($player->username) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $player->number }}
                                     </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->id }}.png"
-                                         alt="{{ $player->id }}"/>
+                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->catalogID }}.png"
+                                         alt="{{ $player->catalogID }}"/>
                                 </td>
-                                @if ($key % 14 == 13)
+                                @if ($key % 9 == 8)
                         </tr>
                     @endif
                     @endforeach
@@ -112,17 +116,17 @@
                         <tr>
                             @foreach ($invitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->id) }}"
-                                    title="{{ ucfirst($player->name) }}"
+                                    data-href="{{ route('Item Information', $player->catalogID) }}"
+                                    title="{{ ucfirst($player->username) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $player->number }}
                                     </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->id }}.png"
-                                         alt="{{ $player->id }}"/>
+                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->catalogID }}.png"
+                                         alt="{{ $player->catalogID }}"/>
                                 </td>
-                                @if ($key % 11 == 10)
+                                @if ($key % 8 == 7)
                         </tr>
                     @endif
                     @endforeach
@@ -141,17 +145,17 @@
                         <tr>
                             @foreach ($invitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->id) }}"
-                                    title="{{ ucfirst($player->name) }}"
+                                    data-href="{{ route('Item Information', $player->catalogID) }}"
+                                    title="{{ ucfirst($player->username) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $player->number }}
                                     </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->id }}.png"
-                                         alt="{{ $player->id }}"/>
+                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$player->catalogID }}.png"
+                                         alt="{{ $player->catalogID }}"/>
                                 </td>
-                                @if ($key % 8 == 7)
+                                @if ($key % 6 == 5)
                         </tr>
                     @endif
                     @endforeach

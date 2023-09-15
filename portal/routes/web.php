@@ -51,9 +51,8 @@ Route::get('minigames', [QuestController::class, 'minigames'])->name('Mini Games
 
 // Player pages
 Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player');
-//Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
-//Route::get('player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth:api')->name('Bank');
-//Route::get('player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth:api')->name('Inventory Items');
+Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank');
+Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv');
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
@@ -114,7 +113,8 @@ Route::get('staff/{db}/staff_logs/data', [StaffController::class, 'staffLogsData
 Route::get('staff/error_logs', [StaffController::class, 'errorLogsList'])->middleware('auth')->name('ErrorLogsList');
 Route::get('staff/error_logs/data', [StaffController::class, 'errorLogsData'])->middleware('auth')->name('ErrorLogsData');
 Route::get('staff/error_logs/{id}', [StaffController::class, 'errorLogsView'])->middleware('auth')->name('ErrorLogsDetail');
-
+Route::get('player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth')->name('Bank');
+Route::get('player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth')->name('Inventory Items');
 //Route::get('register', 'Livewire\Registration')->name('Player Registration');
 //Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
 
