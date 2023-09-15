@@ -52,8 +52,8 @@ Route::get('minigames', [QuestController::class, 'minigames'])->name('Mini Games
 // Player pages
 Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player');
 //Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
-Route::get('player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth:api')->name('Bank');
-Route::get('player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth:api')->name('Inventory Items');
+//Route::get('player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth:api')->name('Bank');
+//Route::get('player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth:api')->name('Inventory Items');
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
@@ -126,7 +126,7 @@ Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middl
 
 Route::get('/discord', function() {
     if (!empty(config('openrsc.discord_url'))) {
-        return redirect(config('openrsc.discord_url')); 
+        return redirect(config('openrsc.discord_url'));
     }
     return redirect('/');
 });
