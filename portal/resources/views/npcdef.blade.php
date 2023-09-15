@@ -92,7 +92,7 @@
                         <tr>
                             @foreach ($npc_drops as $key=>$npc_drop)
                                 <td class="pl-1 pr-1 clickable-row"
-                                    data-href="{{ route('Items', $npc_drop->itemID) }}"
+                                    data-href="{{ route('Item Information', $npc_drop->itemID) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                             style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
