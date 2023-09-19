@@ -13,7 +13,7 @@
                     <input type="hidden" name="db" value="{{$db}}">
                     <label for="name" class="form-label">Search for Player by Username</label>
                     <div class="input-group mb-3">
-                      <input id="name" name="name" class="text-black pl-2 pr-2" type="text" style="border-radius: 4px" required="required">
+                      <input id="name" name="name" placeholder="Username" class="text-black pl-2 pr-2" type="text" style="border-radius: 4px" required="required">
                       <button type="submit" style="border-radius: 4px" class="btn btn-primary ms-2">Search</button>
                     </div>
                   </form>
