@@ -6,9 +6,9 @@
             Server Item Stats for {{ $item->name ?? "" }} on {{ $db }}
         </h2>
         <div class="row justify-content-center">
-            <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
+            <div class="col-lg-12 col-md-12 col-sm-12 text-gray-400 pr-lg-5 pl-lg-5 pt-3 pb-3 bg-black text-center">
                 <div>
-                    <table id="itemStats" width="100%"></table>
+                    <table id="itemStats" class="table-responsive" style="width:100%"></table>
                 </div>
             </div>
         </div>
@@ -26,11 +26,35 @@
                 processing: true,
                 serverSide: true,
                 columns: [
-                    {title: "Username", data: 'username'},
-                    {title: "Bank Count", data: 'bank_count', 'searchable': false},
-                    {title: "Inventory Count", data: 'inv_count', 'searchable': false},
-                    {title: "Total Count", data: 'total_count', 'searchable': false},
-                ]
+                    {
+                        title: "Username",
+                        data: 'username',
+                    },
+                    {
+                        title: "Bank Count",
+                        data: 'bank_count',
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return Number(data).toLocaleString();
+                        }
+                    },
+                    {
+                        title: "Inventory Count",
+                        data: 'inv_count',
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return Number(data).toLocaleString();
+                        }
+                    },
+                    {
+                        title: "Total Count",
+                        data: 'total_count',
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return Number(data).toLocaleString();
+                        }
+                    },
+                ],
             });
         });
     </script>
