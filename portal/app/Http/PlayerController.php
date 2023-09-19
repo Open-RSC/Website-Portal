@@ -366,8 +366,7 @@ class PlayerController extends Controller
             ->join('players as b', function ($join) {
                 $join->on('a.playerID', '=', 'b.id')
                     ->where([
-                        ['b.username', '=', 'shar'],
-                        ['b.banned', '!=', 1]
+                        ['b.username', '=', 'shar']
                     ]);
             })
             ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
