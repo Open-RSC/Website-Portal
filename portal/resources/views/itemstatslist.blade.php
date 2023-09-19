@@ -30,6 +30,9 @@
                     {
                         title: "Username",
                         data: 'username',
+                        render: function(data, type, row) {
+                            return `<a href="/staff/${db}/player/${row.playerID}/detail">${data}</a>`;
+                        }
                     },
                     {
                         title: "Bank Count",

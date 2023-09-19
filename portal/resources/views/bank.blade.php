@@ -58,8 +58,8 @@
                         <tr>
                             @foreach ($bankitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->catalogID) }}"
-                                    title="{{ ucfirst($player->username) }}"
+                                    data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => $player->catalogID]) }}"
+                                    title="{{ ucfirst($player->itemName) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
@@ -87,8 +87,8 @@
                         <tr>
                             @foreach ($bankitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->catalogID) }}"
-                                    title="{{ ucfirst($player->username) }}"
+                                    data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => $player->catalogID]) }}"
+                                    title="{{ ucfirst($player->itemName) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
@@ -116,8 +116,8 @@
                         <tr>
                             @foreach ($bankitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->catalogID) }}"
-                                    title="{{ ucfirst($player->username) }}"
+                                    data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => $player->catalogID]) }}"
+                                    title="{{ ucfirst($player->itemName) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
@@ -145,8 +145,8 @@
                         <tr>
                             @foreach ($bankitems as $key=>$player)
                                 <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                    data-href="{{ route('Item Information', $player->catalogID) }}"
-                                    title="{{ ucfirst($player->username) }}"
+                                    data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => $player->catalogID]) }}"
+                                    title="{{ ucfirst($player->itemName) }}"
                                     style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                     <div
                                         style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">

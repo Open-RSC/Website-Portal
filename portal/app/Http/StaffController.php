@@ -556,7 +556,7 @@ class StaffController extends Controller
             ->table('players as p')
             ->leftJoin('bank as b', 'p.id', '=', 'b.playerID')
             ->leftJoin('itemstatuses as is_b', 'b.itemID', '=', 'is_b.itemID')
-            ->select('p.username', DB::raw('SUM(is_b.amount) AS bank_count'))
+            ->select('p.username', 'p.id', DB::raw('SUM(is_b.amount) AS bank_count'))
             ->where('is_b.catalogID', $itemID)
             ->where('is_b.amount', '>', 0)
             ->where('p.group_id', '>=', config('group.player_moderator'))
@@ -570,7 +570,7 @@ class StaffController extends Controller
             ->table('players as p')
             ->leftJoin('invitems as i', 'p.id', '=', 'i.playerID')
             ->leftJoin('itemstatuses as is_i', 'i.itemID', '=', 'is_i.itemID')
-            ->select('p.username', DB::raw('SUM(is_i.amount) AS inv_count'))
+            ->select('p.username', 'p.id', DB::raw('SUM(is_i.amount) AS inv_count'))
             ->where('is_i.catalogID', $itemID)
             ->where('is_i.amount', '>', 0)
             ->where('p.group_id', '>=', config('group.player_moderator'))
@@ -587,6 +587,7 @@ class StaffController extends Controller
             if ($result->bank_count > 0) {  // Only add if count > 0
                 $combined[$username]['username'] = $username;
                 $combined[$username]['bank_count'] = $result->bank_count;
+                $combined[$username]['playerID'] = $result->id; // add player id
             }
         }
 
@@ -595,6 +596,7 @@ class StaffController extends Controller
             if ($result->inv_count > 0) {  // Only add if count > 0
                 $combined[$username]['username'] = $username;
                 $combined[$username]['inv_count'] = $result->inv_count;
+                $combined[$username]['playerID'] = $result->id; // add player id
             }
         }
 
@@ -606,11 +608,11 @@ class StaffController extends Controller
             $data['bank_count'] = $data['bank_count'] ?? 0;
             $data['inv_count'] = $data['inv_count'] ?? 0;
             $data['total_count'] = $data['bank_count'] + $data['inv_count'];
+            // No need to add playerID here because it should already be set from the queries
         }
 
         // Limit to top 100 players by total_count
         $combined = array_slice($combined, 0, 100);
-
 
         return DataTables::collection($combined)->make(true);
     }

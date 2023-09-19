@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -154,4 +155,27 @@ class players extends Authenticatable
     }
 
     public $connection = 'preservation'; //Default to preservation, used for auth.php login authentication.
+
+    public static function hasBank($db, $playerID) {
+        $result = DB::connection($db)
+            ->table('bank as b')
+            ->join('itemstatuses as is_b', 'b.itemID', '=', 'is_b.itemID')
+            ->where('b.playerID', '=', $playerID)
+            ->where('is_b.amount', '>', 0)
+            ->count();
+
+        return $result > 0;
+    }
+
+    public static function hasInventory($db, $playerID) {
+        $result = DB::connection($db)
+            ->table('invitems as i')
+            ->join('itemstatuses as is_i', 'i.itemID', '=', 'is_i.itemID')
+            ->where('i.playerID', '=', $playerID)
+            ->where('is_i.amount', '>', 0)
+            ->count();
+
+        return $result > 0;
+    }
+
 }

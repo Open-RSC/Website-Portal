@@ -362,6 +362,7 @@ class PlayerController extends Controller
         $bankitems = DB::connection($db)
             ->table('bank as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
             ->join('players as b', function ($join) {
                 $join->on('a.playerID', '=', 'b.id')
                     ->where([
@@ -369,11 +370,11 @@ class PlayerController extends Controller
                         ['b.banned', '!=', 1]
                     ]);
             })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot'))
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$bankitems) {
+        if ($bankitems->isEmpty()) {
             abort(404);
         }
 
@@ -398,17 +399,18 @@ class PlayerController extends Controller
         $invitems = DB::connection($db)
             ->table('invitems as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
             ->join('players as b', function ($join) {
                 $join->on('a.playerID', '=', 'b.id')
                     ->where([
                         ['b.username', '=', 'shar'],
                     ]);
             })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot'))
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$invitems) {
+        if ($invitems->isEmpty()) {
             abort(404);
         }
 
@@ -446,17 +448,18 @@ class PlayerController extends Controller
         $bankitems = DB::connection($db)
             ->table('bank as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
             ->join('players as b', function ($join) use ($subpage) {
                 $join->on('a.playerID', '=', 'b.id')
                     ->where([
                         ['b.username', '=', $subpage],
                     ]);
             })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot'))
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$bankitems) {
+        if ($bankitems->isEmpty()) {
             abort(404);
         }
 
@@ -497,17 +500,18 @@ class PlayerController extends Controller
         $invitems = DB::connection($db)
             ->table('invitems as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
             ->join('players as b', function ($join) use ($subpage) {
                 $join->on('a.playerID', '=', 'b.id')
                     ->where([
                         ['b.username', '=', $subpage],
                     ]);
             })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot'))
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (!$invitems) {
+        if ($invitems->isEmpty()) {
             abort(404);
         }
 

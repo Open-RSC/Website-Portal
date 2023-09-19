@@ -18,7 +18,7 @@
                          alt="{{ $player->username }}"/>
                 @endif
                 <p>
-                    Status: 
+                    Status:
                     @if ($player->online == 1)
                         <span style="color: lime">
                             <strong>Online</strong>
@@ -34,7 +34,7 @@
                 @if(Gate::allows('admin', Auth::user())) <p>Email: {{ $player->email ?? "None" }}</p> @endif
                 <p>Creation Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->creation_date)->format("Y-m-d H:i:s") }}</p>
                 <p>Login Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->login_date)->format("Y-m-d H:i:s") }}</p>
-                <p>    
+                <p>
                     Last Online:
                     @if ($player->login_date)
                         {{ Carbon\Carbon::parse($player->login_date)->diffForHumans() }}
@@ -51,6 +51,16 @@
                 <p>Deaths: {{ $player->deaths }} </p>
                 <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::now()->subSeconds($player->muted)->diffForHumans() }} @else No @endif  </p>
                 <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::now()->subSeconds($player->banned)->diffForHumans() }} @else No @endif  </p>
+                @if (\App\Models\players::hasBank($db, $player->id))
+                    <p>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/bank">View Bank</a>
+                    </p>
+                @endif
+                @if (\App\Models\players::hasInventory($db, $player->id))
+                    <p>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/inventory">View Inventory</a>
+                    </p>
+                @endif
             </div>
         </div>
     </div>
