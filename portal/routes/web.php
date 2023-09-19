@@ -79,7 +79,8 @@ Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->n
 Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show']);
 Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores');
 Route::post('searchByName', [HiscoresController::class, 'searchByName']);
-Route::post('searchNpcHiscoresByName', [HiscoresController::class, 'searchNpcHiscoresByName']);
+Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName']);
+Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName']);
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
 
 // Current players
