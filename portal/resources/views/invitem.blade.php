@@ -5,7 +5,9 @@
         <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">
             {{ ucfirst($invitems->first()->username) }}'s Inventory
         </h2>
-
+        @if(url()->previous() != url()->current())
+            <a href="{{ url()->previous() }}">Go back</a>
+        @endif
         <div class="row align-items-center pb-3">
             <div class="pb-0 stats row justify-content-center text-primary">
                 @if (File::exists(public_path('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $invitems->first()->playerID . '.png')))

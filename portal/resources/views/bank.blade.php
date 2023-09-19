@@ -5,7 +5,9 @@
         <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3">
             {{ ucfirst($bankitems->first()->username) }}'s Bank
         </h2>
-
+        @if(url()->previous() != url()->current())
+            <a href="{{ url()->previous() }}">Go back</a>
+        @endif
         <div class="align-items-center pb-3">
             <div class="pb-0 table-transparent row justify-content-center text-primary">
                 @if (File::exists(public_path('/img/avatars/' . ($db == 'preservation' ? 'openrsc' : $db) . '+' . $bankitems->first()->playerID . '.png')))
