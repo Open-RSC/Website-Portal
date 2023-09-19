@@ -63,7 +63,7 @@
         <div class="d-flex hiscores-search-bar">
             <div class="b search-box search-rank"
                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search" action="{{url('searchNpcHiscoresByName')}}">
+                <form method="POST" role="search" action="{{url('searchNpcHiscoresByPlayerName')}}">
                     @csrf <!-- {{ csrf_field() }} -->
                     <input type="hidden" name="db" value="{{$db}}">
                     <label for="name">Search by Player name</label>
