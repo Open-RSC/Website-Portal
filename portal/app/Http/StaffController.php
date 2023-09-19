@@ -628,7 +628,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         if (!$request->has('name')) {
@@ -636,8 +636,7 @@ class StaffController extends Controller
         }
 
         $name = $request->name;
-        //$db = $request->db ?? "preservation";
-        $db = $request->db;
+        $db = $request->db ?? "preservation";
         $player = players::where('username', '=', $name)->first();
 
         if (!$player) {
