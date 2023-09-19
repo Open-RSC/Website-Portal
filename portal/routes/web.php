@@ -31,12 +31,6 @@ Route::get('rules', [HomeController::class, 'rules'])->name('Rules and Security'
 Route::get('online', [StatsController::class, 'online'])->name('Online list');
 Route::get('createdtoday', [StatsController::class, 'createdtoday'])->name('Players Created Today');
 Route::get('logins48', [StatsController::class, 'logins48'])->name('Logins in the last 48 hours');
-Route::get('stats/{db}/overview', [StatsController::class, 'stats'])->name('StatisticsOverview')->middleware('auth');
-Route::get('stats/{id}/detail', [StatsController::class, 'statsDetail'])->name('StatisticsDetail')->middleware('auth');
-Route::get('stats', [StatsController::class, 'redirectToStats'])->name('StatisticsRedirect')->middleware('auth');
-Route::get('stats/list', [StatsController::class, 'redirectToStatsList'])->name('StatisticsListRedirect')->middleware('auth');
-Route::get('stats/{db}/list', [StatsController::class, 'statsList'])->name('StatisticsList')->middleware('auth');
-Route::get('stats/{db}/data', [StatsController::class, 'statsData'])->name('StatisticsData')->middleware('auth');
 Route::get('faq', [HomeController::class, 'faq'])->name('Frequently Asked Questions');
 Route::get('terms', [HomeController::class, 'faq'])->name('Terms and Conditions');
 Route::get('privacy', [HomeController::class, 'faq'])->name('Privacy Policy');
@@ -96,6 +90,12 @@ Route::get('/discord', function() {
 });
 
 // Afman staff zone
+Route::get('staff/itemstats/{db}/overview', [StatsController::class, 'itemStats'])->name('ItemStatisticsOverview')->middleware('auth');
+Route::get('staff/itemstats/{id}/detail', [StatsController::class, 'itemStatsDetail'])->name('ItemStatisticsDetail')->middleware('auth');
+Route::get('staff/itemstats', [StatsController::class, 'redirectToItemStats'])->name('ItemStatisticsRedirect')->middleware('auth');
+Route::get('staff/itemstats/list', [StatsController::class, 'redirectToItemStatsList'])->name('ItemStatisticsListRedirect')->middleware('auth');
+Route::get('staff/itemstats/{db}/list', [StatsController::class, 'itemStatsList'])->name('ItemStatisticsList')->middleware('auth');
+Route::get('staff/itemstats/{db}/data', [StatsController::class, 'itemStatsData'])->name('ItemStatisticsData')->middleware('auth');
 Route::get('staff/{db}/login_list', [StaffController::class, 'login_list'])->middleware('auth')->name('login_list');
 Route::get('staff/{db}/login_list/data', [StaffController::class, 'loginListData'])->middleware('auth')->name('LoginListData');
 Route::get('staff/{db}/player_list', [StaffController::class, 'player_list'])->middleware('auth')->name('player_list');
@@ -125,6 +125,6 @@ Route::get('staff/error_logs/data', [StaffController::class, 'errorLogsData'])->
 Route::get('staff/error_logs/{id}', [StaffController::class, 'errorLogsView'])->middleware('auth')->name('ErrorLogsDetail');
 Route::get('staff/player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth')->name('Bank');
 Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth')->name('Inventory Items');
-Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsList'])->middleware('auth')->name('ItemStats');
-Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsData'])->middleware('auth')->name('itemStatsData');
+Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsItemList'])->middleware('auth')->name('ItemStatsItemList');
+Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsItemData'])->middleware('auth')->name('ItemStatsItemData');
 Route::post('staff/searchPlayerDetailByName', [StaffController::class, 'searchPlayerDetailByName'])->middleware('auth')->name('searchPlayerDetailByName');

@@ -3,64 +3,63 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
-            Server Item Stats for {{ $item->name ?? "" }} on {{ $db }}
+            Statistics for {{ $db }}
         </h2>
         <div class="row justify-content-center">
-            <div class="col-lg-12 col-md-12 col-sm-12 text-gray-400 pr-lg-5 pl-lg-5 pt-3 pb-3 bg-black text-center">
+            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
+                <a href="{{ route('ItemStatisticsOverview', $db) }}">Return to overview</a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
+
                 <div>
-                    <table id="itemStats" class="table-responsive" style="width:100%"></table>
+                    <table id="stats" width="100%"></table>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
 @section('scripts')
     <script>
         $(document).ready(function() {
             var db = @json($db ?? "preservation");
-            let dataTable = $('#itemStats').DataTable({
+            $('#stats').DataTable({
                 ajax: {
-                    url: '{{ route('itemStatsData', ['itemID' => $itemID, 'db' => $db])  }}',
+                    url: '{{ route('ItemStatisticsData', $db)  }}',
                 },
-                order: [[3, 'desc']],
+                order: [[6, 'desc']],
                 processing: true,
                 serverSide: true,
                 columns: [
                     {
-                        title: "Username",
-                        data: 'username',
+                        title: "Gold",
+                        data: 'sumgold',
                         render: function(data, type, row) {
-                            return `<a href="/staff/${db}/player/${row.playerID}/detail">${data}</a>`;
+                            var intData = data / 1000;
+                            return `<a href="/staff/items/${db}/10">${(intData/1000).toFixed(0) + 'M'}</a>`;
                         }
                     },
-                    {
-                        title: "Bank Count",
-                        data: 'bank_count',
-                        searchable: false,
-                        render: function(data, type, row) {
-                            const formattedData = Number(data).toLocaleString();
-                            return `<a href="/staff/player/${db}/${row.username}/bank">${formattedData}</a>`;
-                        }
-                    },
-                    {
-                        title: "Inventory Count",
-                        data: 'inv_count',
-                        searchable: false,
-                        render: function(data, type, row) {
-                            const formattedData = Number(data).toLocaleString();
-                            return `<a href="/staff/player/${db}/${row.username}/inventory">${formattedData}</a>`;
-                        }
-                    },
-                    {
-                        title: "Total Count",
-                        data: 'total_count',
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return Number(data).toLocaleString();
-                        }
-                    },
-                ],
+                    {title: "Crackers", data: 'cracker', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/575">${data}</a>`;
+                    }},
+                    {title: "Red Hat", data: 'redphat', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/576">${data}</a>`;
+                    }},
+                    {title: "Santa", data: 'santahat', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/971">${data}</a>`;
+                    }},
+                    {title: "Dragon Sword", data: 'dlong', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/593">${data}</a>`;
+                    }},
+                    {title: "Dragon Med", data: 'dmed', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/795">${data}</a>`;
+                    }},
+                    {title: "Date", data: 'created_at'},
+                    {title: "View", searchable: false, orderable: false, data: function(data, type, row){
+                        return "<a href='/staff/itemstats/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";
+                    }},
+                ]
             });
         });
     </script>

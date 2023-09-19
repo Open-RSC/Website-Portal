@@ -48,7 +48,7 @@
                     <a class="c text-left" href="/npchiscores/openpk">OpenPK NPCs</a>
                     <a class="c text-left" href="/npchiscores/uranium">RSC Uranium NPCs</a>
                     <a class="c text-left" href="/npchiscores/coleslaw">RSC Coleslaw NPCs</a>
-                @endif    
+                @endif
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
@@ -93,15 +93,15 @@
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Server Item Stats <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
-                        <a class="c text-left" href="{{ route('StatisticsOverview', 'preservation') }}">RSC Preservation Stats</a>
-                        <a class="c text-left" href="{{ route('StatisticsOverview', 'cabbage') }}">RSC Cabbage Stats</a>
-                        <a class="c text-left" href="{{ route('StatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
-                        <a class="c text-left" href="{{ route('StatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
-                        <a class="c text-left" href="{{ route('StatisticsOverview', 'openpk') }}">OpenPK Stats</a>
+                        <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'preservation') }}">RSC Preservation Stats</a>
+                        <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'cabbage') }}">RSC Cabbage Stats</a>
+                        <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'uranium') }}">RSC Uranium Stats</a>
+                        <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'coleslaw') }}">RSC Coleslaw Stats</a>
+                        <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'openpk') }}">OpenPK Stats</a>
                     </span>
                 </span>
             @endif
-        
+
             @if(Gate::allows('moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Chat Logs <i class="fas fa-caret-down"></i></a>
@@ -126,7 +126,7 @@
                     </span>
                 </span>
             @endif
-            
+
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">PM Logs <i class="fas fa-caret-down"></i></a>
@@ -140,7 +140,7 @@
                     </span>
                 </span>
             @endif
-            
+
             @if(Gate::allows('moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Trade Logs <i class="fas fa-caret-down"></i></a>
@@ -153,7 +153,7 @@
                         <a class="c text-left" href="{{ route('trade_logs', 'openpk') }}">OpenPK Trade Logs</a>
                     </span>
                 </span>
-            
+
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Auction Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -162,7 +162,7 @@
                         <a class="c text-left" href="{{ route('auction_logs', 'openpk') }}">OpenPK Auction Logs</a>
                     </span>
                 </span>
-                
+
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Generic Logs <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
@@ -175,7 +175,7 @@
                     </span>
                 </span>
             @endif
-            
+
             @if(Gate::allows('player-moderator', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Rename Logs <i class="fas fa-caret-down"></i></a>
@@ -189,7 +189,7 @@
                     </span>
                 </span>
             @endif
-            
+
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Staff Logs <i class="fas fa-caret-down"></i></a>
@@ -215,7 +215,7 @@
                         <a class="c text-left" href="{{ route('player_list', 'openpk') }}">OpenPK Players</a>
                     </span>
                 </span>
-            @endif    
+            @endif
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Logins <i class="fas fa-caret-down"></i></a>
@@ -229,7 +229,7 @@
                     </span>
                 </span>
             @endif
-            
+
             <span class="flex-auto p-2 dropdown">
                 <a class="c" href="#">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black;">

@@ -527,7 +527,7 @@ class StaffController extends Controller
         return view('errorlogsdetail', ['errorLog' => $errorLog]);
     }
 
-    public function itemStatsList($db, $itemID)
+    public function itemStatsItemList($db, $itemID)
     {
         if (Auth::user() === null) {
             return redirect('/login');
@@ -546,10 +546,10 @@ class StaffController extends Controller
             abort(404);
         }
 
-        return view('itemstatslist', ['itemID' => $itemID, 'item' => $item, 'db' => $db]);
+        return view('itemstatsitemlist', ['itemID' => $itemID, 'item' => $item, 'db' => $db]);
     }
 
-    public function itemStatsData($db, $itemID)
+    public function itemStatsItemData($db, $itemID)
     {
         if (Auth::user() === null) {
             return redirect('/login');

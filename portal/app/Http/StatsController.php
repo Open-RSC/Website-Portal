@@ -217,7 +217,7 @@ class StatsController extends Controller
         );
     }
 
-    public function stats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
+    public function itemStats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
         if (! config('openrsc.stats_page_enabled')) {
             abort(404);
@@ -238,7 +238,7 @@ class StatsController extends Controller
         }
 
         return view(
-            'statsoverview',
+            'itemstatsoverview',
             [
                 'db' => $db,
                 'online' => $stats['online'],
@@ -275,22 +275,22 @@ class StatsController extends Controller
         );
     }
 
-    public function statsList($db = 'cabbage'): View
+    public function itemStatsList($db = 'cabbage'): View
     {
         return view(
-            'statslist',
+            'itemstatslist',
             [
                 'db' => $db,
             ]
         );
     }
 
-    public function statsDetail($id): View
+    public function itemStatsDetail($id): View
     {
         $stats = (array) DB::table('rscstats')->where('id', '=', $id)->get()->toArray()[0];
 
         return view(
-            'statsdetail',
+            'itemstatsdetail',
             [
                 'db' => $stats['server'],
                 'date' => $stats['created_at'],
@@ -328,7 +328,7 @@ class StatsController extends Controller
         );
     }
 
-    public function statsData($db = 'cabbage')
+    public function itemStatsData($db = 'cabbage')
     {
         if (! Gate::allows('admin', Auth::user())) {
             abort(404);
@@ -339,14 +339,14 @@ class StatsController extends Controller
                 ->make();
     }
 
-    public function redirectToStats(): RedirectResponse
+    public function redirectToItemStats(): RedirectResponse
     {
-        return redirect(route('StatisticsOverview', 'cabbage'));
+        return redirect(route('ItemStatisticsOverview', 'cabbage'));
     }
 
-    public function redirectToStatsList(): RedirectResponse
+    public function redirectToItemStatsList(): RedirectResponse
     {
-        return redirect(route('StatisticsList', 'cabbage'));
+        return redirect(route('ItemStatisticsList', 'cabbage'));
     }
 
     public function onlinelookup(): View
