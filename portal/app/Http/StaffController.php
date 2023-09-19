@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Models\itemdef;
+use App\Models\players;
+use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -481,7 +484,7 @@ class StaffController extends Controller
                 ->smart(true)
                 ->make();
     }
-    
+
     public function errorLogsData()
     {
         if (Auth::user() === null) {
@@ -500,7 +503,7 @@ class StaffController extends Controller
                 })
                 ->make();
     }
-    
+
     public function errorLogsList()
     {
         if (Auth::user() === null) {
@@ -511,7 +514,7 @@ class StaffController extends Controller
         }
         return view('errorlogslist');
     }
-    
+
     public function errorLogsView($id)
     {
         if (Auth::user() === null) {
@@ -523,4 +526,127 @@ class StaffController extends Controller
         $errorLog = DB::table('error_logs')->where('id', $id)->first();
         return view('errorlogsdetail', ['errorLog' => $errorLog]);
     }
+
+    public function itemStatsItemList($db, $itemID)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        if (!Schema::connection($db)->hasTable('itemdef')) {
+            abort(404, "The itemdef table does not exist in the $db database.");
+        }
+
+        $item = itemdef::on($db)->where("id", "=", $itemID)->first();
+
+        if (!$item) {
+            abort(404);
+        }
+
+        return view('itemstatsitemlist', ['itemID' => $itemID, 'item' => $item, 'db' => $db]);
+    }
+
+    public function itemStatsItemData($db, $itemID)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        $bankQuery = DB::connection($db)
+            ->table('players as p')
+            ->leftJoin('bank as b', 'p.id', '=', 'b.playerID')
+            ->leftJoin('itemstatuses as is_b', 'b.itemID', '=', 'is_b.itemID')
+            ->select('p.username', 'p.id', DB::raw('SUM(is_b.amount) AS bank_count'))
+            ->where('is_b.catalogID', $itemID)
+            ->where('is_b.amount', '>', 0)
+            ->where('p.group_id', '>=', config('group.player_moderator'))
+            ->groupBy('p.username')
+            ->orderBy('bank_count', 'desc')
+            ->limit(100)
+            ->get();
+
+        // Second query for inv_count
+        $invQuery = DB::connection($db)
+            ->table('players as p')
+            ->leftJoin('invitems as i', 'p.id', '=', 'i.playerID')
+            ->leftJoin('itemstatuses as is_i', 'i.itemID', '=', 'is_i.itemID')
+            ->select('p.username', 'p.id', DB::raw('SUM(is_i.amount) AS inv_count'))
+            ->where('is_i.catalogID', $itemID)
+            ->where('is_i.amount', '>', 0)
+            ->where('p.group_id', '>=', config('group.player_moderator'))
+            ->groupBy('p.username')
+            ->orderBy('inv_count', 'desc')
+            ->limit(100)
+            ->get();
+
+        // Combine the results in PHP
+        $combined = [];
+
+        foreach ($bankQuery as $result) {
+            $username = $result->username;
+            if ($result->bank_count > 0) {  // Only add if count > 0
+                $combined[$username]['username'] = $username;
+                $combined[$username]['bank_count'] = $result->bank_count;
+                $combined[$username]['playerID'] = $result->id; // add player id
+            }
+        }
+
+        foreach ($invQuery as $result) {
+            $username = $result->username;
+            if ($result->inv_count > 0) {  // Only add if count > 0
+                $combined[$username]['username'] = $username;
+                $combined[$username]['inv_count'] = $result->inv_count;
+                $combined[$username]['playerID'] = $result->id; // add player id
+            }
+        }
+
+        foreach ($combined as $username => &$data) {
+            if (!isset($data['bank_count']) && !isset($data['inv_count'])) {
+                unset($combined[$username]);  // Remove entry if both counts are not set
+                continue;
+            }
+            $data['bank_count'] = $data['bank_count'] ?? 0;
+            $data['inv_count'] = $data['inv_count'] ?? 0;
+            $data['total_count'] = $data['bank_count'] + $data['inv_count'];
+            // No need to add playerID here because it should already be set from the queries
+        }
+
+        // Limit to top 100 players by total_count
+        $combined = array_slice($combined, 0, 100);
+
+        return DataTables::collection($combined)->make(true);
+    }
+
+    public function searchPlayerDetailByName(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('moderator', Auth::user())) {
+            abort(404);
+        }
+        if (!$request->has('name')) {
+            abort(404);
+        }
+
+        $name = $request->name;
+        $db = $request->db ?? "preservation";
+        $player = players::where('username', '=', $name)->first();
+
+        if (!$player) {
+            abort(404);
+        }
+
+        $id = $player->id;
+        $urlToRedirectTo = "staff/$db/player/$id/detail";
+
+        return redirect()->to($urlToRedirectTo);
+    }
+
 }

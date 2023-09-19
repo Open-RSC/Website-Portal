@@ -63,10 +63,21 @@
         <div class="d-flex hiscores-search-bar">
             <div class="b search-box search-rank"
                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search" action="{{url('searchNpcHiscoresByName')}}">
+                <form method="POST" role="search" action="{{url('searchNpcHiscoresByPlayerName')}}">
                     @csrf <!-- {{ csrf_field() }} -->
                     <input type="hidden" name="db" value="{{$db}}">
                     <label for="name">Search by Player name</label>
+                    <input id="name" name="name" type="text" required="required" style="width:100px;"
+                        class="bg-white text-black mt-1">
+                    <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
+                </form>
+            </div>
+            <div class="b search-box search-rank ml-4"
+                style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
+                <form method="POST" role="search" action="{{url('searchNpcHiscoresByNpcName')}}">
+                    @csrf <!-- {{ csrf_field() }} -->
+                    <input type="hidden" name="db" value="{{$db}}">
+                    <label for="name">Search by NPC name</label>
                     <input id="name" name="name" type="text" required="required" style="width:100px;"
                         class="bg-white text-black mt-1">
                     <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">

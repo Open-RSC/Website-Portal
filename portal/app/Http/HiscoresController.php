@@ -566,19 +566,42 @@ class HiscoresController extends Component
     }
 
     /**
-     * @function searchByName()
+     * @function searchNpcHiscoresByPlayerName()
      *
      * @return \Illuminate\Http\RedirectResponse
      * Redirects user to a player's NPC hiscores page (to look up player by name).
      */
-    public function searchNpcHiscoresByName(Request $request): \Illuminate\Http\RedirectResponse
+    public function searchNpcHiscoresByPlayerName(Request $request): \Illuminate\Http\RedirectResponse
     {
-        if (! config('openrsc.npc_hiscores_enabled')) {
+        if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $name = $request->name;
         $db = $request->db;
         $urlToRedirectTo = "/npchiscores/$db/player/$name";
+
+        return redirect()->to($urlToRedirectTo);
+    }
+
+    /**
+     * @function searchNpcHiscoresByNpcName()
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * Redirects user to a player's NPC hiscores page (to look up player by name).
+     */
+    public function searchNpcHiscoresByNpcName(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        if (!config('openrsc.npc_hiscores_enabled')) {
+            abort(404);
+        }
+        $name = $request->name;
+        $db = $request->db;
+        $npc = npcdef::where('name', '=', $name)->first();
+        if (!$npc) {
+            abort(404);
+        }
+        $id = $npc->id;
+        $urlToRedirectTo = "/npchiscores/$db/$id";
 
         return redirect()->to($urlToRedirectTo);
     }

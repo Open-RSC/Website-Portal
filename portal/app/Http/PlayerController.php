@@ -350,98 +350,171 @@ class PlayerController extends Controller
             ->with(compact('players'));
     }
 
-    public function shar($db): Factory|View
-    {
-        /**
-         * @var $banks
-         * Fetches the table row of the player experience in view and paginates the results
-         */
-        $banks = DB::connection($db)
-            ->table('bank as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->join('itemdef as c', 'a.id', '=', 'c.id')
-            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
-            ->Where([
-                ['b.username', '=', 'shar'],
-            ])
-            ->orderBy('a.slot', 'asc')
-            ->get();
-
-        if (! $banks) {
-            abort(404);
-        }
-
-        return view('bank', [
-            'banks' => $banks,
-            'db' => $db,
-        ]);
-    }
-
     /**
      * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function bank($db, $subpage)
+    public function sharbank($db, Request $request)
     {
         /**
-         * @var $banks
+         * @var $bankitems
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $banks = DB::connection($db)
+        $bankitems = DB::connection($db)
             ->table('bank as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->join('itemdef as c', 'a.id', '=', 'c.id')
-            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
-            ->whereNotIn('b.banned', [-1, 1])
-            ->where([
-                ['b.username', '=', $subpage],
-            ])
+            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
+            ->join('players as b', function ($join) {
+                $join->on('a.playerID', '=', 'b.id')
+                    ->where([
+                        ['b.username', '=', 'shar']
+                    ]);
+            })
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (! $banks) {
+        if ($bankitems->isEmpty()) {
             abort(404);
         }
 
-        if (! Auth::check()) {
-            return redirect('home');
-        }
+
 
         return view('bank', [
-            'subpage' => $subpage,
-            'banks' => $banks,
+            'bankitems' => $bankitems,
             'db' => $db,
         ])
-            ->with(compact('banks'));
+            ->with(compact('bankitems'));
     }
 
     /**
      * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function invitem($db, $subpage)
+    public function sharinv($db, Request $request)
     {
         /**
-         * @var $banks
+         * @var $invitems
          * Fetches the table row of the player experience in view and paginates the results
          */
         $invitems = DB::connection($db)
             ->table('invitems as a')
-            ->join('players as b', 'a.playerID', '=', 'b.id')
-            ->join('itemdef as c', 'a.id', '=', 'c.id')
-            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
-            ->whereNotIn('b.banned', [-1, 1])
-            ->where([
-                ['b.username', '=', $subpage],
-            ])
+            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
+            ->join('players as b', function ($join) {
+                $join->on('a.playerID', '=', 'b.id')
+                    ->where([
+                        ['b.username', '=', 'shar'],
+                    ]);
+            })
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if (! $invitems) {
+        if ($invitems->isEmpty()) {
             abort(404);
         }
 
-        if (! Auth::check()) {
-            return redirect('home');
+
+
+        return view('invitem', [
+            'invitems' => $invitems,
+            'db' => $db,
+        ])
+            ->with(compact('invitems'));
+    }
+
+    /**
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function bank($db, $subpage, Request $request)
+    {
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
         }
+        DB::connection('laravel')->table('viewlogs')->insert([
+            'username' => Auth::user()->username,
+            'page' => 'bank_items',
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'] ?? '',
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        /**
+         * @var $bankitems
+         * Fetches the table row of the player experience in view and paginates the results
+         */
+        $bankitems = DB::connection($db)
+            ->table('bank as a')
+            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
+            ->join('players as b', function ($join) use ($subpage) {
+                $join->on('a.playerID', '=', 'b.id')
+                    ->where([
+                        ['b.username', '=', $subpage],
+                    ]);
+            })
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
+            ->orderBy('a.slot', 'asc')
+            ->get();
+
+        if ($bankitems->isEmpty()) {
+            abort(404);
+        }
+
+
+
+        return view('bank', [
+            'subpage' => $subpage,
+            'bankitems' => $bankitems,
+            'db' => $db,
+        ])
+            ->with(compact('bankitems'));
+    }
+
+    /**
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function invitem($db, $subpage, Request $request)
+    {
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        DB::connection('laravel')->table('viewlogs')->insert([
+            'username' => Auth::user()->username,
+            'page' => 'inv_items',
+            'game' => $db,
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'search_terms' => $request->query('search')['value'] ?? '',
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+
+        /**
+         * @var $invitems
+         * Fetches the table row of the player experience in view and paginates the results
+         */
+        $invitems = DB::connection($db)
+            ->table('invitems as a')
+            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
+            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
+            ->join('players as b', function ($join) use ($subpage) {
+                $join->on('a.playerID', '=', 'b.id')
+                    ->where([
+                        ['b.username', '=', $subpage],
+                    ]);
+            })
+            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
+            ->orderBy('a.slot', 'asc')
+            ->get();
+
+        if ($invitems->isEmpty()) {
+            abort(404);
+        }
+
+
 
         return view('invitem', [
             'subpage' => $subpage,
@@ -644,7 +717,7 @@ class PlayerController extends Controller
     /**
      * This method creates user's new characters via an API endpoint.
      * Some duplicated validation here is necessary for JSON
-     * error messages, since it is technically handled at a 
+     * error messages, since it is technically handled at a
      * higher up level outside Fortify, since we have our own
      * custom API handled right here.
      * @param Request $request
@@ -655,7 +728,7 @@ class PlayerController extends Controller
         if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
             abort(404);
         }
-        
+
         try {
             $validated = $this->validate($request, [
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
@@ -680,7 +753,7 @@ class PlayerController extends Controller
         if (DB::connection($db)->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
             return response()->json(['message' => 'The username is already in use.'], 409); // Conflict status code
         }
-        
+
         // Check if the user already has too many accounts
         $recentAccounts = DB::connection($db)->table('players')
         ->where('creation_ip', '=', get_client_ip_address())

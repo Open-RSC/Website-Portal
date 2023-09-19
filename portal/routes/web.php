@@ -31,12 +31,6 @@ Route::get('rules', [HomeController::class, 'rules'])->name('Rules and Security'
 Route::get('online', [StatsController::class, 'online'])->name('Online list');
 Route::get('createdtoday', [StatsController::class, 'createdtoday'])->name('Players Created Today');
 Route::get('logins48', [StatsController::class, 'logins48'])->name('Logins in the last 48 hours');
-Route::get('stats/{db}/overview', [StatsController::class, 'stats'])->name('StatisticsOverview')->middleware('auth');
-Route::get('stats/{id}/detail', [StatsController::class, 'statsDetail'])->name('StatisticsDetail')->middleware('auth');
-Route::get('stats', [StatsController::class, 'redirectToStats'])->name('StatisticsRedirect')->middleware('auth');
-Route::get('stats/list', [StatsController::class, 'redirectToStatsList'])->name('StatisticsListRedirect')->middleware('auth');
-Route::get('stats/{db}/list', [StatsController::class, 'statsList'])->name('StatisticsList')->middleware('auth');
-Route::get('stats/{db}/data', [StatsController::class, 'statsData'])->name('StatisticsData')->middleware('auth');
 Route::get('faq', [HomeController::class, 'faq'])->name('Frequently Asked Questions');
 Route::get('terms', [HomeController::class, 'faq'])->name('Terms and Conditions');
 Route::get('privacy', [HomeController::class, 'faq'])->name('Privacy Policy');
@@ -51,9 +45,8 @@ Route::get('minigames', [QuestController::class, 'minigames'])->name('Mini Games
 
 // Player pages
 Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player');
-//Route::get('player/{db}/shar/bank', 'PlayerController@shar')->name('sharbank');
-//Route::get('player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth:api')->name('Bank');
-//Route::get('player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth:api')->name('Inventory Items');
+Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank');
+Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv');
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
@@ -80,13 +73,29 @@ Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->n
 Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show']);
 Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores');
 Route::post('searchByName', [HiscoresController::class, 'searchByName']);
-Route::post('searchNpcHiscoresByName', [HiscoresController::class, 'searchNpcHiscoresByName']);
+Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName']);
+Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName']);
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
 
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
+Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
+
+Route::get('/discord', function() {
+    if (!empty(config('openrsc.discord_url'))) {
+        return redirect(config('openrsc.discord_url'));
+    }
+    return redirect('/');
+});
+
 // Afman staff zone
+Route::get('staff/itemstats/{db}/overview', [StatsController::class, 'itemStats'])->name('ItemStatisticsOverview')->middleware('auth');
+Route::get('staff/itemstats/{id}/detail', [StatsController::class, 'itemStatsDetail'])->name('ItemStatisticsDetail')->middleware('auth');
+Route::get('staff/itemstats', [StatsController::class, 'redirectToItemStats'])->name('ItemStatisticsRedirect')->middleware('auth');
+Route::get('staff/itemstats/list', [StatsController::class, 'redirectToItemStatsList'])->name('ItemStatisticsListRedirect')->middleware('auth');
+Route::get('staff/itemstats/{db}/list', [StatsController::class, 'itemStatsList'])->name('ItemStatisticsList')->middleware('auth');
+Route::get('staff/itemstats/{db}/data', [StatsController::class, 'itemStatsData'])->name('ItemStatisticsData')->middleware('auth');
 Route::get('staff/{db}/login_list', [StaffController::class, 'login_list'])->middleware('auth')->name('login_list');
 Route::get('staff/{db}/login_list/data', [StaffController::class, 'loginListData'])->middleware('auth')->name('LoginListData');
 Route::get('staff/{db}/player_list', [StaffController::class, 'player_list'])->middleware('auth')->name('player_list');
@@ -114,19 +123,8 @@ Route::get('staff/{db}/staff_logs/data', [StaffController::class, 'staffLogsData
 Route::get('staff/error_logs', [StaffController::class, 'errorLogsList'])->middleware('auth')->name('ErrorLogsList');
 Route::get('staff/error_logs/data', [StaffController::class, 'errorLogsData'])->middleware('auth')->name('ErrorLogsData');
 Route::get('staff/error_logs/{id}', [StaffController::class, 'errorLogsView'])->middleware('auth')->name('ErrorLogsDetail');
-
-//Route::get('register', 'Livewire\Registration')->name('Player Registration');
-//Route::post('register', 'Livewire\Registration')->middleware(['honey', 'honey-recaptcha']);
-
-/*Route::any('login', 'Livewire\Login')->name('Secure_Login');
-Route::post('login', 'Livewire\Login')->middleware(['honey', 'honey-recaptcha']);
-Route::post('logout', 'Livewire\Login@logout')->name('Logout');*/
-
-Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
-
-Route::get('/discord', function() {
-    if (!empty(config('openrsc.discord_url'))) {
-        return redirect(config('openrsc.discord_url'));
-    }
-    return redirect('/');
-});
+Route::get('staff/player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth')->name('Bank');
+Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth')->name('Inventory Items');
+Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsItemList'])->middleware('auth')->name('ItemStatsItemList');
+Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsItemData'])->middleware('auth')->name('ItemStatsItemData');
+Route::post('staff/searchPlayerDetailByName', [StaffController::class, 'searchPlayerDetailByName'])->middleware('auth')->name('searchPlayerDetailByName');
