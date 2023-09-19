@@ -115,7 +115,6 @@ Route::get('staff/error_logs/data', [StaffController::class, 'errorLogsData'])->
 Route::get('staff/error_logs/{id}', [StaffController::class, 'errorLogsView'])->middleware('auth')->name('ErrorLogsDetail');
 Route::get('staff/player/{db}/{subpage}/bank', [PlayerController::class, 'bank'])->middleware('auth')->name('Bank');
 Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth')->name('Inventory Items');
-//TODO: these items queries are way, way too slow because they have to do full table scans on large tables.
 Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsList'])->middleware('auth')->name('ItemStats');
 Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsData'])->middleware('auth')->name('itemStatsData');
 

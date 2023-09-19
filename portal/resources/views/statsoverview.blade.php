@@ -5,7 +5,7 @@
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
             Statistics (current) for {{ $db }}
         </h2>
-        
+
         <div class="row justify-content-center">
             <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
                 <div class="">
@@ -44,7 +44,7 @@
 
                         <tr>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '422') }}" title="Pumpkin"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '422']) }}" title="Pumpkin"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($pumpkin)
@@ -57,7 +57,7 @@
                                      alt="Pumpkin"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '575') }}" title="Christmas Cracker"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '575']) }}" title="Christmas Cracker"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($cracker)
@@ -70,7 +70,7 @@
                                      alt="Christmas Cracker"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '576') }}" title="Red Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '576']) }}" title="Red Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($redphat)
@@ -83,7 +83,7 @@
                                      alt="Red Partyhat"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '577') }}" title="Yellow Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '577']) }}" title="Yellow Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($yellowphat)
@@ -98,7 +98,7 @@
                         </tr>
                         <tr>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '578') }}" title="Blue Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '578']) }}" title="Blue Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($bluephat)
@@ -111,7 +111,7 @@
                                      alt="Blue Partyhat"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '579') }}" title="Green Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '579']) }}" title="Green Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($greenphat)
@@ -124,7 +124,7 @@
                                      alt="Green Partyhat"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '580') }}" title="Pink Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '580']) }}" title="Pink Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($pinkphat)
@@ -137,7 +137,7 @@
                                      alt="Pink Partyhat"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '581') }}" title="White Partyhat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '581']) }}" title="White Partyhat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($whitephat)
@@ -152,7 +152,7 @@
                         </tr>
                         <tr>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '677') }}" title="Easter Egg"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '677']) }}" title="Easter Egg"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($easteregg)
@@ -165,7 +165,7 @@
                                      alt="Easter Egg"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '831') }}" title="Red Mask"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '831']) }}" title="Red Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($redmask)
@@ -178,7 +178,7 @@
                                      alt="Red Mask"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '832') }}" title="Blue Mask"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '832']) }}" title="Blue Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($bluemask)
@@ -191,7 +191,7 @@
                                      alt="Blue Mask"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '828') }}" title="Green Mask"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '828']) }}" title="Green Mask"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($greenmask)
@@ -206,7 +206,7 @@
                         </tr>
                         <tr>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '971') }}" title="Santa Hat"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '971']) }}" title="Santa Hat"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($santahat)
@@ -219,7 +219,7 @@
                                      alt="Santa Hat"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '1289') }}" title="Scythe"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '1289']) }}" title="Scythe"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($scythe)
@@ -232,7 +232,7 @@
                                      alt="Scythe"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '1278') }}" title="Dragon Sq Shield"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '1278']) }}" title="Dragon Sq Shield"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dsq)
@@ -245,7 +245,7 @@
                                      alt="Dragon Sq Shield"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '795') }}" title="Dragon Med Helm"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '795']) }}" title="Dragon Med Helm"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dmed)
@@ -260,7 +260,7 @@
                         </tr>
                         <tr>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '522') }}" title="Dragonstone Amulet"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '522']) }}" title="Dragonstone Amulet"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dammy)
@@ -273,7 +273,7 @@
                                      alt="Dragonstone Amulet"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '594') }}" title="Dragon Axe"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '594']) }}" title="Dragon Axe"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dbattle)
@@ -286,7 +286,7 @@
                                      alt="Dragon Axe"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '593') }}" title="Dragon Sword"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '593']) }}" title="Dragon Sword"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($dlong)
@@ -299,7 +299,7 @@
                                      alt="Dragon Sword"/>
                             </td>
                             <td class="pl-1 pr-1 clickable-row" data-toggle="tooltip"
-                                data-href="{{ route('Item Information', '81') }}" title="Rune 2H Sword"
+                                data-href="{{ route('ItemStats', ['db' => $db, 'itemID' => '81']) }}" title="Rune 2H Sword"
                                 style="border: 1px solid black; background: rgba(255,255,255,0.2);">
                                 <div style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                     @if ($rune2h)

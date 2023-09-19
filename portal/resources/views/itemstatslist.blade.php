@@ -18,6 +18,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            var db = @json($db ?? "preservation");
             let dataTable = $('#itemStats').DataTable({
                 ajax: {
                     url: '{{ route('itemStatsData', ['itemID' => $itemID, 'db' => $db])  }}',
@@ -35,7 +36,8 @@
                         data: 'bank_count',
                         searchable: false,
                         render: function(data, type, row) {
-                            return Number(data).toLocaleString();
+                            const formattedData = Number(data).toLocaleString();
+                            return `<a href="/staff/player/${db}/${row.username}/bank">${formattedData}</a>`;
                         }
                     },
                     {
@@ -43,7 +45,8 @@
                         data: 'inv_count',
                         searchable: false,
                         render: function(data, type, row) {
-                            return Number(data).toLocaleString();
+                            const formattedData = Number(data).toLocaleString();
+                            return `<a href="/staff/player/${db}/${row.username}/inventory">${formattedData}</a>`;
                         }
                     },
                     {
