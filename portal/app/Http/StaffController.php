@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Models\itemdef;
+use App\Models\players;
 use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
@@ -620,6 +621,33 @@ class StaffController extends Controller
         $combined = array_slice($combined, 0, 100);
 
         return DataTables::collection($combined)->make(true);
+    }
+
+    public function searchPlayerDetailByName(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!$request->has('name')) {
+            abort(404);
+        }
+
+        $name = $request->name;
+        //$db = $request->db ?? "preservation";
+        $db = $request->db;
+        $player = players::where('username', '=', $name)->first();
+
+        if (!$player) {
+            abort(404);
+        }
+
+        $id = $player->id;
+        $urlToRedirectTo = "staff/$db/player/$id/detail";
+
+        return redirect()->to($urlToRedirectTo);
     }
 
 }

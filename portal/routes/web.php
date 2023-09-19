@@ -86,6 +86,15 @@ Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneSc
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
+Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
+
+Route::get('/discord', function() {
+    if (!empty(config('openrsc.discord_url'))) {
+        return redirect(config('openrsc.discord_url'));
+    }
+    return redirect('/');
+});
+
 // Afman staff zone
 Route::get('staff/{db}/login_list', [StaffController::class, 'login_list'])->middleware('auth')->name('login_list');
 Route::get('staff/{db}/login_list/data', [StaffController::class, 'loginListData'])->middleware('auth')->name('LoginListData');
@@ -118,12 +127,4 @@ Route::get('staff/player/{db}/{subpage}/bank', [PlayerController::class, 'bank']
 Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'invitem'])->middleware('auth')->name('Inventory Items');
 Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsList'])->middleware('auth')->name('ItemStats');
 Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsData'])->middleware('auth')->name('itemStatsData');
-
-Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
-
-Route::get('/discord', function() {
-    if (!empty(config('openrsc.discord_url'))) {
-        return redirect(config('openrsc.discord_url'));
-    }
-    return redirect('/');
-});
+Route::post('staff/searchPlayerDetailByName', [StaffController::class, 'searchPlayerDetailByName'])->middleware('auth')->name('searchPlayerDetailByName');
