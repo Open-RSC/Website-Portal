@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Models\itemdef;
+use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -532,6 +533,10 @@ class StaffController extends Controller
         }
         if (!Gate::allows('admin', Auth::user())) {
             abort(404);
+        }
+
+        if (!Schema::connection($db)->hasTable('itemdef')) {
+            abort(404, 'The itemdef table does not exist in the database.');
         }
 
         $item = itemdef::on($db)->where("id", "=", $itemID)->first();
