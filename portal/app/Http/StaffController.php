@@ -537,7 +537,7 @@ class StaffController extends Controller
         }
 
         if (!Schema::connection($db)->hasTable('itemdef')) {
-            abort(404, 'The itemdef table does not exist in the database.');
+            abort(404, "The itemdef table does not exist in the $db database.");
         }
 
         $item = itemdef::on($db)->where("id", "=", $itemID)->first();
