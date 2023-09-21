@@ -34,7 +34,7 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content nav-hiscores-dropdown" @if (config('openrsc.npc_hiscores_enabled')) style="width: 160px" @endif>
+            <span class="p-2 dropdown-content nav-hiscores-dropdown" @if (config('openrsc.npc_hiscores_enabled')) style="width: 165px" @endif>
                 <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
                 <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
                 <a class="c text-left" href="/hiscores/2001scape">2001Scape</a>
