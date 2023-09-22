@@ -134,3 +134,4 @@ Route::get('/staff/clear-cache', [StaffController::class, 'clearCache'])->name('
 Route::get('/staff/clear-views', [StaffController::class, 'clearViews'])->name('ClearViews');
 Route::get('/staff/clear-routes', [StaffController::class, 'clearRoutes'])->name('ClearRoutes');
 Route::get('/staff/clear-config', [StaffController::class, 'clearConfig'])->name('ClearConfig');
+Route::get('/staff/migrate-database', [StaffController::class, 'migrateDatabase'])->name('MigrateDatabase');

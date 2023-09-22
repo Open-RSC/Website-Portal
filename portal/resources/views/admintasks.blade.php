@@ -43,6 +43,12 @@
                             Clear Config Cache
                         </a>
                     </div>
+
+                    <div class="btn btn-danger mb-2" role="button">
+                        <a href="{{ route('MigrateDatabase') }}" class="text-white text-decoration-none">
+                            Run database migrations
+                        </a>
+                    </div>
                 </div>
 
             </div>
