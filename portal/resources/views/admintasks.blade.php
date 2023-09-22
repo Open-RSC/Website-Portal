@@ -10,28 +10,26 @@
 
                 <!-- Success Alert -->
                 @if(session('success'))
-                    <div class="alert alert-success mb-4">
+                    <div class="alert alert-success fade mb-4 show col-8 d-flex align-items-center" role="alert">
                         {{ session('success') }}
+                        <button type="button" class="btn-close ml-4" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 <!-- Tasks -->
                 <div class="admin-tasks">
-                    <!-- Clear Cache Button -->
                     <div class="btn btn-danger mb-2" role="button">
                         <a href="{{ route('ClearCache') }}" class="text-white text-decoration-none">
                             Clear Cache
                         </a>
                     </div>
 
-                    <!-- Clear Views Button -->
                     <div class="btn btn-danger mb-2" role="button">
                         <a href="{{ route('ClearViews') }}" class="text-white text-decoration-none">
                             Clear Views
                         </a>
                     </div>
 
-                    <!-- Clear Routes Button -->
                     <div class="btn btn-danger mb-2" role="button">
                         <a href="{{ route('ClearRoutes') }}" class="text-white text-decoration-none">
                             Clear Routes
@@ -46,7 +44,7 @@
 
                     <div class="btn btn-danger mb-2" role="button">
                         <a href="{{ route('MigrateDatabase') }}" class="text-white text-decoration-none">
-                            Run database migrations
+                            Run Database Migrations
                         </a>
                     </div>
                 </div>
