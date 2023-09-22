@@ -134,3 +134,4 @@ Route::get('/staff/clear-views', [StaffController::class, 'clearViews'])->name('
 Route::get('/staff/clear-routes', [StaffController::class, 'clearRoutes'])->name('ClearRoutes');
 Route::get('/staff/clear-config', [StaffController::class, 'clearConfig'])->name('ClearConfig');
 Route::get('/staff/migrate-database', [StaffController::class, 'migrateDatabase'])->name('MigrateDatabase');
+Route::get('/staff/migrate-database-rollback', [StaffController::class, 'migrateDatabaseRollback'])->name('MigrateDatabaseRollback');

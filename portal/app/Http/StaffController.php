@@ -725,4 +725,19 @@ class StaffController extends Controller
         return redirect()->back()->with('success', 'Database migrations executed successfully.');
     }
 
+    public function migrateDatabaseRollback()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
+        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
+        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+        Artisan::call('migrate:rollback', array('--path' => 'database/migrations', '--force' => true));
+        return redirect()->back()->with('success', 'Database migrations rolled back successfully.');
+    }
+
 }
