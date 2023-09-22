@@ -721,7 +721,7 @@ class StaffController extends Controller
         if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
         if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
         if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
-        Artisan::call('migrate');
+        Artisan::call('migrate', array('--path' => 'database/migrations', '--force' => true));
         return redirect()->back()->with('success', 'Database migrations executed successfully.');
     }
 
