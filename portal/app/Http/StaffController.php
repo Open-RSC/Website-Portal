@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Models\itemdef;
 use App\Models\players;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
@@ -647,6 +648,66 @@ class StaffController extends Controller
         $urlToRedirectTo = "staff/$db/player/$id/detail";
 
         return redirect()->to($urlToRedirectTo);
+    }
+
+    public function adminTasks()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        return view('admintasks');
+    }
+
+    public function clearCache()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('cache:clear');
+        return redirect()->back()->with('success', 'Cache cleared successfully.');
+    }
+
+    public function clearViews()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('view:clear');
+        return redirect()->back()->with('success', 'Views cleared successfully.');
+    }
+
+    public function clearRoutes()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('route:clear');
+        return redirect()->back()->with('success', 'Routes cleared successfully.');
+    }
+
+    public function clearconfig()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('config:clear');
+        return redirect()->back()->with('success', 'Routes cleared successfully.');
     }
 
 }

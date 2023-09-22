@@ -128,3 +128,9 @@ Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'i
 Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsItemList'])->middleware('auth')->name('ItemStatsItemList');
 Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsItemData'])->middleware('auth')->name('ItemStatsItemData');
 Route::post('staff/searchPlayerDetailByName', [StaffController::class, 'searchPlayerDetailByName'])->middleware('auth')->name('searchPlayerDetailByName');
+Route::get('/staff/admintasks', [StaffController::class, 'adminTasks'])->name('AdminTasks');
+
+Route::get('/staff/clear-cache', [StaffController::class, 'clearCache'])->name('ClearCache');
+Route::get('/staff/clear-views', [StaffController::class, 'clearViews'])->name('ClearViews');
+Route::get('/staff/clear-routes', [StaffController::class, 'clearRoutes'])->name('ClearRoutes');
+Route::get('/staff/clear-config', [StaffController::class, 'clearConfig'])->name('ClearConfig');
