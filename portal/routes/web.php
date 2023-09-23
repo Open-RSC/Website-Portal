@@ -34,7 +34,7 @@ Route::get('logins48', [StatsController::class, 'logins48'])->name('Logins in th
 Route::get('faq', [HomeController::class, 'faq'])->name('Frequently Asked Questions');
 Route::get('terms', [HomeController::class, 'faq'])->name('Terms and Conditions');
 Route::get('privacy', [HomeController::class, 'faq'])->name('Privacy Policy');
-Route::get('playnow', [HomeController::class, 'playnow'])->name('Play RuneScape '); // purposely left with a space to deconflict
+Route::get('playnow', [HomeController::class, 'playnow'])->name('Play RuneScape '); // route name purposely left with a space to deconflict
 Route::get('playnow/worldlist', [HomeController::class, 'worldlist'])->name('World List');
 Route::get('play/{game}/{members}', [HomeController::class, 'play'])->name('Play RuneScape');
 
@@ -68,14 +68,14 @@ Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect
 Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('RuneScape NPC Hiscores');
 Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('RuneScape Player NPC Hiscores');
 Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('RuneScape Hiscores Redirect');
-Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('RuneScape Hiscores');
-Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('RuneScape Hiscores '); // purposely left with a space to deconflict
-Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show']);
-Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores');
+Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('RuneScape Hiscores')->middleware("custom_throttle");
+Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('RuneScape Hiscores ')->middleware("custom_throttle"); // route name purposely left with a space to deconflict
+Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->middleware("custom_throttle");
+Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores')->middleware("custom_throttle");
 Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName");
-Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName");
-Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName");
-Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
+Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName")->middleware("custom_throttle");
+Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
+Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // route name purposely left with a space to deconflict
 
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
