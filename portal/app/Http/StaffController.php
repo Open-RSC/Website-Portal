@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Models\itemdef;
 use App\Models\players;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
@@ -647,6 +648,202 @@ class StaffController extends Controller
         $urlToRedirectTo = "staff/$db/player/$id/detail";
 
         return redirect()->to($urlToRedirectTo);
+    }
+
+    public function throttlingList() {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $throttlingEntries = \DB::table('custom_throttling')->paginate(10);
+        return view('throttlinglist', compact('throttlingEntries'));
+    }
+
+    public function createThrottling() {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('throttlingcreate');
+    }
+
+    public function storeThrottling(Request $request) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $request->validate([
+            'route_name' => 'required|string|unique:custom_throttling,route_name',
+            'max_attempts' => 'required|integer|min:1',
+            'decay_minutes' => 'required|integer|min:1'
+        ]);
+
+        \DB::table('custom_throttling')->insert($request->only('route_name', 'max_attempts', 'decay_minutes'));
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry added!');
+    }
+
+    public function editThrottling($id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $entry = \DB::table('custom_throttling')->where('id', $id)->first();
+        return view('throttlingedit', compact('entry'));
+    }
+
+    public function updateThrottling(Request $request, $id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $request->validate([
+            'route_name' => 'required|string|unique:custom_throttling,route_name,' . $id,
+            'max_attempts' => 'required|integer|min:1',
+            'decay_minutes' => 'required|integer|min:1'
+        ]);
+        \DB::table('custom_throttling')->where('id', $id)->update($request->only('route_name', 'max_attempts', 'decay_minutes'));
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry updated!');
+    }
+
+    public function destroyThrottling($id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        \DB::table('custom_throttling')->where('id', $id)->delete();
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry deleted!');
+    }
+
+    public function adminTasks()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        return view('admintasks');
+    }
+
+    public function clearCache()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('cache:clear');
+        return redirect()->back()->with('success', 'Cache cleared successfully.');
+    }
+
+    public function clearViews()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('view:clear');
+        return redirect()->back()->with('success', 'Views cleared successfully.');
+    }
+
+    public function clearRoutes()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('route:clear');
+        return redirect()->back()->with('success', 'Routes cleared successfully.');
+    }
+
+    public function clearConfig()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        Artisan::call('config:clear');
+        return redirect()->back()->with('success', 'Routes cleared successfully.');
+    }
+
+    public function migrateDatabase()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
+        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
+        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+        Artisan::call('migrate', array('--path' => 'database/migrations', '--force' => true));
+        return redirect()->back()->with('success', 'Database migrations executed successfully.');
+    }
+
+    public function migrateDatabaseRollback()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
+        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
+        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+        Artisan::call('migrate:rollback', array('--path' => 'database/migrations', '--force' => true));
+        return redirect()->back()->with('success', 'Database migrations rolled back successfully.');
+    }
+
+    public function migrateDatabaseFresh()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
+        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
+        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+        Artisan::call('migrate:fresh', array('--path' => 'database/migrations', '--force' => true));
+        return redirect()->back()->with('success', 'Database migrations freshed successfully.');
+    }
+
+    public function migrateDatabaseRefresh()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
+        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
+        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
+        Artisan::call('migrate:refresh', array('--path' => 'database/migrations', '--force' => true));
+        return redirect()->back()->with('success', 'Database refreshed successfully.');
     }
 
 }

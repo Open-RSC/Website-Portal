@@ -34,7 +34,7 @@ Route::get('logins48', [StatsController::class, 'logins48'])->name('Logins in th
 Route::get('faq', [HomeController::class, 'faq'])->name('Frequently Asked Questions');
 Route::get('terms', [HomeController::class, 'faq'])->name('Terms and Conditions');
 Route::get('privacy', [HomeController::class, 'faq'])->name('Privacy Policy');
-Route::get('playnow', [HomeController::class, 'playnow'])->name('Play RuneScape '); // purposely left with a space to deconflict
+Route::get('playnow', [HomeController::class, 'playnow'])->name('Play RuneScape '); // route name purposely left with a space to deconflict
 Route::get('playnow/worldlist', [HomeController::class, 'worldlist'])->name('World List');
 Route::get('play/{game}/{members}', [HomeController::class, 'play'])->name('Play RuneScape');
 
@@ -60,7 +60,7 @@ Route::any('npcs', [NpcController::class, 'index'])->name('Monster Database');
 Route::any('npcdef/{id}', [NpcController::class, 'show'])->name('Monster Details');
 
 // Client launcher online world lookup
-Route::get('onlinelookup', [StatsController::class, 'onlinelookup']);
+Route::get('onlinelookup', [StatsController::class, 'onlinelookup'])->name("OnlineLookup");
 
 // Hiscores
 Route::any('npchiscores/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('RuneScape NPC Hiscores Redirect');
@@ -68,26 +68,26 @@ Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect
 Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('RuneScape NPC Hiscores');
 Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('RuneScape Player NPC Hiscores');
 Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('RuneScape Hiscores Redirect');
-Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('RuneScape Hiscores');
-Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('RuneScape Hiscores '); // purposely left with a space to deconflict
-Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show']);
-Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores');
-Route::post('searchByName', [HiscoresController::class, 'searchByName']);
-Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName']);
-Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName']);
-Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // purposely left with a space to deconflict
+Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('RuneScape Hiscores')->middleware("custom_throttle");
+Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('RuneScape Hiscores ')->middleware("custom_throttle"); // route name purposely left with a space to deconflict
+Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->middleware("custom_throttle");
+Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores')->middleware("custom_throttle");
+Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName");
+Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName")->middleware("custom_throttle");
+Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
+Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // route name purposely left with a space to deconflict
 
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current RuneScape players');
 
-Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15');
+Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15')->name("Register");
 
 Route::get('/discord', function() {
     if (!empty(config('openrsc.discord_url'))) {
         return redirect(config('openrsc.discord_url'));
     }
     return redirect('/');
-});
+})->name("Discord");
 
 // Afman staff zone
 Route::get('staff/itemstats/{db}/overview', [StatsController::class, 'itemStats'])->name('ItemStatisticsOverview')->middleware('auth');
@@ -128,3 +128,18 @@ Route::get('staff/player/{db}/{subpage}/inventory', [PlayerController::class, 'i
 Route::get('staff/items/{db}/{itemID}/', [StaffController::class, 'itemStatsItemList'])->middleware('auth')->name('ItemStatsItemList');
 Route::get('staff/items/{db}/{itemID}/data', [StaffController::class, 'itemStatsItemData'])->middleware('auth')->name('ItemStatsItemData');
 Route::post('staff/searchPlayerDetailByName', [StaffController::class, 'searchPlayerDetailByName'])->middleware('auth')->name('searchPlayerDetailByName');
+Route::get('staff/admin_tasks', [StaffController::class, 'adminTasks'])->name('AdminTasks');
+Route::get('staff/clear-cache', [StaffController::class, 'clearCache'])->name('ClearCache');
+Route::get('staff/clear-views', [StaffController::class, 'clearViews'])->name('ClearViews');
+Route::get('staff/clear-routes', [StaffController::class, 'clearRoutes'])->name('ClearRoutes');
+Route::get('staff/clear-config', [StaffController::class, 'clearConfig'])->name('ClearConfig');
+Route::get('staff/migrate-database', [StaffController::class, 'migrateDatabase'])->name('MigrateDatabase');
+Route::get('staff/migrate-database-rollback', [StaffController::class, 'migrateDatabaseRollback'])->name('MigrateDatabaseRollback');
+Route::get('staff/migrate-database-fresh', [StaffController::class, 'migrateDatabasFresh'])->name('MigrateDatabaseFresh');
+Route::get('staff/migrate-database-refresh', [StaffController::class, 'migrateDatabasRefresh'])->name('MigrateDatabaseRefresh');
+Route::get('staff/throttling', [StaffController::class, 'throttlingList'])->name('ThrottlingList');
+Route::get('staff/throttling/create', [StaffController::class, 'createThrottling'])->name('ThrottlingCreate');
+Route::post('staff/throttling', [StaffController::class, 'storeThrottling'])->name('ThrottlingStore');
+Route::get('staff/throttling/{id}/edit', [StaffController::class, 'editThrottling'])->name('ThrottlingEdit');
+Route::put('staff/throttling/{id}', [StaffController::class, 'updateThrottling'])->name('ThrottlingUpdate');
+Route::delete('staff/throttling/destroy/{id}',  [StaffController::class, 'destroyThrottling'])->name('ThrottlingDestroy');
