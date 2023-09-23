@@ -43,7 +43,11 @@ class PlayerController extends Controller
     public function rank($db, $subpage, $skill): int
     {
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            return DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            return DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -61,7 +65,7 @@ class PlayerController extends Controller
                     ->where('c.iron_man', '!=', 4)
                     ->count()
                 +
-                DB::connection($db)
+                DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -79,7 +83,11 @@ class PlayerController extends Controller
                     ->where('c.iron_man', '!=', 4)
                     ->count();
         } else {
-            return DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            return DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -96,7 +104,7 @@ class PlayerController extends Controller
                     ->where('b.group_id', '>=', 8)
                     ->count()
                 +
-                DB::connection($db)
+                DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -117,7 +125,7 @@ class PlayerController extends Controller
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -126,7 +134,7 @@ class PlayerController extends Controller
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -135,7 +143,7 @@ class PlayerController extends Controller
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -171,7 +179,11 @@ class PlayerController extends Controller
          * Fetches the table row of the player experience in view and paginates the results
          */
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $players = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -204,7 +216,11 @@ class PlayerController extends Controller
                 ])
                 ->get();
         } elseif (value($db) == '2001scape') { // retro authentic
-            $players = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -236,7 +252,11 @@ class PlayerController extends Controller
                 ])
                 ->get();
         } else { // modern authentic
-            $players = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -268,12 +288,16 @@ class PlayerController extends Controller
                 ->get();
         }
 
-        if (! $players) {
+        if (!$players) {
             abort(404);
         }
 
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $rank_overall = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $rank_overall = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', function ($join) {
                     $join->on('a.playerid', '=', 'b.id');
@@ -300,7 +324,11 @@ class PlayerController extends Controller
                 ])
                 ->get();
         } else { // authentic
-            $rank_overall = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $rank_overall = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', function ($join) {
                     $join->on('a.playerid', '=', 'b.id');
@@ -326,7 +354,11 @@ class PlayerController extends Controller
         }
         $hiscores = [];
         if ($db === 'openpk') {
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('players as b')
                 ->select('b.*')
                 ->groupBy('b.username')
@@ -355,11 +387,15 @@ class PlayerController extends Controller
      */
     public function sharbank($db, Request $request)
     {
+        $conn = $db;
+        if (config('openrsc.caching_databases')) {
+            $conn = $db . "_caching";
+        }
         /**
          * @var $bankitems
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $bankitems = DB::connection($db)
+        $bankitems = DB::connection($conn)
             ->table('bank as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
             ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
@@ -391,11 +427,15 @@ class PlayerController extends Controller
      */
     public function sharinv($db, Request $request)
     {
+        $conn = $db;
+        if (config('openrsc.caching_databases')) {
+            $conn = $db . "_caching";
+        }
         /**
          * @var $invitems
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $invitems = DB::connection($db)
+        $invitems = DB::connection($conn)
             ->table('invitems as a')
             ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
             ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
@@ -526,7 +566,7 @@ class PlayerController extends Controller
 
     public function exportView(Request $request): View
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -548,7 +588,7 @@ class PlayerController extends Controller
 
     public function exportInstructions(Request $request): View
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -563,7 +603,7 @@ class PlayerController extends Controller
 
     public function exportSubmit(Request $request)
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -610,7 +650,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
             }
-        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
         $data = '';
@@ -648,7 +688,7 @@ class PlayerController extends Controller
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
-        if (! config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        if (!config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
 
@@ -693,7 +733,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return Response::json('Invalid credentials', 401);
             }
-        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return Response::json('Invalid credentials', 401);
         }
         $data = '';
