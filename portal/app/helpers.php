@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
-if (! function_exists('passwd_compat_hasher')) {
+if (!function_exists('passwd_compat_hasher')) {
     /**
      * Returns the sha512 hash for a legacy password
      *
@@ -18,7 +18,7 @@ if (! function_exists('passwd_compat_hasher')) {
     }
 }
 
-if (! function_exists('password_needs_rehashing')) {
+if (!function_exists('password_needs_rehashing')) {
     /**
      * @param $passwordHashed string The password hash
      */
@@ -28,7 +28,7 @@ if (! function_exists('password_needs_rehashing')) {
     }
 }
 
-if (! function_exists('add_characters')) {
+if (!function_exists('add_characters')) {
     function add_characters($s, $i)
     {
         $s1 = '';
@@ -45,7 +45,7 @@ if (! function_exists('add_characters')) {
     }
 }
 
-if (! function_exists('get_client_ip_address')) {
+if (!function_exists('get_client_ip_address')) {
     function get_client_ip_address()
     {
         if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
@@ -67,7 +67,7 @@ if (! function_exists('get_client_ip_address')) {
     }
 }
 
-if (! function_exists('player_is_online')) {
+if (!function_exists('player_is_online')) {
     function player_is_online($db, $username)
     {
         $player = DB::connection($db)
@@ -80,14 +80,14 @@ if (! function_exists('player_is_online')) {
     }
 }
 
-if (! function_exists('is_incorrect_production_url')) {
+if (!function_exists('is_incorrect_production_url')) {
     function is_incorrect_production_url()
     {
         return (config('app.env') === 'production' && url('/') !== config('app.url'));
     }
 }
 
-if (! function_exists('ucworlds')) {
+if (!function_exists('ucworlds')) {
     function uc_worlds($db) {
         if ($db === "openpk") {
             return "OpenPK";
@@ -96,7 +96,7 @@ if (! function_exists('ucworlds')) {
     }
 }
 
-if (! function_exists('is_json')) {
+if (!function_exists('is_json')) {
     function is_json($string) {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);

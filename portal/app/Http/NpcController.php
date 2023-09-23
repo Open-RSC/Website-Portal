@@ -51,14 +51,14 @@ class NpcController extends Controller
                 ->table('npcdef')
                 ->where('id', '<=', '793')
                 ->find($id);
-            if (! $npcdef) {
+            if (!$npcdef) {
                 abort(404);
             }
         } else {
             $npcdef = DB::connection('preservation')
                 ->table('npcdef')
                 ->find($id);
-            if (! $npcdef) {
+            if (!$npcdef) {
                 abort(404);
             }
         }

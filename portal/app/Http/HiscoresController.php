@@ -56,7 +56,7 @@ class HiscoresController extends Component
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -65,7 +65,7 @@ class HiscoresController extends Component
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -74,7 +74,7 @@ class HiscoresController extends Component
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -96,7 +96,11 @@ class HiscoresController extends Component
          * Fetches the table row of the player experience in view and paginates the results
          */
         if (value($db) == 'openpk') { // openpk
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('players as b')
                 ->select('b.*')
                 ->groupBy('b.username')
@@ -108,7 +112,11 @@ class HiscoresController extends Component
                 ])
                 ->paginate(21);
         } elseif (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -145,7 +153,11 @@ class HiscoresController extends Component
                 ->orderBy('total_xp', 'desc')
                 ->paginate(21);
         } elseif (value($db) == '2001scape') { // retro authentic
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -180,7 +192,11 @@ class HiscoresController extends Component
                 ->orderBy('total_xp', 'desc')
                 ->paginate(21);
         } else { // modern authentic
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -264,7 +280,7 @@ class HiscoresController extends Component
          * @var $subpage
          * queries the npc and returns a 404 error if not found in database
          */
-        if (! in_array($subpage, $skill_array)) {
+        if (!in_array($subpage, $skill_array)) {
             abort(404);
         }
 
@@ -273,7 +289,11 @@ class HiscoresController extends Component
          * Fetches the table row of the player experience in view and paginates the results
          */
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -293,7 +313,11 @@ class HiscoresController extends Component
                 ->orderBy($subpage, 'desc')
                 ->paginate(21);
         } else { // authentic
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -348,7 +372,7 @@ class HiscoresController extends Component
          * @var $subpage
          * queries the npc and returns a 404 error if not found in database
          */
-        if (! in_array($subpage, $skill_array)) {
+        if (!in_array($subpage, $skill_array)) {
             abort(404);
         }
 
@@ -358,7 +382,11 @@ class HiscoresController extends Component
          */
         if ($subpage == 'skill_total') {
             if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -396,7 +424,11 @@ class HiscoresController extends Component
                     ->orderBy('total_xp', 'desc')
                     ->paginate(21);
             } elseif (value($db) == '2001scape') { // retro authentic
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -431,7 +463,11 @@ class HiscoresController extends Component
                     ->orderBy('total_xp', 'desc')
                     ->paginate(21);
             } else { // modern authentic
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -478,7 +514,11 @@ class HiscoresController extends Component
                 ->with(compact('hiscores'));
         } else {
             if (value($db) == 'openpk') { // openpk
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('players as b')
                     ->select('b.*')
                     ->groupBy('b.username')
@@ -490,7 +530,11 @@ class HiscoresController extends Component
                     ])
                     ->paginate(21);
             } elseif (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -511,7 +555,11 @@ class HiscoresController extends Component
                     ->orderBy($subpage, 'desc')
                     ->paginate(21);
             } else { // authentic
-                $hiscores = DB::connection($db)
+                $conn = $db;
+                if (config('openrsc.caching_databases')) {
+                    $conn = $db . "_caching";
+                }
+                $hiscores = DB::connection($conn)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -608,7 +656,7 @@ class HiscoresController extends Component
 
     public function npcHiscoresRedirect($db = 'preservation')
     {
-        if (! config('openrsc.npc_hiscores_enabled')) {
+        if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $npcID = 0;
@@ -618,7 +666,7 @@ class HiscoresController extends Component
 
     public function npcIndex($db, $npc_id)
     {
-        if (! config('openrsc.npc_hiscores_enabled')) {
+        if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
@@ -626,7 +674,11 @@ class HiscoresController extends Component
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         if ($npc_id == 0) {
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
             ->table('players')
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
             ->select('players.id as playerID', 'players.npc_kills as killCount', 'ironman.iron_man', 'players.username as username')
@@ -639,7 +691,11 @@ class HiscoresController extends Component
             ->orderBy('playerID', 'asc')
             ->paginate(21);
         } else {
-            $hiscores = DB::connection($db)
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
             ->table('npckills')
             ->join('players', 'players.id', '=', 'npckills.playerID')
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
@@ -667,10 +723,14 @@ class HiscoresController extends Component
 
     public function npcPlayerIndex($db, $player_name)
     {
-        if (! config('openrsc.npc_hiscores_enabled')) {
+        if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $player = DB::connection($db)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
+        $conn = $db;
+        if (config('openrsc.caching_databases')) {
+            $conn = $db . "_caching";
+        }
+        $player = DB::connection($conn)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
         if (!$player) {
             abort(404);
         }
@@ -682,7 +742,7 @@ class HiscoresController extends Component
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
-        $hiscores = DB::connection($db)
+        $hiscores = DB::connection($conn)
             ->table('npckills AS a')
             ->join('players', 'players.id', '=', 'a.playerID')
             ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
@@ -696,7 +756,7 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->get();
-        $totalKillsAndRank = DB::connection($db)
+        $totalKillsAndRank = DB::connection($conn)
         ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
         ->where('id', '=', $player_id)
         ->first();
@@ -729,7 +789,7 @@ class HiscoresController extends Component
          * @var $db
          * return not found for servers where toplist was no longer a thing
          */
-        if (! in_array($db, $toplist_array)) {
+        if (!in_array($db, $toplist_array)) {
             abort(404);
         }
 
@@ -816,7 +876,11 @@ class HiscoresController extends Component
 
     private function getTopListSelect($db): Builder
     {
-        return DB::connection($db)
+        $conn = $db;
+        if (config('openrsc.caching_databases')) {
+            $conn = $db . "_caching";
+        }
+        return DB::connection($conn)
             ->table('experience as a')
             ->join('players as b', 'a.playerID', '=', 'b.id')
             ->join('maxstats as d', 'a.playerID', '=', 'd.playerID')

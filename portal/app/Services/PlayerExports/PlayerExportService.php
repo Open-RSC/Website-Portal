@@ -346,7 +346,7 @@ class PlayerExportService
             }
             $newRecords[] = $record;
         }
-        if (! isset($records[0])) {
+        if (!isset($records[0])) {
             return $data;
         }
         $table_column_array = array_keys((array) $newRecords[0]);
