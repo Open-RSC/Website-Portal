@@ -81,14 +81,14 @@ class ItemController extends Controller
                 ->table('itemdef')
                 ->where('id', '<=', '2091') // limits to show only authentic items
                 ->find($id);
-            if (! $itemdef) {
+            if (!$itemdef) {
                 abort(404);
             }
         } else {
             $itemdef = DB::connection('preservation')
                 ->table('itemdef')
                 ->find($id);
-            if (! $itemdef) {
+            if (!$itemdef) {
                 abort(404);
             }
         }

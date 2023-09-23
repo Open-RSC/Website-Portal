@@ -36,7 +36,7 @@ class OnlineController extends Component
         /**
          * Only allow showing of page for player worlds
          */
-        if (! in_array($db, array_keys($player_worlds))) {
+        if (!in_array($db, array_keys($player_worlds))) {
             abort(404);
         }
 

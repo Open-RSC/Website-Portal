@@ -161,7 +161,7 @@ class GpgInvalidMemberError extends GpgError
 
     public function __construct($err, $message, $reason = null, $who = null)
     {
-        if (! is_null($reason)) {
+        if (!is_null($reason)) {
             $reason = self::$reasons[$reason];
         }
         parent::__construct(sprintf($message, $reason, $who), $err);
@@ -224,7 +224,7 @@ abstract class GpgResult
         foreach ($this->status as $status) {
             $code = $status[0];
             //echo 'GpgResult::handle(): ' . $code . ": $status[1]\n";
-            if (! isset($this->processors[$code])) {
+            if (!isset($this->processors[$code])) {
                 throw new GpgUnknownStatus($code);
             }
             if ($this->processors[$code]) {
@@ -415,7 +415,7 @@ class GpgImportResult extends GpgResult
 
     public function __get($attr)
     {
-        if (! in_array($attr, self::$_counts)) {
+        if (!in_array($attr, self::$_counts)) {
             throw new Exception('Unknown property '.$attr);
         }
 
@@ -494,17 +494,17 @@ class GpgListKeysResult extends GpgResult
 
     public function handle()
     {
-        if (! $this->data && $this->err) {
+        if (!$this->data && $this->err) {
             throw new GpgGeneralError($this->err);
         }
         $sub = false;
         foreach (explode("\n", $this->data) as $line) {
             $line = trim($line);
-            if (! $line) {
+            if (!$line) {
                 continue;
             }
             $fields = explode(':', $line);
-            if (! isset(self::$keywords[$fields[0]])) {
+            if (!isset(self::$keywords[$fields[0]])) {
                 continue;
             }
             $value = array_slice($fields, 1);
@@ -512,7 +512,7 @@ class GpgListKeysResult extends GpgResult
                 case 'pub':
                 case 'sec':
                     $sub = false;
-                    if (! empty($this->current)) {
+                    if (!empty($this->current)) {
                         $this->keys[$this->current['fingerprint']] = $this->current;
                     }
                     $this->current = [];
@@ -528,7 +528,7 @@ class GpgListKeysResult extends GpgResult
                     break;
                 case 'fpr':
                     // FIXME: Full fingerprint processing for subkeys
-                    if (! $sub) {
+                    if (!$sub) {
                         $this->current['fingerprint'] = $value[8];
                     }
                     break;
@@ -538,7 +538,7 @@ class GpgListKeysResult extends GpgResult
                     break;
             }
         }
-        if (! empty($this->current)) {
+        if (!empty($this->current)) {
             $this->keys[$this->current['fingerprint']] = $this->current;
         }
     }
@@ -881,7 +881,7 @@ class GpgVersionResult
     public function handle()
     {
         preg_match('/gpg\s+\(GnuPG\)\s+(\d+)\./', $this->data, $g);
-        if (! isset($g[1])) {
+        if (!isset($g[1])) {
             throw new GpgGeneralError('gpg: Could not get version');
         }
         $this->version = (int) $g[1];
@@ -930,7 +930,7 @@ class GnuPG
 
     protected function execute($result, $args, $stdin = null, $passphrase = false)
     {
-        if (! $this->version && ! in_array('--version', $args)) {
+        if (!$this->version && ! in_array('--version', $args)) {
             $this->version = $this->execute(new GpgVersionResult(), ['--version'])->version;
         }
 
@@ -939,7 +939,7 @@ class GnuPG
             $cmd = array_merge($cmd, ['--homedir', $this->homedir]);
         }
         if ($passphrase !== false) {
-            if (! in_array('--batch', $args)) {
+            if (!in_array('--batch', $args)) {
                 $cmd[] = '--batch';
             }
             $cmd = array_merge($cmd, ['--passphrase-fd', '4']);
@@ -968,7 +968,7 @@ class GnuPG
             $pipes
         );
 
-        if (! is_resource($process)) {
+        if (!is_resource($process)) {
             throw new GpgProcError($this->binary);
         }
 
@@ -1017,7 +1017,7 @@ class GnuPG
      */
     public function recvKeys(string $keyserver, $keys): GpgImportResult
     {
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = [$keys];
         }
 
@@ -1057,7 +1057,7 @@ class GnuPG
     {
         $args = $binary ? [] : ['--armor'];
         $args = array_merge($args, $secret ? ['--batch', '--export-secret-keys'] : ['--export']);
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = [$keys];
         }
 
@@ -1076,7 +1076,7 @@ class GnuPG
      */
     public function deleteKeys($fingerprints, bool $secret = false): GpgDeleteResult
     {
-        if (! is_array($fingerprints)) {
+        if (!is_array($fingerprints)) {
             $fingerprints = [$fingerprints];
         }
 
@@ -1120,14 +1120,14 @@ class GnuPG
     public function genKeyInput(array $args = []): string
     {
         $login = getenv('LOGNAME');
-        if (! $login) {
+        if (!$login) {
             $login = getenv('USERNAME');
         }
-        if (! $login) {
+        if (!$login) {
             $login = 'user';
         }
         $hostname = gethostname();
-        if (! $hostname) {
+        if (!$hostname) {
             $hostname = 'localhost';
         }
         $type = isset($args['Key-Type']) ? $args['Key-Type'] : 'RSA';
@@ -1237,7 +1237,7 @@ class GnuPG
     public function encrypt(string $data, $recipients, string $signKey = null, string $passphrase = null,
             string $alwaysTrust = "", string $outputFilename = null, string $binary = "", string $symmetric = ""): GpgEncryptResult
     {
-        if (! is_array($recipients)) {
+        if (!is_array($recipients)) {
             $recipients = [$recipients];
         }
         if ($symmetric) {
@@ -1249,7 +1249,7 @@ class GnuPG
                 $args[] = $recipient;
             }
         }
-        if (! $binary) {
+        if (!$binary) {
             $args[] = '--armor';
         }
         if ($outputFilename) {
@@ -1310,7 +1310,7 @@ class GnuPG
             }
             $args = array_merge($args, ['--output', $outputFilename]);
         }
-        if (! is_null($sender)) {
+        if (!is_null($sender)) {
             $args = array_merge($args, ['-u', $sender]);
         }
         if ($alwaysTrust) {

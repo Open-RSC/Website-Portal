@@ -35,7 +35,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(function () {
-            if (! config('openrsc.login_enabled')) {
+            if (!config('openrsc.login_enabled')) {
                 abort(404);
             }
 
@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::registerView(function () {
-            if (! config('openrsc.web_registration_enabled')) {
+            if (!config('openrsc.web_registration_enabled')) {
                 abort(404);
             }
 
@@ -70,7 +70,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing(function (Request $request) {
-            if (! config('openrsc.login_enabled')) {
+            if (!config('openrsc.login_enabled')) {
                 return false;
             }
             try {
@@ -100,7 +100,7 @@ class FortifyServiceProvider extends ServiceProvider
                 if ($trimmed_pass !== $user->pass) {
                     return false;
                 }
-            } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+            } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
                 return false;
             }
             if ($user) {
