@@ -91,6 +91,15 @@
         @else
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Admin Links <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                        <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
+                        <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
+                    </span>
+                </span>
+            @endif
+            @if(Gate::allows('admin', Auth::user()))
+                <span class="flex-auto p-2 dropdown">
                     <a class="c" href="#">Server Item Stats <i class="fas fa-caret-down"></i></a>
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
                         <a class="c text-left" href="{{ route('ItemStatisticsOverview', 'preservation') }}">RSC Preservation Stats</a>
@@ -229,7 +238,9 @@
                     </span>
                 </span>
             @endif
-
+            @if(Gate::allows('admin', Auth::user()))
+                <br>
+            @endif
             <span class="flex-auto p-2 dropdown">
                 <a class="c" href="#">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black;">
