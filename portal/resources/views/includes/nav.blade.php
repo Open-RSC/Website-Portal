@@ -95,6 +95,7 @@
                     <span class="p-2 dropdown-content" style="background:black; width:160px;">
                         <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
                         <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
+                        <a class="c text-left" href="{{ route('ThrottlingList') }}">Custom Rate Limiting</a>
                     </span>
                 </span>
             @endif

@@ -650,6 +650,82 @@ class StaffController extends Controller
         return redirect()->to($urlToRedirectTo);
     }
 
+    public function throttlingList() {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $throttlingEntries = \DB::table('custom_throttling')->paginate(10);
+        return view('throttlinglist', compact('throttlingEntries'));
+    }
+
+    public function createThrottling() {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        return view('throttlingcreate');
+    }
+
+    public function storeThrottling(Request $request) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $request->validate([
+            'route_name' => 'required|string|unique:custom_throttling,route_name',
+            'max_attempts' => 'required|integer|min:1',
+            'decay_minutes' => 'required|integer|min:1'
+        ]);
+
+        \DB::table('custom_throttling')->insert($request->only('route_name', 'max_attempts', 'decay_minutes'));
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry added!');
+    }
+
+    public function editThrottling($id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $entry = \DB::table('custom_throttling')->where('id', $id)->first();
+        return view('throttlingedit', compact('entry'));
+    }
+
+    public function updateThrottling(Request $request, $id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $request->validate([
+            'route_name' => 'required|string|unique:custom_throttling,route_name,' . $id,
+            'max_attempts' => 'required|integer|min:1',
+            'decay_minutes' => 'required|integer|min:1'
+        ]);
+        \DB::table('custom_throttling')->where('id', $id)->update($request->only('route_name', 'max_attempts', 'decay_minutes'));
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry updated!');
+    }
+
+    public function destroyThrottling($id) {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        \DB::table('custom_throttling')->where('id', $id)->delete();
+        return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry deleted!');
+    }
+
     public function adminTasks()
     {
         if (Auth::user() === null) {
