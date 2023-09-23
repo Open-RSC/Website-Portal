@@ -10,7 +10,7 @@
     @endif
     <!-- Create New Entry Button -->
     <div style="align-self: flex-start" class="mb-3">
-        <a href="{{ route('ThrottlingCreate') }}" class="btn btn-primary text-white text-decoration-none">Create New Entry</a>
+        <a href="{{ route('ThrottlingCreate') }}" class="btn btn-success text-white text-decoration-none">Create New Entry</a>
     </div>
     <table class="table table-bordered table-dark">
         <thead>
@@ -28,7 +28,7 @@
                     <td>{{ $entry->max_attempts }}</td>
                     <td>{{ $entry->decay_minutes }}</td>
                     <td>
-                        <a href="{{ route('ThrottlingEdit', $entry->id) }}" class="btn btn-sm btn-primary text-white text-decoration-none">Edit</a>
+                        <a href="{{ route('ThrottlingEdit', $entry->id) }}" class="btn btn-sm btn-success text-white text-decoration-none">Edit</a>
                         <form method="POST" action="{{ route('ThrottlingDestroy', $entry->id) }}" style="display: inline;">
                             @csrf
                             @method('DELETE')

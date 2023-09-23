@@ -36,10 +36,9 @@
                         <input class="form-control mb-1" type="number" name="decay_minutes" value="{{ old('decay_minutes') }}" min="1" required />
                     </div>
 
-                    <div>
-                        <button class="btn btn-success mt-1" type="submit">
-                           Add Entry
-                        </button>
+                    <!-- This div will act as a flex container for the button -->
+                    <div class="d-flex mt-2">
+                        <button class="btn btn-success" type="submit">Add Entry</button>
                     </div>
                 </form>
             </div>

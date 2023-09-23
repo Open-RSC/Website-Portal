@@ -36,20 +36,18 @@
                         <label>Decay Minutes</label>
                         <input class="form-control mb-1" type="number" name="decay_minutes" value="{{ $entry->decay_minutes }}" min="1" required />
                     </div>
-
-                    <div>
-                        <button class="btn btn-success mt-1" type="submit">
-                           Update Entry
-                        </button>
-                        <form method="POST" action="{{ route('ThrottlingDestroy', $entry->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger mt-1" type="submit">
-                                Delete Entry
-                            </button>
-                        </form>
-                    </div>
                 </form>
+                <!-- This div will act as a flex container for the buttons -->
+                <div class="d-flex mt-2">
+                    <button class="btn btn-success" type="submit">Update Entry</button>
+
+                    <!-- Inline form for delete -->
+                    <form method="POST" action="{{ route('ThrottlingDestroy', $entry->id) }}" class="ml-2">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Delete Entry</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
