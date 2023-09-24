@@ -44,12 +44,12 @@ Route::get('quest/{subpage}', [QuestController::class, 'show'])->name('{subpage}
 Route::get('minigames', [QuestController::class, 'minigames'])->name('Mini Games');
 
 // Player pages
-Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player');
-Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank');
-Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv');
+Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player')->middleware("custom_throttle");
+Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank')->middleware("custom_throttle");
+Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv')->middleware("custom_throttle");
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
-Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['throttle:15,20'])->name('PlayerExportSubmit');
+Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['custom_throttle:15,20'])->name('PlayerExportSubmit');
 
 // Item lookup
 Route::any('items', [ItemController::class, 'index'])->name('Items');
@@ -60,19 +60,19 @@ Route::any('npcs', [NpcController::class, 'index'])->name('Monster Database');
 Route::any('npcdef/{id}', [NpcController::class, 'show'])->name('Monster Details');
 
 // Client launcher online world lookup
-Route::get('onlinelookup', [StatsController::class, 'onlinelookup'])->name("OnlineLookup");
+Route::get('onlinelookup', [StatsController::class, 'onlinelookup'])->name("OnlineLookup")->middleware("custom_throttle");
 
 // Hiscores
-Route::any('npchiscores/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('RuneScape NPC Hiscores Redirect');
-Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('RuneScape NPC Hiscores DB Redirect');
-Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('RuneScape NPC Hiscores');
-Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('RuneScape Player NPC Hiscores');
-Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('RuneScape Hiscores Redirect');
+Route::any('npchiscores/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('RuneScape NPC Hiscores Redirect')->middleware("custom_throttle");
+Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('RuneScape NPC Hiscores DB Redirect')->middleware("custom_throttle");
+Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('RuneScape NPC Hiscores')->middleware("custom_throttle");
+Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('RuneScape Player NPC Hiscores')->middleware("custom_throttle");
+Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('RuneScape Hiscores Redirect')->middleware("custom_throttle");
 Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('RuneScape Hiscores')->middleware("custom_throttle");
 Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('RuneScape Hiscores ')->middleware("custom_throttle"); // route name purposely left with a space to deconflict
 Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->middleware("custom_throttle");
 Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('RuneScape Ironman Hiscores')->middleware("custom_throttle");
-Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName");
+Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName")->middleware("custom_throttle");
 Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName")->middleware("custom_throttle");
 Route::post('searchNpcHiscoresByNpcName', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('RuneScape Hiscore tables'); // route name purposely left with a space to deconflict
