@@ -4,8 +4,9 @@
         <h2 class="h2 text-center pt-5 pb-4 text-capitalize display-3 ">Item Database</h2>
         <div class="text-center" style="color:grey">
             <label for="inputBox"></label>
-            <input type="text" class="pl-2 pt-1 mb-4 w-25 text-center" id="inputBox" onkeyup="search()"
-                   placeholder="Search this page">
+            <form method="GET" action="{{ route('Items') }}" id="searchForm">
+                <input type="text" class="mb-3" name="search" value="{{ request('search') }}" placeholder="Search items..." onkeyup="debouncedSubmit()">
+            </form>
         </div>
 
         {{ $items->links('pagination::tailwind') }}
@@ -114,7 +115,22 @@
             @endforeach
             </tbody>
         </table>
-        {{ $items->links('pagination::tailwind') }}
+        {{ $items->appends(['search' => request('search')])->links('pagination::tailwind') }}
     </div>
-    </div>
+    <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
+        const debouncedSubmit = debounce(function() {
+            document.getElementById('searchForm').submit();
+        }, 500)
+    </script>
 @endsection

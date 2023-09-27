@@ -14,7 +14,7 @@ class ItemController extends Controller
     /**
      * @return Factory|View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         /**
          * @return Factory|View
@@ -22,20 +22,17 @@ class ItemController extends Controller
          * @var $items
          * fetches the table row of the item in view and paginates the results
          */
-        if (Config::get('app.authentic') == true) {
-            $items = DB::connection('preservation')
-                ->table('itemdef')
-                ->where([
-                    ['id', '<=', '2091'], // limits to show only authentic items
-                ])
-                ->orderBy('id', 'asc')
-                ->paginate(300);
-        } else {
-            $items = DB::connection('preservation')
-                ->table('itemdef')
-                ->orderBy('id', 'asc')
-                ->paginate(300);
+        $query = DB::connection('preservation')->table('itemdef');
+
+        if ($request->has('search')) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
         }
+
+        if (Config::get('app.authentic') == true) {
+            $query->where('id', '<=', '2091'); // limits to show only authentic items
+        }
+
+        $items = $query->orderBy('id', 'asc')->paginate(300);
 
         return view('items')
             ->with(compact('items'));
