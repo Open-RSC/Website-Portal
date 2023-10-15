@@ -14,7 +14,15 @@
         the interest of "leech proofing" code, money grabs, toxic individuals, DDoS attacks, and deception.
         The Open RuneScape Classic core team consists of real life professional developers, security
         consultants, dev ops
-        managers, and more.
+        managers, and more. You can find the source code for our game servers <a href="https://gitlab.com/open-runescape-classic/core" target="_blank">right here</a> and the source code for our website <a href="https://gitlab.com/open-runescape-classic/Website-Portal" target="_blank">right here</a>.
+
+        <span class="mt-4 rscfont text-danger font-weight-bold d-block">How do I play?</span>
+        Great question! We have many different public worlds, and many different ways to play.
+        To get started, you will want to register an account, which can be done through
+        <a href="/register" target="_blank">the registration page found here</a> or through one of our desktop clients. After that, you can visit <a href="/playnow" target="_blank">the play now page found here</a>, and then log in either by clicking on "Web Client"
+        for the Preservation, 2001scape, and Uranium worlds, or by clicking on "Android Client"
+        or "Desktop Client" depending on if you are on an Android device or on a computer. If you are on Android then you can install the apk like any other apk on Android and then launch it and select the world you want to play. If you are on a computer, then you can launch the launcher you downloaded (OpenRSC.jar) and then simply click on the logo or text of the world you want to play. Please note that you will need Java installed to run our desktop clients (and desktop launcher), we recommend <a href="https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u382-b05/openlogic-openjdk-8u382-b05-windows-x64.msi" target="_blank">Java 8 which you can find here if you are on Windows</a> for the best compatibility with our project. If you are having any problems figuring out how to play, you can visit <a href="/discord" target="_blank">our Discord found here</a> to ask for help or by posting a thread on <a href="/board" target="_blank">our technical support section in our forum found here</a>.
+
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
         <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
@@ -115,11 +123,11 @@
                                                                     href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Who are the Open RuneScape Classic project admins?</span>
-        <a class="link-success underline" target="_blank" href="https://gitlab.com/kenix3">Kenix</a>, <a
+        <a class="link-success underline" target="_blank" href="/player/cabbage/Aurora">Aurora</a>, <a
                 class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
                 class="link-success underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>, <a
                 class="link-success underline" target="_blank" href="https://gitlab.com/ipkpjersi">Ken</a>, and <a
-                class="link-success underline" target="_blank" href="https://gitlab.com/Marwolf">Marwolf</a>
+                class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
         We have a zero tolerance policy on our publicly hosted servers except for RSC Uranium and RSC Coleslaw,
