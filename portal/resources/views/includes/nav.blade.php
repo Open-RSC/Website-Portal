@@ -6,29 +6,32 @@
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="/playnow">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
-                <a class="c text-left" href="/playnow"><i class="fa fa-gamepad"></i> Play Now </a>
+                <a class="c text-left" href="/playnow"><i class="fa fa-fw fa-gamepad"></i> Play Now </a>
                 <a class="c text-left" href="/register">
-                    <i class="fa fa-pen"></i> Register
+                    <i class="fa fa-fw fa-pen"></i> Register
                 </a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Community <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content" style="background:black; width:130px;">
+            <span class="p-2 dropdown-content" style="background:black; width:215px;">
                 <a class="c text-left" href="/board">
-                    <i class="far fa-comment-alt"></i> Forums
+                    <i class="far fa-fw fa-comment-alt"></i> Forums
                 </a>
                 <a class="c text-left" href="{{ config('openrsc.discord_url') }}" target="_blank">
-                    <i class="fab fa-discord"></i> Discord
+                    <i class="fab fa-fw fa-discord"></i> Discord
                 </a>
                 <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank">
-                    <i class="fab fa-reddit-alien"></i> Reddit
+                    <i class="fab fa-fw fa-reddit-alien"></i> Reddit
                 </a>
                 <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
-                    <i class="fab fa-gitlab"></i>&nbsp; Source Code
+                    <i class="fab fa-fw fa-gitlab"></i> Source Code
                 </a>
                 <a class="c text-left" href="/playerexport">
-                    <i class="fa fa-download"></i>&nbsp; Player Exports
+                    <i class="fa fa-fw fa-download"></i> Player Exports
+                </a>
+                <a class="c text-left" href="/faq">
+                    <i class="fa fa-fw fa-question"></i> Frequently Asked Questions
                 </a>
             </span>
         </span>
@@ -56,15 +59,15 @@
             <span class="p-2 dropdown-content nav-guides-dropdown">
                 <a class="c text-left" href="{{ route('Wilderness Map') }}"><i
                             class="fas fa-map"></i> Wilderness Map</a>
-                <a class="c text-left" href="{{ route('Monster Database') }}"><i class="fas fa-book"></i> Monster Database</a>
-                <a class="c text-left" href="{{ route('Items') }}"><i class="fas fa-book"></i> Item Database</a>
-                <a class="c text-left" href="{{ route('Quests') }}"><i class="fas fa-question"></i> Quests</a>
-                <a class="c text-left" href="{{ route('Mini Games') }}"><i class="fas fa-question"></i> Mini Games</a>
+                <a class="c text-left" href="{{ route('Monster Database') }}"><i class="fas fa-fw fa-book"></i> Monster Database</a>
+                <a class="c text-left" href="{{ route('Items') }}"><i class="fas fa-fw fa-book"></i> Item Database</a>
+                <a class="c text-left" href="{{ route('Quests') }}"><i class="fas fa-fw fa-question"></i> Quests</a>
+                <a class="c text-left" href="{{ route('Mini Games') }}"><i class="fas fa-fw fa-question"></i> Mini Games</a>
                 <a class="c text-left" target="_blank" href="https://classic.runescape.wiki">
-                    <i class="fab fa-wikipedia-w"></i> RSC Wiki
+                    <i class="fab fa-fw fa-wikipedia-w"></i> RSC Wiki
                 </a>
                 <a class="c text-left" href="/wiki">
-                    <i class="fab fa-wikipedia-w"></i> OpenRSC Wiki
+                    <i class="fab fa-fw fa-wikipedia-w"></i> OpenRSC Wiki
                 </a>
             </span>
         </span>
