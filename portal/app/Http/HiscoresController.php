@@ -771,11 +771,11 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->get();
-        $totalKillsAndRank = DB::connection($conn)
-        ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
-        ->where('id', '=', $player_id)
-        ->first();
         if (config('openrsc.npc_overall_hiscores_enabled')) {
+            $totalKillsAndRank = DB::connection($conn)
+            ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
+            ->where('id', '=', $player_id)
+            ->first();
             $overallObject = (object)[
                 'npcID' => 0,
                 'username' => $player->username,
