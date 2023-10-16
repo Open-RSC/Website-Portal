@@ -659,7 +659,16 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $npcID = 0;
+
+        if (config('openrsc.npc_overall_hiscores_enabled')) {
+            $npcID = 0;
+        } else {
+            if ($db === '2001scape') {
+                $npcID = 135;
+            } else {
+                $npcID = 477;
+            }
+        }
 
         return redirect()->to("/npchiscores/$db/$npcID");
     }
@@ -672,6 +681,9 @@ class HiscoresController extends Component
         $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
+        }
+        if (!config('openrsc.npc_overall_hiscores_enabled')) {
+            unset($npcs[0]);
         }
         if ($npc_id == 0) {
             $conn = $db;
@@ -742,6 +754,9 @@ class HiscoresController extends Component
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
+        if (!config('openrsc.npc_overall_hiscores_enabled')) {
+            unset($npcs[0]);
+        }
         $hiscores = DB::connection($conn)
             ->table('npckills AS a')
             ->join('players', 'players.id', '=', 'a.playerID')
@@ -756,19 +771,21 @@ class HiscoresController extends Component
                      ->on('a.playerID', '=', 'b.playerID');
             })
             ->get();
-        $totalKillsAndRank = DB::connection($conn)
-        ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
-        ->where('id', '=', $player_id)
-        ->first();
-        $overallObject = (object)[
-            'npcID' => 0,
-            'username' => $player->username,
-            'killCount' => $totalKillsAndRank->npc_kills ?? 0,
-            'rank' => $totalKillsAndRank->rank ?? null
-        ];
-        $hiscoresArray = $hiscores->toArray();
-        array_unshift($hiscoresArray, $overallObject);
-        $hiscores = collect($hiscoresArray);
+        if (config('openrsc.npc_overall_hiscores_enabled')) {
+            $totalKillsAndRank = DB::connection($conn)
+            ->table(DB::raw('(SELECT id, npc_kills, RANK() OVER (ORDER BY npc_kills DESC, id ASC) as rank FROM players WHERE group_id >= '.config('group.player_moderator').' AND banned != -1) AS a'))
+            ->where('id', '=', $player_id)
+            ->first();
+            $overallObject = (object)[
+                'npcID' => 0,
+                'username' => $player->username,
+                'killCount' => $totalKillsAndRank->npc_kills ?? 0,
+                'rank' => $totalKillsAndRank->rank ?? null
+            ];
+            $hiscoresArray = $hiscores->toArray();
+            array_unshift($hiscoresArray, $overallObject);
+            $hiscores = collect($hiscoresArray);
+        }
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
