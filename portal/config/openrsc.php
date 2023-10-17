@@ -21,6 +21,7 @@ return [
     'max_new_accounts_per_24_hours' => env('MAX_NEW_ACCOUNTS_PER_24_HOURS', 3),
     'npc_hiscores_enabled' => env('NPC_HISCORES_ENABLED', false),
     'npc_overall_hiscores_enabled' => env('NPC_OVERALL_HISCORES_ENABLED', true),
+    'npc_odyssey_hiscores_enabled' => env('NPC_ODYSSEY_HISCORES_ENABLED', true),
     'discord_url' => env('DISCORD_URL', 'https://discord.gg/ABdFCqn'),
     'discord_url_on_maintenance_page' => env('DISCORD_URL_ON_MAINTENANCE_PAGE', false),
     'caching_databases' => env('CACHING_DATABASES', false),

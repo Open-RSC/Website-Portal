@@ -678,12 +678,15 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcs = [0 => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         if (!config('openrsc.npc_overall_hiscores_enabled')) {
             unset($npcs[0]);
+        }
+        if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== "coleslaw" && $db !== "cabbage")) {
+            unset($npcs["odyssey"]);
         }
         if ($npc_id == 0) {
             $conn = $db;
@@ -702,6 +705,22 @@ class HiscoresController extends Component
             ->orderBy('killCount', 'desc')
             ->orderBy('playerID', 'asc')
             ->paginate(21);
+        } else if ($npc_id === 'odyssey') {
+            $conn = $db;
+            if (config('openrsc.caching_databases')) {
+                $conn = $db . "_caching";
+            }
+            $hiscores = DB::connection($conn)
+                ->table('player_cache')
+                ->join('players', 'players.id', '=', 'player_cache.playerID')
+                ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
+                ->where([
+                    ['player_cache.type', '=', 0],
+                    ['player_cache.key', '=', 'co_prestige']
+                ])
+                ->selectRaw('CAST(player_cache.value AS UNSIGNED) as killCount, ironman.iron_man, players.username as username, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC) as rank')
+                ->orderBy(DB::raw('CAST(player_cache.value AS UNSIGNED)'), 'desc')
+                ->paginate(21);
         } else {
             $conn = $db;
             if (config('openrsc.caching_databases')) {
@@ -749,13 +768,16 @@ class HiscoresController extends Component
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
-        $npcs = [0 => 'Overall', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcs = [0 => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
             $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         if (!config('openrsc.npc_overall_hiscores_enabled')) {
             unset($npcs[0]);
+        }
+        if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== "coleslaw" && $db !== "cabbage")) {
+            unset($npcs["odyssey"]);
         }
         $hiscores = DB::connection($conn)
             ->table('npckills AS a')
@@ -786,6 +808,31 @@ class HiscoresController extends Component
             array_unshift($hiscoresArray, $overallObject);
             $hiscores = collect($hiscoresArray);
         }
+
+        if (array_key_exists('odyssey', $npcs)) {
+            // Get rank and value for the specific player_id
+            $odysseyData = DB::connection($conn)
+                ->table(DB::raw("(SELECT playerID, CAST(value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(value AS UNSIGNED) DESC) as rank FROM player_cache WHERE type = 0 AND `key` = 'co_prestige') AS sub"))
+                ->where('playerID', '=', $player_id)
+                ->first();
+            if ($odysseyData != null && $odysseyData->value > 0) {
+                $odysseyObject = (object)[
+                    'npcID' => 'odyssey',
+                    'username' => $player->username,
+                    'killCount' => $odysseyData->value ?? 0,
+                    'rank' => $odysseyData->rank ?? null,
+                ];
+
+                $hiscoresArray = $hiscores->toArray();
+                if (config('openrsc.npc_overall_hiscores_enabled')) {
+                    array_splice($hiscoresArray, 1, 0, [$odysseyObject]);
+                } else {
+                    array_unshift($hiscoresArray, $odysseyObject);
+                }
+                $hiscores = collect($hiscoresArray);
+            }
+        }
+
         return view('npchiscoresplayer', [
             'db' => $db,
             'player' => $player,
