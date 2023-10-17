@@ -810,7 +810,6 @@ class HiscoresController extends Component
         }
 
         if (array_key_exists('odyssey', $npcs)) {
-            // Get rank and value for the specific player_id
             $odysseyData = DB::connection($conn)
                 ->table(DB::raw("(SELECT playerID, CAST(value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(value AS UNSIGNED) DESC) as rank FROM player_cache WHERE type = 0 AND `key` = 'co_prestige') AS sub"))
                 ->where('playerID', '=', $player_id)
