@@ -50,7 +50,7 @@
                                 &nbsp;<a class="c" href="/npchiscores/{{ $db }}/player/{{ $player->username }}">{{ ucfirst($player->username) }}</a>
                             </div>
                             <!--Kills-->
-                            <div class="text-right" style="padding-right:15px; width:100px;">
+                            <div class="text-right" {!! $npc_id === "odyssey" ? "style='width:100px;'" : "style='padding-right:15px; width:100px;'" !!} >
                                 {{ number_format($player->killCount) }}
                             </div>
                         </div>
