@@ -124,10 +124,12 @@
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Who are the Open RuneScape Classic project admins?</span>
         <a class="link-success underline" target="_blank" href="/player/cabbage/Aurora">Aurora</a>, <a
-                class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
-                class="link-success underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>, <a
-                class="link-success underline" target="_blank" href="https://gitlab.com/ipkpjersi">Ken</a>, and <a
-                class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>
+    class="link-success underline" target="_blank" href="https://gitlab.com/ipkpjersi">Ken</a>, <a
+    class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
+    class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a
+    class="link-success underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>
+
+
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
         We have a zero tolerance policy on our publicly hosted servers except for RSC Uranium and RSC Coleslaw,
