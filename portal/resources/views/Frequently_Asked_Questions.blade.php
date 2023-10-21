@@ -129,8 +129,6 @@
     class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a
     class="link-success underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>
 
-
-
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What is Open RuneScape Classic's stance on botting?</span>
         We have a zero tolerance policy on our publicly hosted servers except for RSC Uranium and RSC Coleslaw,
         which are botting allowed worlds.
