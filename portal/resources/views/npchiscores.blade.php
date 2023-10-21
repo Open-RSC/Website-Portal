@@ -30,7 +30,7 @@
                     <div class="d-flex">
                         <div class="text-right" style="width:40px;"><b>Rank</b></div>
                         <div class="text-left" style="padding-left:10px; width:160px;"><b>Player Name</b></div>
-                        <div class="text-right" style="width:40px;"><b>Kills</b></div>
+                        <div class="text-right" {!! $npc_id === "odyssey" ? "style='width:100px;'" : "style='width:40px;'" !!}><b>{{ $npc_id === "odyssey" ? "Completions" : "Kills" }}</b></div>
                     </div>
                     @foreach ($hiscores as $key=>$player)
                         <div class="d-flex">
