@@ -18,7 +18,7 @@
                 <tr>
                     <td class="e">
                         <div class="text-center d-flex align-items-center">
-                            {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} NPC Hiscores {!! (($db === "cabbage" || $db === "coleslaw") && ($player->iron_man === 1 || $player->iron_man === 2 || $player->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!} 
+                            {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }} NPC Hiscores {!! (($db === "cabbage" || $db === "coleslaw") && ($player->iron_man === 1 || $player->iron_man === 2 || $player->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!}
                             @if(($db === "cabbage" || $db === "coleslaw") && $player->iron_man === 1)
                                 <img src="{{ asset('img/iron.png') }}" alt="Ironman">
                             @elseif(($db === "cabbage" || $db === "coleslaw") && $player->iron_man === 2)
@@ -35,7 +35,7 @@
                                 <span class="ml-1"></span>{{ ucfirst($player->username) }}
                             </span>
                         </div>
-                        
+
                          <table>
                                 <tr>
                                     <td colspan="3" align="left">
@@ -61,7 +61,7 @@
                                             {{ number_format($player->killCount) }}
                                         </td>
                                     </tr>
-                                @endforeach    
+                                @endforeach
                          </table>
                     </td>
                 </tr>
