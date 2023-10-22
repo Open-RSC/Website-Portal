@@ -19,7 +19,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
 
-$wgSitename = "Open RuneScape Classic Wiki";
+$wgSitename = "OpenRSC Wiki";
 $wgMetaNamespace = "Open_RSC_Wiki";
 
 ## The URL base path to the directory containing the wiki;

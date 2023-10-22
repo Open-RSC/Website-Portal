@@ -86,7 +86,7 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
+                    OpenRSC is not affiliated with RuneScape Classic nor JaGeX.<br>
                     To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}" onmousedown="return ConfirmTerms();">Terms+Conditions</a>
                     +

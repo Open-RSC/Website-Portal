@@ -23,13 +23,13 @@
         <span class="text-danger font-weight-bold d-block pt-4">3️⃣ Do not exploit vulnerabilities or bugs. Responsibly disclose them so they can be fixed. Bug abuse will result in permanent banning from all worlds, Discord, and other platforms</span>
         <span class="d-block">3.1 In 2001scape, it is not allowed to create alt accounts to exploit quest rewards. The use of mules is allowed</span>
 
-        <span class="text-danger font-weight-bold d-block pt-4">4️⃣ No Real World Trading (RWT). Anything outside the Open RuneScape Classic game(s) (even from Jagex) is considered RWT</span>
+        <span class="text-danger font-weight-bold d-block pt-4">4️⃣ No Real World Trading (RWT). Anything outside the OpenRSC game(s) (even from Jagex) is considered RWT</span>
         <span class="d-block">4.1 No trading between botting (Uranium & Coleslaw) and non-botting (Preservation, Cabbage & 2001scape) worlds</span>
         <span class="d-block">4.2 Account buying and selling is not allowed.</span>
         <span class="d-block">4.2.1 Account sharing is not supported nor allowed. This is due to staff being unable to separate identities if one person breaks the rules and it is unfair to those competing for hiscores.</span>
 
         <span class="text-danger font-weight-bold d-block pt-4">5️⃣ No illegal activity – follow all local laws and regulations (Discord etc.) terms of services</span>
-        <span class="d-block">5.1 Don’t tell people where to buy mind-altering substances, AKA drugs. Don’t endorse drugs unless they are also found in RuneScape Classic (i.e. Whiskey is okay)</span>
+        <span class="d-block">5.1 Don’t tell people where to buy mind-altering substances, AKA drugs. Don’t endorse drugs unless they are also found in RSC (i.e. Whiskey is okay)</span>
 
         <span class="text-danger font-weight-bold d-block pt-4">6️⃣ No Advertising</span>
         <span class="d-block">6.1 Other Discord Servers (without permission) is forbidden</span>
