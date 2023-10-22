@@ -5,7 +5,7 @@
             <td class=e>
                 <div class="pl-1 pr-1">
                     <span class="d-block pt-2 pb-2">
-                        Creating an account for Open RuneScape Classic is a simple process.
+                        Creating an account for OpenRSC is a simple process.
                     </span>
                     <span class="d-block pt-2 pb-2">
                         To begin you must first select a username. Once you have found a username that
@@ -13,7 +13,7 @@
                     </span>
                     <span class="d-block pt-2 pb-2">
                         Usernames must be between 2 and 12 characters long and may contain letters, numbers, and spaces.
-                        When playing Open RuneScape Classic, underscores in usernames are translated
+                        When playing OpenRSC, underscores in usernames are translated
                         into spaces. Capitalization is maintained from account creation now. For example, the
                         username Red_Rooster would appear as Red Rooster.
                     </span>

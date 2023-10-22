@@ -8,7 +8,7 @@
                 <div class="table-transparent pl-5 pr-5 mb-5">
                     <div id="row1" class="d-flex flex-wrap justify-content-between pt-3">
                         <div data-toggle="tooltip"
-                             title="It is considered a 'rite of passage'. To complete it, you must tour all the finest bars and taste the strongest drinks in RuneScape Classic.">
+                             title="It is considered a 'rite of passage'. To complete it, you must tour all the finest bars and taste the strongest drinks in RSC.">
 							<span class="d-block">
 								<a href="https://classic.runescape.wiki/w/Alfred_Grimhand_Bar_Crawl" target="_blank">
 									<img class="d-block" alt="minigame image"

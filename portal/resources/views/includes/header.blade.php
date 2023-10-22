@@ -1,14 +1,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Open RuneScape Classic</title>
-	<meta name="description" content="A RuneScape Classic replica - open source and free!">
+	<title>OpenRSC</title>
+	<meta name="description" content="An RSC replica - open source and free!">
 	<meta name="keywords"
-		  content="rsc preservation,openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,runescape classic,rsc cabbage,authentic runescape classic,vanilla rsc, rs1">
-	<meta name="author" content="Open RuneScape Classic">
+		  content="rsc preservation,openrsc,open rsc,rsc,open-rsc,rs classic,rsc cabbage,rsc cabbage,authentic rs classic,vanilla rsc,rs1,rs vet, rsc vet">
+	<meta name="author" content="OpenRSC">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	@if (config('openrsc.force_https', false))
-		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
+		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 	@endif
 
 	<!-- Favicons -->
