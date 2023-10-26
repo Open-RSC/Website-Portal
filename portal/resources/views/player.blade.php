@@ -11,6 +11,11 @@
                     </td>
                 </tr>
             </table>
+            <div class="p-2">
+                <a class="c" href="javascript:history.back()">
+                    Back to hiscores
+                </a>
+            </div>
         </div>
     @else
         <div class="text-center">
@@ -63,20 +68,20 @@
                                             {{ number_format($player->deaths) }}
                                         </td>
                                         <td align="right">
-                                            @if ($player->deaths > 0) 
+                                            @if ($player->deaths > 0)
                                                 {{ number_format($player->kills / $player->deaths, 2) }}
-                                            @else 
-                                                @if ($player->kills > 0) 
+                                            @else
+                                                @if ($player->kills > 0)
                                                     {{ number_format($player->kills, 2) }}
                                                 @else
                                                     0.00
-                                                @endif    
-                                            @endif    
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
-                                @endforeach    
+                                @endforeach
                          </table>
-                        @else     
+                        @else
                             <table>
                                 <tr>
                                     <td colspan="3" width="120" align="left">
