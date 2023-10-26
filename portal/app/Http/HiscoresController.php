@@ -646,7 +646,7 @@ class HiscoresController extends Component
         $db = $request->db;
         $npc = npcdef::where('name', '=', $name)->first();
         if (!$npc) {
-            abort(404);
+            return redirect()->back()->withErrors("The NPC $name does not exist!");
         }
         $id = $npc->id;
         $urlToRedirectTo = "/npchiscores/$db/$id";
@@ -701,6 +701,7 @@ class HiscoresController extends Component
                 ['players.npc_kills', '>', '0'],
                 ['players.banned', '!=', '-1'],
                 ['players.group_id', '>=', config('group.player_moderator')],
+                ['ironman.iron_man', '!=', '4']
             ])
             ->orderBy('killCount', 'desc')
             ->orderBy('playerID', 'asc')
@@ -716,7 +717,8 @@ class HiscoresController extends Component
                 ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
                 ->where([
                     ['player_cache.type', '=', 0],
-                    ['player_cache.key', '=', 'co_prestige']
+                    ['player_cache.key', '=', 'co_prestige'],
+                    ['ironman.iron_man', '!=', '4']
                 ])
                 ->selectRaw('CAST(player_cache.value AS UNSIGNED) as killCount, ironman.iron_man, players.username as username, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC) as rank')
                 ->orderBy(DB::raw('CAST(player_cache.value AS UNSIGNED)'), 'desc')
@@ -738,6 +740,7 @@ class HiscoresController extends Component
                 ['npckills.killCount', '>', '0'],
                 ['players.banned', '!=', '-1'],
                 ['players.group_id', '>=', config('group.player_moderator')],
+                ['ironman.iron_man', '!=', '4']
             ])
             ->paginate(21);
         }
@@ -760,9 +763,9 @@ class HiscoresController extends Component
         if (config('openrsc.caching_databases')) {
             $conn = $db . "_caching";
         }
-        $player = DB::connection($conn)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->select('ironman.iron_man', 'players.*')->first();
+        $player = DB::connection($conn)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->where('ironman.iron_man', '!=', 4)->select('ironman.iron_man', 'players.*')->first();
         if (!$player) {
-            abort(404);
+             return redirect()->back()->withErrors("The Player $player_name does not exist!");
         }
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.

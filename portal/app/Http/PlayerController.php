@@ -213,6 +213,7 @@ class PlayerController extends Controller
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
+                    ['c.iron_man', '!=', 4],
                 ])
                 ->get();
         } elseif (value($db) == '2001scape') { // retro authentic

@@ -1,6 +1,13 @@
 @extends('template')
 @section('content')
     <div class="hiscores-page">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        <span>{{ $error }}</span>
+                    @endforeach
+            </div>
+        @endif
         <div class="hiscores-list-container">
             <div class="hiscores-skill-list" style="width:200px">
                 <div class="hiscores-list-label">
