@@ -661,7 +661,7 @@ class HiscoresController extends Component
         }
 
         if (config('openrsc.npc_overall_hiscores_enabled')) {
-            $npcID = 0;
+            $npcID = 'overall';
         } else {
             if ($db === '2001scape') {
                 $npcID = 135;
@@ -678,17 +678,17 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $npcs = [0 => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcs = ['overall' => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
-            $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
+            $npcs = ['overall' => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         if (!config('openrsc.npc_overall_hiscores_enabled')) {
-            unset($npcs[0]);
+            unset($npcs['overall']);
         }
         if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== "coleslaw" && $db !== "cabbage")) {
             unset($npcs["odyssey"]);
         }
-        if ($npc_id == 0) {
+        if ($npc_id == 'overall') {
             $conn = $db;
             if (config('openrsc.caching_databases')) {
                 $conn = $db . "_caching";
@@ -748,8 +748,7 @@ class HiscoresController extends Component
             'npcs' => $npcs,
             'npc_name' => $npcs[$npc_id] ?? npcdef::where("id", "=", $npc_id)->first()->name ?? " NPC " . $npc_id,
             'npc_id' => $npc_id,
-        ])
-            ->with(compact('hiscores'));
+        ])->with(compact('hiscores'));
     }
 
     public function npcPlayerIndex($db, $player_name)
@@ -768,13 +767,13 @@ class HiscoresController extends Component
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
-        $npcs = [0 => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
+        $npcs = ['overall' => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
-            $npcs = [0 => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
+            $npcs = ['overall' => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
         if (!config('openrsc.npc_overall_hiscores_enabled')) {
-            unset($npcs[0]);
+            unset($npcs['overall']);
         }
         if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== "coleslaw" && $db !== "cabbage")) {
             unset($npcs["odyssey"]);
@@ -799,7 +798,7 @@ class HiscoresController extends Component
             ->where('id', '=', $player_id)
             ->first();
             $overallObject = (object)[
-                'npcID' => 0,
+                'npcID' => 'overall',
                 'username' => $player->username,
                 'killCount' => $totalKillsAndRank->npc_kills ?? 0,
                 'rank' => $totalKillsAndRank->rank ?? null
@@ -836,8 +835,7 @@ class HiscoresController extends Component
             'db' => $db,
             'player' => $player,
             'npcs' => $npcs,
-        ])
-            ->with(compact('hiscores'));
+        ])->with(compact('hiscores'));
     }
 
     /**
