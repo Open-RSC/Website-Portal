@@ -638,7 +638,7 @@ class StaffController extends Controller
 
         $name = $request->name;
         $db = $request->db ?? "preservation";
-        $player = players::where('username', '=', $name)->first();
+        $player = DB::connection($db)->table('players')->where('username', '=', $name)->first();
 
         if (!$player) {
             abort(404);
