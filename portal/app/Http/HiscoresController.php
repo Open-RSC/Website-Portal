@@ -646,7 +646,7 @@ class HiscoresController extends Component
         $db = $request->db;
         $npc = npcdef::where('name', '=', $name)->first();
         if (!$npc) {
-            abort(404);
+            return redirect()->back()->withErrors("That NPC does not exist!");
         }
         $id = $npc->id;
         $urlToRedirectTo = "/npchiscores/$db/$id";
@@ -765,7 +765,7 @@ class HiscoresController extends Component
         }
         $player = DB::connection($conn)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->where('ironman.iron_man', '!=', 4)->select('ironman.iron_man', 'players.*')->first();
         if (!$player) {
-            abort(404);
+             return redirect()->back()->withErrors("That Player does not exist!");
         }
         $player_id = $player->id;
         //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
