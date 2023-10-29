@@ -720,8 +720,9 @@ class HiscoresController extends Component
                     ['player_cache.key', '=', 'co_prestige'],
                     ['ironman.iron_man', '!=', '4']
                 ])
-                ->selectRaw('CAST(player_cache.value AS UNSIGNED) as killCount, ironman.iron_man, players.username as username, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC) as rank')
+                ->selectRaw('CAST(player_cache.value AS UNSIGNED) as killCount, ironman.iron_man, players.username as username, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC, player_cache.playerID ASC) as rank')
                 ->orderBy(DB::raw('CAST(player_cache.value AS UNSIGNED)'), 'desc')
+                ->orderBy('player_cache.playerID', 'asc')
                 ->paginate(21);
         } else {
             $conn = $db;
@@ -813,7 +814,7 @@ class HiscoresController extends Component
 
         if (array_key_exists('odyssey', $npcs)) {
             $odysseyData = DB::connection($conn)
-                ->table(DB::raw("(SELECT playerID, CAST(value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(value AS UNSIGNED) DESC) as rank FROM player_cache WHERE type = 0 AND `key` = 'co_prestige') AS sub"))
+                ->table(DB::raw("(SELECT playerID, CAST(value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(value AS UNSIGNED) DESC, playerID ASC) as rank FROM player_cache WHERE type = 0 AND `key` = 'co_prestige') AS sub"))
                 ->where('playerID', '=', $player_id)
                 ->first();
             if ($odysseyData != null && $odysseyData->value > 0) {
