@@ -13,7 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                
+
                     @if ($errors->any())
                         <div>
                             <div>{{ __('Something went wrong.') }}</div>
@@ -24,7 +24,11 @@
                             </ul>
                         </div>
                     @endif
-                
+                    <div class="mb-3 text-center">
+                        <a href="{{ route('Rules and Security') }}" class="text-green text-underline" rel="noopener noreferrer nofollow" target="_blank">
+                            Please click here to read the rules before registering an account. If you create an account, you have agreed to all of our rules.
+                        </a>
+                    </div>
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
                         <div>
@@ -42,28 +46,28 @@
                             <label>{{ __('Username') }}</label>
                             <input class="form-control mb-1" type="text" name="username" value="{{ old('username') }}" required autofocus />
                         </div>
-                        
+
                         <div>
                             <label>{{ __('Email') }}</label>
                             <input class="form-control mb-1" type="text" name="email" value="{{ old('email') }}" required autofocus />
                         </div>
-                
+
                         <div>
                             <label>{{ __('Password') }}</label>
                             <input class="form-control mb-1" type="password" name="password" required autocomplete="current-password" />
                         </div>
-                        
+
                         <div>
                             <label>{{ __('Confirm Password') }}</label>
                             <input class="form-control mb-1" type="password" name="password_confirmation" required autocomplete="new-password" />
                         </div>
-                
+
                         <div>
                             <!-- <label>{-- __('Remember me') --}</label> -->
                             <!-- We don't have remember_token in players table -->
                             <!-- <input class="mt-1" type="checkbox" name="remember"> -->
                         </div>
-                
+
                         <div>
                             <button class="btn btn-success mt-1" type="submit">
                                {{ __('Register') }}
