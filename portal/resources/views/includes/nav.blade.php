@@ -24,6 +24,9 @@
                 <a class="c text-left" href="https://www.reddit.com/r/rsc" target="_blank">
                     <i class="fab fa-fw fa-reddit-alien"></i> Reddit
                 </a>
+                <a class="c text-left" href="/rules">
+                    <i class="fa fa-fw fa-gavel"></i> Rules
+                </a>
                 <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
                     <i class="fab fa-fw fa-gitlab"></i> Source Code
                 </a>
