@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col container">
-        <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
+        <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3 fs-3">
             Open RSC Registration
         </h2>
 
