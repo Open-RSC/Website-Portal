@@ -31,13 +31,6 @@ class SetDynamicGuard
                 Auth::logout();
                 return $next($request);
             }
-            session(['db_connection' => $guard]);
-            //Seems like Auth::login regenerates a session, which loses the db_connection session variable.
-            //Auth::login($player);
-            //Seems like it still doesn't work, still regenerates session.
-            //Auth::guard($guard)->login($player);
-            //dd(Auth::user());
-            //Seems like we can set setUser instead without having to log in.
             Auth::setUser($player);
         } else {
             Auth::logout();
