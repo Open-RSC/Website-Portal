@@ -26,7 +26,7 @@ class SetDynamicGuard
             Auth::shouldUse($guard);
             $player = new players();
             $player = $player->setConnection($guard)->find($userId);
-            $playerUsername = trim(preg_replace('/[-_.]/', ' ', $player->username));
+            $playerUsername = trim(preg_replace('/[-_.]/', ' ', $player?->username ?? ""));
             if ($player == null || strtolower($playerUsername) != strtolower($expectedUsername)) {
                 Auth::logout();
                 return $next($request);
