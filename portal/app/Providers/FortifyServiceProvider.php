@@ -14,6 +14,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;
@@ -77,6 +78,7 @@ class FortifyServiceProvider extends ServiceProvider
                 $validated = $request->validate([
                     'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                     'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
+                    'db' => ['required', 'in:preservation,cabbage,uranium,coleslaw,openpk,2001scape'], // Validate the 'db' input
                 ]);
             } catch (ValidationException $e) {
                 //\Log::info($e->validator->errors());
@@ -86,7 +88,8 @@ class FortifyServiceProvider extends ServiceProvider
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
             $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
-            $user = players::on('preservation')->where('username', '=', $trimmed_username)->first();
+            $database = $request->input('db');
+            $user = players::on($database)->where('username', '=', $trimmed_username)->first();
             if ($user === null) {
                 return false;
             }
@@ -107,7 +110,7 @@ class FortifyServiceProvider extends ServiceProvider
                 if (config('openrsc.login_admin_only') && ! $user->hasAdmin()) {
                     return false;
                 }
-
+                session(['db_connection' => $database, 'expected_username' => $trimmed_username]);
                 return $user;
             }
 
