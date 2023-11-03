@@ -110,6 +110,10 @@ class FortifyServiceProvider extends ServiceProvider
                 if (config('openrsc.login_admin_only') && ! $user->hasAdmin()) {
                     return false;
                 }
+                if ($database !== "preservation" && (!session()->has('dynamic_guard_middleware_ran') || session()->get('dynamic_guard_middleware_ran') === false)) {
+                    \Log::error("Player $trimmed_username tried to log in but dynamic guard did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases!");
+                    return false;
+                }
                 session(['db_connection' => $database, 'expected_username' => $trimmed_username]);
                 return $user;
             }

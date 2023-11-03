@@ -18,6 +18,7 @@ class SetDynamicGuard
      */
     public function handle($request, Closure $next)
     {
+        session(['dynamic_guard_middleware_ran' => true]);
         //WARNING: Be very careful that API routes do not user Auth::user() facade because multi-database login/auth is a website-only feature. This probably won't ever matter since API routes usually authenticate based on tokens and params anyway, and APIs already don't support features like CSRF and APIs are stateless anyway.
         if (session()->has('db_connection') && session()->has('expected_username')) {
             $guard = session('db_connection');
@@ -27,8 +28,8 @@ class SetDynamicGuard
             $player = new players();
             $player = $player->setConnection($guard)->find($userId);
             $playerUsername = trim(preg_replace('/[-_.]/', ' ', $player?->username ?? ""));
-            if ($player == null || strtolower($playerUsername) != strtolower($expectedUsername)) {
-                \Log::error("This shouldn't happen! player is null: " . ($player == null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
+            if ($player === null || strtolower($playerUsername) !== strtolower($expectedUsername)) {
+                \Log::error("This shouldn't happen! player is null: " . ($player === null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
                 Auth::logout();
                 return $next($request);
             }
