@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use function App\Helpers\get_client_ip_address;
 
 class SetDynamicGuardChecker
 {
@@ -23,7 +24,13 @@ class SetDynamicGuardChecker
             $database = session('db_connection');
             //If the dynamic guard middleware did not run successfully, this attribute won't be set, we might not have the correct user, so force a logout and log an error.
             if (!$request->attributes->get('dynamic_guard_middleware_ran')) {
-                \Log::error("Player $username database $database loaded a page but dynamic guard did not run on the request, serving a page with a user from any database other than the default (preservation) is unsafe because player IDs can differ between databases, forcing logout!");
+                $ip = "";
+                try {
+                    $ip = get_client_ip_address();
+                } catch (E\xception $e) {
+
+                }
+                \Log::error("Player $username IP $ip database $database loaded a page but dynamic guard did not run on the request, serving a page with a user from any database other than the default (preservation) is unsafe because player IDs can differ between databases, forcing logout!");
                 Auth::logout();
             }
         }

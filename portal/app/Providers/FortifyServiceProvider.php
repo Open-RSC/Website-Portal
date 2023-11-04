@@ -7,6 +7,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use function App\Helpers\add_characters;
+use function App\Helpers\get_client_ip_address;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\password_needs_rehashing;
 use App\Models\players;
@@ -111,7 +112,8 @@ class FortifyServiceProvider extends ServiceProvider
                     return false;
                 }
                 if ($database !== "preservation" && (!$request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || !$request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
-                    \Log::error("Player $trimmed_username tried to log in to database $database but dynamic guard (or dynamic guard checker) did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases, rejecting login!");
+                    $ip = get_client_ip_address();
+                    \Log::error("Player $trimmed_username IP $ip tried to log in to database $database but dynamic guard (or dynamic guard checker) did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases, rejecting login!");
                     return false;
                 }
                 session(['db_connection' => $database, 'expected_username' => $trimmed_username]);
