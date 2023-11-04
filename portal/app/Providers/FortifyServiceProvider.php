@@ -112,6 +112,7 @@ class FortifyServiceProvider extends ServiceProvider
                     return false;
                 }
                 if ($database !== "preservation" && (!$request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || !$request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
+                    $ip = "";
                     try {
                         $ip = get_client_ip_address();
                     } catch (\Exception $e) {
