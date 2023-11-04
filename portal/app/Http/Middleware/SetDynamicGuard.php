@@ -27,6 +27,7 @@ class SetDynamicGuard
             $player = new players();
             $player = $player->setConnection($guard)->find($userId);
             $playerUsername = trim(preg_replace('/[-_.]/', ' ', $player?->username ?? ""));
+            //This is probably entirely redundant, we already validated the user ID vs database from the login itself, but just in case we check anyway.
             if ($player === null || strtolower($playerUsername) !== strtolower($expectedUsername)) {
                 \Log::error("This shouldn't happen! player is null: " . ($player === null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
                 Auth::logout();
