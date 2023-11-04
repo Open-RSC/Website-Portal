@@ -7,9 +7,8 @@
             <a class="c" href="/playnow">Play Now <i class="fas fa-caret-down"></i></a>
             <span class="p-2 dropdown-content" style="background:black; width:130px;">
                 <a class="c text-left" href="/playnow"><i class="fa fa-fw fa-gamepad"></i> Play Now </a>
-                <a class="c text-left" href="/register">
-                    <i class="fa fa-fw fa-pen"></i> Register
-                </a>
+                <a class="c text-left" href="/register"><i class="fa fa-fw fa-pen"></i> Register </a>
+                <a class="c text-left" href="/login"><i class="fa fa-fw fa-sign-in"></i> Login </a>
             </span>
         </span>
         <span class="flex-auto p-2 dropdown">
