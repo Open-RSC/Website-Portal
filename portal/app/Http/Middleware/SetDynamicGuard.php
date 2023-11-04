@@ -27,7 +27,7 @@ class SetDynamicGuard
             $player = new players();
             $player = $player->setConnection($guard)->find($userId);
             $playerUsername = trim(preg_replace('/[-_.]/', ' ', $player?->username ?? ""));
-            //This is probably entirely redundant, we already validated the user ID vs database from the login itself, but just in case we check for the correct user again anyway.
+            //This is probably entirely redundant, we already validated the user ID vs database from the login itself, but just in case we check for the correct user again anyway. Then again, if a user gets renamed between their login and the current request, they will have to log in again, so this may not even be entirely redundant.
             if ($player === null || strtolower($playerUsername) !== strtolower($expectedUsername)) {
                 \Log::error("This shouldn't happen! player is null: " . ($player === null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
                 Auth::logout();
