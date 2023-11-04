@@ -136,6 +136,11 @@ return [
             'model' => App\Models\retro::class,
         ],
 
+        'retro' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\retro::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
