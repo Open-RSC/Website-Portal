@@ -11,7 +11,8 @@ use function App\Helpers\get_client_ip_address;
 class SetDynamicGuardChecker
 {
     /**
-     * Handle an incoming request.
+     * This middleware checks that the SetDynamicGuard middleware has run successfully, and if not,
+     * and also if the database is not preservation, then it forces a logout of the user.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next

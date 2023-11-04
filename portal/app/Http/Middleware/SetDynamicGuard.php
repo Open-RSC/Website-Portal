@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 class SetDynamicGuard
 {
     /**
-     * Handle an incoming request.
+     * This middleware sets the correct user for a non-default database (database other than preservation) login.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
