@@ -85,11 +85,13 @@ class FortifyServiceProvider extends ServiceProvider
                 //\Log::info($e->validator->errors());
                 return false;
             }
-
+            $database = $request->input('db');
+            if ($database !== 'preservation' && !config('openrsc.multi_world_logins')) {
+                return false;
+            }
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
             $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
-            $database = $request->input('db');
             $user = players::on($database)->where('username', '=', $trimmed_username)->first();
             if ($user === null) {
                 return false;

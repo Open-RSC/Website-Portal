@@ -25,4 +25,5 @@ return [
     'discord_url' => env('DISCORD_URL', 'https://discord.gg/ABdFCqn'),
     'discord_url_on_maintenance_page' => env('DISCORD_URL_ON_MAINTENANCE_PAGE', false),
     'caching_databases' => env('CACHING_DATABASES', false),
+    'multi_world_logins' => env('MULTI_WORLD_LOGINS', true)
 ];

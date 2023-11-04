@@ -19,6 +19,9 @@ class SetDynamicGuardChecker
      */
     public function handle($request, Closure $next)
     {
+        if (!config('openrsc.multi_world_logins')) {
+            return $next($request);
+        }
         if (Auth::user() !== null && session('db_connection') !== "preservation") {
             $username = Auth::user()->username;
             $database = session('db_connection');
