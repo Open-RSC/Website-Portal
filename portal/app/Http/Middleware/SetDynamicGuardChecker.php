@@ -20,7 +20,8 @@ class SetDynamicGuardChecker
      */
     public function handle($request, Closure $next)
     {
-        if (!config('openrsc.multi_world_logins')) {
+        //Also check that it's preservation, if it's not then it could be an old session before multi_world_logins was turned off. In which case, we will want to force a logout anyway.
+        if (!config('openrsc.multi_world_logins') && session('db_connection') === "preservation") {
             return $next($request);
         }
         if (Auth::user() !== null && session('db_connection') !== "preservation") {
