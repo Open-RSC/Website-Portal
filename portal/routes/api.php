@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//WARNING: Be very careful that API routes do not user Auth::user() facade because multi-database login/auth is a website-only feature. This probably won't ever matter since API routes usually authenticate based on tokens and params anyway, and APIs already don't support features like CSRF and APIs are stateless anyway.
+//WARNING: Be very careful that API routes do not user Auth::user() facade method because multi-database login/auth is a website-only feature. This probably won't ever matter since API routes usually authenticate based on tokens and params anyway, and APIs already don't support features like CSRF and APIs are stateless anyway.
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
