@@ -71,6 +71,11 @@ return [
             'provider' => 'retro',
         ],
 
+        '2001scape' => [
+            'driver' => 'session',
+            'provider' => '2001scape',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
