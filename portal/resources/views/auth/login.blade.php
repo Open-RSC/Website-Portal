@@ -34,7 +34,6 @@
                                 <option value="cabbage">RSC Cabbage</option>
                                 <option value="uranium">RSC Uranium</option>
                                 <option value="coleslaw">RSC Coleslaw</option>
-                                <option value="openpk">OpenPK</option>
                                 <option value="2001scape">2001scape</option>
                             </select>
                         @else
