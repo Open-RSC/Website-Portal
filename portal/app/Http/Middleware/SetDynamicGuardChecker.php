@@ -27,8 +27,8 @@ class SetDynamicGuardChecker
                 $ip = "";
                 try {
                     $ip = get_client_ip_address();
-                } catch (E\xception $e) {
-
+                } catch (\Exception $e) {
+                    \Log::error("Error fetching ip address in SetDynamicGuardChecker for player $username database $database");
                 }
                 \Log::error("Player $username IP $ip database $database loaded a page but dynamic guard did not run on the request, serving a page with a user from any database other than the default (preservation) is unsafe because player IDs can differ between databases, forcing logout!");
                 Auth::logout();

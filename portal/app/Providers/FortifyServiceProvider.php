@@ -112,7 +112,11 @@ class FortifyServiceProvider extends ServiceProvider
                     return false;
                 }
                 if ($database !== "preservation" && (!$request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || !$request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
-                    $ip = get_client_ip_address();
+                    try {
+                        $ip = get_client_ip_address();
+                    } catch (\Exception $e) {
+                        \Log::error("Error fetching ip address in FortifyServiceProvider authenticateUsing() for player $username database $database");
+                    }
                     \Log::error("Player $trimmed_username IP $ip tried to log in to database $database but dynamic guard (or dynamic guard checker) did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases, rejecting login!");
                     return false;
                 }
