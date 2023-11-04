@@ -33,7 +33,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'cabbage' => [
@@ -44,7 +45,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'preservation' => [
@@ -55,7 +57,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'uranium' => [
@@ -66,7 +69,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'coleslaw' => [
@@ -77,7 +81,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'openpk' => [
@@ -88,7 +93,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         '2001scape' => [
@@ -99,7 +105,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\SetDynamicGuard::class
+            \App\Http\Middleware\SetDynamicGuard::class,
+            \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
 
         'api' => [
