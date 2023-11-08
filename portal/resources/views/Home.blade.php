@@ -448,7 +448,7 @@ obtainable item of your choice</span> as a thanks!
                                                     from our staff
                                                 </span>
                                             <div class="d-block">
-                                                <a href="/board/ucp.php?i=pm&folder=inbox" class="c">
+                                                <a href="/login" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -526,7 +526,7 @@ obtainable item of your choice</span> as a thanks!
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Manage your Password and Recovery Details
+                                            Manage your Account
                                             <div class="d-block">
                                                 <a href="/login" class="c">
                                                     Click Here
