@@ -878,7 +878,16 @@ class StaffController extends Controller
         }
         // Add the IP address to the banned list
         BannedIp::create(['ip_address' => $validated['ip_address']]);
-
+        DB::connection('laravel')->table('stafflogs')->insert([
+            'username' => Auth::user()->username,
+            'page' => 'banned_ips',
+            'game' => 'laravel',
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'description' => 'Banned IP ' . $validated['ip_address'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         // Redirect back with success message
         return back()->with('success', 'IP address banned successfully.');
     }
@@ -901,6 +910,16 @@ class StaffController extends Controller
 
         // Check if the operation was successful
         if ($unbanned) {
+            DB::connection('laravel')->table('stafflogs')->insert([
+                'username' => Auth::user()->username,
+                'page' => 'banned_ips',
+                'game' => 'laravel',
+                'url' => $request->fullUrlWithQuery($request->query->all()),
+                'description' => 'Unbanned IP ' . $validated['ip_address'],
+                'ip' => get_client_ip_address(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
             // Redirect back with success message
             return back()->with('success', 'IP address unbanned successfully.');
         } else {
