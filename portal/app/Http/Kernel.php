@@ -33,6 +33,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -57,6 +59,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -69,6 +72,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -81,6 +85,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -93,6 +98,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -105,6 +111,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class
         ],
@@ -112,6 +119,7 @@ class Kernel extends HttpKernel
         'api' => [
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckBannedIp::class
         ],
     ];
 

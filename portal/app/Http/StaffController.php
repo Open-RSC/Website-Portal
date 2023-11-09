@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Models\BannedIp;
 use App\Models\itemdef;
 use App\Models\players;
 use Illuminate\Support\Facades\Artisan;
@@ -844,6 +845,68 @@ class StaffController extends Controller
         if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
         Artisan::call('migrate:refresh', array('--path' => 'database/migrations', '--force' => true));
         return redirect()->back()->with('success', 'Database refreshed successfully.');
+    }
+
+    public function listBannedIpsView()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $bannedIps = BannedIp::paginate(10);
+        return view('bannedipslist', compact('bannedIps'));
+    }
+
+    public function banIp(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        // Validate the request...
+        $validated = $request->validate([
+            'ip_address' => 'required|ip',
+        ]);
+        $existingBan = BannedIp::where('ip_address', $validated['ip_address'])->first();
+        if ($existingBan) {
+            // Redirect back with error message
+            return back()->with('error', 'This IP address is already banned.');
+        }
+        // Add the IP address to the banned list
+        BannedIp::create(['ip_address' => $validated['ip_address']]);
+
+        // Redirect back with success message
+        return back()->with('success', 'IP address banned successfully.');
+    }
+
+    public function unbanIp(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        // Validate the request...
+        $validated = $request->validate([
+            'ip_address' => 'required|ip',
+        ]);
+
+        // Remove the IP address from the banned list
+        $unbanned = BannedIp::where('ip_address', $validated['ip_address'])->delete();
+
+        // Check if the operation was successful
+        if ($unbanned) {
+            // Redirect back with success message
+            return back()->with('success', 'IP address unbanned successfully.');
+        } else {
+            // Redirect back with error message
+            return back()->with('error', 'IP address not found.');
+        }
     }
 
 }

@@ -101,6 +101,7 @@
                         <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
                         <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
                         <a class="c text-left" href="{{ route('ThrottlingList') }}">Custom Rate Limiting</a>
+                        <a class="c text-left" href="{{ route('BannedIpsList') }}">IP Bans</a>
                     </span>
                 </span>
             @endif
