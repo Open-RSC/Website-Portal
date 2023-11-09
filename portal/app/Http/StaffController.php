@@ -855,7 +855,7 @@ class StaffController extends Controller
         if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        $bannedIps = BannedIp::paginate(10);
+        $bannedIps = BannedIp::orderBy('id', 'desc')->paginate(10);
         return view('bannedipslist', compact('bannedIps'));
     }
 
