@@ -129,6 +129,24 @@ class StaffController extends Controller
                 ->editColumn('login_date', function ($data) {
                     return Carbon::createFromTimestamp($data->login_date)->format('Y-m-d H:i:s');
                 })
+                ->editColumn('muted', function ($data) {
+                    if ((int)$data->muted === -1) {
+                        return 'Permanently';
+                    } elseif ((int)$data->muted > 0) {
+                        return Carbon::createFromTimestamp($data->muted / 1000);
+                    } else {
+                        return 'No';
+                    }
+                })
+                ->editColumn('banned', function ($data) {
+                    if ((int)$data->banned === -1) {
+                        return 'Permanently';
+                    } elseif ((int)$data->banned > 0) {
+                        return Carbon::createFromTimestamp($data->banned / 1000);
+                    } else {
+                        return 'No';
+                    }
+                })
                 ->smart(true)
                 ->make();
     }
