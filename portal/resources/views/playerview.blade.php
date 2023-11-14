@@ -49,8 +49,8 @@
                 <p>Quest Points: {{ $player->quest_points }} </p>
                 <p>Kills: {{ $player->kills }} </p>
                 <p>Deaths: {{ $player->deaths }} </p>
-                <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::now()->subSeconds($player->muted)->diffForHumans() }} @else No @endif  </p>
-                <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::now()->subSeconds($player->banned)->diffForHumans() }} @else No @endif  </p>
+                <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000) }} @else No @endif  </p>
+                <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000) }} @else No @endif  </p>
                 @if (\App\Models\players::hasBank($db, $player->id))
                     <p>
                         <a href="/staff/player/{{$db}}/{{$player->username}}/bank">View Bank</a>
