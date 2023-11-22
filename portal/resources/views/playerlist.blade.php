@@ -43,6 +43,7 @@
                     {title: "Login Date", data: 'login_date', responsivePriority: 7},
                     @if(Gate::allows('admin', Auth::user())) {title: "Login IP", data: 'login_ip'}, @endif
                     @if(Gate::allows('admin', Auth::user())) {title: "Creation IP", data: 'creation_ip'}, @endif
+                    @if(Gate::allows('admin', Auth::user())) {data: 'email', visible: false}, @endif
                     {title: "Banned", data: 'banned', responsivePriority: 3},
                     {title: "Muted", data: 'muted', responsivePriority: 4},
                     {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
