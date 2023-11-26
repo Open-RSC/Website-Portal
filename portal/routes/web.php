@@ -28,7 +28,7 @@ Route::get('/home', [HomeController::class, 'home'])->name('Home Page');
 Route::get('worldmap/{db}', [HomeController::class, 'worldmap'])->name('World Map');
 Route::get('worldmap', function () {
     return redirect()->route('World Map', ['db' => 'preservation']);
-});
+})->name('World Map Redirect');
 Route::get('wilderness', [HomeController::class, 'wilderness'])->name('Wilderness Map');
 Route::get('rules', [HomeController::class, 'rules'])->name('Rules and Security');
 Route::get('online', [StatsController::class, 'online'])->name('Online list');
