@@ -4,7 +4,7 @@
         <td colspan="2">
             <p class="homepage-world-location">
                 <img align="left" src="{{ asset('img/usflag.gif') }}" width="30" height="15" border="0">
-                <span class="m-1">Raleigh</span>
+                <span class="m-1">Atlanta</span>
             </p>
             <p class="homepage-world-type">Regular worlds</p>
         </td>
