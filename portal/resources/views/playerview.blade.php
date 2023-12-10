@@ -31,6 +31,7 @@
                 </p>
                 <p>Player ID: {{ $player->id }}</p>
                 <p>Username: {{ $player->username }}</p>
+                <p>Rank: {{ str_replace('User', 'Player', ucwords(str_replace('_', ' ', array_search($player->group_id, config('group'), true)))) }}</p>
                 @if(Gate::allows('admin', Auth::user())) <p>Email: {{ $player->email ?? "None" }}</p> @endif
                 <p>Creation Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->creation_date)->format("Y-m-d H:i:s") }}</p>
                 <p>Login Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->login_date)->format("Y-m-d H:i:s") }}</p>
@@ -47,10 +48,16 @@
                 <p>Combat Level: {{ $player->combat }} </p>
                 <p>Total Level: {{ $player->skill_total }} </p>
                 <p>Quest Points: {{ $player->quest_points }} </p>
+                <p>X: {{ $player->x }} </p>
+                <p>Y: {{ $player->y }} </p>
                 <p>Kills: {{ $player->kills }} </p>
                 <p>Deaths: {{ $player->deaths }} </p>
                 <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000) }} @else No @endif  </p>
                 <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000) }} @else No @endif  </p>
+                <p>Block Private: {{ $player->block_private === 1 ? "Yes" : "No" }} </p>
+                <p>Block Chat: {{ $player->block_chat === 1 ? "Yes" : "No" }} </p>
+                <p>Block Trade: {{ $player->block_trade === 1 ? "Yes" : "No" }} </p>
+                <p>Block Duel: {{ $player->block_duel === 1 ? "Yes" : "No" }} </p>
                 @if (\App\Models\players::hasBank($db, $player->id))
                     <p>
                         <a href="/staff/player/{{$db}}/{{$player->username}}/bank">View Bank</a>
