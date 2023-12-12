@@ -37,6 +37,9 @@
         <span class="d-block">6.3 Any form of unwanted DM/PM advertising is forbidden</span>
         <span class="d-block">6.4 Do not advertise Open RSC to others as part of unsolicited DM/PMs, or in other servers where permission has not been granted. This is not helpful to us. It is a bad look for the project to advertise Open RSC in spaces which are dedicated to other RuneScape communities.</span>
 
+        <span class="text-primary font-weight-bold d-block pt-4">7️⃣ Use English in public chats. Brief snippets of other languages are OK if it is relevant to discussion of those languages.</span>
+        <span class="d-block">7.1 You must only use English in Global chat in game.</span>
+
         <span class="font-weight-bold d-block pt-4">*️⃣ We reserve the right to remove misbehaving players at our discretion even if they haven't explicitly broken any of the above rules.</span>
         <span class="d-block">*️⃣ These rules are enforced at our discretion. We typically reach out to people before banning when they have behavioral problems or trouble getting along with others, but in some cases, people who don't seem like they will change their behaviour may be banned without the courtesy of a warning.</span>
         <span class="d-block">*️⃣ Our moderation team are unpaid volunteers who have a limited capacity to withstand abuse. Insulting staff is a sure way to be removed from almost any community.</span>
