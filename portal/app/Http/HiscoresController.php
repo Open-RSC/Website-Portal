@@ -701,8 +701,11 @@ class HiscoresController extends Component
                 ['players.npc_kills', '>', '0'],
                 ['players.banned', '!=', '-1'],
                 ['players.group_id', '>=', config('group.player_moderator')],
-                ['ironman.iron_man', '!=', '4']
             ])
+            ->where(function($query) {
+                $query->whereNull('ironman.iron_man')
+                      ->orWhere('ironman.iron_man', '!=', '4');
+            })
             ->orderBy('killCount', 'desc')
             ->orderBy('playerID', 'asc')
             ->paginate(21);
@@ -718,8 +721,11 @@ class HiscoresController extends Component
                 ->where([
                     ['player_cache.type', '=', 0],
                     ['player_cache.key', '=', 'co_prestige'],
-                    ['ironman.iron_man', '!=', '4']
                 ])
+                ->where(function($query) {
+                    $query->whereNull('ironman.iron_man')
+                          ->orWhere('ironman.iron_man', '!=', '4');
+                })
                 ->selectRaw('CAST(player_cache.value AS UNSIGNED) as killCount, ironman.iron_man, players.username as username, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC, player_cache.playerID ASC) as rank')
                 ->orderBy(DB::raw('CAST(player_cache.value AS UNSIGNED)'), 'desc')
                 ->orderBy('player_cache.playerID', 'asc')
@@ -741,8 +747,11 @@ class HiscoresController extends Component
                 ['npckills.killCount', '>', '0'],
                 ['players.banned', '!=', '-1'],
                 ['players.group_id', '>=', config('group.player_moderator')],
-                ['ironman.iron_man', '!=', '4']
             ])
+            ->where(function($query) {
+                $query->whereNull('ironman.iron_man')
+                      ->orWhere('ironman.iron_man', '!=', '4');
+            })
             ->paginate(21);
         }
 
@@ -764,7 +773,15 @@ class HiscoresController extends Component
         if (config('openrsc.caching_databases')) {
             $conn = $db . "_caching";
         }
-        $player = DB::connection($conn)->table('players')->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')->where('username', '=', $player_name)->where('ironman.iron_man', '!=', 4)->select('ironman.iron_man', 'players.*')->first();
+        $player = DB::connection($conn)->table('players')
+          ->leftJoin('ironman', 'players.id', '=', 'ironman.playerID')
+          ->where('username', '=', $player_name)
+          ->where(function($query) {
+              $query->whereNull('ironman.iron_man')
+                    ->orWhere('ironman.iron_man', '!=', 4);
+          })
+          ->select('ironman.iron_man', 'players.*')
+          ->first();
         if (!$player) {
              return redirect()->back()->withErrors("The Player $player_name does not exist!");
         }
