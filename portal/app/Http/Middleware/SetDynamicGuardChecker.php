@@ -61,6 +61,7 @@ class SetDynamicGuardChecker
                         'updated_at' => now(),
                     ]);
                 }
+                //We could probably also return $next($request) right below logout, but we might want dynamic_guard_checker_middleware_ran to be true, since it technically is true.
                 Auth::logout();
             }
         }
