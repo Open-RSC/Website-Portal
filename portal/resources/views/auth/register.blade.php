@@ -97,7 +97,7 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Please ensure you have read the rules before agreeing.
+                               Please click on the rules link and ensure you have read and understand them before agreeing.
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK
