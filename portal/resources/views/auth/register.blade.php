@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col container">
-        <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3 fs-3">
+        <h2 class="h2 text-center text-gray-400 pt-2 pb-2 text-capitalize display-3 fs-3">
             Open RSC Registration
         </h2>
 
@@ -26,7 +26,7 @@
                     @endif
                     <div class="mb-3 text-center">
                         <a href="{{ route('Rules and Security') }}" class="text-green text-underline" rel="noopener noreferrer nofollow" target="_blank">
-                            Please click here to read the rules before registering an account. If you create an account, you have agreed to all of our rules.
+                            Please click here to read the rules before registering an account.
                         </a>
                     </div>
                     <form method="POST" action="{{ route('register') }}">
@@ -66,6 +66,13 @@
                             <!-- <label>{-- __('Remember me') --}</label> -->
                             <!-- We don't have remember_token in players table -->
                             <!-- <input class="mt-1" type="checkbox" name="remember"> -->
+                        </div>
+
+                        <div class="form-check mb-2 mt-3">
+                            <input class="form-check-input" type="checkbox" name="agree_to_rules" id="agree_to_rules" {{ old('agree_to_rules') ? 'checked' : '' }} required>
+                            <label class="form-check-label" for="agree_to_rules">
+                                I have read and agree to the <a href="{{ route('Rules and Security') }}" rel="noopener noreferrer nofollow" target="_blank">rules</a>.
+                            </label>
                         </div>
 
                         <div>
