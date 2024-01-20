@@ -53,4 +53,9 @@
         <span class="d-block">*️⃣ We run this as a free service, open source so anyone can run a copy themselves. We also offer account exports, so that even if you are banned, you can take your account somewhere else.</span>
 
     </div>
+    <script>
+        window.onload = function() {
+            localStorage.setItem('visitedRules', 'true');
+        };
+    </script>
 @endsection
