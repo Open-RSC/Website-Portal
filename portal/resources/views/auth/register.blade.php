@@ -45,7 +45,7 @@
                     </div>
                     <div>
                         <label>{{ __('Username') }}</label>
-                        <input class="form-control mb-1" type="text" name="username" value="{{ old('username') }}"
+                        <input class="form-control mb-1" type="text" name="username" value="{{ old('username') }}" minlength="2" maxlength="12"
                                required autofocus/>
                     </div>
 
@@ -57,13 +57,13 @@
 
                     <div>
                         <label>{{ __('Password') }}</label>
-                        <input class="form-control mb-1" type="password" name="password" required
+                        <input class="form-control mb-1" type="password" name="password" required minlength="4" maxlength="20"
                                autocomplete="current-password"/>
                     </div>
 
                     <div>
                         <label>{{ __('Confirm Password') }}</label>
-                        <input class="form-control mb-1" type="password" name="password_confirmation" required
+                        <input class="form-control mb-1" type="password" name="password_confirmation" required minlength="4" maxlength="20"
                                autocomplete="new-password"/>
                     </div>
 
