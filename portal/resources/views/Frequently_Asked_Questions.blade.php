@@ -25,7 +25,7 @@
 
         Please note, by registering an account, you have agreed to all of our rules found <a href="/rules" target="_blank">here</a>.
 
-        <span class="rscfont text-danger font-weight-bold d-block pt-4">How can I use global chat?</span>
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">How do I use global chat?</span>
         To use global chat, you must first reach 150 total level. After you have reached 150 total level, you need to read the rules by typing ::globalrules and following the provided instructions. After that, you can then type ::g and your message to talk in global chat. You can also switch global chat between the Private and Quest tabs by typing ::gp or ::gq if you'd like.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
