@@ -6,7 +6,12 @@
     <span class="orsc-download-links d-block">
         Looking to download the <a href="/downloads/OpenRSC.jar">PC Launcher</a> or <a href="/downloads/openrsc.apk">Android APK</a>?
     </span>
-    
+
+    <p>
+        Check <a href="/faq">here</a>
+        for world differences and other frequently asked questions
+    </p>
+
     <span class="d-block text-center mb-2">
         <b>Click <a href="/register">here</a> to register an account</b>
     </span>
