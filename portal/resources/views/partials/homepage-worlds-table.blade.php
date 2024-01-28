@@ -22,15 +22,15 @@
                                     <b>Anyone may play on the worlds below</b>
                                 </span>
 
-                                <p class="homepage-world-differences">
-                                    Check <a href="/faq" class="homepage-world-differences-link">here</a> 
-                                    for world differences
+                                <p class="d-block text-center">
+                                    Check <a href="/faq">here</a>
+                                    for world differences and other frequently asked questions
                                 </p>
-                                
+
                                 <span class="d-block text-center mb-2">
                                     <b>Click <a href="/register">here</a> to register an account</b>
                                 </span>
-                                
+
                                 <!-- World online counts -->
                                 <div class="homepage-online-worlds-flex-container">
                                     <!-- Regular worlds -->

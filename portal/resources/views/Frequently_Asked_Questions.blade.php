@@ -25,6 +25,8 @@
 
         Please note, by registering an account, you have agreed to all of our rules found <a href="/rules" target="_blank">here</a>.
 
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">How can I use global chat?</span>
+        To use global chat, you must first reach 150 total level. After you have reached 150 total level, you need to read the rules by typing ::globalrules and following the provided instructions. After that, you can then type ::g and your message to talk in global chat. You can also switch global chat between the Private and Quest tabs by typing ::gp or ::gq if you'd like.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
         <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
@@ -93,6 +95,21 @@
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the OpenRSC framework</span>
         </div>
 
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">What's up with holiday drops? Have you done them? Are you going to do more?</span>
+        Preservation/Uranium<br>
+        Preservation has already had all its holiday drops, including Pumpkins, Christmas crackers, Santa hats, Scythes, Bunny ears, Easter eggs, and anything else we're forgetting.
+        Tradeable holiday items will never be dropped again. The only way you can obtain them is by trading with another player.
+        Untradable holiday items like scythes and bunny ears will be dropped every year at Halloween and Easter, respectively. We do track the first time players pick up each of these items though, so we can see who was around for the original drops if we were ever curious for some reason.
+        The players had also voted to have presents dropped every year at Christmas time. These usually just contain small amounts of silly items like gnome balls, or obscure food items. You use these on other players like Christmas crackers.
+        Also while not exactly a holiday drop, Preservation also has another rare item. The Half jug of wine can be obtained by drinking Jugs of wine. You have a 1/25k chance to obtain the item.
+        <br><br>
+        Cabbage/Coleslaw<br>
+        These items are dropped/obtainable every year (if we miss any let us know, there's a lot).
+        Easter: Easter eggs, Bunny ears, Bunny/Egg morph rings, Rubber chicken hat
+        Halloween: Pumpkins, Scythes, Eak the Mouse, Halloween masks (with some new colors and animals)
+        Christmas: Presents that contain pretty much every item in the game, including the other Christmas holiday items, along with some custom ones like Green Santa hats, Christmas cookies, antlers, Santa suit, and so on.
+
+
         <span class="rscfont text-danger font-weight-bold d-block pt-4">May I donate or subscribe for perks?</span>
         No donations nor subscriptions are accepted. We don't want any money. We also don't believe that
         dumping player money into ads will make any difference for long term player growth and retention.
@@ -100,8 +117,7 @@
         and spreading the
         word about us to your friends so they will want to be a part of this too!
 
-        <span
-                class="rscfont text-danger font-weight-bold d-block pt-4">How often is OpenRSC updated?</span>
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">How often is OpenRSC updated?</span>
         The development team is constantly working on updates. Code releases generally occur weekly or monthly on Sundays
         and the public worlds are restarted with updates shortly after the posting of patch notes.
 
