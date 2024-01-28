@@ -824,7 +824,7 @@ class PlayerController extends Controller
             return response()->json(['message' => 'Error creating user.'], 500);
         }
 
-        return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 200);
+        return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 201);
     }
 
     public function passwordNeedsRehash($passwordHashed)
