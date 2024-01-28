@@ -96,14 +96,14 @@
         </div>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What's up with holiday drops? Have you done them? Are you going to do more?</span>
-        Preservation/Uranium<br>
+        <span class="rscfont text-primary">Preservation/Uranium</span><br>
         Preservation has already had all its holiday drops, including Pumpkins, Christmas crackers, Santa hats, Scythes, Bunny ears, Easter eggs, and anything else we're forgetting.
         Tradeable holiday items will never be dropped again. The only way you can obtain them is by trading with another player.
         Untradable holiday items like scythes and bunny ears will be dropped every year at Halloween and Easter, respectively. We do track the first time players pick up each of these items though, so we can see who was around for the original drops if we were ever curious for some reason.
         The players had also voted to have presents dropped every year at Christmas time. These usually just contain small amounts of silly items like gnome balls, or obscure food items. You use these on other players like Christmas crackers.
         Also while not exactly a holiday drop, Preservation also has another rare item. The Half jug of wine can be obtained by drinking Jugs of wine. You have a 1/25k chance to obtain the item.
         <br><br>
-        Cabbage/Coleslaw<br>
+        <span class="rscfont text-primary">Cabbage/Coleslaw</span><br>
         These items are dropped/obtainable every year (if we miss any let us know, there's a lot).
         Easter: Easter eggs, Bunny ears, Bunny/Egg morph rings, Rubber chicken hat
         Halloween: Pumpkins, Scythes, Eak the Mouse, Halloween masks (with some new colors and animals)
