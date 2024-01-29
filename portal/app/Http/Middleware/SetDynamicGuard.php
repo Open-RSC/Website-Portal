@@ -50,7 +50,7 @@ class SetDynamicGuard
                     ]);
                 }
             }
-            //This is probably entirely redundant, we already validated the user ID vs database from the login itself, but just in case we check for the correct user again anyway. Then again, if a user gets renamed between their login and the current request, they will have to log in again, so this may not even be entirely redundant.
+            //This may seem entirely redundant, since we already validated the user ID vs database from the login itself (but would the ID even match for sure?), but just in case we check for the correct user again anyway. Then again, if a user gets renamed between their login and the current request, they will have to log in again, so this may not even be entirely redundant.
             if ($player === null || strtolower($playerUsername) !== strtolower($expectedUsername)) {
                 \Log::error("This shouldn't happen! is player null: " . ($player === null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
                 if (Schema::hasTable('error_logs')) {
