@@ -158,7 +158,7 @@ obtainable item of your choice</span> as a thanks!
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://rsc.wiki/w/RuneScape_Classic" target="_blank"
+                                            <a href="https://rsc.wiki/" target="_blank"
                                                class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_whyrs.jpg') }}"
@@ -168,7 +168,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.wiki/w/RuneScape_Classic"
+                                                    <a href="https://rsc.wiki/"
                                                        target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
