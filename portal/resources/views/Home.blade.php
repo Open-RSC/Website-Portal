@@ -695,9 +695,9 @@ obtainable item of your choice</span> as a thanks!
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Learn about the History of OpenRSC
+                                            Learn about the History of the game
                                             <div class="d-block">
-                                                <a href="https://rsc.vet/wiki"
+                                                <a href="https://rsc.wiki/w/Library_of_Varrock"
                                                    target="_blank" class="c">
                                                     Click Here
                                                 </a>
