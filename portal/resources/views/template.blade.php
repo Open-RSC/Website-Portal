@@ -47,7 +47,7 @@
     <div class="pt-2"></div>
     @yield('content')
 
-@elseif(Route::currentRouteName() == 'Play RuneScape')
+@elseif(Route::currentRouteName() == 'Play RS')
     <main>
         <script>  function ConfirmMenu() {
                 const response = window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");
@@ -86,7 +86,7 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    OpenRSC is not affiliated with RuneScape Classic nor JaGeX.<br>
+                    OpenRSC is not affiliated with the original "RSC" nor its publisher.<br>
                     To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}" onmousedown="return ConfirmTerms();">Terms+Conditions</a>
                     +
@@ -117,11 +117,11 @@
                             <td class=e>
                                 <div class="text-center">
                                     @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
-                                        <b>RuneScape Hiscores</b>
+                                        <b>RS Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
-                                        <b>RuneScape Hiscores</b>
+                                        <b>RS Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
@@ -138,7 +138,7 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
+                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RS Hiscores',$db))
                                             <div class="d-block">
                                                 <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                 <a class="c"
@@ -168,8 +168,7 @@
             <div class="bottom-left-border-wide"></div>
             <div class="bottom-middle-wide">
                 <div class="copyright-wide pt-2">
-                    Open RuneScape Classic is not affiliated with the original "RuneScape Classic"<br>
-                    nor JaGeX. To use our service you must agree to our
+                    OpenRSC is not affiliated with the original "RSC" nor its publisher.<br> To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}">Terms & Conditions</a>.
                 </div>
                 <div class="bottom-middle-border-wide"></div>
@@ -196,11 +195,11 @@
                             <td class=e>
                                 <div class="text-center">
                                     @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
-                                        <b>RuneScape Hiscores</b>
+                                        <b>RS Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
-                                        <b>RuneScape Hiscores</b>
+                                        <b>RS Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
@@ -223,7 +222,7 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RuneScape Hiscores',$db))
+                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RS Hiscores',$db))
                                             <div class="d-flex align-items-center" style="width:254px">
                                                 <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> &nbsp;|&nbsp;
                                                 <img src="{{ asset('img/iron.png') }}" alt="Ironman">&nbsp;<a class="c"
@@ -253,8 +252,7 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    Open RuneScape Classic is not affiliated with the original "RuneScape Classic"<br>
-                    nor JaGeX. To use our service you must agree to our
+                    OpenRSC is not affiliated with the original "RSC" nor its publisher.<br> To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}">Terms & Conditions</a>.
                 </div>
                 <div class="bottom-middle-border"></div>

@@ -28,6 +28,9 @@
         <span class="rscfont text-danger font-weight-bold d-block pt-4">How do I use global chat?</span>
         To use global chat, you must first reach 150 total level. After you have reached 150 total level, you need to read the rules by typing ::globalrules and following the provided instructions. After that, you can then type ::g and your message to talk in global chat. You can also switch global chat between the Private and Quest tabs by typing ::gp or ::gq if you'd like.
 
+         <span class="rscfont text-danger font-weight-bold d-block pt-4">I am a new player, how should I train/make money/do quests?</span>
+        You can find a guide for new players <a href=" https://classic.runescape.wiki/w/Guide_for_new_players">right here</a>.
+
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
         <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> 1x XP rate</span>

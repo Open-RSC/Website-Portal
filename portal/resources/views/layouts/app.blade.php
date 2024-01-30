@@ -90,7 +90,7 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    OpenRSC is not affiliated with RuneScape Classic nor JaGeX.<br>
+                    OpenRSC is not affiliated with the original "RSC" nor its publisher.<br>
                     To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
                     +
@@ -138,15 +138,15 @@
                                     @if(!Config::get('app.authentic'))
                                         <div class="d-block">
                                             @if($subpage ?? '' == 'skill_total')
-                                                <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
+                                                <a class="c" href="{{ route('RS Hiscores') }}">All</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/1">Ironman</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/2">Hardcore</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/3">Ultimate</a>
                                             @else
-                                                <a class="c" href="{{ route('RuneScape Hiscores') }}">All</a> |
-                                                <a class="c" href="{{ route('RuneScape Hiscores') }}/1">Ironman</a> |
-                                                <a class="c" href="{{ route('RuneScape Hiscores') }}/2">Hardcore</a> |
-                                                <a class="c" href="{{ route('RuneScape Hiscores') }}/3">Ultimate</a>
+                                                <a class="c" href="{{ route('RS Hiscores') }}">All</a> |
+                                                <a class="c" href="{{ route('RS Hiscores') }}/1">Ironman</a> |
+                                                <a class="c" href="{{ route('RS Hiscores') }}/2">Hardcore</a> |
+                                                <a class="c" href="{{ route('RS Hiscores') }}/3">Ultimate</a>
                                             @endif
                                         </div>
                                     @endif
@@ -168,7 +168,7 @@
             <div class="bottom-left-border"></div>
             <div class="bottom-middle">
                 <div class="copyright pt-2">
-                    Open RuneScape Classic is not affiliated with RuneScape Classic nor JaGeX.<br>
+                    OpenRSC is not affiliated with the original "RSC" nor its publisher.<br>
                     To use our service you must agree to our
                     <a class="c" href="{{ route('Terms and Conditions') }}">Terms+Conditions</a>
                     +

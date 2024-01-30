@@ -23,7 +23,7 @@
                 <tr>
                     <td class="e">
                         <div class="text-center d-flex align-items-center">
-                            RuneScape Hiscores {!!  (($db === "cabbage" || $db === "coleslaw") && ($players->first()->iron_man === 1 || $players->first()->iron_man === 2 || $players->first()->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!}
+                            RS Hiscores {!!  (($db === "cabbage" || $db === "coleslaw") && ($players->first()->iron_man === 1 || $players->first()->iron_man === 2 || $players->first()->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!}
                             @if(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man == 1)
                                 <img src="{{ asset('img/iron.png') }}" alt="Ironman">
                             @elseif(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man == 2)

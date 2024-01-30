@@ -20,12 +20,12 @@
             @endif
             <th style="width:45px; height:45px; background:#EAD8B9; text-align:center; font-size:0pt; color:#D0C0A1; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;">
                 <img
-                        src="{{ asset('img/rs-archive.png') }}" alt="RuneScape Archive"/>
+                        src="{{ asset('img/rs-archive.png') }}" alt="RS Archive"/>
             </th>
             <td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#685746; vertical-align: middle;">
                 <div align="center">Contribute to the
-                    <a href="https://rs-archive.github.io/index.html" style="color:red">RuneScape Archive</a> with any
-                    lost RuneScape data prior to 2010 and <span style="color:#0000CC">receive any
+                    <a href="https://rs-archive.github.io/index.html" style="color:red">RS Archive</a> with any
+                    lost RS data prior to 2010 and <span style="color:#0000CC">receive any
 obtainable item of your choice</span> as a thanks!
                 </div>
             </td>
@@ -183,7 +183,7 @@ obtainable item of your choice</span> as a thanks!
                                                         background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747">
                                                         <div class="text-center">
-                                                            <b>Why Choose RuneScape?</b>
+                                                            <b>Why Choose OpenRSC?</b>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -223,7 +223,7 @@ obtainable item of your choice</span> as a thanks!
                                                         background="{{ asset('img/stoneback.gif') }}"
                                                         style="background-color: #474747;">
                                                         <div class="text-center">
-                                                            <b>RuneScape Members</b>
+                                                            <b>OpenRSC Members</b>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -610,9 +610,9 @@ obtainable item of your choice</span> as a thanks!
                                                 </tbody>
                                             </table>
                                             Everything you need to know to play
-                                            RuneScape
+                                            OpenRSC
                                             <div class="d-block">
-                                                <a href="https://rsc.wiki" target="_blank" class="c">
+                                                <a href="https://rsc.vet/wiki" target="_blank" class="c">
                                                     Click Here
                                                 </a>
                                             </div>
@@ -695,9 +695,9 @@ obtainable item of your choice</span> as a thanks!
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            Learn about the History of RuneScape
+                                            Learn about the History of OpenRSC
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                                <a href="https://rsc.vet/wiki"
                                                    target="_blank" class="c">
                                                     Click Here
                                                 </a>
