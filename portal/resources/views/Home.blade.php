@@ -191,13 +191,13 @@ obtainable item of your choice</span> as a thanks!
                                             </table>
                                             See why our game is right for you!
                                             <div class="d-block">
-                                                <a href="https://rsc.wiki/w/RuneScape_Classic"
+                                                <a href="https://rsc.vet/wiki"
                                                    target="_blank" class="c">Click Here</a>
                                             </div>
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="https://rscwiki/w/Pay-to-play" target="_blank"
+                                            <a href="https://rsc.wiki/w/Pay-to-play" target="_blank"
                                                class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_members.jpg') }}"
