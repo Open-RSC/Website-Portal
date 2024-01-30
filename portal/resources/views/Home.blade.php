@@ -158,7 +158,7 @@ obtainable item of your choice</span> as a thanks!
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/RuneScape_Classic" target="_blank"
+                                            <a href="https://rsc.wiki/w/RuneScape_Classic" target="_blank"
                                                class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_whyrs.jpg') }}"
@@ -168,7 +168,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/RuneScape_Classic"
+                                                    <a href="https://rsc.wiki/w/RuneScape_Classic"
                                                        target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
@@ -191,13 +191,13 @@ obtainable item of your choice</span> as a thanks!
                                             </table>
                                             See why our game is right for you!
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/RuneScape_Classic"
+                                                <a href="https://rsc.wiki/w/RuneScape_Classic"
                                                    target="_blank" class="c">Click Here</a>
                                             </div>
                                         </td>
                                         <td style="width: 10px;"></td>
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
+                                            <a href="https://rscwiki/w/Pay-to-play" target="_blank"
                                                class="c">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_members.jpg') }}"
@@ -207,7 +207,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/Pay-to-play"
+                                                    <a href="https://rsc.wiki/w/Pay-to-play"
                                                        target="_blank"
                                                        class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
@@ -231,7 +231,7 @@ obtainable item of your choice</span> as a thanks!
                                             </table>
                                             Everyone may be a member for free!
                                             <div class="d-block">
-                                                <a href="https://classic.runescape.wiki/w/Pay-to-play" target="_blank"
+                                                <a href="https://rsc.wiki/w/Pay-to-play" target="_blank"
                                                    class="c">
                                                     Click Here
                                                 </a>
@@ -589,7 +589,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.wiki" target="_blank" class="c">
+                                                    <a href="https://rsc.vet/wiki" target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
                                                              alt="">
@@ -663,7 +663,7 @@ obtainable item of your choice</span> as a thanks!
                                     </tr>
                                     <tr class="align-top">
                                         <td style="width: 100px;">
-                                            <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                            <a href="https://rsc.wiki/w/Library_of_Varrock"
                                                target="_blank">
                                                 <img class="mx-auto"
                                                      src="{{ asset('img/mm_lov.jpg') }}"
@@ -674,7 +674,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://classic.runescape.wiki/w/Library_of_Varrock"
+                                                    <a href="https://rsc.wiki/w/Library_of_Varrock"
                                                        target="_blank">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
