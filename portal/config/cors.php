@@ -17,9 +17,9 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'HEAD'], //Do not allow cross-origin POST
 
-    'allowed_origins' => [], //Add additional domains here, leave empty for only same origin allowed.
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
