@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [], //Add additional domains here, leave at default for only same origin allowed.
+    'allowed_origins' => [], //Add additional domains here, leave empty for only same origin allowed.
 
     'allowed_origins_patterns' => [],
 
