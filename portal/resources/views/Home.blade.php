@@ -168,7 +168,7 @@ obtainable item of your choice</span> as a thanks!
                                         <td style="width: 120px;">
                                             <div style="left: 0; top: 0; position: relative;">
                                                 <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.wiki/"
+                                                    <a href="https://rsc.vet/wiki/"
                                                        target="_blank" class="c">
                                                         <img src="{{ asset('img/blank.gif') }}"
                                                              height="45" width="100"
