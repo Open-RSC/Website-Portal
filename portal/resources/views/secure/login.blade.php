@@ -26,13 +26,13 @@
                                 </select>
                             </label>
                             <div class="form-group row">
-                                <label for="username" class="col-sm-4 col-form-label">Runescape username:</label>
+                                <label for="username" class="col-sm-4 col-form-label">OpenRSC username:</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="username" class="form-control" id="username" placeholder="Username" size="20" maxlength="16">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="password" class="col-sm-4 col-form-label">Runescape password:</label>
+                                <label for="password" class="col-sm-4 col-form-label">OpenRSC password:</label>
                                 <div class="col-sm-8">
                                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" size="20" maxlength="16">
                                 </div>
@@ -47,7 +47,7 @@
                                     <a class="btn btn-jag-grey" href="#" role="button">Lost password?<br>If you have lost/forgotten your password or need to recover your account.</a>
                                 </div>
                                 <div class="col-sm-6">
-                                    <a class="btn btn-jag-grey" href="{{ asset('Player_Registration') }}" role="button">Need an account?<br>Create a RuneScape account to access our game and secure services.</a>
+                                    <a class="btn btn-jag-grey" href="{{ asset('Player_Registration') }}" role="button">Need an account?<br>Create an OpenRSC account to access our game and secure services.</a>
                                 </div>
                             </div>
                             <br/>

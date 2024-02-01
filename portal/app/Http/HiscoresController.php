@@ -879,7 +879,7 @@ class HiscoresController extends Component
             $filename = self::getTopListFileName($db);
             $topListContents = Storage::disk('public')->get($filename);
         } catch (FileNotFoundException $e) {
-            $topListContents = 'No Runescape hiscore tables available'."\n";
+            $topListContents = 'No OpenRSC hiscore tables available'."\n";
         }
 
         return view('toplists', [
@@ -916,7 +916,7 @@ class HiscoresController extends Component
 
         $filenameDated = substr($filename, 0, strrpos($filename, '.')).'_'.date('Y-m-d').'.txt';
 
-        $topListContents = 'Runescape hiscore tables'."\n";
+        $topListContents = 'OpenRSC hiscore tables'."\n";
         $topListContents .= ('Last updated '.date('d-M-Y')."\n");
 
         $topListContents .= ('.'."\n");
