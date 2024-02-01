@@ -20,12 +20,12 @@
             @endif
             <th style="width:45px; height:45px; background:#EAD8B9; text-align:center; font-size:0pt; color:#D0C0A1; padding:0 1px 0 0; line-height:1.25em; vertical-align: middle;">
                 <img
-                        src="{{ asset('img/rs-archive.png') }}" alt="Archive"/>
+                        src="{{ asset('img/rs-archive.png') }}" alt="RS Archive"/>
             </th>
             <td style="text-align:left; font-size:9pt; padding:0 4px 0 4px; height:45px; line-height:1.25em; color:#685746; vertical-align: middle;">
                 <div align="center">Contribute to the
-                    <a href="https://rs-archive.github.io/index.html" style="color:red">Archive</a> with any
-                    lost data prior to 2010 and <span style="color:#0000CC">receive any
+                    <a href="https://rs-archive.github.io/index.html" style="color:red">RS Archive</a> with any
+                    lost RS data prior to 2010 and <span style="color:#0000CC">receive any
 obtainable item of your choice</span> as a thanks!
                 </div>
             </td>

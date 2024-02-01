@@ -66,7 +66,7 @@
                 <a class="c text-left" href="{{ route('Items') }}"><i class="fas fa-fw fa-book"></i> Item Database</a>
                 <a class="c text-left" href="{{ route('Quests') }}"><i class="fas fa-fw fa-question"></i> Quests</a>
                 <a class="c text-left" href="{{ route('Mini Games') }}"><i class="fas fa-fw fa-question"></i> Mini Games</a>
-                <a class="c text-left" target="_blank" href="https://classic.runescape.wiki">
+                <a class="c text-left" target="_blank" href="https://rsc.wiki">
                     <i class="fab fa-fw fa-wikipedia-w"></i> RSC Wiki
                 </a>
                 <a class="c text-left" href="/wiki">
