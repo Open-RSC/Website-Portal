@@ -141,6 +141,9 @@
                                                                     href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
+                                                                    href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/MacOS%20Getting%20Started%20Guide.md">MacOS getting started guide</a></span>
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+                                                                    target="_blank"
                                                                     href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Who are the OpenRSC project admins?</span>
