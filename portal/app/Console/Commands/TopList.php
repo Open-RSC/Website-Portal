@@ -19,7 +19,7 @@ class TopList extends Command
      *
      * @var string
      */
-    protected $description = 'RS hiscore tables';
+    protected $description = 'OpenRSC hiscore tables';
 
     /**
      * Create a new command instance.
@@ -41,6 +41,6 @@ class TopList extends Command
             HiscoresController::createTopList($db, HiscoresController::getTopListFileName($db));
         }
 
-        $this->info('Successfully generated bi-monthly RS toplist.');
+        $this->info('Successfully generated bi-monthly OpenRSC toplist.');
     }
 }

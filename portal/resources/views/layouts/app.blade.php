@@ -138,15 +138,15 @@
                                     @if(!Config::get('app.authentic'))
                                         <div class="d-block">
                                             @if($subpage ?? '' == 'skill_total')
-                                                <a class="c" href="{{ route('RS Hiscores') }}">All</a> |
+                                                <a class="c" href="{{ route('OpenRSC Hiscores') }}">All</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/1">Ironman</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/2">Hardcore</a> |
                                                 <a class="c" href="/hiscores/{{ $subpage ?? '' }}/3">Ultimate</a>
                                             @else
-                                                <a class="c" href="{{ route('RS Hiscores') }}">All</a> |
-                                                <a class="c" href="{{ route('RS Hiscores') }}/1">Ironman</a> |
-                                                <a class="c" href="{{ route('RS Hiscores') }}/2">Hardcore</a> |
-                                                <a class="c" href="{{ route('RS Hiscores') }}/3">Ultimate</a>
+                                                <a class="c" href="{{ route('OpenRSC Hiscores') }}">All</a> |
+                                                <a class="c" href="{{ route('OpenRSC Hiscores') }}/1">Ironman</a> |
+                                                <a class="c" href="{{ route('OpenRSC Hiscores') }}/2">Hardcore</a> |
+                                                <a class="c" href="{{ route('OpenRSC Hiscores') }}/3">Ultimate</a>
                                             @endif
                                         </div>
                                     @endif

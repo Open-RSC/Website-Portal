@@ -84,7 +84,7 @@ class OnlineController extends Component
     }
 
     /**
-     * Displays an RS time since string
+     * Displays a time since string
      *
      * @param $timestamp - the old cumulative timestamp in seconds
      * @param $loginstamp - the login timestamp in seconds
@@ -98,7 +98,7 @@ class OnlineController extends Component
     }
 
     /**
-     * Displays an RS time since string
+     * Displays a time since string
      *
      * @param $timestamp - the timestamp in seconds
      */
@@ -111,7 +111,7 @@ class OnlineController extends Component
     }
 
     /**
-     * Displays an RS time since string
+     * Displays a time since string
      *
      * @param $timestamp - the timestamp in seconds
      */

@@ -117,11 +117,11 @@
                             <td class=e>
                                 <div class="text-center">
                                     @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
-                                        <b>RS Hiscores</b>
+                                        <b>OpenRSC Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
-                                        <b>RS Hiscores</b>
+                                        <b>OpenRSC Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
@@ -138,7 +138,7 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RS Hiscores',$db))
+                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('OpenRSC Hiscores',$db))
                                             <div class="d-block">
                                                 <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> |
                                                 <a class="c"
@@ -195,11 +195,11 @@
                             <td class=e>
                                 <div class="text-center">
                                     @if(str_contains(url()->current(), '/player') && !str_contains(url()->current(), '/staff'))
-                                        <b>RS Hiscores</b>
+                                        <b>OpenRSC Hiscores</b>
                                     @elseif(Route::currentRouteName())
                                         <b>{{ preg_replace("/[^A-Za-z0-9 ]/", " ", Route::currentRouteName()) }}</b>
                                     @elseif(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')))
-                                        <b>RS Hiscores</b>
+                                        <b>OpenRSC Hiscores</b>
                                     @else
                                         <b>{{ ucfirst($subpage ?? '') }}</b>
                                     @endif
@@ -222,7 +222,7 @@
                                         @endif
                                     </div>
                                     @if(str_contains(url()->current(), '/hiscores/cabbage') || str_contains(url()->current(), '/hiscores/coleslaw'))
-                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('RS Hiscores',$db))
+                                        @if(in_array($subpage ?? '', array('skill_total', 'attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'agility', 'thieving', 'runecraft', 'harvesting')) || route('OpenRSC Hiscores',$db))
                                             <div class="d-flex align-items-center" style="width:254px">
                                                 <a class="c" href="/hiscores/{{ $db ?? 'preservation' }}">All</a> &nbsp;|&nbsp;
                                                 <img src="{{ asset('img/iron.png') }}" alt="Ironman">&nbsp;<a class="c"

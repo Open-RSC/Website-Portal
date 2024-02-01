@@ -26,13 +26,13 @@
                                 </select>
                             </label>
                             <div class="form-group row">
-                                <label for="username" class="col-sm-4 col-form-label">RS username:</label>
+                                <label for="username" class="col-sm-4 col-form-label">OpenRSC username:</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="username" class="form-control" id="username" placeholder="Username" size="20" maxlength="16">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="password" class="col-sm-4 col-form-label">RS password:</label>
+                                <label for="password" class="col-sm-4 col-form-label">OpenRSC password:</label>
                                 <div class="col-sm-8">
                                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" size="20" maxlength="16">
                                 </div>
