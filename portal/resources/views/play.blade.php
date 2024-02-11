@@ -7,15 +7,14 @@
         <img src="/img/banners/ad.png" alt="">
         <img src="/img/banners/hbar.gif" alt="">
     @else
-        <div class="mt-5"></div>
-        <div class="mb-3"></div>
+        <div class="mb-1"></div>
         <img src="/img/banners/hbar.gif" alt="">
     @endif
-    
-    <span id="webregistermessage" class="d block">
-    <a href="/register">We have temporarily disabled webclient registration. Please register new player accounts using the website here.</a>
-    </span>
-    <span id="webregisterclose" class="d block col-sm-12">(X)</span>
+
+    <div id="webregistermessage" class="text-center">
+        Click <a href="/register">here</a> to register a new player account <span id="webregisterclose">(X)</span>
+    </div>
+
 
     @if ($retro)
         <iframe src="https://rsc.vet/client2/#{{ $members }},game.openrsc.com,{{ $port }},65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true"
@@ -58,4 +57,9 @@
             randomBanner();
         </script>
     @endif
+    <style>
+        #webregisterclose {
+            color: #90c040;
+        }
+    </style>
 @endsection
