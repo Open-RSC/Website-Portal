@@ -89,6 +89,14 @@ Route::get('/discord', function() {
     return redirect('/');
 })->name("Discord");
 
+Route::get('/iphone', function() {
+    return redirect('/client/#members,game.openrsc.com,43496,65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true');
+})->name("iPhone");
+
+Route::get('/iphone2001', function() {
+    return redirect('/client2/#members,game.openrsc.com,43493,65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true');
+})->name("iPhone2001");
+
 // Afman staff zone
 Route::get('staff/itemstats/{db}/overview', [StatsController::class, 'itemStats'])->name('ItemStatisticsOverview')->middleware('auth');
 Route::get('staff/itemstats/{id}/detail', [StatsController::class, 'itemStatsDetail'])->name('ItemStatisticsDetail')->middleware('auth');
