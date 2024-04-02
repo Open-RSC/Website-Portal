@@ -27,11 +27,13 @@
                 columns: [
                     {title: "Player", data: 'username'},
                     {title: "Former Name", data: 'former_name'},
-                    {title: "IP Address", data: 'ip'},
+                    {title: "IP Address", data: 'ip', render: function(data, type, row) {
+                        return '<a href="https://ipinfo.io/' + data + '" target="_blank" rel="noopener noreferrer">' + data + '</a>';
+                    }},
                     {title: "Date", data: 'time'},
                     {title: "Version", data: 'clientVersion'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
-                        return "<a href='/staff/{{$db}}/player/" + data.playerID + "/detail'><i class='fa fa-eye'></i></a>";    
+                        return "<a href='/staff/{{$db}}/player/" + data.playerID + "/detail'><i class='fa fa-eye'></i></a>";
                     }},
                 ]
             });
@@ -39,11 +41,11 @@
                 {
                     column_number: 0,
                     filter_type: "text"
-                }, 
+                },
                 {
                     column_number: 1,
                     filter_type: "text"
-                }, 
+                },
             ]);
         });
     </script>

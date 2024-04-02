@@ -41,8 +41,16 @@
                     {title: "Former Username", data: 'former_name', responsivePriority: 2},
                     {title: "Creation Date", data: 'creation_date'},
                     {title: "Login Date", data: 'login_date', responsivePriority: 7},
-                    @if(Gate::allows('admin', Auth::user())) {title: "Login IP", data: 'login_ip'}, @endif
-                    @if(Gate::allows('admin', Auth::user())) {title: "Creation IP", data: 'creation_ip'}, @endif
+                    @if(Gate::allows('admin', Auth::user()))
+                        {title: "Login IP", data: 'login_ip', render: function(data, type, row) {
+                            return '<a href="https://ipinfo.io/' + data + '" target="_blank" rel="noopener noreferrer">' + data + '</a>';
+                        }},
+                    @endif
+                    @if(Gate::allows('admin', Auth::user()))
+                        {title: "Creation IP", data: 'creation_ip', render: function(data, type, row) {
+                            return '<a href="https://ipinfo.io/' + data + '" target="_blank" rel="noopener noreferrer">' + data + '</a>';
+                        }},
+                    @endif
                     {title: "Banned", data: 'banned', responsivePriority: 3},
                     {title: "Muted", data: 'muted', responsivePriority: 4},
                     {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
