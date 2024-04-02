@@ -71,6 +71,7 @@ public class Socket {
     }
 
     public void write(byte[] bytes, int offset, int length) {
+        if (this.client.getReadyState() != 1) return;
         Int8Array toSend = Int8Array.create(length);
 
         for (int i = 0; i < length; i += 1) {

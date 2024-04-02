@@ -1536,7 +1536,7 @@ public class mudclient extends GameConnection {
                      }
 
                      if(var7 == var4 - 1 && var6 && this.combatTimeout == 0 && this.logoutTimeout == 0) {
-                    	this.sendLogout();
+                        this.sendLogout();
                         return;
                      }
 

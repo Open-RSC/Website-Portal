@@ -21,10 +21,15 @@
         To get started, you will want to register an account, which can be done through
         <a href="/register" target="_blank">the registration page found here</a> or through one of our desktop clients. After that, you can visit <a href="/playnow" target="_blank">the play now page found here</a>, and then log in either by clicking on "Web Client"
         for the Preservation, 2001scape, and Uranium worlds, or by clicking on "Android Client"
-        or "Desktop Client" depending on if you are on an Android device or on a computer. If you are on Android then you can install the apk like any other apk on Android and then launch it and select the world you want to play. If you are on a computer, then you can launch the launcher you downloaded (OpenRSC.jar) and then simply click on the logo or text of the world you want to play. Please note that you will need Java installed to run our desktop clients (and desktop launcher), we recommend <a href="https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u382-b05/openlogic-openjdk-8u382-b05-windows-x64.msi" target="_blank">Java 8 which you can find here if you are on Windows</a> for the best compatibility with our project. If you are having any problems figuring out how to play, you can visit <a href="/discord" target="_blank">our Discord found here</a> to ask for help or by posting a thread on <a href="/board" target="_blank">our technical support section in our forum found here</a>.
+        or "Desktop Client" depending on if you are on an Android device or on a computer. If you are on Android then you can install the apk like any other apk on Android and then launch it and select the world you want to play. If you are on a computer, then you can launch the launcher you downloaded (OpenRSC.jar) and then simply click on the logo or text of the world you want to play. Please note that you will need Java installed to run our desktop clients (and desktop launcher), we recommend <a href="https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u392-b08/OpenJDK8U-jdk_x64_windows_hotspot_8u392b08.msi" target="_blank">Java 8 which you can find here if you are on Windows</a> for the best compatibility with our project - if it still doesn't open the application, we recommend trying out <a href="https://johann.loefflmann.net/downloads/jarfix.exe">jarfix if you are on Windows which you can find right here</a>. If you are having any problems figuring out how to play, you can visit <a href="/discord" target="_blank">our Discord found here</a> to ask for help or by posting a thread on <a href="/board" target="_blank">our technical support section in our forum found here</a>.
 
         Please note, by registering an account, you have agreed to all of our rules found <a href="/rules" target="_blank">here</a>.
 
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">How do I use global chat?</span>
+        To use global chat, you must first reach 150 total level. After you have reached 150 total level, you need to read the rules by typing ::globalrules and following the provided instructions. After that, you can then type ::g and your message to talk in global chat. You can also switch global chat between the Private and Quest tabs by typing ::gp or ::gq if you'd like.
+
+         <span class="rscfont text-danger font-weight-bold d-block pt-4">I am a new player, how should I train/make money/do quests?</span>
+        You can find a guide for new players <a href=" https://classic.runescape.wiki/w/Guide_for_new_players">right here</a>.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
         <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
@@ -93,6 +98,21 @@
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the OpenRSC framework</span>
         </div>
 
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">What's up with holiday drops? Have you done them? Are you going to do more?</span>
+        <span class="rscfont text-primary">Preservation/Uranium</span><br>
+        Preservation has already had all its holiday drops, including Pumpkins, Christmas crackers, Santa hats, Scythes, Bunny ears, Easter eggs, and anything else we're forgetting.
+        Tradeable holiday items will never be dropped again. The only way you can obtain them is by trading with another player.
+        Untradable holiday items like scythes and bunny ears will be dropped every year at Halloween and Easter, respectively. We do track the first time players pick up each of these items though, so we can see who was around for the original drops if we were ever curious for some reason.
+        The players had also voted to have presents dropped every year at Christmas time. These usually just contain small amounts of silly items like gnome balls, or obscure food items. You use these on other players like Christmas crackers.
+        Also while not exactly a holiday drop, Preservation also has another rare item. The Half jug of wine can be obtained by drinking Jugs of wine. You have a 1/25k chance to obtain the item.
+        <br><br>
+        <span class="rscfont text-primary">Cabbage/Coleslaw</span><br>
+        These items are dropped/obtainable every year (if we miss any let us know, there's a lot).
+        Easter: Easter eggs, Bunny ears, Bunny/Egg morph rings, Rubber chicken hat
+        Halloween: Pumpkins, Scythes, Eak the Mouse, Halloween masks (with some new colors and animals)
+        Christmas: Presents that contain pretty much every item in the game, including the other Christmas holiday items, along with some custom ones like Green Santa hats, Christmas cookies, antlers, Santa suit, and so on.
+
+
         <span class="rscfont text-danger font-weight-bold d-block pt-4">May I donate or subscribe for perks?</span>
         No donations nor subscriptions are accepted. We don't want any money. We also don't believe that
         dumping player money into ads will make any difference for long term player growth and retention.
@@ -100,8 +120,7 @@
         and spreading the
         word about us to your friends so they will want to be a part of this too!
 
-        <span
-                class="rscfont text-danger font-weight-bold d-block pt-4">How often is OpenRSC updated?</span>
+        <span class="rscfont text-danger font-weight-bold d-block pt-4">How often is OpenRSC updated?</span>
         The development team is constantly working on updates. Code releases generally occur weekly or monthly on Sundays
         and the public worlds are restarted with updates shortly after the posting of patch notes.
 
@@ -120,6 +139,9 @@
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
                                                                     href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+                                                                    target="_blank"
+                                                                    href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/MacOS%20Getting%20Started%20Guide.md">MacOS getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
                                                                     href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>

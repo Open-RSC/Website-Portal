@@ -43,8 +43,12 @@
                         Never
                     @endif
                 </p>
-                @if(Gate::allows('admin', Auth::user())) <p>Creation IP: {{ $player->creation_ip }}</p> @endif
-                @if(Gate::allows('admin', Auth::user())) <p>Login IP: {{ $player->login_ip }}</p> @endif
+                @if(Gate::allows('admin', Auth::user()))
+                    <p>Creation IP: <a href="https://ipinfo.io/{{ $player->creation_ip }}" target="_blank" rel="noopener noreferrer">{{ $player->creation_ip }}</a></p>
+                @endif
+                @if(Gate::allows('admin', Auth::user()))
+                    <p>Login IP: <a href="https://ipinfo.io/{{ $player->login_ip }}" target="_blank" rel="noopener noreferrer">{{ $player->login_ip }}</a></p>
+                @endif
                 <p>Combat Level: {{ $player->combat }} </p>
                 <p>Total Level: {{ $player->skill_total }} </p>
                 <p>Quest Points: {{ $player->quest_points }} </p>
