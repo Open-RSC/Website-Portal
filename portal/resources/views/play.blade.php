@@ -7,6 +7,7 @@
         <img src="/img/banners/ad.png" alt="">
         <img src="/img/banners/hbar.gif" alt="">
     @else
+        <div class="mt-5"></div>
         <div class="mb-1"></div>
         <img src="/img/banners/hbar.gif" alt="">
     @endif
