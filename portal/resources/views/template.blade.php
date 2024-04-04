@@ -47,7 +47,7 @@
     <div class="pt-2"></div>
     @yield('content')
 
-@elseif(Route::currentRouteName() == 'Play RS')
+@elseif(Route::currentRouteName() == 'Play OpenRSC')
     <main>
         <script>  function ConfirmMenu() {
                 const response = window.confirm("Clicking this link will exit the game and take you to the main menu.\nPlease log out of the game before exiting.\nClick OK if you have safely logged out.");
