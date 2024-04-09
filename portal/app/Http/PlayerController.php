@@ -801,7 +801,7 @@ class PlayerController extends Controller
         ->where('creation_date', '>=', time() - 86400)
         ->count();
 
-        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
             return response()->json([
                 'message' => 'You have created too many accounts in the past 24 hours.',
                 'status' => 429
