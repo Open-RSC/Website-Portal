@@ -55,14 +55,17 @@
                 <p>Deaths: {{ $player->deaths }} </p>
                 <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::now()->subSeconds($player->muted)->diffForHumans() }} @else No @endif  </p>
                 <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::now()->subSeconds($player->banned)->diffForHumans() }} @else No @endif  </p>
+                <p>
+                    <a href="/player/{{$db}}/{{$player->username}}" target="_blank" rel="noopener noreferrer">View Stats</a>
+                </p>
                 @if (\App\Models\players::hasBank($db, $player->id))
                     <p>
-                        <a href="/staff/player/{{$db}}/{{$player->username}}/bank">View Bank</a>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/bank" target="_blank" rel="noopener noreferrer">View Bank</a>
                     </p>
                 @endif
                 @if (\App\Models\players::hasInventory($db, $player->id))
                     <p>
-                        <a href="/staff/player/{{$db}}/{{$player->username}}/inventory">View Inventory</a>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/inventory" target="_blank" rel="noopener noreferrer">View Inventory</a>
                     </p>
                 @endif
             </div>
