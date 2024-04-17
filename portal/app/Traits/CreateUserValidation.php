@@ -26,21 +26,21 @@ trait CreateUserValidation
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
             'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
         ])->validate();
-
+        $db = $input['db'];
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
 
-        if (DB::connection($input['db'])->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
+        if (DB::connection($db)->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
             throw ValidationException::withMessages([
                 'username' => [trans('The username is already in use.')],
             ]);
         }
 
-        $recentAccounts = DB::connection($input['db'])->table('players')
+        $recentAccounts = DB::connection($db)->table('players')
         ->where('creation_ip', '=', get_client_ip_address())
         ->where('creation_date', '>=', time() - 86400)
         ->count();
 
-        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
             throw ValidationException::withMessages([
                 'throttle' => [trans('You have created too many accounts in the past 24 hours.')],
             ]);

@@ -7,12 +7,13 @@
         <img src="/img/banners/ad.png" alt="">
         <img src="/img/banners/hbar.gif" alt="">
     @else
+        <div class="mt-5"></div>
         <div class="mb-1"></div>
         <img src="/img/banners/hbar.gif" alt="">
     @endif
 
     <div id="webregistermessage" class="text-center">
-        Click <a href="/register">here</a> to register a new player account <span id="webregisterclose">(X)</span>
+        Click <a href="/register" target="_blank" rel="noopener noreferrer">here</a> to register a new player account <span id="webregisterclose">(X)</span>
     </div>
 
 

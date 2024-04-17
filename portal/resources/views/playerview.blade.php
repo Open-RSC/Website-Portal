@@ -62,14 +62,17 @@
                 <p>Block Chat: {{ $player->block_chat === 1 ? "Yes" : "No" }} </p>
                 <p>Block Trade: {{ $player->block_trade === 1 ? "Yes" : "No" }} </p>
                 <p>Block Duel: {{ $player->block_duel === 1 ? "Yes" : "No" }} </p>
+                <p>
+                    <a href="/player/{{$db}}/{{$player->username}}" target="_blank" rel="noopener noreferrer">View Stats</a>
+                </p>
                 @if (\App\Models\players::hasBank($db, $player->id))
                     <p>
-                        <a href="/staff/player/{{$db}}/{{$player->username}}/bank">View Bank</a>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/bank" target="_blank" rel="noopener noreferrer">View Bank</a>
                     </p>
                 @endif
                 @if (\App\Models\players::hasInventory($db, $player->id))
                     <p>
-                        <a href="/staff/player/{{$db}}/{{$player->username}}/inventory">View Inventory</a>
+                        <a href="/staff/player/{{$db}}/{{$player->username}}/inventory" target="_blank" rel="noopener noreferrer">View Inventory</a>
                     </p>
                 @endif
             </div>
