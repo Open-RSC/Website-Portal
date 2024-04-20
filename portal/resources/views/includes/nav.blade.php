@@ -103,7 +103,6 @@
                             <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
                             <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
                             <a class="c text-left" href="{{ route('ThrottlingList') }}">Custom Rate Limiting</a>
-                             <a class="c text-left" href="{{ route('BannedIpsList') }}">IP Bans</a>
                         @endif
                         @if(Gate::allows('player-moderator', Auth::user()))
                             <a class="c text-left" href="{{ route('InviteCodesList') }}">Invite Codes</a>
