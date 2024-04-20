@@ -46,10 +46,10 @@ trait CreateUserValidation
             ]);
         }
 
-        $recentAccounts = 0; /*DB::connection($db)->table('players')
+        $recentAccounts = DB::connection($db)->table('players')
         ->where('creation_ip', '=', get_client_ip_address())
         ->where('creation_date', '>=', time() - 86400)
-        ->count();*/
+        ->count();
 
         if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
             throw ValidationException::withMessages([
