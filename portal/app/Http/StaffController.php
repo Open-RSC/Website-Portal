@@ -761,8 +761,8 @@ class StaffController extends Controller
         if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
-        Artisan::call('invite:generate 50');
-        return redirect()->back()->with('success', '50 invite codes generated successfully.');
+        Artisan::call('invite:generate 5');
+        return redirect()->back()->with('success', '5 invite codes generated successfully.');
     }
 
     public function revokeUnusedInviteCodes()

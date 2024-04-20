@@ -50,7 +50,7 @@
 
                     <div class="btn btn-primary mb-2" role="button">
                         <a href="{{ route('GenerateInviteCodes') }}" class="text-white text-decoration-none">
-                            Generate 50 Invite Codes
+                            Generate 5 Invite Codes
                         </a>
                     </div>
 
