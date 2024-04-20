@@ -13,7 +13,7 @@ class GenerateInviteCodes extends Command
      *
      * @var string
      */
-    protected $signature = 'invite:generate {count=50 : The number of invite codes to generate}';
+    protected $signature = 'invite:generate {count=5 : The number of invite codes to generate}';
 
     /**
      * The console command description.
