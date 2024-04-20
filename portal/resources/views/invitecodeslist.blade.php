@@ -16,6 +16,15 @@
 @endsection
 
 @section('scripts')
+<style>
+    .text-wrap-word {
+        white-space: normal;
+        word-wrap: break-word; /* Older browsers */
+    }
+    .max-width-160 {
+        max-width: 160px; /* Adjust width as needed */
+    }
+</style>
 <script>
     $(document).ready(function() {
         var dataTable = $('#table').DataTable({
@@ -24,9 +33,15 @@
             processing: true,
             order: [[2, 'desc']],
             columns: [
-                {title: 'Invite Codes', data: 'code', name: 'code'},
-                {title: 'Used', data: 'used', name: 'used', width: "20%", render: function(data) {
+                {title: 'Invite Codes', data: 'code', name: 'code', className: 'text-wrap-word max-width-160'},
+                {title: 'Used', data: 'used', name: 'used', width: "25%", render: function(data) {
                     return data === 1 ? 'Yes' : 'No';
+                }},
+                {title: 'Username', data: 'username', name: 'username', render: function(data) {
+                    return data ? data : 'N/A';
+                }},
+                {title: 'World', data: 'world', name: 'world', render: function(data) {
+                    return data ? data : 'N/A';
                 }},
                 {title: 'Created At', data: 'created_at', name: 'created_at'}
             ],
