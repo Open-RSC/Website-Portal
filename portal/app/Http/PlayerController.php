@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Models\InviteCode;
+use App\Models\Setting;
 use function App\Helpers\add_characters;
 use function App\Helpers\get_client_ip_address;
 use function App\Helpers\is_incorrect_production_url;
@@ -770,13 +772,21 @@ class PlayerController extends Controller
             abort(404);
         }
 
+        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+        $rules = [
+            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+            'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
+        ];
+        $inviteCode = "";
+        if ($inviteOnly) {
+            $rules['invite_code'] = ['required', 'exists:invite_codes,code,used,false'];
+            $inviteCode = InviteCode::where('code', $request->input('invite_code') ?? '')->first();
+        }
+
         try {
-            $validated = $this->validate($request, [
-                'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
-                'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
-                'email' => ['required', 'string', 'email', 'max:255'],
-                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
-            ]);
+            $validated = $this->validate($request, $rules);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation Error',
@@ -818,7 +828,13 @@ class PlayerController extends Controller
                 'email' => $request->input('email') ?? "",
                 'password' => $password,
                 'password_confirmation' => $password_confirmation,
+                'invite_code' => $request->input('invite_code') ?? ""
             ]);
+            if ($inviteOnly && $inviteCode) {
+                $inviteCode->used = true;
+                $inviteCode->save();
+            }
+
         } catch (\Exception $e) {
             \Log::info("There was an error with API registration for $username: " . $e->getMessage());
             return response()->json(['message' => 'Error creating user.'], 500);

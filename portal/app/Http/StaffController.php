@@ -3,9 +3,12 @@
 namespace App\Http;
 
 use App\Models\BannedIp;
+use App\Models\InviteCode;
 use App\Models\itemdef;
 use App\Models\players;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
@@ -745,6 +748,67 @@ class StaffController extends Controller
         return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry deleted!');
     }
 
+    public function inviteCodesList() {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        return view('invitecodeslist');
+    }
+
+    public function inviteCodesData(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('player-moderator', Auth::user())) {
+            abort(404);
+        }
+        $query = InviteCode::query();
+
+        return Datatables::of($query)
+            ->editColumn('created_at', function ($inviteCode) {
+                    return $inviteCode->created_at->format('Y-m-d H:i:s');
+            })
+            ->toJson();
+    }
+
+    public function generateInviteCodes()
+    {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+            return redirect('/login');
+        }
+        Artisan::call('invite:generate 50');
+        return redirect()->back()->with('success', '50 invite codes generated successfully.');
+    }
+
+    public function revokeUnusedInviteCodes()
+    {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+            return redirect('/login');
+        }
+
+        $deletedCount = InviteCode::where('used', false)->delete();
+
+        return redirect()->back()->with('success', $deletedCount . ' unused invite codes deleted successfully.');
+    }
+
+    public function toggleInviteOnly()
+    {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+            return redirect('/login');
+        }
+        //Additionally, we could log who toggled this, but it's likely not necessary.
+        $setting = Setting::firstOrCreate(['key' => 'invite_only_registration'],
+                                          ['value' => "0"]);
+        $setting->value = $setting->value === "1" ? "0" : "1";
+        $setting->save();
+
+        return redirect()->back()->with('success', 'Invite-only registration toggled to ' . ($setting->value === '1' ? 'Enabled' : 'Disabled'));
+    }
+
     public function adminTasks()
     {
         if (Auth::user() === null) {
@@ -753,8 +817,8 @@ class StaffController extends Controller
         if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-
-        return view('admintasks');
+        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+        return view('admintasks', compact('inviteOnly'));
     }
 
     public function clearCache()

@@ -2,6 +2,8 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\InviteCode;
+use App\Models\Setting;
 use function App\Helpers\add_characters;
 use function App\Helpers\get_client_ip_address;
 use App\Models\players;
@@ -111,6 +113,16 @@ class CreateNewUser implements CreatesNewUsers
             ->update([$key => $value]);
         }
         if ($playerCreated) {
+            $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+            if ($inviteOnly) {
+                $inviteCode = InviteCode::where('code', $input['invite_code'])->first();
+                if ($inviteCode && !$inviteCode->used) {
+                    $inviteCode->used = true;
+                    $inviteCode->username = $input['username']; // associate the username with the invite code
+                    $inviteCode->world = $input['db']; // associate the world (database)
+                    $inviteCode->save();
+                }
+            }
             session()->flash('success', "Your account '$trimmed_username' has been created!");
         }
 
