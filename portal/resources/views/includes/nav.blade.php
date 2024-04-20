@@ -96,19 +96,20 @@
             {{-- There's currently nothing guest-specific that staff also shouldn't access. --}}
         @else
            @if(Gate::allows('player-moderator', Auth::user()))
-            <span class="flex-auto p-2 dropdown">
-                <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
-                <span class="p-2 dropdown-content" style="background:black; width:160px;">
-                     @if(Gate::allows('admin', Auth::user()))
-                        <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
-                        <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
-                        <a class="c text-left" href="{{ route('ThrottlingList') }}">Custom Rate Limiting</a>
-                    @endif
-                    @if(Gate::allows('player-moderator', Auth::user()))
-                        <a class="c text-left" href="{{ route('InviteCodesList') }}">Invite Codes</a>
-                    @endif
+                <span class="flex-auto p-2 dropdown">
+                    <a class="c" href="#">Staff Links <i class="fas fa-caret-down"></i></a>
+                    <span class="p-2 dropdown-content" style="background:black; width:160px;">
+                         @if(Gate::allows('admin', Auth::user()))
+                            <a class="c text-left" href="{{ route('ErrorLogsList') }}">Error Log</a>
+                            <a class="c text-left" href="{{ route('AdminTasks') }}">Admin Actions</a>
+                            <a class="c text-left" href="{{ route('ThrottlingList') }}">Custom Rate Limiting</a>
+                             <a class="c text-left" href="{{ route('BannedIpsList') }}">IP Bans</a>
+                        @endif
+                        @if(Gate::allows('player-moderator', Auth::user()))
+                            <a class="c text-left" href="{{ route('InviteCodesList') }}">Invite Codes</a>
+                        @endif
+                    </span>
                 </span>
-            </span>
             @endif
             @if(Gate::allows('admin', Auth::user()))
                 <span class="flex-auto p-2 dropdown">
