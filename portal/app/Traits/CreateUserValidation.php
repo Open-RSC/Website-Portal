@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\InviteCode;
+use App\Models\Setting;
 use App\Rules\NoBadWordsRule;
 use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
@@ -20,12 +22,21 @@ trait CreateUserValidation
 
     protected function validateCreateUserInput(array $input)
     {
-        Validator::make($input, [
+         $rules = [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
             'email' => ['required', 'string', 'email', 'max:255'],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
             'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
-        ])->validate();
+        ];
+        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+        // Conditionally add invite code rules based on system configuration
+        if ($inviteOnly) {
+            $rules['invite_code'] = ['required', 'string', 'exists:invite_codes,code,used,false'];
+        }
+
+        $validator = Validator::make($input, $rules);
+
+        $validator->validate();
         $db = $input['db'];
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
 
@@ -35,10 +46,10 @@ trait CreateUserValidation
             ]);
         }
 
-        $recentAccounts = DB::connection($db)->table('players')
+        $recentAccounts = 0; /*DB::connection($db)->table('players')
         ->where('creation_ip', '=', get_client_ip_address())
         ->where('creation_date', '>=', time() - 86400)
-        ->count();
+        ->count();*/
 
         if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
             throw ValidationException::withMessages([
