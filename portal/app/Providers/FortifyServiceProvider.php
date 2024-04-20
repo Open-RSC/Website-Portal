@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\Setting;
 use function App\Helpers\add_characters;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\password_needs_rehashing;
@@ -46,8 +47,8 @@ class FortifyServiceProvider extends ServiceProvider
             if (!config('openrsc.web_registration_enabled')) {
                 abort(404);
             }
-
-            return view('auth.register');
+            $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+            return view('auth.register', compact('inviteOnly'));
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);

@@ -47,6 +47,24 @@
                             Run Database Migrations
                         </a>
                     </div>
+
+                    <div class="btn btn-primary mb-2" role="button">
+                        <a href="{{ route('GenerateInviteCodes') }}" class="text-white text-decoration-none">
+                            Generate 50 Invite Codes
+                        </a>
+                    </div>
+
+                    <div class="btn btn-primary mb-2" role="button">
+                        <a href="{{ route('RevokeUnusedInviteCodes') }}" class="text-white text-decoration-none">
+                            Revoke Unused Invite Codes
+                        </a>
+                    </div>
+
+                    <div class="btn btn-warning mb-2" role="button">
+                        <a href="{{ route('ToggleInviteOnly') }}" class="text-white text-decoration-none">
+                            Toggle Invite-Only Registration (Currently {{ $inviteOnly ? 'Enabled' : 'Disabled' }})
+                        </a>
+                    </div>
                 </div>
 
             </div>

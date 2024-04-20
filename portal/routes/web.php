@@ -98,6 +98,12 @@ Route::get('/iphone2001', function() {
 })->name("iPhone2001");
 
 // Afman staff zone
+Route::get('staff/invitecodes/', [StaffController::class, 'inviteCodesList'])->name('InviteCodesList')->middleware('auth');
+Route::get('staff/invite/data', [StaffController::class, 'inviteCodesData'])->name('InviteCodesData')->middleware('auth');
+Route::get('admin/generate-invite-codes', [StaffController::class, 'generateInviteCodes'])->name('GenerateInviteCodes')->middleware('auth');
+Route::get('admin/revoke-unused-invite-codes', [StaffController::class, 'revokeUnusedInviteCodes'])->name('RevokeUnusedInviteCodes')->middleware('auth');
+Route::get('admin/toggle-invite-only', [StaffController::class, 'toggleInviteOnly'])->name('ToggleInviteOnly')->middleware('auth');
+
 Route::get('staff/itemstats/{db}/overview', [StatsController::class, 'itemStats'])->name('ItemStatisticsOverview')->middleware('auth');
 Route::get('staff/itemstats/{id}/detail', [StatsController::class, 'itemStatsDetail'])->name('ItemStatisticsDetail')->middleware('auth');
 Route::get('staff/itemstats', [StatsController::class, 'redirectToItemStats'])->name('ItemStatisticsRedirect')->middleware('auth');

@@ -67,6 +67,13 @@
                                autocomplete="new-password"/>
                     </div>
 
+                    @if ($inviteOnly)
+                        <div>
+                            <label>{{ __('Invite Code') }}</label>
+                            <input class="form-control mb-1" type="text" name="invite_code" required/>
+                        </div>
+                    @endif
+
                     <div>
                         <!-- <label>{-- __('Remember me') --}</label> -->
                         <!-- We don't have remember_token in players table -->
