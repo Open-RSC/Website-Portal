@@ -639,13 +639,10 @@ class HiscoresController extends Component
      */
     public function searchNpcHiscoresByNpcName(Request $request, $db = null, $name = null)
     {
-        if (!config('openrsc.npc_hiscores_enabled')) {
+        if (!config('openrsc.npc_hiscores_enabled') || !$db || !$name) {
             abort(404);
         }
         $npcs = npcdef::where('name', 'like', '%' . $name . '%')->where('attackable', '1')->orderBy('name')->orderBy('id')->get();
-        if (!$db || !$name) {
-            abort(404);
-        }
         if ($npcs->count() == 1) {
             $npc = $npcs->first();
             return redirect()->to("/npchiscores/$db/{$npc->id}");
