@@ -642,7 +642,22 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled') || !$db || !$name) {
             abort(404);
         }
-        $npcs = npcdef::where('name', 'like', '%' . $name . '%')->where('attackable', '1')->orderBy('name')->orderBy('id')->get();
+        $npcDefs = DB::connection('preservation') //2001scape does not have the npcdef table.
+            ->table('npcdef')
+            ->select('npcdef.id', 'npcdef.name', 'npcdef.combatlvl')
+            ->where('npcdef.name', 'like', '%' . $name . '%')
+            ->where('npcdef.attackable', '1')
+            ->orderBy('npcdef.name')
+            ->orderBy('npcdef.id')
+            ->get();
+        $npcIds = $npcDefs->pluck('id');
+        $npcKills = DB::connection($db)
+            ->table('npckills')
+            ->whereIn('npcID', $npcIds)
+            ->get();
+        $npcs = $npcDefs->filter(function ($npc) use ($npcKills) {
+            return $npcKills->contains('npcID', $npc->id);
+        });
         if ($npcs->count() == 1) {
             $npc = $npcs->first();
             return redirect()->to("/npchiscores/$db/{$npc->id}");
