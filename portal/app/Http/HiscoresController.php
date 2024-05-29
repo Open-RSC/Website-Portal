@@ -642,7 +642,7 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $npcs = npcdef::where('name', 'like', '%' . $name . '%')->orderBy('name')->orderBy('id')->get();
+        $npcs = npcdef::where('name', 'like', '%' . $name . '%')->where('attackable', '1')->orderBy('name')->orderBy('id')->get();
         if (!$db || !$name) {
             abort(404);
         }
