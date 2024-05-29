@@ -642,7 +642,7 @@ class HiscoresController extends Component
         if (!config('openrsc.npc_hiscores_enabled') || !$db || !$name) {
             abort(404);
         }
-        $npcDefs = DB::connection('preservation') //2001scape does not have the npcdef table.
+        $npcDefs = DB::connection('preservation') //2001scape does not have the npcdef table, so we can just use preservation which does.
             ->table('npcdef')
             ->select('npcdef.id', 'npcdef.name', 'npcdef.combatlvl')
             ->where('npcdef.name', 'like', '%' . $name . '%')
