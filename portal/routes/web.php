@@ -74,7 +74,7 @@ Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->midd
 Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('OpenRSC Ironman Hiscores')->middleware("custom_throttle");
 Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName")->middleware("custom_throttle");
 Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName")->middleware("custom_throttle");
-Route::get('searchNpcHiscores/{db}/{name}', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
+Route::get('searchNpcNameHiscores/{db}/{name}', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('OpenRSC Hiscore tables'); // route name purposely left with a space to deconflict
 
 // Current players
