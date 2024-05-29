@@ -102,7 +102,7 @@
             var dbName = document.getElementById('db').value;
             var npcName = document.getElementById('npcName').value.trim();
             if (npcName) {
-                window.location.href = `/searchNpcNameHiscores/${dbName}/${encodeURIComponent(npcName)}`;
+                window.location.href = `/searchNpcHiscoresByNpcName/${dbName}/${encodeURIComponent(npcName)}`;
             }
         }
         </script>
