@@ -94,11 +94,11 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#npcNameSearchForm').addEventListener('submit', function (event) {
                 event.preventDefault();
-                submitNpcSearch();
+                submitNpcNameSearch();
             });
         });
 
-        function submitNpcSearch() {
+        function submitNpcNameSearch() {
             var dbName = document.getElementById('db').value;
             var npcName = document.getElementById('npcName').value.trim();
             if (npcName) {
