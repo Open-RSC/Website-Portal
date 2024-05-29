@@ -637,21 +637,24 @@ class HiscoresController extends Component
      * @return \Illuminate\Http\RedirectResponse
      * Redirects user to a player's NPC hiscores page (to look up player by name).
      */
-    public function searchNpcHiscoresByNpcName(Request $request): \Illuminate\Http\RedirectResponse
+    public function searchNpcHiscoresByNpcName(Request $request): \Illuminate\Http\RedirectResponse | \Illuminate\View\View
     {
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $name = $request->name;
         $db = $request->db;
-        $npc = npcdef::where('name', '=', $name)->first();
-        if (!$npc) {
-            return redirect()->back()->withErrors("The NPC $name does not exist!");
-        }
-        $id = $npc->id;
-        $urlToRedirectTo = "/npchiscores/$db/$id";
+        $npcs = npcdef::where('name', 'like', '%' . $name . '%')->orderBy('name')->orderBy('id')->get();
 
-        return redirect()->to($urlToRedirectTo);
+        if ($npcs->count() == 1) {
+            $npc = $npcs->first();
+            $urlToRedirectTo = "/npchiscores/$db/{$npc->id}";
+            return redirect()->to($urlToRedirectTo);
+        }
+        if ($npcs->count() > 1) {
+            return view('npchiscoreslist', ['npcs' => $npcs, 'db' => $db, 'searchName' => $name]);
+        }
+        return redirect()->back()->withErrors("No NPC found with the name '$name'.");
     }
 
     public function npcHiscoresRedirect($db = 'preservation')
