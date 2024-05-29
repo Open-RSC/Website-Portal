@@ -81,13 +81,11 @@
             </div>
             <div class="b search-box search-rank ml-4"
                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="POST" role="search" action="{{url('searchNpcHiscoresByNpcName')}}">
-                    @csrf <!-- {{ csrf_field() }} -->
+                <form method="GET" action="{{ route('searchNpcHiscoresByNpcName') }}">
                     <input type="hidden" name="db" value="{{$db}}">
                     <label for="name">Search by NPC name</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;"
-                        class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by username" class="text-black pl-1 pr-1">
+                    <input id="name" name="name" type="text" required="required" style="width:100px;" class="bg-white text-black mt-1">
+                    <input type="submit" value="Search" aria-label="Search by NPC name" class="text-black pl-1 pr-1">
                 </form>
             </div>
         </div>
