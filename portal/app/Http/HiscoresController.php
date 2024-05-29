@@ -637,15 +637,15 @@ class HiscoresController extends Component
      * @return \Illuminate\Http\RedirectResponse
      * Redirects user to a player's NPC hiscores page (to look up player by name).
      */
-    public function searchNpcHiscoresByNpcName(Request $request)
+    public function searchNpcHiscoresByNpcName(Request $request, $db = null, $name = null)
     {
         if (!config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
-        $name = $request->input('name');
-        $db = $request->input('db');
         $npcs = npcdef::where('name', 'like', '%' . $name . '%')->orderBy('name')->orderBy('id')->get();
-
+        if (!$db || !$name) {
+            abort(404);
+        }
         if ($npcs->count() == 1) {
             $npc = $npcs->first();
             return redirect()->to("/npchiscores/$db/{$npc->id}");
