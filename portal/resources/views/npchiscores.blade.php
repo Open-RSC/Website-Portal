@@ -81,13 +81,29 @@
             </div>
             <div class="b search-box search-rank ml-4"
                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="GET" action="{{ route('searchNpcHiscoresByNpcName') }}">
-                    <input type="hidden" name="db" value="{{$db}}">
-                    <label for="name">Search by NPC name</label>
-                    <input id="name" name="name" type="text" required="required" style="width:100px;" class="bg-white text-black mt-1">
-                    <input type="submit" value="Search" aria-label="Search by NPC name" class="text-black pl-1 pr-1">
+                <form method="GET" id="npcSearchForm">
+                    <input type="hidden" id="db" value="{{ $db }}">
+                    <label for="npcName">Search by NPC name</label>
+                    <input id="npcName" type="text" required="required" style="width:100px;" class="bg-white text-black mt-1">
+                    <input type="button" value="Search" class="text-black pl-1 pr-1">
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('#npcSearchForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                submitNpcSearch();
+            });
+        });
+
+        function submitNpcSearch() {
+            var dbName = document.getElementById('db').value;
+            var npcName = document.getElementById('npcName').value.trim();
+            if (npcName) {
+                window.location.href = `/searchNpcHiscores/${dbName}/${encodeURIComponent(npcName)}`;
+            }
+        }
+        </script>
 @endsection
