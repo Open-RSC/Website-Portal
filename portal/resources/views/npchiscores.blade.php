@@ -81,7 +81,7 @@
             </div>
             <div class="b search-box search-rank ml-4"
                 style="border-color:#474747; background-image: url('{{ asset("/img/stoneback.gif") }}');">
-                <form method="GET" id="npcSearchForm">
+                <form method="GET" id="npcNameSearchForm">
                     <input type="hidden" id="db" value="{{ $db }}">
                     <label for="npcName">Search by NPC name</label>
                     <input id="npcName" type="text" required="required" style="width:100px;" class="bg-white text-black mt-1">
@@ -92,17 +92,17 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelector('#npcSearchForm').addEventListener('submit', function (event) {
+            document.querySelector('#npcNameSearchForm').addEventListener('submit', function (event) {
                 event.preventDefault();
-                submitNpcSearch();
+                submitNpcNameSearch();
             });
         });
 
-        function submitNpcSearch() {
+        function submitNpcNameSearch() {
             var dbName = document.getElementById('db').value;
             var npcName = document.getElementById('npcName').value.trim();
             if (npcName) {
-                window.location.href = `/searchNpcHiscores/${dbName}/${encodeURIComponent(npcName)}`;
+                window.location.href = `/searchNpcHiscoresByNpcName/${dbName}/${encodeURIComponent(npcName)}`;
             }
         }
         </script>
