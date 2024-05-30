@@ -85,7 +85,7 @@
                     <input type="hidden" id="db" value="{{ $db }}">
                     <label for="npcName">Search by NPC name</label>
                     <input id="npcName" type="text" required="required" style="width:100px;" class="bg-white text-black mt-1">
-                    <input type="button" value="Search" class="text-black pl-1 pr-1">
+                    <input type="submit" value="Search" class="text-black pl-1 pr-1">
                 </form>
             </div>
         </div>
