@@ -223,13 +223,13 @@ class PlayerExportService
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert('player_recovery', $player_recovery, [], [], [], ['question1', 'question2', 'question3', 'question4', 'question5'], ['question1', 'question2', 'question3', 'question4', 'question5'])."\n";
+        $this->sqlString .= $this->buildInsert('player_recovery', $player_recovery, ignoredColumns: [], resetColumns: [], unsetIfEmptyColumns: [], skipSlashColumns: ['question1', 'question2', 'question3', 'question4', 'question5'], replaceQuoteColumns: ['question1', 'question2', 'question3', 'question4', 'question5'])."\n";
         $player_change_recovery = DB::connection($db)
             ->table('player_change_recovery')
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert('player_change_recovery', $player_change_recovery, [], [], [], ['question1', 'question2', 'question3', 'question4', 'question5'], ['question1', 'question2', 'question3', 'question4', 'question5'])."\n";
+        $this->sqlString .= $this->buildInsert('player_change_recovery', $player_change_recovery, ignoredColumns: [], resetColumns: [], unsetIfEmptyColumns: [], skipSlashColumns: ['question1', 'question2', 'question3', 'question4', 'question5'], replaceQuoteColumns: ['question1', 'question2', 'question3', 'question4', 'question5'])."\n";
         $player_contact_details = DB::connection($db)
             ->table('player_contact_details')
             ->select('*')
@@ -241,13 +241,13 @@ class PlayerExportService
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert('former_names', $former_names)."\n";
+        $this->sqlString .= $this->buildInsert('former_names', $former_names, ignoredColumns: [], resetColumns: [], unsetIfEmptyColumns: [], skipSlashColumns: ['reason'], replaceQuoteColumns: ['reason'])."\n";
         $capped_experience = DB::connection($db)
             ->table('capped_experience')
             ->select('*')
             ->where('playerID', '=', $player_id)
             ->get();
-        $this->sqlString .= $this->buildInsert('capped_experience', $capped_experience, [], [], ['attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving'])."\n";
+        $this->sqlString .= $this->buildInsert('capped_experience', $capped_experience, ignoredColumns: [], resetColumns: [], unsetIfEmptyColumns: ['attack', 'defense', 'strength', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving'])."\n";
         $friends = DB::connection($db)
             ->table('friends')
             ->select('*')
@@ -314,7 +314,7 @@ class PlayerExportService
      * This lovely function generates our insert statements for player exports.
      *
      * @param $table string The database table to build the insert statement for.
-     * @param $records array || \Illuminate\Support\Collection The records we will be inserting into the database table.
+     * @param $records array | \Illuminate\Support\Collection The records we will be inserting into the database table.
      * @param $ignoredColumns array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
      * @param $resetColumns array The columns we will be resetting to value 0.
      * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
