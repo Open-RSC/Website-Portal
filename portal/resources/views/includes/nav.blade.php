@@ -77,7 +77,7 @@
         <span class="flex-auto p-1 dropdown">
             <a class="c" href="#">Bug Reports <i class="fas fa-caret-down"></i></a>
                 <span class="p-2 dropdown-content" style="background:black; width:150px;">
-                    <a class="c text-left" href="/worldmap/preservation"><i
+                    <a class="c text-left" href="/board/viewforum.php?f=26"><i
                                 class="fas fa-bug"></i> Report a Bug</a>
                     <a class="c text-left" href="https://gitlab.com/open-runescape-classic/core/-/issues"><i
                                 class="fas fa-sticky-note"></i> GitLab Issues</a>
