@@ -71,6 +71,11 @@ return [
             'provider' => 'retro',
         ],
 
+        '2001scape' => [
+            'driver' => 'session',
+            'provider' => '2001scape',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -127,6 +132,11 @@ return [
         ],
 
         '2001scape' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\retro::class,
+        ],
+
+        'retro' => [
             'driver' => 'eloquent',
             'model' => App\Models\retro::class,
         ],

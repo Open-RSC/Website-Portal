@@ -8,6 +8,7 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Setting;
 use function App\Helpers\add_characters;
+use function App\Helpers\get_client_ip_address;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\password_needs_rehashing;
 use App\Models\players;
@@ -15,6 +16,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\ValidationException;
@@ -78,16 +81,20 @@ class FortifyServiceProvider extends ServiceProvider
                 $validated = $request->validate([
                     'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                     'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
+                    'db' => ['required', 'in:preservation,cabbage,uranium,coleslaw,2001scape'],
                 ]);
             } catch (ValidationException $e) {
                 //\Log::info($e->validator->errors());
                 return false;
             }
-
+            $database = $request->input('db');
+            if ($database !== 'preservation' && !config('openrsc.multi_world_logins')) {
+                return false;
+            }
             $username = $request->input('username');
             $password = add_characters($request->input('password'), 20);
             $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $username));
-            $user = players::on('preservation')->where('username', '=', $trimmed_username)->first();
+            $user = players::on($database)->where('username', '=', $trimmed_username)->first();
             if ($user === null) {
                 return false;
             }
@@ -108,7 +115,39 @@ class FortifyServiceProvider extends ServiceProvider
                 if (config('openrsc.login_admin_only') && ! $user->hasAdmin()) {
                     return false;
                 }
-
+                if ($database !== "preservation" && (!$request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || !$request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
+                    $ip = "";
+                    try {
+                        $ip = get_client_ip_address();
+                    } catch (\Exception $e) {
+                        \Log::error("Error fetching ip address in FortifyServiceProvider authenticateUsing() for player $username database $database, request IP is " . $request->ip() . ", Exception is " . $e->getMessage());
+                        if (Schema::hasTable('error_logs')) {
+                            DB::table('error_logs')->insert([
+                                'message' => "Error fetching ip address in FortifyServiceProvider authenticateUsing() for player $username database $database, request IP is " . $request->ip() . ", Exception is " . $e->getMessage(),
+                                'level' => 'error',
+                                'url' => $request->fullUrl() ?? "",
+                                'username' => $trimmed_username,
+                                'ip' => $ip,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+                    \Log::error("Player $trimmed_username IP $ip tried to log in to database $database but dynamic guard (or dynamic guard checker) did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases, rejecting login!");
+                    if (Schema::hasTable('error_logs')) {
+                        DB::table('error_logs')->insert([
+                            'message' => "Player $trimmed_username IP $ip tried to log in to database $database but dynamic guard (or dynamic guard checker) did not run on the request, logging in to any database other than the default (preservation) is unsafe because player IDs can differ between databases, rejecting login!",
+                            'level' => 'error',
+                            'url' => $request->fullUrl() ?? "",
+                            'username' => $trimmed_username,
+                            'ip' => $ip,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                    return false;
+                }
+                session(['db_connection' => $database, 'expected_username' => $trimmed_username]);
                 return $user;
             }
 

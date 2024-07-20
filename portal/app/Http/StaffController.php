@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Models\BannedIp;
 use App\Models\InviteCode;
 use App\Models\itemdef;
 use App\Models\players;
@@ -54,7 +55,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest chat logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username', 'players.id as playerID')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -120,8 +121,8 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest chat logs.
-        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(20000)->get();
+        //Here we hardcode orderBy time because we only want the latest data.
+        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(40000)->get();
         $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['email', 'salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
 
         return DataTables::of($data)
@@ -130,6 +131,24 @@ class StaffController extends Controller
                 })
                 ->editColumn('login_date', function ($data) {
                     return Carbon::createFromTimestamp($data->login_date)->format('Y-m-d H:i:s');
+                })
+                ->editColumn('muted', function ($data) {
+                    if ((int)$data->muted === -1) {
+                        return 'Permanently';
+                    } elseif ((int)$data->muted > 0) {
+                        return Carbon::createFromTimestamp($data->muted / 1000);
+                    } else {
+                        return 'No';
+                    }
+                })
+                ->editColumn('banned', function ($data) {
+                    if ((int)$data->banned === -1) {
+                        return 'Permanently';
+                    } elseif ((int)$data->banned > 0) {
+                        return Carbon::createFromTimestamp($data->banned / 1000);
+                    } else {
+                        return 'No';
+                    }
                 })
                 ->smart(true)
                 ->make();
@@ -165,7 +184,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest chat logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -204,7 +223,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest chat logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -221,7 +240,7 @@ class StaffController extends Controller
         if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return view('pm_logs', compact('db'));
     }
 
@@ -243,7 +262,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -282,7 +301,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -325,7 +344,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -364,7 +383,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -441,7 +460,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -480,7 +499,7 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        //Here we hardcode orderBy time because we only want the latest logs.
+        //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
                 ->editColumn('time', function ($data) {
                     return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
@@ -908,6 +927,87 @@ class StaffController extends Controller
         if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
         Artisan::call('migrate:refresh', array('--path' => 'database/migrations', '--force' => true));
         return redirect()->back()->with('success', 'Database refreshed successfully.');
+    }
+
+    public function listBannedIpsView()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        $bannedIps = BannedIp::orderBy('id', 'desc')->paginate(10);
+        return view('bannedipslist', compact('bannedIps'));
+    }
+
+    public function banIp(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        // Validate the request...
+        $validated = $request->validate([
+            'ip_address' => 'required|ip',
+        ]);
+        $existingBan = BannedIp::where('ip_address', $validated['ip_address'])->first();
+        if ($existingBan) {
+            // Redirect back with error message
+            return back()->with('error', 'This IP address is already banned.');
+        }
+        // Add the IP address to the banned list
+        BannedIp::create(['ip_address' => $validated['ip_address']]);
+        DB::connection('laravel')->table('stafflogs')->insert([
+            'username' => Auth::user()->username,
+            'page' => 'banned_ips',
+            'game' => 'laravel',
+            'url' => $request->fullUrlWithQuery($request->query->all()),
+            'description' => 'Banned IP ' . $validated['ip_address'],
+            'ip' => get_client_ip_address(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        // Redirect back with success message
+        return back()->with('success', 'IP address banned successfully.');
+    }
+
+    public function unbanIp(Request $request)
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (!Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+        // Validate the request...
+        $validated = $request->validate([
+            'ip_address' => 'required|ip',
+        ]);
+
+        // Remove the IP address from the banned list
+        $unbanned = BannedIp::where('ip_address', $validated['ip_address'])->delete();
+
+        // Check if the operation was successful
+        if ($unbanned) {
+            DB::connection('laravel')->table('stafflogs')->insert([
+                'username' => Auth::user()->username,
+                'page' => 'banned_ips',
+                'game' => 'laravel',
+                'url' => $request->fullUrlWithQuery($request->query->all()),
+                'description' => 'Unbanned IP ' . $validated['ip_address'],
+                'ip' => get_client_ip_address(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            // Redirect back with success message
+            return back()->with('success', 'IP address unbanned successfully.');
+        } else {
+            // Redirect back with error message
+            return back()->with('error', 'IP address not found.');
+        }
     }
 
 }

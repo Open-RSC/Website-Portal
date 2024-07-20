@@ -3,7 +3,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3 fs-3">
-            RSC Preservation Login
+            Open RSC Login
         </h2>
 
         <div class="row justify-content-center">
@@ -27,7 +27,18 @@
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-
+                        @if (config('openrsc.multi_world_logins'))
+                            <label>{{ __('Game') }}</label>
+                            <select class="form-control mb-1 dropdown-arrow" name="db" id="db" required>
+                                <option value="preservation">RSC Preservation</option>
+                                <option value="cabbage">RSC Cabbage</option>
+                                <option value="uranium">RSC Uranium</option>
+                                <option value="coleslaw">RSC Coleslaw</option>
+                                <option value="2001scape">2001scape</option>
+                            </select>
+                        @else
+                            <input type="hidden" name="db" value="preservation" />
+                        @endif
                         <div>
                             <label>{{ __('Username') }}</label>
                             <input class="form-control mb-1" type="text" name="username" value="{{ old('username') }}" required autofocus />
