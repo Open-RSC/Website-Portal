@@ -3,3 +3,4 @@
 @section('content')
     @livewire('npc-search')
 @endsection
+

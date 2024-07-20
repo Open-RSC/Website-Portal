@@ -834,27 +834,29 @@
         <span class="npc-name" data-name="Lundail" data-id="793">793: Lundail</span><br>
 
     </div>
+
+    <script>
+        const npcNames = document.querySelectorAll('.npc-name');
+
+        const inputField = document.querySelector('#search-box');
+
+        npcNames.forEach(npc => {
+            npc.onclick = function() {
+                inputField.value = this.getAttribute('data-name');
+                inputField.dispatchEvent(new Event('input'));
+            };
+        });
+    </script>
+    <style>
+      .responsive-input {
+        width: 500px;
+      }
+
+      @media (max-width: 768px) {
+        .responsive-input {
+          width: 100%;
+        }
+      }
+    </style>
+
 </div>
-<style>
-  .responsive-input {
-    width: 500px;
-  }
-
-  @media (max-width: 768px) {
-    .responsive-input {
-      width: 100%;
-    }
-  }
-</style>
-<script>
-    const npcNames = document.querySelectorAll('.npc-name');
-
-    const inputField = document.querySelector('#search-box');
-
-    npcNames.forEach(npc => {
-        npc.onclick = function() {
-            inputField.value = this.getAttribute('data-name');
-            inputField.dispatchEvent(new Event('input'));
-        };
-    });
-</script>
