@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Models\BannedIp;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpFoundation\Response;
 
 use function App\Helpers\get_client_ip_address;
 

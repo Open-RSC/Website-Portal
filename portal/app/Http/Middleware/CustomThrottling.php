@@ -2,21 +2,19 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Symfony\Component\HttpFoundation\Response;
 
 class CustomThrottling extends ThrottleRequests
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int|string  $maxAttempts
      * @param  float|int  $decayMinutes
      * @param  string  $prefix
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = ''): Response
     {

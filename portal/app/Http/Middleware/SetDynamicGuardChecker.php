@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\Response;
 
 use function App\Helpers\get_client_ip_address;
 
@@ -18,7 +18,6 @@ class SetDynamicGuardChecker
      * This middleware checks that the SetDynamicGuard middleware has run successfully, and if not,
      * and also if the database is not preservation, then it forces a logout of the user.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function handle(Request $request, Closure $next): Response

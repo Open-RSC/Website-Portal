@@ -70,8 +70,6 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-
-
         if (config('openrsc.force_https', false)) {
             resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
         }

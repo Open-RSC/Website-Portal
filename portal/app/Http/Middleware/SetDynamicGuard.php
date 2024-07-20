@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Request;
 use App\Models\players;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Symfony\Component\HttpFoundation\Response;
 
 use function App\Helpers\get_client_ip_address;
 
@@ -17,7 +17,6 @@ class SetDynamicGuard
     /**
      * This middleware sets the correct user for a non-default database (database other than preservation) login.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function handle(Request $request, Closure $next): Response
