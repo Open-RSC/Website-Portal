@@ -120,7 +120,7 @@ class PlayerExportService
         $text .= 'GPG Archive Link: https://web.archive.org/web/20230224020441/https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key';
         Storage::disk('local')->put($txtfile, $text);
 
-        //Create the zip archive
+        //Create the GPG zip archive
         $zip = new ZipArchive();
         try {
             $gpg = new GnuPG();
@@ -138,13 +138,15 @@ class PlayerExportService
             \Log::error('Player Export GPG exception: '.$e->getMessage());
         }
 
+        //Create the zip archive
         try {
-            $zip->open(storage_path('app/'.$zipfile), ZipArchive::CREATE);
-            $zip->addFile(storage_path('app/'.$sqlitefile));
-            $zip->addFile(storage_path('app/'.$sqlfile));
-            $zip->addFile(storage_path('app/'.$txtfile));
-            $zip->addFile(storage_path('app/'.$gpgfile));
-            $zip->close();
+             if ($zip->open(storage_path('app/'.$zipfile), ZipArchive::CREATE) === TRUE) {
+                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
+                $zip->addFile(storage_path('app/'.$gpgfile), 'data.zip.gpg');
+                $zip->close();
+            }
         } catch (\Exception $e) {
             \Log::error("Error creating zip $zipfile: ".$e->getMessage());
             return redirect(route('PlayerExportView'))->withErrors('Error creating Player Export, please try again later.');
