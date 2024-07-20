@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
 use Closure;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 
@@ -16,7 +18,7 @@ class CustomThrottling extends ThrottleRequests
      * @param  string  $prefix
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle($request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = '')
+    public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = ''): Response
     {
         $routeName = $request->route()->getName();
         try {

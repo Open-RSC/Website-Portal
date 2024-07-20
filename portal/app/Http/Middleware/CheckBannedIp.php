@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Symfony\Component\HttpFoundation\Response;
 use App\Models\BannedIp;
 use Closure;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ use function App\Helpers\get_client_ip_address;
 
 class CheckBannedIp
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $bannedIps = BannedIp::pluck('ip_address')->toArray();
         $ip = '';

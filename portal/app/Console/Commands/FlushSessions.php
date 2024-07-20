@@ -35,7 +35,7 @@ class FlushSessions extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $driver = config('session.driver');
         $method_name = 'clean'.ucfirst($driver);

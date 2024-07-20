@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,7 @@ class SetDynamicGuardChecker
      * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         //Also check that it's preservation, if it's not then it could be an old session before multi_world_logins was turned off. In which case, we will want to force a logout anyway.
         if (! config('openrsc.multi_world_logins') && session('db_connection') === 'preservation') {
