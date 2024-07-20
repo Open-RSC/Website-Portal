@@ -7,16 +7,16 @@ use App\Models\InviteCode;
 use App\Models\itemdef;
 use App\Models\players;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
-use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Yajra\DataTables\Facades\DataTables;
+
+use function App\Helpers\get_client_ip_address;
 
 class StaffController extends Controller
 {
@@ -30,7 +30,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -42,7 +42,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -55,13 +55,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username', 'players.id as playerID')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function player_list(Request $request, $db)
@@ -69,7 +70,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -81,7 +82,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $player = DB::connection($db)->table('players')->where('id', '=', $id)->first();
@@ -108,7 +109,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -126,32 +127,32 @@ class StaffController extends Controller
         $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['email', 'salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
 
         return DataTables::of($data)
-                ->editColumn('creation_date', function ($data) {
-                    return Carbon::createFromTimestamp($data->creation_date)->format('Y-m-d H:i:s');
-                })
-                ->editColumn('login_date', function ($data) {
-                    return Carbon::createFromTimestamp($data->login_date)->format('Y-m-d H:i:s');
-                })
-                ->editColumn('muted', function ($data) {
-                    if ((int)$data->muted === -1) {
-                        return 'Permanently';
-                    } elseif ((int)$data->muted > 0) {
-                        return Carbon::createFromTimestamp($data->muted / 1000);
-                    } else {
-                        return 'No';
-                    }
-                })
-                ->editColumn('banned', function ($data) {
-                    if ((int)$data->banned === -1) {
-                        return 'Permanently';
-                    } elseif ((int)$data->banned > 0) {
-                        return Carbon::createFromTimestamp($data->banned / 1000);
-                    } else {
-                        return 'No';
-                    }
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('creation_date', function ($data) {
+                return Carbon::createFromTimestamp($data->creation_date)->format('Y-m-d H:i:s');
+            })
+            ->editColumn('login_date', function ($data) {
+                return Carbon::createFromTimestamp($data->login_date)->format('Y-m-d H:i:s');
+            })
+            ->editColumn('muted', function ($data) {
+                if ((int) $data->muted === -1) {
+                    return 'Permanently';
+                } elseif ((int) $data->muted > 0) {
+                    return Carbon::createFromTimestamp($data->muted / 1000);
+                } else {
+                    return 'No';
+                }
+            })
+            ->editColumn('banned', function ($data) {
+                if ((int) $data->banned === -1) {
+                    return 'Permanently';
+                } elseif ((int) $data->banned > 0) {
+                    return Carbon::createFromTimestamp($data->banned / 1000);
+                } else {
+                    return 'No';
+                }
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function chat_logs(Request $request, $db)
@@ -159,7 +160,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -171,7 +172,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -184,13 +185,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function globalchat_logs(Request $request, $db)
@@ -198,7 +200,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -210,7 +212,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -223,13 +225,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function pm_logs(Request $request, $db)
@@ -237,9 +240,10 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+
         //Here we hardcode orderBy time because we only want the latest data.
         return view('pm_logs', compact('db'));
     }
@@ -249,7 +253,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -262,13 +266,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function trade_logs(Request $request, $db)
@@ -276,7 +281,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -288,7 +293,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -301,17 +306,18 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })->editColumn('player1_items', function ($data) {
-                    return str_replace(',', ",\n", $data->player1_items);
-                })->editColumn('player2_items', function ($data) {
-                    return str_replace(',', ",\n", $data->player2_items);
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })->editColumn('player1_items', function ($data) {
+                return str_replace(',', ",\n", $data->player1_items);
+            })->editColumn('player2_items', function ($data) {
+                return str_replace(',', ",\n", $data->player2_items);
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function generic_logs(Request $request, $db)
@@ -319,7 +325,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -331,7 +337,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -344,13 +350,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function auction_logs(Request $request, $db)
@@ -358,7 +365,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -370,7 +377,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -383,15 +390,16 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })->editColumn('buyer_info', function ($data) {
-                    return str_replace(',', ",\n", $data->buyer_info);
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })->editColumn('buyer_info', function ($data) {
+                return str_replace(',', ",\n", $data->buyer_info);
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function live_feed_logs(Request $request, $db)
@@ -399,7 +407,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -411,7 +419,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -423,7 +431,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -435,7 +443,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (! Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
 
@@ -447,7 +455,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (! Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -460,13 +468,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function staff_logs(Request $request, $db)
@@ -474,7 +483,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -486,7 +495,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -499,13 +508,14 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         //Here we hardcode orderBy time because we only want the latest data.
         return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
-                ->editColumn('time', function ($data) {
-                    return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-                })
-                ->smart(true)
-                ->make();
+            ->editColumn('time', function ($data) {
+                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->smart(true)
+            ->make();
     }
 
     public function errorLogsData()
@@ -513,18 +523,19 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+
         //Here we format the date columns for easier viewing.
         return DataTables::of(DB::table('error_logs')->orderBy('created_at', 'desc')->get())
-                ->editColumn('created_at', function ($data) {
-                    return Carbon::parse($data->created_at)->format('Y-m-d H:i:s');
-                })
-                ->editColumn('updated_at', function ($data) {
-                    return Carbon::parse($data->updated_at)->format('Y-m-d H:i:s');
-                })
-                ->make();
+            ->editColumn('created_at', function ($data) {
+                return Carbon::parse($data->created_at)->format('Y-m-d H:i:s');
+            })
+            ->editColumn('updated_at', function ($data) {
+                return Carbon::parse($data->updated_at)->format('Y-m-d H:i:s');
+            })
+            ->make();
     }
 
     public function errorLogsList()
@@ -532,9 +543,10 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+
         return view('errorlogslist');
     }
 
@@ -543,10 +555,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $errorLog = DB::table('error_logs')->where('id', $id)->first();
+
         return view('errorlogsdetail', ['errorLog' => $errorLog]);
     }
 
@@ -555,17 +568,17 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
-        if (!Schema::connection($db)->hasTable('itemdef')) {
+        if (! Schema::connection($db)->hasTable('itemdef')) {
             abort(404, "The itemdef table does not exist in the $db database.");
         }
 
-        $item = itemdef::on($db)->where("id", "=", $itemID)->first();
+        $item = itemdef::on($db)->where('id', '=', $itemID)->first();
 
-        if (!$item) {
+        if (! $item) {
             abort(404);
         }
 
@@ -577,7 +590,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -630,8 +643,9 @@ class StaffController extends Controller
         }
 
         foreach ($combined as $username => &$data) {
-            if (!isset($data['bank_count']) && !isset($data['inv_count'])) {
+            if (! isset($data['bank_count']) && ! isset($data['inv_count'])) {
                 unset($combined[$username]);  // Remove entry if both counts are not set
+
                 continue;
             }
             $data['bank_count'] = $data['bank_count'] ?? 0;
@@ -651,18 +665,18 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('moderator', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
-        if (!$request->has('name')) {
+        if (! $request->has('name')) {
             abort(404);
         }
 
         $name = $request->name;
-        $db = $request->db ?? "preservation";
+        $db = $request->db ?? 'preservation';
         $player = DB::connection($db)->table('players')->where('username', '=', $name)->first();
 
-        if (!$player) {
+        if (! $player) {
             abort(404);
         }
 
@@ -672,89 +686,103 @@ class StaffController extends Controller
         return redirect()->to($urlToRedirectTo);
     }
 
-    public function throttlingList() {
+    public function throttlingList()
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $throttlingEntries = \DB::table('custom_throttling')->paginate(10);
+
         return view('throttlinglist', compact('throttlingEntries'));
     }
 
-    public function createThrottling() {
+    public function createThrottling()
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
+
         return view('throttlingcreate');
     }
 
-    public function storeThrottling(Request $request) {
+    public function storeThrottling(Request $request)
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $request->validate([
             'route_name' => 'required|string|unique:custom_throttling,route_name',
             'max_attempts' => 'required|integer|min:1',
-            'decay_minutes' => 'required|integer|min:1'
+            'decay_minutes' => 'required|integer|min:1',
         ]);
 
         \DB::table('custom_throttling')->insert($request->only('route_name', 'max_attempts', 'decay_minutes'));
+
         return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry added!');
     }
 
-    public function editThrottling($id) {
+    public function editThrottling($id)
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $entry = \DB::table('custom_throttling')->where('id', $id)->first();
+
         return view('throttlingedit', compact('entry'));
     }
 
-    public function updateThrottling(Request $request, $id) {
+    public function updateThrottling(Request $request, $id)
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $request->validate([
-            'route_name' => 'required|string|unique:custom_throttling,route_name,' . $id,
+            'route_name' => 'required|string|unique:custom_throttling,route_name,'.$id,
             'max_attempts' => 'required|integer|min:1',
-            'decay_minutes' => 'required|integer|min:1'
+            'decay_minutes' => 'required|integer|min:1',
         ]);
         \DB::table('custom_throttling')->where('id', $id)->update($request->only('route_name', 'max_attempts', 'decay_minutes'));
+
         return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry updated!');
     }
 
-    public function destroyThrottling($id) {
+    public function destroyThrottling($id)
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         \DB::table('custom_throttling')->where('id', $id)->delete();
+
         return redirect()->route('ThrottlingList')->with('success', 'Custom Throttling Entry deleted!');
     }
 
-    public function inviteCodesList() {
+    public function inviteCodesList()
+    {
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (! Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
+
         return view('invitecodeslist');
     }
 
@@ -763,50 +791,51 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('player-moderator', Auth::user())) {
+        if (! Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
         $query = InviteCode::query();
 
         return Datatables::of($query)
             ->editColumn('created_at', function ($inviteCode) {
-                    return $inviteCode->created_at->format('Y-m-d H:i:s');
+                return $inviteCode->created_at->format('Y-m-d H:i:s');
             })
             ->toJson();
     }
 
     public function generateInviteCodes()
     {
-        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
         Artisan::call('invite:generate 5');
+
         return redirect()->back()->with('success', '5 invite codes generated successfully.');
     }
 
     public function revokeUnusedInviteCodes()
     {
-        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
 
         $deletedCount = InviteCode::where('used', false)->delete();
 
-        return redirect()->back()->with('success', $deletedCount . ' unused invite codes deleted successfully.');
+        return redirect()->back()->with('success', $deletedCount.' unused invite codes deleted successfully.');
     }
 
     public function toggleInviteOnly()
     {
-        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
         //Additionally, we could log who toggled this, but it's likely not necessary.
         $setting = Setting::firstOrCreate(['key' => 'invite_only_registration'],
-                                          ['value' => "0"]);
-        $setting->value = $setting->value === "1" ? "0" : "1";
+            ['value' => '0']);
+        $setting->value = $setting->value === '1' ? '0' : '1';
         $setting->save();
 
-        return redirect()->back()->with('success', 'Invite-only registration toggled to ' . ($setting->value === '1' ? 'Enabled' : 'Disabled'));
+        return redirect()->back()->with('success', 'Invite-only registration toggled to '.($setting->value === '1' ? 'Enabled' : 'Disabled'));
     }
 
     public function adminTasks()
@@ -814,10 +843,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
+
         return view('admintasks', compact('inviteOnly'));
     }
 
@@ -826,10 +856,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('cache:clear');
+
         return redirect()->back()->with('success', 'Cache cleared successfully.');
     }
 
@@ -838,10 +869,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('view:clear');
+
         return redirect()->back()->with('success', 'Views cleared successfully.');
     }
 
@@ -850,10 +882,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('route:clear');
+
         return redirect()->back()->with('success', 'Routes cleared successfully.');
     }
 
@@ -862,10 +895,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('config:clear');
+
         return redirect()->back()->with('success', 'Routes cleared successfully.');
     }
 
@@ -874,13 +908,20 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
-        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
-        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
-        Artisan::call('migrate', array('--path' => 'database/migrations', '--force' => true));
+        if (! defined('STDIN')) {
+            define('STDIN', fopen('php://stdin', 'rb'));
+        }
+        if (! defined('STDOUT')) {
+            define('STDOUT', fopen('php://stdout', 'wb'));
+        }
+        if (! defined('STDERR')) {
+            define('STDERR', fopen('php://stderr', 'wb'));
+        }
+        Artisan::call('migrate', ['--path' => 'database/migrations', '--force' => true]);
+
         return redirect()->back()->with('success', 'Database migrations executed successfully.');
     }
 
@@ -889,13 +930,20 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
-        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
-        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
-        Artisan::call('migrate:rollback', array('--path' => 'database/migrations', '--force' => true));
+        if (! defined('STDIN')) {
+            define('STDIN', fopen('php://stdin', 'rb'));
+        }
+        if (! defined('STDOUT')) {
+            define('STDOUT', fopen('php://stdout', 'wb'));
+        }
+        if (! defined('STDERR')) {
+            define('STDERR', fopen('php://stderr', 'wb'));
+        }
+        Artisan::call('migrate:rollback', ['--path' => 'database/migrations', '--force' => true]);
+
         return redirect()->back()->with('success', 'Database migrations rolled back successfully.');
     }
 
@@ -904,13 +952,20 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
-        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
-        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
-        Artisan::call('migrate:fresh', array('--path' => 'database/migrations', '--force' => true));
+        if (! defined('STDIN')) {
+            define('STDIN', fopen('php://stdin', 'rb'));
+        }
+        if (! defined('STDOUT')) {
+            define('STDOUT', fopen('php://stdout', 'wb'));
+        }
+        if (! defined('STDERR')) {
+            define('STDERR', fopen('php://stderr', 'wb'));
+        }
+        Artisan::call('migrate:fresh', ['--path' => 'database/migrations', '--force' => true]);
+
         return redirect()->back()->with('success', 'Database migrations freshed successfully.');
     }
 
@@ -919,13 +974,20 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'rb'));
-        if (!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'wb'));
-        if (!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
-        Artisan::call('migrate:refresh', array('--path' => 'database/migrations', '--force' => true));
+        if (! defined('STDIN')) {
+            define('STDIN', fopen('php://stdin', 'rb'));
+        }
+        if (! defined('STDOUT')) {
+            define('STDOUT', fopen('php://stdout', 'wb'));
+        }
+        if (! defined('STDERR')) {
+            define('STDERR', fopen('php://stderr', 'wb'));
+        }
+        Artisan::call('migrate:refresh', ['--path' => 'database/migrations', '--force' => true]);
+
         return redirect()->back()->with('success', 'Database refreshed successfully.');
     }
 
@@ -934,10 +996,11 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $bannedIps = BannedIp::orderBy('id', 'desc')->paginate(10);
+
         return view('bannedipslist', compact('bannedIps'));
     }
 
@@ -946,7 +1009,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         // Validate the request...
@@ -965,11 +1028,12 @@ class StaffController extends Controller
             'page' => 'banned_ips',
             'game' => 'laravel',
             'url' => $request->fullUrlWithQuery($request->query->all()),
-            'description' => 'Banned IP ' . $validated['ip_address'],
+            'description' => 'Banned IP '.$validated['ip_address'],
             'ip' => get_client_ip_address(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         // Redirect back with success message
         return back()->with('success', 'IP address banned successfully.');
     }
@@ -979,7 +1043,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         // Validate the request...
@@ -997,11 +1061,12 @@ class StaffController extends Controller
                 'page' => 'banned_ips',
                 'game' => 'laravel',
                 'url' => $request->fullUrlWithQuery($request->query->all()),
-                'description' => 'Unbanned IP ' . $validated['ip_address'],
+                'description' => 'Unbanned IP '.$validated['ip_address'],
                 'ip' => get_client_ip_address(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
             // Redirect back with success message
             return back()->with('success', 'IP address unbanned successfully.');
         } else {
@@ -1009,5 +1074,4 @@ class StaffController extends Controller
             return back()->with('error', 'IP address not found.');
         }
     }
-
 }

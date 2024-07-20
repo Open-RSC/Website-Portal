@@ -37,7 +37,7 @@ class CreateModeratorCommand extends Command
         // Enter db, if not present via command line option
         $db = $this->option('db');
         $validDatabases = ['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'];
-        while ($db === null || !in_array($db, $validDatabases)) {
+        while ($db === null || ! in_array($db, $validDatabases)) {
             if ($db !== null) {
                 $this->error('Invalid database. Please choose from the valid options.');
             }
@@ -68,11 +68,11 @@ class CreateModeratorCommand extends Command
             'password' => $password,
             'password_confirmation' => $password_confirmation,
             'moderator' => 1,
-            'db' => $db
+            'db' => $db,
         ];
         // Check if invite-only mode is enabled
-        $inviteOnly = Setting::where('key', 'invite_only_registration')->value('value') === "1";
-        $inviteCode = "";
+        $inviteOnly = Setting::where('key', 'invite_only_registration')->value('value') === '1';
+        $inviteCode = '';
         if ($inviteOnly) {
             // Generate an invite code
             $inviteCode = Str::uuid()->toString();
@@ -80,7 +80,7 @@ class CreateModeratorCommand extends Command
                 'code' => $inviteCode,
                 'used' => false,
                 'username' => $name,
-                'world' => $db
+                'world' => $db,
             ]);
             $input['invite_code'] = $inviteCode;
         }
@@ -100,16 +100,18 @@ class CreateModeratorCommand extends Command
             }
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return 1;
         }
 
         // Success message
         if ($user) {
-             $this->info('Moderator User ' . $name . ' created successfully!');
+            $this->info('Moderator User '.$name.' created successfully!');
         }
         if ($inviteCode) {
-            $this->info('Invite code generated for moderator: ' . $inviteCode);
+            $this->info('Invite code generated for moderator: '.$inviteCode);
         }
+
         return 0;
     }
 }

@@ -161,7 +161,7 @@ class GpgInvalidMemberError extends GpgError
 
     public function __construct($err, $message, $reason = null, $who = null)
     {
-        if (!is_null($reason)) {
+        if (! is_null($reason)) {
             $reason = self::$reasons[$reason];
         }
         parent::__construct(sprintf($message, $reason, $who), $err);
@@ -224,7 +224,7 @@ abstract class GpgResult
         foreach ($this->status as $status) {
             $code = $status[0];
             //echo 'GpgResult::handle(): ' . $code . ": $status[1]\n";
-            if (!isset($this->processors[$code])) {
+            if (! isset($this->processors[$code])) {
                 throw new GpgUnknownStatus($code);
             }
             if ($this->processors[$code]) {
@@ -415,7 +415,7 @@ class GpgImportResult extends GpgResult
 
     public function __get($attr)
     {
-        if (!in_array($attr, self::$_counts)) {
+        if (! in_array($attr, self::$_counts)) {
             throw new Exception('Unknown property '.$attr);
         }
 
@@ -494,25 +494,25 @@ class GpgListKeysResult extends GpgResult
 
     public function handle()
     {
-        if (!$this->data && $this->err) {
+        if (! $this->data && $this->err) {
             throw new GpgGeneralError($this->err);
         }
         $sub = false;
         foreach (explode("\n", $this->data) as $line) {
             $line = trim($line);
-            if (!$line) {
+            if (! $line) {
                 continue;
             }
             $fields = explode(':', $line);
-            if (!isset(self::$keywords[$fields[0]])) {
+            if (! isset(self::$keywords[$fields[0]])) {
                 continue;
             }
             $value = array_slice($fields, 1);
-            switch($fields[0]) {
+            switch ($fields[0]) {
                 case 'pub':
                 case 'sec':
                     $sub = false;
-                    if (!empty($this->current)) {
+                    if (! empty($this->current)) {
                         $this->keys[$this->current['fingerprint']] = $this->current;
                     }
                     $this->current = [];
@@ -528,7 +528,7 @@ class GpgListKeysResult extends GpgResult
                     break;
                 case 'fpr':
                     // FIXME: Full fingerprint processing for subkeys
-                    if (!$sub) {
+                    if (! $sub) {
                         $this->current['fingerprint'] = $value[8];
                     }
                     break;
@@ -538,7 +538,7 @@ class GpgListKeysResult extends GpgResult
                     break;
             }
         }
-        if (!empty($this->current)) {
+        if (! empty($this->current)) {
             $this->keys[$this->current['fingerprint']] = $this->current;
         }
     }
@@ -881,7 +881,7 @@ class GpgVersionResult
     public function handle()
     {
         preg_match('/gpg\s+\(GnuPG\)\s+(\d+)\./', $this->data, $g);
-        if (!isset($g[1])) {
+        if (! isset($g[1])) {
             throw new GpgGeneralError('gpg: Could not get version');
         }
         $this->version = (int) $g[1];
@@ -917,11 +917,11 @@ class GnuPG
     /**
      * Initialize a GPG process wrapper
      *
-     * @param  string  $binary Full pathname for GPG binary.
-     * @param  string  $homedir Full pathname to where we can find the public and
-     * 		private keyrings. Default is whatever gpg defaults to.
+     * @param  string  $binary  Full pathname for GPG binary.
+     * @param  string  $homedir  Full pathname to where we can find the public and
+     *                           private keyrings. Default is whatever gpg defaults to.
      */
-    public function __construct(string $homedir = null, string $binary = 'gpg')
+    public function __construct(?string $homedir = null, string $binary = 'gpg')
     {
         $this->binary = $binary;
         $this->homedir = $homedir;
@@ -930,7 +930,7 @@ class GnuPG
 
     protected function execute($result, $args, $stdin = null, $passphrase = false)
     {
-        if (!$this->version && ! in_array('--version', $args)) {
+        if (! $this->version && ! in_array('--version', $args)) {
             $this->version = $this->execute(new GpgVersionResult(), ['--version'])->version;
         }
 
@@ -939,7 +939,7 @@ class GnuPG
             $cmd = array_merge($cmd, ['--homedir', $this->homedir]);
         }
         if ($passphrase !== false) {
-            if (!in_array('--batch', $args)) {
+            if (! in_array('--batch', $args)) {
                 $cmd[] = '--batch';
             }
             $cmd = array_merge($cmd, ['--passphrase-fd', '4']);
@@ -968,7 +968,7 @@ class GnuPG
             $pipes
         );
 
-        if (!is_resource($process)) {
+        if (! is_resource($process)) {
             throw new GpgProcError($this->binary);
         }
 
@@ -1002,7 +1002,7 @@ class GnuPG
     /**
      * Import/merge keys. This adds the given keys to the keyring.
      *
-     * @param  string  $keyData Keys data
+     * @param  string  $keyData  Keys data
      */
     public function importKeys(string $keyData): GpgImportResult
     {
@@ -1012,12 +1012,12 @@ class GnuPG
     /**
      * Import the keys with the given key IDs from a HKP keyserver.
      *
-     * @param  string  $keyserver Keyserver name
-     * @param  mixed  $keys Single key ID string or array of multiple IDs
+     * @param  string  $keyserver  Keyserver name
+     * @param  mixed  $keys  Single key ID string or array of multiple IDs
      */
     public function recvKeys(string $keyserver, $keys): GpgImportResult
     {
-        if (!is_array($keys)) {
+        if (! is_array($keys)) {
             $keys = [$keys];
         }
 
@@ -1030,7 +1030,7 @@ class GnuPG
     /**
      * List keys from the public or secret keyrings.
      *
-     * @param  bool  $secret List secret keys when true
+     * @param  bool  $secret  List secret keys when true
      */
     public function listKeys(bool $secret = false): GpgListKeysResult
     {
@@ -1048,16 +1048,16 @@ class GnuPG
     /**
      * Export keys
      *
-     * @param  mixed  $keys Single key ID string or array of multiple IDs
-     * @param  string  $secret Export secret keys if true
-     * @param  string  $passphrase key password, used when secret = true
-     * @param  bool  $binary Armored format if false
+     * @param  mixed  $keys  Single key ID string or array of multiple IDs
+     * @param  string  $secret  Export secret keys if true
+     * @param  string  $passphrase  key password, used when secret = true
+     * @param  bool  $binary  Armored format if false
      */
-    public function exportKeys($keys, string $secret = "", string $passphrase = "", bool $binary = false): GpgExportResult
+    public function exportKeys($keys, string $secret = '', string $passphrase = '', bool $binary = false): GpgExportResult
     {
         $args = $binary ? [] : ['--armor'];
         $args = array_merge($args, $secret ? ['--batch', '--export-secret-keys'] : ['--export']);
-        if (!is_array($keys)) {
+        if (! is_array($keys)) {
             $keys = [$keys];
         }
 
@@ -1071,12 +1071,12 @@ class GnuPG
     /**
      * Remove keys from the public or secret keyrings.
      *
-     * @param  mixed  $fingerprints Single key fingerprint string or array of multiple fingerprints
-     * @param  bool  $secret Delete secret keys when true
+     * @param  mixed  $fingerprints  Single key fingerprint string or array of multiple fingerprints
+     * @param  bool  $secret  Delete secret keys when true
      */
     public function deleteKeys($fingerprints, bool $secret = false): GpgDeleteResult
     {
-        if (!is_array($fingerprints)) {
+        if (! is_array($fingerprints)) {
             $fingerprints = [$fingerprints];
         }
 
@@ -1092,8 +1092,8 @@ class GnuPG
     /**
      * Check is given key exists
      *
-     * @param  string  $key Key ID
-     * @param  bool  $secret Check secret key if true
+     * @param  string  $key  Key ID
+     * @param  bool  $secret  Check secret key if true
      * @return bool True if key exists
      */
     public function keyExists(string $key, bool $secret = false): bool
@@ -1115,19 +1115,19 @@ class GnuPG
     /**
      * Generate --gen-key input per gpg doc/DETAILS
      *
-     * @param  array  $args Associative array of key parameters
+     * @param  array  $args  Associative array of key parameters
      */
     public function genKeyInput(array $args = []): string
     {
         $login = getenv('LOGNAME');
-        if (!$login) {
+        if (! $login) {
             $login = getenv('USERNAME');
         }
-        if (!$login) {
+        if (! $login) {
             $login = 'user';
         }
         $hostname = gethostname();
-        if (!$hostname) {
+        if (! $hostname) {
             $hostname = 'localhost';
         }
         $type = isset($args['Key-Type']) ? $args['Key-Type'] : 'RSA';
@@ -1148,7 +1148,7 @@ class GnuPG
     /**
      * Generate a new key pair; you might use genKeyInput() to create the control input.
      *
-     * @param  string  $input GnuPG key generation control input
+     * @param  string  $input  GnuPG key generation control input
      */
     public function genKey(string $input): GpgGenKeyResult
     {
@@ -1158,15 +1158,15 @@ class GnuPG
     /**
      * Make a signature.
      *
-     * @param  string  $message Message for sign.
-     * @param  string  $keyId key for signing, default will be used if null
-     * @param  string  $passphrase key password
-     * @param  bool  $clearsign Make a clear text signature.
-     * @param  bool  $detach Make a detached signature.
-     * @param  bool  $binary If false, create ASCII armored output.
+     * @param  string  $message  Message for sign.
+     * @param  string  $keyId  key for signing, default will be used if null
+     * @param  string  $passphrase  key password
+     * @param  bool  $clearsign  Make a clear text signature.
+     * @param  bool  $detach  Make a detached signature.
+     * @param  bool  $binary  If false, create ASCII armored output.
      */
-    public function sign(string $message, string $keyId = null, string $passphrase = null,
-            bool $clearsign = true, bool $detach = false, bool $binary = false): GpgSignResult
+    public function sign(string $message, ?string $keyId = null, ?string $passphrase = null,
+        bool $clearsign = true, bool $detach = false, bool $binary = false): GpgSignResult
     {
         $args = [$binary ? '-s' : '-sa'];
         if ($detach) {
@@ -1185,15 +1185,15 @@ class GnuPG
      * Make a signature.
      * Warning: Entire file will be loaded into memory.
      *
-     * @param  string  $filename File for sign.
-     * @param  string  $keyId key for signing, default will be used if null
-     * @param  string  $passphrase key password
-     * @param  bool  $clearsign Make a clear text signature.
-     * @param  bool  $detach Make a detached signature.
-     * @param  bool  $binary If false, create ASCII armored output.
+     * @param  string  $filename  File for sign.
+     * @param  string  $keyId  key for signing, default will be used if null
+     * @param  string  $passphrase  key password
+     * @param  bool  $clearsign  Make a clear text signature.
+     * @param  bool  $detach  Make a detached signature.
+     * @param  bool  $binary  If false, create ASCII armored output.
      */
-    public function signFile(string $filename, string $keyId = null, string $passphrase = null,
-            bool $clearsign = true, bool $detach = false, bool $binary = false): GpgSignResult
+    public function signFile(string $filename, ?string $keyId = null, ?string $passphrase = null,
+        bool $clearsign = true, bool $detach = false, bool $binary = false): GpgSignResult
     {
         return $this->sign(
             file_get_contents($filename),
@@ -1204,10 +1204,10 @@ class GnuPG
     /**
      * Verify given signature
      *
-     * @param  string  $sign Signature to verify
-     * @param  string  $dataFilename Assume signature is detached when not null
+     * @param  string  $sign  Signature to verify
+     * @param  string  $dataFilename  Assume signature is detached when not null
      */
-    public function verify(string $sign, string $dataFilename = null): GpgVerifyResult
+    public function verify(string $sign, ?string $dataFilename = null): GpgVerifyResult
     {
         if (is_null($dataFilename)) {
             return $this->execute(new GpgVerifyResult(), ['--verify'], $sign);
@@ -1225,19 +1225,19 @@ class GnuPG
     /**
      * Encrypt/sign message
      *
-     * @param  string  $data data to encrypt
-     * @param  mixed  $recipients Single key fingerprint string or array of multiple fingerprints
-     * @param  string  $signKey Key ID for sign. If null, do not sign
-     * @param  string  $passphrase Key passphrase
-     * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
-     * @param  string  $outputFilename If not null, encrypted data will be written to file
-     * @param  string  $binary If false, create ASCII armored output.
-     * @param  string  $symmetric Encrypt with symmetric cipher only
+     * @param  string  $data  data to encrypt
+     * @param  mixed  $recipients  Single key fingerprint string or array of multiple fingerprints
+     * @param  string  $signKey  Key ID for sign. If null, do not sign
+     * @param  string  $passphrase  Key passphrase
+     * @param  string  $alwaysTrust  When true, skip key validation and assume that used keys are always fully trusted.
+     * @param  string  $outputFilename  If not null, encrypted data will be written to file
+     * @param  string  $binary  If false, create ASCII armored output.
+     * @param  string  $symmetric  Encrypt with symmetric cipher only
      */
-    public function encrypt(string $data, $recipients, string $signKey = null, string $passphrase = null,
-            string $alwaysTrust = "", string $outputFilename = null, string $binary = "", string $symmetric = ""): GpgEncryptResult
+    public function encrypt(string $data, $recipients, ?string $signKey = null, ?string $passphrase = null,
+        string $alwaysTrust = '', ?string $outputFilename = null, string $binary = '', string $symmetric = ''): GpgEncryptResult
     {
-        if (!is_array($recipients)) {
+        if (! is_array($recipients)) {
             $recipients = [$recipients];
         }
         if ($symmetric) {
@@ -1249,7 +1249,7 @@ class GnuPG
                 $args[] = $recipient;
             }
         }
-        if (!$binary) {
+        if (! $binary) {
             $args[] = '--armor';
         }
         if ($outputFilename) {
@@ -1273,16 +1273,16 @@ class GnuPG
      * Encrypt/sign file
      * Warning: Entire file will be loaded into memory!
      *
-     * @param  mixed  $recipients Single key fingerprint string or array of multiple fingerprints
-     * @param  string  $signKey Key ID for sign. If null, do not sign
-     * @param  string  $passphrase Key passphrase
-     * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
-     * @param  string  $outputFilename If not null, encrypted data will be written to file
-     * @param  string  $binary If false, create ASCII armored output.
-     * @param  string  $symmetric Encrypt with symmetric cipher only
+     * @param  mixed  $recipients  Single key fingerprint string or array of multiple fingerprints
+     * @param  string  $signKey  Key ID for sign. If null, do not sign
+     * @param  string  $passphrase  Key passphrase
+     * @param  string  $alwaysTrust  When true, skip key validation and assume that used keys are always fully trusted.
+     * @param  string  $outputFilename  If not null, encrypted data will be written to file
+     * @param  string  $binary  If false, create ASCII armored output.
+     * @param  string  $symmetric  Encrypt with symmetric cipher only
      */
-    public function encryptFile($filename, $recipients, string $signKey = null, string $passphrase = null,
-            string $alwaysTrust = "", string $outputFilename = null, string $binary = "", string $symmetric = ""): GpgEncryptResult
+    public function encryptFile($filename, $recipients, ?string $signKey = null, ?string $passphrase = null,
+        string $alwaysTrust = '', ?string $outputFilename = null, string $binary = '', string $symmetric = ''): GpgEncryptResult
     {
         return $this->encrypt(
             file_get_contents($filename),
@@ -1294,13 +1294,13 @@ class GnuPG
     /**
      * Decrypt/verify message
      *
-     * @param  string  $data Data to decrypt
-     * @param  string  $passphrase Passphrase
-     * @param  string  $sender Sender key ID. If null, do not verify
-     * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
-     * @param  string  $outputFilename If not null, decrypted data will be written to file
+     * @param  string  $data  Data to decrypt
+     * @param  string  $passphrase  Passphrase
+     * @param  string  $sender  Sender key ID. If null, do not verify
+     * @param  string  $alwaysTrust  When true, skip key validation and assume that used keys are always fully trusted.
+     * @param  string  $outputFilename  If not null, decrypted data will be written to file
      */
-    public function decrypt(string $data, string $passphrase, string $sender = null, string $alwaysTrust = "", string $outputFilename = null): GpgEncryptResult
+    public function decrypt(string $data, string $passphrase, ?string $sender = null, string $alwaysTrust = '', ?string $outputFilename = null): GpgEncryptResult
     {
         $args = ['--decrypt'];
         if ($outputFilename) {
@@ -1310,7 +1310,7 @@ class GnuPG
             }
             $args = array_merge($args, ['--output', $outputFilename]);
         }
-        if (!is_null($sender)) {
+        if (! is_null($sender)) {
             $args = array_merge($args, ['-u', $sender]);
         }
         if ($alwaysTrust) {
@@ -1324,13 +1324,13 @@ class GnuPG
      * Decrypt/verify file
      * Warning: Entire file will be loaded into memory.
      *
-     * @param  string  $filename Filename
-     * @param  string  $passphrase Passphrase
-     * @param  string  $sender Sender key ID. If null, do not verify
-     * @param  string  $alwaysTrust When true, skip key validation and assume that used keys are always fully trusted.
-     * @param  string  $outputFilename If not null, decrypted data will be written to file
+     * @param  string  $filename  Filename
+     * @param  string  $passphrase  Passphrase
+     * @param  string  $sender  Sender key ID. If null, do not verify
+     * @param  string  $alwaysTrust  When true, skip key validation and assume that used keys are always fully trusted.
+     * @param  string  $outputFilename  If not null, decrypted data will be written to file
      */
-    public function decryptFile(string $filename, string $passphrase, string $sender = null, string $alwaysTrust = "", string $outputFilename = null): GpgEncryptResult
+    public function decryptFile(string $filename, string $passphrase, ?string $sender = null, string $alwaysTrust = '', ?string $outputFilename = null): GpgEncryptResult
     {
         return $this->decrypt(
             file_get_contents($filename),

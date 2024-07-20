@@ -3,8 +3,7 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Login;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+
 use function App\Helpers\get_client_ip_address;
 
 class LogSuccessfulLogin

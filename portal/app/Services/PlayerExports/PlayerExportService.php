@@ -134,7 +134,7 @@ class PlayerExportService
     /**
      * Generate
      *
-     * @param $db string The database to generate SQL queries from.
+     * @param  $db  string The database to generate SQL queries from.
      */
     public function generateSql($db = 'preservation'): string
     {
@@ -166,10 +166,10 @@ class PlayerExportService
         }
         if ($db === 'cabbage' || $db === 'coleslaw') {
             $equipped = DB::connection($db)
-            ->table('equipped')
-            ->select('*')
-            ->where('playerID', '=', $player_id)
-            ->get();
+                ->table('equipped')
+                ->select('*')
+                ->where('playerID', '=', $player_id)
+                ->get();
             $this->sqlString .= $this->buildInsert('equipped', $equipped)."\n";
             foreach ($equipped as $equip_item) {
                 $item_status_ids[] = $equip_item->itemID;
@@ -268,22 +268,22 @@ class PlayerExportService
         $this->sqlString .= $this->buildInsert('npckills', $npckills)."\n";
         if ($db === 'cabbage' || $db === 'coleslaw') {
             $auctions = DB::connection($db)
-            ->table('auctions')
-            ->select('*')
-            ->where('seller', '=', $player_id)
-            ->get();
+                ->table('auctions')
+                ->select('*')
+                ->where('seller', '=', $player_id)
+                ->get();
             $this->sqlString .= $this->buildInsert('auctions', $auctions)."\n";
             $expired_auctions = DB::connection($db)
-            ->table('expired_auctions')
-            ->select('*')
-            ->where('playerID', '=', $player_id)
-            ->get();
+                ->table('expired_auctions')
+                ->select('*')
+                ->where('playerID', '=', $player_id)
+                ->get();
             $this->sqlString .= $this->buildInsert('expired_auctions', $expired_auctions)."\n";
             $bankpresets = DB::connection($db)
-            ->table('bankpresets')
-            ->select('*')
-            ->where('playerID', '=', $player_id)
-            ->get();
+                ->table('bankpresets')
+                ->select('*')
+                ->where('playerID', '=', $player_id)
+                ->get();
             $this->sqlString .= $this->buildInsert('bankpresets', $bankpresets)."\n";
         }
 
@@ -313,13 +313,13 @@ class PlayerExportService
     /**
      * This lovely function generates our insert statements for player exports.
      *
-     * @param $table string The database table to build the insert statement for.
-     * @param $records array | \Illuminate\Support\Collection The records we will be inserting into the database table.
-     * @param $ignoredColumns array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
-     * @param $resetColumns array The columns we will be resetting to value 0.
-     * @param $unsetIfEmptyColumns array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
-     * @param $skipSlashColumns array The columns we will not be replacing quotes with backslashes. A good example of this would be salt or pass hashes because they may contain a quotation mark that we would want to preserve.
-     * @param $replaceQuoteColumns array The columns that we will replace individual quotes with two individual quotes, this is so that the columns can preserve the individual quotes. An example of this would be a salt or pass hashes that may contain a quotation mark we would want to preserve. Also, $replaceQuoteColumns requires a matching column in $skipSlashColumns.
+     * @param  $table  string The database table to build the insert statement for.
+     * @param  $records  array | \Illuminate\Support\Collection The records we will be inserting into the database table.
+     * @param  $ignoredColumns  array The columns we will not be inserting into the database table. This is primarily used for columns that are missing in our SQLite databases but exist in our MySQL/MariaDB databases.
+     * @param  $resetColumns  array The columns we will be resetting to value 0.
+     * @param  $unsetIfEmptyColumns  array The columns we will be unsetting, so they can have their default value (or NULL). This is primarily used for columns in our MySQL/MariaDB databases that do not accept an empty string but do accept NULL or have a default value.
+     * @param  $skipSlashColumns  array The columns we will not be replacing quotes with backslashes. A good example of this would be salt or pass hashes because they may contain a quotation mark that we would want to preserve.
+     * @param  $replaceQuoteColumns  array The columns that we will replace individual quotes with two individual quotes, this is so that the columns can preserve the individual quotes. An example of this would be a salt or pass hashes that may contain a quotation mark we would want to preserve. Also, $replaceQuoteColumns requires a matching column in $skipSlashColumns.
      */
     private function buildInsert($table, $records, $ignoredColumns = [], $resetColumns = [], $unsetIfEmptyColumns = [], $skipSlashColumns = [], $replaceQuoteColumns = []): string
     {
@@ -346,7 +346,7 @@ class PlayerExportService
             }
             $newRecords[] = $record;
         }
-        if (!isset($records[0])) {
+        if (! isset($records[0])) {
             return $data;
         }
         $table_column_array = array_keys((array) $newRecords[0]);

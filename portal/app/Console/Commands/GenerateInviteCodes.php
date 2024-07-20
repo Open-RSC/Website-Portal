@@ -36,6 +36,7 @@ class GenerateInviteCodes extends Command
         }
 
         $this->info("Successfully generated {$count} invite codes.");
+
         return 0;
     }
 }

@@ -12,7 +12,7 @@ class QuestController extends Controller
      * @function index()
      *
      * @return Factory|View
-     * Used to show the main quests page
+     *                      Used to show the main quests page
      */
     public function index(): Factory|View
     {
@@ -23,7 +23,7 @@ class QuestController extends Controller
      * @function minigames()
      *
      * @return Factory|View
-     * Used to show the minigames page
+     *                      Used to show the minigames page
      */
     public function minigames(): Factory|View
     {
@@ -32,7 +32,7 @@ class QuestController extends Controller
 
     /**
      * @return Factory|View
-     * Used to show all quest-specific sub pages
+     *                      Used to show all quest-specific sub pages
      */
     public function show($subpage): Factory|View
     {

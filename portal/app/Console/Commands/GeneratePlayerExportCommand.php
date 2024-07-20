@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+
+use function App\Helpers\player_is_online;
 
 class GeneratePlayerExportCommand extends Command
 {

@@ -31,30 +31,30 @@ class Kernel extends ConsoleKernel
         //even though it's less than 1kb per CSV file so 20MB per year.
         if (config('openrsc.stats_hourly_csv_job_enabled')) {
             $schedule->command('stats:generate-csv preservation')
-                    ->cron('6 */1 * * *');
+                ->cron('6 */1 * * *');
             $schedule->command('stats:generate-csv cabbage')
-                    ->cron('7 */1 * * *');
+                ->cron('7 */1 * * *');
             //$schedule->command('stats:generate-csv 2001scape')
             //        ->cron('8 */1 * * *'); //I do not think 2001scape has all the items that we check.
             $schedule->command('stats:generate-csv uranium')
-                    ->cron('9 */1 * * *');
+                ->cron('9 */1 * * *');
             $schedule->command('stats:generate-csv coleslaw')
-                    ->cron('10 */1 * * *');
+                ->cron('10 */1 * * *');
             $schedule->command('stats:generate-csv openpk')
-                    ->cron('11 */1 * * *');
+                ->cron('11 */1 * * *');
         } elseif (config('openrsc.stats_hourly_job_enabled')) {
             $schedule->command('stats:generate preservation')
-                    ->cron('6 */1 * * *');
+                ->cron('6 */1 * * *');
             $schedule->command('stats:generate cabbage')
-                    ->cron('7 */1 * * *');
+                ->cron('7 */1 * * *');
             //$schedule->command('stats:generate 2001scape')
             //        ->cron('8 */1 * * *'); //I do not think 2001scape has all the items that we check.
             $schedule->command('stats:generate uranium')
-                    ->cron('9 */1 * * *');
+                ->cron('9 */1 * * *');
             $schedule->command('stats:generate coleslaw')
-                    ->cron('10 */1 * * *');
+                ->cron('10 */1 * * *');
             $schedule->command('stats:generate openpk')
-                    ->cron('11 */1 * * *');
+                ->cron('11 */1 * * *');
         }
     }
 

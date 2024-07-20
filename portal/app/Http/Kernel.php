@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'cabbage' => [
@@ -48,7 +48,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'preservation' => [
@@ -61,7 +61,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'uranium' => [
@@ -74,7 +74,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'coleslaw' => [
@@ -87,7 +87,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'openpk' => [
@@ -100,7 +100,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         '2001scape' => [
@@ -113,13 +113,13 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
-            \App\Http\Middleware\SetDynamicGuardChecker::class
+            \App\Http\Middleware\SetDynamicGuardChecker::class,
         ],
 
         'api' => [
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CheckBannedIp::class
+            \App\Http\Middleware\CheckBannedIp::class,
         ],
     ];
 
@@ -138,6 +138,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'custom_throttle' => \App\Http\Middleware\CustomThrottling::class
+        'custom_throttle' => \App\Http\Middleware\CustomThrottling::class,
     ];
 }

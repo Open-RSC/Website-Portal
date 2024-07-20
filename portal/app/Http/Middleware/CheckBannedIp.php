@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use App\Models\BannedIp;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\IpUtils;
+
 use function App\Helpers\get_client_ip_address;
 
 class CheckBannedIp
@@ -15,18 +17,18 @@ class CheckBannedIp
     public function handle(Request $request, Closure $next)
     {
         $bannedIps = BannedIp::pluck('ip_address')->toArray();
-        $ip = "";
+        $ip = '';
         $user = Auth::user();
         $username = $user ? $user->username : 'Guest';
         try {
             $ip = get_client_ip_address();
         } catch (\Exception $e) {
-            \Log::error("Error trying to get IP address of a user in CheckBannedIp, request IP is " . $request->ip() . ", Exception is " . $e->getMessage());
+            \Log::error('Error trying to get IP address of a user in CheckBannedIp, request IP is '.$request->ip().', Exception is '.$e->getMessage());
             if (Schema::hasTable('error_logs')) {
                 DB::table('error_logs')->insert([
-                    'message' => "Error trying to get IP address of a user in CheckBannedIp, request IP is " . $request->ip() . ", Exception is " . $e->getMessage(),
+                    'message' => 'Error trying to get IP address of a user in CheckBannedIp, request IP is '.$request->ip().', Exception is '.$e->getMessage(),
                     'level' => 'error',
-                    'url' => $request->fullUrl() ?? "",
+                    'url' => $request->fullUrl() ?? '',
                     'username' => $username,
                     'ip' => $request->ip(),
                     'created_at' => now(),
@@ -36,18 +38,19 @@ class CheckBannedIp
         }
 
         if (empty($ip)) {
-            \Log::error("Empty IP for a user, request IP is " . $request->ip() . ", skipping CheckBannedIp");
+            \Log::error('Empty IP for a user, request IP is '.$request->ip().', skipping CheckBannedIp');
             if (Schema::hasTable('error_logs')) {
                 DB::table('error_logs')->insert([
-                    'message' => "Empty IP for a user, request IP is " . $request->ip() . ", skipping CheckBannedIp",
+                    'message' => 'Empty IP for a user, request IP is '.$request->ip().', skipping CheckBannedIp',
                     'level' => 'error',
-                    'url' => $request->fullUrl() ?? "",
+                    'url' => $request->fullUrl() ?? '',
                     'username' => $username,
                     'ip' => $request->ip(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
+
             return $next($request);
         }
 

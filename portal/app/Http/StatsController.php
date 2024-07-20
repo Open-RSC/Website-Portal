@@ -19,7 +19,7 @@ class StatsController extends Controller
      * @function index()
      *
      * @return Renderable
-     * Shows the main home page and associated database queries
+     *                    Shows the main home page and associated database queries
      */
     public function index(): Renderable
     {
@@ -39,15 +39,15 @@ class StatsController extends Controller
             ->count();
 
         $registrations = DB::connection('cabbage')->table('players')
-                ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
-                ->count() ?? '0';
+            ->whereRaw('creation_date >= unix_timestamp(current_date - interval 1 day)')
+            ->count() ?? '0';
 
         $logins = DB::connection('cabbage')->table('players')
-                ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
-                ->count() ?? '0';
+            ->whereRaw('login_date >= unix_timestamp(current_date - interval 48 hour)')
+            ->count() ?? '0';
 
         $totalPlayers = DB::connection('cabbage')->table('players')
-                ->count() ?? '0';
+            ->count() ?? '0';
 
         $uniquePlayers = DB::connection('cabbage')->table('players')
             ->distinct('creation_ip')
@@ -71,7 +71,7 @@ class StatsController extends Controller
             ->get();
 
         $sumgold_B = DB::connection('cabbage')->table('bank as B') // bank
-        ->join('players AS A', 'B.playerID', '=', 'A.id')
+            ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
             //->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
@@ -82,7 +82,7 @@ class StatsController extends Controller
             ->sum('S.amount');
 
         $sumgold_I = DB::connection('cabbage')->table('invitems as I') // inventory
-        ->join('players AS A', 'I.playerID', '=', 'A.id')
+            ->join('players AS A', 'I.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'I.itemID')
             ->where([
                 ['S.catalogID', '=', '10'],
@@ -113,7 +113,7 @@ class StatsController extends Controller
      * @function secondsToTime()
      *
      * @return int
-     * Used to calculate the total input of seconds into years, days, hours, minutes, and seconds
+     *             Used to calculate the total input of seconds into years, days, hours, minutes, and seconds
      */
     public function secondsToTime($inputSeconds): int
     {
@@ -219,7 +219,7 @@ class StatsController extends Controller
 
     public function itemStats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
-        if (!config('openrsc.stats_page_enabled')) {
+        if (! config('openrsc.stats_page_enabled')) {
             abort(404);
         }
 
@@ -227,7 +227,7 @@ class StatsController extends Controller
             return redirect('/login');
         }
 
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -330,13 +330,13 @@ class StatsController extends Controller
 
     public function itemStatsData($db = 'cabbage')
     {
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
         return DataTables::of(DB::table('rscstats')->where('server', '=', $db)->get()->toArray())
-                ->smart(true)
-                ->make();
+            ->smart(true)
+            ->make();
     }
 
     public function redirectToItemStats(): RedirectResponse
