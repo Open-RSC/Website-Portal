@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use ZanySoft\Zip\Zip;
+use ZipArchive;
 
 require_once __DIR__.'/gpg.php';
 class PlayerExportService
@@ -87,16 +87,17 @@ class PlayerExportService
         $text .= 'GPG Link: https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key'."\n";
         $text .= 'GPG Archive Link: https://web.archive.org/web/20230224020441/https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key';
         Storage::disk('local')->put($txtfile, $text);
-        $zip = new Zip();
+        $zip = new ZipArchive();
         try {
             $gpg = new GnuPG();
             $private = $gpg->importKeys(file_get_contents(config('openrsc.gpg_private_key_file')));
             $public = $gpg->importKeys(file_get_contents(config('openrsc.gpg_public_key_file')));
-            $zip->create(storage_path('app/'.$tempzipfile), true);
-            $zip->add(storage_path('app/'.$sqlitefile));
-            $zip->add(storage_path('app/'.$sqlfile));
-            $zip->add(storage_path('app/'.$txtfile));
-            $zip->close();
+            if ($zip->open(storage_path('app/'.$tempzipfile), ZipArchive::CREATE) === TRUE) {
+                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
+                $zip->close();
+            }
             $gpgdata = $gpg->signFile(storage_path('app/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
             Storage::disk('local')->put($gpgfile, $gpgdata->data);
         } catch (\Exception $e) {

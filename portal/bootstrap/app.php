@@ -8,7 +8,6 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withProviders([
         \Yajra\DataTables\DataTablesServiceProvider::class,
-        \ZanySoft\Zip\ZipServiceProvider::class,
     ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
