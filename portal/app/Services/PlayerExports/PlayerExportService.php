@@ -67,7 +67,7 @@ class PlayerExportService
         Storage::disk('local')->put($this->basePath.$this->extraPath.'playerdata.db', Storage::disk('sqlite')->get($this->db.'.db'));
         Config::set("database.connections.$basename", [
             'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'database' => env('DB_DATABASE', storage_path('app/'.$sqlitefile)),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', false),

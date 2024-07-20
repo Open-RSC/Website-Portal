@@ -7,7 +7,7 @@ return [
     'connections' => [
         'laravel' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('LARAVEL_DATABASE', 'laravel'),
@@ -27,7 +27,7 @@ return [
 
         'preservation' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('PRESERVATION_DATABASE', 'preservation'),
@@ -47,7 +47,7 @@ return [
 
         'cabbage' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('CABBAGE_DATABASE', 'cabbage'),
@@ -67,7 +67,7 @@ return [
 
         'uranium' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('CABBAGE_DATABASE', 'uranium'),
@@ -87,7 +87,7 @@ return [
 
         'coleslaw' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('CABBAGE_DATABASE', 'coleslaw'),
@@ -107,7 +107,7 @@ return [
 
         'openpk' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('CABBAGE_DATABASE', 'openpk'),
@@ -127,7 +127,7 @@ return [
 
         '2001scape' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('CABBAGE_DATABASE', '2001scape'),
@@ -147,7 +147,7 @@ return [
 
         'preservation_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('PRESERVATION_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('PRESERVATION_CACHING_DB_PORT', '3306'),
             'database' => env('PRESERVATION_CACHING_DATABASE', 'preservation_caching'),
@@ -167,7 +167,7 @@ return [
 
         'cabbage_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('CABBAGE_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('CABBAGE_CACHING_DB_PORT', '3306'),
             'database' => env('CABBAGE_CACHING_DATABASE', 'cabbage_caching'),
@@ -187,7 +187,7 @@ return [
 
         'uranium_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('URANIUM_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('URANIUM_CACHING_DB_PORT', '3306'),
             'database' => env('URANIUM_CACHING_DATABASE', 'uranium_caching'),
@@ -207,7 +207,7 @@ return [
 
         'coleslaw_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('COLESLAW_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('COLESLAW_CACHING_DB_PORT', '3306'),
             'database' => env('COLESLAW_CACHING_DATABASE', 'coleslaw_caching'),
@@ -227,7 +227,7 @@ return [
 
         'openpk_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('OPENPK_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('OPENPK_CACHING_DB_PORT', '3306'),
             'database' => env('OPENPK_CACHING_DATABASE', 'openpk_caching'),
@@ -247,7 +247,7 @@ return [
 
         '2001scape_caching' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('2001SCAPE_CACHING_DB_HOST', 'mariadb-caching'),
             'port' => env('2001SCAPE_CACHING_DB_PORT', '3306'),
             'database' => env('2001SCAPE_CACHING_DATABASE', '2001scape_caching'),
@@ -267,7 +267,7 @@ return [
 
         'board' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'mariadb'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('BOARD_DATABASE', 'board'),
