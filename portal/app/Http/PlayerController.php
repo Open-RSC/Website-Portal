@@ -3,11 +3,8 @@
 namespace App\Http;
 
 use App\Actions\Fortify\CreateNewUser;
-use App\Models\InviteCode;
-use App\Models\Setting;
 use function App\Helpers\add_characters;
 use function App\Helpers\get_client_ip_address;
-use function App\Helpers\is_incorrect_production_url;
 use function App\Helpers\passwd_compat_hasher;
 use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
@@ -45,11 +42,7 @@ class PlayerController extends Controller
     public function rank($db, $subpage, $skill): int
     {
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            return DB::connection($conn)
+            return DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -67,7 +60,7 @@ class PlayerController extends Controller
                     ->where('c.iron_man', '!=', 4)
                     ->count()
                 +
-                DB::connection($conn)
+                DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -85,11 +78,7 @@ class PlayerController extends Controller
                     ->where('c.iron_man', '!=', 4)
                     ->count();
         } else {
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            return DB::connection($conn)
+            return DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -99,14 +88,13 @@ class PlayerController extends Controller
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw($this->coalesce('a', 'aa', $skill)))
-                            ->where('b.username', '=', $subpage)
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where('b.group_id', '>=', 8)
                     ->count()
                 +
-                DB::connection($conn)
+                DB::connection($db)
                     ->table('experience as a')
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -116,8 +104,7 @@ class PlayerController extends Controller
                             ->join('players as b', 'a.playerID', '=', 'b.id')
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw('aa.'.$skill))
-                            ->where('b.username', '=', $subpage)
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
+                            ->where('b.username', '=', $subpage);
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where('b.group_id', '>=', 8)
@@ -127,7 +114,7 @@ class PlayerController extends Controller
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -136,7 +123,7 @@ class PlayerController extends Controller
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -145,7 +132,7 @@ class PlayerController extends Controller
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -181,11 +168,7 @@ class PlayerController extends Controller
          * Fetches the table row of the player experience in view and paginates the results
          */
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $players = DB::connection($conn)
+            $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
@@ -215,15 +198,10 @@ class PlayerController extends Controller
 			'), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
-                    ['c.iron_man', '!=', 4],
                 ])
                 ->get();
         } elseif (value($db) == '2001scape') { // retro authentic
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $players = DB::connection($conn)
+            $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -255,11 +233,7 @@ class PlayerController extends Controller
                 ])
                 ->get();
         } else { // modern authentic
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $players = DB::connection($conn)
+            $players = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
@@ -291,16 +265,12 @@ class PlayerController extends Controller
                 ->get();
         }
 
-        if (!$players) {
+        if (! $players) {
             abort(404);
         }
 
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $rank_overall = DB::connection($conn)
+            $rank_overall = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', function ($join) {
                     $join->on('a.playerid', '=', 'b.id');
@@ -321,17 +291,12 @@ class PlayerController extends Controller
                                 ['b.group_id', '>=', '8'],
                                 ['b.username', '=', $subpage],
                                 ['c.iron_man', '!=', '4'],
-                            ])
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
+                            ]);
                     }],
                 ])
                 ->get();
         } else { // authentic
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $rank_overall = DB::connection($conn)
+            $rank_overall = DB::connection($db)
                 ->table('experience as a')
                 ->join('players as b', function ($join) {
                     $join->on('a.playerid', '=', 'b.id');
@@ -349,19 +314,14 @@ class PlayerController extends Controller
                             ->where([
                                 ['b.group_id', '>=', '8'],
                                 ['b.username', '=', $subpage],
-                            ])
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors randomly.
+                            ]);
                     }],
                 ])
                 ->get();
         }
         $hiscores = [];
         if ($db === 'openpk') {
-            $conn = $db;
-            if (config('openrsc.caching_databases')) {
-                $conn = $db . "_caching";
-            }
-            $hiscores = DB::connection($conn)
+            $hiscores = DB::connection($db)
                 ->table('players as b')
                 ->select('b.*')
                 ->groupBy('b.username')
@@ -385,179 +345,98 @@ class PlayerController extends Controller
             ->with(compact('players'));
     }
 
-    /**
-     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function sharbank($db, Request $request)
+    public function shar($db): Factory|View
     {
-        $conn = $db;
-        if (config('openrsc.caching_databases')) {
-            $conn = $db . "_caching";
-        }
         /**
-         * @var $bankitems
+         * @var $banks
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $bankitems = DB::connection($conn)
+        $banks = DB::connection($db)
             ->table('bank as a')
-            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
-            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
-            ->join('players as b', function ($join) {
-                $join->on('a.playerID', '=', 'b.id')
-                    ->where([
-                        ['b.username', '=', 'shar']
-                    ]);
-            })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
+            ->join('players as b', 'a.playerID', '=', 'b.id')
+            ->join('itemdef as c', 'a.id', '=', 'c.id')
+            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
+            ->Where([
+                ['b.username', '=', 'shar'],
+            ])
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if ($bankitems->isEmpty()) {
+        if (! $banks) {
             abort(404);
         }
-
-
 
         return view('bank', [
-            'bankitems' => $bankitems,
+            'banks' => $banks,
             'db' => $db,
-        ])
-            ->with(compact('bankitems'));
-    }
-
-    /**
-     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function sharinv($db, Request $request)
-    {
-        $conn = $db;
-        if (config('openrsc.caching_databases')) {
-            $conn = $db . "_caching";
-        }
-        /**
-         * @var $invitems
-         * Fetches the table row of the player experience in view and paginates the results
-         */
-        $invitems = DB::connection($conn)
-            ->table('invitems as a')
-            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
-            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
-            ->join('players as b', function ($join) {
-                $join->on('a.playerID', '=', 'b.id')
-                    ->where([
-                        ['b.username', '=', 'shar'],
-                    ]);
-            })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
-            ->orderBy('a.slot', 'asc')
-            ->get();
-
-        if ($invitems->isEmpty()) {
-            abort(404);
-        }
-
-
-
-        return view('invitem', [
-            'invitems' => $invitems,
-            'db' => $db,
-        ])
-            ->with(compact('invitems'));
-    }
-
-    /**
-     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function bank($db, $subpage, Request $request)
-    {
-        if (!Gate::allows('admin', Auth::user())) {
-            abort(404);
-        }
-        DB::connection('laravel')->table('viewlogs')->insert([
-            'username' => Auth::user()->username,
-            'page' => 'bank_items',
-            'game' => $db,
-            'url' => $request->fullUrlWithQuery($request->query->all()),
-            'search_terms' => $request->query('search')['value'] ?? '',
-            'ip' => get_client_ip_address(),
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+    }
+
+    /**
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function bank($db, $subpage)
+    {
         /**
-         * @var $bankitems
+         * @var $banks
          * Fetches the table row of the player experience in view and paginates the results
          */
-        $bankitems = DB::connection($db)
+        $banks = DB::connection($db)
             ->table('bank as a')
-            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
-            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
-            ->join('players as b', function ($join) use ($subpage) {
-                $join->on('a.playerID', '=', 'b.id')
-                    ->where([
-                        ['b.username', '=', $subpage],
-                    ]);
-            })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
+            ->join('players as b', 'a.playerID', '=', 'b.id')
+            ->join('itemdef as c', 'a.id', '=', 'c.id')
+            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
+            ->whereNotIn('b.banned', [-1, 1])
+            ->where([
+                ['b.username', '=', $subpage],
+            ])
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if ($bankitems->isEmpty()) {
+        if (! $banks) {
             abort(404);
         }
 
-
+        if (! Auth::check()) {
+            return redirect('home');
+        }
 
         return view('bank', [
             'subpage' => $subpage,
-            'bankitems' => $bankitems,
+            'banks' => $banks,
             'db' => $db,
         ])
-            ->with(compact('bankitems'));
+            ->with(compact('banks'));
     }
 
     /**
      * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function invitem($db, $subpage, Request $request)
+    public function invitem($db, $subpage)
     {
-        if (!Gate::allows('admin', Auth::user())) {
-            abort(404);
-        }
-        DB::connection('laravel')->table('viewlogs')->insert([
-            'username' => Auth::user()->username,
-            'page' => 'inv_items',
-            'game' => $db,
-            'url' => $request->fullUrlWithQuery($request->query->all()),
-            'search_terms' => $request->query('search')['value'] ?? '',
-            'ip' => get_client_ip_address(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-
         /**
-         * @var $invitems
+         * @var $banks
          * Fetches the table row of the player experience in view and paginates the results
          */
         $invitems = DB::connection($db)
             ->table('invitems as a')
-            ->join('itemstatuses as c', 'a.itemID', '=', 'c.itemID')
-            ->join('itemdef as d', 'c.catalogID', '=', 'd.id')
-            ->join('players as b', function ($join) use ($subpage) {
-                $join->on('a.playerID', '=', 'b.id')
-                    ->where([
-                        ['b.username', '=', $subpage],
-                    ]);
-            })
-            ->select('*', DB::raw('b.username, a.playerID, format(c.amount, 0) as number, a.slot, d.name as itemName'))
+            ->join('players as b', 'a.playerID', '=', 'b.id')
+            ->join('itemdef as c', 'a.id', '=', 'c.id')
+            ->select('*', DB::raw('b.username, a.id, format(a.amount, 0) number, a.slot, c.name'))
+            ->whereNotIn('b.banned', [-1, 1])
+            ->where([
+                ['b.username', '=', $subpage],
+            ])
             ->orderBy('a.slot', 'asc')
             ->get();
 
-        if ($invitems->isEmpty()) {
+        if (! $invitems) {
             abort(404);
         }
 
-
+        if (! Auth::check()) {
+            return redirect('home');
+        }
 
         return view('invitem', [
             'subpage' => $subpage,
@@ -569,7 +448,7 @@ class PlayerController extends Controller
 
     public function exportView(Request $request): View
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -591,7 +470,7 @@ class PlayerController extends Controller
 
     public function exportInstructions(Request $request): View
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -606,7 +485,7 @@ class PlayerController extends Controller
 
     public function exportSubmit(Request $request)
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
         if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
@@ -653,7 +532,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
             }
-        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
         $data = '';
@@ -691,7 +570,7 @@ class PlayerController extends Controller
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
-        if (!config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        if (! config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
 
@@ -736,7 +615,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return Response::json('Invalid credentials', 401);
             }
-        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return Response::json('Invalid credentials', 401);
         }
         $data = '';
@@ -760,7 +639,7 @@ class PlayerController extends Controller
     /**
      * This method creates user's new characters via an API endpoint.
      * Some duplicated validation here is necessary for JSON
-     * error messages, since it is technically handled at a
+     * error messages, since it is technically handled at a 
      * higher up level outside Fortify, since we have our own
      * custom API handled right here.
      * @param Request $request
@@ -768,25 +647,17 @@ class PlayerController extends Controller
      */
     public function registerUserApi(Request $request)
     {
-        if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
+        if (!config('openrsc.api_registration_enabled') ||  (config('app.env') === 'production' && url('/') !== config('app.url'))) {
             abort(404);
         }
-
-        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
-        $rules = [
-            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
-            'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
-        ];
-        $inviteCode = "";
-        if ($inviteOnly) {
-            $rules['invite_code'] = ['required', 'exists:invite_codes,code,used,false'];
-            $inviteCode = InviteCode::where('code', $request->input('invite_code') ?? '')->first();
-        }
-
+        
         try {
-            $validated = $this->validate($request, $rules);
+            $validated = $this->validate($request, [
+                'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+                'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
+            ]);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation Error',
@@ -804,14 +675,14 @@ class PlayerController extends Controller
         if (DB::connection($db)->table('players')->where(DB::raw('LOWER(username)'), '=', strtolower($trimmed_username))->exists()) {
             return response()->json(['message' => 'The username is already in use.'], 409); // Conflict status code
         }
-
+        
         // Check if the user already has too many accounts
         $recentAccounts = DB::connection($db)->table('players')
         ->where('creation_ip', '=', get_client_ip_address())
         ->where('creation_date', '>=', time() - 86400)
         ->count();
 
-        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours')) {
             return response()->json([
                 'message' => 'You have created too many accounts in the past 24 hours.',
                 'status' => 429
@@ -828,19 +699,13 @@ class PlayerController extends Controller
                 'email' => $request->input('email') ?? "",
                 'password' => $password,
                 'password_confirmation' => $password_confirmation,
-                'invite_code' => $request->input('invite_code') ?? ""
             ]);
-            if ($inviteOnly && $inviteCode) {
-                $inviteCode->used = true;
-                $inviteCode->save();
-            }
-
         } catch (\Exception $e) {
-            \Log::info("There was an error with API registration for $username: " . $e->getMessage());
+            \Log::info($e->getMessage());
             return response()->json(['message' => 'Error creating user.'], 500);
         }
 
-        return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 201);
+        return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 200);
     }
 
     public function passwordNeedsRehash($passwordHashed)
