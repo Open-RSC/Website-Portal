@@ -890,7 +890,7 @@
                 if (currentPage > Math.ceil(maxPagesToShow / 2)) {
                     pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', 1)">1</button>`);
                     if (currentPage > Math.ceil(maxPagesToShow / 2) + 1) {
-                        pageButtons.push('<span>...</span>');
+                        pageButtons.push('<span class="ellipsis">...</span>');
                     }
                 }
 
@@ -912,7 +912,7 @@
 
                 //Last page button
                 if (endPage < totalPages - 1) {
-                    pageButtons.push('<span>...</span>');
+                    pageButtons.push('<span class="ellipsis">...</span>');
                     pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${totalPages})">${totalPages}</button>`);
                 } else if (endPage === totalPages - 1) {
                     pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${totalPages})">${totalPages}</button>`);
@@ -981,6 +981,10 @@
         .pagination-container button:last-child {
             border-top-right-radius: 0.25rem;
             border-bottom-right-radius: 0.25rem;
+        }
+
+        .pagination-container .ellipsis {
+            padding: 3px 3px;
         }
     </style>
 @endsection
