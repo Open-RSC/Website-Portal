@@ -21,7 +21,7 @@ class SetDynamicGuard
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! config('openrsc.multi_world_logins')) {
+        if (!config('openrsc.multi_world_logins')) {
             return $next($request);
         }
         //WARNING: Be very careful that API routes do not use the Auth::user() facade method because multi-database login/auth is a website-only feature. This probably won't ever matter since API routes usually authenticate based on tokens and params anyway, and APIs already don't support features like CSRF and APIs are stateless anyway.
