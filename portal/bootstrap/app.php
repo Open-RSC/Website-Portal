@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckBannedIp::class,
             \App\Http\Middleware\SetDynamicGuard::class,
             \App\Http\Middleware\SetDynamicGuardChecker::class,
+            \App\Http\Middleware\CustomThrottling::class,
         ]);
 
         $middleware->throttleApi();
