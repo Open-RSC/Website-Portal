@@ -876,6 +876,7 @@
         function updatePagination(data) {
             const currentPage = data.current_page;
             const totalPages = data.last_page;
+            const maxPagesToShow = 5;
 
             if (totalPages > 1) {
                 const pageButtons = [];
@@ -885,8 +886,23 @@
                     pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${currentPage - 1})">Previous</button>`);
                 }
 
-                //Page Buttons
-                for (let i = 1; i <= totalPages; i++) {
+                //First page button
+                if (currentPage > Math.ceil(maxPagesToShow / 2)) {
+                    pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', 1)">1</button>`);
+                    if (currentPage > Math.ceil(maxPagesToShow / 2) + 1) {
+                        pageButtons.push('<span>...</span>');
+                    }
+                }
+
+                //Page buttons
+                let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+                let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+                if (endPage - startPage < maxPagesToShow - 1) {
+                    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
                     pageButtons.push(`
                         <button onclick="filterNPCs('${inputField.value}', ${i})" ${i === currentPage ? 'class="active"' : ''}>
                             ${i}
@@ -894,12 +910,20 @@
                     `);
                 }
 
+                //Last page button
+                if (endPage < totalPages - 1) {
+                    pageButtons.push('<span>...</span>');
+                    pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${totalPages})">${totalPages}</button>`);
+                } else if (endPage === totalPages - 1) {
+                    pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${totalPages})">${totalPages}</button>`);
+                }
+
                 //Next Button
                 if (currentPage < totalPages) {
                     pageButtons.push(`<button onclick="filterNPCs('${inputField.value}', ${currentPage + 1})">Next</button>`);
                 }
 
-                pagination.innerHTML = pageButtons.join('');
+                pagination.innerHTML = `<ul class="pagination-container">${pageButtons.join('')}</ul>`;
             }
         }
     </script>
