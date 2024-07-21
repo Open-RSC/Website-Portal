@@ -37,10 +37,10 @@ class SetDynamicGuard
             try {
                 $ip = get_client_ip_address();
             } catch (\Exception $e) {
-                \Log::error("Error fetching ip address in SetDynamicGuard for playerUsername $playerUsername expectedUsername $expectedUsername database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage());
+                \Log::error("Error fetching ip address in SetDynamicGuard for playerUsername $playerUsername expectedUsername $expectedUsername database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage());
                 if (Schema::hasTable('error_logs')) {
                     DB::table('error_logs')->insert([
-                        'message' => "Error fetching ip address in SetDynamicGuard for playerUsername $playerUsername expectedUsername $expectedUsername database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage(),
+                        'message' => "Error fetching ip address in SetDynamicGuard for playerUsername $playerUsername expectedUsername $expectedUsername database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage(),
                         'level' => 'error',
                         'url' => $request->fullUrl() ?? '',
                         'username' => $playerUsername,
@@ -52,10 +52,10 @@ class SetDynamicGuard
             }
             //This may seem entirely redundant, since we already validated the user ID vs database from the login itself (but would the ID even match for sure?), but just in case we check for the correct user again anyway. Then again, if a user gets renamed between their login and the current request, they will have to log in again, so this may not even be entirely redundant.
             if ($player === null || strtolower($playerUsername) !== strtolower($expectedUsername)) {
-                \Log::error("This shouldn't happen! is player null: ".($player === null).", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
+                \Log::error("This shouldn't happen!is player null: " . ($player === null) . ", playerUsername: $playerUsername vs expectedUsername: $expectedUsername");
                 if (Schema::hasTable('error_logs')) {
                     DB::table('error_logs')->insert([
-                        'message' => "This shouldn't happen! is player null: ".($player === null).", playerUsername: $playerUsername vs expectedUsername: $expectedUsername",
+                        'message' => "This shouldn't happen!is player null: ".($player === null).", playerUsername: $playerUsername vs expectedUsername: $expectedUsername",
                         'level' => 'error',
                         'url' => $request->fullUrl() ?? '',
                         'username' => $playerUsername,

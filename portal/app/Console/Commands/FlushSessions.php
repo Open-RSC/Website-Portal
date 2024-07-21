@@ -59,7 +59,7 @@ class FlushSessions extends Command
         $files = scandir($directory);
 
         foreach ($files as $file) {
-            if (! in_array($file, $ignoreFiles)) {
+            if (!in_array($file, $ignoreFiles)) {
                 unlink($directory.'/'.$file);
             }
         }

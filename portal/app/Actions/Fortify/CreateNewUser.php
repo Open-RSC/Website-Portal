@@ -117,7 +117,7 @@ class CreateNewUser implements CreatesNewUsers
             $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
             if ($inviteOnly) {
                 $inviteCode = InviteCode::where('code', $input['invite_code'])->first();
-                if ($inviteCode && ! $inviteCode->used) {
+                if ($inviteCode && !$inviteCode->used) {
                     $inviteCode->used = true;
                     $inviteCode->username = $input['username']; // associate the username with the invite code
                     $inviteCode->world = $input['db']; // associate the world (database)

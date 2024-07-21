@@ -265,7 +265,7 @@ class HomeController extends Controller
             ->get();
 
         $playerPositions = $playerPositions->map(function ($player) {
-            if (Auth::user() === null || ! Auth::user()->hasPlayerModerator()) {
+            if (Auth::user() === null || !Auth::user()->hasPlayerModerator()) {
                 $player->username = '';
             }
 
@@ -297,7 +297,7 @@ class HomeController extends Controller
             'mapHeight' => $mapHeight,
             'xOffset' => $xOffset,
             'yOffset' => $yOffset,
-            'usernamesHidden' => Auth::user() === null || ! Auth::user()->hasPlayerModerator(),
+            'usernamesHidden' => Auth::user() === null || !Auth::user()->hasPlayerModerator(),
         ]);
     }
 

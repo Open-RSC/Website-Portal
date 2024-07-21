@@ -37,7 +37,7 @@ class CreateUserCommand extends Command
         // Enter db, if not present via command line option
         $db = $this->option('db');
         $validDatabases = ['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'];
-        while ($db === null || ! in_array($db, $validDatabases)) {
+        while ($db === null || !in_array($db, $validDatabases)) {
             if ($db !== null) {
                 $this->error('Invalid database. Please choose from the valid options.');
             }

@@ -130,7 +130,7 @@ class PlayerController extends Controller
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -139,7 +139,7 @@ class PlayerController extends Controller
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -148,7 +148,7 @@ class PlayerController extends Controller
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (! $relabel) {
+        if (!$relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -294,7 +294,7 @@ class PlayerController extends Controller
                 ->get();
         }
 
-        if (! $players) {
+        if (!$players) {
             abort(404);
         }
 
@@ -469,7 +469,7 @@ class PlayerController extends Controller
      */
     public function bank($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -517,7 +517,7 @@ class PlayerController extends Controller
      */
     public function invitem($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -563,13 +563,13 @@ class PlayerController extends Controller
 
     public function exportView(Request $request): View
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $data = false;
@@ -585,13 +585,13 @@ class PlayerController extends Controller
 
     public function exportInstructions(Request $request): View
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -600,13 +600,13 @@ class PlayerController extends Controller
 
     public function exportSubmit(Request $request)
     {
-        if (! config('openrsc.player_exports_enabled')) {
+        if (!config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         try {
@@ -647,7 +647,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
             }
-        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
         $data = '';
@@ -685,7 +685,7 @@ class PlayerController extends Controller
     public function exportSubmitApi(Request $request)
     {
         //Only enable API when public use is allowed and when the API itself is enabled.
-        if (! config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        if (!config('openrsc.player_exports_enabled') || !config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
 
@@ -730,7 +730,7 @@ class PlayerController extends Controller
             if ($trimmed_pass !== $user->pass) {
                 return Response::json('Invalid credentials', 401);
             }
-        } elseif (! Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
             return Response::json('Invalid credentials', 401);
         }
         $data = '';
@@ -762,7 +762,7 @@ class PlayerController extends Controller
      */
     public function registerUserApi(Request $request)
     {
-        if (! config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
+        if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
             abort(404);
         }
 
@@ -840,6 +840,6 @@ class PlayerController extends Controller
 
     public function passwordNeedsRehash($passwordHashed)
     {
-        return ! str_starts_with($passwordHashed, '$2y$10$');
+        return !str_starts_with($passwordHashed, '$2y$10$');
     }
 }

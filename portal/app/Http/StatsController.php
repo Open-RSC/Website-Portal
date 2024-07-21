@@ -219,7 +219,7 @@ class StatsController extends Controller
 
     public function itemStats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
-        if (! config('openrsc.stats_page_enabled')) {
+        if (!config('openrsc.stats_page_enabled')) {
             abort(404);
         }
 
@@ -227,7 +227,7 @@ class StatsController extends Controller
             return redirect('/login');
         }
 
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -330,7 +330,7 @@ class StatsController extends Controller
 
     public function itemStatsData($db = 'cabbage')
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 

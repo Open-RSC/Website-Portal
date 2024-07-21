@@ -57,7 +57,7 @@ class GeneratePlayerExportCommand extends Command
 
             return false;
         }
-        $this->info("Player export for $trimmed_username on $db created successfully! You can find it at: storage/app/".$playerExport->getBasePath().$playerExport->getExtraPath().$playerExport->getFileName());
+        $this->info("Player export for $trimmed_username on $db created successfully!You can find it at: storage/app/".$playerExport->getBasePath().$playerExport->getExtraPath().$playerExport->getFileName());
 
         return true;
     }

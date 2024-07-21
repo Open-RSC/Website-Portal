@@ -31,15 +31,15 @@ class SetDynamicGuardChecker
             $username = $user ? $user->username : 'Guest';
             $database = session('db_connection');
             //If the dynamic guard middleware did not run successfully, this attribute won't be set, we might not have the correct user, so force a logout and log an error.
-            if (! $request->attributes->get('dynamic_guard_middleware_ran')) {
+            if (!$request->attributes->get('dynamic_guard_middleware_ran')) {
                 $ip = '';
                 try {
                     $ip = get_client_ip_address();
                 } catch (\Exception $e) {
-                    \Log::error("Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage());
+                    \Log::error("Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage());
                     if (Schema::hasTable('error_logs')) {
                         DB::table('error_logs')->insert([
-                            'message' => "Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage(),
+                            'message' => "Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage(),
                             'level' => 'error',
                             'url' => $request->fullUrl() ?? '',
                             'username' => $username,

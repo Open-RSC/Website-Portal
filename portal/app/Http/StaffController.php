@@ -30,7 +30,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -42,7 +42,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -70,7 +70,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -82,7 +82,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $player = DB::connection($db)->table('players')->where('id', '=', $id)->first();
@@ -109,7 +109,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -160,7 +160,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -172,7 +172,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -200,7 +200,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -212,7 +212,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -240,7 +240,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -253,7 +253,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -281,7 +281,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -293,7 +293,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -325,7 +325,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -337,7 +337,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -365,7 +365,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -377,7 +377,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -407,7 +407,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -419,7 +419,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -431,7 +431,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -443,7 +443,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
 
@@ -455,7 +455,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -483,7 +483,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -495,7 +495,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -523,7 +523,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -543,7 +543,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -555,7 +555,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $errorLog = DB::table('error_logs')->where('id', $id)->first();
@@ -568,17 +568,17 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
-        if (! Schema::connection($db)->hasTable('itemdef')) {
+        if (!Schema::connection($db)->hasTable('itemdef')) {
             abort(404, "The itemdef table does not exist in the $db database.");
         }
 
         $item = itemdef::on($db)->where('id', '=', $itemID)->first();
 
-        if (! $item) {
+        if (!$item) {
             abort(404);
         }
 
@@ -590,7 +590,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -643,7 +643,7 @@ class StaffController extends Controller
         }
 
         foreach ($combined as $username => &$data) {
-            if (! isset($data['bank_count']) && ! isset($data['inv_count'])) {
+            if (!isset($data['bank_count']) && !isset($data['inv_count'])) {
                 unset($combined[$username]);  // Remove entry if both counts are not set
 
                 continue;
@@ -665,10 +665,10 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('moderator', Auth::user())) {
+        if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
-        if (! $request->has('name')) {
+        if (!$request->has('name')) {
             abort(404);
         }
 
@@ -676,7 +676,7 @@ class StaffController extends Controller
         $db = $request->db ?? 'preservation';
         $player = DB::connection($db)->table('players')->where('username', '=', $name)->first();
 
-        if (! $player) {
+        if (!$player) {
             abort(404);
         }
 
@@ -691,7 +691,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $throttlingEntries = \DB::table('custom_throttling')->paginate(10);
@@ -704,7 +704,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -716,7 +716,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $request->validate([
@@ -735,7 +735,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $entry = \DB::table('custom_throttling')->where('id', $id)->first();
@@ -748,7 +748,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $request->validate([
@@ -766,7 +766,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         \DB::table('custom_throttling')->where('id', $id)->delete();
@@ -779,7 +779,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
 
@@ -791,7 +791,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('player-moderator', Auth::user())) {
+        if (!Gate::allows('player-moderator', Auth::user())) {
             abort(404);
         }
         $query = InviteCode::query();
@@ -805,7 +805,7 @@ class StaffController extends Controller
 
     public function generateInviteCodes()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
         Artisan::call('invite:generate 5');
@@ -815,7 +815,7 @@ class StaffController extends Controller
 
     public function revokeUnusedInviteCodes()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
 
@@ -826,7 +826,7 @@ class StaffController extends Controller
 
     public function toggleInviteOnly()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null || !Gate::allows('admin', Auth::user())) {
             return redirect('/login');
         }
         //Additionally, we could log who toggled this, but it's likely not necessary.
@@ -843,7 +843,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
@@ -856,7 +856,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('cache:clear');
@@ -869,7 +869,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('view:clear');
@@ -882,7 +882,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('route:clear');
@@ -895,7 +895,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         Artisan::call('config:clear');
@@ -908,16 +908,16 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (! defined('STDIN')) {
+        if (!defined('STDIN')) {
             define('STDIN', fopen('php://stdin', 'rb'));
         }
-        if (! defined('STDOUT')) {
+        if (!defined('STDOUT')) {
             define('STDOUT', fopen('php://stdout', 'wb'));
         }
-        if (! defined('STDERR')) {
+        if (!defined('STDERR')) {
             define('STDERR', fopen('php://stderr', 'wb'));
         }
         Artisan::call('migrate', ['--path' => 'database/migrations', '--force' => true]);
@@ -930,16 +930,16 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (! defined('STDIN')) {
+        if (!defined('STDIN')) {
             define('STDIN', fopen('php://stdin', 'rb'));
         }
-        if (! defined('STDOUT')) {
+        if (!defined('STDOUT')) {
             define('STDOUT', fopen('php://stdout', 'wb'));
         }
-        if (! defined('STDERR')) {
+        if (!defined('STDERR')) {
             define('STDERR', fopen('php://stderr', 'wb'));
         }
         Artisan::call('migrate:rollback', ['--path' => 'database/migrations', '--force' => true]);
@@ -952,16 +952,16 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (! defined('STDIN')) {
+        if (!defined('STDIN')) {
             define('STDIN', fopen('php://stdin', 'rb'));
         }
-        if (! defined('STDOUT')) {
+        if (!defined('STDOUT')) {
             define('STDOUT', fopen('php://stdout', 'wb'));
         }
-        if (! defined('STDERR')) {
+        if (!defined('STDERR')) {
             define('STDERR', fopen('php://stderr', 'wb'));
         }
         Artisan::call('migrate:fresh', ['--path' => 'database/migrations', '--force' => true]);
@@ -974,16 +974,16 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (! defined('STDIN')) {
+        if (!defined('STDIN')) {
             define('STDIN', fopen('php://stdin', 'rb'));
         }
-        if (! defined('STDOUT')) {
+        if (!defined('STDOUT')) {
             define('STDOUT', fopen('php://stdout', 'wb'));
         }
-        if (! defined('STDERR')) {
+        if (!defined('STDERR')) {
             define('STDERR', fopen('php://stderr', 'wb'));
         }
         Artisan::call('migrate:refresh', ['--path' => 'database/migrations', '--force' => true]);
@@ -996,7 +996,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         $bannedIps = BannedIp::orderBy('id', 'desc')->paginate(10);
@@ -1009,7 +1009,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         // Validate the request...
@@ -1043,7 +1043,7 @@ class StaffController extends Controller
         if (Auth::user() === null) {
             return redirect('/login');
         }
-        if (! Gate::allows('admin', Auth::user())) {
+        if (!Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         // Validate the request...
