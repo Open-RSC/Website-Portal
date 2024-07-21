@@ -20,7 +20,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('ThrottlingUpdate', $entry->id) }}">
+                <form id="update-form" method="POST" action="{{ route('ThrottlingUpdate', $entry->id) }}">
                     @csrf
                     @method('PUT')
 
@@ -37,16 +37,16 @@
                         <input class="form-control mb-1" type="number" name="decay_minutes" value="{{ $entry->decay_minutes }}" min="1" required />
                     </div>
                 </form>
-                <!-- This div will act as a flex container for the buttons -->
-                <div class="d-flex mt-2">
-                    <button class="btn btn-success" type="submit">Update Entry</button>
 
-                    <!-- Inline form for delete -->
-                    <form method="POST" action="{{ route('ThrottlingDestroy', $entry->id) }}" class="ml-2">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger" type="submit">Delete Entry</button>
-                    </form>
+                <!-- Inline form for delete -->
+                <form id="delete-form" method="POST" action="{{ route('ThrottlingDestroy', $entry->id) }}">
+                    @csrf
+                    @method('DELETE')
+                </form>
+
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-success" type="button" onclick="document.getElementById('update-form').submit();">Update Entry</button>
+                    <button class="btn btn-danger" type="button" onclick="document.getElementById('delete-form').submit();">Delete Entry</button>
                 </div>
             </div>
         </div>
