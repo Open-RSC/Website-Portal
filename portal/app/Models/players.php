@@ -156,7 +156,8 @@ class players extends Authenticatable
 
     public $connection = 'preservation'; //Default to preservation, used for auth.php login authentication.
 
-    public static function hasBank($db, $playerID) {
+    public static function hasBank($db, $playerID)
+    {
         $result = DB::connection($db)
             ->table('bank as b')
             ->join('itemstatuses as is_b', 'b.itemID', '=', 'is_b.itemID')
@@ -167,7 +168,8 @@ class players extends Authenticatable
         return $result > 0;
     }
 
-    public static function hasInventory($db, $playerID) {
+    public static function hasInventory($db, $playerID)
+    {
         $result = DB::connection($db)
             ->table('invitems as i')
             ->join('itemstatuses as is_i', 'i.itemID', '=', 'is_i.itemID')
@@ -177,5 +179,4 @@ class players extends Authenticatable
 
         return $result > 0;
     }
-
 }

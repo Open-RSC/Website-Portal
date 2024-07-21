@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use function App\Helpers\player_is_online;
 use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+
+use function App\Helpers\player_is_online;
 
 class GeneratePlayerExportCommand extends Command
 {
@@ -56,7 +57,7 @@ class GeneratePlayerExportCommand extends Command
 
             return false;
         }
-        $this->info("Player export for $trimmed_username on $db created successfully! You can find it at: storage/app/".$playerExport->getBasePath().$playerExport->getExtraPath().$playerExport->getFileName());
+        $this->info("Player export for $trimmed_username on $db created successfully!You can find it at: storage/app/".$playerExport->getBasePath().$playerExport->getExtraPath().$playerExport->getFileName());
 
         return true;
     }

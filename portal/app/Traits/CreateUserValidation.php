@@ -2,15 +2,15 @@
 
 namespace App\Traits;
 
-use App\Models\InviteCode;
 use App\Models\Setting;
 use App\Rules\NoBadWordsRule;
-use function App\Helpers\get_client_ip_address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+
+use function App\Helpers\get_client_ip_address;
 
 trait CreateUserValidation
 {
@@ -22,13 +22,13 @@ trait CreateUserValidation
 
     protected function validateCreateUserInput(array $input)
     {
-         $rules = [
+        $rules = [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
             'email' => ['required', 'string', 'email', 'max:255'],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
             'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
         ];
-        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+        $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
         // Conditionally add invite code rules based on system configuration
         if ($inviteOnly) {
             $rules['invite_code'] = ['required', 'string', 'exists:invite_codes,code,used,false'];
@@ -47,11 +47,11 @@ trait CreateUserValidation
         }
 
         $recentAccounts = DB::connection($db)->table('players')
-        ->where('creation_ip', '=', get_client_ip_address())
-        ->where('creation_date', '>=', time() - 86400)
-        ->count();
+            ->where('creation_ip', '=', get_client_ip_address())
+            ->where('creation_date', '>=', time() - 86400)
+            ->count();
 
-        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_' . $db)) {
+        if ($recentAccounts >= config('openrsc.max_new_accounts_per_24_hours_'.$db)) {
             throw ValidationException::withMessages([
                 'throttle' => [trans('You have created too many accounts in the past 24 hours.')],
             ]);

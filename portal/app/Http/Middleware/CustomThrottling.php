@@ -1,36 +1,37 @@
 <?php
+
 namespace App\Http\Middleware;
 
-use Illuminate\Routing\Middleware\ThrottleRequests;
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Symfony\Component\HttpFoundation\Response;
 
 class CustomThrottling extends ThrottleRequests
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  int|string  $maxAttempts
      * @param  float|int  $decayMinutes
      * @param  string  $prefix
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handle($request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = '')
+    public function handle($request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = ''): Response
     {
         $routeName = $request->route()->getName();
         try {
-            $customThrottling = \DB::table('custom_throttling')->where("route_name", "=", $routeName)->first();
+            $customThrottling = \DB::table('custom_throttling')->where('route_name', '=', $routeName)->first();
 
             if ($customThrottling) {
                 $maxAttempts = $customThrottling->max_attempts ?? $maxAttempts;
                 $decayMinutes = $customThrottling->decay_minutes ?? $decayMinutes;
-                \Log::info('Custom Max Attempts: ' . $maxAttempts);
-                \Log::info('Custom Decay Minutes: ' . $decayMinutes);
+                \Log::info('Custom Max Attempts: '.$maxAttempts);
+                \Log::info('Custom Decay Minutes: '.$decayMinutes);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             //We don't need to log the error, it just means we didn't run the migration.
         }
+
         return parent::handle($request, $next, $maxAttempts, $decayMinutes, $prefix);
     }
 }

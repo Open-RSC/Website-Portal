@@ -67,11 +67,11 @@ class CreateUserCommand extends Command
             'email' => $email,
             'password' => $password,
             'password_confirmation' => $password_confirmation,
-            'db' => $db
+            'db' => $db,
         ];
         // Check if invite-only mode is enabled
-        $inviteOnly = Setting::where('key', 'invite_only_registration')->value('value') === "1";
-        $inviteCode = "";
+        $inviteOnly = Setting::where('key', 'invite_only_registration')->value('value') === '1';
+        $inviteCode = '';
         if ($inviteOnly) {
             // Generate an invite code
             $inviteCode = Str::uuid()->toString();
@@ -79,7 +79,7 @@ class CreateUserCommand extends Command
                 'code' => $inviteCode,
                 'used' => false,
                 'username' => $name,
-                'world' => $db
+                'world' => $db,
             ]);
             $input['invite_code'] = $inviteCode;
         }
@@ -99,16 +99,18 @@ class CreateUserCommand extends Command
             }
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+
             return 1;
         }
 
         // Success message
         if ($user) {
-             $this->info('User ' . $name . ' created successfully!');
+            $this->info('User '.$name.' created successfully!');
         }
         if ($inviteCode) {
-            $this->info('Invite code generated for user: ' . $inviteCode);
+            $this->info('Invite code generated for user: '.$inviteCode);
         }
+
         return 0;
     }
 }
