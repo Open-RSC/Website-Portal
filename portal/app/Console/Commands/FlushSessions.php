@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class FlushSessions extends Command
 {
@@ -42,7 +44,7 @@ class FlushSessions extends Command
         if (method_exists($this, $method_name)) {
             try {
                 $this->$method_name();
-                $this->info('Session data cleaned.');
+                $this->info('Session data cleaned at '.Carbon::now()->format('Y-m-d h:iA'));
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
             }
@@ -63,11 +65,13 @@ class FlushSessions extends Command
                 unlink($directory.'/'.$file);
             }
         }
+        $this->info('Successfully cleaned file-based sessions at '.Carbon::now()->format('Y-m-d h:iA'));
     }
 
     protected function cleanDatabase()
     {
         $table = config('session.table');
         DB::table($table)->truncate();
+        $this->info('Successfully cleaned database-based sessions at '.Carbon::now()->format('Y-m-d h:iA'));
     }
 }
