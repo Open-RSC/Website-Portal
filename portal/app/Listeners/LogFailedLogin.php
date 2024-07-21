@@ -3,8 +3,7 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+
 use function App\Helpers\get_client_ip_address;
 
 class LogFailedLogin
@@ -25,7 +24,7 @@ class LogFailedLogin
         if (config('openrsc.login_logging_enabled')) {
             $credentials = $event->credentials;
             \DB::table('failed_login_logs')->insert([
-                'username' => $credentials['username'], 
+                'username' => $credentials['username'],
                 'ip' => get_client_ip_address(),
                 'created_at' => now(),
             ]);

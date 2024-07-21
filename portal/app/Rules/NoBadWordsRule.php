@@ -13,6 +13,7 @@ class NoBadWordsRule implements ValidationRule
 
     // Exact match banned words using 13 rotations
     protected array $exactMatchBadWords = [];
+
     /**
      * Create a new rule instance.
      *
@@ -25,26 +26,20 @@ class NoBadWordsRule implements ValidationRule
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param Closure $fail
-     * @return void
      */
-
-     public function validate(string $attribute, mixed $value, Closure $fail): void
-     {
-         foreach ($this->badWords as $badWord) {
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        foreach ($this->badWords as $badWord) {
             if (Str::contains(strtolower($value), str_rot13($badWord))) {
-                $fail("The :attribute contains banned words.");
+                $fail('The :attribute contains banned words.');
             }
         }
-         foreach ($this->exactMatchBadWords as $badWord) {
+        foreach ($this->exactMatchBadWords as $badWord) {
             if (strtolower($value) === str_rot13($badWord)) {
-                $fail("The :attribute has a banned word.");
+                $fail('The :attribute has a banned word.');
             }
         }
-     }
+    }
 
     /**
      * Get the validation error message.

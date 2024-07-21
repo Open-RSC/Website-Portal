@@ -25,7 +25,7 @@ class GenerateInviteCodes extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $count = $this->argument('count');
         $this->info("Generating {$count} invite codes...");
@@ -36,6 +36,7 @@ class GenerateInviteCodes extends Command
         }
 
         $this->info("Successfully generated {$count} invite codes.");
+
         return 0;
     }
 }

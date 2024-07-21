@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Throwable;
+
 use function App\Helpers\get_client_ip_address;
 
 class Handler extends ExceptionHandler
@@ -31,10 +32,10 @@ class Handler extends ExceptionHandler
             $this->logExceptionToDatabase($exception);
         });
     }
-    
+
     /**
      * Log the exception details into the database.
-     * 
+     *
      * @param  Throwable  $exception  The exception instance containing the error details.
      * @return void
      */
@@ -44,29 +45,29 @@ class Handler extends ExceptionHandler
             $this->logToDatabase($exception);
         }
     }
-    
+
     /**
      * Log the message into the database.
-     * 
+     *
      * @param  string  $message  The message containing the error details.
      * @param  string  $context  The context of the error.
      * @return void
      */
-    public function logMessageToDatabase(string $message, string $context = "")
+    public function logMessageToDatabase(string $message, string $context = '')
     {
         if (Schema::hasTable('error_logs')) {
             $currentRequest = request();
-            $url = $currentRequest->fullUrl() ?? "";
+            $url = $currentRequest->fullUrl() ?? '';
             $user = Auth::user();
             $username = $user ? $user->username : 'Guest';
-            $ipAddress = get_client_ip_address() ?? "";
+            $ipAddress = get_client_ip_address() ?? '';
             DB::table('error_logs')->insert([
                 'message' => $message,
                 'level' => 'error',
                 'context' => $context,
                 'url' => $url,
-                'username' => $username, 
-                'ip' => $ipAddress, 
+                'username' => $username,
+                'ip' => $ipAddress,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -75,24 +76,25 @@ class Handler extends ExceptionHandler
 
     /**
      * Log the exception directly into the database.
-     * @param Throwable $exception
+     *
      * @return void
      */
-    private function logToDatabase(Throwable $exception) {
+    private function logToDatabase(Throwable $exception)
+    {
         if (Schema::hasTable('error_logs')) {
             $currentRequest = request();
-            $url = $currentRequest->fullUrl() ?? "";
+            $url = $currentRequest->fullUrl() ?? '';
             $user = Auth::user();
             $username = $user ? $user->username : 'Guest';
-            $ipAddress = get_client_ip_address() ?? "";
+            $ipAddress = get_client_ip_address() ?? '';
             DB::table('error_logs')->insert([
                 'message' => $exception->getMessage(),
                 'level' => 'error',
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
                 'url' => $url,
-                'username' => $username, 
-                'ip' => $ipAddress, 
+                'username' => $username,
+                'ip' => $ipAddress,
                 'context' => json_encode($exception->getTrace()),
                 'created_at' => now(),
                 'updated_at' => now(),

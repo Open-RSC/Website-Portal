@@ -47,9 +47,9 @@ Route::get('quest/{subpage}', [QuestController::class, 'show'])->name('{subpage}
 Route::get('minigames', [QuestController::class, 'minigames'])->name('Mini Games');
 
 // Player pages
-Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player')->middleware("custom_throttle");
-Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank')->middleware("custom_throttle");
-Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv')->middleware("custom_throttle");
+Route::get('player/{db}/{subpage}', [PlayerController::class, 'index'])->name('Player')->middleware('custom_throttle');
+Route::get('player/{db}/shar/bank', [PlayerController::class, 'sharbank'])->name('sharbank')->middleware('custom_throttle');
+Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->name('sharinv')->middleware('custom_throttle');
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['custom_throttle:15,20'])->name('PlayerExportSubmit');
@@ -60,45 +60,47 @@ Route::any('itemdef/{id}', [ItemController::class, 'show'])->name('Item Informat
 
 // NPC lookup
 Route::any('npcs', [NpcController::class, 'index'])->name('Monster Database');
+Route::get('npcSearch', [NpcController::class, 'npcSearch'])->name('npcSearch');
 Route::any('npcdef/{id}', [NpcController::class, 'show'])->name('Monster Details');
 
 // Client launcher online world lookup
-Route::get('onlinelookup', [StatsController::class, 'onlinelookup'])->name("OnlineLookup")->middleware("custom_throttle");
+Route::get('onlinelookup', [StatsController::class, 'onlinelookup'])->name('OnlineLookup')->middleware('custom_throttle');
 
 // Hiscores
-Route::any('npchiscores/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('OpenRSC NPC Hiscores Redirect')->middleware("custom_throttle");
-Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('OpenRSC NPC Hiscores DB Redirect')->middleware("custom_throttle");
-Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('OpenRSC NPC Hiscores')->middleware("custom_throttle");
-Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('OpenRSC Player NPC Hiscores')->middleware("custom_throttle");
-Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('OpenRSC Hiscores Redirect')->middleware("custom_throttle");
-Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('OpenRSC Hiscores')->middleware("custom_throttle");
-Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('OpenRSC Hiscores ')->middleware("custom_throttle"); // route name purposely left with a space to deconflict
-Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->middleware("custom_throttle");
-Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('OpenRSC Ironman Hiscores')->middleware("custom_throttle");
-Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name("SearchByName")->middleware("custom_throttle");
-Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name("SearchNpcHiscoresByPlayerName")->middleware("custom_throttle");
-Route::get('searchNpcHiscoresByNpcName/{db}/{name}', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name("searchNpcHiscoresByNpcName")->middleware("custom_throttle");
+Route::any('npchiscores/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('OpenRSC NPC Hiscores Redirect')->middleware('custom_throttle');
+Route::any('npchiscores/{db}/', [HiscoresController::class, 'npcHiscoresRedirect'])->name('OpenRSC NPC Hiscores DB Redirect')->middleware('custom_throttle');
+Route::any('npchiscores/{db}/{npc_id}', [HiscoresController::class, 'npcIndex'])->name('OpenRSC NPC Hiscores')->middleware('custom_throttle');
+Route::any('npchiscores/{db}/player/{player_name}', [HiscoresController::class, 'npcPlayerIndex'])->name('OpenRSC Player NPC Hiscores')->middleware('custom_throttle');
+Route::any('hiscores/', [HiscoresController::class, 'playerHiscoresRedirect'])->name('OpenRSC Hiscores Redirect')->middleware('custom_throttle');
+Route::any('hiscores/{db}', [HiscoresController::class, 'index'])->name('OpenRSC Hiscores')->middleware('custom_throttle');
+Route::any('hiscores/{db}/skill_total', [HiscoresController::class, 'index'])->name('OpenRSC Hiscores ')->middleware('custom_throttle'); // route name purposely left with a space to deconflict
+Route::any('hiscores/{db}/{subpage}', [HiscoresController::class, 'show'])->middleware('custom_throttle');
+Route::any('hiscores/{db}/{subpage}/{iron_man}', [HiscoresController::class, 'iron_man'])->name('OpenRSC Ironman Hiscores')->middleware('custom_throttle');
+Route::post('searchByName', [HiscoresController::class, 'searchByName'])->name('SearchByName')->middleware('custom_throttle');
+Route::post('searchNpcHiscoresByPlayerName', [HiscoresController::class, 'searchNpcHiscoresByPlayerName'])->name('SearchNpcHiscoresByPlayerName')->middleware('custom_throttle');
+Route::get('searchNpcHiscoresByNpcName/{db}/{name}', [HiscoresController::class, 'searchNpcHiscoresByNpcName'])->name('searchNpcHiscoresByNpcName')->middleware('custom_throttle');
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('OpenRSC Hiscore tables'); // route name purposely left with a space to deconflict
 
 // Current players
 //Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current OpenRSC players');
 
-Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15')->name("Register");
+Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15')->name('Register');
 
-Route::get('/discord', function() {
-    if (!empty(config('openrsc.discord_url'))) {
+Route::get('/discord', function () {
+    if (! empty(config('openrsc.discord_url'))) {
         return redirect(config('openrsc.discord_url'));
     }
+
     return redirect('/');
-})->name("Discord");
+})->name('Discord');
 
-Route::get('/iphone', function() {
+Route::get('/iphone', function () {
     return redirect('/client/#members,game.openrsc.com,43496,65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true');
-})->name("iPhone");
+})->name('iPhone');
 
-Route::get('/iphone2001', function() {
+Route::get('/iphone2001', function () {
     return redirect('/client2/#members,game.openrsc.com,43493,65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true');
-})->name("iPhone2001");
+})->name('iPhone2001');
 
 // Afman staff zone
 Route::get('staff/invitecodes/', [StaffController::class, 'inviteCodesList'])->name('InviteCodesList')->middleware('auth');
@@ -159,7 +161,7 @@ Route::get('staff/throttling/create', [StaffController::class, 'createThrottling
 Route::post('staff/throttling', [StaffController::class, 'storeThrottling'])->middleware('auth')->name('ThrottlingStore');
 Route::get('staff/throttling/{id}/edit', [StaffController::class, 'editThrottling'])->middleware('auth')->name('ThrottlingEdit');
 Route::put('staff/throttling/{id}', [StaffController::class, 'updateThrottling'])->middleware('auth')->name('ThrottlingUpdate');
-Route::delete('staff/throttling/destroy/{id}',  [StaffController::class, 'destroyThrottling'])->middleware('auth')->name('ThrottlingDestroy');
+Route::delete('staff/throttling/destroy/{id}', [StaffController::class, 'destroyThrottling'])->middleware('auth')->name('ThrottlingDestroy');
 Route::get('staff/banned-ips', [StaffController::class, 'listBannedIpsView'])->middleware('auth')->name('BannedIpsList');
 Route::post('staff/ban-ip', [StaffController::class, 'banIp'])->middleware('auth')->name('BanIp');
 Route::post('staff/unban-ip', [StaffController::class, 'unbanIp'])->middleware('auth')->name('UnbanIp');

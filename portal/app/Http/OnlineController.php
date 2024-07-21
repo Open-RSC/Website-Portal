@@ -15,7 +15,7 @@ class OnlineController extends Component
      * @function index()
      *
      * @return Factory|View
-     * Used to show the main onlinelist page
+     *                      Used to show the main onlinelist page
      */
     public function index($db): Factory|View
     {
@@ -86,8 +86,8 @@ class OnlineController extends Component
     /**
      * Displays a time since string
      *
-     * @param $timestamp - the old cumulative timestamp in seconds
-     * @param $loginstamp - the login timestamp in seconds
+     * @param  $timestamp  - the old cumulative timestamp in seconds
+     * @param  $loginstamp  - the login timestamp in seconds
      */
     public static function formattedCumTime($timestamp, $loginstamp): string
     {
@@ -100,7 +100,7 @@ class OnlineController extends Component
     /**
      * Displays a time since string
      *
-     * @param $timestamp - the timestamp in seconds
+     * @param  $timestamp  - the timestamp in seconds
      */
     public static function formattedTimeSince($timestamp): string
     {
@@ -113,7 +113,7 @@ class OnlineController extends Component
     /**
      * Displays a time since string
      *
-     * @param $timestamp - the timestamp in seconds
+     * @param  $timestamp  - the timestamp in seconds
      */
     public static function formattedTime($timestamp): string
     {

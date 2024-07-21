@@ -25,7 +25,7 @@ class ItemController extends Controller
         $query = DB::connection('preservation')->table('itemdef');
 
         if ($request->has('search')) {
-            $query->where('name', 'LIKE', '%' . $request->search . '%');
+            $query->where('name', 'LIKE', '%'.$request->search.'%');
         }
 
         if (Config::get('app.authentic') == true) {
@@ -97,11 +97,11 @@ class ItemController extends Controller
         $totalPlayerHeld_bank = DB::connection('preservation')
             ->table('bank')
             ->select('itemstatuses.amount', 'bank.playerID', 'players.id', 'players.group_id', 'players.banned')
-			->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
+            ->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('bank.playerID', '=', 'players.id')
                     ->where([
-						['itemstatuses.itemID', '=', $id],
+                        ['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                     ]);
@@ -115,11 +115,11 @@ class ItemController extends Controller
         $totalPlayerHeld_invitems = DB::connection('preservation')
             ->table('invitems')
             ->select('itemstatuses.amount', 'invitems.playerID', 'players.id', 'players.group_id', 'players.banned')
-			->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
+            ->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('invitems.playerID', '=', 'players.id')
                     ->where([
-						['itemstatuses.itemID', '=', $id],
+                        ['itemstatuses.itemID', '=', $id],
                         ['players.id', '>=', '10'],
                         ['players.banned', '!=', '1'],
                     ]);
@@ -139,7 +139,7 @@ class ItemController extends Controller
         $last3moPlayerHeld_bank = DB::connection('preservation')
             ->table('bank')
             ->select('itemstatuses.amount', 'bank.playerID', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
-			->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
+            ->join('itemstatuses', 'itemstatuses.itemID', '=', 'bank.itemID')
             ->join('players', function ($join) use ($id) {
                 $join->on('bank.playerID', '=', 'players.id')
                     ->where([
@@ -160,7 +160,7 @@ class ItemController extends Controller
         $last3moPlayerHeld_invitems = DB::connection('preservation')
             ->table('invitems')
             ->select('itemstatuses.amount', 'invitems.playerID', 'players.id', 'players.group_id', 'players.banned', 'players.login_date')
-			->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
+            ->join('itemstatuses', 'itemstatuses.itemID', '=', 'invitems.itemID')
             ->join('players', function ($join) use ($id) {
                 $join
                     ->on('invitems.playerID', '=', 'players.id')

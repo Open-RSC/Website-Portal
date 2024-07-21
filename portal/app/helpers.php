@@ -9,7 +9,7 @@ if (!function_exists('passwd_compat_hasher')) {
      * Returns the sha512 hash for a legacy password
      *
      *
-     * @param  string  $salt the salt used for legacy hasher
+     * @param  string  $salt  the salt used for legacy hasher
      * @return string the corresponding bcrypt string
      */
     function passwd_compat_hasher(string $credential, string $salt): string
@@ -20,11 +20,11 @@ if (!function_exists('passwd_compat_hasher')) {
 
 if (!function_exists('password_needs_rehashing')) {
     /**
-     * @param $passwordHashed string The password hash
+     * @param  $passwordHashed  string The password hash
      */
     function password_needs_rehashing(string $passwordHashed): bool
     {
-        return ! str_starts_with($passwordHashed, '$2y$10$');
+        return !str_starts_with($passwordHashed, '$2y$10$');
     }
 }
 
@@ -83,22 +83,26 @@ if (!function_exists('player_is_online')) {
 if (!function_exists('is_incorrect_production_url')) {
     function is_incorrect_production_url()
     {
-        return (config('app.env') === 'production' && url('/') !== config('app.url'));
+        return config('app.env') === 'production' && url('/') !== config('app.url');
     }
 }
 
 if (!function_exists('ucworlds')) {
-    function uc_worlds($db) {
-        if ($db === "openpk") {
-            return "OpenPK";
+    function uc_worlds($db)
+    {
+        if ($db === 'openpk') {
+            return 'OpenPK';
         }
+
         return ucwords($db);
     }
 }
 
 if (!function_exists('is_json')) {
-    function is_json($string) {
+    function is_json($string)
+    {
         json_decode($string);
-        return (json_last_error() == JSON_ERROR_NONE);
+
+        return json_last_error() == JSON_ERROR_NONE;
     }
 }

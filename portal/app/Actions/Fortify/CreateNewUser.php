@@ -3,10 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\Models\InviteCode;
-use App\Models\Setting;
-use function App\Helpers\add_characters;
-use function App\Helpers\get_client_ip_address;
 use App\Models\players;
+use App\Models\Setting;
 use App\Models\User;
 use App\Traits\CreateUserValidation;
 use Illuminate\Http\RedirectResponse;
@@ -14,9 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
+use function App\Helpers\add_characters;
+use function App\Helpers\get_client_ip_address;
+
 class CreateNewUser implements CreatesNewUsers
 {
-    use PasswordValidationRules, CreateUserValidation;
+    use CreateUserValidation, PasswordValidationRules;
 
     /**
      * Validate and create a newly registered user.
@@ -100,20 +101,20 @@ class CreateNewUser implements CreatesNewUsers
 
         foreach ($minLevels as $key => $value) {
             DB::connection($input['db'])->table('curstats')
-            ->where('playerID', $player->id)
-            ->update([$key => $value]);
+                ->where('playerID', $player->id)
+                ->update([$key => $value]);
             DB::connection($input['db'])->table('maxstats')
-            ->where('playerID', $player->id)
-            ->update([$key => $value]);
+                ->where('playerID', $player->id)
+                ->update([$key => $value]);
         }
 
         foreach ($experiences as $key => $value) {
             DB::connection($input['db'])->table('experience')
-            ->where('playerID', $player->id)
-            ->update([$key => $value]);
+                ->where('playerID', $player->id)
+                ->update([$key => $value]);
         }
         if ($playerCreated) {
-            $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === "1") ?? false;
+            $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
             if ($inviteOnly) {
                 $inviteCode = InviteCode::where('code', $input['invite_code'])->first();
                 if ($inviteCode && !$inviteCode->used) {
