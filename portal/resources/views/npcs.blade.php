@@ -14,7 +14,7 @@
                 <div class="text-left flex-fill"><b>Description</b></div>
             </div>
             <div id="npc-results"></div>
-            <div id="pagination"></div>
+            <div id="pagination" class="pagination-container"></div>
         </div>
 
         <div class="e bg-black p-2 mt-4" style="max-width: 100%; height: 300px; overflow: auto">
@@ -913,6 +913,50 @@
             .responsive-input {
                 width: 100%;
             }
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .pagination-container button {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            color: #007bff;
+            padding: 0.375rem 0.75rem;
+            margin-left: -1px;
+            cursor: pointer;
+            position: relative;
+            display: block;
+            line-height: 1.25;
+        }
+
+        .pagination-container button:hover {
+            z-index: 2;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            color: #0056b3;
+        }
+
+        .pagination-container button.active {
+            z-index: 3;
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .pagination-container button:first-child {
+            margin-left: 0;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .pagination-container button:last-child {
+            border-top-right-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
         }
     </style>
 @endsection
