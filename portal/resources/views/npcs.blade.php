@@ -925,7 +925,7 @@
         .pagination-container button {
             background-color: #fff;
             border: 1px solid #dee2e6;
-            color: #007bff;
+            color: #28a745;
             padding: 0.375rem 0.75rem;
             margin-left: -1px;
             cursor: pointer;
@@ -938,14 +938,14 @@
             z-index: 2;
             background-color: #e9ecef;
             border-color: #dee2e6;
-            color: #0056b3;
+            color: #218838;
         }
 
         .pagination-container button.active {
             z-index: 3;
             color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #28a745;
+            border-color: #28a745;
         }
 
         .pagination-container button:first-child {
