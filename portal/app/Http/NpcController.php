@@ -2,9 +2,12 @@
 
 namespace App\Http;
 
+use App\Models\npcdef;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
 class NpcController extends Controller
@@ -12,29 +15,34 @@ class NpcController extends Controller
     /**
      * @return Factory|View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         /**
          * @return Factory|View
          *
-         * @var $npcs
-         * fetches the table row of the npc in view and paginates the results
          */
-        if (Config::get('app.authentic') == true) {
-            $npcs = DB::connection('preservation')
-                ->table('npcdef')
-                ->where('id', '<=', '793')
-                ->orderBy('id', 'asc')
-                ->paginate(300);
-        } else {
-            $npcs = DB::connection('preservation')
-                ->table('npcdef')
-                ->orderBy('id', 'asc')
-                ->paginate(300);
+        return view('npcs');
+    }
+
+
+    /**
+     * Fetches the table row of the npc in view and paginates the results
+     * @param Request $request
+     * @return mixed
+     */
+    public function npcSearch(Request $request)
+    {
+        $searchTerm = $request->input('searchTerm', '');
+        $npcs = [];
+
+        if (!empty($searchTerm)) {
+            //TODO: add multi-world NPC support so we can search non-authentic NPCs
+            $npcs = npcdef::when($searchTerm, function ($query, $searchTerm) {
+                return $query->where('name', 'like', '%' . $searchTerm . '%');
+            })->where('id', '<=', '793')->orderBy('combatlvl', 'asc')->paginate(6);
         }
 
-        return view('npcs')
-            ->with(compact('npcs'));
+        return Response::json($npcs);
     }
 
     /**

@@ -60,6 +60,7 @@ Route::any('itemdef/{id}', [ItemController::class, 'show'])->name('Item Informat
 
 // NPC lookup
 Route::any('npcs', [NpcController::class, 'index'])->name('Monster Database');
+Route::get('npcSearch', [NpcController::class, 'npcSearch'])->name('npcSearch');
 Route::any('npcdef/{id}', [NpcController::class, 'show'])->name('Monster Details');
 
 // Client launcher online world lookup
