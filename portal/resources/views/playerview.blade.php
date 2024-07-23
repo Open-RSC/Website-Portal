@@ -56,8 +56,34 @@
                 <p>Y: {{ $player->y }} </p>
                 <p>Kills: {{ $player->kills }} </p>
                 <p>Deaths: {{ $player->deaths }} </p>
-                <p>Muted: @if(((int)$player->muted) === -1) Permanently @elseif(((int)$player->muted) > 0) {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000) }} @else No @endif  </p>
-                <p>Banned: @if(((int)$player->banned) === -1) Permanently @elseif(((int)$player->banned) > 0) {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000) }} @else No @endif  </p>
+                <p>
+                    Muted:
+                    @if ((int) $player->muted === -1)
+                        Permanently
+                    @elseif ((int) $player->muted > 0)
+                        @if ($currentTimeMillis < (int) $player->muted)
+                            Muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
+                        @else
+                            Previously muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
+                        @endif
+                    @else
+                        No
+                    @endif
+                </p>
+                <p>
+                    Banned:
+                    @if ((int) $player->banned === -1)
+                        Permanently
+                    @elseif ((int) $player->banned > 0)
+                        @if ($currentTimeMillis < (int) $player->banned)
+                            Banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
+                        @else
+                            Previously banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
+                        @endif
+                    @else
+                        No
+                    @endif
+                </p>
                 <p>Block Private: {{ $player->block_private === 1 ? "Yes" : "No" }} </p>
                 <p>Block Chat: {{ $player->block_chat === 1 ? "Yes" : "No" }} </p>
                 <p>Block Trade: {{ $player->block_trade === 1 ? "Yes" : "No" }} </p>
