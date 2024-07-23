@@ -53,6 +53,8 @@ Route::get('player/{db}/shar/inventory', [PlayerController::class, 'sharinv'])->
 Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('PlayerExportView');
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['custom_throttle:15,20'])->name('PlayerExportSubmit');
+Route::get('/message-center', [PlayerController::class, 'showMessageCenter'])->name('message-center');
+
 
 // Item lookup
 Route::any('items', [ItemController::class, 'index'])->name('Items');

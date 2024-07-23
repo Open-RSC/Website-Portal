@@ -9,6 +9,7 @@ use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -841,5 +842,96 @@ class PlayerController extends Controller
     public function passwordNeedsRehash($passwordHashed)
     {
         return !str_starts_with($passwordHashed, '$2y$10$');
+    }
+
+    public function showMessageCenter(Request $request)
+    {
+        if (!config('openrsc.message_center_enabled')) {
+            return redirect('home');
+        }
+        if (Auth::user() !== null && strtolower(Auth::user()->username) === strtolower(session('expected_username')) && $request->attributes->get('dynamic_guard_middleware_ran') &&
+            $request->attributes->get('dynamic_guard_checker_middleware_ran')) {
+
+            $showAppealMessage = config('openrsc.message_center_appeal_message_enabled');
+
+            $user = Auth::user();
+            $expectedUsername = session('expected_username');
+            $dbConnection = session('db_connection');
+            $playerId = $user->id;
+            $currentTimeMillis = time() * 1000; //Current time in milliseconds
+
+            //Fetch regular mute status
+            $muteExpires = DB::connection($dbConnection)
+                ->table('player_cache')
+                ->where('playerID', $playerId)
+                ->where('key', 'mute_expires')
+                ->where('type', 3)
+                ->value('value');
+
+            if ($muteExpires === null) {
+                $mutedStatus = 'No';
+            } elseif ((int) $muteExpires === -1) {
+                $mutedStatus = 'Permanently';
+            } elseif ((int) $muteExpires > 0 && $currentTimeMillis < (int) $muteExpires) {
+                $mutedStatus = Carbon::createFromTimestamp($muteExpires / 1000)->format('Y-m-d H:i:s T');
+            } else {
+                $mutedStatus = 'No';
+            }
+
+            //Fetch global mute status
+            $globalMute = DB::connection($dbConnection)
+                ->table('player_cache')
+                ->where('playerID', $playerId)
+                ->where('key', 'global_mute')
+                ->where('type', 3)
+                ->value('value');
+
+            if ($globalMute === null) {
+                $globalMutedStatus = 'No';
+            } elseif ((int) $globalMute === -1) {
+                $globalMutedStatus = 'Permanently';
+            } elseif ((int) $globalMute > 0 && $currentTimeMillis < (int) $globalMute) {
+                $globalMutedStatus = Carbon::createFromTimestamp($globalMute / 1000)->format('Y-m-d H:i:s T');
+            } else {
+                $globalMutedStatus = 'No';
+            }
+
+            //The mute column only updates on game logout, not when issued.
+            if ((int) $user->muted === -1) {
+                $mutedColumnStatus = 'Permanently';
+            } elseif ((int) $user->muted > 0 && $currentTimeMillis < (int) $user->muted) {
+                $mutedColumnStatus = Carbon::createFromTimestamp($user->muted / 1000)->format('Y-m-d H:i:s T');
+            } else {
+                $mutedColumnStatus = 'No';
+            }
+
+            //Banned column updates immediately when issued.
+            if ((int) $user->banned === -1) {
+                $bannedStatus = 'Permanently';
+            } elseif ((int) $user->banned > 0 && $currentTimeMillis < (int) $user->banned) {
+                $bannedStatus = Carbon::createFromTimestamp($user->banned / 1000)->format('Y-m-d H:i:s T');
+            } else {
+                $bannedStatus = 'No';
+            }
+
+            return view('message-center', [
+                'loggedIn' => true,
+                'user' => $user,
+                'expectedUsername' => $expectedUsername,
+                'dbConnection' => $dbConnection,
+                'mutedStatus' => $mutedStatus,
+                'globalMutedStatus' => $globalMutedStatus,
+                'mutedColumnStatus' => $mutedColumnStatus,
+                'muteExpires' => $muteExpires,
+                'globalMute' => $globalMute,
+                'mutedColumn' => $user->muted,
+                'banned' => $user->banned,
+                'bannedStatus' => $bannedStatus,
+                'currentTimeMillis' => $currentTimeMillis,
+                'showAppealMessage' => $showAppealMessage
+            ]);
+        } else {
+            return redirect()->route('login');
+        }
     }
 }
