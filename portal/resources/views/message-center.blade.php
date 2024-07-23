@@ -3,12 +3,12 @@
 @section('content')
     <div class="col container">
         <h4 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize">
-            Message Center
+            Message Centre
         </h4>
         <div class="row justify-content-center">
             <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
                 @if ($loggedIn)
-                    <p>Welcome to the Message Center!</p>
+                    <p>Welcome to the Message Centre!</p>
                     <p><strong>Username:</strong> {{ Auth::user()->username }}</p>
                     <p><strong>World:</strong> {{ $dbConnection }}</p>
                     <p>

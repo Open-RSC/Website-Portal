@@ -54,6 +54,7 @@ Route::get('playerexport/', [PlayerController::class, 'exportView'])->name('Play
 Route::get('playerexportinstructions/', [PlayerController::class, 'exportInstructions'])->name('PlayerExportInstructions');
 Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->middleware(['custom_throttle:15,20'])->name('PlayerExportSubmit');
 Route::get('/message-center', [PlayerController::class, 'showMessageCenter'])->name('message-center');
+Route::get('/message-centre', [PlayerController::class, 'showMessageCenter'])->name('message-centre');
 
 
 // Item lookup
