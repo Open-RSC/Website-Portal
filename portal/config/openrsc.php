@@ -31,4 +31,6 @@ return [
     'discord_url_on_maintenance_page' => env('DISCORD_URL_ON_MAINTENANCE_PAGE', false),
     'caching_databases' => env('CACHING_DATABASES', false),
     'multi_world_logins' => env('MULTI_WORLD_LOGINS', true),
+    'message_center_enabled' => env('MESSAGE_CENTER_ENABLED', true),
+    'message_center_appeal_message_enabled' => env('MESSAGE_CENTER_APPEAL_MESSAGE_ENABLED', true),
 ];

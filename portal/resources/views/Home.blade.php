@@ -448,7 +448,7 @@ obtainable item of your choice</span> as a thanks!
                                                     from our staff
                                                 </span>
                                             <div class="d-block">
-                                                <a href="/login" class="c">
+                                                <a href="/message-center" class="c">
                                                     Click Here
                                                 </a>
                                             </div>

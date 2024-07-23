@@ -261,9 +261,12 @@
             @endif
             <span class="flex-auto p-2 dropdown">
                 <a class="c" href="#">{{ Auth::user()->username }} <i class="fas fa-caret-down"></i></a>
-                <span class="p-2 dropdown-content" style="background:black;">
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                <span class="p-2 dropdown-content" style="background:black; width: 140px;">
+                    @if (config('openrsc.message_center_enabled'))
+                        <a href="{{ route('message-center') }}" class="text-left"><i class="fa fa-fw fa-message"></i> Message Centre</a>
+                    @endif
+                    <a href="{{ route('logout') }}" class="text-left"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-fw fa-sign-out"></i> Logout</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                           style="display: none;">
                         @csrf

@@ -125,7 +125,7 @@ class StaffController extends Controller
         //Here we hardcode orderBy time because we only want the latest data.
         $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(40000)->get();
         $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['email', 'salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
-
+        $currentTimeMillis = time() * 1000;
         return DataTables::of($data)
             ->editColumn('creation_date', function ($data) {
                 return Carbon::createFromTimestamp($data->creation_date)->format('Y-m-d H:i:s');
@@ -133,20 +133,28 @@ class StaffController extends Controller
             ->editColumn('login_date', function ($data) {
                 return Carbon::createFromTimestamp($data->login_date)->format('Y-m-d H:i:s');
             })
-            ->editColumn('muted', function ($data) {
+            ->editColumn('muted', function ($data) use ($currentTimeMillis) {
                 if ((int) $data->muted === -1) {
                     return 'Permanently';
                 } elseif ((int) $data->muted > 0) {
-                    return Carbon::createFromTimestamp($data->muted / 1000);
+                    if ($currentTimeMillis < (int) $data->muted) {
+                        return Carbon::createFromTimestamp($data->muted / 1000)->format('Y-m-d H:i:s');
+                    } else {
+                        return 'Previously';
+                    }
                 } else {
                     return 'No';
                 }
             })
-            ->editColumn('banned', function ($data) {
+            ->editColumn('banned', function ($data) use ($currentTimeMillis) {
                 if ((int) $data->banned === -1) {
                     return 'Permanently';
                 } elseif ((int) $data->banned > 0) {
-                    return Carbon::createFromTimestamp($data->banned / 1000);
+                    if ($currentTimeMillis < (int) $data->banned) {
+                        return Carbon::createFromTimestamp($data->banned / 1000)->format('Y-m-d H:i:s');
+                    } else {
+                        return 'Previously';
+                    }
                 } else {
                     return 'No';
                 }
