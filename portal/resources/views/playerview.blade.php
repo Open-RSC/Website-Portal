@@ -57,9 +57,8 @@
                 <p>Kills: {{ $player->kills }} </p>
                 <p>Deaths: {{ $player->deaths }} </p>
                 <p>
-                    Muted:
                     @if ((int) $player->muted === -1)
-                        Permanently
+                        Muted: Permanently
                     @elseif ((int) $player->muted > 0)
                         @if (time() * 1000 < (int) $player->muted)
                             Muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
@@ -67,13 +66,12 @@
                             Previously muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
                         @endif
                     @else
-                        No
+                       Muted: No
                     @endif
                 </p>
                 <p>
-                    Banned:
                     @if ((int) $player->banned === -1)
-                        Permanently
+                       Banned: Permanently
                     @elseif ((int) $player->banned > 0)
                         @if (time() * 1000 < (int) $player->banned)
                             Banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
@@ -81,7 +79,7 @@
                             Previously banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
                         @endif
                     @else
-                        No
+                        Banned: No
                     @endif
                 </p>
                 <p>Block Private: {{ $player->block_private === 1 ? "Yes" : "No" }} </p>
