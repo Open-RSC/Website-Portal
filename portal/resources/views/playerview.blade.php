@@ -61,7 +61,7 @@
                     @if ((int) $player->muted === -1)
                         Permanently
                     @elseif ((int) $player->muted > 0)
-                        @if ($currentTimeMillis < (int) $player->muted)
+                        @if (time() * 1000 < (int) $player->muted)
                             Muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
                         @else
                             Previously muted until: {{ Carbon\Carbon::createFromTimestamp($player->muted / 1000)->format('Y-m-d H:i:s T') }}
@@ -75,7 +75,7 @@
                     @if ((int) $player->banned === -1)
                         Permanently
                     @elseif ((int) $player->banned > 0)
-                        @if ($currentTimeMillis < (int) $player->banned)
+                        @if (time() * 1000 < (int) $player->banned)
                             Banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
                         @else
                             Previously banned until: {{ Carbon\Carbon::createFromTimestamp($player->banned / 1000)->format('Y-m-d H:i:s T') }}
