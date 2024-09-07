@@ -7,6 +7,21 @@
   </head>
   <body>
     <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
-    <script>main();</script>
+    <script>
+      function preventAllKeyDefaults() {
+        var canvas = document.querySelector('canvas');
+        if (canvas) {
+          canvas.addEventListener('keydown', function(e) {
+            e.preventDefault();
+          });
+        }
+      }
+
+      main();
+
+      window.addEventListener('load', function() {
+        preventAllKeyDefaults();
+      });
+    </script>
   </body>
 </html>
