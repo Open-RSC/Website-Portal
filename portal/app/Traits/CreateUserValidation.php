@@ -46,6 +46,19 @@ trait CreateUserValidation
             ]);
         }
 
+        // Check if the username has already been badnamed
+        $formerBadNameExists = DB::connection($db)->table('former_names')
+        ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
+        ->where('changeType', '=', 1)
+        ->exists();
+
+        if ($formerBadNameExists) {
+            throw ValidationException::withMessages([
+                'username' => [trans('This username cannot be used.')],
+            ]);
+        }
+
+        // Check if the user already has too many accounts
         $recentAccounts = DB::connection($db)->table('players')
             ->where('creation_ip', '=', get_client_ip_address())
             ->where('creation_date', '>=', time() - 86400)
