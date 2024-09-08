@@ -800,6 +800,18 @@ class PlayerController extends Controller
             return response()->json(['message' => 'The username is already in use.'], 409); // Conflict status code
         }
 
+        // Check if the username has already been badnamed
+        $formerBadNameExists = DB::connection($db)->table('former_names')
+        ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
+        ->where('changeType', '=', 1)
+        ->exists();
+
+        if ($formerBadNameExists) {
+            return response()->json([
+                'message' => 'This username cannot be used',
+            ], 422);
+        }
+
         // Check if the user already has too many accounts
         $recentAccounts = DB::connection($db)->table('players')
             ->where('creation_ip', '=', get_client_ip_address())
