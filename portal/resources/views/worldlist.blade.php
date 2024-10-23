@@ -75,7 +75,7 @@
             </div>
             <div class="promo-tile-col">
                 <div class="promo-tile-col-inner b">
-                    <a href="https://gitlab.com/openrsc/core"
+                    <a href="https://gitlab.com/openrsc/openrsc"
                        class="c" target="_parent">
                         <span style="color: #ffbb22; ">
                             <b>
