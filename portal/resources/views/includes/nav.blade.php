@@ -26,7 +26,7 @@
                 <a class="c text-left" href="/rules">
                     <i class="fa fa-fw fa-gavel"></i> Rules
                 </a>
-                <a class="c text-left" target="_blank" href="https://gitlab.com/open-runescape-classic/core">
+                <a class="c text-left" target="_blank" href="https://gitlab.com/openrsc/core">
                     <i class="fab fa-fw fa-gitlab"></i> Source Code
                 </a>
                 <a class="c text-left" href="/playerexport">
@@ -78,7 +78,7 @@
                 <span class="p-2 dropdown-content" style="background:black; width:150px;">
                     <a class="c text-left" href="/board/viewforum.php?f=26"><i
                                 class="fas fa-bug"></i> Report a Bug</a>
-                    <a class="c text-left" href="https://gitlab.com/open-runescape-classic/core/-/issues"><i
+                    <a class="c text-left" href="https://gitlab.com/openrsc/core/-/issues"><i
                                 class="fas fa-sticky-note"></i> GitLab Issues</a>
                 </span>
         </span>

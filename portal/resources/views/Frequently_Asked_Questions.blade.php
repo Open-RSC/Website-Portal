@@ -14,7 +14,7 @@
         the interest of "leech proofing" code, money grabs, toxic individuals, DDoS attacks, and deception.
         The OpenRSC core team consists of real life professional developers, security
         consultants, dev ops
-        managers, and more. You can find the source code for our game servers <a href="https://gitlab.com/open-runescape-classic/core" target="_blank">right here</a> and the source code for our website <a href="https://gitlab.com/open-runescape-classic/Website-Portal" target="_blank">right here</a>. You can also find the rules for our live servers <a href="/rules" target="_blank">right here</a>.
+        managers, and more. You can find the source code for our game servers <a href="https://gitlab.com/openrsc/core" target="_blank">right here</a> and the source code for our website <a href="https://gitlab.com/openrsc/Website-Portal" target="_blank">right here</a>. You can also find the rules for our live servers <a href="/rules" target="_blank">right here</a>.
 
         <span class="mt-4 rscfont text-danger font-weight-bold d-block">How do I play?</span>
         Great question! We have many different public worlds, and many different ways to play.
@@ -29,7 +29,7 @@
         To use global chat, you must first reach 150 total level. After you have reached 150 total level, you need to read the rules by typing ::globalrules and following the provided instructions. After that, you can then type ::g and your message to talk in global chat. You can also switch global chat between the Private and Quest tabs by typing ::gp or ::gq if you'd like.
 
          <span class="rscfont text-danger font-weight-bold d-block pt-4">I am a new player, how should I train/make money/do quests?</span>
-        You can find a guide for new players <a href=" https://classic.runescape.wiki/w/Guide_for_new_players">right here</a>.
+        You can find a guide for new players <a href="https://rsc.wiki/w/Guide_for_new_players">right here</a>.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What are the differences between the public worlds?</span>
         <div class="pl-1 d-block"><span class="rscfont text-primary d-block">RSC Preservation (Formerly OpenRSC)</span>
@@ -126,7 +126,7 @@
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Is a single player edition available?</span>
         Yes! Download a copy of the <a class="link-success underline" target="_blank"
-                                       href="https://gitlab.com/open-runescape-classic/core">GitLab
+                                       href="https://gitlab.com/openrsc/core">GitLab
             "core" project repository</a> and start
         playing. A "Start-Windows.cmd" script is included to launch a portable version that does not require any
         additional installation nor configuration.
@@ -135,13 +135,13 @@
                 class="rscfont text-danger font-weight-bold d-block pt-4">Where may I learn how to run my own OpenRSC server?</span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
-                                                                    href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/Windows%20Getting%20Started%20Guide.md">Windows getting started guide</a></span>
+                                                                    href="https://gitlab.com/openrsc/core/-/blob/develop/Windows%20Getting%20Started%20Guide.md">Windows getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
-                                                                    href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
+                                                                    href="https://gitlab.com/openrsc/core/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
-                                                                    href="https://gitlab.com/open-runescape-classic/core/-/blob/develop/MacOS%20Getting%20Started%20Guide.md">MacOS getting started guide</a></span>
+                                                                    href="https://gitlab.com/openrsc/core/-/blob/develop/MacOS%20Getting%20Started%20Guide.md">MacOS getting started guide</a></span>
         <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
                                                                     target="_blank"
                                                                     href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>

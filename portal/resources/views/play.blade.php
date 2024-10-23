@@ -33,12 +33,12 @@
     @if ($members != 'members')
         <div class="d-flex">
             <div>
-                <a href="https://classic.runescape.wiki/w/Banner" target="_blank">
+                <a href="https://rsc.wiki/w/Banner" target="_blank">
                     <img src="col-1" id="banner" alt="">
                 </a>
             </div>
             <div>
-                <a href="https://classic.runescape.wiki/w/Banner#RealArcade_Banner" target="_blank">
+                <a href="https://rsc.wiki/w/Banner#RealArcade_Banner" target="_blank">
                     <img src="/img/banners/realbanner.gif" alt="">
                 </a>
             </div>
