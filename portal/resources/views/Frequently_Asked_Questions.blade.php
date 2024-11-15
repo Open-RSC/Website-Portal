@@ -84,10 +84,11 @@
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the OpenRSC framework</span>
         </div>
         <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">OpenPK (Under development)</span>
-            <span class="d-block"><i class="fas fa-angle-right"></i> Stork-style point system and dedicated to F2P player killing</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i> StorkPK-style point system and dedicated to player killing</span>
             <span class="d-block"><i
                         class="fas fa-angle-right"></i> Staff moderated world with no botting allowed</span>
             <span class="d-block"><i class="fas fa-angle-right"></i> Operated using the OpenRSC framework</span>
+            <span class="d-block"><i class="fas fa-angle-right"></i>You can read more about our plans to get an idea of what it will be like <a href="https://gitlab.com/openrsc/openrsc/-/issues/1048">right here</a>.</span>
         </div>
         <div class="pl-1 d-block pt-2"><span class="rscfont text-primary d-block">RSC Kale (Under development)</span>
             <span class="d-block"><i
