@@ -11,7 +11,7 @@ Artisan::command('inspire', function () {
 // SCHEDULED COMMANDS
 // In order to get scheduled commands to run, we need a cron job on our server to run the scheduler: * * * * * php /path/to/portal/artisan schedule:run >> /dev/null 2>&1
 
-// Schedule::command('inspire')->hourly();
+//Schedule::command('inspire')->hourly();
 
 //Schedule::command('toplist:bi-monthly')
 //    ->twiceMonthly(1, 16, '12:00');
