@@ -13,8 +13,8 @@ Artisan::command('inspire', function () {
 
 // Schedule::command('inspire')->hourly();
 
-Schedule::command('toplist:bi-monthly')
-    ->twiceMonthly(1, 16, '12:00');
+//Schedule::command('toplist:bi-monthly')
+//    ->twiceMonthly(1, 16, '12:00');
 
 //TODO: We should probably add clean-up for stats CSVs at some point, even though it's less than 1kb per CSV file so 20MB per year.
 
