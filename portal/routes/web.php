@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', [HomeController::class, 'home'])->name('Home');
+Route::get('/thearchive', function() {
+    return redirect('https://rs-archive.github.io/index.html');
+});
 Route::get('/home', [HomeController::class, 'home'])->name('Home Page');
 Route::get('worldmap/{db}', [HomeController::class, 'worldmap'])->name('World Map');
 Route::get('worldmap', function () {
