@@ -66,7 +66,7 @@
         <p>As a foreign server administrator, you do not need this file. It is a SQLite database containing just the one user's data, intended for that player to use with a single-player server.</p>
 
         <h3><code>playerdata.sql</code></h3>
-        <p>This file contains several <code>INSERT</code> statements with all of the user's data. You should be able to run this file without issue, importing to MariaDB or SQLite.</p>
+        <p>This file contains several <code>INSERT</code> statements with all of the user's data. You should be able to run this file without issue, importing it via MariaDB or SQLite.</p>
         <p>If you are importing into a server with existing users, not from OpenRSC, you will need to manually figure out how to change the <code>id</code> field of player in the player table, and then also update their player id for all the associated database tables. If the player id is not adjusted to be compatible with your server, you will encounter collisions between users by importing <code>playerdata.sql</code> without modification.</p>
         <p>If you haven't already started allowing new user registrations on your server, it would be sane to insert an entry into the players table with a high id, something like 100,000,000, so that AUTO_INCREMENT for new player ids will safely avoid the space where original OpenRSC accounts were created (currently we are up to player IDs around 20,000 on the RSC Preservation server)</p>
         <p>We trust you are able to handle this.</p>
