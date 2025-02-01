@@ -24,7 +24,7 @@
         <h3>How to extract</h3>
         <ol>
             <li>First, you will need the public key associated with the private key that Open RSC used to sign the data. A link to this file is included in <code>metadata.txt</code>.</li>
-            <li>Ensure that you trust the GPG Link looks like it belongs to Open RSC. We have used https://rsc.vet and https://openrsc.com at the time of this writing.</li>
+            <li>Ensure that you trust that the GPG Link looks like it belongs to Open RSC. We have used https://rsc.vet and https://openrsc.com at the time of this writing.</li>
             <li>Download the key.</li>
             <li>On a linux system, the command used to import a gpg public key is: <code>gpg --import ./openrsc-gpg-public-key-2023-02-16.key</code></li>
             <li>You will want to inform GPG how much you trust that data signed with the private key associated with that public key comes from Open RSC.</li>
@@ -38,7 +38,7 @@
         </ol>
         
         <h3><code>metadata.txt</code></h3>
-        <p>This file contains important information for adminstrators considering importing a player.</p>
+        <p>This file contains important information for administrators considering importing a player.</p>
         <p>Here is an example metadata.txt file:</p>
         <code>
         Server: cabbage<br/>
@@ -66,7 +66,7 @@
         <p>As a foreign server administrator, you do not need this file. It is a SQLite database containing just the one user's data, intended for that player to use with a single-player server.</p>
         
         <h3><code>playerdata.sql</code></h3>
-        <p>This file contains several <code>INSERT</code> statements with all of the user's data. You should be run this file without issue, importing to MariaDB or SQLite.</p>
+        <p>This file contains several <code>INSERT</code> statements with all of the user's data. You should be able to run this file without issue, importing to MariaDB or SQLite.</p>
         <p>If you are importing into a server with existing users, not from Open RSC, you will need to manually figure out how to change the <code>id</code> field of player in the player table, and then also update their player id for all the associated database tables. If the player id is not adjusted to be compatible with your server, you will encounter collisions between users by importing <code>playerdata.sql</code> without modification.</p>
         <p>If you haven't already started allowing new user registrations on your server, it would be sane to insert an entry into the players table with a high id, something like 100,000,000, so that AUTO_INCREMENT for new player ids will safely avoid the space where original Open RSC accounts were created (currently we are up to player IDs around 20,000 on the RSC Preservation server)</p>
         <p>We trust you are able to handle this.</p>
