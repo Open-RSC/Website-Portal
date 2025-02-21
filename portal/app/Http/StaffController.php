@@ -85,8 +85,12 @@ class StaffController extends Controller
         if (!Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
+        $playerData = [];
         $player = DB::connection($db)->table('players')->where('id', '=', $id)->first();
-
+        $playerCacheData = DB::connection($db)->table('player_cache')->where('playerID', '=', $id)->get();
+        foreach ($playerCacheData as $row) {
+            $playerData[$row->key] = $row->value;
+        }
         if ($player === null) {
             abort(404);
         }
@@ -101,7 +105,7 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        return view('playerview', compact('db', 'player'));
+        return view('playerview', compact('db', 'player', 'playerData'));
     }
 
     public function playerListData(Request $request, $db)

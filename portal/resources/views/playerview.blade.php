@@ -82,6 +82,7 @@
                         Banned: No
                     @endif
                 </p>
+                <p>Bank Pin: {{ !empty($playerData['bank_pin']) ? "Yes" : "No" }} </p>
                 <p>Block Private: {{ $player->block_private === 1 ? "Yes" : "No" }} </p>
                 <p>Block Chat: {{ $player->block_chat === 1 ? "Yes" : "No" }} </p>
                 <p>Block Trade: {{ $player->block_trade === 1 ? "Yes" : "No" }} </p>
