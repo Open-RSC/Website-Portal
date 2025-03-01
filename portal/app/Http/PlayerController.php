@@ -316,18 +316,18 @@ class PlayerController extends Controller
                 ])
                 ->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                 ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                            AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                        a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                        a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
-                        / 4.0
-                        FROM experience a WHERE a.playerid = b.id)
-                        >
-                        (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                        a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                        a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
-                        / 4.0
-                        FROM experience a JOIN players b ON a.playerid = b.id
-                        WHERE b.username = ? LIMIT 1)
+                    AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
+                    a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
+                    a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
+                    / 4.0
+                    FROM experience a WHERE a.playerid = b.id)
+                    >
+                    (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
+                    a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
+                    a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
+                    / 4.0
+                    FROM experience a JOIN players b ON a.playerid = b.id
+                    WHERE b.username = ? LIMIT 1)
                 )', [$subpage, $subpage])
                 ->get();
         } elseif (value($db) == '2001scape') { // Retro authentic
@@ -345,18 +345,18 @@ class PlayerController extends Controller
                 ])
                 ->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                 ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                                AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
-                            a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
-                            a.crafting + a.smithing + a.mining)
-                            / 4.0
-                            FROM experience a WHERE a.playerid = b.id)
-                            >
-                            (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
-                            a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
-                            a.crafting + a.smithing + a.mining)
-                            / 4.0
-                            FROM experience a JOIN players b ON a.playerid = b.id
-                            WHERE b.username = ? LIMIT 1)
+                    AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
+                    a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
+                    a.crafting + a.smithing + a.mining)
+                    / 4.0
+                    FROM experience a WHERE a.playerid = b.id)
+                    >
+                    (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
+                    a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
+                    a.crafting + a.smithing + a.mining)
+                    / 4.0
+                    FROM experience a JOIN players b ON a.playerid = b.id
+                    WHERE b.username = ? LIMIT 1)
                 )', [$subpage, $subpage])
                 ->get();
         } else { // authentic
@@ -374,18 +374,18 @@ class PlayerController extends Controller
                 ])
                 ->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                 ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                                AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
-                            / 4.0
-                            FROM experience a WHERE a.playerid = b.id)
-                            >
-                            (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
-                            / 4.0
-                            FROM experience a JOIN players b ON a.playerid = b.id
-                            WHERE b.username = ? LIMIT 1)
+                    AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
+                    a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
+                    a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
+                    / 4.0
+                    FROM experience a WHERE a.playerid = b.id)
+                    >
+                    (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
+                    a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
+                    a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
+                    / 4.0
+                    FROM experience a JOIN players b ON a.playerid = b.id
+                    WHERE b.username = ? LIMIT 1)
                 )', [$subpage, $subpage])
                 ->get();
         }
