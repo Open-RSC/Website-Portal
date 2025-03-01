@@ -23,12 +23,13 @@
                 <tr>
                     <td class="e">
                         <div class="text-center d-flex align-items-center">
-                        @if ($db === "openpk") PK Hiscores @else Skill Hiscores @endif {!!  (($db === "cabbage" || $db === "coleslaw") && ($players->first()->iron_man === 1 || $players->first()->iron_man === 2 || $players->first()->iron_man === -1)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!}
-                            @if(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man == 1)
+                        @if ($db === "openpk") PK Hiscores @else Skill Hiscores @endif {!!  (($db === "cabbage" || $db === "coleslaw") && ($players->first()->iron_man === 1 || $players->first()->iron_man === 2 || $players->first()->iron_man === -1 || $players->first()->iron_man === 4)) ? '<span class="mr-1 ml-1">for</span>' : 'for' !!}
+                                {{ dd($players->first()) }}
+                            @if(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man === 1)
                                 <img src="{{ asset('img/iron.png') }}" alt="Ironman">
-                            @elseif(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man == 2)
+                            @elseif(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man === 2)
                                 <img src="{{ asset('img/uim.png') }}" alt="Ultimate Ironman">
-                            @elseif(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man == -1)
+                            @elseif(($db === "cabbage" || $db === "coleslaw") && $players->first()->iron_man === 3)
                                 <img src="{{ asset('img/hcim.png') }}" alt="Hardcore Ironman">
                             @endif
                             @if ($players->first()->group_id < '10')
