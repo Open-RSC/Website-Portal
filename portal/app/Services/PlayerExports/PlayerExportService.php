@@ -68,7 +68,7 @@ class PlayerExportService
 
         Storage::disk('local')->put($sqlfile, $this->sqlString);
 
-        $sqliteFilePath = storage_path('app/'.$sqlitefile);
+        $sqliteFilePath = storage_path('app/private/'.$sqlitefile);
         // Log the path being used for SQLite file
         // \Log::info('SQLite file path: ' . $sqliteFilePath);
 
@@ -126,13 +126,13 @@ class PlayerExportService
             $gpg = new GnuPG;
             $private = $gpg->importKeys(file_get_contents(config('openrsc.gpg_private_key_file')));
             $public = $gpg->importKeys(file_get_contents(config('openrsc.gpg_public_key_file')));
-            if ($zip->open(storage_path('app/'.$tempzipfile), ZipArchive::CREATE) === true) {
-                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
-                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
-                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
+            if ($zip->open(storage_path('app/private/'.$tempzipfile), ZipArchive::CREATE) === true) {
+                $zip->addFile(storage_path('app/private/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/private/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/private/'.$txtfile), 'metadata.txt');
                 $zip->close();
             }
-            $gpgdata = $gpg->signFile(storage_path('app/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
+            $gpgdata = $gpg->signFile(storage_path('app/private/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
             Storage::disk('local')->put($gpgfile, $gpgdata->data);
         } catch (\Exception $e) {
             \Log::error('Player Export GPG exception: '.$e->getMessage());
@@ -140,11 +140,11 @@ class PlayerExportService
 
         // Create the zip archive
         try {
-            if ($zip->open(storage_path('app/'.$zipfile), ZipArchive::CREATE) === true) {
-                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
-                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
-                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
-                $zip->addFile(storage_path('app/'.$gpgfile), 'data.zip.gpg');
+            if ($zip->open(storage_path('app/private/'.$zipfile), ZipArchive::CREATE) === true) {
+                $zip->addFile(storage_path('app/private/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/private/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/private/'.$txtfile), 'metadata.txt');
+                $zip->addFile(storage_path('app/private/'.$gpgfile), 'data.zip.gpg');
                 $zip->close();
             }
         } catch (\Exception $e) {
@@ -162,7 +162,7 @@ class PlayerExportService
 
         $this->fileName = $this->db.'-'.$this->username.'-'.$this->dateString.'.zip';
         $this->generateFileExportLog();
-        $this->fileData = file_get_contents(storage_path('app/'.$this->basePath.$this->extraPath.$this->fileName));
+        $this->fileData = file_get_contents(storage_path('app/private/'.$this->basePath.$this->extraPath.$this->fileName));
 
         return $this->fileData;
     }
