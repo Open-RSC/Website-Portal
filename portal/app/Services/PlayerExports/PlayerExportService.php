@@ -57,7 +57,6 @@ class PlayerExportService
     public function generateFile(): string
     {
         $basename = $this->db . '-' . $this->username . '-' . $this->dateString;
-        $exportPath = storage_path('app/private/' . $this->extraPath);
         $sqlfile = $this->basePath . $this->extraPath . 'playerdata.sql';
         $zipfile = $this->basePath . $this->extraPath . $basename . '.zip';
         $tempzipfile = $this->basePath . $this->extraPath . 'data.zip';
@@ -66,55 +65,42 @@ class PlayerExportService
         $txtfile = $this->basePath . $this->extraPath . 'metadata.txt';
 
         \Log::info("Generating player export for username: {$this->username}, DB: {$this->db}");
-        \Log::info("Export path: {$exportPath}");
 
-        // Step 1: Ensure export directory exists
-        if (!file_exists($exportPath)) {
-            if (!mkdir($exportPath, 0775, true)) {
-                \Log::error("Failed to create export directory: {$exportPath}");
-                throw new \Exception("Failed to create export directory: {$exportPath}");
-            } else {
-                \Log::info("Successfully created export directory: {$exportPath}");
-            }
+        // Ensure the export directory exists
+        if (!Storage::disk('local')->exists($this->basePath . $this->extraPath)) {
+            \Log::info("Creating export directory: " . storage_path('app/private/' . $this->basePath . $this->extraPath));
+            Storage::disk('local')->makeDirectory($this->basePath . $this->extraPath);
+        } else {
+            \Log::info("Export directory already exists: " . storage_path('app/private/' . $this->basePath . $this->extraPath));
         }
 
-        // Step 2: Store SQL file
-        try {
-            Storage::disk('local')->put($sqlfile, $this->sqlString);
-            \Log::info("SQL file stored successfully at: {$sqlfile}");
-        } catch (\Exception $e) {
-            \Log::error("Error writing SQL file: " . $e->getMessage());
-            throw $e;
-        }
+        // Step 1: Store SQL file
+        Storage::disk('local')->put($sqlfile, $this->sqlString);
+        \Log::info("SQL file stored: {$sqlfile}");
 
-        // Step 3: Verify SQLite database file exists
+        // Step 2: Verify SQLite database file exists
         $sqliteFilePath = storage_path('app/private/' . $sqlitefile);
-        \Log::info("Checking SQLite file at: {$sqliteFilePath}");
+        \Log::info("Checking SQLite file existence at: {$sqliteFilePath}");
 
         if (!Storage::disk('sqlite')->exists($this->db . '.db')) {
             \Log::error("SQLite file missing: " . Storage::disk('sqlite')->path($this->db . '.db'));
             throw new \Exception("SQLite file does not exist at path: " . Storage::disk('sqlite')->path($this->db . '.db'));
         }
 
-        // Step 4: Copy SQLite database file to local storage
-        try {
-            Storage::disk('local')->put($sqlitefile, Storage::disk('sqlite')->get($this->db . '.db'));
-            \Log::info("Copied SQLite file to local storage: {$sqlitefile}");
-        } catch (\Exception $e) {
-            \Log::error("Error copying SQLite file: " . $e->getMessage());
-            throw $e;
-        }
+        // Step 3: Copy SQLite database file
+        Storage::disk('local')->put($sqlitefile, Storage::disk('sqlite')->get($this->db . '.db'));
+        \Log::info("SQLite file copied: {$sqlitefile}");
 
-        // Step 5: Configure SQLite connection
+        // Step 4: Configure SQLite connection
         Config::set("database.connections.$basename", [
             'driver' => 'sqlite',
             'database' => $sqliteFilePath,
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', false),
         ]);
-        \Log::info("Configured SQLite connection: {$basename}");
+        \Log::info("Configured SQLite connection for: {$basename}");
 
-        // Step 6: Execute SQL statements
+        // Step 5: Execute SQL statements
         $sqlArray = explode("\n", $this->sqlString);
         foreach ($sqlArray as $statement) {
             if (empty(trim($statement))) {
@@ -131,7 +117,7 @@ class PlayerExportService
 
         \Log::info("SQL execution completed for: {$basename}");
 
-        // Step 7: Create metadata text file
+        // Step 6: Create metadata text file
         $text = "Server: {$this->db}\n";
         $text .= 'Timestamp: ' . floor(microtime(true) * 1000) . "\n";
         $text .= 'Muted: ' . $this->player[0]->muted . "\n";
@@ -139,9 +125,9 @@ class PlayerExportService
         $text .= 'Offences: ' . $this->player[0]->offences . "\n";
         $text .= 'GPG Link: https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key' . "\n";
         Storage::disk('local')->put($txtfile, $text);
-        \Log::info("Metadata file created at: {$txtfile}");
+        \Log::info("Metadata file created: {$txtfile}");
 
-        // Step 8: Create GPG zip archive
+        // Step 7: Create GPG zip archive
         try {
             $zip = new ZipArchive;
             $gpg = new GnuPG;
@@ -160,7 +146,7 @@ class PlayerExportService
             \Log::error("GPG exception: " . $e->getMessage());
         }
 
-        // Step 9: Create the final zip archive
+        // Step 8: Create the final zip archive
         try {
             if ($zip->open(storage_path('app/private/' . $zipfile), ZipArchive::CREATE) === true) {
                 $zip->addFile(storage_path('app/private/' . $sqlitefile), 'playerdata.db');
@@ -168,18 +154,18 @@ class PlayerExportService
                 $zip->addFile(storage_path('app/private/' . $txtfile), 'metadata.txt');
                 $zip->addFile(storage_path('app/private/' . $gpgfile), 'data.zip.gpg');
                 $zip->close();
-                \Log::info("Final zip archive created at: {$zipfile}");
+                \Log::info("Final zip archive created: {$zipfile}");
             }
         } catch (\Exception $e) {
             \Log::error("Error creating zip: " . $e->getMessage());
             return redirect(route('PlayerExportView'))->withErrors('Error creating Player Export, please try again later.');
         }
 
-        // Step 10: Cleanup temporary files
+        // Step 9: Cleanup temporary files
         Storage::disk('local')->delete([$sqlfile, $sqlitefile, $txtfile, $tempzipfile, $gpgfile]);
         \Log::info("Cleanup complete: Deleted temporary files");
 
-        // Step 11: Set file name and generate export log
+        // Step 10: Set file name and generate export log
         $this->fileName = $basename . '.zip';
         $this->generateFileExportLog();
         $this->fileData = file_get_contents(storage_path('app/private/' . $this->basePath . $this->extraPath . $this->fileName));
