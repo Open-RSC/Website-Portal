@@ -39,7 +39,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(function () {
-            if (!config('openrsc.login_enabled')) {
+            if (! config('openrsc.login_enabled')) {
                 abort(404);
             }
 
@@ -47,7 +47,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::registerView(function () {
-            if (!config('openrsc.web_registration_enabled')) {
+            if (! config('openrsc.web_registration_enabled')) {
                 abort(404);
             }
             $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
@@ -75,7 +75,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing(function (Request $request) {
-            if (!config('openrsc.login_enabled')) {
+            if (! config('openrsc.login_enabled')) {
                 return false;
             }
             try {
@@ -85,11 +85,11 @@ class FortifyServiceProvider extends ServiceProvider
                     'db' => ['required', 'in:preservation,cabbage,uranium,coleslaw,2001scape'],
                 ]);
             } catch (ValidationException $e) {
-                //\Log::info($e->validator->errors());
+                // \Log::info($e->validator->errors());
                 return false;
             }
             $database = $request->input('db');
-            if ($database !== 'preservation' && !config('openrsc.multi_world_logins')) {
+            if ($database !== 'preservation' && ! config('openrsc.multi_world_logins')) {
                 return false;
             }
             $username = $request->input('username');
@@ -104,19 +104,19 @@ class FortifyServiceProvider extends ServiceProvider
             } else {
                 $trimmed_pass = trim($password);
             }
-            //If we're still using SHA512 for the password, do a simple comparison.
+            // If we're still using SHA512 for the password, do a simple comparison.
             if (password_needs_rehashing($user->pass)) {
                 if ($trimmed_pass !== $user->pass) {
                     return false;
                 }
-            } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+            } elseif (! Hash::check($trimmed_pass, $user->pass)) { // Otherwise, we have a bcrypt hash in the DB to check.
                 return false;
             }
             if ($user) {
-                if (config('openrsc.login_admin_only') && !$user->hasAdmin()) {
+                if (config('openrsc.login_admin_only') && ! $user->hasAdmin()) {
                     return false;
                 }
-                if ($database !== 'preservation' && (!$request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || !$request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
+                if ($database !== 'preservation' && (! $request->attributes->has('dynamic_guard_middleware_ran') || $request->attributes->get('dynamic_guard_middleware_ran') !== true || ! $request->attributes->has('dynamic_guard_checker_middleware_ran') || $request->attributes->get('dynamic_guard_checker_middleware_ran') !== true)) {
                     $ip = '';
                     try {
                         $ip = get_client_ip_address();

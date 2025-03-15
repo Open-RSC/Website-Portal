@@ -73,7 +73,7 @@ class StatsController extends Controller
         $sumgold_B = DB::connection('cabbage')->table('bank as B') // bank
             ->join('players AS A', 'B.playerID', '=', 'A.id')
             ->join('itemstatuses AS S', 'S.itemID', '=', 'B.itemID')
-            //->join('invitems as I', 'I.playerID', '=', 'A.id')
+            // ->join('invitems as I', 'I.playerID', '=', 'A.id')
             ->where([
                 ['S.catalogID', '=', '10'],
                 ['A.group_id', '=', '10'],
@@ -101,7 +101,7 @@ class StatsController extends Controller
                 'logins' => $logins,
                 'totalPlayers' => $totalPlayers,
                 'uniquePlayers' => $uniquePlayers,
-                //'totalTime' => $totalTime,
+                // 'totalTime' => $totalTime,
                 'activityfeed' => $activityfeed,
                 'sumgold' => $sumgold,
                 'news_feed' => $news_feed,
@@ -219,7 +219,7 @@ class StatsController extends Controller
 
     public function itemStats($db = 'cabbage'): Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application|Redirector|RedirectResponse
     {
-        if (!config('openrsc.stats_page_enabled')) {
+        if (! config('openrsc.stats_page_enabled')) {
             abort(404);
         }
 
@@ -227,7 +227,7 @@ class StatsController extends Controller
             return redirect('/login');
         }
 
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 
@@ -330,7 +330,7 @@ class StatsController extends Controller
 
     public function itemStatsData($db = 'cabbage')
     {
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
 

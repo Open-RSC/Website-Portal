@@ -11,12 +11,12 @@ Artisan::command('inspire', function () {
 // SCHEDULED COMMANDS
 // In order to get scheduled commands to run, we need a cron job on our server to run the scheduler: * * * * * php /path/to/portal/artisan schedule:run >> /dev/null 2>&1
 
-//Schedule::command('inspire')->hourly();
+// Schedule::command('inspire')->hourly();
 
-//Schedule::command('toplist:bi-monthly')
+// Schedule::command('toplist:bi-monthly')
 //    ->twiceMonthly(1, 16, '12:00');
 
-//TODO: We should probably add clean-up for stats CSVs at some point, even though it's less than 1kb per CSV file so 20MB per year.
+// TODO: We should probably add clean-up for stats CSVs at some point, even though it's less than 1kb per CSV file so 20MB per year.
 
 // HOURLY JOBS
 if (config('openrsc.stats_hourly_csv_job_enabled')) {
@@ -25,7 +25,7 @@ if (config('openrsc.stats_hourly_csv_job_enabled')) {
         ->cron('6 */1 * * *');
     Schedule::command('stats:generate-csv cabbage')
         ->cron('7 */1 * * *');
-    //Schedule::command('stats:generate-csv 2001scape')
+    // Schedule::command('stats:generate-csv 2001scape')
     //        ->cron('8 */1 * * *'); //I do not think 2001scape has all the items that we check.
     Schedule::command('stats:generate-csv uranium')
         ->cron('9 */1 * * *');
@@ -39,7 +39,7 @@ if (config('openrsc.stats_hourly_csv_job_enabled')) {
         ->cron('6 */1 * * *');
     Schedule::command('stats:generate cabbage')
         ->cron('7 */1 * * *');
-    //Schedule::command('stats:generate 2001scape')
+    // Schedule::command('stats:generate 2001scape')
     //        ->cron('8 */1 * * *'); //I do not think 2001scape has all the items that we check.
     Schedule::command('stats:generate uranium')
         ->cron('9 */1 * * *');

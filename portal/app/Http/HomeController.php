@@ -109,7 +109,7 @@ class HomeController extends Controller
             })
             ->count('b.online');
 
-        //World logged in players over the last 48h
+        // World logged in players over the last 48h
         $preservation_48 = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
                 $join->on('b.id', '=', 'a.playerID');
@@ -265,7 +265,7 @@ class HomeController extends Controller
             ->get();
 
         $playerPositions = $playerPositions->map(function ($player) {
-            if (Auth::user() === null || !Auth::user()->hasPlayerModerator()) {
+            if (Auth::user() === null || ! Auth::user()->hasPlayerModerator()) {
                 $player->username = '';
             }
 
@@ -297,7 +297,7 @@ class HomeController extends Controller
             'mapHeight' => $mapHeight,
             'xOffset' => $xOffset,
             'yOffset' => $yOffset,
-            'usernamesHidden' => Auth::user() === null || !Auth::user()->hasPlayerModerator(),
+            'usernamesHidden' => Auth::user() === null || ! Auth::user()->hasPlayerModerator(),
         ]);
     }
 

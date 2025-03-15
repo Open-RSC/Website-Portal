@@ -18,7 +18,7 @@ class RegisteredUserController extends \Laravel\Fortify\Http\Controllers\Registe
 
     public function store(Request $request, CreatesNewUsers $creator): RegisterResponse
     {
-        if (!config('openrsc.web_registration_enabled') || is_incorrect_production_url()) {
+        if (! config('openrsc.web_registration_enabled') || is_incorrect_production_url()) {
             \Log::warning('IP '.get_client_ip_address().' tried to validate with incorrect registration URL in production OR web registration not enabled!');
             Session::flash('error', 'Failed to create account!');
 

@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 // General pages
 Route::get('/', [HomeController::class, 'home'])->name('Home');
-Route::get('/thearchive', function() {
+Route::get('/thearchive', function () {
     return redirect('https://rs-archive.github.io/index.html');
 });
 Route::get('/home', [HomeController::class, 'home'])->name('Home Page');
@@ -59,7 +59,6 @@ Route::post('playerexport/export/', [PlayerController::class, 'exportSubmit'])->
 Route::get('/message-center', [PlayerController::class, 'showMessageCenter'])->name('message-center');
 Route::get('/message-centre', [PlayerController::class, 'showMessageCenter'])->name('message-centre');
 
-
 // Item lookup
 Route::any('items', [ItemController::class, 'index'])->name('Items');
 Route::any('itemdef/{id}', [ItemController::class, 'show'])->name('Item Information');
@@ -88,7 +87,7 @@ Route::get('searchNpcHiscoresByNpcName/{db}/{name}', [HiscoresController::class,
 Route::any('toplist/{db}', [HiscoresController::class, 'toplist'])->name('OpenRSC Hiscore tables'); // route name purposely left with a space to deconflict
 
 // Current players
-//Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current OpenRSC players');
+// Route::any('onlinelist/{db}', 'OnlineController@index')->name('Current OpenRSC players');
 
 Route::post('/register', [Auth\RegisteredUserController::class, 'store'])->middleware('throttle:10,15')->name('Register');
 

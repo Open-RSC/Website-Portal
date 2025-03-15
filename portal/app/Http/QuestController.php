@@ -85,7 +85,7 @@ class QuestController extends Controller
             ->get();*/
 
         return view('quests/'.$subpage, [
-            //'quest' => $quest,
+            // 'quest' => $quest,
             'quest_array' => $quest_array,
             'minigame_array' => $minigame_array,
             'subpage' => $subpage,

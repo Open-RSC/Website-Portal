@@ -56,7 +56,7 @@ class HiscoresController extends Component
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -65,7 +65,7 @@ class HiscoresController extends Component
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -74,7 +74,7 @@ class HiscoresController extends Component
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -256,7 +256,7 @@ class HiscoresController extends Component
      */
     public function show($db, $subpage): Factory|View
     {
-        //$queryString = $db->getQueryString();
+        // $queryString = $db->getQueryString();
         /**
          * @var $skill_array
          * prevents non-authentic skills from showing if .env DB_DATABASE is named 'openrsc'
@@ -280,7 +280,7 @@ class HiscoresController extends Component
          * @var $subpage
          * queries the npc and returns a 404 error if not found in database
          */
-        if (!in_array($subpage, $skill_array)) {
+        if (! in_array($subpage, $skill_array)) {
             abort(404);
         }
 
@@ -372,7 +372,7 @@ class HiscoresController extends Component
          * @var $subpage
          * queries the npc and returns a 404 error if not found in database
          */
-        if (!in_array($subpage, $skill_array)) {
+        if (! in_array($subpage, $skill_array)) {
             abort(404);
         }
 
@@ -594,7 +594,7 @@ class HiscoresController extends Component
 
     public function playerHiscoresRedirect($db = 'preservation')
     {
-        //Redirect to player hiscores.
+        // Redirect to player hiscores.
         return redirect()->to("/hiscores/$db/");
     }
 
@@ -621,7 +621,7 @@ class HiscoresController extends Component
      */
     public function searchNpcHiscoresByPlayerName(Request $request): \Illuminate\Http\RedirectResponse
     {
-        if (!config('openrsc.npc_hiscores_enabled')) {
+        if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $name = $request->name;
@@ -639,10 +639,10 @@ class HiscoresController extends Component
      */
     public function searchNpcHiscoresByNpcName(Request $request, $db = null, $name = null)
     {
-        if (!config('openrsc.npc_hiscores_enabled') || !$db || !$name) {
+        if (! config('openrsc.npc_hiscores_enabled') || ! $db || ! $name) {
             abort(404);
         }
-        $npcDefs = DB::connection('preservation') //2001scape does not have the npcdef table, so we can just use preservation which does.
+        $npcDefs = DB::connection('preservation') // 2001scape does not have the npcdef table, so we can just use preservation which does.
             ->table('npcdef')
             ->select('npcdef.id', 'npcdef.name', 'npcdef.combatlvl')
             ->where('npcdef.name', 'like', '%'.$name.'%')
@@ -672,7 +672,7 @@ class HiscoresController extends Component
 
     public function npcHiscoresRedirect($db = 'preservation')
     {
-        if (!config('openrsc.npc_hiscores_enabled')) {
+        if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
 
@@ -691,17 +691,17 @@ class HiscoresController extends Component
 
     public function npcIndex($db, $npc_id)
     {
-        if (!config('openrsc.npc_hiscores_enabled')) {
+        if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $npcs = ['overall' => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcs = ['overall' => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
-        if (!config('openrsc.npc_overall_hiscores_enabled')) {
+        if (! config('openrsc.npc_overall_hiscores_enabled')) {
             unset($npcs['overall']);
         }
-        if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== 'coleslaw' && $db !== 'cabbage')) {
+        if (! config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== 'coleslaw' && $db !== 'cabbage')) {
             unset($npcs['odyssey']);
         }
         if ($npc_id == 'overall') {
@@ -781,7 +781,7 @@ class HiscoresController extends Component
 
     public function npcPlayerIndex($db, $player_name)
     {
-        if (!config('openrsc.npc_hiscores_enabled')) {
+        if (! config('openrsc.npc_hiscores_enabled')) {
             abort(404);
         }
         $conn = $db;
@@ -797,21 +797,21 @@ class HiscoresController extends Component
             })
             ->select('ironman.iron_man', 'players.*')
             ->first();
-        if (!$player) {
+        if (! $player) {
             return redirect()->back()->withErrors("The Player $player_name does not exist!");
         }
         $player_id = $player->id;
-        //We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
+        // We should probably keep the NPC IDs array small to keep NPC hiscores performing quickly.
         $npcIDs = [477, 291, 290, 201, 202, 344, 254, 184, 567, 135, 542, 787, 190, 158, 584, 295, 555, 61, 407, 137, 199, 270, 70, 86, 76, 367, 21, 6, 114, 3, 409];
         $npcs = ['overall' => 'Overall', 'odyssey' => 'Odyssey Completions', 477 => 'King Black Dragon', 291 => 'Black Dragon', 290 => 'Black Demon', 201 => 'Red Dragon', 202 => 'Blue Dragon', 344 => 'Fire Giant', 254 => 'Ice Queen', 184 => 'Greater Demon', 567 => 'Salarin', 135 => 'Ice Giant', 542 => 'UndeadOne', 787 => 'Shadow Warrior', 190 => 'Chaos Dwarf', 158 => 'Ice Warrior', 584 => 'Earth Warrior', 295 => 'Animated Axe', 555 => 'Chaos Druid Warrior', 61 => 'Giant', 407 => 'Khazard Troop', 137 => 'Pirate', 199 => 'Dark Warrior', 270 => 'Chaos Druid', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 367 => 'Dungeon Rat', 21 => 'Mugger', 6 => 'Cow', 114 => 'Imp', 3 => 'Chicken', 409 => 'Gnome Troop'];
         if ($db === '2001scape') {
             $npcIDs = [135, 61, 137, 70, 86, 76, 21, 114, 3];
             $npcs = ['overall' => 'Overall', 135 => 'Ice Giant', 61 => 'Giant', 137 => 'Pirate', 70 => 'Scorpion', 86 => 'Warrior', 76 => 'Barbarian', 21 => 'Mugger', 114 => 'Imp', 3 => 'Chicken'];
         }
-        if (!config('openrsc.npc_overall_hiscores_enabled')) {
+        if (! config('openrsc.npc_overall_hiscores_enabled')) {
             unset($npcs['overall']);
         }
-        if (!config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== 'coleslaw' && $db !== 'cabbage')) {
+        if (! config('openrsc.npc_odyssey_hiscores_enabled') || ($db !== 'coleslaw' && $db !== 'cabbage')) {
             unset($npcs['odyssey']);
         }
         $hiscores = DB::connection($conn)
@@ -886,7 +886,7 @@ class HiscoresController extends Component
          * @var $db
          * return not found for servers where toplist was no longer a thing
          */
-        if (!in_array($db, $toplist_array)) {
+        if (! in_array($db, $toplist_array)) {
             abort(404);
         }
 

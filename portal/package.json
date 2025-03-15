@@ -37,5 +37,8 @@
         "sass-loader": "^10.2.1",
         "source-map-resolve": "^0.6.0",
         "tailwindcss": "^2.2.19"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1"
     }
 }
