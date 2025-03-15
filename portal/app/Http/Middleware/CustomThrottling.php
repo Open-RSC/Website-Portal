@@ -16,7 +16,7 @@ class CustomThrottling extends ThrottleRequests
      * @param  float|int  $decayMinutes
      * @param  string  $prefix
      */
-    public function handle($request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = ''): Response
+    public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1, $prefix = ''): Response
     {
         $routeName = $request->route()->getName();
         try {
