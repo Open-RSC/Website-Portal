@@ -1094,4 +1094,24 @@ class StaffController extends Controller
             return back()->with('error', 'IP address not found.');
         }
     }
+
+    public function webserverInfo()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        $info = [
+            'Laravel Version' => app()->version(),
+            'PHP Version' => PHP_VERSION,
+            'MySQL Version' => DB::select('SELECT VERSION() as version')[0]->version ?? 'Unknown',
+            'Web Server' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
+            'Operating System' => php_uname(),
+        ];
+
+        return view('webserverinfo', compact('info'));
+    }
 }
