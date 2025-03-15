@@ -815,8 +815,11 @@ class StaffController extends Controller
 
     public function generateInviteCodes()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null) {
             return redirect('/login');
+        }
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
         }
         Artisan::call('invite:generate 5');
 
@@ -825,8 +828,12 @@ class StaffController extends Controller
 
     public function revokeUnusedInviteCodes()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null) {
             return redirect('/login');
+        }
+
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
         }
 
         $deletedCount = InviteCode::where('used', false)->delete();
@@ -836,8 +843,11 @@ class StaffController extends Controller
 
     public function toggleInviteOnly()
     {
-        if (Auth::user() === null || ! Gate::allows('admin', Auth::user())) {
+        if (Auth::user() === null) {
             return redirect('/login');
+        }
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
         }
         // Additionally, we could log who toggled this, but it's likely not necessary.
         $setting = Setting::firstOrCreate(['key' => 'invite_only_registration'],
