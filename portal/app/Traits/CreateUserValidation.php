@@ -48,9 +48,9 @@ trait CreateUserValidation
 
         // Check if the username has already been badnamed
         $formerBadNameExists = DB::connection($db)->table('former_names')
-        ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
-        ->where('changeType', '=', 1)
-        ->exists();
+            ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
+            ->where('changeType', '=', 1)
+            ->exists();
 
         if ($formerBadNameExists) {
             throw ValidationException::withMessages([

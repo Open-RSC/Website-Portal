@@ -27,7 +27,7 @@ use function App\Helpers\player_is_online;
 
 class PlayerController extends Controller
 {
-    protected bool $debugPlayerExports = false; //If we want to display the generated SQL on the page, set this to true.
+    protected bool $debugPlayerExports = false; // If we want to display the generated SQL on the page, set this to true.
 
     public function bd_nice_number($n): string
     {
@@ -104,7 +104,7 @@ class PlayerController extends Controller
                         ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                         ->select(DB::raw($this->coalesce('a', 'aa', $skill)))
                         ->where('b.username', '=', $subpage)
-                        ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
+                        ->limit(1); // This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where('b.group_id', '>=', 8)
@@ -121,7 +121,7 @@ class PlayerController extends Controller
                             ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                             ->select(DB::raw('aa.'.$skill))
                             ->where('b.username', '=', $subpage)
-                            ->limit(1); //This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
+                            ->limit(1); // This limit 1 shouldn't be necessary, but without it, we get errors when there are multiple rows for the same username somehow.
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where('b.group_id', '>=', 8)
@@ -131,7 +131,7 @@ class PlayerController extends Controller
 
     public function coalesce($alias1, $alias2, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).')';
         } else {
             return 'ifnull('.$this->maxCast($alias2, $subpage).','.$this->cast($alias1, $subpage).') as '.$subpage;
@@ -140,7 +140,7 @@ class PlayerController extends Controller
 
     public function cast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'&0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'&0xFFFFFFFF) as '.$subpage;
@@ -149,7 +149,7 @@ class PlayerController extends Controller
 
     public function maxCast($alias, $subpage, $relabel = false): string
     {
-        if (!$relabel) {
+        if (! $relabel) {
             return $alias.'.'.$subpage.'|0xFFFFFFFF';
         } else {
             return '('.$alias.'.'.$subpage.'|0xFFFFFFFF) as '.$subpage;
@@ -295,7 +295,7 @@ class PlayerController extends Controller
                 ->get();
         }
 
-        if (!$players) {
+        if (! $players) {
             abort(404);
         }
 
@@ -500,7 +500,7 @@ class PlayerController extends Controller
      */
     public function bank($db, $subpage, Request $request)
     {
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -548,7 +548,7 @@ class PlayerController extends Controller
      */
     public function invitem($db, $subpage, Request $request)
     {
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -594,13 +594,13 @@ class PlayerController extends Controller
 
     public function exportView(Request $request): View
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         $data = false;
@@ -616,13 +616,13 @@ class PlayerController extends Controller
 
     public function exportInstructions(Request $request): View
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
 
@@ -631,13 +631,13 @@ class PlayerController extends Controller
 
     public function exportSubmit(Request $request)
     {
-        if (!config('openrsc.player_exports_enabled')) {
+        if (! config('openrsc.player_exports_enabled')) {
             abort(404);
         }
-        if (config('openrsc.player_exports_admin_only') && !Gate::allows('admin', Auth::user())) {
+        if (config('openrsc.player_exports_admin_only') && ! Gate::allows('admin', Auth::user())) {
             abort(404);
         }
-        if (config('openrsc.player_exports_moderator_only') && !Gate::allows('moderator', Auth::user())) {
+        if (config('openrsc.player_exports_moderator_only') && ! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         try {
@@ -667,18 +667,18 @@ class PlayerController extends Controller
         if (player_is_online($db, $trimmed_username)) {
             return redirect(route('PlayerExportView'))->withErrors('You must be logged out to create a player export');
         }
-        //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
+        // If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
             $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
         } else {
             $trimmed_pass = trim($password);
         }
-        //If we're still using SHA512 for the password, do a simple comparison.
+        // If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
                 return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
             }
-        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { // Otherwise, we have a bcrypt hash in the DB to check.
             return redirect(route('PlayerExportView'))->withErrors('Invalid credentials');
         }
         $data = '';
@@ -715,8 +715,8 @@ class PlayerController extends Controller
      */
     public function exportSubmitApi(Request $request)
     {
-        //Only enable API when public use is allowed and when the API itself is enabled.
-        if (!config('openrsc.player_exports_enabled') || !config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
+        // Only enable API when public use is allowed and when the API itself is enabled.
+        if (! config('openrsc.player_exports_enabled') || ! config('openrsc.player_exports_api_enabled') || config('openrsc.player_exports_admin_only') || config('openrsc.player_exports_moderator_only')) {
             abort(404);
         }
 
@@ -750,18 +750,18 @@ class PlayerController extends Controller
         if (player_is_online($db, $trimmed_username)) {
             return Response::json('You must be logged out to create a player export', 401);
         }
-        //If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
+        // If we have a salt, we're using some form of legacy password, so let's generate a sha512 hash.
         if ($user->salt) {
             $trimmed_pass = passwd_compat_hasher(trim($password), $user->salt);
         } else {
             $trimmed_pass = trim($password);
         }
-        //If we're still using SHA512 for the password, do a simple comparison.
+        // If we're still using SHA512 for the password, do a simple comparison.
         if ($this->passwordNeedsRehash($user->pass)) {
             if ($trimmed_pass !== $user->pass) {
                 return Response::json('Invalid credentials', 401);
             }
-        } elseif (!Hash::check($trimmed_pass, $user->pass)) { //Otherwise, we have a bcrypt hash in the DB to check.
+        } elseif (! Hash::check($trimmed_pass, $user->pass)) { // Otherwise, we have a bcrypt hash in the DB to check.
             return Response::json('Invalid credentials', 401);
         }
         $data = '';
@@ -793,7 +793,7 @@ class PlayerController extends Controller
      */
     public function registerUserApi(Request $request)
     {
-        if (!config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
+        if (! config('openrsc.api_registration_enabled') || is_incorrect_production_url()) {
             abort(404);
         }
 
@@ -832,9 +832,9 @@ class PlayerController extends Controller
 
         // Check if the username has already been badnamed
         $formerBadNameExists = DB::connection($db)->table('former_names')
-        ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
-        ->where('changeType', '=', 1)
-        ->exists();
+            ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
+            ->where('changeType', '=', 1)
+            ->exists();
 
         if ($formerBadNameExists) {
             return response()->json([
@@ -857,7 +857,7 @@ class PlayerController extends Controller
 
         // Create the user using Fortify's logic
         try {
-            $new_user_action = new CreateNewUser();
+            $new_user_action = new CreateNewUser;
             $user = $new_user_action->create([
                 'db' => $db,
                 'name' => $username,
@@ -883,12 +883,12 @@ class PlayerController extends Controller
 
     public function passwordNeedsRehash($passwordHashed)
     {
-        return !str_starts_with($passwordHashed, '$2y$10$');
+        return ! str_starts_with($passwordHashed, '$2y$10$');
     }
 
     public function showMessageCenter(Request $request)
     {
-        if (!config('openrsc.message_center_enabled')) {
+        if (! config('openrsc.message_center_enabled')) {
             return redirect('home');
         }
         if (Auth::user() !== null && strtolower(Auth::user()->username) === strtolower(session('expected_username')) && $request->attributes->get('dynamic_guard_middleware_ran') &&
@@ -900,9 +900,9 @@ class PlayerController extends Controller
             $expectedUsername = session('expected_username');
             $dbConnection = session('db_connection');
             $playerId = $user->id;
-            $currentTimeMillis = time() * 1000; //Current time in milliseconds
+            $currentTimeMillis = time() * 1000; // Current time in milliseconds
 
-            //Fetch regular mute status
+            // Fetch regular mute status
             $muteExpires = DB::connection($dbConnection)
                 ->table('player_cache')
                 ->where('playerID', $playerId)
@@ -920,7 +920,7 @@ class PlayerController extends Controller
                 $mutedStatus = 'No';
             }
 
-            //Fetch global mute status
+            // Fetch global mute status
             $globalMute = DB::connection($dbConnection)
                 ->table('player_cache')
                 ->where('playerID', $playerId)
@@ -938,7 +938,7 @@ class PlayerController extends Controller
                 $globalMutedStatus = 'No';
             }
 
-            //The mute column only updates on game logout, not when issued.
+            // The mute column only updates on game logout, not when issued.
             if ((int) $user->muted === -1) {
                 $mutedColumnStatus = 'Permanently';
             } elseif ((int) $user->muted > 0 && $currentTimeMillis < (int) $user->muted) {
@@ -947,7 +947,7 @@ class PlayerController extends Controller
                 $mutedColumnStatus = 'No';
             }
 
-            //Banned column updates immediately when issued.
+            // Banned column updates immediately when issued.
             if ((int) $user->banned === -1) {
                 $bannedStatus = 'Permanently';
             } elseif ((int) $user->banned > 0 && $currentTimeMillis < (int) $user->banned) {
@@ -970,7 +970,7 @@ class PlayerController extends Controller
                 'banned' => $user->banned,
                 'bannedStatus' => $bannedStatus,
                 'currentTimeMillis' => $currentTimeMillis,
-                'showAppealMessage' => $showAppealMessage
+                'showAppealMessage' => $showAppealMessage,
             ]);
         } else {
             return redirect()->route('login');

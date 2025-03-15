@@ -51,5 +51,5 @@ class phpbb_posts extends phpbb_topics
 
     protected $dateFormat = 'U';
 
-    //protected $connection = 'connection-name';
+    // protected $connection = 'connection-name';
 }

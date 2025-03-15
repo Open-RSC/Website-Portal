@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('max_attempts');
             $table->integer('decay_minutes');
             $table->timestamps();
-            //Index for route_name column for faster lookups
+            // Index for route_name column for faster lookups
             $table->index('route_name');
         });
     }

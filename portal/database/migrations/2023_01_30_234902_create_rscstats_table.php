@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //We should order by indexed columns like ID for best performance,
-        //especially since primary key ID is automatically indexed.
-        //We could always add more indexes later if we needed to.
+        // We should order by indexed columns like ID for best performance,
+        // especially since primary key ID is automatically indexed.
+        // We could always add more indexes later if we needed to.
         Schema::create('rscstats', function (Blueprint $table) {
             $table->id();
             $table->string('server');
-            $table->string('key'); //The key will be servername_stats_date_hour like cabbage_stats_2023-01-31_11PM to prevent re-creating the hourly stats.
+            $table->string('key'); // The key will be servername_stats_date_hour like cabbage_stats_2023-01-31_11PM to prevent re-creating the hourly stats.
             $table->integer('online');
             $table->integer('registrations');
             $table->integer('createdToday');
@@ -49,7 +49,7 @@ return new class extends Migration
             $table->integer('dlong');
             $table->integer('rune2h');
             $table->timestamps();
-            $table->index('created_at'); //Only index created_at, since we don't search by updated_at.
+            $table->index('created_at'); // Only index created_at, since we don't search by updated_at.
         });
     }
 

@@ -59,7 +59,7 @@ class CheckBannedIp
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Your IP address has been banned.'], 403);
             }
-            //Optionally, we could log this event, but it's probably not necessary.
+            // Optionally, we could log this event, but it's probably not necessary.
             abort(403, 'Your IP address has been banned.');
         }
 
