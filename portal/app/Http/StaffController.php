@@ -3,14 +3,13 @@
 namespace App\Http;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use App\Models\BannedIp;
 use App\Models\InviteCode;
 use App\Models\itemdef;
 use App\Models\players;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
