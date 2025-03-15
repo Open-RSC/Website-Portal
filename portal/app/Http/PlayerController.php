@@ -641,7 +641,7 @@ class PlayerController extends Controller
             abort(404);
         }
         try {
-            $validated = $this->validate($request, [
+            $validated = $request->validate([
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                 'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
                 'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
@@ -721,7 +721,7 @@ class PlayerController extends Controller
         }
 
         try {
-            $validated = $this->validate($request, [
+            $validated = $request->validate([
                 'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
                 'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
                 'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20'],
@@ -811,7 +811,7 @@ class PlayerController extends Controller
         }
 
         try {
-            $validated = $this->validate($request, $rules);
+            $validated = $request->validate($rules);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation Error',
