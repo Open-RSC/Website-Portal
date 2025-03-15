@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use App\Models\BannedIp;
 use App\Models\InviteCode;
 use App\Models\itemdef;
@@ -18,11 +21,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 use function App\Helpers\get_client_ip_address;
 
-class StaffController extends Controller
+class StaffController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
+        return [
+            'auth',
+        ];
     }
 
     public function login_list(Request $request, $db)
