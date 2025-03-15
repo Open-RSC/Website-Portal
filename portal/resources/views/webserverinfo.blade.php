@@ -1,23 +1,24 @@
 @extends('template')
 
 @section('content')
-<div class="container">
-
-    <div class="text-center mt-4">
-        <h2 class="text-center text-gray-400 pt-5 pb-4 display-3">
-            Webserver Information
+    <div class="col container">
+        <h2 class="h2 text-center text-gray-400 pt-5 pb-4 text-capitalize display-3">
+            Web Server Information
         </h2>
-
-    <table class="table table-bordered text-gray-400">
-        <tbody>
-            @foreach($info as $key => $value)
-                <tr>
-                    <th>{{ $key }}</th>
-                    <td>{{ $value }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-        <a href="{{ route('AdminTasks') }}" class="btn btn-secondary">Back to Admin Tasks</a>
+        <div class="row justify-content-center">
+            <div class="col-lg-12 text-gray-400 pr-5 pl-5 pt-3 pb-3">
+                <table class="table table-bordered text-gray-400">
+                    <tbody>
+                    @foreach($info as $key => $value)
+                        <tr>
+                            <th>{{ $key }}</th>
+                            <td>{{ $value }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <a href="{{ route('AdminTasks') }}" class="btn-primary">Back to Admin Tasks</a>
+            </div>
+        </div>
     </div>
-</div>
+@endsection
