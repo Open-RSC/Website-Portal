@@ -37,7 +37,7 @@ class CreateModeratorCommand extends Command
         // Enter db, if not present via command line option
         $db = $this->option('db');
         $validDatabases = ['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'];
-        while ($db === null || !in_array($db, $validDatabases)) {
+        while ($db === null || ! in_array($db, $validDatabases)) {
             if ($db !== null) {
                 $this->error('Invalid database. Please choose from the valid options.');
             }
@@ -87,7 +87,7 @@ class CreateModeratorCommand extends Command
 
         try {
             // Use Fortify to create a new user.
-            $new_user_action = new CreateNewUser();
+            $new_user_action = new CreateNewUser;
             $user = $new_user_action->create($input);
 
             if ($inviteCode) {

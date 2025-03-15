@@ -19,15 +19,13 @@ class NpcController extends Controller
     {
         /**
          * @return Factory|View
-         *
          */
         return view('npcs');
     }
 
-
     /**
      * Fetches the table row of the npc in view and paginates the results
-     * @param Request $request
+     *
      * @return mixed
      */
     public function npcSearch(Request $request)
@@ -35,10 +33,10 @@ class NpcController extends Controller
         $searchTerm = $request->input('searchTerm', '');
         $npcs = [];
 
-        if (!empty($searchTerm)) {
-            //TODO: add multi-world NPC support so we can search non-authentic NPCs
+        if (! empty($searchTerm)) {
+            // TODO: add multi-world NPC support so we can search non-authentic NPCs
             $npcs = npcdef::when($searchTerm, function ($query, $searchTerm) {
-                return $query->where('name', 'like', '%' . $searchTerm . '%');
+                return $query->where('name', 'like', '%'.$searchTerm.'%');
             })->where('id', '<=', '793')->orderBy('combatlvl', 'asc')->paginate(6);
         }
 
@@ -59,14 +57,14 @@ class NpcController extends Controller
                 ->table('npcdef')
                 ->where('id', '<=', '793')
                 ->find($id);
-            if (!$npcdef) {
+            if (! $npcdef) {
                 abort(404);
             }
         } else {
             $npcdef = DB::connection('preservation')
                 ->table('npcdef')
                 ->find($id);
-            if (!$npcdef) {
+            if (! $npcdef) {
                 abort(404);
             }
         }

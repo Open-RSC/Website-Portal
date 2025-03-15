@@ -64,24 +64,24 @@ class PlayerExportService
         $sqlitefile = $this->basePath.$this->extraPath.'playerdata.db';
         $txtfile = $this->basePath.$this->extraPath.'metadata.txt';
 
-        //\Log::info('Generating player export for username: ' . $this->username . ' DB: ' . $this->db);
+        // \Log::info('Generating player export for username: ' . $this->username . ' DB: ' . $this->db);
 
         Storage::disk('local')->put($sqlfile, $this->sqlString);
 
-        $sqliteFilePath = storage_path('app/'.$sqlitefile);
-        //Log the path being used for SQLite file
-        //\Log::info('SQLite file path: ' . $sqliteFilePath);
+        $sqliteFilePath = storage_path('app/private/'.$sqlitefile);
+        // Log the path being used for SQLite file
+        // \Log::info('SQLite file path: ' . $sqliteFilePath);
 
-        //Check if the SQLite file exists
-        if (!Storage::disk('sqlite')->exists($this->db.'.db')) {
-            \Log::error("SQLite file does not exist: " . Storage::disk('sqlite')->get($this->db.'.db'));
-            throw new \Exception("SQLite file does not exist at path: " . Storage::disk('sqlite')->get($this->db.'.db'));
+        // Check if the SQLite file exists
+        if (! Storage::disk('sqlite')->exists($this->db.'.db')) {
+            \Log::error('SQLite file does not exist: '.Storage::disk('sqlite')->get($this->db.'.db'));
+            throw new \Exception('SQLite file does not exist at path: '.Storage::disk('sqlite')->get($this->db.'.db'));
         }
 
-        //Put the SQLite file in the local storage
+        // Put the SQLite file in the local storage
         Storage::disk('local')->put($sqlitefile, Storage::disk('sqlite')->get($this->db.'.db'));
 
-        //Configure the SQLite connection dynamically
+        // Configure the SQLite connection dynamically
         Config::set("database.connections.$basename", [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
@@ -90,10 +90,10 @@ class PlayerExportService
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', false),
         ]);
 
-        //Log the SQLite configuration
-        //\Log::info('Configured SQLite connection for: ' . $basename);
+        // Log the SQLite configuration
+        // \Log::info('Configured SQLite connection for: ' . $basename);
 
-        //Execute the SQL statements
+        // Execute the SQL statements
         $sqlArray = explode("\n", $this->sqlString);
         foreach ($sqlArray as $statement) {
             if (empty($statement)) {
@@ -102,15 +102,15 @@ class PlayerExportService
             try {
                 DB::connection($basename)->statement($statement);
             } catch (\Exception $e) {
-                \Log::error('SQL execution error: ' . $e->getMessage());
+                \Log::error('SQL execution error: '.$e->getMessage());
                 throw $e;
             }
         }
 
-        //Log completion of SQL execution
-        \Log::info('SQL execution completed for: ' . $basename);
+        // Log completion of SQL execution
+        \Log::info('SQL execution completed for: '.$basename);
 
-        //Create metadata text file
+        // Create metadata text file
         $text = "Server: $this->db"."\n";
         $text .= 'Timestamp: '.floor(microtime(true) * 1000)."\n";
         $text .= 'Muted: '.$this->player[0]->muted."\n";
@@ -120,39 +120,40 @@ class PlayerExportService
         $text .= 'GPG Archive Link: https://web.archive.org/web/20230224020441/https://rsc.vet/openrsc-gpg-public-key-2023-02-16.key';
         Storage::disk('local')->put($txtfile, $text);
 
-        //Create the GPG zip archive
-        $zip = new ZipArchive();
+        // Create the GPG zip archive
+        $zip = new ZipArchive;
         try {
-            $gpg = new GnuPG();
+            $gpg = new GnuPG;
             $private = $gpg->importKeys(file_get_contents(config('openrsc.gpg_private_key_file')));
             $public = $gpg->importKeys(file_get_contents(config('openrsc.gpg_public_key_file')));
-            if ($zip->open(storage_path('app/'.$tempzipfile), ZipArchive::CREATE) === TRUE) {
-                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
-                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
-                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
+            if ($zip->open(storage_path('app/private/'.$tempzipfile), ZipArchive::CREATE) === true) {
+                $zip->addFile(storage_path('app/private/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/private/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/private/'.$txtfile), 'metadata.txt');
                 $zip->close();
             }
-            $gpgdata = $gpg->signFile(storage_path('app/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
+            $gpgdata = $gpg->signFile(storage_path('app/private/'.$tempzipfile), $private->results[0]['fingerprint'], null, false, false, true);
             Storage::disk('local')->put($gpgfile, $gpgdata->data);
         } catch (\Exception $e) {
             \Log::error('Player Export GPG exception: '.$e->getMessage());
         }
 
-        //Create the zip archive
+        // Create the zip archive
         try {
-             if ($zip->open(storage_path('app/'.$zipfile), ZipArchive::CREATE) === TRUE) {
-                $zip->addFile(storage_path('app/'.$sqlitefile), 'playerdata.db');
-                $zip->addFile(storage_path('app/'.$sqlfile), 'playerdata.sql');
-                $zip->addFile(storage_path('app/'.$txtfile), 'metadata.txt');
-                $zip->addFile(storage_path('app/'.$gpgfile), 'data.zip.gpg');
+            if ($zip->open(storage_path('app/private/'.$zipfile), ZipArchive::CREATE) === true) {
+                $zip->addFile(storage_path('app/private/'.$sqlitefile), 'playerdata.db');
+                $zip->addFile(storage_path('app/private/'.$sqlfile), 'playerdata.sql');
+                $zip->addFile(storage_path('app/private/'.$txtfile), 'metadata.txt');
+                $zip->addFile(storage_path('app/private/'.$gpgfile), 'data.zip.gpg');
                 $zip->close();
             }
         } catch (\Exception $e) {
             \Log::error("Error creating zip $zipfile: ".$e->getMessage());
+
             return redirect(route('PlayerExportView'))->withErrors('Error creating Player Export, please try again later.');
         }
 
-        //Clean up temporary files
+        // Clean up temporary files
         Storage::disk('local')->delete($sqlfile);
         Storage::disk('local')->delete($sqlitefile);
         Storage::disk('local')->delete($txtfile);
@@ -161,14 +162,14 @@ class PlayerExportService
 
         $this->fileName = $this->db.'-'.$this->username.'-'.$this->dateString.'.zip';
         $this->generateFileExportLog();
-        $this->fileData = file_get_contents(storage_path('app/'.$this->basePath.$this->extraPath.$this->fileName));
+        $this->fileData = file_get_contents(storage_path('app/private/'.$this->basePath.$this->extraPath.$this->fileName));
 
         return $this->fileData;
     }
 
     public function generateEmail()
     {
-        //TODO: implement method for generating email if we want to in the future, it's not a requirement for now.
+        // TODO: implement method for generating email if we want to in the future, it's not a requirement for now.
     }
 
     /**
@@ -251,7 +252,7 @@ class PlayerExportService
             ->where('playerID', '=', $player_id)
             ->get();
         $this->sqlString .= $this->buildInsert('quests', $quests)."\n";
-        //Ironman could be cabbage/coleslaw-only, but it's not currently.
+        // Ironman could be cabbage/coleslaw-only, but it's not currently.
         $ironman = DB::connection($db)
             ->table('ironman')
             ->select('*')
@@ -386,7 +387,7 @@ class PlayerExportService
             }
             $newRecords[] = $record;
         }
-        if (!isset($records[0])) {
+        if (! isset($records[0])) {
             return $data;
         }
         $table_column_array = array_keys((array) $newRecords[0]);

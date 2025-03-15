@@ -22,24 +22,24 @@ class SetDynamicGuardChecker
      */
     public function handle(Request $request, Closure $next): Response
     {
-        //Also check that it's preservation, if it's not then it could be an old session before multi_world_logins was turned off. In which case, we will want to force a logout anyway.
-        if (!config('openrsc.multi_world_logins') && session('db_connection') === 'preservation') {
+        // Also check that it's preservation, if it's not then it could be an old session before multi_world_logins was turned off. In which case, we will want to force a logout anyway.
+        if (! config('openrsc.multi_world_logins') && session('db_connection') === 'preservation') {
             return $next($request);
         }
         if (Auth::user() !== null && session('db_connection') !== 'preservation') {
             $user = Auth::user();
             $username = $user ? $user->username : 'Guest';
             $database = session('db_connection');
-            //If the dynamic guard middleware did not run successfully, this attribute won't be set, we might not have the correct user, so force a logout and log an error.
-            if (!$request->attributes->get('dynamic_guard_middleware_ran')) {
+            // If the dynamic guard middleware did not run successfully, this attribute won't be set, we might not have the correct user, so force a logout and log an error.
+            if (! $request->attributes->get('dynamic_guard_middleware_ran')) {
                 $ip = '';
                 try {
                     $ip = get_client_ip_address();
                 } catch (\Exception $e) {
-                    \Log::error("Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage());
+                    \Log::error("Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage());
                     if (Schema::hasTable('error_logs')) {
                         DB::table('error_logs')->insert([
-                            'message' => "Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is " . $request->ip() . ', Exception is ' . $e->getMessage(),
+                            'message' => "Error fetching ip address in SetDynamicGuardChecker for player $username database $database, request IP is ".$request->ip().', Exception is '.$e->getMessage(),
                             'level' => 'error',
                             'url' => $request->fullUrl() ?? '',
                             'username' => $username,
@@ -61,7 +61,7 @@ class SetDynamicGuardChecker
                         'updated_at' => now(),
                     ]);
                 }
-                //We could probably also return $next($request) right below logout, but we might want dynamic_guard_checker_middleware_ran to be true, since it technically is true.
+                // We could probably also return $next($request) right below logout, but we might want dynamic_guard_checker_middleware_ran to be true, since it technically is true.
                 Auth::logout();
             }
         }

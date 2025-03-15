@@ -28,7 +28,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         $this->validateCreateUserInput($input);
         $password = add_characters($input['password'], 20);
-        $player = new players();
+        $player = new players;
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));
         $player = $player->setDbConnection($input['db'])->create([
             'username' => $trimmed_username,
@@ -46,7 +46,7 @@ class CreateNewUser implements CreatesNewUsers
         DB::connection($input['db'])->table('capped_experience')->insert(['playerID' => $player->id]);
         $minLevels = [];
         $experiences = [];
-        //We currently only allow for the original XP curve. This shouldn't be a problem.
+        // We currently only allow for the original XP curve. This shouldn't be a problem.
         if ($input['db'] === '2001scape') {
             $minLevels['attack'] = 1;
             $minLevels['defense'] = 1;
@@ -117,7 +117,7 @@ class CreateNewUser implements CreatesNewUsers
             $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
             if ($inviteOnly) {
                 $inviteCode = InviteCode::where('code', $input['invite_code'])->first();
-                if ($inviteCode && !$inviteCode->used) {
+                if ($inviteCode && ! $inviteCode->used) {
                     $inviteCode->used = true;
                     $inviteCode->username = $input['username']; // associate the username with the invite code
                     $inviteCode->world = $input['db']; // associate the world (database)

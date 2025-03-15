@@ -1,6 +1,6 @@
 <?php
 
-//TODO: convert this config to an Enum once we're upgraded to latest Laravel
+// TODO: convert this config to an Enum once we're upgraded to latest Laravel
 return [
     'owner' => 0,
     'admin' => 1,

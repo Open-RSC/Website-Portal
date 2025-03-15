@@ -154,7 +154,7 @@ class players extends Authenticatable
         return $this->group_id == config('group.player_moderator') || $this->isModerator() || $this->isOwner() || $this->isAdmin();
     }
 
-    public $connection = 'preservation'; //Default to preservation, used for auth.php login authentication.
+    public $connection = 'preservation'; // Default to preservation, used for auth.php login authentication.
 
     public static function hasBank($db, $playerID)
     {

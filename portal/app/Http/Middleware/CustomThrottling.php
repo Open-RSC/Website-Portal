@@ -29,7 +29,7 @@ class CustomThrottling extends ThrottleRequests
                 \Log::info('Custom Decay Minutes: '.$decayMinutes);
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            //We don't need to log the error, it just means we didn't run the migration.
+            // We don't need to log the error, it just means we didn't run the migration.
         }
 
         return parent::handle($request, $next, $maxAttempts, $decayMinutes, $prefix);
