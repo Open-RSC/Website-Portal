@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Schema;
 use Yajra\DataTables\Facades\DataTables;
 
 use function App\Helpers\get_client_ip_address;
+use function App\Helpers\getDateFromMsec;
 
 class StaffController extends Controller
 {
@@ -91,6 +92,8 @@ class StaffController extends Controller
         if ($player === null) {
             abort(404);
         }
+        $totalPlayedMs = $playerData['total_played'] ?? 0;
+        $timePlayed = getDateFromMsec($totalPlayedMs);
         DB::connection('laravel')->table('viewlogs')->insert([
             'username' => Auth::user()->username,
             'page' => 'player_view',
@@ -102,7 +105,7 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        return view('playerview', compact('db', 'player', 'playerData'));
+        return view('playerview', compact('db', 'player', 'playerData', 'timePlayed'));
     }
 
     public function playerListData(Request $request, $db)
