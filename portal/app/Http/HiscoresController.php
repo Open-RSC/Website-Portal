@@ -299,8 +299,10 @@ class HiscoresController extends Component
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
-                ->where('a.'.$subpage, '>=', '53452') // limits to display only level 30 and above
-                ->orWhere('a.'.$subpage, '<', '0')    // and those that have overflow
+                ->where([
+                    ['a.'.$subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                    ['a.'.$subpage, '<', '0', 'or'], // and those that have overflow
+                ])
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
@@ -320,9 +322,11 @@ class HiscoresController extends Component
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw($this->coalesce('a', 'aa', $subpage, true)))
-                ->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
-                ->orWhere('aa.'.$subpage, '>=', 0)    // and those that have looped
+                ->where([
+                    ['a.'.$subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                    ['a.'.$subpage, '<', '0', 'or'], // and those that have overflow
+                    ['aa.'.$subpage, '>=', '0', 'or'], // and those that have looped
+                ])
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
                     ['b.group_id', '>=', '8'],
@@ -536,8 +540,10 @@ class HiscoresController extends Component
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->join('ironman as c', 'b.id', '=', 'c.playerID')
                     ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
-                    ->where('a.'.$subpage, '>=', '53452') // limits to display only level 30 and above
-                    ->orWhere('a.'.$subpage, '<', '0')    // and those that have overflow
+                    ->where([
+                        ['a.'.$subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                        ['a.'.$subpage, '<', '0', 'or'], // and those that have overflow
+                    ])
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
                         ['b.group_id', '>=', '8'],
@@ -558,9 +564,11 @@ class HiscoresController extends Component
                     ->join('players as b', 'a.playerID', '=', 'b.id')
                     ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                     ->select('b.*', 'c.*', DB::raw($this->coalesce('a', 'aa', $subpage, true)))
-                    ->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                    ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
-                    ->orWhere('aa.'.$subpage, '>=', 0)    // and those that have looped
+                    ->where([
+                        ['a.'.$subpage, '>=', '53452', 'or'], // limits to display only level 30 and above
+                        ['a.'.$subpage, '<', '0', 'or'], // and those that have overflow
+                        ['aa.'.$subpage, '>=', '0', 'or'], // and those that have looped
+                    ])
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
                         ['b.group_id', '>=', '8'],
