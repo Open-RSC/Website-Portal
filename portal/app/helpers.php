@@ -107,8 +107,8 @@ if (! function_exists('is_json')) {
     }
 }
 
-if (! function_exists('getDateFromMsec')) {
-    function getDateFromMsec($msec) {
+if (! function_exists('get_date_from_msec')) {
+    function get_date_from_msec($msec) {
         $seconds = floor($msec / 1000);
         $ss = $seconds % 60;
         $minutes = floor($seconds / 60);
@@ -118,5 +118,49 @@ if (! function_exists('getDateFromMsec')) {
         $days = floor($hours / 24);
 
         return "{$days} days {$hh} hours {$mm} minutes {$ss} seconds";
+    }
+}
+
+if (! function_exists('rot19')) {
+    function rot19($string)
+    {
+        $result = '';
+        foreach (str_split($string) as $char) {
+            $ascii = ord($char);
+            if ($ascii >= ord('a') && $ascii <= ord('z')) {
+                $result .= chr((($ascii - ord('a') + 19) % 26) + ord('a'));
+            } elseif ($ascii >= ord('A') && $ascii <= ord('Z')) {
+                $result .= chr((($ascii - ord('A') + 19) % 26) + ord('A'));
+            } else {
+                $result .= $char;
+            }
+        }
+
+        return $result;
+    }
+}
+
+if (! function_exists('safe_json_encode')) {
+    function safe_json_encode($data)
+    {
+        if (empty($data) || in_array($data, ['[]', '{}', 'null', 'NULL', ''])) {
+            return null;
+        }
+        $encodedData = json_encode($data);
+        if (in_array($encodedData, ['[]', '{}', '""', 'null', 'NULL'])) {
+            return null;
+        }
+
+        return $encodedData;
+    }
+}
+
+if (! function_exists('get_base_url')) {
+    function get_base_url() {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $port = $_SERVER['SERVER_PORT'] ?? null;
+
+        return $port && !in_array($port, [80, 443]) ? "$scheme://$host:$port" : "$scheme://$host";
     }
 }
