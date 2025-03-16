@@ -52,6 +52,7 @@
                 <p>Combat Level: {{ $player->combat }} </p>
                 <p>Total Level: {{ $player->skill_total }} </p>
                 <p>Quest Points: {{ $player->quest_points }} </p>
+                <p>Time Played: {{ $timePlayed }}</p>
                 <p>X: {{ $player->x }} </p>
                 <p>Y: {{ $player->y }} </p>
                 <p>Kills: {{ $player->kills }} </p>

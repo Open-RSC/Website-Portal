@@ -106,3 +106,17 @@ if (! function_exists('is_json')) {
         return json_last_error() == JSON_ERROR_NONE;
     }
 }
+
+if (! function_exists('getDateFromMsec')) {
+    function getDateFromMsec($msec) {
+        $seconds = floor($msec / 1000);
+        $ss = $seconds % 60;
+        $minutes = floor($seconds / 60);
+        $mm = $minutes % 60;
+        $hours = floor($minutes / 60);
+        $hh = $hours % 24;
+        $days = floor($hours / 24);
+
+        return "{$days} days {$hh} hours {$mm} minutes {$ss} seconds";
+    }
+}
