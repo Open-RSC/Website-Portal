@@ -320,12 +320,13 @@ class PlayerExportService
                 ->where('playerID', '=', $player_id)
                 ->get();
             $this->sqlString .= $this->buildInsert('expired_auctions', $expired_auctions)."\n";
-            $bankpresets = DB::connection($db)
+            //For some reason, bank presets sometimes generate an error like SQLSTATE[HY000]: General error: 1 near "55555555":  syntax error (Connection: cabbage-someusernamehere-2025-03-25_11-40-40,  INSERT INTO bankpresets (id, playerID, slot, inventory, equipment) VALUES ('55555555','100000','0','\0*\0\0\0\0\0!\0\0\0\0\0 so for now, we'll leave bank presets commented out.
+            /*$bankpresets = DB::connection($db)
                 ->table('bankpresets')
                 ->select('*')
                 ->where('playerID', '=', $player_id)
                 ->get();
-            $this->sqlString .= $this->buildInsert('bankpresets', $bankpresets)."\n";
+            $this->sqlString .= $this->buildInsert('bankpresets', $bankpresets)."\n";*/
         }
 
         return $this->sqlString;
