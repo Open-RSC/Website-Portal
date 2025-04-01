@@ -83,7 +83,19 @@ if (! function_exists('player_is_online')) {
 if (! function_exists('is_incorrect_production_url')) {
     function is_incorrect_production_url()
     {
-        return config('app.env') === 'production' && url('/') !== config('app.url');
+        if (config('app.env') !== 'production') {
+            return false;
+        }
+
+        $normalizeHost = function($url) {
+            $host = parse_url($url, PHP_URL_HOST);
+            if (str_starts_with($host, 'www.')) {
+                $host = substr($host, 4); //Remove "www." from host
+            }
+            return $host;
+        };
+
+        return $normalizeHost(url('/')) !== $normalizeHost(config('app.url'));
     }
 }
 
