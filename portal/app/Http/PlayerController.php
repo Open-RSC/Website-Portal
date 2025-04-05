@@ -454,7 +454,7 @@ class PlayerController extends Controller
      */
     public function bank($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -502,7 +502,7 @@ class PlayerController extends Controller
      */
     public function invitem($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
