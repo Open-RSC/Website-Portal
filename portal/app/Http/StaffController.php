@@ -128,7 +128,7 @@ class StaffController extends Controller
         ]);
         // Here we hardcode orderBy time because we only want the latest data.
         $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(40000)->get();
-        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['email', 'salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
+        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
         $currentTimeMillis = time() * 1000;
 
         return DataTables::of($data)
