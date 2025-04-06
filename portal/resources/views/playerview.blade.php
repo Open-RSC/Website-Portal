@@ -32,7 +32,7 @@
                 <p>Player ID: {{ $player->id }}</p>
                 <p>Username: {{ $player->username }}</p>
                 <p>Rank: {{ str_replace('User', 'Player', ucwords(str_replace('_', ' ', array_search($player->group_id, config('group'), true)))) ?: 'Player' }}</p>
-                @if(Gate::allows('admin', Auth::user())) <p>Email: {{ $player->email ?? "None" }}</p> @endif
+                @if(Gate::allows('moderator', Auth::user())) <p>Email: {{ $player->email ?? "None" }}</p> @endif
                 <p>Creation Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->creation_date)->format("Y-m-d H:i:s") }}</p>
                 <p>Login Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->login_date)->format("Y-m-d H:i:s") }}</p>
                 <p>

@@ -51,7 +51,7 @@
                             return '<a href="https://ipinfo.io/' + data + '" target="_blank" rel="noopener noreferrer">' + data + '</a>';
                         }},
                     @endif
-                    @if(Gate::allows('admin', Auth::user())) {data: 'email', visible: false}, @endif
+                    @if(Gate::allows('moderator', Auth::user())) {data: 'email', visible: false}, @endif
                     {title: "Banned", data: 'banned', responsivePriority: 3},
                     {title: "Muted", data: 'muted', responsivePriority: 4},
                     {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
@@ -69,11 +69,11 @@
                     filter_type: "text"
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 4 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 5 @endif,
                     filter_type: "text"
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 5 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 6 @endif,
                     filter_type: "text"
                 },
             ]);
