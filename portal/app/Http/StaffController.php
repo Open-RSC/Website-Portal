@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Schema;
 use Yajra\DataTables\Facades\DataTables;
 
 use function App\Helpers\get_client_ip_address;
+use function App\Helpers\get_date_from_msec;
 
 class StaffController extends Controller
 {
@@ -106,6 +107,8 @@ class StaffController extends Controller
         if ($player === null) {
             abort(404);
         }
+        $totalPlayedMs = $playerData['total_played'] ?? 0;
+        $timePlayed = get_date_from_msec($totalPlayedMs);
         DB::connection('laravel')->table('viewlogs')->insert([
             'username' => Auth::user()->username,
             'page' => 'player_view',
@@ -117,7 +120,7 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        return view('playerview', compact('db', 'player', 'playerData'));
+        return view('playerview', compact('db', 'player', 'playerData', 'timePlayed'));
     }
 
     public function playerListData(Request $request, $db)
@@ -1109,5 +1112,25 @@ class StaffController extends Controller
             // Redirect back with error message
             return back()->with('error', 'IP address not found.');
         }
+    }
+
+    public function webserverInfo()
+    {
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
+
+        $info = [
+            'Laravel Version' => app()->version(),
+            'PHP Version' => PHP_VERSION,
+            'MySQL Version' => DB::select('SELECT VERSION() as version')[0]->version ?? 'Unknown',
+            'Web Server' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
+            'Operating System' => php_uname(),
+        ];
+
+        return view('webserverinfo', compact('info'));
     }
 }

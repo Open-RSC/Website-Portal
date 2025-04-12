@@ -170,3 +170,4 @@ Route::delete('staff/throttling/destroy/{id}', [StaffController::class, 'destroy
 Route::get('staff/banned-ips', [StaffController::class, 'listBannedIpsView'])->middleware('auth')->name('BannedIpsList');
 Route::post('staff/ban-ip', [StaffController::class, 'banIp'])->middleware('auth')->name('BanIp');
 Route::post('staff/unban-ip', [StaffController::class, 'unbanIp'])->middleware('auth')->name('UnbanIp');
+Route::get('/admin/webserver-info',  [StaffController::class, 'webserverInfo'])->name('WebserverInfo');

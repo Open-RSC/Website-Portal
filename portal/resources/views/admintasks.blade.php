@@ -65,6 +65,12 @@
                             Toggle Invite-Only Registration (Currently {{ $inviteOnly ? 'Enabled' : 'Disabled' }})
                         </a>
                     </div>
+
+                    <div class="btn btn-info mb-2" role="button">
+                        <a href="{{ route('WebserverInfo') }}" class="text-white text-decoration-none">
+                            Display Webserver Info
+                        </a>
+                    </div>
                 </div>
 
             </div>

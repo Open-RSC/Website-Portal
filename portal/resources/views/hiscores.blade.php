@@ -18,24 +18,25 @@
                                     @endif
                                 </div>
                                 <div style="width:40px;">
-                                    @if($skill == 'skill_total')
+                                    @if(!empty($ironman_mode))
+                                        <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}/{{$ironman_mode}}">
+                                    @elseif($skill == 'skill_total')
                                         <a class="c" class="col-3" href="/hiscores/{{ $db }}">
-                                            @else
-                                                <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}">
-                                                    @endif
-                                                    @if($skill == 'skill_total')
-                                                        Overall
-                                                    @elseif($skill =='hits')
-                                                        Fighting
-                                                    @elseif($skill == 'woodcut')
-                                                        Woodcutting
-                                                    @elseif($skill == 'runecraft')
-                                                        Runecrafting
-                                                    @else
-                                                        {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
-                                                    @endif
-                                                </a>
-                                        </a>
+                                    @else
+                                        <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}">
+                                    @endif
+                                        @if($skill == 'skill_total')
+                                            Overall
+                                        @elseif($skill =='hits')
+                                            Fighting
+                                        @elseif($skill == 'woodcut')
+                                            Woodcutting
+                                        @elseif($skill == 'runecraft')
+                                            Runecrafting
+                                        @else
+                                            {{ ucwords(preg_replace("/[^A-Za-z0-9 ]/", " ", $skill)) }}
+                                        @endif
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
@@ -44,22 +45,26 @@
             @endif
             <div class="hiscores-player-list">
                 <div class="hiscores-list-label">
-                     <b> {{ \App\Helpers\uc_worlds($db) ?? "Preservation" }}
-                        @if(!empty($ironman_mode))
-                            @switch($ironman_mode)
-                                @case(1)
-                                    Ironman
-                                    @break
-                                @case(2)
-                                    Ultimate
-                                    @break
-                                @case(3)
-                                    Hardcore
-                                    @break
-                            @endswitch
-                        @endif
-                        @if ($db == "openpk") Kill @else Overall @endif Hiscores
-                    </b>
+                    <b>{{ \App\Helpers\uc_worlds($db) ?? "Preservation" }}</b>
+                    @if(!empty($ironman_mode))
+                        @switch($ironman_mode)
+                            @case(1)
+                                <b>Ironman</b>
+                                @break
+                            @case(2)
+                                <b>Ultimate</b>
+                                @break
+                            @case(3)
+                                <b>Hardcore</b>
+                                @break
+                        @endswitch
+                    @endif
+                    @if ($db == "openpk")
+                        <b>Kill</b>
+                    @else
+                        <b>Overall</b>
+                    @endif
+                    <b>Hiscores</b>
                 </div>
                 <div class="e bg-black p-2" style="outline: black;">
                     <div class="d-flex">
