@@ -33,12 +33,14 @@
             yadcf.init(dataTable, [
                 {
                     column_number: 0,
-                    filter_type: "text"
-                }, 
+                    filter_type: "text",
+                    filter_delay: 500
+                },
                 {
                     column_number: 1,
-                    filter_type: "text"
-                }, 
+                    filter_type: "text",
+                    filter_delay: 500
+                },
             ]);
         });
     </script>

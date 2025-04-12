@@ -54,13 +54,28 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('logins')->select('*', 'players.username as username', 'players.id as playerID')->join('players', 'logins.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        //Here we hardcode orderBy time because we only want the latest data.
+        $query = DB::connection($db)->table('logins')
+            ->join('players', 'logins.playerID', '=', 'players.id')
+            ->select([
+                'logins.*',
+                'players.username as username',
+                'players.former_name'
+            ])
+            ->orderBy('time', 'desc');
+
+        return DataTables::of($query)
+            ->filterColumn('username', function ($query, $keyword) {
+                $query->where('players.username', 'LIKE', "%$keyword%");
+            })
+            ->filterColumn('former_name', function ($query, $keyword) {
+                $query->where('players.former_name', 'LIKE', "%$keyword%");
+            })
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
             ->smart(true)
-            ->make();
+            ->make(true);
     }
 
     public function player_list(Request $request, $db)
@@ -127,8 +142,9 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
         // Here we hardcode orderBy time because we only want the latest data.
-        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->limit(40000)->get();
+        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->get();
         $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
+
         $currentTimeMillis = time() * 1000;
 
         return DataTables::of($data)
@@ -200,7 +216,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -240,7 +256,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -281,7 +297,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -321,7 +337,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('player1_items', function ($data) {
@@ -365,7 +381,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -405,7 +421,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('buyer_info', function ($data) {
@@ -483,7 +499,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -523,7 +539,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(20000)->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
