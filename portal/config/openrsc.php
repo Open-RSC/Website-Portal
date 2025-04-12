@@ -37,4 +37,5 @@ return [
     'multi_world_logins' => env('MULTI_WORLD_LOGINS', true),
     'message_center_enabled' => env('MESSAGE_CENTER_ENABLED', true),
     'message_center_appeal_message_enabled' => env('MESSAGE_CENTER_APPEAL_MESSAGE_ENABLED', true),
+    'password_resets_enabled' => env('PASSWORD_RESETS_ENABLED', false),
 ];

@@ -25,8 +25,8 @@ class CustomThrottling extends ThrottleRequests
             if ($customThrottling) {
                 $maxAttempts = $customThrottling->max_attempts ?? $maxAttempts;
                 $decayMinutes = $customThrottling->decay_minutes ?? $decayMinutes;
-                \Log::info('Custom Max Attempts: '.$maxAttempts);
-                \Log::info('Custom Decay Minutes: '.$decayMinutes);
+                \Log::info('Custom Max Attempts: '.$maxAttempts.' for route '.$routeName);
+                \Log::info('Custom Decay Minutes: '.$decayMinutes.' for route '.$routeName);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             // We don't need to log the error, it just means we didn't run the migration.

@@ -3,7 +3,9 @@
 namespace App\Http;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Mail\PasswordResetLink;
 use App\Models\InviteCode;
+use App\Models\PasswordResetRequest;
 use App\Models\Setting;
 use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Contracts\Foundation\Application;
@@ -14,7 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -935,5 +939,133 @@ class PlayerController extends Controller
         } else {
             return redirect()->route('login');
         }
+    }
+
+    public function showPasswordResetPage(Request $request) {
+        if (!config('openrsc.password_resets_enabled', false)) {
+            abort(404);
+        }
+
+        if (is_incorrect_production_url()) {
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            abort(404);
+        }
+
+        return view('auth.password-request');
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        if (!config('openrsc.password_resets_enabled', false)) {
+            abort(404);
+        }
+
+        if (is_incorrect_production_url()) {
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            abort(404);
+        }
+
+        $multiWorldLoginsEnabled = config('openrsc.multi_world_logins', false);
+
+        $allowedWorlds = $multiWorldLoginsEnabled
+        ? ['preservation', 'cabbage', 'uranium', 'coleslaw', '2001scape']
+        : ['preservation'];
+
+        $request->validate([
+            'username' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'db' => ['required', Rule::in($allowedWorlds)],
+        ]);
+
+        $db = $request->input('db');
+        $email = $request->input('email');
+        $username = trim(preg_replace('/[-_.]/', ' ', $request->input('username')));
+
+        $email = DB::connection($db)->table('players')
+            ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
+            ->where(DB::raw('LOWER(email)'), '=', strtolower($email))
+            ->value('email');
+
+        $statusMessage = 'If the email you provided matches the one on record, an email with a code will be sent shortly.';
+        //If the email is incorrect, DO NOT TELL THE USER! We can simply redirect them back with a default status message, using the same status message for a correct email too.
+        if (!$email) {
+            \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
+            return back()->with('status', $statusMessage);
+        }
+
+        $token = Str::uuid();
+
+        PasswordResetRequest::updateOrCreate(
+            ['username' => $username, 'db' => $db],
+            ['email' => $email, 'token' => $token, 'expires_at' => now()->addHour(), 'ip' => get_client_ip_address()],
+        );
+
+        $resetUrl = route('password.reset.form', ['token' => $token]);
+        Mail::to($email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
+        \Log::info("Password Reset correct email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        return back()->with('status', $statusMessage);
+    }
+
+    public function showPasswordResetForm(Request $request, $token)
+    {
+        if (!config('openrsc.password_resets_enabled', false)) {
+            abort(404);
+        }
+
+        if (is_incorrect_production_url()) {
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            abort(404);
+        }
+
+        $resetRequest = PasswordResetRequest::where('token', $token)
+            ->where('expires_at', '>=', now())
+            ->firstOrFail();
+
+        return view('auth.password-reset', [
+            'username' => $resetRequest->username,
+            'db' => $resetRequest->db,
+            'token' => $token,
+        ]);
+    }
+
+    public function handlePasswordReset(Request $request)
+    {
+        if (!config('openrsc.password_resets_enabled', false)) {
+            abort(404);
+        }
+
+        if (is_incorrect_production_url()) {
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            abort(404);
+        }
+
+        $request->validate([
+            'token' => 'required|uuid',
+            'password' => ['required', 'confirmed', 'min:4', 'max:20', 'regex:/^([ -~])+$/i'],
+        ]);
+
+        $resetRequest = PasswordResetRequest::where('token', $request->token)
+            ->where('expires_at', '>=', now())
+            ->firstOrFail();
+
+        //Players can only reset their password if their IP address matches the IP address that requested the password reset.
+        if (get_client_ip_address() !== $resetRequest->ip) {
+            abort(404);
+        }
+
+        $trimmedUsername = trim(preg_replace('/[-_.]/', ' ', $resetRequest->username));
+
+        DB::connection($resetRequest->db)->table('players')
+            ->where(DB::raw('LOWER(username)'), '=', strtolower($trimmedUsername))
+            ->update([
+                'pass' => Hash::make(trim(add_characters($request->password, 20))),
+                'salt' => '' //Clear out their existing compatibility salt if any, since bcrypt has salt built-in we don't need another salt.
+            ]);
+
+        //Log the password change then delete it
+        \Log::info("Password Reset completed for email {$resetRequest->email} with username {$resetRequest->username} from IP: " . get_client_ip_address() . " on world: {$resetRequest->db}, password has been changed.");
+        //Delete the password request, since we don't need it anymore.
+        $resetRequest->delete();
+        return redirect()->route('login')->with('status', 'Your password has been reset!');
     }
 }
