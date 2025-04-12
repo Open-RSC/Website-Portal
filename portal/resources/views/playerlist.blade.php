@@ -62,19 +62,23 @@
             yadcf.init(dataTable, [
                 {
                     column_number: 0,
-                    filter_type: "text"
+                    filter_type: "text",
+                    filter_delay: 500
                 },
                 {
                     column_number: 1,
-                    filter_type: "text"
+                    filter_type: "text",
+                    filter_delay: 500
                 },
                 {
                     column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 4 @endif,
-                    filter_type: "text"
+                    filter_type: "text",
+                    filter_delay: 500
                 },
                 {
                     column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 5 @endif,
-                    filter_type: "text"
+                    filter_type: "text",
+                    filter_delay: 500
                 },
             ]);
         });
