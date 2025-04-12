@@ -71,12 +71,12 @@
                     filter_delay: 500
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 4 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 5 @endif,
                     filter_type: "text",
                     filter_delay: 500
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 5 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 6 @endif,
                     filter_type: "text",
                     filter_delay: 500
                 },
