@@ -35,7 +35,13 @@ trait CreateUserValidation
         }
 
         $validator = Validator::make($input, $rules);
+        $domain = parse_url(config('app.url'), PHP_URL_HOST); //For example: rsc.vet
 
+        if (!empty($input['email']) && str_ends_with(strtolower($input['email']), '@' . strtolower($domain))) {
+            throw ValidationException::withMessages([
+                'email' => ['Registration using this email domain is not allowed.'],
+            ]);
+        }
         $validator->validate();
         $db = $input['db'];
         $trimmed_username = trim(preg_replace('/[-_.]/', ' ', $input['username']));

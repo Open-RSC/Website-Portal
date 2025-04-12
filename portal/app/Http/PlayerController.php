@@ -810,8 +810,14 @@ class PlayerController extends Controller
             $inviteCode = InviteCode::where('code', $request->input('invite_code') ?? '')->first();
         }
 
+        $domain = parse_url(config('app.url'), PHP_URL_HOST); //For example: rsc.vet
         try {
             $validated = $request->validate($rules);
+            if (!empty($input['email']) && str_ends_with(strtolower($input['email']), '@' . strtolower($domain))) {
+                throw ValidationException::withMessages([
+                    'email' => ['Registration using this email domain is not allowed.'],
+                ]);
+            }
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation Error',
