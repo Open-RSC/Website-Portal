@@ -381,7 +381,7 @@ class StaffController extends Controller
         ]);
 
         // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->get()->toArray())
+        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(50000)->get()->toArray())
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
