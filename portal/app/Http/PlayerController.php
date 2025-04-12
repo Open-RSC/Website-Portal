@@ -170,6 +170,20 @@ class PlayerController extends Controller
         }, $skill_array);
     }
 
+    public function cast_skills($alias, $skill_array): string
+    {
+        return implode('+', array_map(function ($skill) use ($alias) {
+            return '('.$this->cast($alias, $skill).')';
+        }, $skill_array));
+    }
+
+    public function coalesce_skills($alias1, $alias2, $skill_array): string
+    {
+        return implode('+', array_map(function ($skill) use ($alias1, $alias2) {
+            return '('.$this->coalesce($alias1, $alias2, $skill).')';
+        }, $skill_array));
+    }
+
     public function index($db, $subpage): \Illuminate\Contracts\View\View|Factory|Application
     {
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
@@ -189,34 +203,14 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense']);
             $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('ironman as c', 'b.id', '=', 'c.playerID')
                 ->select('b.*', 'c.*', DB::raw('
-			(SUM(('.$this->cast('a', 'attack').') +
-			('.$this->cast('a', 'strength').') +
-			('.$this->cast('a', 'defense').') +
-			('.$this->cast('a', 'hits').') +
-			('.$this->cast('a', 'ranged').') +
-			('.$this->cast('a', 'prayer').') +
-			('.$this->cast('a', 'magic').') +
-			('.$this->cast('a', 'cooking').') +
-			('.$this->cast('a', 'woodcut').') +
-			('.$this->cast('a', 'fletching').') +
-			('.$this->cast('a', 'fishing').') +
-			('.$this->cast('a', 'firemaking').') +
-			('.$this->cast('a', 'crafting').') +
-			('.$this->cast('a', 'smithing').') +
-			('.$this->cast('a', 'mining').') +
-			('.$this->cast('a', 'herblaw').') +
-			('.$this->cast('a', 'agility').') +
-			('.$this->cast('a', 'thieving').') +
-			('.$this->cast('a', 'runecraft').') +
-			('.$this->cast('a', 'harvesting').'))
-			/4.0)
-			as total_xp
-			'), ...$this->skill_cast('a', $skill_array))
+			        (SUM(('.$this->cast_skills('a', $query_skills).')) / 4.0) as total_xp
+                '), ...$this->skill_cast('a', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
                     ['c.iron_man', '!=', 4],
@@ -227,33 +221,14 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense', 'influence', 'thieving', 'tailoring', 'herblaw']);
             $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayGood').') +
-			('.$this->coalesce('a', 'aa', 'prayEvil').') +
-			('.$this->coalesce('a', 'aa', 'goodMagic').') +
-			('.$this->coalesce('a', 'aa', 'evilMagic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcutting').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'influence').') +
-			('.$this->coalesce('a', 'aa', 'thieving').') +
-			('.$this->coalesce('a', 'aa', 'tailoring').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').'))
-			/4.0)
-			as total_xp
-			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
+			        (SUM(('.$this->coalesce_skills('a', 'aa', $query_skills).')) /4.0) as total_xp
+			    '), ...$this->skill_coalesce('a', 'aa', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
                 ])
@@ -263,32 +238,14 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense']);
             $players = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerID', '=', 'b.id')
                 ->join('capped_experience as aa', 'aa.playerID', '=', 'b.id')
                 ->select('b.*', DB::raw('
-			(SUM(('.$this->coalesce('a', 'aa', 'attack').') +
-			('.$this->coalesce('a', 'aa', 'strength').') +
-			('.$this->coalesce('a', 'aa', 'defense').') +
-			('.$this->coalesce('a', 'aa', 'hits').') +
-			('.$this->coalesce('a', 'aa', 'ranged').') +
-			('.$this->coalesce('a', 'aa', 'prayer').') +
-			('.$this->coalesce('a', 'aa', 'magic').') +
-			('.$this->coalesce('a', 'aa', 'cooking').') +
-			('.$this->coalesce('a', 'aa', 'woodcut').') +
-			('.$this->coalesce('a', 'aa', 'fletching').') +
-			('.$this->coalesce('a', 'aa', 'fishing').') +
-			('.$this->coalesce('a', 'aa', 'firemaking').') +
-			('.$this->coalesce('a', 'aa', 'crafting').') +
-			('.$this->coalesce('a', 'aa', 'smithing').') +
-			('.$this->coalesce('a', 'aa', 'mining').') +
-			('.$this->coalesce('a', 'aa', 'herblaw').') +
-			('.$this->coalesce('a', 'aa', 'agility').') +
-			('.$this->coalesce('a', 'aa', 'thieving').'))
-			/4.0)
-			as total_xp
-			'), ...$this->skill_coalesce('a', 'aa', $skill_array))
+			        (SUM(('.$this->coalesce_skills('a', 'aa', $query_skills).')) /4.0) as total_xp
+                '), ...$this->skill_coalesce('a', 'aa', $skill_array))
                 ->where([
                     ['b.username', '=', $subpage],
                 ])
@@ -304,6 +261,7 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense']);
             $rank_overall = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerid', '=', 'b.id')
@@ -314,18 +272,14 @@ class PlayerController extends Controller
                     ['b.group_id', '>=', '8'],
                     ['c.iron_man', '!=', '4'],
                 ])
-                ->where(function ($query) use ($subpage) {
+                ->where(function ($query) use ($subpage, $query_skills) {
                     $query->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                         ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                            AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
-                            / 4.0 FROM experience a WHERE a.playerid = b.id)
+                            AND (SELECT SUM('.$this->cast_skills('a', $query_skills).') / 4.0
+                            FROM experience a WHERE a.playerid = b.id)
                             >
-                            (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving + a.runecraft + a.harvesting)
-                            / 4.0 FROM experience a JOIN players b ON a.playerid = b.id
+                            (SELECT SUM('.$this->cast_skills('a', $query_skills).') / 4.0
+                            FROM experience a JOIN players b ON a.playerid = b.id
                             WHERE b.username = ? LIMIT 1)
                         )', [$subpage, $subpage]);
                 })
@@ -335,6 +289,7 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense', 'influence', 'thieving', 'tailoring', 'herblaw']);
             $rank_overall = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerid', '=', 'b.id')
@@ -343,18 +298,17 @@ class PlayerController extends Controller
                 ->where([
                     ['b.group_id', '>=', '8'],
                 ])
-                ->where(function ($query) use ($subpage) {
+                ->where(function ($query) use ($subpage, $query_skills) {
                     $query->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                         ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                            AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
-                            a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
-                            a.crafting + a.smithing + a.mining + a.influence + a.thieving + a.tailoring + a.herblaw)
-                            / 4.0 FROM experience a WHERE a.playerid = b.id)
+                            AND (SELECT SUM('.$this->coalesce_skills('a', 'aa', $query_skills).') / 4.0
+                            FROM experience a
+                            JOIN capped_experience as aa ON aa.playerID = b.id
+                            WHERE a.playerid = b.id)
                             >
-                            (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayGood + a.prayEvil +
-                            a.goodMagic + a.evilMagic + a.cooking + a.woodcutting + a.firemaking +
-                            a.crafting + a.smithing + a.mining + a.influence + a.thieving + a.tailoring + a.herblaw)
-                            / 4.0 FROM experience a JOIN players b ON a.playerid = b.id
+                            (SELECT SUM('.$this->coalesce_skills('a', 'aa', $query_skills).') / 4.0
+                            FROM experience a JOIN players b ON a.playerid = b.id
+                            JOIN capped_experience as aa ON aa.playerID = b.id
                             WHERE b.username = ? LIMIT 1)
                         )', [$subpage, $subpage]);
                 })
@@ -364,6 +318,7 @@ class PlayerController extends Controller
             if (config('openrsc.caching_databases')) {
                 $conn = $db.'_caching';
             }
+            $query_skills = array_merge($skill_array, ['attack', 'strength', 'defense']);
             $rank_overall = DB::connection($conn)
                 ->table('experience as a')
                 ->join('players as b', 'a.playerid', '=', 'b.id')
@@ -372,18 +327,17 @@ class PlayerController extends Controller
                 ->where([
                     ['b.group_id', '>=', '8'],
                 ])
-                ->where(function ($query) use ($subpage) {
+                ->where(function ($query) use ($subpage, $query_skills) {
                     $query->whereRaw('b.skill_total > (SELECT skill_total FROM players WHERE username = ? LIMIT 1)', [$subpage])
                         ->orWhereRaw('(b.skill_total = (SELECT skill_total FROM players WHERE username = ? LIMIT 1)
-                            AND (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
-                            / 4.0 FROM experience a WHERE a.playerid = b.id)
+                            AND (SELECT SUM('.$this->coalesce_skills('a', 'aa', $query_skills).') / 4.0
+                            FROM experience a
+                            JOIN capped_experience as aa ON aa.playerID = b.id
+                            WHERE a.playerid = b.id)
                             >
-                            (SELECT SUM(a.attack + a.strength + a.defense + a.hits + a.ranged + a.prayer + a.magic +
-                            a.cooking + a.woodcut + a.fletching + a.fishing + a.firemaking + a.crafting +
-                            a.smithing + a.mining + a.herblaw + a.agility + a.thieving)
-                            / 4.0 FROM experience a JOIN players b ON a.playerid = b.id
+                            (SELECT SUM('.$this->coalesce_skills('a', 'aa', $query_skills).') / 4.0
+                            FROM experience a JOIN players b ON a.playerid = b.id
+                            JOIN capped_experience as aa ON aa.playerID = b.id
                             WHERE b.username = ? LIMIT 1)
                         )', [$subpage, $subpage]);
                 })
@@ -500,7 +454,7 @@ class PlayerController extends Controller
      */
     public function bank($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
@@ -548,7 +502,7 @@ class PlayerController extends Controller
      */
     public function invitem($db, $subpage, Request $request)
     {
-        if (! Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('moderator', Auth::user())) {
             abort(404);
         }
         DB::connection('laravel')->table('viewlogs')->insert([
