@@ -23,6 +23,8 @@
 
             <p style="margin-bottom:16px;">This code will expire in <strong>1 hour</strong>.</p>
 
+            <p style="margin-bottom:16px;">Do not share this email or the password reset link within it with anyone.</p>
+
             <p style="margin-bottom:16px;">
                 Do not reply to this email. For help, please register a forum account and post on our forums:
                 <a href="https://rsc.vet/board/viewforum.php?f=27"
