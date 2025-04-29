@@ -7,7 +7,7 @@
         </h2>
 
         <div class="row justify-content-center">
-            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
+            <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 bg-black">
                 @if (session('status'))
                     <div>
                         {{ session('status') }}
@@ -91,6 +91,9 @@
                         <button class="btn btn-success mt-1" type="submit">
                             {{ __('Register') }}
                         </button>
+                    </div>
+                    <div class="d-block text-center mt-3 mb-3">
+                        <p>Already have an account? Click <a href="/login">here</a> to login.</p>
                     </div>
                 </form>
                 <div class="modal fade modal-dark" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
