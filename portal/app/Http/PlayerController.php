@@ -1062,8 +1062,12 @@ class PlayerController extends Controller
                 'salt' => '' //Clear out their existing compatibility salt if any, since bcrypt has salt built-in we don't need another salt.
             ]);
 
-        //Log the password change then delete it
+        //Log the password change then delete it.
         \Log::info("Password Reset completed for email {$resetRequest->email} with username {$resetRequest->username} from IP: " . get_client_ip_address() . " on world: {$resetRequest->db}, password has been changed.");
+        //Let the user know their password was changed, this is really important!
+        Mail::to($resetRequest->email)->send(
+            new \App\Mail\PasswordResetSuccess($resetRequest->username, $resetRequest->db)
+        );
         //Delete the password request, since we don't need it anymore.
         $resetRequest->delete();
         return redirect()->route('login')->with('status', 'Your password has been reset!');
