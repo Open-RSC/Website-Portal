@@ -1068,6 +1068,26 @@ class PlayerController extends Controller
         Mail::to($resetRequest->email)->send(
             new \App\Mail\PasswordResetSuccess($resetRequest->username, $resetRequest->db)
         );
+        //Send the password reset notification to Discord, this is important too!
+        if (config('openrsc.password_resets_discord_notifications')) {
+            $webhookUrl = config('openrsc.password_resets_discord_webhook_url');
+
+            if ($webhookUrl) {
+                $message = [
+                    'content' => "**[Password Reset Successfully]**\n"
+                               . "**User:** `{$resetRequest->username}`\n"
+                               . "**World:** `{$resetRequest->db}`\n"
+                               . "**User IP:** `".get_client_ip_address()."`\n"
+                               . "**Time:** " . now()->toDateTimeString(),
+                ];
+
+                try {
+                    \Http::post($webhookUrl, $message);
+                } catch (\Exception $e) {
+                    \Log::warning("Failed to send Discord password reset notification: " . $e->getMessage());
+                }
+            }
+        }
         //Delete the password request, since we don't need it anymore.
         $resetRequest->delete();
         return redirect()->route('login')->with('status', 'Your password has been reset!');
