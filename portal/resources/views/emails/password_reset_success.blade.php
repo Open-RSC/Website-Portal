@@ -3,10 +3,10 @@
         <td>
             <img src="https://rsc.vet/img/logo.png" alt="OpenRSC Logo"
             style="display:block; margin-bottom:20px; width:200px; height:auto;">
-            <h2 style="color:#6be585;">OpenRSC ({{ \App\Helpers\uc_worlds($db) }}) Password Reset Confirmation</h2>
+            <h2 style="color:#6be585;">OpenRSC ({{ \App\Helpers\uc_worlds($db) }}) Password Reset Notification</h2>
 
             <p style="margin-bottom:16px;">
-                The password for your account <strong>{{ $username }}</strong> on world <strong>{{ \App\Helpers\uc_worlds($db) }}</strong> was successfully reset.
+                The password for your account <strong>{{ $username }}</strong> on world <strong>{{ \App\Helpers\uc_worlds($db) }}</strong> was successfully changed.
             </p>
 
             <p style="margin-bottom:16px;">
