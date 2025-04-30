@@ -32,12 +32,12 @@
 
                 <div>
                     <label>{{ __('New Password') }}</label>
-                    <input class="form-control mb-1" type="password" name="password" required minlength="4" maxlength="20" onpaste="return false;" />
+                    <input class="form-control mb-1" type="password" name="password" required minlength="4" maxlength="20" onpaste="return false;" ondrop="return false;" autocomplete="off" />
                 </div>
 
                 <div>
                     <label>{{ __('Confirm Password') }}</label>
-                    <input class="form-control mb-1" type="password" name="password_confirmation" required minlength="4" maxlength="20" onpaste="return false;" />
+                    <input class="form-control mb-1" type="password" name="password_confirmation" required minlength="4" maxlength="20" onpaste="return false;" ondrop="return false;" autocomplete="off" />
                 </div>
 
                 <div>
