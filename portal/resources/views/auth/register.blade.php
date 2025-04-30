@@ -58,13 +58,13 @@
                     <div>
                         <label>{{ __('Password') }}</label>
                         <input class="form-control mb-1" type="password" name="password" required minlength="4" maxlength="20"
-                               autocomplete="current-password"/>
+                               autocomplete="current-password" onpaste="return false;"/>
                     </div>
 
                     <div>
                         <label>{{ __('Confirm Password') }}</label>
                         <input class="form-control mb-1" type="password" name="password_confirmation" required minlength="4" maxlength="20"
-                               autocomplete="new-password"/>
+                               autocomplete="new-password" onpaste="return false;"/>
                     </div>
 
                     @if ($inviteOnly)
