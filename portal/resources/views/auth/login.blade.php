@@ -60,12 +60,12 @@
                                {{ __('Login') }}
                             </button>
                         </div>
-                        @if (config('openrsc.password_resets_enabled', false))
                             <div class="d-block text-center mt-3 mb-3">
                                 <p>Need an account? Click <a href="/register">here</a> to register an account.</p>
-                                <p>Forgot your password? Click <a href="/forgot-password">here</a> to reset your password.</p>
+                                @if (config('openrsc.password_resets_enabled', false))
+                                    <p>Forgot your password? Click <a href="/forgot-password">here</a> to reset your password.</p>
+                                @endif
                             </div>
-                        @endif
                     </form>
             </div>
         </div>
