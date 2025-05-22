@@ -988,7 +988,7 @@ class PlayerController extends Controller
 
         $statusMessage = 'If the email you provided matches the one on record, an email with a code will be sent shortly.';
         //If the email is incorrect, DO NOT TELL THE USER! We can simply redirect them back with a default status message, using the same status message for a correct email too.
-        if (!$accountEmail) {
+        if (!$accountEmail || $email !== $accountEmail) {
             \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
             return back()->with('status', $statusMessage);
         }
@@ -1001,8 +1001,8 @@ class PlayerController extends Controller
         );
 
         $resetUrl = route('password.reset.form', ['token' => $token]);
-        Mail::to($email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
-        \Log::info("Password Reset correct email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        Mail::to($accountEmail)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
+        \Log::info("Password Reset correct email {$accountEmail} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
         return back()->with('status', $statusMessage);
     }
 
