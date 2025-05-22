@@ -981,14 +981,14 @@ class PlayerController extends Controller
         $email = $request->input('email');
         $username = trim(preg_replace('/[-_.]/', ' ', $request->input('username')));
 
-        $email = DB::connection($db)->table('players')
+        $accountEmail = DB::connection($db)->table('players')
             ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
             ->where(DB::raw('LOWER(email)'), '=', strtolower($email))
             ->value('email');
 
         $statusMessage = 'If the email you provided matches the one on record, an email with a code will be sent shortly.';
         //If the email is incorrect, DO NOT TELL THE USER! We can simply redirect them back with a default status message, using the same status message for a correct email too.
-        if (!$email) {
+        if (!$accountEmail) {
             \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
             return back()->with('status', $statusMessage);
         }
