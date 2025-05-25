@@ -752,6 +752,7 @@ class PlayerController extends Controller
         }
 
         $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
+        //We could add agree_to_rules in here, and even a custom captcha if we wanted.
         $rules = [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
@@ -833,10 +834,12 @@ class PlayerController extends Controller
             }
 
         } catch (\Exception $e) {
-            \Log::info("There was an error with API registration for $username: ".$e->getMessage());
+            \Log::warning("There was an error with API registration for $username: ".$e->getMessage());
 
             return response()->json(['message' => 'Error creating user.'], 500);
         }
+
+        \Log::info('API Registration: IP ' . get_client_ip_address() . ' with user agent: ' . $request->header('User-Agent') . ' created the account ' . $username . ' on world ' . $db);
 
         return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 201);
     }

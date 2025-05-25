@@ -26,7 +26,7 @@ class RegisteredUserController extends \Laravel\Fortify\Http\Controllers\Registe
         }
         $this->validateCreateUserRequest($request);
         event(new Registered($user = $creator->create($request->all())));
-
+        \Log::info('Website Registration: IP ' . get_client_ip_address() . ' with user agent: ' . $request->header('User-Agent') . ' created the account ' . $request->username . ' on world ' . $request->world );
         return app(RegisterResponse::class);
     }
 }
