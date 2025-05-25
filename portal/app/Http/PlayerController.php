@@ -839,7 +839,7 @@ class PlayerController extends Controller
             return response()->json(['message' => 'Error creating user.'], 500);
         }
 
-        \Log::info('API Registration: IP ' . get_client_ip_address() . ' with user agent: ' . $request->header('User-Agent') . ' created the account ' . $username . ' on world ' . $db);
+        \Log::info('API Registration: IP ' . get_client_ip_address() . ' with user agent: ' . $request->header('User-Agent') . ' created the account: ' . $username . ' on world: ' . $db);
 
         return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 201);
     }
