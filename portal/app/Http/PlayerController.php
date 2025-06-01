@@ -968,8 +968,8 @@ class PlayerController extends Controller
         $multiWorldLoginsEnabled = config('openrsc.multi_world_logins', false);
 
         $allowedWorlds = $multiWorldLoginsEnabled
-        ? ['preservation', 'cabbage', 'uranium', 'coleslaw', '2001scape']
-        : ['preservation'];
+            ? ['preservation', 'cabbage', 'uranium', 'coleslaw', '2001scape']
+            : ['preservation'];
 
         $request->validate([
             'username' => ['required', 'string'],
@@ -981,15 +981,23 @@ class PlayerController extends Controller
         $email = $request->input('email');
         $username = trim(preg_replace('/[-_.]/', ' ', $request->input('username')));
 
-        $accountEmail = DB::connection($db)->table('players')
+        // Check if the user exists and email matches
+        $account = DB::connection($db)->table('players')
+            ->select('email', 'group_id')
             ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
-            ->where(DB::raw('LOWER(email)'), '=', strtolower($email))
-            ->value('email');
+            ->first();
 
         $statusMessage = 'If the email you provided matches the one on record, an email with a code will be sent shortly.';
-        //If the email is incorrect, DO NOT TELL THE USER! We can simply redirect them back with a default status message, using the same status message for a correct email too.
-        if (!$accountEmail || $email !== $accountEmail) {
+
+        if (!$account || strtolower($account->email) !== strtolower($email)) {
             \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
+            return back()->with('status', $statusMessage);
+        }
+
+        // Check if user is of too high rank (player mod or higher)
+        $playerModRank = config('group.player_moderator'); // assuming this gives the rank value 8
+        if ($account->group_id <= $playerModRank) {  // Lower numbers are higher ranks
+            \Log::info("Password Reset denied for high rank account {$username} with group_id {$account->group_id} from IP: " . get_client_ip_address() . " on world: {$db}");
             return back()->with('status', $statusMessage);
         }
 
@@ -1001,8 +1009,8 @@ class PlayerController extends Controller
         );
 
         $resetUrl = route('password.reset.form', ['token' => $token]);
-        Mail::to($accountEmail)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
-        \Log::info("Password Reset correct email {$accountEmail} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        Mail::to($account->email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
+        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
         return back()->with('status', $statusMessage);
     }
 
