@@ -9,8 +9,8 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
             @if (session('status'))
-                <div>
-                    {{ session('status') }}
+                <div class="mb-3">
+                    {!! session('status') !!}
                 </div>
             @endif
 

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -987,7 +988,7 @@ class PlayerController extends Controller
             ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
             ->first();
 
-        $statusMessage = 'If the email you provided matches the one on record, an email with a code will be sent shortly.';
+        $statusMessage = "If the email you provided matches the one on record, an email with a code will be sent shortly. <br><br>Please check your spam folder if you cannot find the email and allow up to 15-30 minutes for the email to send before creating another request.";
 
         if (!$account || strtolower($account->email) !== strtolower($email)) {
             \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
