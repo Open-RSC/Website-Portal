@@ -988,7 +988,7 @@ class PlayerController extends Controller
             ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
             ->first();
 
-        $statusMessage = "If the email you provided matches the one on record, an email with a code will be sent shortly. <br><br>Please check your spam folder if you cannot find the email and allow up to 15-30 minutes for the email to send before creating another request.";
+        $statusMessage = "If the email you provided matches the one on record, an email with a code will be sent shortly. \n\nPlease check your spam folder if you cannot find the email and allow up to 15-30 minutes for the email to send before creating another request."; //We use \n instead of <br> since we're using nl2br and e() to print the status message safely.
 
         if (!$account || strtolower($account->email) !== strtolower($email)) {
             \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
