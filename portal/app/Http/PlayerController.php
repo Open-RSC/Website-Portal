@@ -1001,6 +1001,16 @@ class PlayerController extends Controller
             return back()->with('status', $statusMessage);
         }
 
+        $recentResetCount = DB::table('password_reset_history')
+            ->where('ip', get_client_ip_address())
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+
+        if ($recentResetCount >= config('openrsc.max_password_resets_per_24_hours')) {
+            \Log::info("Password Reset blocked for IP: " . get_client_ip_address() . " on world {$db}, exceeded reset limit.");
+            return back()->with('status', 'Too many reset requests from your IP in the past 24 hours.');
+        }
+
         $token = Str::uuid();
 
         PasswordResetRequest::updateOrCreate(
@@ -1011,6 +1021,16 @@ class PlayerController extends Controller
         $resetUrl = route('password.reset.form', ['token' => $token]);
         Mail::to($account->email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
         \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        DB::table('password_reset_history')->insert([
+            'username' => $username,
+            'email' => $account->email,
+            'db' => $db,
+            'ip' => get_client_ip_address(),
+            'email_sent' => true,
+            'password_reset' => false,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         return back()->with('status', $statusMessage);
     }
 
@@ -1096,6 +1116,16 @@ class PlayerController extends Controller
                 }
             }
         }
+        DB::table('password_reset_history')
+            ->where('username', $resetRequest->username)
+            ->where('db', $resetRequest->db)
+            ->where('ip', get_client_ip_address())
+            ->latest('created_at')
+            ->limit(1)
+            ->update([
+                'password_reset' => true,
+                'updated_at' => now(),
+            ]);
         //Delete the password request, since we don't need it anymore.
         $resetRequest->delete();
         return redirect()->route('login')->with('status', 'Your password has been reset!');

@@ -40,4 +40,5 @@ return [
     'password_resets_enabled' => env('PASSWORD_RESETS_ENABLED', false),
     'password_resets_discord_notifications' => env('PASSWORD_RESETS_DISCORD_NOTIFICATIONS', false),
     'password_resets_discord_webhook_url' => env('PASSWORD_RESETS_DISCORD_WEBHOOK_URL', ''),
+    'max_password_resets_per_24_hours' => env('MAX_PASSWORD_RESETS_PER_24_HOURS', 3),
 ];
