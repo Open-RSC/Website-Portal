@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('db');
             $table->string('ip');
+            $table->uuid('token')->unique();
             $table->boolean('email_sent')->default(true);
             $table->boolean('password_reset')->default(false);
-            $table->uuid('token')->unique();
             $table->timestamps();
         });
     }
