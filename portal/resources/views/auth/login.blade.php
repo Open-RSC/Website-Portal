@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 text-gray-400 pr-5 pl-5 pt-3 pb-3 bg-black">
                     @if (session('status'))
-                        <div>
+                        <div class="mb-3">
                             {{ session('status') }}
                         </div>
                     @endif
@@ -60,10 +60,12 @@
                                {{ __('Login') }}
                             </button>
                         </div>
-
-                        <div class="d-block text-center mt-3">
-                            <p>Need an account? Click <a href="/register">here</a> to register an account.</p>
-                        </div>
+                            <div class="d-block text-center mt-3 mb-3">
+                                <p>Need an account? Click <a href="/register">here</a> to register an account.</p>
+                                @if (config('openrsc.password_resets_enabled', false))
+                                    <p>Forgot your password? Click <a href="/forgot-password">here</a> to reset your password.</p>
+                                @endif
+                            </div>
                     </form>
             </div>
         </div>

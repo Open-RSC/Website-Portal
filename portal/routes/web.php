@@ -107,6 +107,17 @@ Route::get('/iphone2001', function () {
     return redirect('/client2/#members,game.openrsc.com,43493,65537,7112866275597968156550007489163685737528267584779959617759901583041864787078477876689003422509099353805015177703670715380710894892460637136582066351659813,true');
 })->name('iPhone2001');
 
+Route::get('/password/request', [PlayerController::class, 'showPasswordResetPage'])->name('password.request.form');
+Route::post('/password/email', [PlayerController::class, 'sendResetLink'])->name('password.email.request')->middleware('custom_throttle:12,1');
+Route::get('/password/reset/{token}', [PlayerController::class, 'showPasswordResetForm'])->name('password.reset.form');
+Route::post('/password/reset', [PlayerController::class, 'handlePasswordReset'])->name('password.reset.submit')->middleware('custom_throttle:12,1');
+Route::get('/forgotpassword', function () {
+    return redirect()->route('password.request.form');
+});
+Route::get('/forgot-password', function () {
+    return redirect()->route('password.request.form');
+});
+
 // Afman staff zone
 Route::get('staff/invitecodes/', [StaffController::class, 'inviteCodesList'])->name('InviteCodesList')->middleware('auth');
 Route::get('staff/invite/data', [StaffController::class, 'inviteCodesData'])->name('InviteCodesData')->middleware('auth');
