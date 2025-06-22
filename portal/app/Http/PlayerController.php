@@ -1027,6 +1027,7 @@ class PlayerController extends Controller
             'email' => $account->email,
             'db' => $db,
             'ip' => get_client_ip_address(),
+            'token' => $token,
             'email_sent' => true,
             'password_reset' => false,
             'created_at' => now(),
@@ -1118,11 +1119,7 @@ class PlayerController extends Controller
             }
         }
         DB::table('password_reset_history')
-            ->where('username', $resetRequest->username)
-            ->where('db', $resetRequest->db)
-            ->where('ip', get_client_ip_address())
-            ->latest('created_at')
-            ->limit(1)
+            ->where('token', $resetRequest->token)
             ->update([
                 'password_reset' => true,
                 'updated_at' => now(),
