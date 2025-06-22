@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ip');
             $table->boolean('email_sent')->default(true);
             $table->boolean('password_reset')->default(false);
+            $table->uuid('token')->unique();
             $table->timestamps();
         });
     }
