@@ -52,7 +52,7 @@
                                     <tr>
                                         <td colspan="3" align="left">
                                             {{-- TODO: fix player rank somehow... --}}
-                                            {{ $player->rank }}
+                                            {{ number_format($player->rank) }}
                                         </td>
                                         <td align="right">
                                             <a class="c" href="/npchiscores/{{$db}}/{{$player->npcID}}">{{ $npcs[$player->npcID] }}</a>

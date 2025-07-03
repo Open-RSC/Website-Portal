@@ -43,7 +43,7 @@
                         <div class="d-flex">
                             <!--Rank-->
                             <div class="text-right" style="width:40px;">
-                                {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                {{ number_format(($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1) }}
                             </div>
                             <!--Player-->
                             <div class="text-left d-flex align-items-center" style="padding-left:10px; width:160px;">

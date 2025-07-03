@@ -59,7 +59,7 @@
                                 @foreach ($players as $key=>$player)
                                     <tr>
                                         <td colspan="3" align="left">
-                                            {{ ($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1 }}
+                                            {{ number_format(($hiscores->currentpage()-1) * $hiscores->perpage() + $key + 1) }}
                                         </td>
                                         <td align="right">
                                             {{ number_format($player->kills) }}
@@ -146,7 +146,7 @@
                                                 </a>
                                             </td>
                                             <td align="right">
-                                                {{  (new App\Http\PlayerController)->rank($db, $subpage, $skill)+1 }}
+                                                {{  number_format((new App\Http\PlayerController)->rank($db, $subpage, $skill)+1) }}
                                             </td>
                                             <td align="right">
                                                 {{ number_format((new App\Http\HiscoresController)->experienceToLevel($player->$skill/4.0)) }}
