@@ -643,6 +643,7 @@ class HiscoresController extends Component
                 ->where([
                     ['player_cache.type', '=', 0],
                     ['player_cache.key', '=', 'co_prestige'],
+                    ['players.banned', '!=', -1]
                 ])
                 ->where(function ($query) {
                     $query->whereNull('ironman.iron_man')
@@ -752,7 +753,7 @@ class HiscoresController extends Component
 
         if (array_key_exists('odyssey', $npcs)) {
             $odysseyData = DB::connection($conn)
-                ->table(DB::raw("(SELECT playerID, CAST(value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(value AS UNSIGNED) DESC, playerID ASC) as rank FROM player_cache WHERE type = 0 AND `key` = 'co_prestige') AS sub"))
+                ->table(DB::raw("(SELECT player_cache.playerID, CAST(player_cache.value AS UNSIGNED) as value, RANK() OVER (ORDER BY CAST(player_cache.value AS UNSIGNED) DESC, player_cache.playerID ASC) as rank FROM player_cache JOIN players ON players.id = player_cache.playerID WHERE player_cache.type = 0 AND player_cache.key = 'co_prestige' AND players.banned != -1) AS sub"))
                 ->where('playerID', '=', $player_id)
                 ->first();
             if ($odysseyData != null && $odysseyData->value > 0) {
