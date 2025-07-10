@@ -35,7 +35,7 @@
 						Created: {{ Carbon\Carbon::parse($invitems->first()->creation_date)->diffForHumans() }}
 					</div>
                     <div class="sm-stats text-info">
-						Last Online:
+						Last Login:
 						@if ($invitems->first()->login_date)
                             {{ Carbon\Carbon::parse($invitems->first()->login_date)->diffForHumans() }}
                         @else

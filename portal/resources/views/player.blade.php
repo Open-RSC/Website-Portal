@@ -178,24 +178,37 @@
                 @endif
                 <div class="col-8 text-left" style="width: 200px;">
                 <span class="rscfont d-block">
-                    Status:
-                    @if ($players->first()->online == 1)
-                        <span style="color: #01fe00;">
-                            Online
-                        </span>
-                    @else
-                        <span style="color: #ff0101;">
-                            Offline
-                        </span>
-                    @endif
-                </span>
-                    <span class="rscfont d-block">
                     Created: {{ Carbon\Carbon::parse($players->first()->creation_date)->diffForHumans() }}
                 </span>
                     <span class="rscfont d-block">
                         Last Online:
-                        @if ($players->first()->login_date)
-                            {{ Carbon\Carbon::parse($players->first()->login_date)->diffForHumans() }}
+                        @php
+                            $loginDate = $players->first()->login_date
+                                ? Carbon\Carbon::parse($players->first()->login_date)
+                                : null;
+                        @endphp
+
+                        @if ($loginDate)
+                            @php
+                                $now = now();
+                                $diffInHours = floor($loginDate->diffInHours($now));
+                                $diffInDays = floor($loginDate->diffInDays($now));
+                                $diffInWeeks = floor($loginDate->diffInWeeks($now));
+                                $diffInMonths = floor($loginDate->diffInMonths($now));
+                                $diffInYears = floor($loginDate->diffInYears($now));
+                            @endphp
+
+                            @if ($diffInHours < 24)
+                                Within the past 24 hours
+                            @elseif ($diffInDays <= 6)
+                                {{ $diffInDays }} day{{ $diffInDays > 1 ? 's' : '' }} ago
+                            @elseif ($diffInWeeks <= 3)
+                                {{ $diffInWeeks }} week{{ $diffInWeeks > 1 ? 's' : '' }} ago
+                            @elseif ($diffInMonths <= 11)
+                                {{ $diffInMonths }} month{{ $diffInMonths > 1 ? 's' : '' }} ago
+                            @else
+                                {{ $diffInYears }} year{{ $diffInYears > 1 ? 's' : '' }} ago
+                            @endif
                         @else
                             Never
                         @endif
