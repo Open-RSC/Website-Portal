@@ -36,7 +36,7 @@
                 <p>Creation Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->creation_date)->format("Y-m-d H:i:s") }}</p>
                 <p>Login Date: {{ \Illuminate\Support\Carbon::createFromTimestamp($player->login_date)->format("Y-m-d H:i:s") }}</p>
                 <p>
-                    Last Online:
+                    Last Login:
                     @if ($player->login_date)
                         {{ Carbon\Carbon::parse($player->login_date)->diffForHumans() }}
                     @else
