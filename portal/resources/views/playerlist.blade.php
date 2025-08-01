@@ -54,6 +54,7 @@
                     @if(Gate::allows('moderator', Auth::user())) {data: 'email', visible: false}, @endif
                     {title: "Banned", data: 'banned', responsivePriority: 3},
                     {title: "Muted", data: 'muted', responsivePriority: 4},
+                    { title: "Global Muted", data: 'global_muted', responsivePriority: 5 },
                     {title: "View", searchable: false, orderable: false, responsivePriority: 6, data: function(data, type, row){
                         return "<a href='/staff/{{$db}}/player/" + data.id + "/detail'><i class='fa fa-eye'></i></a>";
                     }},
@@ -71,12 +72,17 @@
                     filter_delay: 500
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 6 @else 5 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 6 @endif,
                     filter_type: "text",
                     filter_delay: 500
                 },
                 {
-                    column_number: @if(Gate::allows('admin', Auth::user())) 7 @else 6 @endif,
+                    column_number: @if(Gate::allows('admin', Auth::user())) 8 @else 7 @endif,
+                    filter_type: "text",
+                    filter_delay: 500
+                },
+                {
+                    column_number: @if(Gate::allows('admin', Auth::user())) 9 @else 8 @endif,
                     filter_type: "text",
                     filter_delay: 500
                 },
