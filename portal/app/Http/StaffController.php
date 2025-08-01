@@ -143,29 +143,7 @@ class StaffController extends Controller
         ]);
         // Here we hardcode orderBy time because we only want the latest data.
         $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->get();
-        $playerIDs = $query->pluck('id')->all();
-        $globalMuteMap = DB::connection($db)
-            ->table('player_cache')
-            ->whereIn('playerID', $playerIDs)
-            ->where('key', 'global_mute')
-            ->where('type', 3)
-            ->pluck('value', 'playerID');
-        $currentTimeMillis = time() * 1000;
-        $data = $query->map(function ($item) use ($globalMuteMap, $currentTimeMillis) {
-            $globalMuteValue = isset($globalMuteMap[$item->id]) ? (int)$globalMuteMap[$item->id] : 0;
-            $item->global_muted = match (true) {
-                $globalMuteValue === -1 => 'Permanently',
-                $globalMuteValue > $currentTimeMillis => Carbon::createFromTimestamp($globalMuteValue / 1000)->format('Y-m-d H:i:s'),
-                $globalMuteValue > 0 => 'Previously',
-                default => 'No',
-            };
-
-            return Gate::allows('admin', Auth::user())
-                ? $item
-                : (object)(collect($item)->except(['salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId'])->merge([
-                    'global_muted' => $item->global_muted,
-                ])->all());
-        })->toArray();
+        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
 
         $currentTimeMillis = time() * 1000;
 
