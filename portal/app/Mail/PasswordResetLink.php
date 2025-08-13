@@ -36,7 +36,7 @@ class PasswordResetLink extends Mailable
         return new Envelope(
             from: new Address($fromAddress, $fromName),
             replyTo: $fromAddress,
-            subject: 'OpenRSC (' . uc_worlds($this->db) . ') Password Reset Link',
+            subject: 'OpenRSC (' . uc_worlds($this->db) . ') Password Reset Request',
         );
     }
 

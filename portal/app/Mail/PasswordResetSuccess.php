@@ -27,7 +27,7 @@ class PasswordResetSuccess extends Mailable
         return new Envelope(
             from: new Address(env('MAIL_FROM_ADDRESS', 'noreply@rsc.vet'), env('MAIL_FROM_NAME', 'OpenRSC')),
             replyTo: env('MAIL_FROM_ADDRESS', 'noreply@rsc.vet'),
-            subject: 'OpenRSC (' . uc_worlds($this->db) . ') Password Reset Notification',
+            subject: 'OpenRSC (' . uc_worlds($this->db) . ') Password Reset Successful',
         );
     }
 
