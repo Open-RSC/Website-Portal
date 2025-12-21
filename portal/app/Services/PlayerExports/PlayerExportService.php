@@ -185,7 +185,7 @@ class PlayerExportService
             ->where('username', '=', $this->username)
             ->get();
         $player_id = $this->player[0]->id;
-        $this->sqlString = $this->buildInsert('players', $this->player, ['petfatigue', 'pets', 'transfer'], ['banned', 'muted', 'offences'], ['lastRecoveryTryId'], ['salt', 'pass'], ['salt', 'pass'])."\n";
+        $this->sqlString = $this->buildInsert('players', $this->player, ignoredColumns: ['petfatigue', 'pets', 'transfer'], resetColumns: ['banned', 'muted', 'offences'], unsetIfEmptyColumns: ['lastRecoveryTryId'], skipSlashColumns: ['salt', 'pass'], replaceQuoteColumns: ['salt', 'pass'])."\n";
         $inv_items = DB::connection($db)
             ->table('invitems')
             ->select('*')
