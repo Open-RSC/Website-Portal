@@ -31,7 +31,7 @@ return [
     'npc_hiscores_enabled' => env('NPC_HISCORES_ENABLED', false),
     'npc_overall_hiscores_enabled' => env('NPC_OVERALL_HISCORES_ENABLED', true),
     'npc_odyssey_hiscores_enabled' => env('NPC_ODYSSEY_HISCORES_ENABLED', true),
-    'discord_url' => env('DISCORD_URL', 'https://discord.gg/ABdFCqn'),
+    'discord_url' => env('DISCORD_URL', 'https://openrsc.com/discord'),
     'discord_url_on_maintenance_page' => env('DISCORD_URL_ON_MAINTENANCE_PAGE', false),
     'caching_databases' => env('CACHING_DATABASES', false),
     'multi_world_logins' => env('MULTI_WORLD_LOGINS', true),
