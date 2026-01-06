@@ -1023,8 +1023,13 @@ class PlayerController extends Controller
         );
 
         $resetUrl = route('password.reset.form', ['token' => $token]);
-        Mail::to($account->email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
         \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        try {
+            Mail::to($account->email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
+        } catch (\Exception $e) {
+            \Log::info("Error when trying to send password reset email for correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, Exception: " . $e->getMessage());
+        }
+        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sent reset email.");
         DB::table('password_reset_history')->insert([
             'username' => $username,
             'email' => $account->email,
