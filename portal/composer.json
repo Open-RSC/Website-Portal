@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.5",
         "lukeraymonddowning/honey": "dev-l12-compatibility",
-        "twbs/bootstrap": "4.1.3",
+        "twbs/bootstrap": "4.3.1",
         "yajra/laravel-datatables-oracle": "^12.0",
         "league/flysystem-aws-s3-v3": "^3.0"
     },
