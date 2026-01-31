@@ -3,7 +3,7 @@
 @section('content')
     <div class="col">
         <div class="d-flex justify-content-start pb-1">
-            <input id="search-box" class="e pl-1 text-white click responsive-input" placeholder="Type a name" type="text" style="background:black;">
+            <input id="search-box" class="e pl-1 text-white click responsive-input" placeholder="Type a name or id" type="text" style="background:black;">
         </div>
 
         <div class="e bg-black p-2" style="outline:black; max-width: 100%;">
