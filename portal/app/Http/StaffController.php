@@ -58,7 +58,7 @@ class StaffController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | TOTAL COUNT (windowed by default, otherwise cached for 5 minutes after first load because missing an index makes this slow)
+        | TOTAL COUNT (windowed by default, otherwise cached for 5 minutes after first load because missing an index makes this very slow)
         |--------------------------------------------------------------------------
         */
         $recordsTotal = $showAll
