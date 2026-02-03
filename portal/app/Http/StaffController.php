@@ -43,16 +43,32 @@ class StaffController extends Controller
 
         $length = (int) $request->get('length', 10);
         $start  = (int) $request->get('start', 0);
+        $draw   = (int) $request->get('draw');
         $search = $request->input('search.value');
+        $showAll = $request->has('all');
+        //WARNING: We load only 100k rows by default, to load more you need to pass ?all to the URL.
+
+        // --------------------------------------------
+        // LIMIT WINDOW (default 100k rows)
+        // --------------------------------------------
+        $windowSize = 100_000;
+
+        $maxDbid = DB::connection($db)->table('logins')->max('dbid');
+        $minDbidAllowed = $showAll ? 0 : max(0, $maxDbid - $windowSize);
 
         /*
         |--------------------------------------------------------------------------
-        | TOTAL COUNT (cached because no index, very slow)
+        | TOTAL COUNT (windowed by default, otherwise cached for 5 minutes after first load because missing an index makes this slow)
         |--------------------------------------------------------------------------
         */
-        $recordsTotal = Cache::remember("logins_count_$db", 300, function () use ($db) {
-            return DB::connection($db)->table('logins')->count();
-        });
+        $recordsTotal = $showAll
+            ? Cache::remember("logins_count_$db", 300, function () use ($db) {
+                return DB::connection($db)->table('logins')->count();
+            })
+            : DB::connection($db)
+                ->table('logins')
+                ->where('dbid', '>=', $minDbidAllowed)
+                ->count();
 
         /*
         |--------------------------------------------------------------------------
@@ -71,10 +87,9 @@ class StaffController extends Controller
                 ->pluck('id')
                 ->toArray();
 
-            // No matches? Return empty instantly
             if (empty($matchingPlayerIds)) {
                 return response()->json([
-                    'draw' => intval($request->get('draw')),
+                    'draw' => $draw,
                     'recordsTotal' => $recordsTotal,
                     'recordsFiltered' => 0,
                     'data' => [],
@@ -89,6 +104,7 @@ class StaffController extends Controller
         */
         $base = DB::connection($db)
             ->table('logins')
+            ->where('dbid', '>=', $minDbidAllowed)
             ->when($matchingPlayerIds, function ($q) use ($matchingPlayerIds) {
                 $q->whereIn('playerID', $matchingPlayerIds);
             })
@@ -101,31 +117,35 @@ class StaffController extends Controller
         | STEP 3 — join ONLY those rows to players
         |--------------------------------------------------------------------------
         */
-        $query = DB::connection($db)
+        $data = DB::connection($db)
             ->table(DB::raw("({$base->toSql()}) as l"))
             ->mergeBindings($base)
             ->join('players', 'l.playerID', '=', 'players.id')
             ->select([
                 'l.dbid',
+                'l.playerID',
                 'l.time',
                 'l.ip',
                 'l.clientVersion',
                 'players.username',
                 'players.former_name',
-            ]);
-
-        $data = $query->get();
+            ])
+            ->get();
 
         /*
         |--------------------------------------------------------------------------
-        | FILTERED COUNT
+        | FILTERED COUNT (windowed)
         |--------------------------------------------------------------------------
         */
-        $recordsFiltered = $matchingPlayerIds
-            ? DB::connection($db)->table('logins')
+        if ($matchingPlayerIds) {
+            $recordsFiltered = DB::connection($db)
+                ->table('logins')
+                ->where('dbid', '>=', $minDbidAllowed)
                 ->whereIn('playerID', $matchingPlayerIds)
-                ->count()
-            : $recordsTotal;
+                ->count();
+        } else {
+            $recordsFiltered = $recordsTotal;
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -137,18 +157,12 @@ class StaffController extends Controller
             return $row;
         });
 
-        /*
-        |--------------------------------------------------------------------------
-        | Proper DataTables JSON response
-        |--------------------------------------------------------------------------
-        */
         return response()->json([
-            'draw' => intval($request->get('draw')),
+            'draw' => $draw,
             'recordsTotal' => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,
             'data' => $data,
         ]);
-
     }
 
 
