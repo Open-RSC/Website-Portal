@@ -12,6 +12,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -37,46 +38,119 @@ class StaffController extends Controller
 
     public function loginListData(Request $request, $db)
     {
-        if (Auth::user() === null) {
-            return redirect('/login');
+        if (Auth::user() === null) return redirect('/login');
+        if (! Gate::allows('admin', Auth::user())) abort(404);
+
+        $length = (int) $request->get('length', 10);
+        $start  = (int) $request->get('start', 0);
+        $search = $request->input('search.value');
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL COUNT (cached because no index, very slow)
+        |--------------------------------------------------------------------------
+        */
+        $recordsTotal = Cache::remember("logins_count_$db", 300, function () use ($db) {
+            return DB::connection($db)->table('logins')->count();
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | STEP 1 — find matching player IDs (FAST, small table)
+        |--------------------------------------------------------------------------
+        */
+        $matchingPlayerIds = null;
+
+        if ($search) {
+            $matchingPlayerIds = DB::connection($db)
+                ->table('players')
+                ->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                      ->orWhere('former_name', 'like', "%{$search}%");
+                })
+                ->pluck('id')
+                ->toArray();
+
+            // No matches? Return empty instantly
+            if (empty($matchingPlayerIds)) {
+                return response()->json([
+                    'draw' => intval($request->get('draw')),
+                    'recordsTotal' => $recordsTotal,
+                    'recordsFiltered' => 0,
+                    'data' => [],
+                ]);
+            }
         }
-        if (! Gate::allows('admin', Auth::user())) {
-            abort(404);
-        }
-        DB::connection('laravel')->table('viewlogs')->insert([
-            'username' => Auth::user()->username,
-            'page' => 'login_list',
-            'game' => $db,
-            'url' => $request->fullUrlWithQuery($request->query->all()),
-            'search_terms' => $request->query('search')['value'],
-            'ip' => get_client_ip_address(),
-            'created_at' => now(),
-            'updated_at' => now(),
+
+        /*
+        |--------------------------------------------------------------------------
+        | STEP 2 — page logins FIRST (FAST, uses PK)
+        |--------------------------------------------------------------------------
+        */
+        $base = DB::connection($db)
+            ->table('logins')
+            ->when($matchingPlayerIds, function ($q) use ($matchingPlayerIds) {
+                $q->whereIn('playerID', $matchingPlayerIds);
+            })
+            ->orderByDesc('dbid')
+            ->offset($start)
+            ->limit($length);
+
+        /*
+        |--------------------------------------------------------------------------
+        | STEP 3 — join ONLY those rows to players
+        |--------------------------------------------------------------------------
+        */
+        $query = DB::connection($db)
+            ->table(DB::raw("({$base->toSql()}) as l"))
+            ->mergeBindings($base)
+            ->join('players', 'l.playerID', '=', 'players.id')
+            ->select([
+                'l.dbid',
+                'l.time',
+                'l.ip',
+                'l.clientVersion',
+                'players.username',
+                'players.former_name',
+            ]);
+
+        $data = $query->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTERED COUNT
+        |--------------------------------------------------------------------------
+        */
+        $recordsFiltered = $matchingPlayerIds
+            ? DB::connection($db)->table('logins')
+                ->whereIn('playerID', $matchingPlayerIds)
+                ->count()
+            : $recordsTotal;
+
+        /*
+        |--------------------------------------------------------------------------
+        | FORMAT
+        |--------------------------------------------------------------------------
+        */
+        $data->transform(function ($row) {
+            $row->time = date('Y-m-d H:i:s', $row->time);
+            return $row;
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Proper DataTables JSON response
+        |--------------------------------------------------------------------------
+        */
+        return response()->json([
+            'draw' => intval($request->get('draw')),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data,
         ]);
 
-        //Here we hardcode orderBy time because we only want the latest data.
-        $query = DB::connection($db)->table('logins')
-            ->join('players', 'logins.playerID', '=', 'players.id')
-            ->select([
-                'logins.*',
-                'players.username as username',
-                'players.former_name'
-            ])
-            ->orderBy('time', 'desc');
-
-        return DataTables::of($query)
-            ->filterColumn('username', function ($query, $keyword) {
-                $query->where('players.username', 'LIKE', "%$keyword%");
-            })
-            ->filterColumn('former_name', function ($query, $keyword) {
-                $query->where('players.former_name', 'LIKE', "%$keyword%");
-            })
-            ->editColumn('time', function ($data) {
-                return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
-            })
-            ->smart(true)
-            ->make(true);
     }
+
 
     public function player_list(Request $request, $db)
     {
@@ -142,12 +216,24 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
         // Here we hardcode orderBy time because we only want the latest data.
-        $query = DB::connection($db)->table('players')->orderBy('creation_date', 'desc')->get();
-        $data = Gate::allows('admin', Auth::user()) ? $query->toArray() : $query->map(fn ($item) => (object) (collect($item)->except(['salt', 'pass', 'creation_ip', 'login_ip', 'lastRecoveryTryId']))->all())->toArray();
+        $query = DB::connection($db)->table('players')
+            ->orderBy('creation_date', 'desc');
+
+        if (!Gate::allows('admin', Auth::user())) {
+            $query->select([
+                'id','username','former_name','group_id','email',
+                'combat','skill_total','x','y','fatigue','combatstyle',
+                'block_chat','block_private','block_trade','block_duel',
+                'cameraauto','onemouse','soundoff','haircolour','topcolour',
+                'trousercolour','skincolour','headsprite','bodysprite','male',
+                'creation_date','login_date','banned','offences','muted',
+                'kills','npc_kills','deaths','online','quest_points'
+            ]);
+        }
 
         $currentTimeMillis = time() * 1000;
 
-        return DataTables::of($data)
+        return DataTables::of($query)
             ->editColumn('creation_date', function ($data) {
                 return Carbon::createFromTimestamp($data->creation_date)->format('Y-m-d H:i:s');
             })
@@ -557,7 +643,7 @@ class StaffController extends Controller
         }
 
         // Here we format the date columns for easier viewing.
-        return DataTables::of(DB::table('error_logs')->orderBy('created_at', 'desc')->get())
+        return DataTables::of(DB::table('error_logs')->orderBy('created_at', 'desc'))
             ->editColumn('created_at', function ($data) {
                 return Carbon::parse($data->created_at)->format('Y-m-d H:i:s');
             })
