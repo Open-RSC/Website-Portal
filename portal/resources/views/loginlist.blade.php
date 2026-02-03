@@ -19,7 +19,7 @@
         $(document).ready(function() {
             let dataTable = $('#logs').DataTable({
                 ajax: {
-                    url: '{{ route('LoginListData', $db)  }}',
+                    url: '{{ route('LoginListData', $db) }}' + window.location.search,
                 },
                 order: [[3, 'desc']],
                 processing: true,
