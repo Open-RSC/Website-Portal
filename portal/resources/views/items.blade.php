@@ -13,16 +13,16 @@
         <table id="List" class="container table-striped table-hover text-primary table-transparent">
             <thead class="border-bottom border-info">
             <tr class="text-info">
-                <th class="pl-3 float-left">Item Name</th>
-                <th class="text-center">Picture</th>
-                <th class="text-center">Required Level</th>
-                <th class="text-center">Shop Value</th>
-                <th class="pr-3 float-right">Alch Value (Low / High)</th>
+                <th class="text-center p-2">Item Name</th>
+                <th class="text-center p-2">Picture</th>
+                <th class="text-center p-2">Required Level</th>
+                <th class="text-center p-2">Shop Value</th>
+                <th class="text-center p-2 text-wrap-balance">Alch Value (Low/High)</th>
             </tr>
             </thead>
             <tbody>
             @foreach ($items as $itemdef)
-                <tr class="clickable-row" data-href="itemdef/{{ $itemdef->id }}">
+                <tr class="clickable-row cursor-pointer" data-href="itemdef/{{ $itemdef->id }}">
                     <td class="pl-3 w-25">
                         <span class="text-capitalize pl-1">{{ $itemdef->name }} ({{ $itemdef->id }})</span>
                         <span class="text-white-50 pl-1 d-block">{{ $itemdef->description }}</span>

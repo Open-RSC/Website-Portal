@@ -25,7 +25,12 @@ class ItemController extends Controller
         $query = DB::connection('preservation')->table('itemdef');
 
         if ($request->has('search')) {
-            $query->where('name', 'LIKE', '%'.$request->search.'%');
+            $search = $request->search;
+            if (ctype_digit($search)) {
+                $query->where('id', '=', (int) $search);
+            } else {
+                $query->where('name', 'LIKE', '%'.$search.'%');
+            }
         }
 
         if (Config::get('app.authentic') == true) {

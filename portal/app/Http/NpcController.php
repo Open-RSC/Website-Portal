@@ -36,6 +36,9 @@ class NpcController extends Controller
         if (! empty($searchTerm)) {
             // TODO: add multi-world NPC support so we can search non-authentic NPCs
             $npcs = npcdef::when($searchTerm, function ($query, $searchTerm) {
+                if (ctype_digit($searchTerm)) {
+                    return $query->where('id', '=', (int) $searchTerm);
+                }
                 return $query->where('name', 'like', '%'.$searchTerm.'%');
             })->where('id', '<=', '793')->orderBy('combatlvl', 'asc')->paginate(6);
         }
