@@ -48,6 +48,15 @@ class StaffController extends Controller
         $showAll = $request->has('all');
         //WARNING: We load only 100k rows by default, to load more you need to pass ?all to the URL.
 
+        // Check for column-specific searches (yadcf filters)
+        $columns = $request->input('columns', []);
+        $columnSearches = [];
+        foreach ($columns as $index => $column) {
+            if (!empty($column['search']['value'])) {
+                $columnSearches[$index] = $column['search']['value'];
+            }
+        }
+
         // --------------------------------------------
         // LIMIT WINDOW (default 100k rows)
         // --------------------------------------------
@@ -77,12 +86,22 @@ class StaffController extends Controller
         */
         $matchingPlayerIds = null;
 
-        if ($search) {
+        // Check both global search and column-specific searches (columns 0 = username, 1 = former_name)
+        if ($search || !empty($columnSearches)) {
             $matchingPlayerIds = DB::connection($db)
                 ->table('players')
-                ->where(function ($q) use ($search) {
-                    $q->where('username', 'like', "%{$search}%")
-                      ->orWhere('former_name', 'like', "%{$search}%");
+                ->where(function ($q) use ($search, $columnSearches) {
+                    if ($search) {
+                        $q->where('username', 'like', "%{$search}%")
+                          ->orWhere('former_name', 'like', "%{$search}%");
+                    }
+                    // Column 0 is username, Column 1 is former_name
+                    if (!empty($columnSearches[0])) {
+                        $q->where('username', 'like', "%{$columnSearches[0]}%");
+                    }
+                    if (!empty($columnSearches[1])) {
+                        $q->where('former_name', 'like', "%{$columnSearches[1]}%");
+                    }
                 })
                 ->pluck('id')
                 ->toArray();
@@ -99,38 +118,80 @@ class StaffController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | STEP 2 — page logins FIRST (FAST, uses PK)
+        | STEP 2 — determine sort order from DataTables
         |--------------------------------------------------------------------------
         */
-        $base = DB::connection($db)
-            ->table('logins')
-            ->where('dbid', '>=', $minDbidAllowed)
-            ->when($matchingPlayerIds, function ($q) use ($matchingPlayerIds) {
-                $q->whereIn('playerID', $matchingPlayerIds);
-            })
-            ->orderByDesc('dbid')
-            ->offset($start)
-            ->limit($length);
+        // Get DataTables ordering parameters
+        $orderColumnIndex = $request->input('order.0.column', 3); // default to column 3 (time)
+        $orderDir = $request->input('order.0.dir', 'desc');
+
+        // Map column indices to database columns
+        // Column 0: username, Column 1: former_name, Column 2: ip, Column 3: time, Column 4: clientVersion
+        $columnMap = [
+            0 => 'players.username',
+            1 => 'players.former_name',
+            2 => 'logins.ip',
+            3 => 'logins.time',
+            4 => 'logins.clientVersion',
+        ];
+
+        $orderColumn = $columnMap[$orderColumnIndex] ?? 'logins.dbid';
+        $needsPlayerJoinForSort = in_array($orderColumn, ['players.username', 'players.former_name']);
 
         /*
         |--------------------------------------------------------------------------
-        | STEP 3 — join ONLY those rows to players
+        | STEP 3 — page and join (join early if sorting by player columns)
         |--------------------------------------------------------------------------
         */
-        $data = DB::connection($db)
-            ->table(DB::raw("({$base->toSql()}) as l"))
-            ->mergeBindings($base)
-            ->join('players', 'l.playerID', '=', 'players.id')
-            ->select([
-                'l.dbid',
-                'l.playerID',
-                'l.time',
-                'l.ip',
-                'l.clientVersion',
-                'players.username',
-                'players.former_name',
-            ])
-            ->get();
+        if ($needsPlayerJoinForSort) {
+            // Need to join first to sort by player columns
+            $data = DB::connection($db)
+                ->table('logins')
+                ->join('players', 'logins.playerID', '=', 'players.id')
+                ->where('logins.dbid', '>=', $minDbidAllowed)
+                ->when($matchingPlayerIds, function ($q) use ($matchingPlayerIds) {
+                    $q->whereIn('logins.playerID', $matchingPlayerIds);
+                })
+                ->select([
+                    'logins.dbid',
+                    'logins.playerID',
+                    'logins.time',
+                    'logins.ip',
+                    'logins.clientVersion',
+                    'players.username',
+                    'players.former_name',
+                ])
+                ->orderBy($orderColumn, $orderDir)
+                ->offset($start)
+                ->limit($length)
+                ->get();
+        } else {
+            // Optimize: page logins first, then join (for logins table column sorts)
+            $base = DB::connection($db)
+                ->table('logins')
+                ->where('dbid', '>=', $minDbidAllowed)
+                ->when($matchingPlayerIds, function ($q) use ($matchingPlayerIds) {
+                    $q->whereIn('playerID', $matchingPlayerIds);
+                })
+                ->orderBy(str_replace('logins.', '', $orderColumn), $orderDir)
+                ->offset($start)
+                ->limit($length);
+
+            $data = DB::connection($db)
+                ->table(DB::raw("({$base->toSql()}) as l"))
+                ->mergeBindings($base)
+                ->join('players', 'l.playerID', '=', 'players.id')
+                ->select([
+                    'l.dbid',
+                    'l.playerID',
+                    'l.time',
+                    'l.ip',
+                    'l.clientVersion',
+                    'players.username',
+                    'players.former_name',
+                ])
+                ->get();
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -229,9 +290,8 @@ class StaffController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        // Here we hardcode orderBy time because we only want the latest data.
-        $query = DB::connection($db)->table('players')
-            ->orderBy('creation_date', 'desc');
+        // Don't hardcode orderBy - let DataTables handle sorting
+        $query = DB::connection($db)->table('players');
 
         if (!Gate::allows('admin', Auth::user())) {
             $query->select([
