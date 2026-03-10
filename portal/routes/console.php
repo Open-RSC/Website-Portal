@@ -76,6 +76,20 @@ if (config('openrsc.stats_daily_csv_job_enabled')) {
         ->dailyAt('00:21');
 }
 
+// DAILY JOBS - Rare Item Monitor
+if (config('openrsc.rare_item_monitor_enabled')) {
+    Schedule::command('monitor:rare-items preservation')
+        ->dailyAt('01:00');
+    Schedule::command('monitor:rare-items cabbage')
+        ->dailyAt('01:01');
+    Schedule::command('monitor:rare-items uranium')
+        ->dailyAt('01:02');
+    Schedule::command('monitor:rare-items coleslaw')
+        ->dailyAt('01:03');
+    Schedule::command('monitor:rare-items openpk')
+        ->dailyAt('01:04');
+}
+
 // WEEKLY JOBS
 if (config('openrsc.stats_weekly_csv_job_enabled')) {
     // Weekly CSV Jobs
