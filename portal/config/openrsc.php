@@ -41,4 +41,9 @@ return [
     'password_resets_discord_notifications' => env('PASSWORD_RESETS_DISCORD_NOTIFICATIONS', false),
     'password_resets_discord_webhook_url' => env('PASSWORD_RESETS_DISCORD_WEBHOOK_URL', ''),
     'max_password_resets_per_24_hours' => env('MAX_PASSWORD_RESETS_PER_24_HOURS', 3),
+    'rare_item_monitor_enabled' => env('RARE_ITEM_MONITOR_ENABLED', false),
+    'rare_item_monitor_discord_webhook_url' => env('RARE_ITEM_MONITOR_DISCORD_WEBHOOK_URL', ''),
+    'rare_item_monitor_gold_threshold' => env('RARE_ITEM_MONITOR_GOLD_THRESHOLD', 30_000_000),
+    'rare_item_monitor_rare_threshold' => env('RARE_ITEM_MONITOR_RARE_THRESHOLD', 50),
+    'rare_item_monitor_ultra_rare_threshold' => env('RARE_ITEM_MONITOR_ULTRA_RARE_THRESHOLD', 10),
 ];
