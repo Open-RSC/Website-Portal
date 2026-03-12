@@ -37,15 +37,17 @@ class RareItemMonitorService
     private int $rareItemThreshold;
     private int $ultraRareItemThreshold;
 
+    private array $goldThresholdMultipliers = ['openpk' => 3, 'uranium' => 5, 'coleslaw' => 5];
+
     public function __construct(string $db)
     {
         $this->db = $db;
         $this->goldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
         $this->rareItemThreshold = (int) config('openrsc.rare_item_monitor_rare_threshold', 50);
         $this->ultraRareItemThreshold = (int) config('openrsc.rare_item_monitor_ultra_rare_threshold', 10);
-        if ($db === 'openpk') {
-            //OpenPK needs a 3x gold threshold, or possibly more, to not cause false positives.
-            $this->goldThreshold *= 3;
+        if (array_key_exists($db, $this->goldThresholdMultipliers)) {
+            //Some worlds need gold threshold to not cause false positives.
+            $this->goldThreshold *= $this->goldThresholdMultipliers[$db];
         }
     }
 
