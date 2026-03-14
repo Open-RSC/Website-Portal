@@ -65,6 +65,17 @@ class MonitorRareItemsCommand extends Command
             ));
         }
 
+        $goldMultiplierStr = $result['gold_multiplier'] > 1
+            ? ' (base: ' . number_format($result['gold_threshold_base']) . ' × ' . $result['gold_multiplier'] . 'x)'
+            : '';
+        $this->error(sprintf(
+            "[$db] Thresholds — Gold: %s%s, Rare: %s, Ultra-Rare: %s",
+            number_format($result['gold_threshold']),
+            $goldMultiplierStr,
+            number_format($result['rare_threshold']),
+            number_format($result['ultra_rare_threshold'])
+        ));
+
         $this->sendDiscordAlert($result);
 
         return 0;
@@ -90,6 +101,13 @@ class MonitorRareItemsCommand extends Command
             $delta   = number_format($item['delta']);
             $content .= "**{$flag}**: {$current} (prev: {$prev}, +{$delta})\n";
         }
+
+        $goldMultiplierStr = $result['gold_multiplier'] > 1
+            ? ' (base: ' . number_format($result['gold_threshold_base']) . ' × ' . $result['gold_multiplier'] . 'x)'
+            : '';
+        $content .= "\n**Thresholds:** Gold: " . number_format($result['gold_threshold']) . $goldMultiplierStr;
+        $content .= ", Rare: " . number_format($result['rare_threshold']);
+        $content .= ", Ultra-Rare: " . number_format($result['ultra_rare_threshold']);
 
         try {
             \Http::post($webhookUrl, ['content' => $content]);
