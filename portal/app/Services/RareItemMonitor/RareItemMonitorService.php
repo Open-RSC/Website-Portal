@@ -37,7 +37,7 @@ class RareItemMonitorService
     private int $rareItemThreshold;
     private int $ultraRareItemThreshold;
 
-    private array $goldThresholdMultipliers = ['openpk' => 3, 'uranium' => 5, 'coleslaw' => 5];
+    private array $goldThresholdMultipliers;
 
     public function __construct(string $db)
     {
@@ -45,6 +45,7 @@ class RareItemMonitorService
         $this->goldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
         $this->rareItemThreshold = (int) config('openrsc.rare_item_monitor_rare_threshold', 50);
         $this->ultraRareItemThreshold = (int) config('openrsc.rare_item_monitor_ultra_rare_threshold', 10);
+        $this->goldThresholdMultipliers = ['openpk' => 5, 'uranium' => 5, 'coleslaw' => 25];
         if (array_key_exists($db, $this->goldThresholdMultipliers)) {
             //Some worlds need gold threshold to not cause false positives.
             $this->goldThreshold *= $this->goldThresholdMultipliers[$db];
@@ -113,12 +114,20 @@ class RareItemMonitorService
             }
         }
 
+        $baseGoldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
+        $goldMultiplier    = $this->goldThresholdMultipliers[$this->db] ?? 1;
+
         return [
-            'db'                 => $this->db,
-            'flags'              => $flags,
-            'items'              => $items,
-            'yesterday_snapshot' => Carbon::yesterday()->toDateString(),
-            'today_snapshot'     => Carbon::today()->toDateString(),
+            'db'                      => $this->db,
+            'flags'                   => $flags,
+            'items'                   => $items,
+            'yesterday_snapshot'      => Carbon::yesterday()->toDateString(),
+            'today_snapshot'          => Carbon::today()->toDateString(),
+            'gold_threshold'          => $this->goldThreshold,
+            'gold_threshold_base'     => $baseGoldThreshold,
+            'gold_multiplier'         => $goldMultiplier,
+            'rare_threshold'          => $this->rareItemThreshold,
+            'ultra_rare_threshold'    => $this->ultraRareItemThreshold,
         ];
     }
 
