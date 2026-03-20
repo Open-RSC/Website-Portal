@@ -43,17 +43,17 @@
                     {title: "Crackers", data: 'cracker', render: function(data, type, row) {
                         return `<a href="/staff/items/${db}/575">${data}</a>`;
                     }},
-                    {title: "Red Hat", data: 'redphat', render: function(data, type, row) {
-                        return `<a href="/staff/items/${db}/576">${data}</a>`;
+                    {title: "Pink Hat", data: 'pinkphat', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/580">${data}</a>`;
                     }},
                     {title: "Santa", data: 'santahat', render: function(data, type, row) {
                         return `<a href="/staff/items/${db}/971">${data}</a>`;
                     }},
-                    {title: "Dragon Sword", data: 'dlong', render: function(data, type, row) {
-                        return `<a href="/staff/items/${db}/593">${data}</a>`;
-                    }},
                     {title: "Dragon Med", data: 'dmed', render: function(data, type, row) {
                         return `<a href="/staff/items/${db}/795">${data}</a>`;
+                    }},
+                    {title: "Dragon Sq Shield", data: 'dsq', render: function(data, type, row) {
+                        return `<a href="/staff/items/${db}/1278">${data}</a>`;
                     }},
                     {title: "Date", data: 'created_at'},
                     {title: "View", searchable: false, orderable: false, data: function(data, type, row){
