@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Models\InviteCode;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
+#[Signature('invite:generate {count=5 : The number of invite codes to generate}')]
+#[Description('Generates multiple invite codes.')]
 class GenerateInviteCodes extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'invite:generate {count=5 : The number of invite codes to generate}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generates multiple invite codes.';
-
     /**
      * Execute the console command.
      */

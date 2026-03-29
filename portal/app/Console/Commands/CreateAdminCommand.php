@@ -5,25 +5,15 @@ namespace App\Console\Commands;
 use App\Actions\Fortify\CreateNewUser;
 use App\Models\InviteCode;
 use App\Models\Setting;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
+#[Signature('admin:create {--u|username= : Username of the newly created admin.} {--e|email= : E-Mail of the newly created admin.} {--d|db= : Database for the newly created admin.}')]
+#[Description('Manually creates a new Laravel Admin.')]
 class CreateAdminCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'admin:create {--u|username= : Username of the newly created admin.} {--e|email= : E-Mail of the newly created admin.} {--d|db= : Database for the newly created admin.}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Manually creates a new Laravel Admin.';
-
     /**
      * Execute the console command.
      * https://laravel.com/docs/9.x/artisan

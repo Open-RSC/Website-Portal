@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,10 +11,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $message
  * @property int $time
  */
-class live_feeds extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['username', 'message', 'time'];
-}
+#[Fillable(['username', 'message', 'time'])]
+class live_feeds extends Model {}

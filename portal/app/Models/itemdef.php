@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -27,24 +29,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $basePrice
  * @property bool $isNoteable
  */
-class itemdef extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'itemdef';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['name', 'description', 'command', 'isFemaleOnly', 'isMembersOnly', 'isStackable', 'isUntradable', 'isWearable', 'appearanceID', 'wearableID', 'wearSlot', 'requiredLevel', 'requiredSkillID', 'armourBonus', 'weaponAimBonus', 'weaponPowerBonus', 'magicBonus', 'prayerBonus', 'basePrice', 'isNoteable'];
-}
+#[Table('itemdef', incrementing: false)]
+#[Fillable(['name', 'description', 'command', 'isFemaleOnly', 'isMembersOnly', 'isStackable', 'isUntradable', 'isWearable', 'appearanceID', 'wearableID', 'wearSlot', 'requiredLevel', 'requiredSkillID', 'armourBonus', 'weaponAimBonus', 'weaponPowerBonus', 'magicBonus', 'prayerBonus', 'basePrice', 'isNoteable'])]
+class itemdef extends Model {}

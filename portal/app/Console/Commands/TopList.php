@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Http\HiscoresController;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Signature('toplist:bi-monthly')]
+#[Description('OpenRSC hiscore tables')]
 class TopList extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'toplist:bi-monthly';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'OpenRSC hiscore tables';
-
     /**
      * Create a new command instance.
      *

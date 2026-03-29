@@ -8,7 +8,6 @@ use App\Models\itemdef;
 use App\Models\players;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +22,6 @@ use function App\Helpers\get_date_from_msec;
 
 class StaffController extends Controller
 {
-
     public function login_list(Request $request, $db)
     {
         if (Auth::user() === null) {
@@ -38,21 +36,25 @@ class StaffController extends Controller
 
     public function loginListData(Request $request, $db)
     {
-        if (Auth::user() === null) return redirect('/login');
-        if (! Gate::allows('admin', Auth::user())) abort(404);
+        if (Auth::user() === null) {
+            return redirect('/login');
+        }
+        if (! Gate::allows('admin', Auth::user())) {
+            abort(404);
+        }
 
-        $length = (int) $request->get('length', 10);
-        $start  = (int) $request->get('start', 0);
-        $draw   = (int) $request->get('draw');
+        $length = (int) $request->input('length', 10);
+        $start = (int) $request->input('start', 0);
+        $draw = (int) $request->input('draw');
         $search = $request->input('search.value');
         $showAll = $request->has('all');
-        //WARNING: We load only 100k rows by default, to load more you need to pass ?all to the URL.
+        // WARNING: We load only 100k rows by default, to load more you need to pass ?all to the URL.
 
         // Check for column-specific searches (yadcf filters)
         $columns = $request->input('columns', []);
         $columnSearches = [];
         foreach ($columns as $index => $column) {
-            if (!empty($column['search']['value'])) {
+            if (! empty($column['search']['value'])) {
                 $columnSearches[$index] = $column['search']['value'];
             }
         }
@@ -87,19 +89,19 @@ class StaffController extends Controller
         $matchingPlayerIds = null;
 
         // Check both global search and column-specific searches (columns 0 = username, 1 = former_name)
-        if ($search || !empty($columnSearches)) {
+        if ($search || ! empty($columnSearches)) {
             $matchingPlayerIds = DB::connection($db)
                 ->table('players')
                 ->where(function ($q) use ($search, $columnSearches) {
                     if ($search) {
                         $q->where('username', 'like', "%{$search}%")
-                          ->orWhere('former_name', 'like', "%{$search}%");
+                            ->orWhere('former_name', 'like', "%{$search}%");
                     }
                     // Column 0 is username, Column 1 is former_name
-                    if (!empty($columnSearches[0])) {
+                    if (! empty($columnSearches[0])) {
                         $q->where('username', 'like', "%{$columnSearches[0]}%");
                     }
-                    if (!empty($columnSearches[1])) {
+                    if (! empty($columnSearches[1])) {
                         $q->where('former_name', 'like', "%{$columnSearches[1]}%");
                     }
                 })
@@ -215,6 +217,7 @@ class StaffController extends Controller
         */
         $data->transform(function ($row) {
             $row->time = date('Y-m-d H:i:s', $row->time);
+
             return $row;
         });
 
@@ -225,7 +228,6 @@ class StaffController extends Controller
             'data' => $data,
         ]);
     }
-
 
     public function player_list(Request $request, $db)
     {
@@ -293,15 +295,15 @@ class StaffController extends Controller
         // Don't hardcode orderBy - let DataTables handle sorting
         $query = DB::connection($db)->table('players');
 
-        if (!Gate::allows('admin', Auth::user())) {
+        if (! Gate::allows('admin', Auth::user())) {
             $query->select([
-                'id','username','former_name','group_id','email',
-                'combat','skill_total','x','y','fatigue','combatstyle',
-                'block_chat','block_private','block_trade','block_duel',
-                'cameraauto','onemouse','soundoff','haircolour','topcolour',
-                'trousercolour','skincolour','headsprite','bodysprite','male',
-                'creation_date','login_date','banned','offences','muted',
-                'kills','npc_kills','deaths','online','quest_points'
+                'id', 'username', 'former_name', 'group_id', 'email',
+                'combat', 'skill_total', 'x', 'y', 'fatigue', 'combatstyle',
+                'block_chat', 'block_private', 'block_trade', 'block_duel',
+                'cameraauto', 'onemouse', 'soundoff', 'haircolour', 'topcolour',
+                'trousercolour', 'skincolour', 'headsprite', 'bodysprite', 'male',
+                'creation_date', 'login_date', 'banned', 'offences', 'muted',
+                'kills', 'npc_kills', 'deaths', 'online', 'quest_points',
             ]);
         }
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,17 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $amount
  * @property int $respawn
  */
-class grounditems extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'idx';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['id', 'x', 'y', 'amount', 'respawn'];
-}
+#[Table(key: 'idx')]
+#[Fillable(['id', 'x', 'y', 'amount', 'respawn'])]
+class grounditems extends Model {}

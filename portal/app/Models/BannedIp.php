@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-class BannedIp extends Model
-{
-    protected $fillable = ['ip_address'];
-}
+#[Fillable(['ip_address'])]
+class BannedIp extends Model {}

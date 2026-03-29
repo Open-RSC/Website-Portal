@@ -40,5 +40,6 @@
     },
     "devDependencies": {
         "concurrently": "^9.0.1"
-    }
+    },
+    "$schema": "https://www.schemastore.org/package.json"
 }

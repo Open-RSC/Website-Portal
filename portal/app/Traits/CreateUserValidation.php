@@ -22,7 +22,7 @@ trait CreateUserValidation
 
     protected function validateCreateUserInput(array $input)
     {
-        //We could add a custom captcha in here if we wanted.
+        // We could add a custom captcha in here if we wanted.
         $rules = [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -31,15 +31,15 @@ trait CreateUserValidation
             'agree_to_rules' => ['required', 'accepted'],
         ];
         $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
-        //Conditionally add invite code rules based on system configuration
+        // Conditionally add invite code rules based on system configuration
         if ($inviteOnly) {
             $rules['invite_code'] = ['required', 'string', 'exists:invite_codes,code,used,false'];
         }
 
         $validator = Validator::make($input, $rules);
-        $domain = parse_url(config('app.url'), PHP_URL_HOST); //For example: rsc.vet
+        $domain = parse_url(config('app.url'), PHP_URL_HOST); // For example: rsc.vet
 
-        if (!empty($input['email']) && str_ends_with(strtolower($input['email']), '@' . strtolower($domain))) {
+        if (! empty($input['email']) && str_ends_with(strtolower($input['email']), '@'.strtolower($domain))) {
             throw ValidationException::withMessages([
                 'email' => ['Registration using this email domain is not allowed.'],
             ]);
@@ -54,7 +54,7 @@ trait CreateUserValidation
             ]);
         }
 
-        //Check if the username has already been badnamed
+        // Check if the username has already been badnamed
         $formerBadNameExists = DB::connection($db)->table('former_names')
             ->where(DB::raw('LOWER(formerName)'), '=', strtolower($trimmed_username))
             ->where('changeType', '=', 1)
@@ -66,7 +66,7 @@ trait CreateUserValidation
             ]);
         }
 
-        //Check if the user already has too many accounts
+        // Check if the user already has too many accounts
         $recentAccounts = DB::connection($db)->table('players')
             ->where('creation_ip', '=', get_client_ip_address())
             ->where('creation_date', '>=', time() - 86400)

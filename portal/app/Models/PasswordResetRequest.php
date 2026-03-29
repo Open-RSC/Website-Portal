@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-class PasswordResetRequest extends Model
-{
-    protected $fillable = [ 'username', 'email', 'db', 'token', 'expires_at', 'ip' ];
-}
+#[Fillable(['username', 'email', 'db', 'token', 'expires_at', 'ip'])]
+class PasswordResetRequest extends Model {}

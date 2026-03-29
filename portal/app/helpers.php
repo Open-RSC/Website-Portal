@@ -87,11 +87,12 @@ if (! function_exists('is_incorrect_production_url')) {
             return false;
         }
 
-        $normalizeHost = function($url) {
+        $normalizeHost = function ($url) {
             $host = parse_url($url, PHP_URL_HOST);
             if (str_starts_with($host, 'www.')) {
-                $host = substr($host, 4); //Remove "www." from host
+                $host = substr($host, 4); // Remove "www." from host
             }
+
             return $host;
         };
 
@@ -120,7 +121,8 @@ if (! function_exists('is_json')) {
 }
 
 if (! function_exists('get_date_from_msec')) {
-    function get_date_from_msec($msec) {
+    function get_date_from_msec($msec)
+    {
         $seconds = floor($msec / 1000);
         $ss = $seconds % 60;
         $minutes = floor($seconds / 60);
@@ -168,11 +170,12 @@ if (! function_exists('safe_json_encode')) {
 }
 
 if (! function_exists('get_base_url')) {
-    function get_base_url() {
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    function get_base_url()
+    {
+        $scheme = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         $port = $_SERVER['SERVER_PORT'] ?? null;
 
-        return $port && !in_array($port, [80, 443]) ? "$scheme://$host:$port" : "$scheme://$host";
+        return $port && ! in_array($port, [80, 443]) ? "$scheme://$host:$port" : "$scheme://$host";
     }
 }

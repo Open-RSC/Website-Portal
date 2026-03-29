@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Connection;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -46,26 +49,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static where(string $string, string $string1, string $searchTerm)
  */
-class npcdef extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'npcdef';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['name', 'description', 'command', 'command2', 'attack', 'strength', 'hits', 'defense', 'ranged', 'combatlvl', 'isMembers', 'attackable', 'aggressive', 'respawnTime', 'sprites1', 'sprites2', 'sprites3', 'sprites4', 'sprites5', 'sprites6', 'sprites7', 'sprites8', 'sprites9', 'sprites10', 'sprites11', 'sprites12', 'hairColour', 'topColour', 'bottomColour', 'skinColour', 'camera1', 'camera2', 'walkModel', 'combatModel', 'combatSprite', 'canEdit', 'roundMode'];
-
-    protected $connection = 'cabbage';
-}
+#[Table('npcdef', incrementing: false)]
+#[Fillable(['name', 'description', 'command', 'command2', 'attack', 'strength', 'hits', 'defense', 'ranged', 'combatlvl', 'isMembers', 'attackable', 'aggressive', 'respawnTime', 'sprites1', 'sprites2', 'sprites3', 'sprites4', 'sprites5', 'sprites6', 'sprites7', 'sprites8', 'sprites9', 'sprites10', 'sprites11', 'sprites12', 'hairColour', 'topColour', 'bottomColour', 'skinColour', 'camera1', 'camera2', 'walkModel', 'combatModel', 'combatSprite', 'canEdit', 'roundMode'])]
+#[Connection('cabbage')]
+class npcdef extends Model {}

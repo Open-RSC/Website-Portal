@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -757,7 +756,7 @@ class PlayerController extends Controller
         }
 
         $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
-        //We could add agree_to_rules in here, and even a custom captcha if we wanted.
+        // We could add agree_to_rules in here, and even a custom captcha if we wanted.
         $rules = [
             'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
@@ -770,10 +769,10 @@ class PlayerController extends Controller
             $inviteCode = InviteCode::where('code', $request->input('invite_code') ?? '')->first();
         }
 
-        $domain = parse_url(config('app.url'), PHP_URL_HOST); //For example: rsc.vet
+        $domain = parse_url(config('app.url'), PHP_URL_HOST); // For example: rsc.vet
         try {
             $validated = $request->validate($rules);
-            if (!empty($input['email']) && str_ends_with(strtolower($input['email']), '@' . strtolower($domain))) {
+            if (! empty($input['email']) && str_ends_with(strtolower($input['email']), '@'.strtolower($domain))) {
                 throw ValidationException::withMessages([
                     'email' => ['Registration using this email domain is not allowed.'],
                 ]);
@@ -844,7 +843,7 @@ class PlayerController extends Controller
             return response()->json(['message' => 'Error creating user.'], 500);
         }
 
-        \Log::info('API Registration: IP ' . get_client_ip_address() . ' with user agent: ' . $request->header('User-Agent') . ' created the account: ' . $username . ' on world: ' . $db);
+        \Log::info('API Registration: IP '.get_client_ip_address().' with user agent: '.$request->header('User-Agent').' created the account: '.$username.' on world: '.$db);
 
         return response()->json(['message' => "Your account '$trimmed_username' has been created!"], 201);
     }
@@ -945,13 +944,14 @@ class PlayerController extends Controller
         }
     }
 
-    public function showPasswordResetPage(Request $request) {
-        if (!config('openrsc.password_resets_enabled', false)) {
+    public function showPasswordResetPage(Request $request)
+    {
+        if (! config('openrsc.password_resets_enabled', false)) {
             abort(404);
         }
 
         if (is_incorrect_production_url()) {
-            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: '.$request->fullUrl());
             abort(404);
         }
 
@@ -960,12 +960,12 @@ class PlayerController extends Controller
 
     public function sendResetLink(Request $request)
     {
-        if (!config('openrsc.password_resets_enabled', false)) {
+        if (! config('openrsc.password_resets_enabled', false)) {
             abort(404);
         }
 
         if (is_incorrect_production_url()) {
-            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: '.$request->fullUrl());
             abort(404);
         }
 
@@ -991,17 +991,19 @@ class PlayerController extends Controller
             ->where(DB::raw('LOWER(username)'), '=', strtolower($username))
             ->first();
 
-        $statusMessage = "If the email you provided matches the one on record, an email with a code will be sent shortly. \n\nPlease check your spam folder if you cannot find the email and allow up to 15-30 minutes for the email to send before creating another request."; //We use \n instead of <br> since we're using nl2br and e() to print the status message safely.
+        $statusMessage = "If the email you provided matches the one on record, an email with a code will be sent shortly. \n\nPlease check your spam folder if you cannot find the email and allow up to 15-30 minutes for the email to send before creating another request."; // We use \n instead of <br> since we're using nl2br and e() to print the status message safely.
 
-        if (!$account || strtolower($account->email) !== strtolower($email)) {
-            \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: " . get_client_ip_address() . " on world {$db}, reset email will not be sent.");
+        if (! $account || strtolower($account->email) !== strtolower($email)) {
+            \Log::info("Password Reset incorrect email {$email} provided for username {$username} from IP: ".get_client_ip_address()." on world {$db}, reset email will not be sent.");
+
             return back()->with('status', $statusMessage);
         }
 
         // Check if user is of too high rank (player mod or higher)
         $playerModRank = config('group.player_moderator'); // assuming this gives the rank value 8
         if ($account->group_id <= $playerModRank) {  // Lower numbers are higher ranks
-            \Log::info("Password Reset denied for high rank account {$username} with group_id {$account->group_id} from IP: " . get_client_ip_address() . " on world: {$db}");
+            \Log::info("Password Reset denied for high rank account {$username} with group_id {$account->group_id} from IP: ".get_client_ip_address()." on world: {$db}");
+
             return back()->with('status', $statusMessage);
         }
 
@@ -1011,7 +1013,8 @@ class PlayerController extends Controller
             ->count();
 
         if ($recentResetCount >= config('openrsc.max_password_resets_per_24_hours')) {
-            \Log::info("Password Reset blocked for IP: " . get_client_ip_address() . " on world {$db}, exceeded reset limit.");
+            \Log::info('Password Reset blocked for IP: '.get_client_ip_address()." on world {$db}, exceeded reset limit.");
+
             return back()->with('status', 'Too many reset requests from your IP in the past 24 hours.');
         }
 
@@ -1023,13 +1026,13 @@ class PlayerController extends Controller
         );
 
         $resetUrl = route('password.reset.form', ['token' => $token]);
-        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sending reset email.");
+        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: ".get_client_ip_address()." on world: {$db}, sending reset email.");
         try {
             Mail::to($account->email)->send(new PasswordResetLink($resetUrl, $token, $username, $db));
         } catch (\Exception $e) {
-            \Log::info("Error when trying to send password reset email for correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, Exception: " . $e->getMessage());
+            \Log::info("Error when trying to send password reset email for correct email {$account->email} provided for username {$username} from IP: ".get_client_ip_address()." on world: {$db}, Exception: ".$e->getMessage());
         }
-        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: " . get_client_ip_address() . " on world: {$db}, sent reset email.");
+        \Log::info("Password Reset correct email {$account->email} provided for username {$username} from IP: ".get_client_ip_address()." on world: {$db}, sent reset email.");
         DB::table('password_reset_history')->insert([
             'username' => $username,
             'email' => $account->email,
@@ -1041,17 +1044,18 @@ class PlayerController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         return back()->with('status', $statusMessage);
     }
 
     public function showPasswordResetForm(Request $request, $token)
     {
-        if (!config('openrsc.password_resets_enabled', false)) {
+        if (! config('openrsc.password_resets_enabled', false)) {
             abort(404);
         }
 
         if (is_incorrect_production_url()) {
-            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: '.$request->fullUrl());
             abort(404);
         }
 
@@ -1068,12 +1072,12 @@ class PlayerController extends Controller
 
     public function handlePasswordReset(Request $request)
     {
-        if (!config('openrsc.password_resets_enabled', false)) {
+        if (! config('openrsc.password_resets_enabled', false)) {
             abort(404);
         }
 
         if (is_incorrect_production_url()) {
-            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: ' . $request->fullUrl());
+            \Log::warning('IP '.get_client_ip_address().' tried to reset password with incorrect website URL in production! URL: '.$request->fullUrl());
             abort(404);
         }
 
@@ -1086,7 +1090,7 @@ class PlayerController extends Controller
             ->where('expires_at', '>=', now())
             ->firstOrFail();
 
-        //Players can only reset their password if their IP address matches the IP address that requested the password reset.
+        // Players can only reset their password if their IP address matches the IP address that requested the password reset.
         if (get_client_ip_address() !== $resetRequest->ip) {
             abort(404);
         }
@@ -1097,32 +1101,32 @@ class PlayerController extends Controller
             ->where(DB::raw('LOWER(username)'), '=', strtolower($trimmedUsername))
             ->update([
                 'pass' => Hash::make(trim(add_characters($request->password, 20))),
-                'salt' => '' //Clear out their existing compatibility salt if any, since bcrypt has salt built-in we don't need another salt.
+                'salt' => '', // Clear out their existing compatibility salt if any, since bcrypt has salt built-in we don't need another salt.
             ]);
 
-        //Log the password change before we delete it.
-        \Log::info("Password Reset completed for email {$resetRequest->email} with username {$resetRequest->username} from IP: " . get_client_ip_address() . " on world: {$resetRequest->db}, password has been changed.");
-        //Let the user know their password was changed, this is really important!
+        // Log the password change before we delete it.
+        \Log::info("Password Reset completed for email {$resetRequest->email} with username {$resetRequest->username} from IP: ".get_client_ip_address()." on world: {$resetRequest->db}, password has been changed.");
+        // Let the user know their password was changed, this is really important!
         Mail::to($resetRequest->email)->send(
             new \App\Mail\PasswordResetSuccess($resetRequest->username, $resetRequest->db)
         );
-        //Send the password reset notification to Discord, this is important too!
+        // Send the password reset notification to Discord, this is important too!
         if (config('openrsc.password_resets_discord_notifications')) {
             $webhookUrl = config('openrsc.password_resets_discord_webhook_url');
 
             if ($webhookUrl) {
                 $message = [
                     'content' => "**[Password Reset Successfully]**\n"
-                               . "**User:** `{$resetRequest->username}`\n"
-                               . "**World:** `{$resetRequest->db}`\n"
-                               . "**User IP:** `".get_client_ip_address()."`\n"
-                               . "**Time:** " . now()->toDateTimeString(),
+                               ."**User:** `{$resetRequest->username}`\n"
+                               ."**World:** `{$resetRequest->db}`\n"
+                               .'**User IP:** `'.get_client_ip_address()."`\n"
+                               .'**Time:** '.now()->toDateTimeString(),
                 ];
 
                 try {
                     \Http::post($webhookUrl, $message);
                 } catch (\Exception $e) {
-                    \Log::warning("Failed to send Discord password reset notification: " . $e->getMessage());
+                    \Log::warning('Failed to send Discord password reset notification: '.$e->getMessage());
                 }
             }
         }
@@ -1132,8 +1136,9 @@ class PlayerController extends Controller
                 'password_reset' => true,
                 'updated_at' => now(),
             ]);
-        //Delete the password request, since we don't need it anymore.
+        // Delete the password request, since we don't need it anymore.
         $resetRequest->delete();
+
         return redirect()->route('login')->with('status', 'Your password has been reset!');
     }
 }

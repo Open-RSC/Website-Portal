@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,10 +10,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $message
  * @property int $time
  */
-class generic_logs extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['message', 'time'];
-}
+#[Fillable(['message', 'time'])]
+class generic_logs extends Model {}

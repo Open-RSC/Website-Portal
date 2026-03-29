@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Services\Stats\StatsService;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
+#[Signature('stats:generate-csv {db}')]
+#[Description('Generate stats csv')]
 class GenerateStatsCsv extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'stats:generate-csv {db}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate stats csv';
-
     /**
      * Create a new command instance.
      *

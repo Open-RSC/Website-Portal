@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,17 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $npcId
  * @property string $ts
  */
-class droplogs extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'ID';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['itemID', 'playerID', 'dropAmount', 'npcId', 'ts'];
-}
+#[Table(key: 'ID')]
+#[Fillable(['itemID', 'playerID', 'dropAmount', 'npcId', 'ts'])]
+class droplogs extends Model {}

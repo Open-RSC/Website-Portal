@@ -39,6 +39,7 @@ class NpcController extends Controller
                 if (ctype_digit($searchTerm)) {
                     return $query->where('id', '=', (int) $searchTerm);
                 }
+
                 return $query->where('name', 'like', '%'.$searchTerm.'%');
             })->where('id', '<=', '793')->orderBy('combatlvl', 'asc')->paginate(6);
         }

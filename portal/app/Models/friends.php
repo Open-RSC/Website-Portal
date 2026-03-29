@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,17 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $friend
  * @property string $friendName
  */
-class friends extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'dbid';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'friend', 'friendName'];
-}
+#[Table(key: 'dbid')]
+#[Fillable(['playerID', 'friend', 'friendName'])]
+class friends extends Model {}

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,10 +13,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $kills
  * @property int $deaths
  */
-class clan_players extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['clan_id', 'username', 'rank', 'kills', 'deaths'];
-}
+#[Fillable(['clan_id', 'username', 'rank', 'kills', 'deaths'])]
+class clan_players extends Model {}
