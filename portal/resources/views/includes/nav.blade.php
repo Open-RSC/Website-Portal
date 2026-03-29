@@ -39,20 +39,20 @@
         </span>
         <span class="flex-auto p-2 dropdown">
             <a class="c" href="#">Hiscores <i class="fas fa-caret-down"></i></a>
-            <span class="p-2 dropdown-content nav-hiscores-dropdown" @if (config('openrsc.npc_hiscores_enabled')) style="width: 165px" @endif>
-                <a class="c text-left" href="/hiscores/preservation">RSC Preservation</a>
-                <a class="c text-left" href="/hiscores/cabbage">RSC Cabbage</a>
-                <a class="c text-left" href="/hiscores/2001scape">2001Scape</a>
-                <a class="c text-left" href="/hiscores/openpk">OpenPK</a>
-                <a class="c text-left" href="/hiscores/uranium">RSC Uranium</a>
-                <a class="c text-left" href="/hiscores/coleslaw">RSC Coleslaw</a>
+            <span class="p-2 dropdown-content nav-hiscores-dropdown" @if (config('openrsc.npc_hiscores_enabled')) style="width: 185px" @endif>
+                <a class="c text-left" href="/hiscores/preservation"><i class="fas fa-fw fa-chart-bar"></i> RSC Preservation</a>
+                <a class="c text-left" href="/hiscores/cabbage"><i class="fas fa-fw fa-chart-bar"></i> RSC Cabbage</a>
+                <a class="c text-left" href="/hiscores/2001scape"><i class="fas fa-fw fa-chart-bar"></i> 2001Scape</a>
+                <a class="c text-left" href="/hiscores/openpk"><i class="fas fa-fw fa-chart-bar"></i> OpenPK</a>
+                <a class="c text-left" href="/hiscores/uranium"><i class="fas fa-fw fa-chart-bar"></i> RSC Uranium</a>
+                <a class="c text-left" href="/hiscores/coleslaw"><i class="fas fa-fw fa-chart-bar"></i> RSC Coleslaw</a>
                 @if (config('openrsc.npc_hiscores_enabled'))
-                    <a class="c text-left" style="border-top: 1px dotted #90c040;" href="/npchiscores/preservation">RSC Preservation NPCs</a>
-                    <a class="c text-left" href="/npchiscores/cabbage">RSC Cabbage NPCs</a>
-                    <a class="c text-left" href="/npchiscores/2001scape">2001Scape NPCs</a>
-                    <a class="c text-left" href="/npchiscores/openpk">OpenPK NPCs</a>
-                    <a class="c text-left" href="/npchiscores/uranium">RSC Uranium NPCs</a>
-                    <a class="c text-left" href="/npchiscores/coleslaw">RSC Coleslaw NPCs</a>
+                    <a class="c text-left" style="border-top: 1px dotted #90c040;" href="/npchiscores/preservation"><i class="fas fa-fw fa-dragon"></i> RSC Preservation NPCs</a>
+                    <a class="c text-left" href="/npchiscores/cabbage"><i class="fas fa-fw fa-dragon"></i> RSC Cabbage NPCs</a>
+                    <a class="c text-left" href="/npchiscores/2001scape"><i class="fas fa-fw fa-dragon"></i> 2001Scape NPCs</a>
+                    <a class="c text-left" href="/npchiscores/openpk"><i class="fas fa-fw fa-dragon"></i> OpenPK NPCs</a>
+                    <a class="c text-left" href="/npchiscores/uranium"><i class="fas fa-fw fa-dragon"></i> RSC Uranium NPCs</a>
+                    <a class="c text-left" href="/npchiscores/coleslaw"><i class="fas fa-fw fa-dragon"></i> RSC Coleslaw NPCs</a>
                 @endif
             </span>
         </span>
