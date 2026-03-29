@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,17 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $itemID
  * @property int $slot
  */
-class bank extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'bank';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'itemID', 'slot'];
-}
+#[Table('bank')]
+#[Fillable(['playerID', 'itemID', 'slot'])]
+class bank extends Model {}

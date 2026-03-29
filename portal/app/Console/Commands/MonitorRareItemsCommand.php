@@ -3,25 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Services\RareItemMonitor\RareItemMonitorService;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
+#[Signature('monitor:rare-items {db}')]
+#[Description('Monitor rare items for duplication anomalies by comparing the previous day\'s snapshot against today\'s')]
 class MonitorRareItemsCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'monitor:rare-items {db}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Monitor rare items for duplication anomalies by comparing the previous day\'s snapshot against today\'s';
-
     /**
      * Create a new command instance.
      *
@@ -37,9 +27,9 @@ class MonitorRareItemsCommand extends Command
      */
     public function handle(): int
     {
-        $db      = $this->argument('db');
+        $db = $this->argument('db');
         $service = new RareItemMonitorService($db);
-        $result  = $service->run();
+        $result = $service->run();
 
         if ($result === null) {
             $this->warn("[$db] No data available to compare. Ensure the daily stats job has run for at least two consecutive days.");
@@ -48,12 +38,12 @@ class MonitorRareItemsCommand extends Command
         }
 
         if (empty($result['flags'])) {
-            $this->info("[$db] No anomalies detected on " . Carbon::today()->toDateString());
+            $this->info("[$db] No anomalies detected on ".Carbon::today()->toDateString());
 
             return 0;
         }
 
-        $this->error("[$db] RARE ITEM RED FLAG(S) detected on " . Carbon::today()->toDateString() . ':');
+        $this->error("[$db] RARE ITEM RED FLAG(S) detected on ".Carbon::today()->toDateString().':');
         foreach ($result['flags'] as $flag) {
             $item = $result['items'][$flag];
             $this->error(sprintf(
@@ -66,7 +56,7 @@ class MonitorRareItemsCommand extends Command
         }
 
         $goldMultiplierStr = $result['gold_multiplier'] > 1
-            ? ' (base: ' . number_format($result['gold_threshold_base']) . ' × ' . $result['gold_multiplier'] . 'x)'
+            ? ' (base: '.number_format($result['gold_threshold_base']).' × '.$result['gold_multiplier'].'x)'
             : '';
         $this->error(sprintf(
             "[$db] Thresholds — Gold: %s%s, Rare: %s, Ultra-Rare: %s",
@@ -89,30 +79,30 @@ class MonitorRareItemsCommand extends Command
             return;
         }
 
-        $db      = ucwords($result['db']);
+        $db = ucwords($result['db']);
         $content = "**Rare Item Alert - {$db}**\n";
         $content .= "**Comparing:** `{$result['yesterday_snapshot']}` -> `{$result['today_snapshot']}`\n\n";
         $content .= "**Red Flags:**\n";
 
         foreach ($result['flags'] as $flag) {
-            $item    = $result['items'][$flag];
+            $item = $result['items'][$flag];
             $current = number_format($item['current']);
-            $prev    = number_format($item['previous']);
-            $delta   = number_format($item['delta']);
+            $prev = number_format($item['previous']);
+            $delta = number_format($item['delta']);
             $content .= "**{$flag}**: {$current} (prev: {$prev}, +{$delta})\n";
         }
 
         $goldMultiplierStr = $result['gold_multiplier'] > 1
-            ? ' (base: ' . number_format($result['gold_threshold_base']) . ' × ' . $result['gold_multiplier'] . 'x)'
+            ? ' (base: '.number_format($result['gold_threshold_base']).' × '.$result['gold_multiplier'].'x)'
             : '';
-        $content .= "\n**Thresholds:** Gold: " . number_format($result['gold_threshold']) . $goldMultiplierStr;
-        $content .= ", Rare: " . number_format($result['rare_threshold']);
-        $content .= ", Ultra-Rare: " . number_format($result['ultra_rare_threshold']);
+        $content .= "\n**Thresholds:** Gold: ".number_format($result['gold_threshold']).$goldMultiplierStr;
+        $content .= ', Rare: '.number_format($result['rare_threshold']);
+        $content .= ', Ultra-Rare: '.number_format($result['ultra_rare_threshold']);
 
         try {
             \Http::post($webhookUrl, ['content' => $content]);
         } catch (\Exception $e) {
-            \Log::warning("[$result[db]] Failed to send rare item monitor Discord alert: " . $e->getMessage());
+            \Log::warning("[$result[db]] Failed to send rare item monitor Discord alert: ".$e->getMessage());
         }
     }
 }

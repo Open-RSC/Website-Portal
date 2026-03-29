@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,10 +12,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $reciever
  * @property int $time
  */
-class private_message_logs extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['sender', 'message', 'reciever', 'time'];
-}
+#[Fillable(['sender', 'message', 'reciever', 'time'])]
+class private_message_logs extends Model {}

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,17 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $time
  * @property string $ip
  */
-class recovery_attempts extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'dbid';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'username', 'time', 'ip'];
-}
+#[Table(key: 'dbid')]
+#[Fillable(['playerID', 'username', 'time', 'ip'])]
+class recovery_attempts extends Model {}

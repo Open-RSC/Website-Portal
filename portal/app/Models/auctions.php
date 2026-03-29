@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,24 +19,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $time
  * @property bool $was_cancel
  */
-class auctions extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'auctionID';
-
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'integer';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['itemID', 'amount', 'amount_left', 'price', 'seller', 'seller_username', 'buyer_info', 'sold-out', 'time', 'was_cancel'];
-}
+#[Table(key: 'auctionID', keyType: 'integer')]
+#[Fillable(['itemID', 'amount', 'amount_left', 'price', 'seller', 'seller_username', 'buyer_info', 'sold-out', 'time', 'was_cancel'])]
+class auctions extends Model {}

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,10 +13,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $ip
  * @property string $message
  */
-class player_security_changes extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'eventAlias', 'date', 'ip', 'message'];
-}
+#[Fillable(['playerID', 'eventAlias', 'date', 'ip', 'message'])]
+class player_security_changes extends Model {}

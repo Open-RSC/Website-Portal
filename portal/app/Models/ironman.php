@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,17 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method static where(int $iron_man)
  */
-class ironman extends Model
-{
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'ironman';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'iron_man', 'iron_man_restriction', 'hc_ironman_death'];
-}
+#[Table('ironman')]
+#[Fillable(['playerID', 'iron_man', 'iron_man_restriction', 'hc_ironman_death'])]
+class ironman extends Model {}

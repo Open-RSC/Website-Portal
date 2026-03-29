@@ -117,7 +117,7 @@ class HiscoresController extends Component
             $skill_array = ['skill_total', 'hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving'];
         }
 
-         /**
+        /**
          * @var $hiscores
          * Fetches the table row of the player experience in view and paginates the results
          */
@@ -261,7 +261,7 @@ class HiscoresController extends Component
                 ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
                 ->where(function ($query) use ($subpage) {
                     $query->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                          ->orWhere('a.'.$subpage, '<', 0);     // and those that have overflow
+                        ->orWhere('a.'.$subpage, '<', 0);     // and those that have overflow
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
@@ -284,8 +284,8 @@ class HiscoresController extends Component
                 ->select('b.*', DB::raw($this->coalesce('a', 'aa', $subpage, true)))
                 ->where(function ($query) use ($subpage) {
                     $query->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                          ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
-                          ->orWhere('aa.'.$subpage, '>=', 0);   // and those that have looped
+                        ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
+                        ->orWhere('aa.'.$subpage, '>=', 0);   // and those that have looped
                 })
                 ->whereNotIn('b.banned', [-1, 1])
                 ->where([
@@ -448,7 +448,7 @@ class HiscoresController extends Component
                     ->select('b.*', 'c.*', DB::raw($this->cast('a', $subpage, true)))
                     ->where(function ($query) use ($subpage) {
                         $query->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                              ->orWhere('a.'.$subpage, '<', 0);     // and those that have overflow
+                            ->orWhere('a.'.$subpage, '<', 0);     // and those that have overflow
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
@@ -472,8 +472,8 @@ class HiscoresController extends Component
                     ->select('b.*', 'c.*', DB::raw($this->coalesce('a', 'aa', $subpage, true)))
                     ->where(function ($query) use ($subpage) {
                         $query->where('a.'.$subpage, '>=', 53452)   // limits to display only level 30 and above
-                              ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
-                              ->orWhere('aa.'.$subpage, '>=', 0);   // and those that have looped
+                            ->orWhere('a.'.$subpage, '<', 0)      // and those that have overflow
+                            ->orWhere('aa.'.$subpage, '>=', 0);   // and those that have looped
                     })
                     ->whereNotIn('b.banned', [-1, 1])
                     ->where([
@@ -643,7 +643,7 @@ class HiscoresController extends Component
                 ->where([
                     ['player_cache.type', '=', 0],
                     ['player_cache.key', '=', 'co_prestige'],
-                    ['players.banned', '!=', -1]
+                    ['players.banned', '!=', -1],
                 ])
                 ->where(function ($query) {
                     $query->whereNull('ironman.iron_man')

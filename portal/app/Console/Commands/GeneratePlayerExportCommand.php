@@ -3,27 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Services\PlayerExports\PlayerExportService;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 use function App\Helpers\player_is_online;
 
+#[Signature('playerexport:generate {db} {username}')]
+#[Description('Generate player export')]
 class GeneratePlayerExportCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'playerexport:generate {db} {username}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate player export';
-
     /**
      * Create a new command instance.
      *

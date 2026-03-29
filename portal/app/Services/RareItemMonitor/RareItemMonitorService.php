@@ -10,21 +10,21 @@ class RareItemMonitorService
 {
     // Rare items to monitor: rscstats column => display name
     private const RARE_ITEMS = [
-        'cracker'    => 'Christmas Cracker',
-        'santahat'   => 'Santa Hat',
-        'pumpkin'    => 'Pumpkin',
-        'easteregg'  => 'Easter Egg',
-        'redphat'    => 'Red Party Hat',
+        'cracker' => 'Christmas Cracker',
+        'santahat' => 'Santa Hat',
+        'pumpkin' => 'Pumpkin',
+        'easteregg' => 'Easter Egg',
+        'redphat' => 'Red Party Hat',
         'yellowphat' => 'Yellow Party Hat',
-        'bluephat'   => 'Blue Party Hat',
-        'greenphat'  => 'Green Party Hat',
-        'pinkphat'   => 'Pink Party Hat',
-        'whitephat'  => 'White Party Hat',
-        'redmask'    => "Red H'ween Mask",
-        'bluemask'   => "Blue H'ween Mask",
-        'greenmask'  => "Green H'ween Mask",
-        'scythe'     => 'Scythe',
-        'dmed'       => 'Dragon Med Helm',
+        'bluephat' => 'Blue Party Hat',
+        'greenphat' => 'Green Party Hat',
+        'pinkphat' => 'Pink Party Hat',
+        'whitephat' => 'White Party Hat',
+        'redmask' => "Red H'ween Mask",
+        'bluemask' => "Blue H'ween Mask",
+        'greenmask' => "Green H'ween Mask",
+        'scythe' => 'Scythe',
+        'dmed' => 'Dragon Med Helm',
     ];
 
     // Ultra-rare items with a tighter threshold (default: 10)
@@ -33,8 +33,11 @@ class RareItemMonitorService
     ];
 
     private string $db;
+
     private int $goldThreshold;
+
     private int $rareItemThreshold;
+
     private int $ultraRareItemThreshold;
 
     private array $goldThresholdMultipliers;
@@ -47,7 +50,7 @@ class RareItemMonitorService
         $this->ultraRareItemThreshold = (int) config('openrsc.rare_item_monitor_ultra_rare_threshold', 10);
         $this->goldThresholdMultipliers = ['openpk' => 5, 'uranium' => 5, 'coleslaw' => 25];
         if (array_key_exists($db, $this->goldThresholdMultipliers)) {
-            //Some worlds need gold threshold to not cause false positives.
+            // Some worlds need gold threshold to not cause false positives.
             $this->goldThreshold *= $this->goldThresholdMultipliers[$db];
         }
     }
@@ -62,7 +65,7 @@ class RareItemMonitorService
     public function run(): ?array
     {
         $yesterday = $this->getYesterdayStats();
-        $today     = $this->getTodayStats();
+        $today = $this->getTodayStats();
 
         if (! $yesterday || ! $today) {
             return null;
@@ -72,13 +75,13 @@ class RareItemMonitorService
         $items = [];
 
         // Gold
-        $goldDelta  = (int) $today->sumgold - (int) $yesterday->sumgold;
+        $goldDelta = (int) $today->sumgold - (int) $yesterday->sumgold;
         $isGoldFlag = $goldDelta >= $this->goldThreshold;
         $items['Gold'] = [
-            'current'  => (int) $today->sumgold,
+            'current' => (int) $today->sumgold,
             'previous' => (int) $yesterday->sumgold,
-            'delta'    => $goldDelta,
-            'flag'     => $isGoldFlag,
+            'delta' => $goldDelta,
+            'flag' => $isGoldFlag,
         ];
         if ($isGoldFlag) {
             $flags[] = 'Gold';
@@ -86,13 +89,13 @@ class RareItemMonitorService
 
         // Rare items
         foreach (self::RARE_ITEMS as $column => $name) {
-            $delta  = (int) $today->$column - (int) $yesterday->$column;
+            $delta = (int) $today->$column - (int) $yesterday->$column;
             $isFlag = $delta >= $this->rareItemThreshold;
             $items[$name] = [
-                'current'  => (int) $today->$column,
+                'current' => (int) $today->$column,
                 'previous' => (int) $yesterday->$column,
-                'delta'    => $delta,
-                'flag'     => $isFlag,
+                'delta' => $delta,
+                'flag' => $isFlag,
             ];
             if ($isFlag) {
                 $flags[] = $name;
@@ -101,13 +104,13 @@ class RareItemMonitorService
 
         // Ultra-rare items (tighter threshold)
         foreach (self::ULTRA_RARE_ITEMS as $column => $name) {
-            $delta  = (int) $today->$column - (int) $yesterday->$column;
+            $delta = (int) $today->$column - (int) $yesterday->$column;
             $isFlag = $delta >= $this->ultraRareItemThreshold;
             $items[$name] = [
-                'current'  => (int) $today->$column,
+                'current' => (int) $today->$column,
                 'previous' => (int) $yesterday->$column,
-                'delta'    => $delta,
-                'flag'     => $isFlag,
+                'delta' => $delta,
+                'flag' => $isFlag,
             ];
             if ($isFlag) {
                 $flags[] = $name;
@@ -115,19 +118,19 @@ class RareItemMonitorService
         }
 
         $baseGoldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
-        $goldMultiplier    = $this->goldThresholdMultipliers[$this->db] ?? 1;
+        $goldMultiplier = $this->goldThresholdMultipliers[$this->db] ?? 1;
 
         return [
-            'db'                      => $this->db,
-            'flags'                   => $flags,
-            'items'                   => $items,
-            'yesterday_snapshot'      => Carbon::yesterday()->toDateString(),
-            'today_snapshot'          => Carbon::today()->toDateString(),
-            'gold_threshold'          => $this->goldThreshold,
-            'gold_threshold_base'     => $baseGoldThreshold,
-            'gold_multiplier'         => $goldMultiplier,
-            'rare_threshold'          => $this->rareItemThreshold,
-            'ultra_rare_threshold'    => $this->ultraRareItemThreshold,
+            'db' => $this->db,
+            'flags' => $flags,
+            'items' => $items,
+            'yesterday_snapshot' => Carbon::yesterday()->toDateString(),
+            'today_snapshot' => Carbon::today()->toDateString(),
+            'gold_threshold' => $this->goldThreshold,
+            'gold_threshold_base' => $baseGoldThreshold,
+            'gold_multiplier' => $goldMultiplier,
+            'rare_threshold' => $this->rareItemThreshold,
+            'ultra_rare_threshold' => $this->ultraRareItemThreshold,
         ];
     }
 

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Connection;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,19 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $weight
  */
-class npcdrops extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'db_index';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['npcdef_id', 'amount', 'id', 'weight'];
-
-    protected $connection = 'cabbage';
-}
+#[Table(key: 'db_index')]
+#[Fillable(['npcdef_id', 'amount', 'id', 'weight'])]
+#[Connection('cabbage')]
+class npcdrops extends Model {}

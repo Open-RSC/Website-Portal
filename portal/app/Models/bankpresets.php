@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,10 +12,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $inventory
  * @property string $equipment
  */
-class bankpresets extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['playerID', 'slot', 'inventory', 'equipment'];
-}
+#[Fillable(['playerID', 'slot', 'inventory', 'equipment'])]
+class bankpresets extends Model {}

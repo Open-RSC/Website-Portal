@@ -3,24 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Services\Stats\StatsService;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Signature('stats:generate {db}')]
+#[Description('Generate stats')]
 class GenerateStats extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'stats:generate {db}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate stats';
-
     /**
      * Create a new command instance.
      *

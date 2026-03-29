@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -27,17 +29,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $group_legend
  * @property int $group_max_recipients
  */
-class phpbb_groups extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'group_id';
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['group_type', 'group_founder_manage', 'group_skip_auth', 'group_name', 'group_desc', 'group_desc_bitfield', 'group_desc_options', 'group_desc_uid', 'group_display', 'group_avatar', 'group_avatar_type', 'group_avatar_width', 'group_avatar_height', 'group_rank', 'group_colour', 'group_sig_chars', 'group_receive_pm', 'group_message_limit', 'group_legend', 'group_max_recipients'];
-}
+#[Table(key: 'group_id')]
+#[Fillable(['group_type', 'group_founder_manage', 'group_skip_auth', 'group_name', 'group_desc', 'group_desc_bitfield', 'group_desc_options', 'group_desc_uid', 'group_display', 'group_avatar', 'group_avatar_type', 'group_avatar_width', 'group_avatar_height', 'group_rank', 'group_colour', 'group_sig_chars', 'group_receive_pm', 'group_message_limit', 'group_legend', 'group_max_recipients'])]
+class phpbb_groups extends Model {}

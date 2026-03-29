@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,24 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $wielded
  * @property int $durability
  */
-class itemstatuses extends Model
-{
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'itemID';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * @var array
-     */
-    protected $fillable = ['catalogID', 'amount', 'noted', 'wielded', 'durability'];
-}
+#[Table(key: 'itemID', incrementing: false)]
+#[Fillable(['catalogID', 'amount', 'noted', 'wielded', 'durability'])]
+class itemstatuses extends Model {}

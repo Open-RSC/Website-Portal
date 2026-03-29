@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,10 +19,5 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $suggests_or_mutes
  * @property bool $tried_apply_action
  */
-class game_reports extends Model
-{
-    /**
-     * @var array
-     */
-    protected $fillable = ['reporter', 'reported', 'time', 'reason', 'chatlog', 'reporter_x', 'reporter_y', 'reported_x', 'reported_y', 'suggests_or_mutes', 'tried_apply_action'];
-}
+#[Fillable(['reporter', 'reported', 'time', 'reason', 'chatlog', 'reporter_x', 'reporter_y', 'reported_x', 'reported_y', 'suggests_or_mutes', 'tried_apply_action'])]
+class game_reports extends Model {}
