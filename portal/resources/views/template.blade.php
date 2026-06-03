@@ -67,14 +67,10 @@
                 return false;
             }  </script>
         <div class="pt-1"></div>
-        <section class="top-border">
-            <div class="top-left-border"></div>
-            <form name=back>
-                <div class="top-middle-border2" onmousedown="return ConfirmMenu();">
-                </div>
-            </form>
-            <div class="top-right-border"></div>
-        </section>
+        <form name=back>
+            <div class="top-middle-border2" onmousedown="return ConfirmMenu();">
+            </div>
+        </form>
         <section class="middle">
             <div class="mid-left-border"></div>
             <div class="middle-content">
@@ -101,12 +97,6 @@
 @elseif (Route::currentRouteName() == 'player_list')
     @include('includes.nav')
     <main class="main-wide">
-        <section class="top-border-wide">
-            <div class="top-left-border-wide"></div>
-            <div class="top-middle-border-wide"></div>
-            <div class="top-right-border-wide"></div>
-        </section>
-
         <section class="middle-wide">
             <div class="mid-left-border"></div>
             <div class="middle-content-wide">
@@ -179,12 +169,6 @@
 @else
     @include('includes.nav')
     <main>
-        <section class="top-border">
-            <div class="top-left-border"></div>
-            <div class="top-middle-border"></div>
-            <div class="top-right-border"></div>
-        </section>
-
         <section class="middle">
             <div class="mid-left-border"></div>
             <div class="middle-content">

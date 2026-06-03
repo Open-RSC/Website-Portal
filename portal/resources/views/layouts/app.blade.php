@@ -50,12 +50,6 @@
 
 @elseif(Route::currentRouteName() == 'Secure Login')
     <main>
-        <section class="top-border">
-            <div class="top-left-border"></div>
-            <div class="top-middle-border"></div>
-            <div class="top-right-border"></div>
-        </section>
-
         <section class="middle">
             <div class="mid-left-border"></div>
             <div class="middle-content">
@@ -104,12 +98,6 @@
 
 @else
     <main>
-        <section class="top-border">
-            <div class="top-left-border"></div>
-            <div class="top-middle-border"></div>
-            <div class="top-right-border"></div>
-        </section>
-
         <section class="middle">
             <div class="mid-left-border"></div>
             <div class="middle-content">

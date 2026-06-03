@@ -277,66 +277,6 @@ main.main-wide {
     flex: 1;
   }
 }
-section.top-border {
-  display: block;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: flex;
-    width: 605px;
-    height: 43px;
-  }
-}
-
-section.top-border-wide {
-  display: block;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: flex;
-    width: 1105px;
-    height: 43px;
-  }
-}
-
-div.top-left-border {
-  display: none;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: block;
-    width: 100px;
-    height: 43px;
-    background-image: url("/img/edge_a.jpg");
-  }
-}
-
-div.top-left-border-wide {
-  display: none;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: block;
-    width: 350px;
-    height: 43px;
-    background-image: url("/img/edge_a.jpg");
-  }
-}
-
-div.top-middle-border {
-  height: 43px;
-  background-image: url("/img/edge_c.jpg");
-
-  @media (min-width: $mobile-breakpoint) {
-    width: 400px;
-  }
-}
-
-div.top-middle-border-wide {
-  height: 43px;
-  background-image: url("/img/edge_c.jpg");
-
-  @media (min-width: $mobile-breakpoint) {
-    width: 450px;
-  }
-}
-
 div.top-middle-border2 {
   height: 43px;
   background-image: url("/img/edge_c2.jpg");
@@ -344,29 +284,8 @@ div.top-middle-border2 {
 
   @media (min-width: $mobile-breakpoint) {
     width: 400px;
+    margin: 0 auto;
     background-position-x: 0;
-  }
-}
-
-div.top-right-border {
-  display: none;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: block;
-    width: 100px;
-    height: 43px;
-    background-image: url("/img/edge_d.jpg");
-  }
-}
-
-div.top-right-border-wide {
-  display: none;
-
-  @media (min-width: $mobile-breakpoint) {
-    display: block;
-    width: 300px;
-    height: 43px;
-    background-image: url("/img/edge_d.jpg");
   }
 }
 
@@ -404,7 +323,7 @@ p.online-count {
 
 .recent-patches a {
   text-decoration: none;
-  color: rgb(144, 192, 64);
+  color: rgb(77, 159, 214);
   font-size: 0.9em;
   line-height: 20px;
 }
@@ -435,7 +354,6 @@ div.mid-left-border {
     display: block;
     width: 41px;
     min-height: 377px;
-    background-image: url("/img/edge_f.jpg");
   }
 }
 
@@ -446,7 +364,6 @@ div.mid-right-border {
     display: block;
     width: 41px;
     min-height: 377px;
-    background-image: url("/img/edge_e.jpg");
   }
 }
 
@@ -663,7 +580,6 @@ section > div.bottom-left-border {
     display: block;
     width: 100px;
     height: 82px;
-    background-image: url("/img/edge_g.jpg");
   }
 
 }
@@ -675,7 +591,6 @@ section > div.bottom-left-border-wide {
     display: block;
     width: 100px;
     height: 82px;
-    background-image: url("/img/edge_g.jpg");
   }
 
 }
@@ -711,7 +626,6 @@ section > div.bottom-middle > div.bottom-middle-border {
     display: block;
     width: 400px;
     height: 43px;
-    background-image: url("/img/edge_c.jpg");
   }
 }
 
@@ -746,7 +660,6 @@ section > div.bottom-middle-wide > div.bottom-middle-border-wide {
     display: block;
     width: 900px;
     height: 43px;
-    background-image: url("/img/edge_c.jpg");
   }
 }
 
@@ -757,7 +670,6 @@ section > div.bottom-right-border {
     display: block;
     width: 100px;
     height: 82px;
-    background-image: url("/img/edge_h.jpg");
   }
 }
 
@@ -768,7 +680,6 @@ section > div.bottom-right-border-wide {
     display: block;
     width: 100px;
     height: 82px;
-    background-image: url("/img/edge_h.jpg");
   }
 }
 
