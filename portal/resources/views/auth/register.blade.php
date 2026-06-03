@@ -3,7 +3,7 @@
 @section('content')
     <div class="col container">
         <h2 class="h2 text-center text-gray-400 pt-2 pb-2 text-capitalize display-3 fs-3">
-            Open RSC Registration
+            OpenRSC Registration
         </h2>
 
         <div class="row justify-content-center">
