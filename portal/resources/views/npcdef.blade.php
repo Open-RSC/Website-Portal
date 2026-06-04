@@ -10,38 +10,20 @@
         </h2>
         <div class="row align-items-center pb-3">
             <div class="col d-inline-block text-center" style="width:150px; padding-left:30px;">
-                <img class="display-glow pb-3 align-self-center" src="{{ asset('img/npc') }}/{{ $npcdef->id }}.png"
-                     alt="{{ $npcdef->name }}"/>
                 <span class="col d-inline-block">{{ ucfirst($npcdef->description) }}</span>
                 <span class="col d-inline-block">Combat Level: {{ $npcdef->combatlvl ?? "N/A" }}</span>
             </div>
 
             <div class="col-md d-flex text-center justify-content-around">
-                @if ($npcdef->attack > 0)
-                    <div class="d-block">
-                        <span class=" text-primary">atk {{ $npcdef->attack }}</span>
-                    </div>
-                @endif
-                @if ($npcdef->defense > 0)
-                    <div class="d-block">
-                        <span class=" text-primary">def {{ $npcdef->defense }}</span>
-                    </div>
-                @endif
-                @if ($npcdef->strength > 0)
-                    <div class="d-block">
-                        <span class=" text-primary">str {{ $npcdef->strength }}</span>
-                    </div>
-                @endif
-                @if ($npcdef->hits > 0)
-                    <div class="d-block">
-                        <span class=" text-primary">hp {{ $npcdef->hits }}</span>
-                    </div>
-                @endif
-                @if ($npcdef->ranged > 0)
-                    <div class="d-block">
-                        <span class=" text-primary">ranged {{ $npcdef->ranged }}</span>
-                    </div>
-                @endif
+                @php
+                    $stats = [];
+                    if ($npcdef->attack > 0) $stats[] = 'atk ' . $npcdef->attack;
+                    if ($npcdef->defense > 0) $stats[] = 'def ' . $npcdef->defense;
+                    if ($npcdef->strength > 0) $stats[] = 'str ' . $npcdef->strength;
+                    if ($npcdef->hits > 0) $stats[] = 'hp ' . $npcdef->hits;
+                    if ($npcdef->ranged > 0) $stats[] = 'ranged ' . $npcdef->ranged;
+                @endphp
+                <span class="text-primary">{{ implode(', ', $stats) }}</span>
             </div>
 
             <div class="col-md d-inline-block text-center">
@@ -88,8 +70,6 @@
                                             style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $npc_drop->dropAmount }}
                                     </div>
-                                    <img class="mt-n2 pb-1" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
-                                         alt="{{ $npc_drop->itemID }}"/>
                                     <span class="text-capitalize d-block">
                                         {{ $npc_drop->itemName }}
                                 </span>
@@ -119,11 +99,9 @@
                                             style="margin-top: 0; position: relative; color: limegreen; font-size: 13px;">
                                         {{ $npc_drop->dropAmount }}
                                     </div>
-                                    <img class="mt-n2" src="{{ asset('img/items').'/'.$npc_drop->itemID }}.png"
-                                         alt="{{ $npc_drop->itemID }}"/>
-                                    <!--<span class="text-capitalize d-block">
-                                    { $npc_drop->itemName }} ({ $npc_drop->itemID }})
-                                </span>-->
+                                    <span class="text-capitalize d-block">
+                                        {{ $npc_drop->itemName }}
+                                    </span>
                                 </td>
                                 @if ($key % 6 == 5)
                         </tr>

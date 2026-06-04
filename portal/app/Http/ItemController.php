@@ -195,7 +195,7 @@ class ItemController extends Controller
                 ->table('npcdrops AS B')
                 ->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
                 ->join('itemdef AS C', 'B.id', '=', 'C.id')
-                ->select('A.id', 'A.name AS npcName', 'B.npcdef_id AS npcID', 'B.amount AS dropAmount', 'B.id AS dropID', 'B.weight AS dropWeight', 'C.id AS itemID', 'C.name AS itemName')
+                ->select('A.id', 'A.name AS npcName', 'A.combatlvl AS npcCombatlvl', 'A.attack AS npcAttack', 'A.defense AS npcDefense', 'A.strength AS npcStrength', 'A.hits AS npcHits', 'A.ranged AS npcRanged', 'B.npcdef_id AS npcID', 'B.amount AS dropAmount', 'B.id AS dropID', 'B.weight AS dropWeight', 'C.id AS itemID', 'C.name AS itemName')
                 ->where([
                     ['B.id', '=', $id],
                     ['B.npcdef_id', '<=', '793'],
@@ -209,7 +209,7 @@ class ItemController extends Controller
                 ->table('npcdrops AS B')
                 ->join('npcdef AS A', 'A.id', '=', 'B.npcdef_id')
                 ->join('itemdef AS C', 'B.id', '=', 'C.id')
-                ->select('A.id', 'A.name AS npcName', 'B.npcdef_id AS npcID', 'B.amount AS dropAmount', 'B.id AS dropID', 'B.weight AS dropWeight', 'C.id AS itemID', 'C.name AS itemName')
+                ->select('A.id', 'A.name AS npcName', 'A.combatlvl AS npcCombatlvl', 'A.attack AS npcAttack', 'A.defense AS npcDefense', 'A.strength AS npcStrength', 'A.hits AS npcHits', 'A.ranged AS npcRanged', 'B.npcdef_id AS npcID', 'B.amount AS dropAmount', 'B.id AS dropID', 'B.weight AS dropWeight', 'C.id AS itemID', 'C.name AS itemName')
                 ->where('B.id', '=', $id)
                 ->orderBy('id', 'asc')
                 ->paginate(50);
