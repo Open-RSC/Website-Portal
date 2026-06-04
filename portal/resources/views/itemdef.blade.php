@@ -120,7 +120,7 @@
             <thead class="border-bottom border-info">
             <tr class="text-info">
                 <th class="pl-3 float-left pl-1">Name (ID)</th>
-                <th class="text-center">Picture</th>
+                <th class="text-center">Stats</th>
                 <th class="pr-3 float-right pl-5">Quantity</th>
             </tr>
             </thead>
@@ -133,10 +133,16 @@
 							</span>
                     </td>
                     <td class="text-center pt-1 pb-1">
-                        <div>
-                            <img src="{{ asset('img/npc') }}/{{ $item_drop->npcID }}.png"
-                                 alt="{{ $item_drop->npcName }}"/>
-                        </div>
+                        @php
+                            $npcStats = [];
+                            if ($item_drop->npcAttack > 0) $npcStats[] = 'atk ' . $item_drop->npcAttack;
+                            if ($item_drop->npcDefense > 0) $npcStats[] = 'def ' . $item_drop->npcDefense;
+                            if ($item_drop->npcStrength > 0) $npcStats[] = 'str ' . $item_drop->npcStrength;
+                            if ($item_drop->npcHits > 0) $npcStats[] = 'hp ' . $item_drop->npcHits;
+                            if ($item_drop->npcRanged > 0) $npcStats[] = 'ranged ' . $item_drop->npcRanged;
+                        @endphp
+                        <div>Combat Level: {{ $item_drop->npcCombatlvl ?? 'N/A' }}</div>
+                        <div>{{ implode(', ', $npcStats) }}</div>
                     </td>
                     <td>
                         <div class="pr-3 float-right pl-5 pt-1">

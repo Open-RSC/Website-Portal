@@ -126,7 +126,7 @@
         and the public worlds are restarted with updates shortly after the posting of patch notes.
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Is a single player edition available?</span>
-        Yes! Download a copy of the <a class="link-success underline" target="_blank"
+        Yes! Download a copy of the <a class="underline" target="_blank"
                                        href="https://gitlab.com/openrsc/openrsc">GitLab
             "core" project repository</a> and start
         playing. A "Start-Windows.cmd" script is included to launch a portable version that does not require any
@@ -134,25 +134,25 @@
 
         <span
                 class="rscfont text-danger font-weight-bold d-block pt-4">Where may I learn how to run my own OpenRSC server?</span>
-        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="underline"
                                                                     target="_blank"
                                                                     href="https://gitlab.com/openrsc/openrsc/-/blob/develop/Windows%20Getting%20Started%20Guide.md">Windows getting started guide</a></span>
-        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="underline"
                                                                     target="_blank"
                                                                     href="https://gitlab.com/openrsc/openrsc/-/blob/develop/Linux%20Getting%20Started%20Guide.md">Linux getting started guide</a></span>
-        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="underline"
                                                                     target="_blank"
                                                                     href="https://gitlab.com/openrsc/openrsc/-/blob/develop/MacOS%20Getting%20Started%20Guide.md">MacOS getting started guide</a></span>
-        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="link-success underline"
+        <span class="d-block"><i class="fas fa-angle-right"></i> <a class="underline"
                                                                     target="_blank"
                                                                     href="https://rsc.vet/wiki/index.php?title=Running_your_own_server">Running your own production server</a></span>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">Who are the OpenRSC project admins?</span>
-        <a class="link-success underline" target="_blank" href="/player/cabbage/Aurora">Aurora</a>, <a
-    class="link-success underline" target="_blank" href="https://gitlab.com/ipkpjersi">Ken</a>, <a
-    class="link-success underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
-    class="link-success underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a
-    class="link-success underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>
+        <a class="underline" target="_blank" href="/player/cabbage/Aurora">Aurora</a>, <a
+    class="underline" target="_blank" href="https://gitlab.com/ipkpjersi">Ken</a>, <a
+    class="underline" target="_blank" href="https://github.com/hubcapp">Logg</a>, <a
+    class="underline" target="_blank" href="https://gitlab.com/devrscer">Luis</a>, and <a
+    class="underline" target="_blank" href="https://gitlab.com/Rrrrry123">Ryan</a>
 
         <span class="rscfont text-danger font-weight-bold d-block pt-4">What is OpenRSC's stance on botting?</span>
         We have a zero tolerance policy on our publicly hosted servers except for RSC Uranium and RSC Coleslaw,
