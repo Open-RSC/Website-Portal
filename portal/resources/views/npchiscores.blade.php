@@ -20,7 +20,7 @@
                             </div>
                             <div style="width:40px;">
                                 <ul style="padding-left: 0; margin-bottom: 0">
-                                    <li style="list-style: disc; width: 140px;"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
+                                    <li style="list-style: none; width: 140px;"><a class="c" class="col-3" href="/npchiscores/{{ $db }}/{{ $npcId }}">
                                         {{ $npcName }}
                                     </a></li>
                                 </ul>

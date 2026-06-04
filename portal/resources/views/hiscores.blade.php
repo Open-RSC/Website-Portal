@@ -10,13 +10,6 @@
                     <div class="e bg-black p-2" style="outline: black;">
                         @foreach ($skill_array as $skill)
                             <div class="d-flex" style="padding-left:20px; padding-bottom:2px;">
-                                <div style="width:24px;">
-                                    @if($skill == 'skill_total')
-                                    @else
-                                        <img src="{{ asset('img/skill_icons').'/'.strtolower($skill) }}.gif"
-                                             alt="{{ strtolower($skill) }}"/>
-                                    @endif
-                                </div>
                                 <div style="width:40px;">
                                     @if(!empty($ironman_mode))
                                         <a class="c" class="col-3" href="/hiscores/{{ $db }}/{{ $skill }}/{{$ironman_mode}}">

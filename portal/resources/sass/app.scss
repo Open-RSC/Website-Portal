@@ -23,7 +23,7 @@ body {
   font-size: 1em;
   color: white;
 
-  @media (min-width: $mobile-breakpoint) {
+  @media (min-width: $mobile-xs-breakpoint) {
     background-image: none;
     background-color: black;
   }
@@ -618,7 +618,7 @@ section > div.bottom-middle > div.copyright {
 
 section > div.bottom-middle > div.bottom-middle-border {
   display: none;
- 
+
   @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 400px;
@@ -652,7 +652,7 @@ section > div.bottom-middle-wide > div.copyright-wide {
 
 section > div.bottom-middle-wide > div.bottom-middle-border-wide {
   display: none;
- 
+
   @media (min-width: $mobile-breakpoint) {
     display: block;
     width: 900px;
@@ -1075,6 +1075,7 @@ li > a:only-child:after {
 
 .navbar-expand-xxl {
   font-family: system-ui;
+  margin-bottom: 5px;
 
   .flex-row {
     @media (min-width: $mobile-breakpoint) {

@@ -120,14 +120,6 @@
                                     </tr>
                                     @foreach ($skill_array as $skill)
                                         <tr>
-                                            <td>
-                                                @if($skill == 'skill_total')
-                                                @else
-                                                    <img src="{{ asset('/img/skill_icons').'/'.strtolower($skill) }}.gif"
-                                                         valign="bottom"
-                                                         width=16 height=16 alt="{{ strtolower($skill) }}"/>
-                                                @endif
-                                            </td>
                                             <td>&nbsp;
                                             </td>
                                             <td align="left">
