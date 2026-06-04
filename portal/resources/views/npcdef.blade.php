@@ -19,37 +19,27 @@
             <div class="col-md d-flex text-center justify-content-around">
                 @if ($npcdef->attack > 0)
                     <div class="d-block">
-                        <img class="mb-1" src="{{ asset('img/skill_icons/attack.svg') }}" alt="attack" height="16px"
-                             width="16px"/>
-                        <span class=" text-primary">{{ $npcdef->attack }}</span>
+                        <span class=" text-primary">atk {{ $npcdef->attack }}</span>
                     </div>
                 @endif
                 @if ($npcdef->defense > 0)
                     <div class="d-block">
-                        <img class="mb-1" src="{{ asset('img/skill_icons/defense.svg') }}" alt="defense"
-                             height="16px" width="16px"/>
-                        <span class=" text-primary">{{ $npcdef->defense }}</span>
+                        <span class=" text-primary">def {{ $npcdef->defense }}</span>
                     </div>
                 @endif
                 @if ($npcdef->strength > 0)
                     <div class="d-block">
-                        <img class="mb-1" src="{{ asset('img/skill_icons/strength.svg') }}" alt="strength"
-                             height="16px" width="16px"/>
-                        <span class=" text-primary">{{ $npcdef->strength }}</span>
+                        <span class=" text-primary">str {{ $npcdef->strength }}</span>
                     </div>
                 @endif
                 @if ($npcdef->hits > 0)
                     <div class="d-block">
-                        <img class="mb-1" src="{{ asset('img/skill_icons/hits.svg') }}" alt="hits" height="16px"
-                             width="16px"/>
-                        <span class=" text-primary">{{ $npcdef->hits }}</span>
+                        <span class=" text-primary">hp {{ $npcdef->hits }}</span>
                     </div>
                 @endif
                 @if ($npcdef->ranged > 0)
                     <div class="d-block">
-                        <img class="mb-1" src="{{ asset('img/skill_icons/ranged.svg') }}" alt="ranged" height="16px"
-                             width="16px"/>
-                        <span class=" text-primary">{{ $npcdef->ranged }}</span>
+                        <span class=" text-primary">ranged {{ $npcdef->ranged }}</span>
                     </div>
                 @endif
             </div>

@@ -8,70 +8,50 @@
 
         <div class="row align-items-center">
             <div class="col-md d-inline-block text-center">
-                <img class="display-glow pb-2" style="transform: scale(1.3);"
-                     src="{{ asset('img/items') }}/{{ $itemdef->id }}.png" alt="{{ $itemdef->name }}"/>
                 <span class="col d-inline-block">{{ $itemdef->description }}</span>
             </div>
 
             <div class="col-md d-inline-block text-center">
                 @if ($itemdef->requiredLevel > 0)
                     Required Level:
-                    @if($itemdef->requiredSkillID == 0)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/attack.svg') }}" alt="attack" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 1)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/defense.svg') }}" alt="defense"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 2)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/strength.svg') }}" alt="strength"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 3)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/hits.svg') }}" alt="hits" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 4)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/ranged.svg') }}" alt="ranged" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 5)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/prayer.svg') }}" alt="prayer" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 6)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/magic.svg') }}" alt="magic" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 7)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/cooking.svg') }}" alt="cooking"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 8)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/woodcut.svg') }}" alt="woodcut"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 9)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/fletching.svg') }}" alt="fletching"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 10)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/fishing.svg') }}" alt="fishing"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 11)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/firemaking.svg') }}" alt="firemaking"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 12)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/crafting.svg') }}" alt="crafting"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 13)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/smithing.svg') }}" alt="smithing"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 14)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/mining.svg') }}" alt="mining" height="16px"
-                             width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 15)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/herblaw.svg') }}" alt="herblaw"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 16)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/agility.svg') }}" alt="agility"
-                             height="16px" width="16px"/>
-                    @elseif($itemdef->requiredSkillID == 17)
-                        <img class="mb-1" src="{{ asset('img/skill_icons/thieving.svg') }}" alt="thieving"
-                             height="16px" width="16px"/>
-                    @endif
                     {{ number_format($itemdef->requiredLevel) }}
+                    @if($itemdef->requiredSkillID == 0)
+                        attack
+                    @elseif($itemdef->requiredSkillID == 1)
+                        defense
+                    @elseif($itemdef->requiredSkillID == 2)
+                        strength
+                    @elseif($itemdef->requiredSkillID == 3)
+                        hits
+                    @elseif($itemdef->requiredSkillID == 4)
+                        ranged
+                    @elseif($itemdef->requiredSkillID == 5)
+                        prayer
+                    @elseif($itemdef->requiredSkillID == 6)
+                        magic
+                    @elseif($itemdef->requiredSkillID == 7)
+                        cooking
+                    @elseif($itemdef->requiredSkillID == 8)
+                        woodcutting
+                    @elseif($itemdef->requiredSkillID == 9)
+                        fletching
+                    @elseif($itemdef->requiredSkillID == 10)
+                        fishing
+                    @elseif($itemdef->requiredSkillID == 11)
+                        firemaking
+                    @elseif($itemdef->requiredSkillID == 12)
+                        crafting
+                    @elseif($itemdef->requiredSkillID == 13)
+                        smithing
+                    @elseif($itemdef->requiredSkillID == 14)
+                        mining
+                    @elseif($itemdef->requiredSkillID == 15)
+                        herblaw
+                    @elseif($itemdef->requiredSkillID == 16)
+                        agility
+                    @elseif($itemdef->requiredSkillID == 17)
+                        thieving
+                    @endif
                 @endif
                 @if ($itemdef->armourBonus > 0)
                     <div class="d-block">

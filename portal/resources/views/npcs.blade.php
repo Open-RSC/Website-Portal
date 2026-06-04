@@ -8,7 +8,6 @@
 
         <div class="e bg-black p-2" style="outline:black; max-width: 100%;">
             <div class="d-flex flex-wrap">
-                <div class="text-center flex-fill"><b>Image</b></div>
                 <div class="text-left flex-fill"><b>Name</b></div>
                 <div class="text-left flex-fill"><b>Level</b></div>
                 <div class="text-left flex-fill"><b>Description</b></div>
@@ -852,10 +851,6 @@
         function displayNPCDetails(npcDetails) {
             const npcHtml = `
                 <div class="d-flex flex-wrap pt-3">
-                    <!-- Image -->
-                    <div class="img-fluid pt-1 pb-1 mx-auto flex-fill" style="max-width: 80px;">
-                        <img src="{{ asset('img/npc') }}/${npcDetails.id}.png" alt="${npcDetails.name}" style="max-height: 62px; max-width: 75px;" />
-                    </div>
                     <!-- Name -->
                     <div class="text-left pt-1 pb-1 flex-fill" style="padding-left:10px;">
                         <a class="c" href="/npcdef/${npcDetails.id}">${npcDetails.name}</a>
