@@ -84,7 +84,7 @@
                         @else
                             <table>
                                 <tr>
-                                    <td colspan="3" width="120" align="left">
+                                    <td width="120" align="left">
                                         <b>Skill</b>
                                     </td>
                                     <td width="80" align="right">
@@ -99,10 +99,6 @@
                                 </tr>
                                 @foreach ($players as $key=>$player)
                                     <tr>
-                                        <td>&nbsp;
-                                        </td>
-                                        <td>&nbsp;
-                                        </td>
                                         <td align="left">
                                             <a class="c" href="/hiscores/{{ $db }}">
                                                 Overall
@@ -120,8 +116,6 @@
                                     </tr>
                                     @foreach ($skill_array as $skill)
                                         <tr>
-                                            <td>&nbsp;
-                                            </td>
                                             <td align="left">
                                                 <a class="c" href="/hiscores/{{ $db }}/{{ $skill }}">
                                                     @if($skill == 'skill_total')
