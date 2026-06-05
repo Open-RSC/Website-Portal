@@ -13,9 +13,6 @@
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Black_Knights%27_Fortress_(quest)"
                                    target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Black_Knight_Quest_Complete.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="quest image">
 									<span class="text-gray-300">
 										Black Knights' Fortress
 									</span>
@@ -43,9 +40,6 @@
                              title="Reward: 1 quest point, cooking experience, and access to the cook's range in Lumbridge castle">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Cook%27s_Assistant" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Cooks_Assistant_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Cook's Assistant
 									</span>
@@ -72,9 +66,6 @@
                         <div data-toggle="tooltip" title="Reward: 3 quest points and to obtain Silverlight">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Demon_Slayer" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Demon_Slayer_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Demon Slayer
 									</span>
@@ -101,9 +92,6 @@
                              title="Reward: 1 quest point, mining experience, 180 coins, and the ability to use Doric's anvils">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Doric%27s_Quest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Dorics_Quest_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Doric's Quest
 									</span>
@@ -133,9 +121,6 @@
                              title="Reward: 2 quest points, defense experience, strength experience, and the ability to wear the rune plate mail body">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Dragon_slayer" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Dragon_Slayer_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Dragon slayer
 									</span>
@@ -162,9 +147,6 @@
                         <div data-toggle="tooltip" title="Reward: 4 quest points and 300 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Ernest_the_Chicken" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Ernest_Chicken_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Ernest the Chicken
 									</span>
@@ -191,9 +173,6 @@
                         <div data-toggle="tooltip" title="Reward: 5 quests, 1 gold bar, and crafting experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Goblin_Diplomacy" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Goblin_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Goblin Diplomacy
 									</span>
@@ -221,9 +200,6 @@
                              title="Reward: 1 quest point, magic experience, and an amulet of accuracy">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Imp_Catcher" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Imp_Catcher_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Imp Catcher
 									</span>
@@ -253,9 +229,6 @@
                              title="Reward: 1 quest point, smithing experience, and optionally the Faladian Sword">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/The_Knight%27s_Sword" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Knight\'s_Sword_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										The Knight's Sword
 									</span>
@@ -282,9 +255,6 @@
                              title="Reward: 2 quest points, 450 coins, a gold ring, and an emerald">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Pirate%27s_Treasure" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Pirates_Treasure_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Pirate's Treasure
 									</span>
@@ -312,9 +282,6 @@
                              title="Reward: 3 quest points, 700 coins, and free passage through the Al-Kharid toll gate">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Prince_Ali_Rescue" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Prince_Ali_Rescue_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Prince Ali Rescue
 									</span>
@@ -341,9 +308,6 @@
                              title="Reward: 1 quest point, prayer experience, and an Amulet of Ghostspeak">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/The_Restless_Ghost" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/The_Restless_Ghost_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										The Restless Ghost
 									</span>
@@ -373,9 +337,6 @@
                              title="Reward: 5 quest points">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Romeo_%26_Juliet" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Romeo_Juliet_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Romeo & Juliet
 									</span>
@@ -403,9 +364,6 @@
                              title="Reward: 1 quest point, 60 coins, and crafting experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Sheep_Shearer" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Sheep_Shearer_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Sheep Shearer
 									</span>
@@ -433,9 +391,6 @@
                              title="Reward: 1 quest point and 600 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Shield_of_Arrav" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Shield_of_Arrav_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Shield of Arrav
 									</span>
@@ -463,9 +418,6 @@
                              title="Reward: 3 quest points and attack experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Vampire_Slayer" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Vampire_Slayer_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Vampire Slayer
 									</span>
@@ -495,9 +447,6 @@
                              title="Reward: 1 quest point and magic experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Witch%27s_potion" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Witch\'s_potion_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Witch's potion
 									</span>
@@ -533,9 +482,6 @@
                              title="Reward: 3 quest points, a King Lathas Amulet, use of the Combat Training Camp, ability to travel through the Ardougne wall gateway, and thieving experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Biohazard" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Biohazard_finish_8.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Biohazard
 									</span>
@@ -563,9 +509,6 @@
                              title="Reward: 1 quest point and 500 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Clock_Tower" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Clock_tower_2.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Clock Tower
 									</span>
@@ -593,9 +536,6 @@
                              title="Reward: 2 quest points, 2 gold bars, mining experience, and herblaw experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Digsite_(quest)" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Digsite_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Digsite
 									</span>
@@ -622,9 +562,6 @@
                              title="Reward: 4 quest points, herblaw experience, and the ability to use the herblaw skill">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Druidic_Ritual" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Druidic_Ritual_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Druidic Ritual
 									</span>
@@ -654,9 +591,6 @@
                              title="Reward: 1 quest point, crafting experience, the ability to buy a dwarf cannon, and the ability to make cannonballs with steel bars">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Dwarf_Cannon" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Dwarf_cannon_finish.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Dwarf Cannon
 									</span>
@@ -683,9 +617,6 @@
                              title="Reward: 1 quest point, access to the hellhound dungeon east of Ardougne, and steel gauntlets that can be enhanced">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Family_Crest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Family_Crest_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Family Crest
 									</span>
@@ -712,9 +643,6 @@
                              title="Reward: 2 quest points, attack experience, thieving experience, and 1000 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Fight_Arena_(quest)" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/FightArenaComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Fight Arena
 									</span>
@@ -741,9 +669,6 @@
                              title="Reward: 1 quest point, fishing experience, and access to the Dwarf's underground tunnel beneath White Wolf Mountain">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Fishing_Contest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/FishConReward.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Fishing Contest
 									</span>
@@ -773,9 +698,6 @@
                              title="Reward: 5 quest points, agility experience, magic experience, attack experience, access to the mines in Grand Tree, access to the Spirit Tree located at the Grand Tree, and access to the gnome gliders">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/The_Grand_Tree_(quest)" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Grand_tree_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										The Grand Tree
 									</span>
@@ -802,9 +724,6 @@
                              title="Reward: 1 quest point, a kitten, a chocolate cake, a stew, and cooking experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Gertrude%27s_Cat" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Gertude_Cat_Complete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Gertrude's Cat
 									</span>
@@ -831,9 +750,6 @@
                              title="Reward: 1 quest point, 2000 coins, thieving experience, and Carnillean armour">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/The_Hazeel_Cult" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Good_Hazeel_Complete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										The Hazeel Cult
 									</span>
@@ -861,9 +777,6 @@
                              title="Reward: 1 quest point, experience in multiple skills, access to the Heroes' Guild, and the ability to wield the Dragon axe">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Hero%27s_Quest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Heroes_finish.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Hero's Quest
 									</span>
@@ -893,9 +806,6 @@
                              title="Reward: 2 quest points, prayer experience, and defense experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/The_Holy_Grail" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/HolyGrailComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										The Holy Grail
 									</span>
@@ -922,9 +832,6 @@
                              title="Reward: 1 quest point and herblaw experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Jungle_Potion" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/JunglePotionComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Jungle Potion
 									</span>
@@ -951,9 +858,6 @@
                              title="Reward: 4 quest points, experience in several skills, access to the Legends' Guild, the ability to wield the Dragon Square Shield and Cape of Legends, and the ability to make cooked oomlie meat parcels and blessed golden bowls">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Legend%27s_Quest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/LegendsQuestComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Legend's Quest
 									</span>
@@ -978,9 +882,6 @@
                              title="Reward: 3 quest points, access to Zanaris, and the ability to buy Dragon Swords">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Lost_City" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Lost_City_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Lost City
 									</span>
@@ -1010,9 +911,6 @@
                              title="Reward: 6 quest points, Excalibur, and the ability to begin the Heroes' Quest">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Merlin%27s_Crystal" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Merlins_Crystal_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Merlin's Crystal
 									</span>
@@ -1040,9 +938,6 @@
                              title="Reward: 1 quest point, 8 law runes, and woodcutting experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Monk%27s_Friend" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Monk\'s_friend_end.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Monk's Friend
 									</span>
@@ -1070,9 +965,6 @@
                              title="Reward: 3 quest points, crafting experience, and 2000 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Murder_Mystery" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Murder_reward.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Murder Mystery
 									</span>
@@ -1099,9 +991,6 @@
                              title="Reward: 2 quest points, crafting experience, various items, and an uncut sapphire">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Observatory_Quest" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Observatory_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Observatory Quest
 									</span>
@@ -1130,9 +1019,6 @@
                              title="Reward: 1 quest point, a magic scroll granting the ability to cast Ardougne teleport, and mining experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Plague_City" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Plague_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Plague City
 									</span>
@@ -1160,9 +1046,6 @@
                              title="Reward: 1 quest point, strength experience, and Thormac the Sorcerer will enchant battlestaffs for 40K coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Scorpion_Catcher" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Scorp_catcher_end.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Scorpion Catcher
 									</span>
@@ -1190,9 +1073,6 @@
                              title="Reward: 1 quest point, a oyster pearl, and fishing experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Sea_Slug" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/SeaSlugComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Sea Slug
 									</span>
@@ -1219,9 +1099,6 @@
                              title="Reward: 4 quest points, a protective jacket, protective trousers, and 3100 coins">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Sheep_Herder" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Sheep_Herder_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Sheep Herder
 									</span>
@@ -1250,9 +1127,6 @@
                              title="Reward: 2 quest points, access to Shilo Village, and crafting experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Shilo_Village_(quest)" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/ShiloVillageComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Shilo Village
 									</span>
@@ -1279,9 +1153,6 @@
                              title="Reward: 1 quest point, ranged experience, fletching experience, a Pendant of Lucien, a Pendant of Armadyl, and a Staff of Armadyl">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Temple_of_Ikov" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Temple_of_Ikov_Evil_-_Complete.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Temple of Ikov
 									</span>
@@ -1309,9 +1180,6 @@
                              title="Reward: 2 quest points, the ability to make throwing darts, slave robe top and bottom, a wrought iron key, access to the Desert Mining Camp mine, and experience in various skills">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Tourist_Trap" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/TouristTrapComplete.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Tourist Trap
 									</span>
@@ -1338,9 +1206,6 @@
                              title="Reward: 2 quest points, attack experience, a Gnome Amulet of Protection, and access to Spirit Trees">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Tree_Gnome_Village_(quest)" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Tree_Gnome_Village_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Tree Gnome Village
 									</span>
@@ -1369,9 +1234,6 @@
                              title="Reward: 1 quest point, thieving experience, and 5 swordfish">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Tribal_Totem" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Tribal_totem_5.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Tribal Totem
 									</span>
@@ -1398,9 +1260,6 @@
                              title="Reward: 5 quest points, a Staff of Iban, 30 fire runes, 15 death runes, attack experience, and agility experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Underground_Pass" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Underground_completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Underground Pass
 									</span>
@@ -1427,9 +1286,6 @@
                              title="Reward: 4 quest points, 5000 coins, magic experience, and the ability to use the Watchtower teleport spell">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Watchtower_(quest)" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Watchtower_other_rewards.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Watchtower
 									</span>
@@ -1456,9 +1312,6 @@
                              title="Reward: 1 quest point, 40 mithril seeds, 2 diamonds, 2 gold bars, strength experience, and attack experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Waterfall_Quest" target="_blank">
-									<img class="d-block"
-                                         src="{{ asset('img/quests/Waterfall_Quest_Completed.png') }}"
-                                         style="max-height:150px; max-width: 225px;" alt="">
 									<span class="text-gray-300">
 										Waterfall Quest
 									</span>
@@ -1487,9 +1340,6 @@
                              title="Reward: 4 quest points and hits experience">
 							<span class="d-block">
 								<a href="https://rsc.wiki/w/Witch%27s_House" target="_blank">
-									<img class="d-block" alt="quest image"
-                                         src="{{ asset('img/quests/Witches_Quest_end.png') }}"
-                                         style="max-height:150px; max-width: 225px;">
 									<span class="text-gray-300">
 										Witch's House
 									</span>
