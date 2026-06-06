@@ -377,8 +377,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -417,8 +419,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -458,8 +462,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -498,8 +504,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('player1_items', function ($data) {
@@ -542,8 +550,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -582,8 +592,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('buyer_info', function ($data) {
@@ -660,11 +672,16 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc')->get()->toArray())
+        // Pass the builder (not ->get()) so DataTables paginates at the SQL level instead of loading every row into memory. No subquery wrapper here because the joined select(['*', ...]) would collide on duplicate column names in a derived table.
+        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
+            // currentName is a select alias (players.username); map search/sort to the real column since an alias can't be referenced in a WHERE clause.
+            ->filterColumn('currentName', function ($query, $keyword) {
+                $query->whereRaw('LOWER(players.username) LIKE ?', ['%'.strtolower($keyword).'%']);
+            })
+            ->orderColumn('currentName', 'players.username $1')
             ->smart(true)
             ->make();
     }
@@ -700,8 +717,10 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Here we hardcode orderBy time because we only want the latest data.
-        return DataTables::of(DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(50000)->get()->toArray())
+        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(50000);
+
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })

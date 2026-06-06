@@ -70,3 +70,7 @@ portal/public/css/all.css
 portal/public/css/tailwind.css
 
 etc/nginx/ssl/cloudflare.pem
+portal/public/img/favicons/.claude/settings.local.json
+portal/public/img/.claude/settings.local.json
+portal/.claude/settings.local.json
+.claude/settings.local.json
