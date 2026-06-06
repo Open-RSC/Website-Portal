@@ -377,8 +377,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -419,8 +419,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -462,8 +462,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -504,8 +504,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -550,8 +550,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -592,8 +592,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
@@ -717,8 +717,8 @@ class StaffController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Cap to the latest 50,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
-        $latest = DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(50000);
+        // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
+        $latest = DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(100000);
 
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
             ->editColumn('time', function ($data) {
