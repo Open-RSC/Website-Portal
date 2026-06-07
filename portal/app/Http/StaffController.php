@@ -380,7 +380,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('chat_logs')->orderBy('time', 'desc')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -422,7 +422,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '=', 'Global$')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -465,7 +465,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('private_message_logs')->orderBy('time', 'desc')->where('reciever', '!=', 'Global$')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -507,7 +507,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('trade_logs')->orderBy('time', 'desc')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('player1_items', function ($data) {
@@ -553,7 +553,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('generic_logs')->orderBy('time', 'desc')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -595,7 +595,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('auctions')->orderBy('time', 'desc')->where('was_cancel', '=', 0)->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })->editColumn('buyer_info', function ($data) {
@@ -673,7 +673,7 @@ class StaffController extends Controller
         ]);
 
         // Pass the builder (not ->get()) so DataTables paginates at the SQL level instead of loading every row into memory. No subquery wrapper here because the joined select(['*', ...]) would collide on duplicate column names in a derived table.
-        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->table('former_names')->select(['*', 'players.username AS currentName'])->join('players', 'former_names.playerID', '=', 'players.id'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
@@ -720,7 +720,7 @@ class StaffController extends Controller
         // Cap to the latest 100,000 rows in a subquery so DataTables paginates at the SQL level instead of loading every row into memory.
         $latest = DB::connection($db)->table('staff_logs')->orderBy('time', 'desc')->limit(100000);
 
-        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs')->orderBy('time', 'desc'))
+        return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
