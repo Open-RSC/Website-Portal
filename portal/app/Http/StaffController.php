@@ -358,6 +358,35 @@ class StaffController extends Controller
         return view('chat_logs', compact('db'));
     }
 
+    /**
+     * Apply a DataTables search against a column that stores a UTC Unix timestamp (in seconds).
+     *
+     * Why this exists: DataTables runs column searches at the SQL level against the raw stored
+     * value, but the value shown in the table is produced by
+     * Carbon::createFromTimestamp(...)->format('Y-m-d H:i:s'), which renders in UTC. To make a
+     * search like "2026-03-20" match what the user actually sees, we have to format the stored
+     * timestamp the same way in SQL.
+     *
+     * How time zones affect it: we deliberately avoid FROM_UNIXTIME() here because it formats
+     * using the MySQL session time zone. If that session time zone is ever not UTC, the formatted
+     * date is shifted by the offset, so near midnight a search for "2026-03-20" would return rows
+     * that display as "2026-03-21" (and vice versa). TIMESTAMPADD against a literal epoch performs
+     * no time zone conversion, so it always yields the UTC wall clock, matching both the UTC data
+     * and the UTC display.
+     *
+     * Warning: this assumes the stored data and the displayed value are both UTC. If the table view
+     * is ever changed to display in another time zone (for example config('app.timezone'), which
+     * Carbon::createFromTimestamp currently ignores), this formatting must be changed to convert to
+     * that same zone. Note also that the MySQL named time zone tables are not loaded on these
+     * servers, so CONVERT_TZ() with a named zone returns NULL.
+     *
+     * $column is always a hardcoded column name from this controller, never user input.
+     */
+    private function filterTimestampColumn($query, $keyword, $column = 'time')
+    {
+        $query->whereRaw("DATE_FORMAT(TIMESTAMPADD(SECOND, {$column}, '1970-01-01 00:00:00'), '%Y-%m-%d %H:%i:%s') LIKE ?", ["%{$keyword}%"]);
+    }
+
     public function chatLogsData(Request $request, $db)
     {
         if (Auth::user() === null) {
@@ -383,6 +412,9 @@ class StaffController extends Controller
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
             })
             ->smart(true)
             ->make();
@@ -425,6 +457,9 @@ class StaffController extends Controller
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
             })
             ->smart(true)
             ->make();
@@ -469,6 +504,9 @@ class StaffController extends Controller
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
+            })
             ->smart(true)
             ->make();
     }
@@ -510,6 +548,9 @@ class StaffController extends Controller
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
             })->editColumn('player1_items', function ($data) {
                 return str_replace(',', ",\n", $data->player1_items);
             })->editColumn('player2_items', function ($data) {
@@ -557,6 +598,9 @@ class StaffController extends Controller
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
+            })
             ->smart(true)
             ->make();
     }
@@ -598,6 +642,9 @@ class StaffController extends Controller
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
             })->editColumn('buyer_info', function ($data) {
                 return str_replace(',', ",\n", $data->buyer_info);
             })
@@ -677,6 +724,9 @@ class StaffController extends Controller
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
             })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword, 'former_names.time');
+            })
             // currentName is a select alias (players.username); map search/sort to the real column since an alias can't be referenced in a WHERE clause.
             ->filterColumn('currentName', function ($query, $keyword) {
                 $query->whereRaw('LOWER(players.username) LIKE ?', ['%'.strtolower($keyword).'%']);
@@ -723,6 +773,9 @@ class StaffController extends Controller
         return DataTables::of(DB::connection($db)->query()->fromSub($latest, 'logs'))
             ->editColumn('time', function ($data) {
                 return Carbon::createFromTimestamp($data->time)->format('Y-m-d H:i:s');
+            })
+            ->filterColumn('time', function ($query, $keyword) {
+                $this->filterTimestampColumn($query, $keyword);
             })
             ->smart(true)
             ->make();
