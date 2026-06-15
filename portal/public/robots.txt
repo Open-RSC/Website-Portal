@@ -19,5 +19,11 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
+User-agent: ia_archiver
+Allow: /
+
+User-agent: archive.org_bot
+Allow: /
+
 User-agent: *
 Disallow: /

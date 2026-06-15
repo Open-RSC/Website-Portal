@@ -4,6 +4,7 @@
 	<title>OpenRSC</title>
 	<meta name="description" content="An RSC replica - open source and free!">
 	<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nositelinkssearchbox">
+	<meta name="ia_archiver" content="index, archive, follow">
 	<meta name="author" content="OpenRSC">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	@if (config('openrsc.force_https', false))
