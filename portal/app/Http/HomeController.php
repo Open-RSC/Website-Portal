@@ -24,6 +24,18 @@ class HomeController extends Controller
                 ->get();
         }
 
+        // In development, show sample news when the live feed is empty (for example when
+        // the board database is not enabled) so the homepage news section can be previewed.
+        if (config('app.debug') && count($news_feed) === 0) {
+            $news_feed = collect([
+                (object) ['forum_id' => 2, 'post_id' => 1, 'post_subject' => 'Sample news post - homepage preview', 'topic_time' => strtotime('2025-12-20')],
+                (object) ['forum_id' => 2, 'post_id' => 2, 'post_subject' => 'Another update with a longer subject line to test truncation', 'topic_time' => strtotime('2025-02-11')],
+                (object) ['forum_id' => 2, 'post_id' => 3, 'post_subject' => 'Client release notes example', 'topic_time' => strtotime('2025-02-02')],
+                (object) ['forum_id' => 2, 'post_id' => 4, 'post_subject' => 'Seasonal event announcement', 'topic_time' => strtotime('2024-12-24')],
+                (object) ['forum_id' => 2, 'post_id' => 5, 'post_subject' => 'Welcome to the development preview', 'topic_time' => strtotime('2024-10-31')],
+            ]);
+        }
+
         // World online player counts
         $preservation_online = DB::connection('preservation')->table('players as b')
             ->leftJoin('player_cache as a', function ($join) {
@@ -308,9 +320,18 @@ class HomeController extends Controller
         $desktopClientName = 'Desktop Client';
         $androidClientName = 'Android Client';
 
+        // Capability descriptions shown beneath the buttons. The client name is
+        // highlighted to match the original Play Now graphics (web is yellow,
+        // the game client is green), the rest of each sentence stays white.
+        $webClientLabel = 'Web client';
+        $webClientInfo = 'can play Preservation, 2001Scape and Uranium.';
+        $desktopClientInfo = 'can play all servers.';
+        $androidClientInfo = 'can play all servers except 2001Scape.';
+
         $gameClientUrl = $desktopClientUrl;
         $gameClientName = $desktopClientName;
-        $graphicImageUrl = '/img/PlayNowGraphic-Desktop.png';
+        $gameClientLabel = 'Desktop client';
+        $gameClientInfo = $desktopClientInfo;
         $otherOSName = 'Android';
         $otherClientUrl = $androidClientUrl;
         $otherClientName = $androidClientName;
@@ -320,7 +341,8 @@ class HomeController extends Controller
         if (str_contains($useragent, 'android')) {
             $gameClientUrl = $androidClientUrl;
             $gameClientName = $androidClientName;
-            $graphicImageUrl = '/img/PlayNowGraphic-Android.png';
+            $gameClientLabel = 'Android client';
+            $gameClientInfo = $androidClientInfo;
             $otherOSName = 'PC';
             $otherClientUrl = $desktopClientUrl;
             $otherClientName = $desktopClientName;
@@ -329,7 +351,10 @@ class HomeController extends Controller
         return view('playnow', [
             'gameClientUrl' => $gameClientUrl,
             'gameClientName' => $gameClientName,
-            'graphicImageUrl' => $graphicImageUrl,
+            'webClientLabel' => $webClientLabel,
+            'webClientInfo' => $webClientInfo,
+            'gameClientLabel' => $gameClientLabel,
+            'gameClientInfo' => $gameClientInfo,
             'otherOSName' => $otherOSName,
             'otherClientUrl' => $otherClientUrl,
             'otherClientName' => $otherClientName,

@@ -73,3 +73,83 @@
         margin-left: 50px;
     }
 }
+
+// Latest news list, centered without the old scroll icon column
+.homepage-news-table {
+    margin: 0 auto;
+    width: 100%;
+
+    @media (min-width: $mobile-breakpoint) {
+        width: 420px;
+    }
+}
+
+.homepage-news-subject {
+    text-align: left;
+    padding-right: 8px;
+}
+
+.homepage-news-date {
+    text-align: right;
+    white-space: nowrap;
+}
+
+// Centered, wrapping grid of promo tiles (replaces the old mm_/mms_ icon layout)
+.homepage-promo-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+    padding: 0 10px;
+}
+
+.homepage-promo-tile {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+// Stone box that only wraps the title, hardcoded to the classic 100x45 size.
+// The whole box is the clickable link (a clickable image, not clickable text).
+.homepage-promo-tile-title-box {
+    display: block;
+    padding: 2px;
+    background-color: black;
+    width: 100px;
+    height: 45px;
+}
+
+.homepage-promo-tile-title-inner {
+    background-repeat: no-repeat;
+    background-image: url('/img/stoneback.gif');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+}
+
+// Title text stays white even though it lives inside a link
+.homepage-promo-tile-title {
+    color: #fff;
+}
+
+// The title box behaves like a clickable image - no text underline on hover.
+// Selector is specific enough to override the global "A.c:hover" underline.
+a.c.homepage-promo-tile-title-box,
+a.c.homepage-promo-tile-title-box:hover {
+    text-decoration: none;
+}
+
+.homepage-promo-tile-desc {
+    margin: 6px 0;
+    flex-grow: 1;
+}
+
+.homepage-promo-tile-link {
+    display: block;
+}
