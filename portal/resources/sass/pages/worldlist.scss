@@ -36,15 +36,10 @@
 }
 
 .promo-tiles-and-sword-table {
-    background-image: url('/img/swordarrow.gif');
-    background-repeat: no-repeat;
-    background-position-y: top;
-    background-position-x: calc(50% - 5px);
     margin: 0 10px 0 10px;
     height: 100%;
 
     @media (min-width: $mobile-breakpoint) {
-        background-position-x: 204px;
         margin: 20px auto;
     }
 }
