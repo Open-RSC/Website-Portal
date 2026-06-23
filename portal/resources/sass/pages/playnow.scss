@@ -1,37 +1,112 @@
 .play-now-container {
-    position: relative;
-}
-
-.play-now-left-button {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 50%;
-    bottom: 15%;
-
-    @media (min-width: $mobile-breakpoint) {
-        height: 490px;
-    }
-}
-
-.play-now-right-button {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    right: 0;
-    bottom: 15%;
-
-    @media (min-width: $mobile-breakpoint) {
-        height: 490px;
-    }
-}
-
-.play-now-image {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0.75rem;
+    // The parent .middle-content is a centered column flex, so without an
+    // explicit width this container shrinks to its content and the buttons
+    // can never sit side by side. Force it to span the full content width.
     width: 100%;
+    margin: 2rem auto 1.5rem;
+}
 
-    @media (min-width: $mobile-breakpoint) {
-        width: auto;
+// Ornate RuneScape Classic style oval button, built entirely in CSS.
+// The outer element is the gold/tan beveled frame, the ::before draws the
+// dark red recessed face, and the ::after adds a subtle inner highlight ring.
+.play-now-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    // Fixed wider-than-tall size with a 50% radius makes a compact oval that
+    // matches the original Play Now graphic, instead of stretching to fill the
+    // flex row (too wide) or going fully square (too circular).
+    flex: 0 0 auto;
+    width: 200px;
+    height: 110px;
+    padding: 16px 20px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, #f6dd9c 0%, #cf9c36 32%, #9c6a1c 64%, #5e3c0c 100%);
+    box-shadow:
+        0 0 0 2px #3a2407,
+        0 6px 16px rgba(0, 0, 0, 0.55);
+    transition: transform 0.12s ease, filter 0.12s ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 9px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at center, #871717 0%, #560d0d 55%, #2c0606 100%);
+        box-shadow:
+            inset 0 0 0 2px #e7c270,
+            inset 0 2px 12px rgba(0, 0, 0, 0.7);
+        z-index: 0;
     }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 9px;
+        border-radius: 50%;
+        pointer-events: none;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        z-index: 1;
+    }
+
+    &:hover,
+    &:focus {
+        transform: translateY(-2px) scale(1.02);
+        filter: brightness(1.08);
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.99);
+        filter: brightness(0.96);
+    }
+}
+
+.play-now-button-small,
+.play-now-button-large {
+    position: relative;
+    z-index: 2;
+    line-height: 1.15;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.play-now-button-small {
+    color: #ffd34d;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px #000;
+}
+
+.play-now-button-large {
+    margin-top: 0.25rem;
+    color: #fff4d6;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 3px #000, 0 0 6px rgba(255, 200, 80, 0.35);
+}
+
+.play-now-client-info {
+    margin-top: 0.5rem;
+    text-align: center;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+// Client name highlight colours sampled from the original Play Now graphics.
+.play-now-info-web {
+    color: #ffe100;
+}
+
+.play-now-info-game {
+    color: #4bff00;
 }
 
 .play-now-other-clients {

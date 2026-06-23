@@ -70,46 +70,29 @@ obtainable item of your choice</span> as a thanks!
                                 <b>Latest News and Updates</b>
                             </span>
                             <div class="pb-3"></div>
-                            <table class="homepage-content">
-                                <tbody>
-                                <tr class="align-top">
-                                    <td style="width: 100px;">
-                                        <a href="/board/viewforum.php?f=2">
-                                            <img class="mx-auto"
-                                                 src="{{ asset('img/mm_scroll.jpg') }}"
-                                                 alt="">
-                                        </a>
-                                    </td>
-                                    <td style="width: 350px">
-                                        <table id="List" class="container">
-                                            @foreach ($news_feed as $news)
-                                                <tr>
-                                                    <td class="w-75">
-                                                        <!-- News subject -->
-                                                        <a class="c"
-                                                           href="/board/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
-                                                            @php
-                                                                echo Str::limit(strip_tags($news->post_subject), 37);
-                                                            @endphp
-                                                        </a>
-                                                    </td>
-                                                    <td class="w-25">
-                                                            <span class="text-white float-right">
-                                                                @php
-                                                                    $timestamp = $news->topic_time;
-                                                                    $dt = new DateTime();
-                                                                    echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
-                                                                @endphp
-                                                            </span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                </tr>
-                                </tbody>
+                            <table id="List" class="homepage-news-table">
+                                @foreach ($news_feed as $news)
+                                    <tr>
+                                        <td class="homepage-news-subject">
+                                            <!-- News subject -->
+                                            <a class="c"
+                                               href="/board/viewtopic.php?f={{ $news->forum_id }}&p={{ $news->post_id }}">
+                                                @php
+                                                    echo Str::limit(strip_tags($news->post_subject), 37);
+                                                @endphp
+                                            </a>
+                                        </td>
+                                        <td class="homepage-news-date">
+                                            <span class="text-white">
+                                                @php
+                                                    $timestamp = $news->topic_time;
+                                                    $dt = new DateTime();
+                                                    echo $dt->setTimestamp( $timestamp )->format("d-M-Y ");
+                                                @endphp
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </table>
                             <div class="text-center pb-2">To view a full list of news and
                                 updates,
@@ -149,179 +132,31 @@ obtainable item of your choice</span> as a thanks!
                         <td style="width: 7px;"
                             background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <div style="text-align: center;">
-                                <div class="pb-3"></div>
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="https://rsc.wiki/" target="_blank"
-                                               class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_whyrs.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.vet/wiki/"
-                                                       target="_blank" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747">
-                                                        <div class="text-center">
-                                                            <b>Why Choose OpenRSC?</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            See why our game is right for you!
-                                            <div class="d-block">
-                                                <a href="https://rsc.vet/wiki"
-                                                   target="_blank" class="c">Click Here</a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="https://rsc.wiki/w/Pay-to-play" target="_blank"
-                                               class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_members.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.wiki/w/Pay-to-play"
-                                                       target="_blank"
-                                                       class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>OpenRSC Members</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Everyone may be a member for free!
-                                            <div class="d-block">
-                                                <a href="https://rsc.wiki/w/Pay-to-play" target="_blank"
-                                                   class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="/hiscores/preservation" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_chalice.jpg') }}"
-                                                     alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="/hiscores/preservation" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Hiscore Tables</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Is your character in the top 250,000?
-                                            <div class="d-block">
-                                                <a href="/hiscores/preservation" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="https://2009scape.org" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mms_rsclassic.png') }}"
-                                                     alt="RS2 Beta">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://2009scape.org" target="_blank" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Play RS2 Beta</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Try the new version
-                                            <span class="d-block">
-                                                of the game!</span>
-                                            <div class="d-block">
-                                                <a href="https://2009scape.org" target="_blank" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="pb-3"></div>
+                            <div class="homepage-promo-tiles">
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => 'https://rsc.vet/wiki',
+                                    'title' => 'Why Choose OpenRSC?',
+                                    'desc' => 'See why our game is right for you!',
+                                    'external' => true,
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => 'https://rsc.wiki/w/Pay-to-play',
+                                    'title' => 'OpenRSC Members',
+                                    'desc' => 'Everyone plays entirely for free!',
+                                    'external' => true,
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => '/hiscores/preservation',
+                                    'title' => 'Hiscore Tables',
+                                    'desc' => 'Is your character in the top 250,000?',
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => 'https://2009scape.org',
+                                    'title' => 'Play New Beta',
+                                    'desc' => 'Try the new version of the game!',
+                                    'external' => true,
+                                ])
                             </div>
                             <div class="pb-3"></div>
                         </td>
@@ -358,184 +193,31 @@ obtainable item of your choice</span> as a thanks!
                         <td style="width: 7px;"
                             background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <div style="text-align: center;">
-                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1"
-                                     alt="">
-                                <div class="pb-3"></div>
-                                <b>Secure Services</b>
-                                <div class="pb-3"></div>
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="{{ config('openrsc.discord_url') }}" target="_blank">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_support.jpg') }}"
-                                                     height="120" width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ config('openrsc.discord_url') }}" target="_blank">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Customer Support</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Questions?
-                                            <span class="d-block">
-                                                    Contact our staff
-                                                </span>
-                                            <div class="d-block">
-                                                <a href="{{ config('openrsc.discord_url') }}" target="_blank" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="/message-centre" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_inbox.jpg') }}"
-                                                     height="120"
-                                                     width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="/message-centre"
-                                                       class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Message Centre</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Your messages
-                                            <span class="d-block">
-                                                    from our staff
-                                                </span>
-                                            <div class="d-block">
-                                                <a href="/message-centre" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="/board" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mms_forums.jpg') }}"
-                                                     height="120" width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="/board" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Forums</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Discuss the game with fellow players!
-                                            <div class="d-block">
-                                                <a href="/board" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="/message-centre" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mms_accman.jpg') }}"
-                                                     height="120" width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="/message-centre" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Account Management</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Manage your Account
-                                            <div class="d-block">
-                                                <a href="/message-centre" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="pb-3"></div>
+                            <b class="d-block text-center">Secure Services</b>
+                            <div class="pb-3"></div>
+                            <div class="homepage-promo-tiles">
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => config('openrsc.discord_url'),
+                                    'title' => 'Customer Support',
+                                    'desc' => 'Questions? Contact our staff',
+                                    'external' => true,
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => '/message-centre',
+                                    'title' => 'Message Centre',
+                                    'desc' => 'Your messages from our staff',
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => '/board',
+                                    'title' => 'Forums',
+                                    'desc' => 'Discuss the game with fellow players!',
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => '/message-centre',
+                                    'title' => 'Account Management',
+                                    'desc' => 'Manage your Account',
+                                ])
                             </div>
                             <div class="pb-3"></div>
                         </td>
@@ -570,188 +252,32 @@ obtainable item of your choice</span> as a thanks!
                         <td style="width: 7px;"
                             background="{{ asset('img/fm_middle.gif') }}"></td>
                         <td class="align-bottom">
-                            <div style="text-align: center;">
-                                <img src="{{ asset('img/blank.gif') }}" height="7" width="1"
-                                     alt="">
-                                <div class="pb-3"></div>
-                                <b>Manual</b>
-                                <div class="pb-3"></div>
-                                <table>
-                                    <tbody>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="https://rsc.wiki" target="_blank" class="c">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_howtoplay.jpg') }}"
-                                                     height="120" width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.vet/wiki" target="_blank" class="c">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>How To Play</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Everything you need to know to play
-                                            OpenRSC
-                                            <div class="d-block">
-                                                <a href="https://rsc.vet/wiki" target="_blank" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="{{ route('Frequently Asked Questions') }}">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_faq.jpg') }}"
-                                                     height="120"
-                                                     width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Frequently Asked Questions') }}">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>F.A.Q.</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Answers to Frequently Asked Questions
-                                            <div class="d-block">
-                                                <a href="{{ route('Frequently Asked Questions') }}"
-                                                   class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr class="align-top">
-                                        <td style="width: 100px;">
-                                            <a href="https://rsc.wiki/w/Library_of_Varrock"
-                                               target="_blank">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_lov.jpg') }}"
-                                                     height="120"
-                                                     width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="https://rsc.wiki/w/Library_of_Varrock"
-                                                       target="_blank">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747;">
-                                                        <div class="text-center">
-                                                            <b>Library of Varrock</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Learn about the History of the game
-                                            <div class="d-block">
-                                                <a href="https://rsc.wiki/w/Library_of_Varrock"
-                                                   target="_blank" class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td style="width: 10px;"></td>
-                                        <td style="width: 100px;">
-                                            <a href="{{ route('Rules and Security') }}">
-                                                <img class="mx-auto"
-                                                     src="{{ asset('img/mm_rules.jpg') }}"
-                                                     height="120"
-                                                     width="77" alt="">
-                                            </a>
-                                        </td>
-                                        <td style="width: 120px;">
-                                            <div style="left: 0; top: 0; position: relative;">
-                                                <div style="left: 0; top: 0; position: absolute;">
-                                                    <a href="{{ route('Rules and Security') }}">
-                                                        <img src="{{ asset('img/blank.gif') }}"
-                                                             height="45" width="100"
-                                                             alt="">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <table style="height: 45px; width: 100px; padding: 2px; background-color: black;">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="b"
-                                                        background="{{ asset('img/stoneback.gif') }}"
-                                                        style="background-color: #474747">
-                                                        <div class="text-center">
-                                                            <b>Rules & Security</b>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            Learn our rules
-                                            <span class="d-block">
-                                                and stay safe
-                                            </span>
-                                            <span class="d-block">
-                                                online
-                                            </span>
-                                            <div class="d-block">
-                                                <a href="{{ route('Rules and Security') }}"
-                                                   class="c">
-                                                    Click Here
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <div class="pb-3"></div>
+                            <b class="d-block text-center">Manual</b>
+                            <div class="pb-3"></div>
+                            <div class="homepage-promo-tiles">
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => 'https://rsc.vet/wiki',
+                                    'title' => 'How To Play',
+                                    'desc' => 'Everything you need to know to play OpenRSC',
+                                    'external' => true,
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => route('Frequently Asked Questions'),
+                                    'title' => 'F.A.Q.',
+                                    'desc' => 'Answers to Frequently Asked Questions',
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => 'https://rsc.wiki/w/Library_of_Varrock',
+                                    'title' => 'Library',
+                                    'desc' => 'Learn about the History of the game',
+                                    'external' => true,
+                                ])
+                                @include('partials.homepage-promo-tile', [
+                                    'url' => route('Rules and Security'),
+                                    'title' => 'Rules & Security',
+                                    'desc' => 'Learn our rules and stay safe online',
+                                ])
                             </div>
                             <div class="pb-3"></div>
                         </td>
