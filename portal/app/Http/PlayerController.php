@@ -190,6 +190,11 @@ class PlayerController extends Controller
 
     public function index($db, $subpage): \Illuminate\Contracts\View\View|Factory|Application
     {
+        // Moderator-and-above accounts (owner, admin, super moderator, moderator) are hidden from the
+        // public player page, but logged-in moderators and admins can still look them up to view their
+        // skill hiscores. Player moderators, devs, and event staff remain publicly visible.
+        $canViewStaff = Auth::check() && Gate::allows('moderator', Auth::user());
+
         if (value($db) == 'cabbage' || value($db) == 'coleslaw') { // custom
             $skill_array = ['hits', 'ranged', 'prayer', 'magic', 'cooking', 'woodcut', 'fletching', 'fishing', 'firemaking', 'crafting', 'smithing', 'mining', 'herblaw', 'agility', 'thieving', 'runecraft', 'harvesting'];
         } elseif (value($db) == '2001scape') { // retro authentic -- omitted unimplemented skills or that could not be leveled by its own
@@ -219,6 +224,10 @@ class PlayerController extends Controller
                     ['b.username', '=', $subpage],
                     ['c.iron_man', '!=', 4],
                 ])
+                // Hide moderator-and-above accounts from the public player page, but let logged-in staff look them up.
+                ->when(! $canViewStaff, function ($query) {
+                    $query->whereNotIn('b.group_id', [config('group.owner'), config('group.admin'), config('group.super_moderator'), config('group.moderator')]);
+                })
                 ->get();
         } elseif (value($db) == '2001scape') { // retro authentic
             $conn = $db;
@@ -236,6 +245,10 @@ class PlayerController extends Controller
                 ->where([
                     ['b.username', '=', $subpage],
                 ])
+                // Hide moderator-and-above accounts from the public player page, but let logged-in staff look them up.
+                ->when(! $canViewStaff, function ($query) {
+                    $query->whereNotIn('b.group_id', [config('group.owner'), config('group.admin'), config('group.super_moderator'), config('group.moderator')]);
+                })
                 ->get();
         } else { // modern authentic
             $conn = $db;
@@ -253,6 +266,10 @@ class PlayerController extends Controller
                 ->where([
                     ['b.username', '=', $subpage],
                 ])
+                // Hide moderator-and-above accounts from the public player page, but let logged-in staff look them up.
+                ->when(! $canViewStaff, function ($query) {
+                    $query->whereNotIn('b.group_id', [config('group.owner'), config('group.admin'), config('group.super_moderator'), config('group.moderator')]);
+                })
                 ->get();
         }
 
