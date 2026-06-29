@@ -216,7 +216,7 @@ obtainable item of your choice</span> as a thanks!
                                 @include('partials.homepage-promo-tile', [
                                     'url' => '/message-centre',
                                     'title' => 'Account Management',
-                                    'desc' => 'Manage your Account',
+                                    'desc' => 'Manage your Game Account',
                                 ])
                             </div>
                             <div class="pb-3"></div>
