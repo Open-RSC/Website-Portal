@@ -1,0 +1,705 @@
+# Pyvrag 177 onq jbeqf. Bar cre yvar, ybjrepnfr n-m 0-9 '.
+# N jbeq nybar = prafberq naljurer (cnegvny zngpu).
+# jbeq <GNO> cnvef = obhaqnel rkprcgvbaf jurer vg vf ABG prafberq (nqinaprq).
+#   rnpu cnve vf 'orsber-nsgre' qrpvzny pune-pynff olgrf, fcnpr frcnengrq,
+#   r.t. 'g rerpgvba' -> 20-27. Yrnir n jbeq'f cnvef nf-vf hayrff lbh xabj gurz.
+# Yvarf fgnegvat jvgu # naq oynax yvarf ner vtaberq.
+nubyr
+nubyrf
+nany	3-19 3-27 15-25 27-15 27-25
+nahf
+nefr	5-4 15-12 15-18 15-19 15-27 16-3 16-4 16-12 16-14 16-18 16-19 16-27 22-27 27-14
+nefrf	15-20 16-20 16-27
+nfonaqvg
+nfonaqvgf
+nfubyr
+nfubyrf
+nfzbaxrl
+nfzbaxrlf
+nffonaqvg
+nffonaqvgf
+nffubyr
+nffubyrf
+nffzbaxrl
+nffzbaxrlf
+nffjvcr
+nffjvcrf
+nhgbehar
+onvgpu
+onvgpurf
+onvgpuf
+onefgneq
+onefgneqf
+onefgreq
+onefgreqf
+onfgneq
+onfgneqf
+onfgreq
+onfgreqf
+oryyraq
+oryyraqf
+ovnpu
+ovngpu
+ovngpurf
+ovngpuf
+ovppu
+ovpu
+ovpurf
+ovpuf
+ovqra
+ovrgpuf
+ovbgpu	27-25
+ovbgpurf
+ovbgpuf
+ovfu	2-5 2-9 2-12 2-14 2-25 2-27 8-15 15-12 15-14 15-27 21-5 21-9 21-25 21-27 27-15
+ovfrk
+ovgpu
+ovgpurf
+ovgpuf
+oybwbo
+oybwbof
+oybbqent
+oybbqentf
+oybjwbo
+oybjwbof
+oybjzr
+obybp
+obybpx
+obybpxf
+obybpf
+obybx
+obybxf
+obybk
+obaqntr
+obare
+obaref
+obbo
+obbof
+oernfg	1-27 27-16
+oernfgf
+ohttn
+ohttnf
+ohttre	5-19 5-27
+ohttref	5-27
+ohxxnxr
+ohgzbaxrl
+ohgzbaxrlf
+ohgg	27-5 27-15 27-20
+ohggzbaxrl
+ohggzbaxrlf
+ohggf
+olpu
+olpurf
+olpuf
+olgpu
+olgpurf
+olgpuf
+pnpx	27-12
+pnpxvat
+pnpxf
+purng	27-5 27-9
+purngf
+puvatpubat
+puvax
+puvaxf
+puvg	18-5 27-3
+puvgf
+pubqr
+pwo
+pyvg
+pyvgf
+pbp	1-11 5-11 14-20 27-11 27-15
+pbpnva
+pbpnvar
+pbpx	1-19 1-27 5-27 27-1 27-5 27-12 27-18 27-20
+pbpxf	1-27
+pbpf
+pbx	5-5 14-5 18-5 27-5 27-9 27-19 27-25 27-28 0-0
+pbxr	5-4 14-4 18-4 27-4 27-18
+pbxf	0-0
+pbaqbz
+pbaqbzf
+pbba	1-19 1-27 3-19 3-27 15-27 25-19 25-27
+pbbaf	1-27 3-27 25-27
+pbd
+pbdf
+pbk
+penc	19-2 19-5 19-8 19-9 19-16 19-19 19-25 19-27
+pencf	19-27
+perqvgpneq
+perqvgpneqf
+pehq	27-5 27-9
+phz	1-27 3-2 9-27 12-27 14-2 15-5 18-19 18-22 19-27 21-2 27-17
+phzvat
+phavyvat
+phag	19-8
+phagf
+plore	27-14
+plorerq
+plorevat
+ploref
+qnzz	27-5 27-13
+qnzzf
+qnza	1-9 27-1 27-5 27-9
+qnzaf
+quvpx
+quvpxf
+quvx
+quvxf
+quvk
+qvp	1-1 1-5 1-20 1-27 2-1 4-20 5-1 5-9 5-20 5-27 9-21 9-27 14-1 14-5 14-20 14-21 15-1 15-21 15-27 18-5 18-20 21-5 21-9 21-18 27-5 27-8 27-9 27-20
+qvpx
+qvpxf
+qvpf
+qvwpx
+qvx	1-5 1-9
+qvxf
+qvyqb
+qvyqbrf
+qvyqbf
+qvd
+qvdf
+qvk	14-27
+qbhfpur
+qhzonff
+rpfgnpl
+rwnphyng
+rwnphyngr
+rwnphyngrq
+rwnphyngrf
+rwnphyngvat
+rwnphyngvba
+rcfgrva
+rerpgvba	20-27
+rerpgvbaf
+rkperzrag
+rkperzragf
+rkpergr
+rkpergrf
+snp	5-5 5-9 5-20 9-20 12-5 14-20 18-5 20-5 21-20 27-1 27-5 27-9 27-20 27-21
+snpx
+snpxf
+snpf
+snrprf
+snt
+sntbg
+sntbgf
+sntf
+snx	27-5 27-9
+snxf
+snaavrf
+snaal
+snaalf
+snex
+snexf
+sneg	27-8
+spx
+spxf
+sphx
+sphxf
+srp	1-20 5-20 6-20 14-20 15-25 18-20
+srpx
+srpxf
+srpf
+srt	1-21 9-21
+srtf
+srx	1-5
+srxf
+sryng
+sryngr
+sryngrf
+sryngf
+srd
+srdf
+suhpx
+suhpxf
+suhx
+suhxf
+suhd
+suhdf
+sx
+sxrq
+sxre
+sxvat
+sxf
+sbp	5-21 6-1 21-1 27-1 27-21
+sbpx
+sbpxf
+sbpf
+sbrx
+sbrxf
+sbx
+sbxf
+sbd
+sbdf
+sberfxva
+shp
+shpx
+shpxrq
+shpxre
+shpxref
+shpxvat
+shpxf
+shpf
+shqtrcnpxre
+shqtrcnpxref
+shux
+shuxf
+shvpx
+shvpxf
+shwcnpxre
+shwcnpxref
+shx
+shxp
+shxpf
+shxf
+shd
+shdf
+shk
+tnatonat
+tnatencr
+tnatencrq
+tnatencre
+tnatencref
+tnatencrf
+tnatencvat
+tnl
+tnlf
+travgny
+travgnyf
+trl	1-27 15-27 27-19
+trlf	27-5
+tunl
+tunlf
+turl
+turlf
+unp	19-11 23-11
+unpx	19-12 19-19 19-27 23-9 23-25 23-27
+unpxrq
+unpxre
+unpxref
+unpxvat
+unpxf	19-27
+unpf
+unx	19-1 19-5 19-9 19-25
+unxf
+unznf
+unaqwbo
+unaqwbof
+und
+undf
+unfu	5-27 27-9
+unfuvfu	27-27
+urtfrgu
+urebva	27-5
+urgeb
+urgebrf
+urgebf
+uvgyre
+uvgyref
+ubzb
+ubzbrf
+ubzbf
+ubbxre
+ubbxref
+uber	2-14 3-19 3-27 16-27 19-19 19-27 27-14
+uberf	3-27 19-27
+ubeavr	20-18 20-19
+ubeavre	20-27
+ubeavrfg	20-27
+ubeal	20-27
+uggc
+uhzc	20-5 20-9 20-27 27-8
+uhzcrq	20-27
+uhzcvat	20-27
+uhzcf
+wvunq
+wvm
+whatyrohaal
+xnznyn
+xrlybtre
+xrlybtref
+xvxr
+xarrtebj
+xbp
+xbpx
+xbpxf
+xbpf
+xbx	27-1
+xbxf
+xbd
+xbdf
+xenc
+xencf
+xhag
+xhagf
+xjrre
+xjrref
+ynovn
+ynovhz
+ynqlobl
+yrfovna
+yrfovnaf
+yrfob
+yrfobrf
+yrfobf
+yrfl	19-27
+yrm	19-9 19-25
+yrmrf
+yvpx	3-5 3-9 3-19 3-27 6-5 6-9 6-27 19-5 19-12 19-14 19-27 27-5
+yvpxrq	3-27 6-27 27-27
+yvpxvat	3-27 6-27
+yvpxf	3-27
+yfq
+znpeb
+znpebrf
+znpebf
+znxeb
+znxebrf
+znxebf
+zndeb
+zndebrf
+zndebf
+znevwhnan
+znfgreong
+znfgreongr
+znfgreongrq
+znfgreongre
+znfgreongref
+znfgreongvat
+znfgreongvba
+znfgheong
+znfgheongr
+znfgheongrq
+znfgheongre
+znfgheongref
+znfgheongvat
+znfgheongvba
+zvqqtrg
+zbgureshpxre
+zbgureshpxref
+zbgureshaxre
+zbgureshaxref
+zhfgreong
+zhfgreongr
+zhfgreongrq
+zhfgreongre
+zhfgreongref
+zhfgreongvat
+zhfgreongvba
+anxrq
+angfv
+angfvf
+angmv
+angmvf
+anmv	19-5 19-27
+anmvf
+artre
+arteb
+artebrf
+artebf
+attn
+auvtn
+auvtnf
+auvtre
+auvtref
+auvttn
+auvttnf
+auvttre
+auvttref
+avtn
+avtnf
+avtre	19-5 19-9 19-27 27-9
+avtref
+avtt
+avttn
+avttnf
+avttre	19-5 19-9 19-27
+avttref
+avtttre
+avttttre
+avttm
+avte	5-1
+avtef
+avcyr
+avcyrf
+avccyr
+avccyrf
+avddn
+avddre
+avmmyr
+abapr
+abaprf
+ahqr
+ahgf	1-27 4-27 8-27 12-27 20-27 27-8
+bonzn
+beny	8-27 12-27 13-5 13-9 13-12 13-19 13-25 13-27 16-27 20-27 27-12 27-25
+betnfz
+betnfzvp
+betnfzf
+cnrqb
+cnrqbrf
+cnrqbcuvy
+cnrqbcuvyr
+cnrqbcuvyrf
+cnrqbcuvyf
+cnrqbf
+cnwrrg
+cnagvrf
+cnagl
+cnffjbeq
+cnffjbeqf
+cnfjbeq
+cnfjbeqf
+crqb	18-5 18-19 18-27 19-13
+crqbrf	18-27
+crqbcuvy
+crqbcuvyr
+crqbcuvyrf
+crqbcuvyf
+crqbf	18-27
+cravf
+crei	13-9 21-9 27-1
+creireg
+creiregf
+creif
+cuhss
+cuhssf
+cvyybpx
+cvyybpxf
+cvzc
+cvzcrq
+cvzcvat
+cvzcf
+cvff	27-1 27-26
+cvffrq
+cvffrf
+cvffvat
+cbsgre
+cbsgref
+cbapr
+cbaprf
+cbbsgre
+cbbsgref
+cbbwrrg
+cbepuzbaxrl
+cbea
+cbeab
+cevp	1-15 18-5 27-5 27-9 27-11 27-25
+cevpx	27-12
+cevpf
+cevx	1-1
+cevxf
+cebfgvghg
+cebfgvghgr
+cebfgvghgrf
+cebfgvghgf
+cfjbeq
+cfjbeqf
+chppl
+chs	27-6 27-9
+chsf
+chfv	27-5 27-14
+chff	27-12 27-26
+chffl
+chfl
+cj	5-1 9-18 13-21 21-1 21-5
+cjbeq
+cjbeqf
+cjf
+dbx
+dbxf
+dhrre
+dhrref
+djrre
+djrref
+enturnq
+envcr
+envcrq
+envcre
+envcref
+envcrf
+envcvat
+envcvfg
+encr	1-20 3-4 3-18 3-27 4-4 7-6 7-19 7-22 7-27 20-4 20-26 23-4 23-18
+encrq	3-27 4-27 20-27 23-27
+encre	3-19 3-27 23-19 23-27
+encref	3-27 23-27
+encvfg	5-27
+erpghz
+erttva
+ergneq
+ergneqrq
+ergneqf
+erib2
+euncr
+efunxm
+efcvfg
+ehtzhapure
+ehtzhapuref
+eharobg
+eharobgf
+fpnax
+fpnaxf
+fpnad
+fpnadf
+fpuvg
+fpuvgf
+fperj	11-5 11-19 11-27 14-27
+fperjrq	11-27
+fperjvat
+fpebghz
+fpebghzf
+frxf	0-0
+frzra	1-20 9-20 18-20 21-20
+frk
+funt
+funtre
+funtref
+funtvat
+funtf
+fung	4-27 27-5 27-20
+fungf
+furznyr
+furg	25-27 27-19 0-0
+furgf	27-27
+fuvrg
+fuvrgf
+fuvg
+fuvgrq
+fuvgre
+fuvgvat
+fuvgf
+fuvm
+fuvmavg
+fuvmavgf
+fuybat
+fuybatf
+fubg5gvzrf
+fug	9-1
+fugv
+fugvf
+fugf
+fvug
+fxnap	1-5
+fxnapf
+fxnax
+fxnaxf
+fxnad
+fxnadf
+fynt
+fyntf
+fyncre
+fyncref
+fyvg	23-19 23-27 27-8
+fybcrurnq
+fyhg
+fyhgf
+fzrt
+fzrtf
+fbqbzl	27-27
+fcnax
+fcnaxrq
+fcnaxre
+fcnaxref
+fcnaxvat
+fcnaxf
+fcnfgvp
+fcnfgvpf
+fcrnepuhpxre
+fcrez
+fcuvapgre
+fcuvapgref
+fchax
+fchaxf
+fdnax
+fdnaxf
+fgnyx	27-9 27-19
+fgnyxf	27-27
+fgsh	1-12 5-12 9-12 21-12
+fhp	27-3 27-5 27-8 27-9 27-18 27-20 27-21
+fhpre
+fhpref
+fhpx
+fhpxrq
+fhpxvat
+fhpxf
+fhpf
+fhx
+fhxf
+fhdre
+fhk
+fkl
+gnzcba
+grfgrf
+grfgvpyr
+grfgvpyrf
+grfgvf
+guebo	18-27 20-27
+guebof
+gvqqvrf
+gvqqlf
+gvg	1-21 1-25 2-12 3-5 3-9 3-25 5-5 5-9 12-21 14-1 14-5 14-9 14-12 14-25 16-21 16-25 18-5 18-9 18-21 19-3 19-5 19-9 19-19 19-21 19-25 19-27 20-21 21-9 21-25 27-1 27-2 27-5 27-8 27-9 27-12 27-14 27-18
+gvgf	19-27
+gbbyxvg
+gbbyxvgf
+gbfre
+gbfref
+gbffre
+gbffref
+gbffe
+gbffef
+genaavrf
+genaal
+gebwna
+gebwnaf
+gebba
+gehzc
+gheq	1-1 19-9 19-25
+gheqf
+gjng	12-5
+gjngf
+haqerff
+hevang
+hevangr
+hevangrq
+hevangrf
+hevangvat
+hevangf
+hevar	6-19
+inqtr
+inqtrf
+intvan
+intvanf
+inuvan
+ivoengbe
+ivoengbef
+ivehf
+ivehfrf
+ivggh
+ivgghf
+imr
+jnat
+jnatf
+jnax	19-9 19-25
+jnaxrq
+jnaxre
+jnaxref
+jnaxvat
+jnaxf
+jryphz
+jube
+juber
+juberf
+jubef
+jvttre
+jvttref
+jvyyvrf
+jvyyl
+jaxre
+jaxref
+jbc	19-5 19-9 19-27
+jbcf
+jgs
+jjj
+mvccreurnq
