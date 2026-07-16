@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
 decode_filter.py - decode the OpenRSC mudclient-177 web-client chat filter
-(filter2.jag) into human-editable text files. Its companion is encode_filter.py.
+(filter3.jag) into human-editable text files. Its companion is encode_filter.py.
 
 QUICK START
 -----------
     cd .../Website-Portal/tools/badwords
-    python3 decode_filter.py          # filter2.jag -> the 4 .txt files below
+    python3 decode_filter.py          # filter3.jag -> the 4 .txt files below
     # ...edit badwords.txt (add/remove words)...
-    python3 encode_filter.py          # .txt files -> filter2.jag (backs up .bak)
+    python3 encode_filter.py          # .txt files -> filter3.jag (backs up .bak)
 
     python3 decode_filter.py other.jag   # decode a specific archive instead
 
     These scripts live in tools/badwords/ and read/write the client cache at
-    ../../portal/public/client/cache/ (that is where filter2.jag[.bak] live).
+    ../../portal/public/client/cache/ (that is where filter3.jag[.bak] live).
     The .txt / .rot13.txt files are written next to the scripts (tools/badwords/).
 
     # To VERSION the censor list in git as diffable-but-obfuscated text, run
@@ -23,7 +23,7 @@ QUICK START
     # The reverse,
     #   python3 generate_rot13_filter.py --decode   # the 4 .rot13.txt -> the 4 .txt
     # restores plaintext from the committed rot13 without needing the jag.
-    # Note: generate_rot13_filter.py never reads filter2.jag itself.
+    # Note: generate_rot13_filter.py never reads filter3.jag itself.
 
 OUTPUT FILES (written next to the script)
 -----------------------------------------
@@ -49,9 +49,9 @@ badwords.txt FORMAT
 WHAT THIS DOES / DOESN'T TOUCH  (important)
 -------------------------------------------
 * This is the browser CLIENT filter for mudclient 177 (served at /client).
-  It is loaded at runtime from cache/filter2.jag by WordFilter.loadFilters, so
+  It is loaded at runtime from cache/filter3.jag by WordFilter.loadFilters, so
   editing the jag is all that's needed - no TeaVM/classes.js rebuild.
-* The OTHER web client, /client2, does NOT use filter2.jag. Its censor list is
+* The OTHER web client, /client2, does NOT use filter3.jag. Its censor list is
   plaintext String arrays (censoredWords1/2/3) compiled into client2's
   teavm/classes.js and must be edited there directly. These scripts don't touch it.
 * The desktop/server filters are also separate:
@@ -73,7 +73,7 @@ WHAT THIS DOES / DOESN'T TOUCH  (important)
 
 FILE FORMAT (for future maintainers)
 ------------------------------------
-    filter2.jag = [3B uncSize][3B compSize][body]
+    filter3.jag = [3B uncSize][3B compSize][body]
         if uncSize != compSize, body is headerless bzip2 (the 'BZh1' magic is
         stripped; this decoder puts it back). encode_filter.py always writes an
         UNCOMPRESSED archive (uncSize==compSize) which the client reads the same.
@@ -182,7 +182,7 @@ def fmt_pairs(pairs):
 
 # ---------- main ----------
 def main():
-    jag = sys.argv[1] if len(sys.argv) > 1 else os.path.join(CACHE_DIR, 'filter2.jag')
+    jag = sys.argv[1] if len(sys.argv) > 1 else os.path.join(CACHE_DIR, 'filter3.jag')
     if not os.path.exists(jag):
         sys.exit(f"error: {jag} not found")
     entries = unpack_jag(open(jag, 'rb').read())

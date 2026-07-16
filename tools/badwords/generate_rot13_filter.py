@@ -6,9 +6,9 @@ actual words being human-readable at a glance. Companion to decode_filter.py /
 encode_filter.py.
 
     cd .../Website-Portal/tools/badwords
-    python3 decode_filter.py            # filter2.jag -> the 4 plaintext .txt
+    python3 decode_filter.py            # filter3.jag -> the 4 plaintext .txt
     python3 generate_rot13_filter.py    # the 4 .txt   -> the 4 .rot13.txt
-    # commit the .rot13.txt files (and the regenerated filter2.jag)
+    # commit the .rot13.txt files (and the regenerated filter3.jag)
     # (the plaintext .txt stay gitignored - see .gitignore)
 
     python3 generate_rot13_filter.py --decode   # reverse: .rot13.txt -> .txt

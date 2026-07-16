@@ -18,5 +18,5 @@ public class Version {
    // $FF: renamed from: i int
    public static int soundsVer = 1;
    // $FF: renamed from: j int
-   public static int filterVer = 2;
+   public static int filterVer = 3;
 }
