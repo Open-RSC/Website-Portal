@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
 encode_filter.py - rebuild the OpenRSC mudclient-177 web-client chat filter
-(filter2.jag) from the text files produced by decode_filter.py.
+(filter3.jag) from the text files produced by decode_filter.py.
 
     cd .../Website-Portal/tools/badwords
     python3 decode_filter.py       # first, to produce the .txt files
     # ...edit badwords.txt...
-    python3 encode_filter.py       # writes the client cache filter2.jag (backs up .bak once)
+    python3 encode_filter.py       # writes the client cache filter3.jag (backs up .bak once)
     python3 encode_filter.py -o out.jag    # or write to a specific path
     python3 encode_filter.py --no-rot13    # skip refreshing the .rot13.txt copies
 
 Reads badwords.txt, goodfragments.txt, hosts.txt, tlds.txt from next to this
 script (tools/badwords/); all four required, run decode_filter.py first if any
-are missing. Writes filter2.jag into ../../portal/public/client/cache/ (the
+are missing. Writes filter3.jag into ../../portal/public/client/cache/ (the
 client cache). See decode_filter.py's header for the full format reference, the
 badwords.txt syntax, and the important caveats (this only affects /client 177,
 NOT /client2; to stop a substring badword censoring a real word, prefer the
@@ -20,11 +20,11 @@ badword's boundary pairs in badwords.txt - full-word WordFilter.goodWords in
 classes.js is only for contexts the pairs cannot express).
 
 Behaviour:
-* Rebuilds filter2.jag as an UNCOMPRESSED archive (uncSize==compSize). The
+* Rebuilds filter3.jag as an UNCOMPRESSED archive (uncSize==compSize). The
   client reads it identically to the original bzip2 one; the file is just a bit
   larger. No TeaVM/classes.js rebuild is needed - the client loads this jag at
   runtime.
-* Backs up an existing filter2.jag to filter2.jag.bak the first time only.
+* Backs up an existing filter3.jag to filter3.jag.bak the first time only.
 * fragmentsenc hashes are sorted + de-duplicated (the client binary-searches
   them). Each badword's boundary-pairs are written back in file order, so keep
   them sorted by (before,after) if you hand-edit them. decode->encode is
@@ -170,7 +170,7 @@ def selfcheck(raw):
     return found
 
 def main():
-    out = os.path.join(CACHE_DIR, 'filter2.jag')
+    out = os.path.join(CACHE_DIR, 'filter3.jag')
     if '-o' in sys.argv:
         out = sys.argv[sys.argv.index('-o') + 1]
 
