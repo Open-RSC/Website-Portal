@@ -66,6 +66,7 @@
 
             <div>
                 <p>If you forgot your username or email address, or if you did not provide an email address when creating an account, you can recover your account through the forums.</p>
+                <p><strong>2001Scape password resets must be done through the forums.</strong></p>
                 <p>You can register a forum account (separate from in game accounts) <a href="https://rsc.vet/board/ucp.php?mode=register" target="_blank" rel="noopener noreferrer">here</a>. Then create a new thread <a href="https://rsc.vet/board/viewforum.php?f=27" target="_blank" rel="noopener noreferrer">here</a>, making sure to follow the provided <a href="https://rsc.vet/board/viewtopic.php?t=270" target="_blank" rel="noopener noreferrer">template</a>.</p>
             </div>
         </div>
