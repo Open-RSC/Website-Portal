@@ -34,25 +34,68 @@ class RareItemMonitorService
 
     private string $db;
 
+    private int $goldThresholdBase;
+
+    private int $rareItemThresholdBase;
+
+    private int $ultraRareItemThresholdBase;
+
+    private float $goldMultiplier;
+
+    private float $rareItemMultiplier;
+
+    private float $ultraRareItemMultiplier;
+
     private int $goldThreshold;
 
     private int $rareItemThreshold;
 
     private int $ultraRareItemThreshold;
 
-    private array $goldThresholdMultipliers;
-
     public function __construct(string $db)
     {
         $this->db = $db;
-        $this->goldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
-        $this->rareItemThreshold = (int) config('openrsc.rare_item_monitor_rare_threshold', 50);
-        $this->ultraRareItemThreshold = (int) config('openrsc.rare_item_monitor_ultra_rare_threshold', 10);
-        $this->goldThresholdMultipliers = ['openpk' => 5, 'uranium' => 5, 'coleslaw' => 25];
-        if (array_key_exists($db, $this->goldThresholdMultipliers)) {
-            // Some worlds need gold threshold to not cause false positives.
-            $this->goldThreshold *= $this->goldThresholdMultipliers[$db];
+        $this->goldThresholdBase = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
+        $this->rareItemThresholdBase = (int) config('openrsc.rare_item_monitor_rare_threshold', 50);
+        $this->ultraRareItemThresholdBase = (int) config('openrsc.rare_item_monitor_ultra_rare_threshold', 10);
+
+        // Botting worlds legitimately generate gold and rare drops far faster than the other
+        // worlds, so each world scales the base thresholds by its own multiplier to avoid
+        // drowning the alert channel in false positives.
+        $this->goldMultiplier = $this->multiplierFor('openrsc.rare_item_monitor_gold_threshold_multipliers');
+        $this->rareItemMultiplier = $this->multiplierFor('openrsc.rare_item_monitor_rare_threshold_multipliers');
+        $this->ultraRareItemMultiplier = $this->multiplierFor('openrsc.rare_item_monitor_ultra_rare_threshold_multipliers');
+
+        $this->goldThreshold = (int) ceil($this->goldThresholdBase * $this->goldMultiplier);
+        $this->rareItemThreshold = (int) ceil($this->rareItemThresholdBase * $this->rareItemMultiplier);
+        $this->ultraRareItemThreshold = (int) ceil($this->ultraRareItemThresholdBase * $this->ultraRareItemMultiplier);
+    }
+
+    /**
+     * Resolve this world's multiplier from a config key holding "world:multiplier" pairs,
+     * for example "openpk:5,uranium:25,coleslaw:100". Worlds that are absent, or entries
+     * that are malformed or non-positive, fall back to 1x.
+     */
+    private function multiplierFor(string $configKey): float
+    {
+        $configured = (string) config($configKey, '');
+
+        foreach (explode(',', $configured) as $pair) {
+            $parts = explode(':', trim($pair), 2);
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            $world = strtolower(trim($parts[0]));
+            $multiplier = (float) trim($parts[1]);
+            if ($world !== strtolower($this->db) || $multiplier <= 0) {
+                continue;
+            }
+
+            return $multiplier;
         }
+
+        return 1.0;
     }
 
     /**
@@ -117,9 +160,6 @@ class RareItemMonitorService
             }
         }
 
-        $baseGoldThreshold = (int) config('openrsc.rare_item_monitor_gold_threshold', 30_000_000);
-        $goldMultiplier = $this->goldThresholdMultipliers[$this->db] ?? 1;
-
         return [
             'db' => $this->db,
             'flags' => $flags,
@@ -127,10 +167,14 @@ class RareItemMonitorService
             'yesterday_snapshot' => Carbon::yesterday()->toDateString(),
             'today_snapshot' => Carbon::today()->toDateString(),
             'gold_threshold' => $this->goldThreshold,
-            'gold_threshold_base' => $baseGoldThreshold,
-            'gold_multiplier' => $goldMultiplier,
+            'gold_threshold_base' => $this->goldThresholdBase,
+            'gold_multiplier' => $this->goldMultiplier,
             'rare_threshold' => $this->rareItemThreshold,
+            'rare_threshold_base' => $this->rareItemThresholdBase,
+            'rare_multiplier' => $this->rareItemMultiplier,
             'ultra_rare_threshold' => $this->ultraRareItemThreshold,
+            'ultra_rare_threshold_base' => $this->ultraRareItemThresholdBase,
+            'ultra_rare_multiplier' => $this->ultraRareItemMultiplier,
         ];
     }
 

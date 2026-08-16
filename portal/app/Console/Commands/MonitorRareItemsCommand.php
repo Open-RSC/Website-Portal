@@ -55,20 +55,31 @@ class MonitorRareItemsCommand extends Command
             ));
         }
 
-        $goldMultiplierStr = $result['gold_multiplier'] > 1
-            ? ' (base: '.number_format($result['gold_threshold_base']).' × '.$result['gold_multiplier'].'x)'
-            : '';
-        $this->error(sprintf(
-            "[$db] Thresholds — Gold: %s%s, Rare: %s, Ultra-Rare: %s",
-            number_format($result['gold_threshold']),
-            $goldMultiplierStr,
-            number_format($result['rare_threshold']),
-            number_format($result['ultra_rare_threshold'])
-        ));
+        $this->error("[$db] Thresholds — ".$this->formatThresholds($result));
 
         $this->sendDiscordAlert($result);
 
         return 0;
+    }
+
+    /**
+     * Build the threshold summary line, showing the base value and multiplier for any
+     * threshold that this world scales.
+     */
+    private function formatThresholds(array $result): string
+    {
+        return 'Gold: '.$this->formatThreshold($result['gold_threshold'], $result['gold_threshold_base'], $result['gold_multiplier'])
+            .', Rare: '.$this->formatThreshold($result['rare_threshold'], $result['rare_threshold_base'], $result['rare_multiplier'])
+            .', Ultra-Rare: '.$this->formatThreshold($result['ultra_rare_threshold'], $result['ultra_rare_threshold_base'], $result['ultra_rare_multiplier']);
+    }
+
+    private function formatThreshold(int $threshold, int $base, float $multiplier): string
+    {
+        if ($multiplier == 1.0) {
+            return number_format($threshold);
+        }
+
+        return number_format($threshold).' (base: '.number_format($base).' × '.rtrim(rtrim(number_format($multiplier, 2, '.', ''), '0'), '.').'x)';
     }
 
     private function sendDiscordAlert(array $result): void
@@ -92,12 +103,7 @@ class MonitorRareItemsCommand extends Command
             $content .= "**{$flag}**: {$current} (prev: {$prev}, +{$delta})\n";
         }
 
-        $goldMultiplierStr = $result['gold_multiplier'] > 1
-            ? ' (base: '.number_format($result['gold_threshold_base']).' × '.$result['gold_multiplier'].'x)'
-            : '';
-        $content .= "\n**Thresholds:** Gold: ".number_format($result['gold_threshold']).$goldMultiplierStr;
-        $content .= ', Rare: '.number_format($result['rare_threshold']);
-        $content .= ', Ultra-Rare: '.number_format($result['ultra_rare_threshold']);
+        $content .= "\n**Thresholds:** ".$this->formatThresholds($result);
 
         try {
             \Http::post($webhookUrl, ['content' => $content]);

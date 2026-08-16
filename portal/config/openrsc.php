@@ -46,4 +46,10 @@ return [
     'rare_item_monitor_gold_threshold' => env('RARE_ITEM_MONITOR_GOLD_THRESHOLD', 30_000_000),
     'rare_item_monitor_rare_threshold' => env('RARE_ITEM_MONITOR_RARE_THRESHOLD', 50),
     'rare_item_monitor_ultra_rare_threshold' => env('RARE_ITEM_MONITOR_ULTRA_RARE_THRESHOLD', 10),
+    // Per-world threshold multipliers, formatted as "world:multiplier" pairs separated by commas.
+    // Worlds that are not listed use a multiplier of 1x. Botting worlds need much higher
+    // multipliers because their economies grow far faster than the legitimate worlds.
+    'rare_item_monitor_gold_threshold_multipliers' => env('RARE_ITEM_MONITOR_GOLD_THRESHOLD_MULTIPLIERS', 'cabbage:5,openpk:5,uranium:25,coleslaw:100'),
+    'rare_item_monitor_rare_threshold_multipliers' => env('RARE_ITEM_MONITOR_RARE_THRESHOLD_MULTIPLIERS', 'openpk:2,uranium:10,coleslaw:10'),
+    'rare_item_monitor_ultra_rare_threshold_multipliers' => env('RARE_ITEM_MONITOR_ULTRA_RARE_THRESHOLD_MULTIPLIERS', 'openpk:2,uranium:5,coleslaw:5'),
 ];
