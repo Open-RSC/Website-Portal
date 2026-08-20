@@ -10,6 +10,9 @@ return [
     'stats_weekly_csv_job_enabled' => env('STATS_WEEKLY_CSV_JOB_ENABLED', false),
     'stats_page_enabled' => env('STATS_PAGE_ENABLED', true),
     'force_https' => env('FORCE_HTTPS', false),
+    // Hostnames that should be permanently redirected to APP_URL instead of serving
+    // the website on them, formatted as a comma separated list of hosts.
+    'non_canonical_hosts' => env('NON_CANONICAL_HOSTS', 'portal.rsc.vet,game.rsc.vet,game.openrsc.com'),
     'gpg_private_key_file' => env('GPG_PRIVATE_KEY_FILE', ''),
     'gpg_public_key_file' => env('GPG_PUBLIC_KEY_FILE', ''),
     'player_exports_enabled' => env('PLAYER_EXPORTS_ENABLED', false),
