@@ -13,6 +13,12 @@ return [
     // Hostnames that should be permanently redirected to APP_URL instead of serving
     // the website on them, formatted as a comma separated list of hosts.
     'non_canonical_hosts' => env('NON_CANONICAL_HOSTS', 'portal.rsc.vet,game.rsc.vet,game.openrsc.com'),
+    // Sites that are allowed to keep using the non canonical hosts, matched on the
+    // referrer host (subdomains included) or on a substring of the user agent. Both are
+    // trivially spoofable, so these must only ever relax hostname restrictions,
+    // or other trivial matters (depending on your definition of trivial).
+    'non_canonical_exempt_referrer_hosts' => env('NON_CANONICAL_EXEMPT_REFERRER_HOSTS', 'championsguild.fi'),
+    'non_canonical_exempt_user_agents' => env('NON_CANONICAL_EXEMPT_USER_AGENTS', 'python-httpx'),
     'gpg_private_key_file' => env('GPG_PRIVATE_KEY_FILE', ''),
     'gpg_public_key_file' => env('GPG_PUBLIC_KEY_FILE', ''),
     'player_exports_enabled' => env('PLAYER_EXPORTS_ENABLED', false),

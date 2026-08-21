@@ -7,6 +7,7 @@ use App\Mail\PasswordResetLink;
 use App\Models\InviteCode;
 use App\Models\PasswordResetRequest;
 use App\Models\Setting;
+use App\Rules\NoBadWordsRule;
 use App\Services\PlayerExports\PlayerExportService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -775,7 +776,7 @@ class PlayerController extends Controller
         $inviteOnly = (Setting::where('key', 'invite_only_registration')->value('value') === '1') ?? false;
         // We could add agree_to_rules in here, and even a custom captcha if we wanted.
         $rules = [
-            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12'],
+            'username' => ['bail', 'regex:/^([a-zA-Z0-9_ ])+$/i', 'required', 'min:2', 'max:12', new NoBadWordsRule],
             'db' => ['required', Rule::in(['preservation', 'cabbage', '2001scape', 'coleslaw', 'uranium', 'openpk'])],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['regex:/^([ -~])+$/i', 'required', 'min:4', 'max:20', 'confirmed'],
