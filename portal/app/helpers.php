@@ -126,6 +126,8 @@ if (! function_exists('is_exempt_non_canonical_client')) {
         if ($referrerHost !== '') {
             foreach (config_list('openrsc.non_canonical_exempt_referrer_hosts') as $host) {
                 if ($referrerHost === $host || str_ends_with($referrerHost, '.'.$host)) {
+                    log_non_canonical_exemption($request, 'referrer host '.$referrerHost);
+
                     return true;
                 }
             }
@@ -135,12 +137,35 @@ if (! function_exists('is_exempt_non_canonical_client')) {
         if ($userAgent !== '') {
             foreach (config_list('openrsc.non_canonical_exempt_user_agents') as $userAgentNeedle) {
                 if (str_contains($userAgent, $userAgentNeedle)) {
+                    log_non_canonical_exemption($request, 'user agent '.$userAgentNeedle);
+
                     return true;
                 }
             }
         }
 
         return false;
+    }
+}
+
+if (! function_exists('log_non_canonical_exemption')) {
+    /**
+     * Logs who we let through a non canonical host restriction and what matched them, so
+     * that an exemption being abused is visible in the logs rather than silent.
+     *
+     * @param  string  $matchedOn  the configured entry that let this request through
+     */
+    function log_non_canonical_exemption(\Illuminate\Http\Request $request, string $matchedOn): void
+    {
+        if (! config('openrsc.non_canonical_exempt_logging_enabled', true)) {
+            return;
+        }
+
+        \Log::info('Non canonical host exemption: IP '.get_client_ip_address().
+            ' matched on '.$matchedOn.
+            ' with user agent: '.($request->headers->get('User-Agent') ?? '(none)').
+            ' and referrer: '.($request->headers->get('referer') ?? '(none)').
+            ' requested URL: '.$request->fullUrl());
     }
 }
 

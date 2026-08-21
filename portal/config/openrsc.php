@@ -19,6 +19,7 @@ return [
     // or other trivial matters (depending on your definition of trivial).
     'non_canonical_exempt_referrer_hosts' => env('NON_CANONICAL_EXEMPT_REFERRER_HOSTS', 'championsguild.fi'),
     'non_canonical_exempt_user_agents' => env('NON_CANONICAL_EXEMPT_USER_AGENTS', 'python-httpx'),
+    'non_canonical_exempt_logging_enabled' => env('NON_CANONICAL_EXEMPT_LOGGING_ENABLED', true),
     'gpg_private_key_file' => env('GPG_PRIVATE_KEY_FILE', ''),
     'gpg_public_key_file' => env('GPG_PUBLIC_KEY_FILE', ''),
     'player_exports_enabled' => env('PLAYER_EXPORTS_ENABLED', false),
