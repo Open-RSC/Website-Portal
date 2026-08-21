@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use function App\Helpers\is_exempt_non_canonical_client;
+
 class RedirectNonCanonicalHost
 {
     /**
@@ -22,6 +24,12 @@ class RedirectNonCanonicalHost
         }
 
         if (! in_array($requestHost, $this->redirectHosts(), true)) {
+            return $next($request);
+        }
+
+        // Some specific sites are allowed to keep using these hosts, and redirecting them would
+        // break API clients that do not follow redirects or otherwise cannot use redirects.
+        if (is_exempt_non_canonical_client($request)) {
             return $next($request);
         }
 

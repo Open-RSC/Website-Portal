@@ -96,7 +96,67 @@ if (! function_exists('is_incorrect_production_url')) {
             return $host;
         };
 
+        if (is_exempt_non_canonical_client()) {
+            return false;
+        }
+
         return $normalizeHost(url('/')) !== $normalizeHost(config('app.url'));
+    }
+}
+
+if (! function_exists('is_exempt_non_canonical_client')) {
+    /**
+     * Determines whether the current request comes from a partner site that is allowed
+     * to keep using the hostnames we otherwise block or redirect, based on its referrer
+     * or its user agent. Both of these can be spoofed, so this must only gate hostname
+     * restrictions and never anything that actually needs to be trusted.
+     */
+    function is_exempt_non_canonical_client(?\Illuminate\Http\Request $request = null): bool
+    {
+        $request = $request ?? request();
+        if ($request === null) {
+            return false;
+        }
+
+        $referrerHost = strtolower((string) parse_url((string) $request->headers->get('referer'), PHP_URL_HOST));
+        if (str_starts_with($referrerHost, 'www.')) {
+            $referrerHost = substr($referrerHost, 4); // Remove "www." from host
+        }
+
+        if ($referrerHost !== '') {
+            foreach (config_list('openrsc.non_canonical_exempt_referrer_hosts') as $host) {
+                if ($referrerHost === $host || str_ends_with($referrerHost, '.'.$host)) {
+                    return true;
+                }
+            }
+        }
+
+        $userAgent = strtolower((string) $request->headers->get('User-Agent'));
+        if ($userAgent !== '') {
+            foreach (config_list('openrsc.non_canonical_exempt_user_agents') as $userAgentNeedle) {
+                if (str_contains($userAgent, $userAgentNeedle)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('config_list')) {
+    /**
+     * Reads a comma separated config value as a lowercased, trimmed list with the empty
+     * entries removed.
+     *
+     * @return array<int, string>
+     */
+    function config_list(string $key): array
+    {
+        $values = explode(',', strtolower((string) config($key, '')));
+        $values = array_map('trim', $values);
+
+        return array_values(array_filter($values, fn (string $value): bool => $value !== ''));
     }
 }
 
