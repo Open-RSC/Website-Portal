@@ -151,7 +151,7 @@ class players extends Authenticatable
 
     public function hasPlayerModerator()
     {
-        return $this->group_id == config('group.player_moderator') || $this->isModerator() || $this->isOwner() || $this->isAdmin();
+        return $this->group_id == config('group.player_moderator') || $this->isModerator() || $this->isSuperModerator() || $this->isOwner() || $this->isAdmin();
     }
 
     public $connection = 'preservation'; // Default to preservation, used for auth.php login authentication.
